@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31129.286
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Netus2_DatabaseConnection", "Netus2_DatabaseConnection\Netus2_DatabaseConnection.csproj", "{5038E061-06FA-487B-8511-57284498DBBB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Netus2_Test", "Netus2_Test\Netus2_Test.csproj", "{95A683EB-97B0-4A04-BE9F-C84810BDED01}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5038E061-06FA-487B-8511-57284498DBBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5038E061-06FA-487B-8511-57284498DBBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5038E061-06FA-487B-8511-57284498DBBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5038E061-06FA-487B-8511-57284498DBBB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95A683EB-97B0-4A04-BE9F-C84810BDED01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95A683EB-97B0-4A04-BE9F-C84810BDED01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95A683EB-97B0-4A04-BE9F-C84810BDED01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95A683EB-97B0-4A04-BE9F-C84810BDED01}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A9F512E8-6978-4D74-87E0-10612C6E4430}
+	EndGlobalSection
+EndGlobal
