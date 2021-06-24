@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Netus2_DatabaseConnection",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Netus2_Test", "Netus2_Test\Netus2_Test.csproj", "{95A683EB-97B0-4A04-BE9F-C84810BDED01}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Netus2_SisSync", "Netus2_SisSync\Netus2_SisSync.csproj", "{E177DA94-8309-4347-BF69-9D1B52B4482C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{95A683EB-97B0-4A04-BE9F-C84810BDED01}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{95A683EB-97B0-4A04-BE9F-C84810BDED01}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{95A683EB-97B0-4A04-BE9F-C84810BDED01}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E177DA94-8309-4347-BF69-9D1B52B4482C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E177DA94-8309-4347-BF69-9D1B52B4482C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E177DA94-8309-4347-BF69-9D1B52B4482C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E177DA94-8309-4347-BF69-9D1B52B4482C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
