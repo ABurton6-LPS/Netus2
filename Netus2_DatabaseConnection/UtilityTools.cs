@@ -8,6 +8,11 @@ namespace Netus2
 {
     public class UtilityTools
     {
+        static void Main(string[] args)
+        {
+            // Do Nothing
+        }
+
         public static Dictionary<string, Enumeration> PopulateEnumValues(string tableName)
         {
             Dictionary<string, Enumeration> enumerations = new Dictionary<string, Enumeration>();
