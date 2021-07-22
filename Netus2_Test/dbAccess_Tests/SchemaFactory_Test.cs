@@ -255,6 +255,8 @@ namespace Netus2_Test.dbAccess_Tests
                         expectedColumns.Add("created_by");
                         expectedColumns.Add("changed");
                         expectedColumns.Add("changed_by");
+                        expectedColumns.Add("term_code");
+                        expectedColumns.Add("school_year");
                         break;
                     case "organization":
                         expectedColumns.Add("organization_id");

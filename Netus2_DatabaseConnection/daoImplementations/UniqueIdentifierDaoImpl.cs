@@ -191,7 +191,7 @@ namespace Netus2.daoImplementations
             sql.Append("'Netus2'");
             sql.Append(")");
 
-            uniqueIdDao.unique_identifier_id = connection.InsertNewRecord(sql.ToString(), "unique_identifier");
+            uniqueIdDao.unique_identifier_id = connection.InsertNewRecord(sql.ToString());
 
             return daoObjectMapper.MapUniqueIdentifier(uniqueIdDao);
         }

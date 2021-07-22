@@ -265,7 +265,7 @@ namespace Netus2.daoImplementations
             sql.Append("GETDATE(), ");
             sql.Append("'Netus2')");
 
-            enrollmentDao.enrollment_id = connection.InsertNewRecord(sql.ToString(), "enrollment");
+            enrollmentDao.enrollment_id = connection.InsertNewRecord(sql.ToString());
 
             ClassEnrolled foundClassEnrolled = null;
 

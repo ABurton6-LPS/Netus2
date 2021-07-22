@@ -28,6 +28,13 @@ namespace Netus2.daoInterfaces
         Organization Read_WithAcademicSessionId(int academicSessionId, IConnectable connection);
 
         /// <summary>
+        /// Returns the specific Organization object, which is linked to the provided buildingCode.
+        /// </summary>
+        /// <param name="buildingCode"></param>
+        /// <param name="connection"></param>
+        Organization Read_WithBuildingCode(string buildingCode, IConnectable connection);
+
+        /// <summary>
         /// Returns a list of Organization objects, read from the database, which match the parameters provided in the 
         /// Organization object passed in, and linked to the primary key of the parent Organization object, parentId. 
         /// Null values provided within the Organization will be ignored.

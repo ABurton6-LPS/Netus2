@@ -267,7 +267,7 @@ namespace Netus2.daoImplementations
                 "city, enum_state_province_id, postal_code, enum_country_id, is_current_id, enum_address_id, " +
                 "created, created_by) VALUES (" + sqlValues.ToString() + ")");
 
-            address.Id = connection.InsertNewRecord(sql.ToString(), "address");
+            address.Id = connection.InsertNewRecord(sql.ToString());
 
             return address;
         }

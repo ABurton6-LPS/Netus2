@@ -375,7 +375,7 @@ namespace Netus2.daoImplementations
             sql.Append("GETDATE(), ");
             sql.Append("'Netus2')");
 
-            classEnrolledDao.class_id = connection.InsertNewRecord(sql.ToString(), "class");
+            classEnrolledDao.class_id = connection.InsertNewRecord(sql.ToString());
 
             AcademicSession foundAcademicSession = Read_AcademicSession((int)classEnrolledDao.academic_session_id, connection);
             Course foundCourse = Read_Course((int)classEnrolledDao.course_id, connection);

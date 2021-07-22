@@ -532,7 +532,7 @@ namespace Netus2_Test.logAccess_Tests
             int preTestLogCount = logReader.Read_LogAcademicSession(connection).Count;
 
             TestDataBuilder withData = new TestDataBuilder(connection);
-            AcademicSession academicSession = new AcademicSession("Test Academic Session", Enum_Session.values["term"], withData.school);
+            AcademicSession academicSession = new AcademicSession("Test Academic Session", Enum_Session.values["term"], withData.school, "T1");
             academicSession = academicSessionDaoImpl.Write(academicSession, connection);
             academicSessionDaoImpl.Delete(academicSession, connection);
 
@@ -973,7 +973,7 @@ namespace Netus2_Test.logAccess_Tests
             Person student = personDaoImpl.Write(testDataBuilder.SimpleStudent(), connection);
             Enrollment enrollment = enrollmentDaoImpl.Write(testDataBuilder.SimpleEnrollment(null, academicSession), student.Id, connection);
 
-            AcademicSession newAcademicSession = new AcademicSession("New Academic Session Name", Enum_Session.values["grading period"], org);
+            AcademicSession newAcademicSession = new AcademicSession("New Academic Session Name", Enum_Session.values["grading period"], org, "T1");
             newAcademicSession = academicSessionDaoImpl.Write(newAcademicSession, connection);
             enrollment.AcademicSessions[0] = newAcademicSession;
             enrollmentDaoImpl.Update(enrollment, student.Id, connection);

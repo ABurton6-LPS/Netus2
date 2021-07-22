@@ -72,7 +72,7 @@ namespace Netus2_Test.daoObject_Tests
 
             //Add Academic Session to School
             //You must create the AcademicSession with the Organization (School), so no need to update the School
-            AcademicSession schoolYear = new AcademicSession("2020 - 2021", Enum_Session.values["school year"], school);
+            AcademicSession schoolYear = new AcademicSession("2020 - 2021", Enum_Session.values["school year"], school, "T1");
             schoolYear = academicSessionDaoImpl.Write(schoolYear, connection);
             schoolYear = academicSessionDaoImpl.Read(schoolYear, connection)[0];
             Assert.IsTrue(schoolYear.Id > 0);
@@ -80,7 +80,7 @@ namespace Netus2_Test.daoObject_Tests
 
             //Add GradingPeriod AcademicSession to SchoolYear
             //You can write the AcademicSession with the parentId, so no need to update the SchoolYear
-            AcademicSession gradingPeriod = new AcademicSession("markingPeriod", Enum_Session.values["grading period"], school);
+            AcademicSession gradingPeriod = new AcademicSession("markingPeriod", Enum_Session.values["grading period"], school, "T1");
             gradingPeriod = academicSessionDaoImpl.Write(gradingPeriod, schoolYear.Id, connection);
             schoolYear = academicSessionDaoImpl.Read(schoolYear, connection)[0];
             Assert.IsTrue(gradingPeriod.Id > 0);

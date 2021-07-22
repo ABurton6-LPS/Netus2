@@ -286,7 +286,8 @@ namespace Netus2_Test.daoObject_Tests
 
             string name = "New Academic Session";
             Enumeration sessionType = Enum_Session.values["school year"];
-            AcademicSession newAcademicSession = new AcademicSession(name, sessionType, testDataBuilder.school);
+            string termCode = "T1";
+            AcademicSession newAcademicSession = new AcademicSession(name, sessionType, testDataBuilder.school, termCode);
             newAcademicSession = academicSessionDaoImpl.Write(newAcademicSession, connection);
             classEnrolled.AcademicSession = newAcademicSession;
             classEnrolledDaoImpl.Update(classEnrolled, connection);

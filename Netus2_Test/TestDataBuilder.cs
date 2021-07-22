@@ -62,7 +62,7 @@ namespace Netus2_Test
             organizationDaoImpl.Update(school, district.Id, connection);
             school = organizationDaoImpl.Read(school, connection)[0];
 
-            schoolYear = new AcademicSession("2020 - 2021", Enum_Session.values["school year"], school);
+            schoolYear = new AcademicSession("2020 - 2021", Enum_Session.values["school year"], school, "T1");
             schoolYear = academicSessionDaoImpl.Write(schoolYear, connection);
 
             teacher = new Person("John", "Smith", new DateTime(1985, 9, 6), Enum_Gender.values["male"], Enum_Ethnic.values["cau"]);
@@ -240,7 +240,8 @@ namespace Netus2_Test
         {
             string name = "Simple Academic Session";
             Enumeration sessionType = Enum_Session.values["school year"];
-            AcademicSession academicSession = new AcademicSession(name, sessionType, org);
+            string termCode = "T1";
+            AcademicSession academicSession = new AcademicSession(name, sessionType, org, termCode);
 
             return academicSession;
         }

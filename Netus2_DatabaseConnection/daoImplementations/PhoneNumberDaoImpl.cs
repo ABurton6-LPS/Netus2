@@ -212,7 +212,7 @@ namespace Netus2.daoImplementations
                 "(person_id, phone_number, is_primary_id, enum_phone_id, created, created_by) " +
                 "VALUES (" + sqlValues.ToString() + ")";
 
-            phoneNumberDao.phone_number_id = connection.InsertNewRecord(sql, "phone_number");
+            phoneNumberDao.phone_number_id = connection.InsertNewRecord(sql);
 
             return daoObjectMapper.MapPhoneNumber(phoneNumberDao);
         }

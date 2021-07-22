@@ -64,6 +64,17 @@ namespace Netus2.daoInterfaces
         List<AcademicSession> Read_UsingOrganizationId(int organizationId, IConnectable connection);
 
         /// <summary>
+        /// Returns the AcademicSession object which is linked to the data provided. The schoolCode is the buildingCode for the Organization table
+        /// that this record will be linked to. The termCode and the schoolYear, in conjunction with the organizationId (for the Organization object
+        /// with the buildingCode which matches the provided schoolCode value) create a unique identifier for a given AcademicSession object.
+        /// </summary>
+        /// <param name="schoolCode"></param>
+        /// <param name="termCode"></param>
+        /// <param name="schoolYear"></param>
+        /// <param name="connection"></param>
+        AcademicSession Read_UsingSchoolCode_TermCode_Schoolyear(string schoolCode, string termCode, int schoolYear, IConnectable connection);
+
+        /// <summary>
         /// <para>
         /// Writes the provided AcademicSession object to the database, then returns with that same object, 
         /// but with the auto-generated Id field populated using the primary key from the database.

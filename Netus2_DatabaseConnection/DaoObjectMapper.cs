@@ -427,11 +427,13 @@ namespace Netus2
             else
                 academicSessionDao.academic_session_id = null;
 
+            academicSessionDao.term_code = academicSession.TermCode;
+            academicSessionDao.school_year = academicSession.SchoolYear;
             academicSessionDao.name = academicSession.Name;
             academicSessionDao.start_date = academicSession.StartDate;
             academicSessionDao.end_date = academicSession.EndDate;
             academicSessionDao.enum_session_id = academicSession.SessionType?.Id;
-            
+
             if (parentId != -1)
                 academicSessionDao.parent_session_id = parentId;
             else
@@ -449,11 +451,12 @@ namespace Netus2
         {
             string name = academicSessionDao.name;
             Enumeration sessionType = Enum_Session.GetEnumFromId((int)academicSessionDao.enum_session_id);
-            AcademicSession academicSession = new AcademicSession(name, sessionType, org);
+            AcademicSession academicSession = new AcademicSession(name, sessionType, org, academicSessionDao.term_code);
 
             academicSession.Id = academicSessionDao.academic_session_id != null ? (int)academicSessionDao.academic_session_id : -1;
             academicSession.StartDate = (DateTime)academicSessionDao.start_date;
             academicSession.EndDate = (DateTime)academicSessionDao.end_date;
+            academicSession.SchoolYear = (int)academicSessionDao.school_year;
 
             return academicSession;
         }

@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\FunctionApp1\Netus2SisSync.csproj" />
     <ProjectReference Include="..\Netus2_DatabaseConnection\Netus2_DatabaseConnection.csproj" />
   </ItemGroup>
 

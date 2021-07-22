@@ -216,7 +216,7 @@ namespace Netus2.daoImplementations
                 "application_identification, created, created_by) " +
                 "VALUES (" + sqlValues.ToString() + ")";
 
-            resourceDao.resource_id = connection.InsertNewRecord(sql, "resource");
+            resourceDao.resource_id = connection.InsertNewRecord(sql);
 
             Resource result = daoObjectMapper.MapResource(resourceDao);
 

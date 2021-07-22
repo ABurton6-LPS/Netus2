@@ -237,7 +237,7 @@ namespace Netus2.daoImplementations
                 "(lineitem_id, person_id, enum_score_status_id, score, score_date, comment, created, created_by) " +
                 "VALUES (" + sqlValues.ToString() + ")";
 
-            markDao.mark_id = connection.InsertNewRecord(sql, "mark");
+            markDao.mark_id = connection.InsertNewRecord(sql);
 
             LineItem lineItem = Read_LineItem((int)markDao.lineitem_id, connection);
 

@@ -9,5 +9,16 @@ namespace Netus2.enumerations
         public string HrCode;
         public string PipCode;
         public string Descript;
+
+        public override string ToString()
+        {
+            return 
+                "Id: " + Id + " " + 
+                "Netus2Code: " + Netus2Code + " " +
+                "SisCode: " + SisCode + " " +
+                "HrCode: " + HrCode + " " +
+                "PipCode: " + PipCode + " " +
+                "Descript: " + Descript;
+        }
     }
 }

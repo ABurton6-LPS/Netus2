@@ -270,7 +270,7 @@ namespace Netus2.daoImplementations
             sql.Append(sqlValues.ToString());
             sql.Append(")");
 
-            providerDao.provider_id = connection.InsertNewRecord(sql.ToString(), "provider");
+            providerDao.provider_id = connection.InsertNewRecord(sql.ToString());
 
             Provider result = daoObjectMapper.MapProvider(providerDao);
 

@@ -153,7 +153,7 @@ namespace Netus2.daoImplementations
             sql.Append("GETDATE(), ");
             sql.Append("'Netus2')");
 
-            appDao.app_id = connection.InsertNewRecord(sql.ToString(), "app");
+            appDao.app_id = connection.InsertNewRecord(sql.ToString());
 
             Provider foundProvider = Read_Provider((int)appDao.provider_id, connection);
             return daoObjectMapper.MapApp(appDao, foundProvider);

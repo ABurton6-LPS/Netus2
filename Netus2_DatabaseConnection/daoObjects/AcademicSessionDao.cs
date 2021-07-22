@@ -9,6 +9,8 @@ namespace Netus2.daoObjects
     public class AcademicSessionDao
     {
         public int? academic_session_id { get; set; }
+        public string term_code { get; set; }
+        public int? school_year { get; set; }
         public string name { get; set; }
         public DateTime? start_date { get; set; }
         public DateTime? end_date { get; set; }

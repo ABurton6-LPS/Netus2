@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -9,6 +10,12 @@ namespace Netus2.dbAccess
 {
     public interface IConnectable
     {
+
+        /// <summary>
+        /// Indicates the state of the SqlConnection during the most recent network operation performed on the connection.
+        /// </summary>
+        ConnectionState GetState();
+
         /// <summary>
         /// Opens a connection to the database.
         /// </summary>
@@ -61,6 +68,6 @@ namespace Netus2.dbAccess
         /// <param name="tableBeingInsertedInto"></param>
         /// <returns>The largest primary key in the table after the insertion, which should be the
         /// primary key of the record just inserted.</returns>
-        int InsertNewRecord(string sql, string tableBeingInsertedInto);
+        int InsertNewRecord(string sql);
     }
 }

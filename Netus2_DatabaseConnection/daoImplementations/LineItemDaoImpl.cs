@@ -263,7 +263,7 @@ namespace Netus2.daoImplementations
                 "(name, descript, assign_date, due_date, class_id, enum_category_id, markValueMin, markValueMax, created, created_by) " +
                 "VALUES (" + sqlValues.ToString() + ")";
 
-            lineItemDao.lineitem_id = connection.InsertNewRecord(sql, "lineItem");
+            lineItemDao.lineitem_id = connection.InsertNewRecord(sql);
 
             ClassEnrolled classEnrolled = Read_ClassEnrolled((int)lineItemDao.class_id, connection);
             LineItem result = daoObjectMapper.MapLineItem(lineItemDao, classEnrolled);

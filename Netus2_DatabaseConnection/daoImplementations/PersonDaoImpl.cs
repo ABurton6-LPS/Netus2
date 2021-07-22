@@ -443,7 +443,7 @@ namespace Netus2.daoImplementations
                 "enum_residence_status_id, login_name, login_pw, created, created_by) " +
                 "VALUES (" + sqlValues.ToString() + ")";
 
-            personDao.person_id = connection.InsertNewRecord(sql, "person");
+            personDao.person_id = connection.InsertNewRecord(sql);
 
             Person result = daoObjectMapper.MapPerson(personDao);
 

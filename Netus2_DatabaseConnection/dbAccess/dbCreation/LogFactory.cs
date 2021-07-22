@@ -674,6 +674,8 @@ namespace Netus2
             string sql =
                 "CREATE TABLE log_academic_session ("
                 + "log_academic_session_id int IDENTITY(1,1) PRIMARY KEY,"
+                + "term_code varchar(5), "
+                + "school_year int, "
                 + "academic_session_id int,"
                 + "name varchar(150),"
                 + "start_date date,"

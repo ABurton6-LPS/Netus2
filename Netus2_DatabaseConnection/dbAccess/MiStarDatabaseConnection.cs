@@ -5,18 +5,14 @@ using System.Data.SqlClient;
 
 namespace Netus2
 {
-    public class Netus2DatabaseConnection : IConnectable
+    public class MiStarDatabaseConnection : IConnectable
     {
-        //Local database connection
-        //string connectionString = @"Data Source=ITDSL0995104653;Initial Catalog=Netus2;Integrated Security=SSPI";
-
-        //Cloud database connection
-        string connectionString = @"Data Source=tcp:janusdb.database.windows.net,1433;Initial Catalog=Netus2;Uid=janus;Pwd=AqIiA59@$J0K";
+        string connectionString = @"Data Source=tcp:lvboe-zangle.resa.net,1433;Initial Catalog=lvboe;Uid=lvnetus;Pwd=V67A#O9miN#TzQ5x2gzS";
 
         private SqlConnection connection;
         private SqlTransaction transaction = null;
 
-        public Netus2DatabaseConnection()
+        public MiStarDatabaseConnection()
         {
             connection = new SqlConnection(connectionString);
         }

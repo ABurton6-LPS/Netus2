@@ -280,7 +280,7 @@ namespace Netus2.daoImplementations
             sql.Append("GETDATE(), ");
             sql.Append("'Netus2')");
 
-            esDao.employment_session_id = connection.InsertNewRecord(sql.ToString(), "employment_session");
+            esDao.employment_session_id = connection.InsertNewRecord(sql.ToString());
 
             Organization foundOrg = Read_Organization((int)esDao.organization_id, connection);
             return daoObjectMapper.MapEmploymentSession(esDao, foundOrg);

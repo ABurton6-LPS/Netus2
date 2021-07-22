@@ -251,7 +251,7 @@ namespace Netus2.daoImplementations
             sql.Append("GETDATE(), ");
             sql.Append("'Netus2')");
 
-            courseDao.course_id = connection.InsertNewRecord(sql.ToString(), "course");
+            courseDao.course_id = connection.InsertNewRecord(sql.ToString());
 
             Course result = daoObjectMapper.MapCourse(courseDao);
 

@@ -72,6 +72,17 @@ namespace Netus2.daoImplementations
             }
         }
 
+        public Organization Read_WithBuildingCode(string buildingCode, IConnectable connection)
+        {
+            string sql = "SELECT * FROM organization WHERE building_code LIKE ('" + buildingCode + "')";
+
+            List<Organization> results = Read(sql, connection);
+            if (results.Count > 0)
+                return results[0];
+            else
+                return null;
+        }
+
         public Organization Read_WithOrganizationId(int orgId, IConnectable connection)
         {
             string sql = "SELECT * FROM organization WHERE organization_id = " + orgId;
@@ -287,7 +298,7 @@ namespace Netus2.daoImplementations
             sql.Append(sqlValues.ToString());
             sql.Append(")");
 
-            organizationDao.organization_id = connection.InsertNewRecord(sql.ToString(), "organization");
+            organizationDao.organization_id = connection.InsertNewRecord(sql.ToString());
             Organization resultOrg = daoObjectMapper.MapOrganization(organizationDao);
 
             return resultOrg;
