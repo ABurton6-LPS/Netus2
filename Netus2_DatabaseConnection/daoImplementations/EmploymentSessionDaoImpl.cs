@@ -232,8 +232,8 @@ namespace Netus2.daoImplementations
                 employmentSession.Id = foundEmploymentSessions[0].Id;
                 UpdateInternals(employmentSession, personId, connection);
             }
-            else if (foundEmploymentSessions.Count > 1)
-                throw new Exception("Multiple Employment Sessions found matching the description of:\n" +
+            else
+                throw new Exception(foundEmploymentSessions.Count + " Employment Sessions found matching the description of:\n" +
                     employmentSession.ToString());
         }
 

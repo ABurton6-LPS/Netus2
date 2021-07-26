@@ -31,7 +31,7 @@ namespace Netus2.daoImplementations
             else if (results.Count == 1)
                 return results[0];
             else
-                throw new Exception("Duplicate jct_enrollment_academic_session recors found.\n" +
+                throw new Exception("The jct_enrollment_academic_session table contains a duplicate record.\n" +
                     "enrollment_id = " + enrollmentId + ", address_Id = " + academicSessionId);
         }
 

@@ -164,7 +164,7 @@ namespace Netus2.daoImplementations
                 UpdateInternals(phoneNumber, personId, connection);
             }
             else if (foundPhoneNumbers.Count > 1)
-                throw new Exception("Multiple Phone Numbers found matching the description of:\n" +
+                throw new Exception(foundPhoneNumbers.Count + " Phone Numbers found matching the description of:\n" +
                     phoneNumber.ToString());
         }
 

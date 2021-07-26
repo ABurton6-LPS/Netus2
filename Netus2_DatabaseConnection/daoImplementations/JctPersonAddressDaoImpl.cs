@@ -31,7 +31,7 @@ namespace Netus2.daoImplementations
             else if (results.Count == 1)
                 return results[0];
             else
-                throw new Exception("Duplicate jct_person_address recors found.\n" +
+                throw new Exception("The jct_person_address table contains a duplicate record.\n" +
                     "person_id = " + personId + ", address_Id = " + addressId);
         }
 

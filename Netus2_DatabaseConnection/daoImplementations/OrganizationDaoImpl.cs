@@ -64,7 +64,7 @@ namespace Netus2.daoImplementations
                 else if (foundChildren.Count == 0)
                     return;
                 else
-                    throw new Exception("Multiple Organization records found matching:\n" + child.ToString());
+                    throw new Exception(foundChildren.Count + " Organization records found matching:\n" + child.ToString());
             }
             foreach (Organization child in childrenToRemove)
             {
@@ -246,7 +246,7 @@ namespace Netus2.daoImplementations
                 UpdateInternals(organization, parentOrganizationId, connection);
             }
             else if (foundOrganizations.Count > 1)
-                throw new Exception("Multiple Organizations found matching the description of:\n" +
+                throw new Exception(foundOrganizations.Count + " Organizations found matching the description of:\n" +
                     organization.ToString());
         }
 

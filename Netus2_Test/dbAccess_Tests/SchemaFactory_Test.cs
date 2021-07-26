@@ -39,6 +39,7 @@ namespace Netus2_Test.dbAccess_Tests
         [TestCase("enum_category")]
         [TestCase("enum_ethnic")]
         [TestCase("enum_identifier")]
+        [TestCase("enum_sync_status")]
         [TestCase("person")]
         [TestCase("jct_person_role")]
         [TestCase("jct_person_person")]
@@ -61,6 +62,11 @@ namespace Netus2_Test.dbAccess_Tests
         [TestCase("lineitem")]
         [TestCase("enrollment")]
         [TestCase("mark")]
+        [TestCase("sync_job")]
+        [TestCase("sync_task")]
+        [TestCase("sync_job_status")]
+        [TestCase("sync_task_status")]
+        [TestCase("sync_error")]
         public void Test_BuildSchema_CreatesExpectedTableWithProperColumns(String tableName)
         {
             List<String> expectedColumns = GetExpectedColumns(tableName);
@@ -360,6 +366,37 @@ namespace Netus2_Test.dbAccess_Tests
                         expectedColumns.Add("created_by");
                         expectedColumns.Add("changed");
                         expectedColumns.Add("changed_by");
+                        break;
+                    case "sync_job":
+                        expectedColumns.Add("sync_job_id");
+                        expectedColumns.Add("name");
+                        expectedColumns.Add("timestamp");
+                        break;
+                    case "sync_task":
+                        expectedColumns.Add("sync_task_id");
+                        expectedColumns.Add("sync_job_id");
+                        expectedColumns.Add("name");
+                        expectedColumns.Add("timestamp");
+                        break;
+                    case "sync_job_status":
+                        expectedColumns.Add("sync_job_status_id");
+                        expectedColumns.Add("sync_job_id");
+                        expectedColumns.Add("enum_sync_status");
+                        expectedColumns.Add("timestamp");
+                        break;
+                    case "sync_task_status":
+                        expectedColumns.Add("sync_task_status_id");
+                        expectedColumns.Add("sync_task_id");
+                        expectedColumns.Add("enum_sync_status_id");
+                        expectedColumns.Add("timestamp");
+                        break;
+                    case "sync_error":
+                        expectedColumns.Add("sync_error_id");
+                        expectedColumns.Add("sync_job_id");
+                        expectedColumns.Add("sync_task_id");
+                        expectedColumns.Add("message");
+                        expectedColumns.Add("stack_trace");
+                        expectedColumns.Add("timestamp");
                         break;
                     default:
                         Assert.Fail("I need to know what columns to expect for table " + tableName);

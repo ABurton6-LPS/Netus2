@@ -39,7 +39,7 @@ namespace Netus2.daoImplementations
             if (results.Count == 1)
                 return results[0];
             else
-                throw new Exception("Multiple jct_person_person records found.\n" +
+                throw new Exception("The jct_person_person table contains a duplicate record.\n" +
                     "person_one_id = " + personOneId + ", person_two_id = " + personTwoId);
         }
 

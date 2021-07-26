@@ -1,5 +1,4 @@
 ﻿using NUnit.Framework;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Data;
 using Netus2;
@@ -11,12 +10,10 @@ using Netus2.daoInterfaces;
 using Netus2_DatabaseConnection;
 using Netus2SisSync;
 
-namespace Netus2_Test.Netus2SisSync_Test2
+namespace Netus2_Test.Netus2SisSync_Test
 {
     class Netus2SisSync_Test
     {
-        LoggerFactory loggerFactory;
-        ILogger log;
         CountDownLatch_Mock latch;
         IConnectable miStarConnection;
         IConnectable netus2Connection;
@@ -24,111 +21,109 @@ namespace Netus2_Test.Netus2SisSync_Test2
         [SetUp]
         public void SetUp()
         {
-            loggerFactory = new LoggerFactory();
             latch = new CountDownLatch_Mock(0);
-            log = loggerFactory.CreateLogger("Test Logger");
 
-            //miStarConnection = new MiStarDatabaseConnection();
-            //miStarConnection.OpenConnection();
+            miStarConnection = new MiStarDatabaseConnection();
+            miStarConnection.OpenConnection();
 
-            //netus2Connection = new Netus2DatabaseConnection();
-            //netus2Connection.OpenConnection();
-            //netus2Connection.BeginTransaction();
+            netus2Connection = new Netus2DatabaseConnection();
+            netus2Connection.OpenConnection();
+            netus2Connection.BeginTransaction();
         }
 
-        [TestCase]
-        public void Netus2SisSync_LiveRun()
-        {
-            try
-            {
-                FunctionApp1.Netus2SisSync.Run(null, log);
-                Assert.Pass();
-            }
-            catch (Exception e)
-            {
-                Assert.Fail(e.Message);
-            }
-        }
-
-        [TestCase]
-        public void Netus2SisSyncTest_Organization_Children()
-        {
-            DataTable dtOrganization = SyncOrganization.ReadFromSis(miStarConnection);
-
-            for(int i = 0; (i < 10 && i < dtOrganization.Rows.Count); i++)
-            {
-                DataRow row = dtOrganization.Rows[i];
-                SyncOrganization.SyncForChildRecords(row, latch, netus2Connection, log);
-                ConfirmNetus2WasSynced_Organization_Children(row, netus2Connection);
-            }
-        }
-
-        [TestCase]
-        public void Netus2SisSyncTest_Organization_Parents()
-        {
-            DataTable dtOrganization = SyncOrganization.ReadFromSis(miStarConnection);
-
-            for (int i = 0; (i < 10 && i < dtOrganization.Rows.Count); i++)
-            {
-                DataRow row = dtOrganization.Rows[i];
-                SyncOrganization.SyncForParentRecords(row, latch, netus2Connection, log);
-                ConfirmNetus2WasSynced_Organization_Parents(row, netus2Connection);
-            }
-        }
-
-        [TestCase]
-        public void Netus2SisSyncTest_AcademicSession_Children()
-        {
-            DataTable dtAcademicSession = SyncAcademicSession.ReadFromSis(miStarConnection);
-
-            for (int i = 0; (i < 10 && i < dtAcademicSession.Rows.Count); i++)
-            {
-                DataRow row = dtAcademicSession.Rows[i];
-                SyncAcademicSession.SyncForChildRecords(row, latch, netus2Connection, log);
-                ConfirmNetus2WasSynched_AcademicSession_Children(row, netus2Connection);
-            }
-        }
-
-        [TestCase]
-        public void Netus2SisSyncTest_AcademicSession_Parents()
-        {
-            DataTable dtAcademicSession = SyncAcademicSession.ReadFromSis(miStarConnection);
-
-            for (int i = 0; (i < 10 && i < dtAcademicSession.Rows.Count); i++)
-            {
-                DataRow row = dtAcademicSession.Rows[i];
-                SyncAcademicSession.SyncForParentRecords(row, latch, netus2Connection, log);
-                ConfirmNetus2WasSynched_AcademicSession_Parents(row, netus2Connection);
-            }
-        }
-
-        [TestCase]
-        public void Netus2SisSyncTest_Person()
-        {
-            DataTable dtPerson = SyncPerson.ReadFromSis(miStarConnection);
-
-            for (int i = 0; (i < 10 && i < dtPerson.Rows.Count); i++)
-            {
-                DataRow row = dtPerson.Rows[i];
-                SyncPerson.SyncForAllRecords(row, latch, netus2Connection, log);
-                ConfirmNetus2WasSynched_Person(row, netus2Connection);
-            }
-        }
-
-        //[TearDown]
-        //public void TearDown()
+        //[TestCase]
+        //public void Netus2SisSync_LiveRun()
         //{
-        //    if(miStarConnection.GetState() == ConnectionState.Open)
+        //    try
         //    {
-        //        miStarConnection.CloseConnection();
+        //        FunctionApp1.Netus2SisSync.Run(null);
+        //        Assert.Pass();
         //    }
-
-        //    if (netus2Connection.GetState() == ConnectionState.Open)
+        //    catch (Exception e)
         //    {
-        //        netus2Connection.RollbackTransaction();
-        //        netus2Connection.CloseConnection();
+        //        Assert.Fail(e.Message);
         //    }
         //}
+
+        //[TestCase]
+        //public void Netus2SisSyncTest_Organization_Children()
+        //{
+        //    DataTable dtOrganization = SyncOrganization.ReadFromSis(miStarConnection);
+
+        //    for(int i = 0; (i < 10 && i < dtOrganization.Rows.Count); i++)
+        //    {
+        //        DataRow row = dtOrganization.Rows[i];
+        //        SyncOrganization.SyncForChildRecords(row, latch, netus2Connection);
+        //        ConfirmNetus2WasSynced_Organization_Children(row, netus2Connection);
+        //    }
+        //}
+
+        //[TestCase]
+        //public void Netus2SisSyncTest_Organization_Parents()
+        //{
+        //    DataTable dtOrganization = SyncOrganization.ReadFromSis(miStarConnection);
+
+        //    for (int i = 0; (i < 10 && i < dtOrganization.Rows.Count); i++)
+        //    {
+        //        DataRow row = dtOrganization.Rows[i];
+        //        SyncOrganization.SyncForParentRecords(row, latch, netus2Connection);
+        //        ConfirmNetus2WasSynced_Organization_Parents(row, netus2Connection);
+        //    }
+        //}
+
+        //[TestCase]
+        //public void Netus2SisSyncTest_AcademicSession_Children()
+        //{
+        //    DataTable dtAcademicSession = SyncAcademicSession.ReadFromSis(miStarConnection);
+
+        //    for (int i = 0; (i < 10 && i < dtAcademicSession.Rows.Count); i++)
+        //    {
+        //        DataRow row = dtAcademicSession.Rows[i];
+        //        SyncAcademicSession.SyncForChildRecords(row, latch, netus2Connection);
+        //        ConfirmNetus2WasSynched_AcademicSession_Children(row, netus2Connection);
+        //    }
+        //}
+
+        //[TestCase]
+        //public void Netus2SisSyncTest_AcademicSession_Parents()
+        //{
+        //    DataTable dtAcademicSession = SyncAcademicSession.ReadFromSis(miStarConnection);
+
+        //    for (int i = 0; (i < 10 && i < dtAcademicSession.Rows.Count); i++)
+        //    {
+        //        DataRow row = dtAcademicSession.Rows[i];
+        //        SyncAcademicSession.SyncForParentRecords(row, latch, netus2Connection);
+        //        ConfirmNetus2WasSynched_AcademicSession_Parents(row, netus2Connection);
+        //    }
+        //}
+
+        //[TestCase]
+        //public void Netus2SisSyncTest_Person()
+        //{
+        //    DataTable dtPerson = SyncPerson.ReadFromSis(miStarConnection);
+
+        //    for (int i = 0; (i < 10 && i < dtPerson.Rows.Count); i++)
+        //    {
+        //        DataRow row = dtPerson.Rows[i];
+        //        SyncPerson.SyncForAllRecords(row, latch, netus2Connection);
+        //        ConfirmNetus2WasSynched_Person(row, netus2Connection);
+        //    }
+        //}
+
+        [TearDown]
+        public void TearDown()
+        {
+            if (miStarConnection.GetState() == ConnectionState.Open)
+            {
+                miStarConnection.CloseConnection();
+            }
+
+            if (netus2Connection.GetState() == ConnectionState.Open)
+            {
+                netus2Connection.RollbackTransaction();
+                netus2Connection.CloseConnection();
+            }
+        }
 
         private static void ConfirmNetus2WasSynced_Organization_Children(DataRow row, IConnectable connection)
         {

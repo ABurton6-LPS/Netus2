@@ -217,8 +217,8 @@ namespace Netus2.daoImplementations
                 enrollment.Id = foundEnrollments[0].Id;
                 UpdateInternals(enrollment, personId, connection);
             }
-            else if (foundEnrollments.Count > 1)
-                throw new Exception("Multiple Enrollments found matching the description of:\n" +
+            else
+                throw new Exception(foundEnrollments.Count + " Enrollments found matching the description of:\n" +
                     enrollment.ToString());
         }
 

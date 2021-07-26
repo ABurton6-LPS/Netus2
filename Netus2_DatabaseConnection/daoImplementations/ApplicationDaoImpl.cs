@@ -124,8 +124,8 @@ namespace Netus2.daoImplementations
                 application.Id = foundApplications[0].Id;
                 UpdateInternals(application, connection);
             }
-            else if (foundApplications.Count > 1)
-                throw new Exception("Multiple Applications found matching the description of:\n" +
+            else
+                throw new Exception(foundApplications.Count + " Applications found matching the description of:\n" +
                     application.ToString());
         }
 

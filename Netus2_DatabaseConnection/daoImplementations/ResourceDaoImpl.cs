@@ -169,7 +169,7 @@ namespace Netus2.daoImplementations
                 UpdateInternals(resource, connection);
             }
             else if (foundResources.Count > 1)
-                throw new Exception("Multiple Resources found matching the description of:\n" +
+                throw new Exception(foundResources.Count + " Resources found matching the description of:\n" +
                     resource.ToString());
         }
 
@@ -177,11 +177,7 @@ namespace Netus2.daoImplementations
         {
             ResourceDao resourceDao = daoObjectMapper.MapResource(resource);
 
-            if (resourceDao.resource_id == null)
-            {
-                throw new Exception("The following Resource needs to be inserted into the database, before it can be updated.\n" + resource.ToString());
-            }
-            else
+            if (resourceDao.resource_id != null)
             {
                 StringBuilder sql = new StringBuilder("UPDATE resource SET ");
                 sql.Append("name = " + (resourceDao.name != null ? "'" + resourceDao.name + "', " : "NULL, "));
@@ -195,6 +191,8 @@ namespace Netus2.daoImplementations
 
                 connection.ExecuteNonQuery(sql.ToString());
             }
+            else
+                throw new Exception("The following Resource needs to be inserted into the database, before it can be updated.\n" + resource.ToString());
         }
 
         public Resource Write(Resource resource, IConnectable connection)

@@ -210,8 +210,8 @@ namespace Netus2.daoImplementations
                 course.Id = foundCourses[0].Id;
                 UpdateInternals(course, connection);
             }
-            else if (foundCourses.Count > 1)
-                throw new Exception("Multiple Courses found matching the description of:\n" +
+            else
+                throw new Exception(foundCourses.Count + " Courses found matching the description of:\n" +
                     course.ToString());
         }
 

@@ -149,7 +149,7 @@ namespace Netus2.daoImplementations
                 UpdateInternals(uniqueIdentifier, personId, connection);
             }
             else if (foundUniqueIdentifiers.Count > 1)
-                throw new Exception("Multiple Unique Identifiers found matching the description of:\n" +
+                throw new Exception(foundUniqueIdentifiers.Count + " Unique Identifiers found matching the description of:\n" +
                     uniqueIdentifier.ToString());
         }
 

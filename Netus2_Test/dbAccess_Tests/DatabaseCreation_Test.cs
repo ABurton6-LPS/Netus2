@@ -29,7 +29,7 @@ namespace Netus2_Test.dbAccess_Tests
                 if (sqlE.Message.Contains("There is already an object named"))
                     Assert.Pass();
                 else
-                    throw;
+                    Assert.Fail();
             }
         }
 
@@ -45,7 +45,7 @@ namespace Netus2_Test.dbAccess_Tests
                 if (sqlE.Message.Contains("There is already an object named"))
                     Assert.Pass();
                 else
-                    throw;
+                    Assert.Fail();
             }
         }
 
@@ -61,7 +61,7 @@ namespace Netus2_Test.dbAccess_Tests
                 if (sqlE.Message.Contains("There is already an object named"))
                     Assert.Pass();
                 else
-                    throw;
+                    Assert.Fail();
             }
         }
 
@@ -77,7 +77,7 @@ namespace Netus2_Test.dbAccess_Tests
                 if (sqlE.Message.Contains("There is already an object named"))
                     Assert.Pass();
                 else
-                    throw;
+                    Assert.Fail();
             }
         }
 

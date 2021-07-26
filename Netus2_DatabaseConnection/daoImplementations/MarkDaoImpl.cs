@@ -188,7 +188,7 @@ namespace Netus2.daoImplementations
                 UpdateInternals(mark, personId, connection);
             }
             else if (foundMarks.Count > 1)
-                throw new Exception("Multiple Marks found matching the description of:\n" +
+                throw new Exception(foundMarks.Count + " Marks found matching the description of:\n" +
                     mark.ToString());
 
         }
@@ -197,11 +197,7 @@ namespace Netus2.daoImplementations
         {
             MarkDao markDao = daoObjectMapper.MapMark(mark, personId);
 
-            if (markDao.mark_id == null)
-            {
-                throw new Exception("The following Mark needs to be inserted into the database, before it can be updated.\n" + mark.ToString());
-            }
-            else
+            if (markDao.mark_id != null)
             {
                 StringBuilder sql = new StringBuilder("UPDATE mark SET ");
                 sql.Append("lineitem_id = " + (markDao.lineitem_id != null ? markDao.lineitem_id + ", " : "NULL, "));
@@ -216,6 +212,8 @@ namespace Netus2.daoImplementations
 
                 connection.ExecuteNonQuery(sql.ToString());
             }
+            else
+                throw new Exception("The following Mark needs to be inserted into the database, before it can be updated.\n" + mark.ToString());
         }
 
         public Mark Write(Mark mark, int personId, IConnectable connection)

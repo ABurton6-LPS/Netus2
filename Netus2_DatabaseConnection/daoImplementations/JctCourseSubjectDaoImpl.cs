@@ -31,7 +31,7 @@ namespace Netus2.daoImplementations
             else if (results.Count == 0)
                 return null;
             else
-                throw new Exception("The jct_course_subject table contains a duplicate record...somehow.\n" +
+                throw new Exception("The jct_course_subject table contains a duplicate record.\n" +
                     "course_id = " + courseId + ", subject_id = " + subjectId);
         }
 

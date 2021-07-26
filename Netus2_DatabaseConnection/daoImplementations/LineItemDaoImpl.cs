@@ -210,21 +210,17 @@ namespace Netus2.daoImplementations
                 lineItem.Id = foundLineItems[0].Id;
                 UpdateInternals(lineItem, connection);
             }
-            else if (foundLineItems.Count > 1)
-                throw new Exception("Multiple LineItems found matching the description of:\n" +
+            else
+                throw new Exception(foundLineItems.Count + " LineItems found matching the description of:\n" +
                     lineItem.ToString());
         }
 
         private void UpdateInternals(LineItem lineItem, IConnectable connection)
         {
-            if (lineItem.Id == -1)
-            {
-                throw new Exception("The following LineItem needs to be inserted into the database, before it can be updated.\n" + lineItem.ToString());
-            }
-            else
-            {
-                LineItemDao lineItemDao = daoObjectMapper.MapLineItem(lineItem);
+            LineItemDao lineItemDao = daoObjectMapper.MapLineItem(lineItem);
 
+            if(lineItemDao.lineitem_id != null)
+            {
                 StringBuilder sql = new StringBuilder("UPDATE lineItem SET ");
                 sql.Append("name = " + (lineItemDao.name != null ? "'" + lineItemDao.name + "', " : "NULL, "));
                 sql.Append("descript = " + (lineItemDao.descript != null ? "'" + lineItemDao.descript + "', " : "NULL, "));
@@ -239,6 +235,10 @@ namespace Netus2.daoImplementations
                 sql.Append("WHERE lineItem_id = " + lineItemDao.lineitem_id);
 
                 connection.ExecuteNonQuery(sql.ToString());
+            }
+            else
+            {
+                throw new Exception("The following LineItem needs to be inserted into the database, before it can be updated.\n" + lineItem.ToString());
             }
         }
 

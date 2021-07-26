@@ -378,7 +378,7 @@ namespace Netus2.daoImplementations
                 UpdateInternals(person, connection);
             }
             else if (foundPersons.Count > 1)
-                throw new Exception("Multiple Persons found matching the description of:\n" +
+                throw new Exception(foundPersons.Count + " Persons found matching the description of:\n" +
                     person.ToString());
         }
 
@@ -386,11 +386,7 @@ namespace Netus2.daoImplementations
         {
             PersonDao personDao = daoObjectMapper.MapPerson(person);
 
-            if (personDao.person_id == null)
-            {
-                throw new Exception("The following Person needs to be inserted into the database, before it can be updated.\n" + person.ToString());
-            }
-            else
+            if (personDao.person_id != null)
             {
                 StringBuilder sql = new StringBuilder("UPDATE person SET ");
                 sql.Append("first_name = " + (personDao.first_name != null ? "'" + personDao.first_name + "', " : "NULL, "));
@@ -418,6 +414,8 @@ namespace Netus2.daoImplementations
                 UpdatedEnrollments(person.Enrollments, person.Id, connection);
                 UpdateMarks(person.Marks, person.Id, connection);
             }
+            else
+                throw new Exception("The following Person needs to be inserted into the database, before it can be updated.\n" + person.ToString());
         }
 
         public Person Write(Person person, IConnectable connection)

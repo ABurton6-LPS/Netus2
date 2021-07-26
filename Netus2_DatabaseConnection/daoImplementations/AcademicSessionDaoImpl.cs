@@ -390,8 +390,8 @@ namespace Netus2.daoImplementations
                 academicSession.Id = foundAcademicSessions[0].Id;
                 UpdateInternals(academicSession, parentId, connection);
             }
-            else if (foundAcademicSessions.Count > 1)
-                throw new Exception("Multiple Academic Sessions found matching the description of:\n" +
+            else
+                throw new Exception(foundAcademicSessions.Count + " Academic Sessions found matching the description of:\n" +
                     academicSession.ToString());
         }
 

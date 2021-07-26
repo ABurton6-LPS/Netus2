@@ -325,8 +325,8 @@ namespace Netus2.daoImplementations
                 classEnrolled.Id = foundClassEnrolleds[0].Id;
                 UpdateInternals(classEnrolled, connection);
             }
-            else if (foundClassEnrolleds.Count > 1)
-                throw new Exception("Multiple ClassEnrolleds found matching the description of:\n" +
+            else
+                throw new Exception(foundClassEnrolleds.Count + " ClassEnrolleds found matching the description of:\n" +
                     classEnrolled.ToString());
         }
 

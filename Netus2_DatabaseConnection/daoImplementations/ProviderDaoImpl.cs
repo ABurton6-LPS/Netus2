@@ -216,7 +216,7 @@ namespace Netus2.daoImplementations
                 UpdateInternals(provider, parentProviderId, connection);
             }
             else if (foundProviders.Count > 1)
-                throw new Exception("Multiple Providers found matching the description of:\n" +
+                throw new Exception(foundProviders.Count + " Providers found matching the description of:\n" +
                     provider.ToString());
         }
 

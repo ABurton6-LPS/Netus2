@@ -8,10 +8,10 @@ namespace Netus2
     public class Netus2DatabaseConnection : IConnectable
     {
         //Local database connection
-        //string connectionString = @"Data Source=ITDSL0995104653;Initial Catalog=Netus2;Integrated Security=SSPI";
+        string connectionString = @"Data Source=ITDSL0995104653;Initial Catalog=Netus2;Integrated Security=SSPI";
 
         //Cloud database connection
-        string connectionString = @"Data Source=tcp:janusdb.database.windows.net,1433;Initial Catalog=Netus2;Uid=janus;Pwd=AqIiA59@$J0K";
+        //string connectionString = @"Data Source=tcp:janusdb.database.windows.net,1433;Initial Catalog=Netus2;Uid=janus;Pwd=AqIiA59@$J0K";
 
         private SqlConnection connection;
         private SqlTransaction transaction = null;

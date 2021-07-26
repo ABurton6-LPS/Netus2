@@ -215,8 +215,8 @@ namespace Netus2.daoImplementations
                 address.Id = foundAddresses[0].Id;
                 UpdateInternals(address, connection);
             }
-            else if (foundAddresses.Count > 1)
-                throw new Exception("Multiple Addresses found matching the description of:\n" +
+            else
+                throw new Exception(foundAddresses.Count + " Addresses found matching the description of:\n" +
                     address.ToString());
         }
 
