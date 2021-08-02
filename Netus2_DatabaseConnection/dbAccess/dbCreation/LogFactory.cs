@@ -1,7 +1,4 @@
-﻿using Netus2.dbAccess;
-using System;
-
-namespace Netus2
+﻿namespace Netus2_DatabaseConnection.dbAccess.dbCreation
 {
     public class LogFactory
     {

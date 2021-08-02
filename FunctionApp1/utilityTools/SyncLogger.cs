@@ -1,11 +1,10 @@
-﻿using Netus2;
-using Netus2.dbAccess;
-using Netus2.enumerations;
+﻿using Netus2_DatabaseConnection.dbAccess;
+using Netus2_DatabaseConnection.enumerations;
 using Netus2SisSync.SyncProcesses;
 using System;
 using System.Text;
 
-namespace Netus2SisSync.Sync_Logging
+namespace Netus2SisSync.UtilityTools
 {
     public static class SyncLogger
     {

@@ -1,10 +1,11 @@
-﻿using Netus2;
-using Netus2.daoImplementations;
-using Netus2.daoInterfaces;
-using Netus2.enumerations;
-using Netus2.logObjects;
+﻿using Netus2_DatabaseConnection;
+using Netus2_DatabaseConnection.daoImplementations;
+using Netus2_DatabaseConnection.daoInterfaces;
+using Netus2_DatabaseConnection.dataObjects;
+using Netus2_DatabaseConnection.dbAccess;
+using Netus2_DatabaseConnection.enumerations;
+using Netus2_DatabaseConnection.logObjects;
 using NUnit.Framework;
-using System;
 using System.Collections.Generic;
 using static Netus2_Test.logAccess_Tests.LogTestValidator;
 
@@ -12,7 +13,7 @@ namespace Netus2_Test.logAccess_Tests
 {
     class LogReader_Test
     {
-        Netus2DatabaseConnection connection;
+        IConnectable connection;
         LogReader logReader;
         TestDataBuilder testDataBuilder;
         IPersonDao personDaoImpl;
@@ -34,10 +35,10 @@ namespace Netus2_Test.logAccess_Tests
         [SetUp]
         public void Setup()
         {
-            connection = new Netus2DatabaseConnection();
+            connection = DbConnectionFactory.GetConnection("Local");
             connection.OpenConnection();
             connection.BeginTransaction();
-            testDataBuilder = new TestDataBuilder();
+            testDataBuilder = new TestDataBuilder(connection);
             logReader = new LogReader();
             personDaoImpl = new PersonDaoImpl();
             providerDaoImpl = new ProviderDaoImpl();

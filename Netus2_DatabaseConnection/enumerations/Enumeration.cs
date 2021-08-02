@@ -1,5 +1,4 @@
-﻿
-namespace Netus2.enumerations
+﻿namespace Netus2_DatabaseConnection.enumerations
 {
     public class Enumeration
     {

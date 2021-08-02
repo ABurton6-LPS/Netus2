@@ -1,11 +1,8 @@
-﻿using Netus2.dbAccess;
-using System;
+﻿using Netus2_DatabaseConnection.dataObjects;
+using Netus2_DatabaseConnection.dbAccess;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Netus2.daoInterfaces
+namespace Netus2_DatabaseConnection.daoInterfaces
 {
     public interface IClassEnrolledDao
     {

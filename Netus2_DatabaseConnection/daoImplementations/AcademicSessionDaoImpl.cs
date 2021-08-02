@@ -1,12 +1,13 @@
-﻿using Netus2.daoInterfaces;
-using Netus2.daoObjects;
-using Netus2.dbAccess;
+﻿using Netus2_DatabaseConnection.daoInterfaces;
+using Netus2_DatabaseConnection.daoObjects;
+using Netus2_DatabaseConnection.dataObjects;
+using Netus2_DatabaseConnection.dbAccess;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
+using System.Data;
 using System.Text;
 
-namespace Netus2.daoImplementations
+namespace Netus2_DatabaseConnection.daoImplementations
 {
     public class AcademicSessionDaoImpl : IAcademicSessionDao
     {
@@ -141,121 +142,10 @@ namespace Netus2.daoImplementations
             return Read(sql.ToString(), connection);
         }
 
-        //private List<AcademicSession> Read(string sql, IConnectable connection)
-        //{
-        //    List<AcademicSessionDao> foundAsDaos = new List<AcademicSessionDao>();
-        //    SqlDataReader reader = null;
-        //    try
-        //    {
-        //        reader = connection.GetReader(sql.ToString());
-        //        while (reader.Read())
-        //        {
-        //            AcademicSessionDao foundAsDao = new AcademicSessionDao();
-        //            for (int i = 0; i < reader.FieldCount; i++)
-        //            {
-        //                var value = reader.GetValue(i);
-        //                switch (i)
-        //                {
-        //                    case 0:
-        //                        if (value != DBNull.Value)
-        //                            foundAsDao.academic_session_id = (int)value;
-        //                        else
-        //                            foundAsDao.academic_session_id = null;
-        //                        break;
-        //                    case 1:
-        //                        if (value != DBNull.Value)
-        //                            foundAsDao.term_code = (string)value;
-        //                        else
-        //                            foundAsDao.term_code = null;
-        //                        break;
-        //                    case 2:
-        //                        if (value != DBNull.Value)
-        //                            foundAsDao.school_year = (int)value;
-        //                        else
-        //                            foundAsDao.school_year = null;
-        //                        break;
-        //                    case 3:
-        //                        if (value != DBNull.Value)
-        //                            foundAsDao.name = (string)value;
-        //                        else
-        //                            foundAsDao.name = null;
-        //                        break;
-        //                    case 4:
-        //                        if (value != DBNull.Value)
-        //                            foundAsDao.start_date = (DateTime)value;
-        //                        else
-        //                            foundAsDao.start_date = null;
-        //                        break;
-        //                    case 5:
-        //                        if (value != DBNull.Value)
-        //                            foundAsDao.end_date = (DateTime)value;
-        //                        else
-        //                            foundAsDao.end_date = null;
-        //                        break;
-        //                    case 6:
-        //                        if (value != DBNull.Value)
-        //                            foundAsDao.enum_session_id = (int)value;
-        //                        else
-        //                            foundAsDao.enum_session_id = null;
-        //                        break;
-        //                    case 7:
-        //                        if (value != DBNull.Value)
-        //                            foundAsDao.parent_session_id = (int)value;
-        //                        else
-        //                            foundAsDao.parent_session_id = null;
-        //                        break;
-        //                    case 8:
-        //                        if (value != DBNull.Value)
-        //                            foundAsDao.organization_id = (int)value;
-        //                        else
-        //                            foundAsDao.organization_id = null;
-        //                        break;
-        //                    case 9:
-        //                        if (value != DBNull.Value)
-        //                            foundAsDao.created = (DateTime)value;
-        //                        else
-        //                            foundAsDao.created = (DateTime)value;
-        //                        break;
-        //                    case 10:
-        //                        foundAsDao.created_by = value != DBNull.Value ? (string)value : null;
-        //                        break;
-        //                    case 11:
-        //                        if (value != DBNull.Value)
-        //                            foundAsDao.changed = (DateTime)value;
-        //                        else
-        //                            foundAsDao.changed = null;
-        //                        break;
-        //                    case 12:
-        //                        foundAsDao.changed_by = value != DBNull.Value ? (string)value : null;
-        //                        break;
-        //                    default:
-        //                        throw new Exception("Unexpected column found in academic_session table: " + reader.GetName(i));
-        //                }
-        //            }
-        //            foundAsDaos.Add(foundAsDao);
-        //        }
-        //    }
-        //    finally
-        //    {
-        //        if (reader != null)
-        //            reader.Close();
-        //    }
-
-        //    List<AcademicSession> results = new List<AcademicSession>();
-        //    foreach (AcademicSessionDao foundAsDao in foundAsDaos)
-        //    {
-        //        Organization foundOrg = Read_Organization((int)foundAsDao.organization_id, connection);
-        //        AcademicSession result = daoObjectMapper.MapAcademicSession(foundAsDao, foundOrg);
-        //        result.Children.AddRange(Read_Children(result, connection));
-        //        results.Add(result);
-        //    }
-        //    return results;
-        //}
-
         private List<AcademicSession> Read(string sql, IConnectable connection)
         {
             List<AcademicSessionDao> foundAsDaos = new List<AcademicSessionDao>();
-            SqlDataReader reader = null;
+            IDataReader reader = null;
             try
             {
                 reader = connection.GetReader(sql.ToString());
@@ -275,69 +165,69 @@ namespace Netus2.daoImplementations
                                 break;
                             case 1:
                                 if (value != DBNull.Value)
+                                    foundAsDao.term_code = (string)value;
+                                else
+                                    foundAsDao.term_code = null;
+                                break;
+                            case 2:
+                                if (value != DBNull.Value)
+                                    foundAsDao.school_year = (int)value;
+                                else
+                                    foundAsDao.school_year = null;
+                                break;
+                            case 3:
+                                if (value != DBNull.Value)
                                     foundAsDao.name = (string)value;
                                 else
                                     foundAsDao.name = null;
                                 break;
-                            case 2:
+                            case 4:
                                 if (value != DBNull.Value)
                                     foundAsDao.start_date = (DateTime)value;
                                 else
                                     foundAsDao.start_date = null;
                                 break;
-                            case 3:
+                            case 5:
                                 if (value != DBNull.Value)
                                     foundAsDao.end_date = (DateTime)value;
                                 else
                                     foundAsDao.end_date = null;
                                 break;
-                            case 4:
+                            case 6:
                                 if (value != DBNull.Value)
                                     foundAsDao.enum_session_id = (int)value;
                                 else
                                     foundAsDao.enum_session_id = null;
                                 break;
-                            case 5:
+                            case 7:
                                 if (value != DBNull.Value)
                                     foundAsDao.parent_session_id = (int)value;
                                 else
                                     foundAsDao.parent_session_id = null;
                                 break;
-                            case 6:
+                            case 8:
                                 if (value != DBNull.Value)
                                     foundAsDao.organization_id = (int)value;
                                 else
                                     foundAsDao.organization_id = null;
                                 break;
-                            case 7:
+                            case 9:
                                 if (value != DBNull.Value)
                                     foundAsDao.created = (DateTime)value;
                                 else
                                     foundAsDao.created = (DateTime)value;
                                 break;
-                            case 8:
+                            case 10:
                                 foundAsDao.created_by = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 9:
+                            case 11:
                                 if (value != DBNull.Value)
                                     foundAsDao.changed = (DateTime)value;
                                 else
                                     foundAsDao.changed = null;
                                 break;
-                            case 10:
-                                foundAsDao.changed_by = value != DBNull.Value ? (string)value : null;
-                                break;
-                            case 11:
-                                if (value != DBNull.Value)
-                                    foundAsDao.term_code = (string)value;
-                                else
-                                    foundAsDao.term_code = null;
-                                break;
                             case 12:
-                                if (value != DBNull.Value)
-                                    foundAsDao.school_year = (int)value;
-                                else
-                                    foundAsDao.school_year = null;
+                                foundAsDao.changed_by = value != DBNull.Value ? (string)value : null;
                                 break;
                             default:
                                 throw new Exception("Unexpected column found in academic_session table: " + reader.GetName(i));

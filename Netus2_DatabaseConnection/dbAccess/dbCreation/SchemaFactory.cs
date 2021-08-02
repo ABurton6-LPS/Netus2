@@ -1,6 +1,4 @@
-﻿using Netus2.dbAccess;
-
-namespace Netus2
+﻿namespace Netus2_DatabaseConnection.dbAccess.dbCreation
 {
     public class SchemaFactory
     {

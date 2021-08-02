@@ -1,22 +1,16 @@
-﻿using Netus2.dbAccess;
-using System;
+﻿using System;
 using System.Data;
+using System.Data.Common;
 using System.Data.SqlClient;
 
-namespace Netus2
+namespace Netus2_DatabaseConnection.dbAccess
 {
-    public class Netus2DatabaseConnection : IConnectable
+    public class GenericDatabaseConnection : IConnectable
     {
-        //Local database connection
-        string connectionString = @"Data Source=ITDSL0995104653;Initial Catalog=Netus2;Integrated Security=SSPI";
+        private IDbConnection connection;
+        private IDbTransaction transaction = null;
 
-        //Cloud database connection
-        //string connectionString = @"Data Source=tcp:janusdb.database.windows.net,1433;Initial Catalog=Netus2;Uid=janus;Pwd=AqIiA59@$J0K";
-
-        private SqlConnection connection;
-        private SqlTransaction transaction = null;
-
-        public Netus2DatabaseConnection()
+        public GenericDatabaseConnection(string connectionString)
         {
             connection = new SqlConnection(connectionString);
         }
@@ -57,7 +51,7 @@ namespace Netus2
             }
         }
 
-        public SqlDataReader GetReader(string sql)
+        public IDataReader GetReader(string sql)
         {
             if ((sql == null) || (sql == "") || !(sql.ToUpper().Substring(0, 6).Contains("SELECT")))
             {
@@ -68,11 +62,11 @@ namespace Netus2
 
             if (transaction != null)
             {
-                command = new SqlCommand(sql, connection, transaction);
+                command = new SqlCommand(sql, (SqlConnection)connection, (SqlTransaction)transaction);
             }
             else
             {
-                command = new SqlCommand(sql, connection);
+                command = new SqlCommand(sql, (SqlConnection)connection);
             }
 
             return command.ExecuteReader();
@@ -85,15 +79,15 @@ namespace Netus2
                 throw new Exception("SQL Cannot be empty, null, or a query.");
             }
 
-            SqlCommand command = null;
+            IDbCommand command = null;
 
             if (transaction != null)
             {
-                command = new SqlCommand(sql, connection, transaction);
+                command = new SqlCommand(sql, (SqlConnection)connection, (SqlTransaction)transaction);
             }
             else
             {
-                command = new SqlCommand(sql, connection);
+                command = new SqlCommand(sql, (SqlConnection)connection);
             }
 
             return command.ExecuteNonQuery();
@@ -116,7 +110,7 @@ namespace Netus2
             }
 
             sql = "SELECT SCOPE_IDENTITY()";
-            SqlDataReader reader = null;
+            IDataReader reader = null;
             try
             {
                 reader = GetReader(sql);

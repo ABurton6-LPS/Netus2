@@ -1,12 +1,12 @@
-﻿using Netus2.daoInterfaces;
-using Netus2.daoObjects;
-using Netus2.dbAccess;
+﻿using Netus2_DatabaseConnection.daoInterfaces;
+using Netus2_DatabaseConnection.daoObjects;
+using Netus2_DatabaseConnection.dbAccess;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
+using System.Data;
 using System.Text;
 
-namespace Netus2.daoImplementations
+namespace Netus2_DatabaseConnection.daoImplementations
 {
     public class JctPersonAddressDaoImpl : IJctPersonAddressDao
     {
@@ -52,7 +52,7 @@ namespace Netus2.daoImplementations
         {
             List<JctPersonAddressDao> jctPersonAddressDaos = new List<JctPersonAddressDao>();
 
-            SqlDataReader reader = null;
+            IDataReader reader = null;
             try
             {
                 reader = connection.GetReader(sql);

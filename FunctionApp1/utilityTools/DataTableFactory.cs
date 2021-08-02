@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Text;
 
-namespace Netus2SisSync
+namespace Netus2SisSync.UtilityTools
 {
     public class DataTableFactory
     {

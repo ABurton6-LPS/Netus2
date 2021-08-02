@@ -1,7 +1,7 @@
-﻿using Netus2;
-using Netus2.dbAccess;
+﻿using Netus2_DatabaseConnection.dataObjects;
+using Netus2_DatabaseConnection.dbAccess;
 using NUnit.Framework;
-using System.Data.SqlClient;
+using System.Data;
 
 namespace Netus2_Test.daoObject_Tests
 {
@@ -332,7 +332,7 @@ namespace Netus2_Test.daoObject_Tests
 
         private static int RunSql(string sql, IConnectable connection)
         {
-            SqlDataReader reader = null;
+            IDataReader reader = null;
             int recordsFound = 0;
             try
             {

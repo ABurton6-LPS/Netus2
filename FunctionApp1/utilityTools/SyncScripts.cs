@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Netus2SisSync
+﻿namespace Netus2SisSync.UtilityTools
 {
     class SyncScripts
     {

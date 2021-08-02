@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 
-namespace Netus2_DatabaseConnection
+namespace Netus2_DatabaseConnection.utilityTools 
 {
     public class CountDownLatch
     {

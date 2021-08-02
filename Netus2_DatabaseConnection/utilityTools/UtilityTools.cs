@@ -1,12 +1,10 @@
-﻿using Netus2.daoObjects;
-using Netus2.dbAccess;
-using Netus2.enumerations;
+﻿using Netus2_DatabaseConnection.dbAccess;
+using Netus2_DatabaseConnection.enumerations;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
 
-namespace Netus2
+namespace Netus2_DatabaseConnection.utilityTools
 {
     public class UtilityTools
     {
@@ -19,10 +17,10 @@ namespace Netus2
         {
             Dictionary<string, Enumeration> enumerations = new Dictionary<string, Enumeration>();
 
-            IConnectable connection = new Netus2DatabaseConnection();
+            IConnectable connection = DbConnectionFactory.GetConnection("Netus2");
             connection.OpenConnection();
 
-            SqlDataReader reader = null;
+            IDataReader reader = null;
             try
             {
                 reader = connection.GetReader("SELECT * FROM " + tableName);

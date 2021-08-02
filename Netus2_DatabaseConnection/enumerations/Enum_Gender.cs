@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using Netus2_DatabaseConnection.utilityTools;
+using System.Collections.Generic;
 
-namespace Netus2.enumerations
+namespace Netus2_DatabaseConnection.enumerations
 {
     public class Enum_Gender
     {

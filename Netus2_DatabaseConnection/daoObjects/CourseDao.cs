@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Netus2.daoObjects
+namespace Netus2_DatabaseConnection.daoObjects
 {
     public class CourseDao
     {

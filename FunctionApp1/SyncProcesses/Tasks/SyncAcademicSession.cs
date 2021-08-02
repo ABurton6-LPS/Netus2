@@ -1,26 +1,23 @@
-﻿using Netus2;
-using Netus2.daoImplementations;
-using Netus2.daoInterfaces;
-using Netus2.dbAccess;
-using Netus2.enumerations;
-using Netus2_DatabaseConnection;
-using Netus2SisSync.Sync_Logging;
-using Netus2SisSync.SyncProcesses;
+﻿using Netus2_DatabaseConnection.daoImplementations;
+using Netus2_DatabaseConnection.daoInterfaces;
+using Netus2_DatabaseConnection.dataObjects;
+using Netus2_DatabaseConnection.dbAccess;
+using Netus2_DatabaseConnection.enumerations;
+using Netus2_DatabaseConnection.utilityTools;
+using Netus2SisSync.UtilityTools;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
+using System.Data;
 using System.Diagnostics;
 using System.Threading;
 
-namespace Netus2SisSync
+namespace Netus2SisSync.SyncProcesses.Tasks
 {
     public class SyncAcademicSession
     {
-        public static void Start(IConnectable miStarConnection, IConnectable netus2Connection)
+        public static void Start(SyncJob job, IConnectable miStarConnection, IConnectable netus2Connection)
         {
-            SyncJob job = SyncLogger.LogNewJob("AcademicSession_Start", netus2Connection);
-
             DataTable dtAcademicSession = SyncAcademicSession.ReadFromSis(job, miStarConnection, netus2Connection);
             CountDownLatch dtAcademicSessionChildLatch = new CountDownLatch(dtAcademicSession.Rows.Count);
             foreach (DataRow row in dtAcademicSession.Rows)
@@ -37,14 +34,12 @@ namespace Netus2SisSync
                 Thread.Sleep(100);
             }
             dtAcademicSessionParentLatch.Wait();
-
-            SyncLogger.LogStatus(job, Enum_Sync_Status.values["end"], netus2Connection);
         }
 
         public static DataTable ReadFromSis(SyncJob job, IConnectable miStarConnection, IConnectable netus2Connection)
         {
             DataTable dtAcademicSession = DataTableFactory.CreateDataTable("AcademicSession");
-            SqlDataReader reader = null;
+            IDataReader reader = null;
             try
             {
                 reader = miStarConnection.GetReader(SyncScripts.ReadSiS_AcademicSession_SQL);
@@ -108,7 +103,7 @@ namespace Netus2SisSync
             IConnectable connection = null;
             try
             {
-                connection = new Netus2DatabaseConnection();
+                connection = DbConnectionFactory.GetConnection("Netus2");
                 connection.OpenConnection();
 
                 task = SyncLogger.LogNewTask("AcademicSession_SyncForChildRecords", job, connection);
@@ -181,7 +176,7 @@ namespace Netus2SisSync
             IConnectable connection = null;
             try
             {
-                connection = new Netus2DatabaseConnection();
+                connection = DbConnectionFactory.GetConnection("Netus2");
                 connection.OpenConnection();
 
                 task = SyncLogger.LogNewTask("AcademicSession_SyncForParentRecords", job, connection);

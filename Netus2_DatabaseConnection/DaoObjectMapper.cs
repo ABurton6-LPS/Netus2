@@ -1,12 +1,10 @@
-﻿using Netus2.daoImplementations;
-using Netus2.daoInterfaces;
-using Netus2.daoObjects;
-using Netus2.dbAccess;
-using Netus2.enumerations;
+﻿using Netus2_DatabaseConnection.daoObjects;
+using Netus2_DatabaseConnection.dataObjects;
+using Netus2_DatabaseConnection.enumerations;
 using System;
 using System.Collections.Generic;
 
-namespace Netus2
+namespace Netus2_DatabaseConnection
 {
     public class DaoObjectMapper
     {

@@ -1,9 +1,4 @@
-﻿using Netus2.dbAccess;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Netus2_DatabaseConnection.dbAccess.dbCreation
+﻿namespace Netus2_DatabaseConnection.dbAccess.dbCreation
 {
     public class ErrorFactory
     {

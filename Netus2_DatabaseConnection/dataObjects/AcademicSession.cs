@@ -1,8 +1,8 @@
-﻿using Netus2.enumerations;
+﻿using Netus2_DatabaseConnection.enumerations;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Netus2
+namespace Netus2_DatabaseConnection.dataObjects
 {
     public class AcademicSession : Session
     {

@@ -1,9 +1,9 @@
-using Netus2;
-using Netus2.dbAccess;
+using Netus2_DatabaseConnection.dbAccess;
+using Netus2_DatabaseConnection.dbAccess.dbCreation;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
+using System.Data;
 
 namespace Netus2_Test.dbAccess_Tests
 {
@@ -14,7 +14,7 @@ namespace Netus2_Test.dbAccess_Tests
         [SetUp]
         public void Setup()
         {
-            connection = new Netus2DatabaseConnection();
+            connection = DbConnectionFactory.GetConnection("Local");
             connection.OpenConnection();
             connection.BeginTransaction();
 
@@ -81,7 +81,7 @@ namespace Netus2_Test.dbAccess_Tests
             string sql =
                 "SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = N'" + tableName + "'";
             int numberOfRecordsReturned = 0;
-            SqlDataReader reader = null;
+            IDataReader reader = null;
             try
             {
                 reader = connection.GetReader(sql);
@@ -103,7 +103,7 @@ namespace Netus2_Test.dbAccess_Tests
         {
             List<String> foundColumns = new List<String>();
             string sql = "SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = N'" + tableName + "' AND COLUMN_NAME NOT LIKE 'populated_by'";
-            SqlDataReader reader = null;
+            IDataReader reader = null;
             try
             {
                 reader = connection.GetReader(sql);

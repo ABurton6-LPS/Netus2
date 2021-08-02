@@ -1,7 +1,8 @@
-﻿using Netus2;
-using Netus2.daoImplementations;
-using Netus2.daoInterfaces;
-using Netus2.enumerations;
+﻿using Netus2_DatabaseConnection.daoImplementations;
+using Netus2_DatabaseConnection.daoInterfaces;
+using Netus2_DatabaseConnection.dataObjects;
+using Netus2_DatabaseConnection.dbAccess;
+using Netus2_DatabaseConnection.enumerations;
 using NUnit.Framework;
 using System;
 
@@ -9,7 +10,7 @@ namespace Netus2_Test.daoObject_Tests
 {
     class Overall_Delete_Test
     {
-        Netus2DatabaseConnection connection;
+        IConnectable connection;
         IOrganizationDao organizationDaoImpl;
         IAcademicSessionDao academicSessionDaoImpl;
         IPersonDao personDaoImpl;
@@ -48,7 +49,7 @@ namespace Netus2_Test.daoObject_Tests
         [SetUp]
         public void Setup()
         {
-            connection = new Netus2DatabaseConnection();
+            connection = DbConnectionFactory.GetConnection("Local");
             connection.OpenConnection();
             connection.BeginTransaction();
             organizationDaoImpl = new OrganizationDaoImpl();

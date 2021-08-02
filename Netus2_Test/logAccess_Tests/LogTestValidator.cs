@@ -1,8 +1,8 @@
-﻿using Netus2;
-using Netus2.dbAccess;
-using Netus2.logObjects;
+﻿using Netus2_DatabaseConnection.dataObjects;
+using Netus2_DatabaseConnection.dbAccess;
+using Netus2_DatabaseConnection.logObjects;
 using NUnit.Framework;
-using System.Data.SqlClient;
+using System.Data;
 
 namespace Netus2_Test.logAccess_Tests
 {
@@ -172,7 +172,7 @@ namespace Netus2_Test.logAccess_Tests
 
         private static int RunSql(string sql, IConnectable connection)
         {
-            SqlDataReader reader = null;
+            IDataReader reader = null;
             int recordsFound = 0;
             try
             {

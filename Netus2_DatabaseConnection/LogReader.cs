@@ -1,11 +1,11 @@
-﻿using Netus2.dbAccess;
-using Netus2.enumerations;
-using Netus2.logObjects;
+﻿using Netus2_DatabaseConnection.dbAccess;
+using Netus2_DatabaseConnection.enumerations;
+using Netus2_DatabaseConnection.logObjects;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
+using System.Data;
 
-namespace Netus2
+namespace Netus2_DatabaseConnection
 {
     public class LogReader
     {
@@ -15,7 +15,7 @@ namespace Netus2
 
             string sql = "SELECT * FROM log_person";
 
-            SqlDataReader reader = null;
+            IDataReader reader = null;
             try
             {
                 reader = connection.GetReader(sql);
@@ -132,7 +132,7 @@ namespace Netus2
 
             string sql = "SELECT * FROM log_jct_person_role";
 
-            SqlDataReader reader = null;
+            IDataReader reader = null;
             try
             {
                 reader = connection.GetReader(sql);
@@ -196,7 +196,7 @@ namespace Netus2
 
             string sql = "SELECT * FROM log_jct_person_person";
 
-            SqlDataReader reader = null;
+            IDataReader reader = null;
             try
             {
                 reader = connection.GetReader(sql);
@@ -260,7 +260,7 @@ namespace Netus2
 
             string sql = "SELECT * FROM log_unique_identifier";
 
-            SqlDataReader reader = null;
+            IDataReader reader = null;
             try
             {
                 reader = connection.GetReader(sql);
@@ -357,7 +357,7 @@ namespace Netus2
 
             string sql = "SELECT * FROM log_provider";
 
-            SqlDataReader reader = null;
+            IDataReader reader = null;
             try
             {
                 reader = connection.GetReader(sql);
@@ -448,7 +448,7 @@ namespace Netus2
 
             string sql = "SELECT * FROM log_app";
 
-            SqlDataReader reader = null;
+            IDataReader reader = null;
             try
             {
                 reader = connection.GetReader(sql);
@@ -533,7 +533,7 @@ namespace Netus2
 
             string sql = "SELECT * FROM log_jct_person_app";
 
-            SqlDataReader reader = null;
+            IDataReader reader = null;
             try
             {
                 reader = connection.GetReader(sql);
@@ -597,7 +597,7 @@ namespace Netus2
 
             string sql = "SELECT * FROM log_jct_class_person";
 
-            SqlDataReader reader = null;
+            IDataReader reader = null;
             try
             {
                 reader = connection.GetReader(sql);
@@ -666,7 +666,7 @@ namespace Netus2
 
             string sql = "SELECT * FROM log_phone_number";
 
-            SqlDataReader reader = null;
+            IDataReader reader = null;
             try
             {
                 reader = connection.GetReader(sql);
@@ -763,7 +763,7 @@ namespace Netus2
 
             string sql = "SELECT * FROM log_address";
 
-            SqlDataReader reader = null;
+            IDataReader reader = null;
             try
             {
                 reader = connection.GetReader(sql);
@@ -884,7 +884,7 @@ namespace Netus2
 
             string sql = "SELECT * FROM log_jct_person_address";
 
-            SqlDataReader reader = null;
+            IDataReader reader = null;
             try
             {
                 reader = connection.GetReader(sql);
@@ -948,7 +948,7 @@ namespace Netus2
 
             string sql = "SELECT * FROM log_employment_session";
 
-            SqlDataReader reader = null;
+            IDataReader reader = null;
             try
             {
                 reader = connection.GetReader(sql);
@@ -1063,7 +1063,7 @@ namespace Netus2
 
             string sql = "SELECT * FROM log_academic_session";
 
-            SqlDataReader reader = null;
+            IDataReader reader = null;
             try
             {
                 reader = connection.GetReader(sql);
@@ -1171,7 +1171,7 @@ namespace Netus2
             List<LogOrganization> logOrgs = new List<LogOrganization>();
 
             string sql = "SELECT * FROM log_organization";
-            SqlDataReader reader = null;
+            IDataReader reader = null;
             try
             {
                 reader = connection.GetReader(sql);
@@ -1267,7 +1267,7 @@ namespace Netus2
             List<LogResource> logResources = new List<LogResource>();
 
             string sql = "SELECT * FROM log_resource";
-            SqlDataReader reader = null;
+            IDataReader reader = null;
             try
             {
                 reader = connection.GetReader(sql);
@@ -1360,7 +1360,7 @@ namespace Netus2
             List<LogCourse> logCourses = new List<LogCourse>();
 
             string sql = "SELECT * FROM log_course";
-            SqlDataReader reader = null;
+            IDataReader reader = null;
             try
             {
                 reader = connection.GetReader(sql);
@@ -1442,7 +1442,7 @@ namespace Netus2
 
             string sql = "SELECT * FROM log_jct_course_subject";
 
-            SqlDataReader reader = null;
+            IDataReader reader = null;
             try
             {
                 reader = connection.GetReader(sql);
@@ -1506,7 +1506,7 @@ namespace Netus2
 
             string sql = "SELECT * FROM log_jct_course_grade";
 
-            SqlDataReader reader = null;
+            IDataReader reader = null;
             try
             {
                 reader = connection.GetReader(sql);
@@ -1569,7 +1569,7 @@ namespace Netus2
             List<LogClass> logClasss = new List<LogClass>();
 
             string sql = "SELECT * FROM log_class";
-            SqlDataReader reader = null;
+            IDataReader reader = null;
             try
             {
                 reader = connection.GetReader(sql);
@@ -1672,7 +1672,7 @@ namespace Netus2
 
             string sql = "SELECT * FROM log_jct_class_period";
 
-            SqlDataReader reader = null;
+            IDataReader reader = null;
             try
             {
                 reader = connection.GetReader(sql);
@@ -1736,7 +1736,7 @@ namespace Netus2
 
             string sql = "SELECT * FROM log_jct_class_resource";
 
-            SqlDataReader reader = null;
+            IDataReader reader = null;
             try
             {
                 reader = connection.GetReader(sql);
@@ -1800,7 +1800,7 @@ namespace Netus2
 
             string sql = "SELECT * FROM log_lineitem";
 
-            SqlDataReader reader = null;
+            IDataReader reader = null;
             try
             {
                 reader = connection.GetReader(sql);
@@ -1918,7 +1918,7 @@ namespace Netus2
 
             string sql = "SELECT * FROM log_enrollment";
 
-            SqlDataReader reader = null;
+            IDataReader reader = null;
             try
             {
                 reader = connection.GetReader(sql);
@@ -2030,7 +2030,7 @@ namespace Netus2
 
             string sql = "SELECT * FROM log_mark";
 
-            SqlDataReader reader = null;
+            IDataReader reader = null;
             try
             {
                 reader = connection.GetReader(sql);
@@ -2139,7 +2139,7 @@ namespace Netus2
 
             string sql = "SELECT * FROM log_jct_enrollment_academic_session";
 
-            SqlDataReader reader = null;
+            IDataReader reader = null;
             try
             {
                 reader = connection.GetReader(sql);

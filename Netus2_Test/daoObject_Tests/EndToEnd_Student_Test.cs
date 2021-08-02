@@ -1,7 +1,8 @@
-﻿using Netus2;
-using Netus2.daoImplementations;
-using Netus2.daoInterfaces;
-using Netus2.enumerations;
+﻿using Netus2_DatabaseConnection.daoImplementations;
+using Netus2_DatabaseConnection.daoInterfaces;
+using Netus2_DatabaseConnection.dataObjects;
+using Netus2_DatabaseConnection.dbAccess;
+using Netus2_DatabaseConnection.enumerations;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ namespace Netus2_Test.daoObject_Tests
 {
     class EndToEnd_StudentTest
     {
-        Netus2DatabaseConnection connection;
+        IConnectable connection;
 
         TestDataBuilder testDataBuilder;
 
@@ -28,7 +29,7 @@ namespace Netus2_Test.daoObject_Tests
         [SetUp]
         public void Setup()
         {
-            connection = new Netus2DatabaseConnection();
+            connection = DbConnectionFactory.GetConnection("Local");
             connection.OpenConnection();
             connection.BeginTransaction();
 
