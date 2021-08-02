@@ -1,13 +1,14 @@
-﻿using Netus2.daoInterfaces;
-using Netus2.daoObjects;
-using Netus2.dbAccess;
-using Netus2.enumerations;
+﻿using Netus2_DatabaseConnection.daoInterfaces;
+using Netus2_DatabaseConnection.daoObjects;
+using Netus2_DatabaseConnection.dataObjects;
+using Netus2_DatabaseConnection.dbAccess;
+using Netus2_DatabaseConnection.enumerations;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
+using System.Data;
 using System.Text;
 
-namespace Netus2.daoImplementations
+namespace Netus2_DatabaseConnection.daoImplementations
 {
     public class PersonDaoImpl : IPersonDao
     {
@@ -188,7 +189,7 @@ namespace Netus2.daoImplementations
         {
             List<PersonDao> foundPeopleDao = new List<PersonDao>();
 
-            SqlDataReader reader = null;
+            IDataReader reader = null;
             try
             {
                 reader = connection.GetReader(sql);
@@ -378,7 +379,7 @@ namespace Netus2.daoImplementations
                 UpdateInternals(person, connection);
             }
             else if (foundPersons.Count > 1)
-                throw new Exception("Multiple Persons found matching the description of:\n" +
+                throw new Exception(foundPersons.Count + " Persons found matching the description of:\n" +
                     person.ToString());
         }
 
@@ -386,11 +387,7 @@ namespace Netus2.daoImplementations
         {
             PersonDao personDao = daoObjectMapper.MapPerson(person);
 
-            if (personDao.person_id == null)
-            {
-                throw new Exception("The following Person needs to be inserted into the database, before it can be updated.\n" + person.ToString());
-            }
-            else
+            if (personDao.person_id != null)
             {
                 StringBuilder sql = new StringBuilder("UPDATE person SET ");
                 sql.Append("first_name = " + (personDao.first_name != null ? "'" + personDao.first_name + "', " : "NULL, "));
@@ -418,6 +415,8 @@ namespace Netus2.daoImplementations
                 UpdatedEnrollments(person.Enrollments, person.Id, connection);
                 UpdateMarks(person.Marks, person.Id, connection);
             }
+            else
+                throw new Exception("The following Person needs to be inserted into the database, before it can be updated.\n" + person.ToString());
         }
 
         public Person Write(Person person, IConnectable connection)
@@ -443,7 +442,7 @@ namespace Netus2.daoImplementations
                 "enum_residence_status_id, login_name, login_pw, created, created_by) " +
                 "VALUES (" + sqlValues.ToString() + ")";
 
-            personDao.person_id = connection.InsertNewRecord(sql, "person");
+            personDao.person_id = connection.InsertNewRecord(sql);
 
             Person result = daoObjectMapper.MapPerson(personDao);
 

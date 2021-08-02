@@ -1,6 +1,4 @@
-﻿using Netus2.dbAccess;
-
-namespace Netus2
+﻿namespace Netus2_DatabaseConnection.dbAccess.dbCreation
 {
     public class SchemaFactory
     {
@@ -13,6 +11,8 @@ namespace Netus2
         private static void BuildEnums(IConnectable connection)
         {
             BuildEnumLogAction(connection);
+            BuildEnumSyncStatus(connection);
+            BuildEnumJobStatus(connection);
             BuildEnumTrueFalse(connection);
             BuildEnumPhone(connection);
             BuildEnumAddress(connection);
@@ -61,6 +61,11 @@ namespace Netus2
             BuildEnrollment(connection);
             BuildJctEnrollmentAcademicSession(connection);
             BuildMark(connection);
+            BuildSyncJob(connection);
+            BuildSyncTask(connection);
+            BuildSyncJobStatus(connection);
+            BuildSyncTaskStatus(connection);
+            BuildSyncError(connection);
         }
 
         private static void BuildEnumLogAction(IConnectable connection)
@@ -73,6 +78,34 @@ namespace Netus2
                     + "hr_code varchar(20),"
                     + "pip_code varchar(20),"
                     + "descript varchar(150) NOT NULL)";
+
+            connection.ExecuteNonQuery(sql);
+        }
+
+        private static void BuildEnumSyncStatus(IConnectable connection)
+        {
+            string sql =
+                "CREATE TABLE enum_sync_status( "
+                + "enum_sync_status_id int IDENTITY(1,1) PRIMARY KEY, "
+                + "netus2_code varchar(20) NOT NULL, "
+                + "sis_code varchar(20), "
+                + "hr_code varchar(20), "
+                + "pip_code varchar(20), "
+                + "descript varchar(1150) NOT NULL)";
+
+            connection.ExecuteNonQuery(sql);
+        }
+
+        private static void BuildEnumJobStatus(IConnectable connection)
+        {
+            string sql =
+                "CREATE TABLE enum_job_status ("
+                + "enum_job_status_id int IDENTITY(1,1) PRIMARY KEY,"
+                + "netus2_code varchar(20) NOT NULL,"
+                + "sis_code varchar(20),"
+                + "hr_code varchar(20),"
+                + "pip_code varchar(20),"
+                + "descript varchar(150) NOT NULL)";
 
             connection.ExecuteNonQuery(sql);
         }
@@ -545,6 +578,8 @@ namespace Netus2
             string sql =
                 "CREATE TABLE academic_session ("
                     + "academic_session_id int IDENTITY(1,1) PRIMARY KEY,"
+                    + "term_code varchar(5) NOT NULL, "
+                    + "school_year int, "
                     + "name varchar(150) NOT NULL,"
                     + "start_date date NOT NULL,"
                     + "end_date date NOT NULL,"
@@ -570,7 +605,7 @@ namespace Netus2
                     + "name varchar(150) NOT NULL,"
                     + "enum_organization_id int NOT NULL,"
                     + "identifier varchar(150),"
-                    + "building_code varchar(150),"
+                    + "building_code varchar(150) UNIQUE,"
                     + "organization_parent_id int,"
                     + "created datetime NOT NULL,"
                     + "created_by varchar(150) NOT NULL,"
@@ -770,6 +805,69 @@ namespace Netus2
                     + "FOREIGN KEY (lineitem_id) REFERENCES lineitem(lineitem_id),"
                     + "FOREIGN KEY (person_id) REFERENCES person(person_id),"
                     + "FOREIGN KEY (enum_score_status_id) REFERENCES enum_score_status(enum_score_status_id))";
+            connection.ExecuteNonQuery(sql);
+        }
+
+        private static void BuildSyncJob(IConnectable connection)
+        {
+            string sql =
+                "CREATE TABLE sync_job( "
+                + "sync_job_id int IDENTITY(1,1) PRIMARY KEY, "
+                + "[name] varchar(20) NOT NULL, "
+                + "[timestamp] datetime)";
+            connection.ExecuteNonQuery(sql);
+        }
+
+        private static void BuildSyncTask(IConnectable connection)
+        {
+            string sql =
+                "CREATE TABLE sync_task( "
+                + "sync_task_id int IDENTITY(1,1) PRIMARY KEY, "
+                + "sync_job_id int, "
+                + "[name] varchar(20) NOT NULL, "
+                + "[timestamp] datetime, "
+                + "FOREIGN KEY(sync_job_id) REFERENCES sync_job(sync_job_id))";
+            connection.ExecuteNonQuery(sql);
+        }
+
+        private static void BuildSyncJobStatus(IConnectable connection)
+        {
+            string sql =
+                "CREATE TABLE sync_job_status( "
+                + "sync_job_status_id int IDENTITY(1,1) PRIMARY KEY, "
+                + "sync_job_id int, "
+                + "enum_sync_status_id int, "
+                + "[timestamp] datetime, "
+                + "FOREIGN KEY(sync_job_id) REFERENCES sync_job(sync_job_id), "
+                + "FOREIGN KEY(enum_sync_status_id) REFERENCES enum_sync_status(enum_sync_status_id))";
+            connection.ExecuteNonQuery(sql);
+        }
+
+        private static void BuildSyncTaskStatus(IConnectable connection)
+        {
+            string sql =
+                "CREATE TABLE sync_task_status( "
+                + "sync_task_status_id int IDENTITY(1,1) PRIMARY KEY, "
+                + "sync_task_id int, "
+                + "enum_sync_status_id int, "
+                + "[timestamp] datetime, "
+                + "FOREIGN KEY(sync_task_id) REFERENCES sync_task(sync_task_id), "
+                + "FOREIGN KEY(enum_sync_status_id) REFERENCES enum_sync_status(enum_sync_status_id))";
+            connection.ExecuteNonQuery(sql);
+        }
+
+        private static void BuildSyncError(IConnectable connection)
+        {
+            string sql =
+                "CREATE TABLE sync_error( "
+                + "sync_error_id int IDENTITY(1,1) PRIMARY KEY, "
+                + "sync_job_id int, "
+                + "sync_task_id int, "
+                + "[message] varchar(100), "
+                + "stack_trace text NOT NULL, "
+                + "[timestamp] datetime, "
+                + "FOREIGN KEY(sync_job_id) REFERENCES sync_job(sync_job_id), "
+                + "FOREIGN KEY(sync_task_id) REFERENCES sync_task(sync_task_id))";
             connection.ExecuteNonQuery(sql);
         }
     }

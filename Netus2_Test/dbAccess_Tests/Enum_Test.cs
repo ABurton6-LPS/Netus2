@@ -1,4 +1,4 @@
-﻿using Netus2.enumerations;
+﻿using Netus2_DatabaseConnection.enumerations;
 using NUnit.Framework;
 
 namespace Netus2_Test.dbAccess_Tests

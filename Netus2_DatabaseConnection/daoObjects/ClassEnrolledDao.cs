@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Netus2.daoObjects
+namespace Netus2_DatabaseConnection.daoObjects
 {
     public class ClassEnrolledDao
     {

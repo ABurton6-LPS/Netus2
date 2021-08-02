@@ -1,9 +1,7 @@
-﻿using Netus2.enumerations;
-using System;
-using System.Collections.Generic;
+﻿using Netus2_DatabaseConnection.enumerations;
 using System.Text;
 
-namespace Netus2
+namespace Netus2_DatabaseConnection.dataObjects
 {
     public class EmploymentSession : Session
     {

@@ -1,8 +1,7 @@
-﻿using Netus2.dbAccess;
-using Netus2.enumerations;
+﻿using Netus2_DatabaseConnection.enumerations;
 using System;
 
-namespace Netus2.logObjects
+namespace Netus2_DatabaseConnection.logObjects
 {
     public class LogAcademicSession
     {

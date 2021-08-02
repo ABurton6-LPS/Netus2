@@ -1,12 +1,13 @@
-﻿using Netus2.daoInterfaces;
-using Netus2.daoObjects;
-using Netus2.dbAccess;
+﻿using Netus2_DatabaseConnection.daoInterfaces;
+using Netus2_DatabaseConnection.daoObjects;
+using Netus2_DatabaseConnection.dataObjects;
+using Netus2_DatabaseConnection.dbAccess;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
+using System.Data;
 using System.Text;
 
-namespace Netus2.daoImplementations
+namespace Netus2_DatabaseConnection.daoImplementations
 {
     public class UniqueIdentifierDaoImpl : IUniqueIdentifierDao
     {
@@ -59,7 +60,7 @@ namespace Netus2.daoImplementations
         {
             List<UniqueIdentifierDao> foundUniqueIdDaos = new List<UniqueIdentifierDao>();
 
-            SqlDataReader reader = null;
+            IDataReader reader = null;
             try
             {
                 reader = connection.GetReader(sql);
@@ -149,7 +150,7 @@ namespace Netus2.daoImplementations
                 UpdateInternals(uniqueIdentifier, personId, connection);
             }
             else if (foundUniqueIdentifiers.Count > 1)
-                throw new Exception("Multiple Unique Identifiers found matching the description of:\n" +
+                throw new Exception(foundUniqueIdentifiers.Count + " Unique Identifiers found matching the description of:\n" +
                     uniqueIdentifier.ToString());
         }
 
@@ -191,7 +192,7 @@ namespace Netus2.daoImplementations
             sql.Append("'Netus2'");
             sql.Append(")");
 
-            uniqueIdDao.unique_identifier_id = connection.InsertNewRecord(sql.ToString(), "unique_identifier");
+            uniqueIdDao.unique_identifier_id = connection.InsertNewRecord(sql.ToString());
 
             return daoObjectMapper.MapUniqueIdentifier(uniqueIdDao);
         }

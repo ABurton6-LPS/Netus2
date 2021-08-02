@@ -1,12 +1,13 @@
-﻿using Netus2.daoInterfaces;
-using Netus2.daoObjects;
-using Netus2.dbAccess;
+﻿using Netus2_DatabaseConnection.daoInterfaces;
+using Netus2_DatabaseConnection.daoObjects;
+using Netus2_DatabaseConnection.dataObjects;
+using Netus2_DatabaseConnection.dbAccess;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
+using System.Data;
 using System.Text;
 
-namespace Netus2.daoImplementations
+namespace Netus2_DatabaseConnection.daoImplementations
 {
     public class ResourceDaoImpl : IResourceDao
     {
@@ -81,7 +82,7 @@ namespace Netus2.daoImplementations
         {
             List<ResourceDao> foundResourceDaos = new List<ResourceDao>();
 
-            SqlDataReader reader = null;
+            IDataReader reader = null;
             try
             {
                 reader = connection.GetReader(sql);
@@ -169,7 +170,7 @@ namespace Netus2.daoImplementations
                 UpdateInternals(resource, connection);
             }
             else if (foundResources.Count > 1)
-                throw new Exception("Multiple Resources found matching the description of:\n" +
+                throw new Exception(foundResources.Count + " Resources found matching the description of:\n" +
                     resource.ToString());
         }
 
@@ -177,11 +178,7 @@ namespace Netus2.daoImplementations
         {
             ResourceDao resourceDao = daoObjectMapper.MapResource(resource);
 
-            if (resourceDao.resource_id == null)
-            {
-                throw new Exception("The following Resource needs to be inserted into the database, before it can be updated.\n" + resource.ToString());
-            }
-            else
+            if (resourceDao.resource_id != null)
             {
                 StringBuilder sql = new StringBuilder("UPDATE resource SET ");
                 sql.Append("name = " + (resourceDao.name != null ? "'" + resourceDao.name + "', " : "NULL, "));
@@ -195,6 +192,8 @@ namespace Netus2.daoImplementations
 
                 connection.ExecuteNonQuery(sql.ToString());
             }
+            else
+                throw new Exception("The following Resource needs to be inserted into the database, before it can be updated.\n" + resource.ToString());
         }
 
         public Resource Write(Resource resource, IConnectable connection)
@@ -216,7 +215,7 @@ namespace Netus2.daoImplementations
                 "application_identification, created, created_by) " +
                 "VALUES (" + sqlValues.ToString() + ")";
 
-            resourceDao.resource_id = connection.InsertNewRecord(sql, "resource");
+            resourceDao.resource_id = connection.InsertNewRecord(sql);
 
             Resource result = daoObjectMapper.MapResource(resourceDao);
 

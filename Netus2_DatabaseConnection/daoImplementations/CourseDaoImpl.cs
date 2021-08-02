@@ -1,13 +1,14 @@
-﻿using Netus2.daoInterfaces;
-using Netus2.daoObjects;
-using Netus2.dbAccess;
-using Netus2.enumerations;
+﻿using Netus2_DatabaseConnection.daoInterfaces;
+using Netus2_DatabaseConnection.daoObjects;
+using Netus2_DatabaseConnection.dataObjects;
+using Netus2_DatabaseConnection.dbAccess;
+using Netus2_DatabaseConnection.enumerations;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
+using System.Data;
 using System.Text;
 
-namespace Netus2.daoImplementations
+namespace Netus2_DatabaseConnection.daoImplementations
 {
     public class CourseDaoImpl : ICourseDao
     {
@@ -90,7 +91,7 @@ namespace Netus2.daoImplementations
         private List<Course> Read(string sql, IConnectable connection)
         {
             List<CourseDao> foundCourseDaos = new List<CourseDao>();
-            SqlDataReader reader = null;
+            IDataReader reader = null;
             try
             {
                 reader = connection.GetReader(sql);
@@ -210,8 +211,8 @@ namespace Netus2.daoImplementations
                 course.Id = foundCourses[0].Id;
                 UpdateInternals(course, connection);
             }
-            else if (foundCourses.Count > 1)
-                throw new Exception("Multiple Courses found matching the description of:\n" +
+            else
+                throw new Exception(foundCourses.Count + " Courses found matching the description of:\n" +
                     course.ToString());
         }
 
@@ -251,7 +252,7 @@ namespace Netus2.daoImplementations
             sql.Append("GETDATE(), ");
             sql.Append("'Netus2')");
 
-            courseDao.course_id = connection.InsertNewRecord(sql.ToString(), "course");
+            courseDao.course_id = connection.InsertNewRecord(sql.ToString());
 
             Course result = daoObjectMapper.MapCourse(courseDao);
 

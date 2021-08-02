@@ -1,13 +1,14 @@
-﻿using Netus2.daoInterfaces;
-using Netus2.daoObjects;
-using Netus2.dbAccess;
-using Netus2.enumerations;
+﻿using Netus2_DatabaseConnection.daoInterfaces;
+using Netus2_DatabaseConnection.daoObjects;
+using Netus2_DatabaseConnection.dataObjects;
+using Netus2_DatabaseConnection.dbAccess;
+using Netus2_DatabaseConnection.enumerations;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
+using System.Data;
 using System.Text;
 
-namespace Netus2.daoImplementations
+namespace Netus2_DatabaseConnection.daoImplementations
 {
     public class ClassEnrolledDaoImpl : IClassEnrolledDao
     {
@@ -137,7 +138,7 @@ namespace Netus2.daoImplementations
         private List<ClassEnrolled> Read(string sql, IConnectable connection)
         {
             List<ClassEnrolledDao> foundClassEnrolledDaos = new List<ClassEnrolledDao>();
-            SqlDataReader reader = null;
+            IDataReader reader = null;
             try
             {
                 reader = connection.GetReader(sql.ToString());
@@ -325,8 +326,8 @@ namespace Netus2.daoImplementations
                 classEnrolled.Id = foundClassEnrolleds[0].Id;
                 UpdateInternals(classEnrolled, connection);
             }
-            else if (foundClassEnrolleds.Count > 1)
-                throw new Exception("Multiple ClassEnrolleds found matching the description of:\n" +
+            else
+                throw new Exception(foundClassEnrolleds.Count + " ClassEnrolleds found matching the description of:\n" +
                     classEnrolled.ToString());
         }
 
@@ -375,7 +376,7 @@ namespace Netus2.daoImplementations
             sql.Append("GETDATE(), ");
             sql.Append("'Netus2')");
 
-            classEnrolledDao.class_id = connection.InsertNewRecord(sql.ToString(), "class");
+            classEnrolledDao.class_id = connection.InsertNewRecord(sql.ToString());
 
             AcademicSession foundAcademicSession = Read_AcademicSession((int)classEnrolledDao.academic_session_id, connection);
             Course foundCourse = Read_Course((int)classEnrolledDao.course_id, connection);

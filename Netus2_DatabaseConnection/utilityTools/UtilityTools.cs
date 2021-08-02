@@ -1,21 +1,26 @@
-﻿using Netus2.dbAccess;
-using Netus2.enumerations;
+﻿using Netus2_DatabaseConnection.dbAccess;
+using Netus2_DatabaseConnection.enumerations;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
+using System.Data;
 
-namespace Netus2
+namespace Netus2_DatabaseConnection.utilityTools
 {
     public class UtilityTools
     {
+        static void Main(string[] args)
+        {
+            // Do Nothing
+        }
+
         public static Dictionary<string, Enumeration> PopulateEnumValues(string tableName)
         {
             Dictionary<string, Enumeration> enumerations = new Dictionary<string, Enumeration>();
 
-            IConnectable connection = new Netus2DatabaseConnection();
+            IConnectable connection = DbConnectionFactory.GetConnection("Netus2");
             connection.OpenConnection();
 
-            SqlDataReader reader = null;
+            IDataReader reader = null;
             try
             {
                 reader = connection.GetReader("SELECT * FROM " + tableName);

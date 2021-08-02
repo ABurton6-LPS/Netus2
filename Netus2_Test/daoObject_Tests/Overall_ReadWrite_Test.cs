@@ -1,7 +1,8 @@
-﻿using Netus2;
-using Netus2.daoImplementations;
-using Netus2.daoInterfaces;
-using Netus2.enumerations;
+﻿using Netus2_DatabaseConnection.daoImplementations;
+using Netus2_DatabaseConnection.daoInterfaces;
+using Netus2_DatabaseConnection.dataObjects;
+using Netus2_DatabaseConnection.dbAccess;
+using Netus2_DatabaseConnection.enumerations;
 using NUnit.Framework;
 using System;
 
@@ -9,7 +10,7 @@ namespace Netus2_Test.daoObject_Tests
 {
     class Overall_ReadWrite_Test
     {
-        Netus2DatabaseConnection connection;
+        IConnectable connection;
         IOrganizationDao organizationDaoImpl;
         IAcademicSessionDao academicSessionDaoImpl;
         IPersonDao personDaoImpl;
@@ -29,7 +30,7 @@ namespace Netus2_Test.daoObject_Tests
         [SetUp]
         public void Setup()
         {
-            connection = new Netus2DatabaseConnection();
+            connection = DbConnectionFactory.GetConnection("Local");
             connection.OpenConnection();
             connection.BeginTransaction();
             organizationDaoImpl = new OrganizationDaoImpl();
@@ -72,7 +73,7 @@ namespace Netus2_Test.daoObject_Tests
 
             //Add Academic Session to School
             //You must create the AcademicSession with the Organization (School), so no need to update the School
-            AcademicSession schoolYear = new AcademicSession("2020 - 2021", Enum_Session.values["school year"], school);
+            AcademicSession schoolYear = new AcademicSession("2020 - 2021", Enum_Session.values["school year"], school, "T1");
             schoolYear = academicSessionDaoImpl.Write(schoolYear, connection);
             schoolYear = academicSessionDaoImpl.Read(schoolYear, connection)[0];
             Assert.IsTrue(schoolYear.Id > 0);
@@ -80,7 +81,7 @@ namespace Netus2_Test.daoObject_Tests
 
             //Add GradingPeriod AcademicSession to SchoolYear
             //You can write the AcademicSession with the parentId, so no need to update the SchoolYear
-            AcademicSession gradingPeriod = new AcademicSession("markingPeriod", Enum_Session.values["grading period"], school);
+            AcademicSession gradingPeriod = new AcademicSession("markingPeriod", Enum_Session.values["grading period"], school, "T1");
             gradingPeriod = academicSessionDaoImpl.Write(gradingPeriod, schoolYear.Id, connection);
             schoolYear = academicSessionDaoImpl.Read(schoolYear, connection)[0];
             Assert.IsTrue(gradingPeriod.Id > 0);

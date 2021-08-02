@@ -1,14 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data;
+using System.Data;
 
-namespace Netus2.dbAccess
+namespace Netus2_DatabaseConnection.dbAccess
 {
     public interface IConnectable
     {
+
+        /// <summary>
+        /// Indicates the state of the SqlConnection during the most recent network operation performed on the connection.
+        /// </summary>
+        ConnectionState GetState();
+
         /// <summary>
         /// Opens a connection to the database.
         /// </summary>
@@ -35,17 +37,17 @@ namespace Netus2.dbAccess
         void RollbackTransaction();
 
         /// <summary>
-        /// Provide a SQL statement as a string, and it will provide the SqlDataReader object that can be used
+        /// Provide a SQL statement as a string, and it will provide the IDataReader object that can be used
         /// to retrieve the results of your SQL query.
         /// </summary>
         /// <param name="sql"></param>
         /// <returns>
         /// <para>
-        /// SqlDataReader object that can be iterated through to retrive the results of your query.
+        /// IDataReader object that can be iterated through to retrive the results of your query.
         /// </para>
         /// Note: Make sure you close this reader when you are done, and before opening another.
         /// </returns>
-        SqlDataReader GetReader(string sql);
+        IDataReader GetReader(string sql);
 
         /// <summary>
         /// Use this to pass in a SQL statement which is neither a Query or an Insert statement.
@@ -61,6 +63,6 @@ namespace Netus2.dbAccess
         /// <param name="tableBeingInsertedInto"></param>
         /// <returns>The largest primary key in the table after the insertion, which should be the
         /// primary key of the record just inserted.</returns>
-        int InsertNewRecord(string sql, string tableBeingInsertedInto);
+        int InsertNewRecord(string sql);
     }
 }

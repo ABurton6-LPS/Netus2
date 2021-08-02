@@ -1,7 +1,8 @@
-﻿using Netus2;
-using Netus2.daoImplementations;
-using Netus2.daoInterfaces;
-using Netus2.enumerations;
+﻿using Netus2_DatabaseConnection.daoImplementations;
+using Netus2_DatabaseConnection.daoInterfaces;
+using Netus2_DatabaseConnection.dataObjects;
+using Netus2_DatabaseConnection.dbAccess;
+using Netus2_DatabaseConnection.enumerations;
 using NUnit.Framework;
 using System;
 
@@ -9,7 +10,7 @@ namespace Netus2_Test.daoObject_Tests
 {
     class Overall_Delete_Test
     {
-        Netus2DatabaseConnection connection;
+        IConnectable connection;
         IOrganizationDao organizationDaoImpl;
         IAcademicSessionDao academicSessionDaoImpl;
         IPersonDao personDaoImpl;
@@ -48,7 +49,7 @@ namespace Netus2_Test.daoObject_Tests
         [SetUp]
         public void Setup()
         {
-            connection = new Netus2DatabaseConnection();
+            connection = DbConnectionFactory.GetConnection("Local");
             connection.OpenConnection();
             connection.BeginTransaction();
             organizationDaoImpl = new OrganizationDaoImpl();
@@ -76,7 +77,7 @@ namespace Netus2_Test.daoObject_Tests
             organizationDaoImpl.Update(school, district.Id, connection);
             school = organizationDaoImpl.Read(school, connection)[0];
 
-            schoolYear = new AcademicSession("2020 - 2021", Enum_Session.values["school year"], school);
+            schoolYear = new AcademicSession("2020 - 2021", Enum_Session.values["school year"], school, "T1");
             schoolYear = academicSessionDaoImpl.Write(schoolYear, connection);
 
             teacher = new Person("John", "Smith", new DateTime(1985, 9, 6), Enum_Gender.values["male"], Enum_Ethnic.values["cau"]);

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Netus2.daoObjects
+namespace Netus2_DatabaseConnection.daoObjects
 {
     public class PersonDao
     {

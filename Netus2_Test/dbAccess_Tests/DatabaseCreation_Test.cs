@@ -1,6 +1,7 @@
-using Netus2;
-using Netus2.dbAccess;
+using Netus2_DatabaseConnection.dbAccess;
+using Netus2_DatabaseConnection.dbAccess.dbCreation;
 using NUnit.Framework;
+using System.Data;
 using System.Data.SqlClient;
 
 namespace Netus2_Test.dbAccess_Tests
@@ -12,7 +13,7 @@ namespace Netus2_Test.dbAccess_Tests
         [Test]
         public void Test_0_OpenConnection()
         {
-            connection = new Netus2DatabaseConnection();
+            connection = DbConnectionFactory.GetConnection("Local");
             connection.OpenConnection();
             connection.BeginTransaction();
         }
@@ -29,7 +30,7 @@ namespace Netus2_Test.dbAccess_Tests
                 if (sqlE.Message.Contains("There is already an object named"))
                     Assert.Pass();
                 else
-                    throw;
+                    Assert.Fail();
             }
         }
 
@@ -45,7 +46,7 @@ namespace Netus2_Test.dbAccess_Tests
                 if (sqlE.Message.Contains("There is already an object named"))
                     Assert.Pass();
                 else
-                    throw;
+                    Assert.Fail();
             }
         }
 
@@ -61,7 +62,7 @@ namespace Netus2_Test.dbAccess_Tests
                 if (sqlE.Message.Contains("There is already an object named"))
                     Assert.Pass();
                 else
-                    throw;
+                    Assert.Fail();
             }
         }
 
@@ -77,7 +78,7 @@ namespace Netus2_Test.dbAccess_Tests
                 if (sqlE.Message.Contains("There is already an object named"))
                     Assert.Pass();
                 else
-                    throw;
+                    Assert.Fail();
             }
         }
 

@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace Netus2
+namespace Netus2_DatabaseConnection.dataObjects
 {
     public class Application
     {

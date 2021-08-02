@@ -1,12 +1,13 @@
-﻿using Netus2.daoInterfaces;
-using Netus2.daoObjects;
-using Netus2.dbAccess;
+﻿using Netus2_DatabaseConnection.daoInterfaces;
+using Netus2_DatabaseConnection.daoObjects;
+using Netus2_DatabaseConnection.dataObjects;
+using Netus2_DatabaseConnection.dbAccess;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
+using System.Data;
 using System.Text;
 
-namespace Netus2.daoImplementations
+namespace Netus2_DatabaseConnection.daoImplementations
 {
     public class PhoneNumberDaoImpl : IPhoneNumberDao
     {
@@ -69,7 +70,7 @@ namespace Netus2.daoImplementations
         {
             List<PhoneNumberDao> foundPhoneNumbersDao = new List<PhoneNumberDao>();
 
-            SqlDataReader reader = null;
+            IDataReader reader = null;
             try
             {
                 reader = connection.GetReader(sql);
@@ -164,7 +165,7 @@ namespace Netus2.daoImplementations
                 UpdateInternals(phoneNumber, personId, connection);
             }
             else if (foundPhoneNumbers.Count > 1)
-                throw new Exception("Multiple Phone Numbers found matching the description of:\n" +
+                throw new Exception(foundPhoneNumbers.Count + " Phone Numbers found matching the description of:\n" +
                     phoneNumber.ToString());
         }
 
@@ -212,7 +213,7 @@ namespace Netus2.daoImplementations
                 "(person_id, phone_number, is_primary_id, enum_phone_id, created, created_by) " +
                 "VALUES (" + sqlValues.ToString() + ")";
 
-            phoneNumberDao.phone_number_id = connection.InsertNewRecord(sql, "phone_number");
+            phoneNumberDao.phone_number_id = connection.InsertNewRecord(sql);
 
             return daoObjectMapper.MapPhoneNumber(phoneNumberDao);
         }

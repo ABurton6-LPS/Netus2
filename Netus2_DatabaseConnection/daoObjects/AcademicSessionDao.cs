@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Netus2.daoObjects
+namespace Netus2_DatabaseConnection.daoObjects
 {
     public class AcademicSessionDao
     {
         public int? academic_session_id { get; set; }
+        public string term_code { get; set; }
+        public int? school_year { get; set; }
         public string name { get; set; }
         public DateTime? start_date { get; set; }
         public DateTime? end_date { get; set; }

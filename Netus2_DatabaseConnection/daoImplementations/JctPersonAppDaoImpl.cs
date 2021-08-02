@@ -1,12 +1,12 @@
-﻿using Netus2.daoInterfaces;
-using Netus2.daoObjects;
-using Netus2.dbAccess;
+﻿using Netus2_DatabaseConnection.daoInterfaces;
+using Netus2_DatabaseConnection.daoObjects;
+using Netus2_DatabaseConnection.dbAccess;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
+using System.Data;
 using System.Text;
 
-namespace Netus2.daoImplementations
+namespace Netus2_DatabaseConnection.daoImplementations
 {
     public class JctPersonAppDaoImpl : IJctPersonAppDao
     {
@@ -31,7 +31,7 @@ namespace Netus2.daoImplementations
             else if (results.Count == 1)
                 return results[0];
             else
-                throw new Exception("Duplicate jct_person_app recors found.\n" +
+                throw new Exception("The jct_person_app table contains a duplicate record.\n" +
                     "person_id = " + personId + ", app_Id = " + appId);
         }
 
@@ -52,7 +52,7 @@ namespace Netus2.daoImplementations
         {
             List<JctPersonAppDao> jctPersonAppDaos = new List<JctPersonAppDao>();
 
-            SqlDataReader reader = null;
+            IDataReader reader = null;
             try
             {
                 reader = connection.GetReader(sql);

@@ -1,7 +1,8 @@
-﻿using Netus2.dbAccess;
+﻿using Netus2_DatabaseConnection.dataObjects;
+using Netus2_DatabaseConnection.dbAccess;
 using System.Collections.Generic;
 
-namespace Netus2.daoInterfaces
+namespace Netus2_DatabaseConnection.daoInterfaces
 {
     public interface IOrganizationDao
     {
@@ -26,6 +27,13 @@ namespace Netus2.daoInterfaces
         /// <param name="academicSessionId"/>
         /// <param name="connection"/>
         Organization Read_WithAcademicSessionId(int academicSessionId, IConnectable connection);
+
+        /// <summary>
+        /// Returns the specific Organization object, which is linked to the provided buildingCode.
+        /// </summary>
+        /// <param name="buildingCode"></param>
+        /// <param name="connection"></param>
+        Organization Read_WithBuildingCode(string buildingCode, IConnectable connection);
 
         /// <summary>
         /// Returns a list of Organization objects, read from the database, which match the parameters provided in the 

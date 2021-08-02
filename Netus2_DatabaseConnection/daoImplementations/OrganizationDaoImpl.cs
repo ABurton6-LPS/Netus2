@@ -1,12 +1,13 @@
-﻿using Netus2.daoInterfaces;
-using Netus2.daoObjects;
-using Netus2.dbAccess;
+﻿using Netus2_DatabaseConnection.daoInterfaces;
+using Netus2_DatabaseConnection.daoObjects;
+using Netus2_DatabaseConnection.dataObjects;
+using Netus2_DatabaseConnection.dbAccess;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
+using System.Data;
 using System.Text;
 
-namespace Netus2.daoImplementations
+namespace Netus2_DatabaseConnection.daoImplementations
 {
     public class OrganizationDaoImpl : IOrganizationDao
     {
@@ -64,12 +65,23 @@ namespace Netus2.daoImplementations
                 else if (foundChildren.Count == 0)
                     return;
                 else
-                    throw new Exception("Multiple Organization records found matching:\n" + child.ToString());
+                    throw new Exception(foundChildren.Count + " Organization records found matching:\n" + child.ToString());
             }
             foreach (Organization child in childrenToRemove)
             {
                 organization.Children.Remove(child);
             }
+        }
+
+        public Organization Read_WithBuildingCode(string buildingCode, IConnectable connection)
+        {
+            string sql = "SELECT * FROM organization WHERE building_code LIKE ('" + buildingCode + "')";
+
+            List<Organization> results = Read(sql, connection);
+            if (results.Count > 0)
+                return results[0];
+            else
+                return null;
         }
 
         public Organization Read_WithOrganizationId(int orgId, IConnectable connection)
@@ -138,7 +150,7 @@ namespace Netus2.daoImplementations
         {
             List<OrganizationDao> foundOrganizationsDaos = new List<OrganizationDao>();
 
-            SqlDataReader reader = null;
+            IDataReader reader = null;
             try
             {
                 reader = connection.GetReader(sql);
@@ -235,7 +247,7 @@ namespace Netus2.daoImplementations
                 UpdateInternals(organization, parentOrganizationId, connection);
             }
             else if (foundOrganizations.Count > 1)
-                throw new Exception("Multiple Organizations found matching the description of:\n" +
+                throw new Exception(foundOrganizations.Count + " Organizations found matching the description of:\n" +
                     organization.ToString());
         }
 
@@ -287,7 +299,7 @@ namespace Netus2.daoImplementations
             sql.Append(sqlValues.ToString());
             sql.Append(")");
 
-            organizationDao.organization_id = connection.InsertNewRecord(sql.ToString(), "organization");
+            organizationDao.organization_id = connection.InsertNewRecord(sql.ToString());
             Organization resultOrg = daoObjectMapper.MapOrganization(organizationDao);
 
             return resultOrg;

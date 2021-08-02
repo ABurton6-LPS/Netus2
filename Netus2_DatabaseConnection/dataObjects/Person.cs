@@ -1,11 +1,10 @@
-﻿using Netus2.enumerations;
+﻿using Netus2_DatabaseConnection.enumerations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace Netus2
+namespace Netus2_DatabaseConnection.dataObjects
 {
     public class Person
     {

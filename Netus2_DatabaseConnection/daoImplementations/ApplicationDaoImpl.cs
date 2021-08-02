@@ -1,12 +1,13 @@
-﻿using Netus2.daoInterfaces;
-using Netus2.daoObjects;
-using Netus2.dbAccess;
+﻿using Netus2_DatabaseConnection.daoInterfaces;
+using Netus2_DatabaseConnection.daoObjects;
+using Netus2_DatabaseConnection.dataObjects;
+using Netus2_DatabaseConnection.dbAccess;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
+using System.Data;
 using System.Text;
 
-namespace Netus2.daoImplementations
+namespace Netus2_DatabaseConnection.daoImplementations
 {
     public class ApplicationDaoImpl : IApplicationDao
     {
@@ -77,7 +78,7 @@ namespace Netus2.daoImplementations
         private List<Application> Read(string sql, IConnectable connection)
         {
             List<ApplicationDao> foundAppDaos = new List<ApplicationDao>();
-            SqlDataReader reader = null;
+            IDataReader reader = null;
             try
             {
                 reader = connection.GetReader(sql);
@@ -124,8 +125,8 @@ namespace Netus2.daoImplementations
                 application.Id = foundApplications[0].Id;
                 UpdateInternals(application, connection);
             }
-            else if (foundApplications.Count > 1)
-                throw new Exception("Multiple Applications found matching the description of:\n" +
+            else
+                throw new Exception(foundApplications.Count + " Applications found matching the description of:\n" +
                     application.ToString());
         }
 
@@ -153,7 +154,7 @@ namespace Netus2.daoImplementations
             sql.Append("GETDATE(), ");
             sql.Append("'Netus2')");
 
-            appDao.app_id = connection.InsertNewRecord(sql.ToString(), "app");
+            appDao.app_id = connection.InsertNewRecord(sql.ToString());
 
             Provider foundProvider = Read_Provider((int)appDao.provider_id, connection);
             return daoObjectMapper.MapApp(appDao, foundProvider);

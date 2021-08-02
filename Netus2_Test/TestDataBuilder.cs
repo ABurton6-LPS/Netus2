@@ -1,8 +1,8 @@
-﻿using Netus2;
-using Netus2.daoImplementations;
-using Netus2.daoInterfaces;
-using Netus2.dbAccess;
-using Netus2.enumerations;
+﻿using Netus2_DatabaseConnection.daoImplementations;
+using Netus2_DatabaseConnection.daoInterfaces;
+using Netus2_DatabaseConnection.dataObjects;
+using Netus2_DatabaseConnection.dbAccess;
+using Netus2_DatabaseConnection.enumerations;
 using System;
 using System.Collections.Generic;
 
@@ -47,22 +47,19 @@ namespace Netus2_Test
         public Provider provider;
         public Application app;
 
-        int lastUniqueValue = 0;
-
-        public TestDataBuilder() { }
-
         public TestDataBuilder(IConnectable connection)
         {
             district = new Organization("livonia public schools", Enum_Organization.values["district"], "lps");
             district = organizationDaoImpl.Write(district, connection);
 
             school = new Organization("livonia high school", Enum_Organization.values["school"], "lhs");
+            school.BuildingCode = DateTime.Now.ToString();
             school = organizationDaoImpl.Write(school, connection);
             district.Children.Add(school);
             organizationDaoImpl.Update(school, district.Id, connection);
             school = organizationDaoImpl.Read(school, connection)[0];
 
-            schoolYear = new AcademicSession("2020 - 2021", Enum_Session.values["school year"], school);
+            schoolYear = new AcademicSession("2020 - 2021", Enum_Session.values["school year"], school, "T1");
             schoolYear = academicSessionDaoImpl.Write(schoolYear, connection);
 
             teacher = new Person("John", "Smith", new DateTime(1985, 9, 6), Enum_Gender.values["male"], Enum_Ethnic.values["cau"]);
@@ -79,7 +76,7 @@ namespace Netus2_Test
             personDaoImpl.Update(teacher, connection);
             teacher = personDaoImpl.Read(teacher, connection)[0];
 
-            uniqueId_Teacher = new UniqueIdentifier(lastUniqueValue++.ToString(), Enum_Identifier.values["state id"], Enum_True_False.values["true"]);
+            uniqueId_Teacher = new UniqueIdentifier(DateTime.Now.ToString(), Enum_Identifier.values["state id"], Enum_True_False.values["true"]);
             uniqueId_Teacher = uniqueIdentifierDaoImpl.Write(uniqueId_Teacher, teacher.Id, connection);
 
             employmentSession = new EmploymentSession("John Smith Employment", Enum_True_False.values["true"], school);
@@ -126,7 +123,7 @@ namespace Netus2_Test
             mark = new Mark(lineItem, Enum_Score_Status.values["submitted"], 100.00, new DateTime(2020, 9, 1));
             mark = markDaoImpl.Write(mark, student.Id, connection);
 
-            uniqueId_Student = new UniqueIdentifier(lastUniqueValue++.ToString(), Enum_Identifier.values["student id"], Enum_True_False.values["true"]);
+            uniqueId_Student = new UniqueIdentifier(DateTime.Now.ToString(), Enum_Identifier.values["student id"], Enum_True_False.values["true"]);
             uniqueId_Student = uniqueIdentifierDaoImpl.Write(uniqueId_Student, student.Id, connection);
 
             phoneNumber_Student = new PhoneNumber("8001231234", Enum_True_False.values["true"], Enum_Phone.values["cell"]);
@@ -170,7 +167,7 @@ namespace Netus2_Test
 
         public UniqueIdentifier SimpleUniqueIdentifier()
         {
-            string identifier = lastUniqueValue++.ToString();
+            string identifier = DateTime.Now.ToString();
             Enumeration enumIdentifier = Enum_Identifier.values["badge id"];
             Enumeration isActive = Enum_True_False.values["true"];
             UniqueIdentifier uniqueId = new UniqueIdentifier(identifier, enumIdentifier, isActive);
@@ -240,7 +237,8 @@ namespace Netus2_Test
         {
             string name = "Simple Academic Session";
             Enumeration sessionType = Enum_Session.values["school year"];
-            AcademicSession academicSession = new AcademicSession(name, sessionType, org);
+            string termCode = "T1";
+            AcademicSession academicSession = new AcademicSession(name, sessionType, org, termCode);
 
             return academicSession;
         }

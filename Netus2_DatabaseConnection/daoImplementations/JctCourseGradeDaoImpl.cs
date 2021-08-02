@@ -1,12 +1,12 @@
-﻿using Netus2.daoInterfaces;
-using Netus2.daoObjects;
-using Netus2.dbAccess;
+﻿using Netus2_DatabaseConnection.daoInterfaces;
+using Netus2_DatabaseConnection.daoObjects;
+using Netus2_DatabaseConnection.dbAccess;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
+using System.Data;
 using System.Text;
 
-namespace Netus2.daoImplementations
+namespace Netus2_DatabaseConnection.daoImplementations
 {
     public class JctCourseGradeDaoImpl : IJctCourseGradeDao
     {
@@ -31,7 +31,7 @@ namespace Netus2.daoImplementations
             else if (results.Count == 0)
                 return null;
             else
-                throw new Exception("The jct_course_grade table contains a duplicate record...somehow.\n" +
+                throw new Exception("The jct_course_grade table contains a duplicate record.\n" +
                     "course_id = " + courseId + ", grade_id = " + gradeId);
         }
 
@@ -46,7 +46,7 @@ namespace Netus2.daoImplementations
         private List<JctCourseGradeDao> Read(string sql, IConnectable connection)
         {
             List<JctCourseGradeDao> jctCourseGradeDaos = new List<JctCourseGradeDao>();
-            SqlDataReader reader = null;
+            IDataReader reader = null;
             try
             {
                 reader = connection.GetReader(sql.ToString());

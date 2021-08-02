@@ -1,12 +1,13 @@
-﻿using Netus2.daoInterfaces;
-using Netus2.daoObjects;
-using Netus2.dbAccess;
+﻿using Netus2_DatabaseConnection.daoInterfaces;
+using Netus2_DatabaseConnection.daoObjects;
+using Netus2_DatabaseConnection.dataObjects;
+using Netus2_DatabaseConnection.dbAccess;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
+using System.Data;
 using System.Text;
 
-namespace Netus2.daoImplementations
+namespace Netus2_DatabaseConnection.daoImplementations
 {
     public class EnrollmentDaoImpl : IEnrollmentDao
     {
@@ -83,7 +84,7 @@ namespace Netus2.daoImplementations
         private List<Enrollment> Read(string sql, IConnectable connection)
         {
             List<EnrollmentDao> foundEnrollmentDaos = new List<EnrollmentDao>();
-            SqlDataReader reader = null;
+            IDataReader reader = null;
             try
             {
                 reader = connection.GetReader(sql);
@@ -217,8 +218,8 @@ namespace Netus2.daoImplementations
                 enrollment.Id = foundEnrollments[0].Id;
                 UpdateInternals(enrollment, personId, connection);
             }
-            else if (foundEnrollments.Count > 1)
-                throw new Exception("Multiple Enrollments found matching the description of:\n" +
+            else
+                throw new Exception(foundEnrollments.Count + " Enrollments found matching the description of:\n" +
                     enrollment.ToString());
         }
 
@@ -265,7 +266,7 @@ namespace Netus2.daoImplementations
             sql.Append("GETDATE(), ");
             sql.Append("'Netus2')");
 
-            enrollmentDao.enrollment_id = connection.InsertNewRecord(sql.ToString(), "enrollment");
+            enrollmentDao.enrollment_id = connection.InsertNewRecord(sql.ToString());
 
             ClassEnrolled foundClassEnrolled = null;
 

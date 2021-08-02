@@ -1,7 +1,8 @@
-﻿using Netus2.dbAccess;
+﻿using Netus2_DatabaseConnection.dataObjects;
+using Netus2_DatabaseConnection.dbAccess;
 using System.Collections.Generic;
 
-namespace Netus2.daoInterfaces
+namespace Netus2_DatabaseConnection.daoInterfaces
 {
     public interface IUniqueIdentifierDao
     {

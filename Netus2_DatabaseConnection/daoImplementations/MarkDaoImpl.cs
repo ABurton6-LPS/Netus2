@@ -1,12 +1,13 @@
-﻿using Netus2.daoInterfaces;
-using Netus2.daoObjects;
-using Netus2.dbAccess;
+﻿using Netus2_DatabaseConnection.daoInterfaces;
+using Netus2_DatabaseConnection.daoObjects;
+using Netus2_DatabaseConnection.dataObjects;
+using Netus2_DatabaseConnection.dbAccess;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
+using System.Data;
 using System.Text;
 
-namespace Netus2.daoImplementations
+namespace Netus2_DatabaseConnection.daoImplementations
 {
     public class MarkDaoImpl : IMarkDao
     {
@@ -79,7 +80,7 @@ namespace Netus2.daoImplementations
         {
             List<MarkDao> foundMarkDaos = new List<MarkDao>();
 
-            SqlDataReader reader = null;
+            IDataReader reader = null;
             try
             {
                 reader = connection.GetReader(sql);
@@ -188,7 +189,7 @@ namespace Netus2.daoImplementations
                 UpdateInternals(mark, personId, connection);
             }
             else if (foundMarks.Count > 1)
-                throw new Exception("Multiple Marks found matching the description of:\n" +
+                throw new Exception(foundMarks.Count + " Marks found matching the description of:\n" +
                     mark.ToString());
 
         }
@@ -197,11 +198,7 @@ namespace Netus2.daoImplementations
         {
             MarkDao markDao = daoObjectMapper.MapMark(mark, personId);
 
-            if (markDao.mark_id == null)
-            {
-                throw new Exception("The following Mark needs to be inserted into the database, before it can be updated.\n" + mark.ToString());
-            }
-            else
+            if (markDao.mark_id != null)
             {
                 StringBuilder sql = new StringBuilder("UPDATE mark SET ");
                 sql.Append("lineitem_id = " + (markDao.lineitem_id != null ? markDao.lineitem_id + ", " : "NULL, "));
@@ -216,6 +213,8 @@ namespace Netus2.daoImplementations
 
                 connection.ExecuteNonQuery(sql.ToString());
             }
+            else
+                throw new Exception("The following Mark needs to be inserted into the database, before it can be updated.\n" + mark.ToString());
         }
 
         public Mark Write(Mark mark, int personId, IConnectable connection)
@@ -237,7 +236,7 @@ namespace Netus2.daoImplementations
                 "(lineitem_id, person_id, enum_score_status_id, score, score_date, comment, created, created_by) " +
                 "VALUES (" + sqlValues.ToString() + ")";
 
-            markDao.mark_id = connection.InsertNewRecord(sql, "mark");
+            markDao.mark_id = connection.InsertNewRecord(sql);
 
             LineItem lineItem = Read_LineItem((int)markDao.lineitem_id, connection);
 

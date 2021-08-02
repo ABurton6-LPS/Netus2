@@ -1,12 +1,14 @@
-﻿using Netus2.daoInterfaces;
-using Netus2.daoObjects;
-using Netus2.dbAccess;
+﻿using Netus2_DatabaseConnection.daoInterfaces;
+using Netus2_DatabaseConnection.daoObjects;
+using Netus2_DatabaseConnection.dataObjects;
+using Netus2_DatabaseConnection.dbAccess;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
+using System.Data;
+using System.Data;
 using System.Text;
 
-namespace Netus2.daoImplementations
+namespace Netus2_DatabaseConnection.daoImplementations
 {
     public class AddressDaoImpl : IAddressDao
     {
@@ -102,7 +104,7 @@ namespace Netus2.daoImplementations
         private List<Address> Read(string sql, IConnectable connection)
         {
             List<AddressDao> foundAddressDaos = new List<AddressDao>();
-            SqlDataReader reader = null;
+            IDataReader reader = null;
             try
             {
                 reader = connection.GetReader(sql);
@@ -215,8 +217,8 @@ namespace Netus2.daoImplementations
                 address.Id = foundAddresses[0].Id;
                 UpdateInternals(address, connection);
             }
-            else if (foundAddresses.Count > 1)
-                throw new Exception("Multiple Addresses found matching the description of:\n" +
+            else
+                throw new Exception(foundAddresses.Count + " Addresses found matching the description of:\n" +
                     address.ToString());
         }
 
@@ -267,7 +269,7 @@ namespace Netus2.daoImplementations
                 "city, enum_state_province_id, postal_code, enum_country_id, is_current_id, enum_address_id, " +
                 "created, created_by) VALUES (" + sqlValues.ToString() + ")");
 
-            address.Id = connection.InsertNewRecord(sql.ToString(), "address");
+            address.Id = connection.InsertNewRecord(sql.ToString());
 
             return address;
         }

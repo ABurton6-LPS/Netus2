@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using Netus2_DatabaseConnection.utilityTools;
+using System.Collections.Generic;
 
-namespace Netus2.enumerations
+namespace Netus2_DatabaseConnection.enumerations
 {
     public class Enum_Role
     {
@@ -11,6 +12,19 @@ namespace Netus2.enumerations
             foreach (var value in values)
             {
                 if (value.Value.Id == id)
+                {
+                    return value.Value;
+                }
+            }
+
+            return null;
+        }
+
+        public static Enumeration GetEnumFromSisCode(string sisCode)
+        {
+            foreach (var value in values)
+            {
+                if (value.Value.SisCode == sisCode)
                 {
                     return value.Value;
                 }
