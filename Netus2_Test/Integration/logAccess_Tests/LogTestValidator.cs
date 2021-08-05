@@ -4,7 +4,7 @@ using Netus2_DatabaseConnection.logObjects;
 using NUnit.Framework;
 using System.Data;
 
-namespace Netus2_Test.logAccess_Tests
+namespace Netus2_Test.Integration.logAccess_Tests
 {
     public class LogTestValidator
     {

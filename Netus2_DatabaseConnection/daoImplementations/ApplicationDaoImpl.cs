@@ -86,7 +86,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 {
                     ApplicationDao foundAppDao = new ApplicationDao();
 
-                    List<string> columnNames = new List<String>();
+                    List<string> columnNames = new List<string>();
                     for (int i = 0; i < reader.FieldCount; i++)
                         columnNames.Add(reader.GetName(i));
 

@@ -7,9 +7,9 @@ using Netus2_DatabaseConnection.enumerations;
 using Netus2_DatabaseConnection.logObjects;
 using NUnit.Framework;
 using System.Collections.Generic;
-using static Netus2_Test.logAccess_Tests.LogTestValidator;
+using static Netus2_Test.Integration.logAccess_Tests.LogTestValidator;
 
-namespace Netus2_Test.logAccess_Tests
+namespace Netus2_Test.Integration.logAccess_Tests
 {
     class LogReader_Test
     {

@@ -5,7 +5,7 @@
         public static bool TestMode = false;
 
         private static string LocalDatabaseConnectionString = @"Data Source=ITDSL0995104653;Initial Catalog=Netus2;Integrated Security=SSPI";
-        private static string MiStarDatabaseConnectionString = @"Data Source=tcp:lvboe-zangle.resa.net,1433;Initial Catalog=lvboe;Uid=lvnetus;Pwd=V67A#O9miN#TzQ5x2gzS";
+        private static string SisDatabaseConnectionString = @"Data Source=tcp:lvboe-zangle.resa.net,1433;Initial Catalog=lvboe;Uid=lvnetus;Pwd=V67A#O9miN#TzQ5x2gzS";
         private static string MockDatabaseConnectionString = @"MockDatabaseConnectionString";
         private static string Netus2DatabaseConnectionString = @"Data Source=tcp:janusdb.database.windows.net,1433;Initial Catalog=Netus2;Uid=janus;Pwd=AqIiA59@$J0K";
         //private static string Netus2DatabaseConnectionString = "off";
@@ -22,7 +22,7 @@
             }
         }
 
-        public static IConnectable GetMiStarConnection()
+        public static IConnectable GetSisConnection()
         {
             if (TestMode)
             {
@@ -30,7 +30,7 @@
             }
             else
             {
-                return new GenericDatabaseConnection(MiStarDatabaseConnectionString);
+                return new GenericDatabaseConnection(SisDatabaseConnectionString);
             }
         }
 

@@ -6,9 +6,9 @@ using Netus2_DatabaseConnection.enumerations;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using static Netus2_Test.daoObject_Tests.TestDataValidator;
+using static Netus2_Test.Integration.daoObject_Tests.TestDataValidator;
 
-namespace Netus2_Test.daoObject_Tests
+namespace Netus2_Test.Integration.daoObject_Tests
 {
     class EndToEnd_StudentTest
     {

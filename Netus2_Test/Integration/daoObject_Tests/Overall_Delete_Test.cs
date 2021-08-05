@@ -1,12 +1,9 @@
 ﻿using Netus2_DatabaseConnection.daoImplementations;
 using Netus2_DatabaseConnection.daoInterfaces;
-using Netus2_DatabaseConnection.dataObjects;
 using Netus2_DatabaseConnection.dbAccess;
-using Netus2_DatabaseConnection.enumerations;
 using NUnit.Framework;
-using System;
 
-namespace Netus2_Test.daoObject_Tests
+namespace Netus2_Test.Integration.daoObject_Tests
 {
     class Overall_Delete_Test
     {

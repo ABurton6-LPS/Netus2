@@ -1,27 +1,28 @@
 ﻿using NUnit.Framework;
 using Netus2_DatabaseConnection.dbAccess;
 using Netus2SisSync.UtilityTools;
-using Netus2SisSync.SyncProcesses;
-using Netus2SisSync.SyncProcesses.Tasks;
 using System.Data;
 using Moq;
 using System.Collections.Generic;
 using System;
-using Netus2_DatabaseConnection.enumerations;
+using Netus2SisSync.SyncProcesses.SyncJobs;
+using Netus2SisSync.SyncProcesses.SyncTasks.OrganizationTasks;
 
-namespace Netus2_Test.netus2SisSync_Test
+namespace Netus2_Test.Unit.netus2SisSync_Test
 {
-    class Netus2SisSync_Test
+    class SyncOrganization_Test
     {
-        MockDatabaseConnection mockMiStarDbConnection;
-        MockDatabaseConnection mockNetus2DbConnection;
+        MockDatabaseConnection _sisConnection;
+        MockDatabaseConnection _netus2DbConnection;
+        CountDownLatch_Mock _latch;
 
         [SetUp]
         public void SetUp()
         {
             DbConnectionFactory.TestMode = true;
-            mockMiStarDbConnection = (MockDatabaseConnection)DbConnectionFactory.GetMiStarConnection();
-            mockNetus2DbConnection = (MockDatabaseConnection)DbConnectionFactory.GetNetus2Connection();
+            _sisConnection = (MockDatabaseConnection)DbConnectionFactory.GetSisConnection();
+            _netus2DbConnection = (MockDatabaseConnection)DbConnectionFactory.GetNetus2Connection();
+            _latch = new CountDownLatch_Mock(0);
         }
 
         [TestCase]
@@ -37,11 +38,11 @@ namespace Netus2_Test.netus2SisSync_Test
             List<SisOrganizationTestData> tstDataSet = new List<SisOrganizationTestData>();
             tstDataSet.Add(tstData);
 
-            var reader = GetTestData_SisRead_Organization(tstDataSet);
+            SetMockReaderWithTestData(tstDataSet);
 
-            mockMiStarDbConnection.mockReader = reader;
-            SyncJob syncOrganizationJobTest = new SyncJob("TestJob", DateTime.Now);
-            DataTable results = SyncOrganization.ReadFromSis(syncOrganizationJobTest, mockMiStarDbConnection, mockNetus2DbConnection);
+            SyncJob_Organization syncJob_Organization = new SyncJob_Organization("TestJob", DateTime.Now, _sisConnection, _netus2DbConnection);
+            syncJob_Organization.ReadFromSis();
+            DataTable results = syncJob_Organization._dtOrganization;
 
             string emptyString = "";
             Assert.NotNull(results);
@@ -74,11 +75,11 @@ namespace Netus2_Test.netus2SisSync_Test
             tstDataSet.Add(tstData);
             tstDataSet.Add(tstData2);
 
-            var reader = GetTestData_SisRead_Organization(tstDataSet);
+            SetMockReaderWithTestData(tstDataSet);
 
-            mockMiStarDbConnection.mockReader = reader;
-            SyncJob syncOrganizationJobTest = new SyncJob("TestJob", DateTime.Now);
-            DataTable results = SyncOrganization.ReadFromSis(syncOrganizationJobTest, mockMiStarDbConnection, mockNetus2DbConnection);
+            SyncJob_Organization syncJob_Organization = new SyncJob_Organization("TestJob", DateTime.Now, _sisConnection, _netus2DbConnection);
+            syncJob_Organization.ReadFromSis();
+            DataTable results = syncJob_Organization._dtOrganization;
 
             Assert.NotNull(results);
             Assert.AreEqual(tstDataSet.Count, results.Rows.Count);
@@ -105,13 +106,38 @@ namespace Netus2_Test.netus2SisSync_Test
             tstData.BldgCode = "tstBldg";
             tstData.ParOrgId = "tstParOrgId";
 
-            CountDownLatch_Mock latch = new CountDownLatch_Mock(0);
-            SyncJob job = new SyncJob("TestSyncJob", DateTime.Now);
             List<SisOrganizationTestData> tstDataSet = new List<SisOrganizationTestData>();
             tstDataSet.Add(tstData);
             DataRow row = BuildTestDataTable(tstDataSet).Rows[0];
 
-            SyncOrganization.SyncForChildRecords(job, row, latch);
+            SyncJob_Organization syncJob_Organization = 
+                new SyncJob_Organization("TestJob", DateTime.Now, _sisConnection, _netus2DbConnection);
+            SyncTask_OrganizationChildRecords syncTask_OrganizationChildRecords = 
+                new SyncTask_OrganizationChildRecords("TestTask", DateTime.Now, syncJob_Organization);
+
+            syncTask_OrganizationChildRecords.Execute(row, _latch);
+        }
+
+        [TestCase]
+        public void SyncParent_Organization()
+        {
+            SisOrganizationTestData tstData = new SisOrganizationTestData();
+            tstData.Name = "TestName";
+            tstData.OrgId = "tstOrgId";
+            tstData.Ident = "tstId";
+            tstData.BldgCode = "tstBldg";
+            tstData.ParOrgId = "tstParOrgId";
+
+            List<SisOrganizationTestData> tstDataSet = new List<SisOrganizationTestData>();
+            tstDataSet.Add(tstData);
+            DataRow row = BuildTestDataTable(tstDataSet).Rows[0];
+
+            SyncJob_Organization syncJob_Organization =
+                new SyncJob_Organization("TestJob", DateTime.Now, _sisConnection, _netus2DbConnection);
+            SyncTask_OrganizationParentRecords syncTask_OrganizationParentRecords =
+                new SyncTask_OrganizationParentRecords("TestTask", DateTime.Now, syncJob_Organization);
+
+            syncTask_OrganizationParentRecords.Execute(row, _latch);
         }
 
         private DataTable BuildTestDataTable(List<SisOrganizationTestData> tstDataSet)
@@ -131,7 +157,7 @@ namespace Netus2_Test.netus2SisSync_Test
             return dtOrganization;
         }
 
-        private Mock<IDataReader> GetTestData_SisRead_Organization(List<SisOrganizationTestData> tstDataSet)
+        private void SetMockReaderWithTestData(List<SisOrganizationTestData> tstDataSet)
         {
             int count = -1;
             var reader = new Mock<IDataReader>();
@@ -143,22 +169,42 @@ namespace Netus2_Test.netus2SisSync_Test
             reader.Setup(x => x.FieldCount)
                 .Returns(() => 5);
 
+            reader.Setup(x => x.GetName(0))
+                .Returns(() => "name");
+            reader.Setup(x => x.GetOrdinal("name"))
+                .Returns(() => 0);
             reader.Setup(x => x.GetValue(0))
                 .Returns(() => tstDataSet[count].Name);
 
+            reader.Setup(x => x.GetName(1))
+                .Returns(() => "enum_organization_id");
+            reader.Setup(x => x.GetOrdinal("enum_organization_id"))
+                .Returns(() => 1);
             reader.Setup(x => x.GetValue(1))
                 .Returns(() => tstDataSet[count].OrgId);
 
+            reader.Setup(x => x.GetName(2))
+                .Returns(() => "identifier");
+            reader.Setup(x => x.GetOrdinal("identifier"))
+                .Returns(() => 2);
             reader.Setup(x => x.GetValue(2))
                 .Returns(() => tstDataSet[count].Ident);
 
+            reader.Setup(x => x.GetName(3))
+                .Returns(() => "building_code");
+            reader.Setup(x => x.GetOrdinal("building_code"))
+                .Returns(() => 3);
             reader.Setup(x => x.GetValue(3))
                 .Returns(() => tstDataSet[count].BldgCode);
 
+            reader.Setup(x => x.GetName(4))
+                .Returns(() => "organization_parent_id");
+            reader.Setup(x => x.GetOrdinal("organization_parent_id"))
+                .Returns(() => 4);
             reader.Setup(x => x.GetValue(4))
                 .Returns(() => tstDataSet[count].ParOrgId);
 
-            return reader;
+            _sisConnection.mockReader = reader;
         }
     }
 

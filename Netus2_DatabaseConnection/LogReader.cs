@@ -23,7 +23,7 @@ namespace Netus2_DatabaseConnection
                 {
                     LogPerson logPerson = new LogPerson();
 
-                    List<string> columnNames = new List<String>();
+                    List<string> columnNames = new List<string>();
                     for (int i = 0; i < reader.FieldCount; i++)
                         columnNames.Add(reader.GetName(i));
 
@@ -145,7 +145,7 @@ namespace Netus2_DatabaseConnection
                 {
                     LogJctPersonRole logJctPersonRole = new LogJctPersonRole();
 
-                    List<string> columnNames = new List<String>();
+                    List<string> columnNames = new List<string>();
                     for (int i = 0; i < reader.FieldCount; i++)
                         columnNames.Add(reader.GetName(i));
 
@@ -214,7 +214,7 @@ namespace Netus2_DatabaseConnection
                 {
                     LogJctPersonPerson logJctPersonPerson = new LogJctPersonPerson();
 
-                    List<string> columnNames = new List<String>();
+                    List<string> columnNames = new List<string>();
                     for (int i = 0; i < reader.FieldCount; i++)
                         columnNames.Add(reader.GetName(i));
 
@@ -283,7 +283,7 @@ namespace Netus2_DatabaseConnection
                 {
                     LogUniqueIdentifier logUniqueIdentifier = new LogUniqueIdentifier();
 
-                    List<string> columnNames = new List<String>();
+                    List<string> columnNames = new List<string>();
                     for (int i = 0; i < reader.FieldCount; i++)
                         columnNames.Add(reader.GetName(i));
 
@@ -385,7 +385,7 @@ namespace Netus2_DatabaseConnection
                 {
                     LogProvider logProvider = new LogProvider();
 
-                    List<string> columnNames = new List<String>();
+                    List<string> columnNames = new List<string>();
                     for (int i = 0; i < reader.FieldCount; i++)
                         columnNames.Add(reader.GetName(i));
 
@@ -481,7 +481,7 @@ namespace Netus2_DatabaseConnection
                 {
                     LogApp logApp = new LogApp();
 
-                    List<string> columnNames = new List<String>();
+                    List<string> columnNames = new List<string>();
                     for (int i = 0; i < reader.FieldCount; i++)
                         columnNames.Add(reader.GetName(i));
 
@@ -571,7 +571,7 @@ namespace Netus2_DatabaseConnection
                 {
                     LogJctPersonApp logJctPersonApp = new LogJctPersonApp();
 
-                    List<string> columnNames = new List<String>();
+                    List<string> columnNames = new List<string>();
                     for (int i = 0; i < reader.FieldCount; i++)
                         columnNames.Add(reader.GetName(i));
 
@@ -640,7 +640,7 @@ namespace Netus2_DatabaseConnection
                 {
                     LogJctClassPerson logJctClassPerson = new LogJctClassPerson();
 
-                    List<string> columnNames = new List<String>();
+                    List<string> columnNames = new List<string>();
                     for (int i = 0; i < reader.FieldCount; i++)
                         columnNames.Add(reader.GetName(i));
 
@@ -714,7 +714,7 @@ namespace Netus2_DatabaseConnection
                 {
                     LogPhoneNumber logPhoneNumber = new LogPhoneNumber();
 
-                    List<string> columnNames = new List<String>();
+                    List<string> columnNames = new List<string>();
                     for (int i = 0; i < reader.FieldCount; i++)
                         columnNames.Add(reader.GetName(i));
 
@@ -816,7 +816,7 @@ namespace Netus2_DatabaseConnection
                 {
                     LogAddress logAddress = new LogAddress();
 
-                    List<string> columnNames = new List<String>();
+                    List<string> columnNames = new List<string>();
                     for (int i = 0; i < reader.FieldCount; i++)
                         columnNames.Add(reader.GetName(i));
 
@@ -942,7 +942,7 @@ namespace Netus2_DatabaseConnection
                 {
                     LogJctPersonAddress logJctPersonAddress = new LogJctPersonAddress();
 
-                    List<string> columnNames = new List<String>();
+                    List<string> columnNames = new List<string>();
                     for (int i = 0; i < reader.FieldCount; i++)
                         columnNames.Add(reader.GetName(i));
 
@@ -1011,7 +1011,7 @@ namespace Netus2_DatabaseConnection
                 {
                     LogEmploymentSession logEmploymentSession = new LogEmploymentSession();
 
-                    List<string> columnNames = new List<String>();
+                    List<string> columnNames = new List<string>();
                     for (int i = 0; i < reader.FieldCount; i++)
                         columnNames.Add(reader.GetName(i));
 
@@ -1131,7 +1131,7 @@ namespace Netus2_DatabaseConnection
                 {
                     LogAcademicSession logAcademicSession = new LogAcademicSession();
 
-                    List<string> columnNames = new List<String>();
+                    List<string> columnNames = new List<string>();
                     for (int i = 0; i < reader.FieldCount; i++)
                         columnNames.Add(reader.GetName(i));
 
@@ -1256,7 +1256,7 @@ namespace Netus2_DatabaseConnection
                 {
                     LogOrganization logOrg = new LogOrganization();
 
-                    List<string> columnNames = new List<String>();
+                    List<string> columnNames = new List<string>();
                     for (int i = 0; i < reader.FieldCount; i++)
                         columnNames.Add(reader.GetName(i));
 
@@ -1357,7 +1357,7 @@ namespace Netus2_DatabaseConnection
                 {
                     LogResource logResource = new LogResource();
 
-                    List<string> columnNames = new List<String>();
+                    List<string> columnNames = new List<string>();
                     for (int i = 0; i < reader.FieldCount; i++)
                         columnNames.Add(reader.GetName(i));
 
@@ -1455,7 +1455,7 @@ namespace Netus2_DatabaseConnection
                 {
                     LogCourse logCourse = new LogCourse();
 
-                    List<string> columnNames = new List<String>();
+                    List<string> columnNames = new List<string>();
                     for (int i = 0; i < reader.FieldCount; i++)
                         columnNames.Add(reader.GetName(i));
 
@@ -1542,7 +1542,7 @@ namespace Netus2_DatabaseConnection
                 {
                     LogJctCourseSubject logJctCourseSubject = new LogJctCourseSubject();
 
-                    List<string> columnNames = new List<String>();
+                    List<string> columnNames = new List<string>();
                     for (int i = 0; i < reader.FieldCount; i++)
                         columnNames.Add(reader.GetName(i));
 
@@ -1611,7 +1611,7 @@ namespace Netus2_DatabaseConnection
                 {
                     LogJctCourseGrade logJctCourseGrade = new LogJctCourseGrade();
 
-                    List<string> columnNames = new List<String>();
+                    List<string> columnNames = new List<string>();
                     for (int i = 0; i < reader.FieldCount; i++)
                         columnNames.Add(reader.GetName(i));
 
@@ -1679,7 +1679,7 @@ namespace Netus2_DatabaseConnection
                 {
                     LogClass logClass = new LogClass();
 
-                    List<string> columnNames = new List<String>();
+                    List<string> columnNames = new List<string>();
                     for (int i = 0; i < reader.FieldCount; i++)
                         columnNames.Add(reader.GetName(i));
 
@@ -1787,7 +1787,7 @@ namespace Netus2_DatabaseConnection
                 {
                     LogJctClassPeriod logJctClassPeriod = new LogJctClassPeriod();
 
-                    List<string> columnNames = new List<String>();
+                    List<string> columnNames = new List<string>();
                     for (int i = 0; i < reader.FieldCount; i++)
                         columnNames.Add(reader.GetName(i));
 
@@ -1856,7 +1856,7 @@ namespace Netus2_DatabaseConnection
                 {
                     LogJctClassResource logJctClassResource = new LogJctClassResource();
 
-                    List<string> columnNames = new List<String>();
+                    List<string> columnNames = new List<string>();
                     for (int i = 0; i < reader.FieldCount; i++)
                         columnNames.Add(reader.GetName(i));
 
@@ -1925,7 +1925,7 @@ namespace Netus2_DatabaseConnection
                 {
                     LogLineItem logLineItem = new LogLineItem();
 
-                    List<string> columnNames = new List<String>();
+                    List<string> columnNames = new List<string>();
                     for (int i = 0; i < reader.FieldCount; i++)
                         columnNames.Add(reader.GetName(i));
 
@@ -2048,7 +2048,7 @@ namespace Netus2_DatabaseConnection
                 {
                     LogEnrollment logEnrollment = new LogEnrollment();
 
-                    List<string> columnNames = new List<String>();
+                    List<string> columnNames = new List<string>();
                     for (int i = 0; i < reader.FieldCount; i++)
                         columnNames.Add(reader.GetName(i));
 
@@ -2165,7 +2165,7 @@ namespace Netus2_DatabaseConnection
                 {
                     LogMark logMark = new LogMark();
 
-                    List<string> columnNames = new List<String>();
+                    List<string> columnNames = new List<string>();
                     for (int i = 0; i < reader.FieldCount; i++)
                         columnNames.Add(reader.GetName(i));
 
@@ -2279,7 +2279,7 @@ namespace Netus2_DatabaseConnection
                 {
                     LogJctEnrollmentAcademicSession logJctEnrollmentAcademicSession = new LogJctEnrollmentAcademicSession();
 
-                    List<string> columnNames = new List<String>();
+                    List<string> columnNames = new List<string>();
                     for (int i = 0; i < reader.FieldCount; i++)
                         columnNames.Add(reader.GetName(i));
 

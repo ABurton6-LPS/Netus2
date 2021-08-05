@@ -1,10 +1,9 @@
 using Netus2_DatabaseConnection.dbAccess;
 using Netus2_DatabaseConnection.dbAccess.dbCreation;
 using NUnit.Framework;
-using System.Data;
 using System.Data.SqlClient;
 
-namespace Netus2_Test.dbAccess_Tests
+namespace Netus2_Test.Integration.dbAccess_Tests
 {
     public class DatabaseCreation_Test
     {
