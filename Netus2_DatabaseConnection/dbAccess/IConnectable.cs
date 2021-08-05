@@ -12,11 +12,6 @@ namespace Netus2_DatabaseConnection.dbAccess
         ConnectionState GetState();
 
         /// <summary>
-        /// Opens a connection to the database.
-        /// </summary>
-        void OpenConnection();
-
-        /// <summary>
         /// Closes the connection to the database. You need to have an already open conection for this to be used.
         /// </summary>
         void CloseConnection();

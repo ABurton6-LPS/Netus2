@@ -13,12 +13,13 @@ namespace Netus2_DatabaseConnection.dataObjects
         public string BuildingCode { get; set; }
         public List<Organization> Children { get; set; }
 
-        public Organization(string name, Enumeration organizationType, string identifier)
+        public Organization(string name, Enumeration organizationType, string identifier, string buildingCode)
         {
             Id = -1;
             Name = name;
             OrganizationType = organizationType;
             Identifier = identifier;
+            BuildingCode = buildingCode;
 
             Children = new List<Organization>();
         }

@@ -130,52 +130,57 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 while (reader.Read())
                 {
                     ProviderDao foundProviderDao = new ProviderDao();
+
+                    List<string> columnNames = new List<string>();
                     for (int i = 0; i < reader.FieldCount; i++)
+                        columnNames.Add(reader.GetName(i));
+
+                    foreach (string columnName in columnNames)
                     {
-                        var value = reader.GetValue(i);
-                        switch (i)
+                        var value = reader.GetValue(reader.GetOrdinal(columnName));
+                        switch (columnName)
                         {
-                            case 0:
+                            case "provider_id":
                                 if (value != DBNull.Value)
                                     foundProviderDao.provider_id = (int)value;
                                 else
                                     foundProviderDao.provider_id = null;
                                 break;
-                            case 1:
+                            case "name":
                                 foundProviderDao.name = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 2:
+                            case "url_standard_access":
                                 foundProviderDao.url_standard_access = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 3:
+                            case "url_admin_access":
                                 foundProviderDao.url_admin_access = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 4:
+                            case "populated_by":
                                 foundProviderDao.populated_by = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 5:
+                            case "parent_provider_id":
                                 foundProviderDao.parent_provider_id = value != DBNull.Value ? (int)value : -1;
                                 break;
-                            case 6:
+                            case "created":
                                 if (value != DBNull.Value)
                                     foundProviderDao.created = (DateTime)value;
                                 else
                                     foundProviderDao.created = null;
                                 break;
-                            case 7:
+                            case "created_by":
                                 foundProviderDao.created_by = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 8:
+                            case "changed":
                                 if (value != DBNull.Value)
                                     foundProviderDao.changed = (DateTime)value;
                                 else
                                     foundProviderDao.changed = null;
                                 break;
-                            case 9:
+                            case "changed_by":
                                 foundProviderDao.changed_by = value != DBNull.Value ? (string)value : null;
                                 break;
                             default:
-                                throw new Exception("Unexpected column found in provider table: " + reader.GetName(i));
+                                throw new Exception("Unexpected column found in provider table: " + columnName);
                         }
                     }
                     foundProvidersDao.Add(foundProviderDao);

@@ -91,73 +91,78 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 while (reader.Read())
                 {
                     EnrollmentDao foundEnrollmentDao = new EnrollmentDao();
+
+                    List<string> columnNames = new List<string>();
                     for (int i = 0; i < reader.FieldCount; i++)
+                        columnNames.Add(reader.GetName(i));
+
+                    foreach (string columnName in columnNames)
                     {
-                        var value = reader.GetValue(i);
-                        switch (i)
+                        var value = reader.GetValue(reader.GetOrdinal(columnName));
+                        switch (columnName)
                         {
-                            case 0:
+                            case "enrollment_id":
                                 if (value != DBNull.Value)
                                     foundEnrollmentDao.enrollment_id = (int)value;
                                 else
                                     foundEnrollmentDao.enrollment_id = null;
                                 break;
-                            case 1:
+                            case "person_id":
                                 if (value != DBNull.Value)
                                     foundEnrollmentDao.person_id = (int)value;
                                 else
                                     foundEnrollmentDao.person_id = null;
                                 break;
-                            case 2:
+                            case "class_id":
                                 if (value != DBNull.Value)
                                     foundEnrollmentDao.class_id = (int)value;
                                 else
                                     foundEnrollmentDao.class_id = null;
                                 break;
-                            case 3:
+                            case "enum_grade_id":
                                 if (value != DBNull.Value)
                                     foundEnrollmentDao.enum_grade_id = (int)value;
                                 else
                                     foundEnrollmentDao.enum_grade_id = null;
                                 break;
-                            case 4:
+                            case "start_date":
                                 if (value != DBNull.Value)
                                     foundEnrollmentDao.start_date = (DateTime)value;
                                 else
                                     foundEnrollmentDao.start_date = null;
                                 break;
-                            case 5:
+                            case "end_date":
                                 if (value != DBNull.Value)
                                     foundEnrollmentDao.end_date = (DateTime)value;
                                 else
                                     foundEnrollmentDao.end_date = null;
                                 break;
-                            case 6:
+                            case "is_primary_id":
                                 if (value != DBNull.Value)
                                     foundEnrollmentDao.is_primary_id = (int)value;
                                 else
                                     foundEnrollmentDao.is_primary_id = null;
                                 break;
-                            case 7:
+                            case "created":
                                 if (value != DBNull.Value)
                                     foundEnrollmentDao.created = (DateTime)value;
                                 else
                                     foundEnrollmentDao.created = null;
                                 break;
-                            case 8:
+                            case "created_by":
                                 foundEnrollmentDao.created_by = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 9:
+                            case "changed":
                                 if (value != DBNull.Value)
                                     foundEnrollmentDao.changed = (DateTime)value;
                                 else
                                     foundEnrollmentDao.changed = null;
                                 break;
-                            case 10:
+                            case "changed_by":
                                 foundEnrollmentDao.changed_by = value != DBNull.Value ? (string)value : null;
                                 break;
                             default:
-                                throw new Exception("Unexpected column found in enrollment table: " + reader.GetName(i));
+                                throw new Exception("Unexpected column found in enrollment table: " + columnName);
                         }
                     }
                     foundEnrollmentDaos.Add(foundEnrollmentDao);

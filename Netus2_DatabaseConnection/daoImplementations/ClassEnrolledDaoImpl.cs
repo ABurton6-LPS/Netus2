@@ -145,64 +145,69 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 while (reader.Read())
                 {
                     ClassEnrolledDao foundClassEnrolledDao = new ClassEnrolledDao();
+
+                    List<string> columnNames = new List<string>();
                     for (int i = 0; i < reader.FieldCount; i++)
+                        columnNames.Add(reader.GetName(i));
+
+                    foreach (string columnName in columnNames)
                     {
-                        var value = reader.GetValue(i);
-                        switch (i)
+                        var value = reader.GetValue(reader.GetOrdinal(columnName));
+                        switch (columnName)
                         {
-                            case 0:
+                            case "class_id":
                                 if (value != DBNull.Value)
                                     foundClassEnrolledDao.class_id = (int)value;
                                 else
                                     foundClassEnrolledDao.class_id = null;
                                 break;
-                            case 1:
+                            case "name":
                                 foundClassEnrolledDao.name = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 2:
+                            case "class_code":
                                 foundClassEnrolledDao.class_code = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 3:
+                            case "enum_class_id":
                                 if (value != DBNull.Value)
                                     foundClassEnrolledDao.enum_class_id = (int)value;
                                 else
                                     foundClassEnrolledDao.enum_class_id = null;
                                 break;
-                            case 4:
+                            case "room":
                                 foundClassEnrolledDao.room = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 5:
+                            case "course_id":
                                 if (value != DBNull.Value)
                                     foundClassEnrolledDao.course_id = (int)value;
                                 else
                                     foundClassEnrolledDao.course_id = null;
                                     break;
-                            case 6:
+                            case "academic_session_id":
                                 if (value != DBNull.Value)
                                     foundClassEnrolledDao.academic_session_id = (int)value;
                                 else
                                     foundClassEnrolledDao.academic_session_id = null;
                                 break;
-                            case 7:
+                            case "created":
                                 if (value != DBNull.Value)
                                     foundClassEnrolledDao.created = (DateTime)value;
                                 else
                                     foundClassEnrolledDao.created = null;
                                 break;
-                            case 8:
+                            case "created_by":
                                 foundClassEnrolledDao.created_by = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 9:
+                            case "changed":
                                 if (value != DBNull.Value)
                                     foundClassEnrolledDao.changed = (DateTime)value;
                                 else
                                     foundClassEnrolledDao.changed = null;
                                 break;
-                            case 10:
+                            case "changed_by":
                                 foundClassEnrolledDao.changed_by = value != DBNull.Value ? (string)value : null;
                                 break;
                             default:
-                                throw new Exception("Unexpected column found in class table: " + reader.GetName(i));
+                                throw new Exception("Unexpected column found in class table: " + columnName);
                         }
                     }
                     foundClassEnrolledDaos.Add(foundClassEnrolledDao);

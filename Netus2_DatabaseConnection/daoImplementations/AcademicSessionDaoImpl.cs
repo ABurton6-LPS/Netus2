@@ -16,6 +16,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         public void Delete(AcademicSession academicSession, IConnectable connection)
         {
             UnlinkChildren(academicSession, connection);
+            UnlinkEnrollment(academicSession, connection);
             Delete_ClassesEnrolled(academicSession.Id, connection);
 
             AcademicSessionDao academicSessionDao = daoObjectMapper.MapAcademicSession(academicSession, -1);
@@ -55,6 +56,16 @@ namespace Netus2_DatabaseConnection.daoImplementations
             foreach (AcademicSession child in childrenToRemove)
             {
                 academicSession.Children.Remove(child);
+            }
+        }
+
+        private void UnlinkEnrollment(AcademicSession academicSession, IConnectable connection)
+        {
+            IJctEnrollmentAcademicSessionDao jctEnrollmentAcademicSessionDaoImpl = new JctEnrollmentAcademicSessionDaoImpl();
+            List<JctEnrollmentAcademicSessionDao> linksToBeRemoved = jctEnrollmentAcademicSessionDaoImpl.Read_WithAcademicSessionId(academicSession.Id, connection);
+            foreach(JctEnrollmentAcademicSessionDao linkToBeRemoved in linksToBeRemoved)
+            {
+                jctEnrollmentAcademicSessionDaoImpl.Delete((int)linkToBeRemoved.enrollment_id, (int)linkToBeRemoved.academic_session_id, connection);
             }
         }
 
@@ -152,85 +163,90 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 while (reader.Read())
                 {
                     AcademicSessionDao foundAsDao = new AcademicSessionDao();
+
+                    List<string> columnNames = new List<string>();
                     for (int i = 0; i < reader.FieldCount; i++)
+                        columnNames.Add(reader.GetName(i));
+
+                    foreach(string columnName in columnNames)
                     {
-                        var value = reader.GetValue(i);
-                        switch (i)
+                        var value = reader.GetValue(reader.GetOrdinal(columnName));
+                        switch (columnName)
                         {
-                            case 0:
+                            case "academic_session_id":
                                 if (value != DBNull.Value)
                                     foundAsDao.academic_session_id = (int)value;
                                 else
                                     foundAsDao.academic_session_id = null;
                                 break;
-                            case 1:
+                            case "term_code":
                                 if (value != DBNull.Value)
                                     foundAsDao.term_code = (string)value;
                                 else
                                     foundAsDao.term_code = null;
                                 break;
-                            case 2:
+                            case "school_year":
                                 if (value != DBNull.Value)
                                     foundAsDao.school_year = (int)value;
                                 else
                                     foundAsDao.school_year = null;
                                 break;
-                            case 3:
+                            case "name":
                                 if (value != DBNull.Value)
                                     foundAsDao.name = (string)value;
                                 else
                                     foundAsDao.name = null;
                                 break;
-                            case 4:
+                            case "start_date":
                                 if (value != DBNull.Value)
                                     foundAsDao.start_date = (DateTime)value;
                                 else
                                     foundAsDao.start_date = null;
                                 break;
-                            case 5:
+                            case "end_date":
                                 if (value != DBNull.Value)
                                     foundAsDao.end_date = (DateTime)value;
                                 else
                                     foundAsDao.end_date = null;
                                 break;
-                            case 6:
+                            case "enum_session_id":
                                 if (value != DBNull.Value)
                                     foundAsDao.enum_session_id = (int)value;
                                 else
                                     foundAsDao.enum_session_id = null;
                                 break;
-                            case 7:
+                            case "parent_session_id":
                                 if (value != DBNull.Value)
                                     foundAsDao.parent_session_id = (int)value;
                                 else
                                     foundAsDao.parent_session_id = null;
                                 break;
-                            case 8:
+                            case "organization_id":
                                 if (value != DBNull.Value)
                                     foundAsDao.organization_id = (int)value;
                                 else
                                     foundAsDao.organization_id = null;
                                 break;
-                            case 9:
+                            case "created":
                                 if (value != DBNull.Value)
                                     foundAsDao.created = (DateTime)value;
                                 else
                                     foundAsDao.created = (DateTime)value;
                                 break;
-                            case 10:
+                            case "created_by":
                                 foundAsDao.created_by = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 11:
+                            case "changed":
                                 if (value != DBNull.Value)
                                     foundAsDao.changed = (DateTime)value;
                                 else
                                     foundAsDao.changed = null;
                                 break;
-                            case 12:
+                            case "changed_by":
                                 foundAsDao.changed_by = value != DBNull.Value ? (string)value : null;
                                 break;
                             default:
-                                throw new Exception("Unexpected column found in academic_session table: " + reader.GetName(i));
+                                throw new Exception("Unexpected column found in academic_session table: " + columnName);
                         }
                     }
                     foundAsDaos.Add(foundAsDao);

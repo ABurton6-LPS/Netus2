@@ -8,10 +8,8 @@ namespace Netus2SisSync.UtilityTools
 {
     public static class SyncLogger
     {
-        public static SyncJob LogNewJob(string jobName, IConnectable connection)
+        public static void LogNewJob(SyncJob job, IConnectable connection)
         {
-            SyncJob job = new SyncJob(jobName, DateTime.Now);
-
             StringBuilder sql = new StringBuilder("INSERT INTO sync_job(");
             sql.Append("[name], [timestamp]");
             sql.Append(") VALUES (");
@@ -21,18 +19,14 @@ namespace Netus2SisSync.UtilityTools
             job.Id = connection.InsertNewRecord(sql.ToString());
 
             LogStatus(job, Enum_Sync_Status.values["start"], connection);
-
-            return job;
         }
 
-        public static SyncTask LogNewTask(string taskName, SyncJob job, IConnectable connection)
+        public static SyncTask LogNewTask(SyncTask task, IConnectable connection)
         {
-            SyncTask task = new SyncTask(taskName, DateTime.Now);
-
             StringBuilder sql = new StringBuilder("INSERT INTO sync_task(");
             sql.Append("sync_job_id, [name], [timestamp]");
             sql.Append(") VALUES (");
-            sql.Append(job.Id + ", ");
+            sql.Append(task.Job.Id + ", ");
             sql.Append("'" + task.Name + "', ");
             sql.Append("'" + task.Timestamp + "')");
 

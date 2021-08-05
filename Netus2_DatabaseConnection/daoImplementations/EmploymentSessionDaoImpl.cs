@@ -126,76 +126,81 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 while (reader.Read())
                 {
                     EmploymentSessionDao foundEsDao = new EmploymentSessionDao();
+
+                    List<string> columnNames = new List<string>();
                     for (int i = 0; i < reader.FieldCount; i++)
+                        columnNames.Add(reader.GetName(i));
+
+                    foreach (string columnName in columnNames)
                     {
-                        var value = reader.GetValue(i);
-                        switch (i)
+                        var value = reader.GetValue(reader.GetOrdinal(columnName));
+                        switch (columnName)
                         {
-                            case 0:
+                            case "employment_session_id":
                                 if (value != DBNull.Value)
                                     foundEsDao.employment_session_id = (int)value;
                                 else
                                     foundEsDao.employment_session_id = null;
                                 break;
-                            case 1:
+                            case "name":
                                 foundEsDao.name = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 2:
+                            case "person_id":
                                 if (value != DBNull.Value)
                                     foundEsDao.person_id = (int)value;
                                 else
                                     foundEsDao.person_id = null;
                                 break;
-                            case 3:
+                            case "start_date":
                                 if (value != DBNull.Value)
                                     foundEsDao.start_date = (DateTime)value;
                                 else
                                     foundEsDao.start_date = null;
                                 break;
-                            case 4:
+                            case "end_date":
                                 if (value != DBNull.Value)
                                     foundEsDao.end_date = (DateTime)value;
                                 else
                                     foundEsDao.end_date = null;
                                 break;
-                            case 5:
+                            case "is_primary_id":
                                 if (value != DBNull.Value)
                                     foundEsDao.is_primary_id = (int)value;
                                 else
                                     foundEsDao.is_primary_id = null;
                                 break;
-                            case 6:
+                            case "enum_session_id":
                                 if (value != DBNull.Value)
                                     foundEsDao.enum_session_id = (int)value;
                                 else
                                     foundEsDao.enum_session_id = null;
                                 break;
-                            case 7:
+                            case "organization_id":
                                 if (value != DBNull.Value)
                                     foundEsDao.organization_id = (int)value;
                                 else
                                     foundEsDao.organization_id = null;
                                 break;
-                            case 8:
+                            case "created":
                                 if (value != DBNull.Value)
                                     foundEsDao.created = (DateTime)value;
                                 else
                                     foundEsDao.created = null;
                                 break;
-                            case 9:
+                            case "created_by":
                                 foundEsDao.created_by = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 10:
+                            case "changed":
                                 if (value != DBNull.Value)
                                     foundEsDao.changed = (DateTime)value;
                                 else
                                     foundEsDao.changed = null;
                                     break;
-                            case 11:
+                            case "changed_by":
                                 foundEsDao.changed_by = value != DBNull.Value ? (string)value : null;
                                 break;
                             default:
-                                throw new Exception("Unexpected column found in employment_session table: " + reader.GetName(i));
+                                throw new Exception("Unexpected column found in employment_session table: " + columnName);
                         }
                     }
                     foundEsDaos.Add(foundEsDao);

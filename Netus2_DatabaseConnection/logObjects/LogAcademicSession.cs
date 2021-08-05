@@ -8,6 +8,8 @@ namespace Netus2_DatabaseConnection.logObjects
         public int log_academic_session_id { get; set; }
         public int? academic_session_id { get; set; }
         public string name { get; set; }
+        public string term_code { get; set; }
+        public int? school_year { get; set; }
         public DateTime? start_date { get; set; }
         public DateTime? end_date { get; set; }
         public int? parent_session_id { get; set; }

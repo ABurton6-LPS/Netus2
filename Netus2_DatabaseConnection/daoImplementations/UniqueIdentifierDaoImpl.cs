@@ -67,58 +67,63 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 while (reader.Read())
                 {
                     UniqueIdentifierDao foundUniqueIdDao = new UniqueIdentifierDao();
+
+                    List<string> columnNames = new List<string>();
                     for (int i = 0; i < reader.FieldCount; i++)
+                        columnNames.Add(reader.GetName(i));
+
+                    foreach (string columnName in columnNames)
                     {
-                        var value = reader.GetValue(i);
-                        switch (i)
+                        var value = reader.GetValue(reader.GetOrdinal(columnName));
+                        switch (columnName)
                         {
-                            case 0:
+                            case "unique_identifier_id":
                                 if (value != DBNull.Value)
                                     foundUniqueIdDao.unique_identifier_id = (int)value;
                                 else
                                     foundUniqueIdDao.unique_identifier_id = null;
                                 break;
-                            case 1:
+                            case "person_id":
                                 if (value != DBNull.Value)
                                     foundUniqueIdDao.person_id = (int)value;
                                 else
                                     foundUniqueIdDao.person_id = null;
                                 break;
-                            case 2:
+                            case "unique_identifier":
                                 foundUniqueIdDao.unique_identifier = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 3:
+                            case "enum_identifier_id":
                                 if (value != DBNull.Value)
                                     foundUniqueIdDao.enum_identifier_id = (int)value;
                                 else
                                     foundUniqueIdDao.enum_identifier_id = null;
                                 break;
-                            case 4:
+                            case "is_active_id":
                                 if (value != DBNull.Value)
                                     foundUniqueIdDao.is_active_id = (int)value;
                                 else
                                     foundUniqueIdDao.is_active_id = null;
                                 break;
-                            case 5:
+                            case "created":
                                 if (value != DBNull.Value)
                                     foundUniqueIdDao.created = (DateTime)value;
                                 else
                                     foundUniqueIdDao.created = null;
                                 break;
-                            case 6:
+                            case "created_by":
                                 foundUniqueIdDao.created_by = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 7:
+                            case "changed":
                                 if (value != DBNull.Value)
                                     foundUniqueIdDao.changed = (DateTime)value;
                                 else
                                     foundUniqueIdDao.changed = null;
                                 break;
-                            case 8:
+                            case "changed_by":
                                 foundUniqueIdDao.changed_by = value != DBNull.Value ? (string)value : null;
                                 break;
                             default:
-                                throw new Exception("Unexpected column found in unique_identifier table: " + reader.GetName(i));
+                                throw new Exception("Unexpected column found in unique_identifier table: " + columnName);
                         }
                     }
                     foundUniqueIdDaos.Add(foundUniqueIdDao);

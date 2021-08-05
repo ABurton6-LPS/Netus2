@@ -6,9 +6,9 @@ using Netus2_DatabaseConnection.enumerations;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using static Netus2_Test.daoObject_Tests.TestDataValidator;
+using static Netus2_Test.Integration.daoObject_Tests.TestDataValidator;
 
-namespace Netus2_Test.daoObject_Tests
+namespace Netus2_Test.Integration.daoObject_Tests
 {
     class EndToEnd_EmployeeTest
     {
@@ -17,7 +17,6 @@ namespace Netus2_Test.daoObject_Tests
         IConnectable connection;
         IOrganizationDao orgDaoImpl;
         IPersonDao personDaoImpl;
-        IClassEnrolledDao classEnrolledDaoImpl;
         IPhoneNumberDao phoneNumberDaoImpl;
         IProviderDao providerDaoImpl;
         IApplicationDao appDaoImpl;
@@ -25,15 +24,13 @@ namespace Netus2_Test.daoObject_Tests
         [SetUp]
         public void Setup()
         {
-            connection = DbConnectionFactory.GetConnection("Local");
-            connection.OpenConnection();
+            connection = DbConnectionFactory.GetNetus2Connection();
             connection.BeginTransaction();
 
             testDataBuilder = new TestDataBuilder(connection);
 
             orgDaoImpl = new OrganizationDaoImpl();
             personDaoImpl = new PersonDaoImpl();
-            classEnrolledDaoImpl = new ClassEnrolledDaoImpl();
             phoneNumberDaoImpl = new PhoneNumberDaoImpl();
             providerDaoImpl = new ProviderDaoImpl();
             appDaoImpl = new ApplicationDaoImpl();
@@ -56,18 +53,7 @@ namespace Netus2_Test.daoObject_Tests
         public void GivenPerson_WhenRoleIsChanged_ShouldChangeJctPersonRole()
         {
             Person student = testDataBuilder.student;
-            student.Enrollments[0].ClassEnrolled = classEnrolledDaoImpl.Write(student.Enrollments[0].ClassEnrolled, connection);
-            student = personDaoImpl.Write(student, connection);
             Person teacher = testDataBuilder.teacher;
-
-            student = personDaoImpl.Write(student, connection);
-            teacher = personDaoImpl.Write(teacher, connection);
-
-            student.Relations.Add(teacher.Id);
-            teacher.Relations.Add(student.Id);
-
-            personDaoImpl.Update(student, connection);
-            personDaoImpl.Update(teacher, connection);
 
             teacher.Roles[0] = Enum_Role.values["administrator"];
             personDaoImpl.Update(teacher, connection);
@@ -81,18 +67,7 @@ namespace Netus2_Test.daoObject_Tests
         public void GivenPerson_WhenRoleIsAdded_ShouldBeAddedToJctPersonRole()
         {
             Person student = testDataBuilder.student;
-            student.Enrollments[0].ClassEnrolled = classEnrolledDaoImpl.Write(student.Enrollments[0].ClassEnrolled, connection);
-            student = personDaoImpl.Write(student, connection);
             Person teacher = testDataBuilder.teacher;
-
-            student = personDaoImpl.Write(student, connection);
-            teacher = personDaoImpl.Write(teacher, connection);
-
-            student.Relations.Add(teacher.Id);
-            teacher.Relations.Add(student.Id);
-
-            personDaoImpl.Update(student, connection);
-            personDaoImpl.Update(teacher, connection);
 
             teacher.Roles.Add(Enum_Role.values["administrator"]);
             personDaoImpl.Update(teacher, connection);
@@ -106,27 +81,14 @@ namespace Netus2_Test.daoObject_Tests
         [Test]
         public void GivenPerson_WhenRoleIsRemoved_ShouldBeRemovedFromJctPersonRole()
         {
-            Person student = testDataBuilder.student;
-            student.Enrollments[0].ClassEnrolled = classEnrolledDaoImpl.Write(student.Enrollments[0].ClassEnrolled, connection);
-            student = personDaoImpl.Write(student, connection);
             Person teacher = testDataBuilder.teacher;
-            teacher.Roles.Add(Enum_Role.values["administrator"]);
 
-            student = personDaoImpl.Write(student, connection);
-            teacher = personDaoImpl.Write(teacher, connection);
-
-            student.Relations.Add(teacher.Id);
-            teacher.Relations.Add(student.Id);
-
-            personDaoImpl.Update(student, connection);
-            personDaoImpl.Update(teacher, connection);
+            Assert_Table(teacher.Id, 1, "jct_person_role", connection);
 
             teacher.Roles.RemoveAt(0);
             personDaoImpl.Update(teacher, connection);
 
-            List<Person> teacherMarks = personDaoImpl.Read(teacher, connection);
-
-            Assert_Table(teacherMarks[0].Id, 1, "jct_person_role", connection);
+            Assert_Table(teacher.Id, 0, "jct_person_role", connection);
         }
 
 
@@ -195,13 +157,12 @@ namespace Netus2_Test.daoObject_Tests
         public void GivenPerson_WhenApplicationIsChanged_ShouldChangeInJctPersonApp()
         {
             Person person = testDataBuilder.teacher;
-            person = personDaoImpl.Write(person, connection);
+            Application app = person.Applications[0];
 
-            Application app = appDaoImpl.Read(person.Applications[0], connection)[0];
             Assert_Table(person.Id, 1, "jct_person_app", connection);
             AssertApplication(person.Applications[0], app);
 
-            person.Applications[0] = testDataBuilder.app;
+            person.Applications[0] = new Application("NewTestApp", person.Applications[0].Provider);
             personDaoImpl.Update(person, connection);
             person = personDaoImpl.Read(person, connection)[0];
 
@@ -214,9 +175,8 @@ namespace Netus2_Test.daoObject_Tests
         public void GivenPerson_WhenApplicationIsRemoved_ShouldDeleteFromJctPersonApp()
         {
             Person person = testDataBuilder.teacher;
-            person = personDaoImpl.Write(person, connection);
+            Application app = person.Applications[0];
 
-            Application app = appDaoImpl.Read(person.Applications[0], connection)[0];
             Assert_Table(person.Id, 1, "jct_person_app", connection);
             AssertApplication(person.Applications[0], app);
 
@@ -273,7 +233,7 @@ namespace Netus2_Test.daoObject_Tests
         [Test]
         public void GivenProvider_WhenApplicationIsAdded_ShouldInsertNewRecordWithLinkToProvider()
         {
-            Application app = testDataBuilder.app;
+            Application app = testDataBuilder.application;
 
             Assert_Table(app.Id, 1, "app", connection);
             Assert_Table(app.Provider.Id, 1, "provider", connection);

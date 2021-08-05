@@ -101,79 +101,84 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 while (reader.Read())
                 {
                     LineItemDao foundLineItemDao = new LineItemDao();
+
+                    List<string> columnNames = new List<string>();
                     for (int i = 0; i < reader.FieldCount; i++)
+                        columnNames.Add(reader.GetName(i));
+
+                    foreach (string columnName in columnNames)
                     {
-                        var value = reader.GetValue(i);
-                        switch (i)
+                        var value = reader.GetValue(reader.GetOrdinal(columnName));
+                        switch (columnName)
                         {
-                            case 0:
+                            case "lineitem_id":
                                 if (value != DBNull.Value)
                                     foundLineItemDao.lineitem_id = (int)value;
                                 else
                                     foundLineItemDao.lineitem_id = null;
                                 break;
-                            case 1:
+                            case "name":
                                 foundLineItemDao.name = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 2:
+                            case "descript":
                                 foundLineItemDao.descript = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 3:
+                            case "assign_date":
                                 if (value != DBNull.Value)
                                     foundLineItemDao.assign_date = (DateTime)value;
                                 else
                                     foundLineItemDao.assign_date = null;
                                 break;
-                            case 4:
+                            case "due_date":
                                 if (value != DBNull.Value)
                                     foundLineItemDao.due_date = (DateTime)value;
                                 else
                                     foundLineItemDao.due_date = null;
                                 break;
-                            case 5:
+                            case "class_id":
                                 if (value != DBNull.Value)
                                     foundLineItemDao.class_id = (int)value;
                                 else
                                     foundLineItemDao.class_id = null;
                                 break;
-                            case 6:
+                            case "enum_category_id":
                                 if (value != DBNull.Value)
                                     foundLineItemDao.enum_category_id = (int)value;
                                 else
                                     foundLineItemDao.enum_category_id = null;
                                 break;
-                            case 7:
+                            case "markValueMin":
                                 if (value != DBNull.Value)
                                     foundLineItemDao.markValueMin = (double)value;
                                 else
                                     foundLineItemDao.markValueMin = null;
                                 break;
-                            case 8:
+                            case "markValueMax":
                                 if (value != DBNull.Value)
                                     foundLineItemDao.markValueMax = (double)value;
                                 else
                                     foundLineItemDao.markValueMax = null;
                                 break;
-                            case 9:
+                            case "created":
                                 if (value != DBNull.Value)
                                     foundLineItemDao.created = (DateTime)value;
                                 else
                                     foundLineItemDao.created = null;
                                 break;
-                            case 10:
+                            case "created_by":
                                 foundLineItemDao.created_by = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 11:
+                            case "changed":
                                 if (value != DBNull.Value)
                                     foundLineItemDao.changed = (DateTime)value;
                                 else
                                     foundLineItemDao.changed = null;
                                 break;
-                            case 12:
+                            case "changed_by":
                                 foundLineItemDao.changed_by = value != DBNull.Value ? (string)value : null;
                                 break;
                             default:
-                                throw new Exception("Unexpected column found in lineItem table: " + reader.GetName(i));
+                                throw new Exception("Unexpected column found in lineItem table: " + columnName);
                         }
                     }
                     foundLineItemDaos.Add(foundLineItemDao);

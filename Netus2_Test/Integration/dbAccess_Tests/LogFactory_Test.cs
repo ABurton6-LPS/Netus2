@@ -5,84 +5,90 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 
-namespace Netus2_Test.dbAccess_Tests
+namespace Netus2_Test.Integration.dbAccess_Tests
 {
-    public class SchemaFactory_Test
+    public class LogFactory_Test
     {
         IConnectable connection;
 
         [SetUp]
         public void Setup()
         {
-            connection = DbConnectionFactory.GetConnection("Local");
-            connection.OpenConnection();
+            connection = DbConnectionFactory.GetLocalConnection();
             connection.BeginTransaction();
+
+            if (!CheckIfTableExists("enum_log_action"))
+                SchemaFactory.BuildSchema(connection);
         }
 
-        [TestCase("enum_log_action")]
-        [TestCase("enum_true_false")]
-        [TestCase("enum_phone")]
-        [TestCase("enum_address")]
-        [TestCase("enum_class")]
-        [TestCase("enum_gender")]
-        [TestCase("enum_importance")]
-        [TestCase("enum_organization")]
-        [TestCase("enum_role")]
-        [TestCase("enum_score_status")]
-        [TestCase("enum_session")]
-        [TestCase("enum_residence_status")]
-        [TestCase("enum_country")]
-        [TestCase("enum_state_province")]
-        [TestCase("enum_grade")]
-        [TestCase("enum_subject")]
-        [TestCase("enum_period")]
-        [TestCase("enum_category")]
-        [TestCase("enum_ethnic")]
-        [TestCase("enum_identifier")]
-        [TestCase("enum_sync_status")]
-        [TestCase("person")]
-        [TestCase("jct_person_role")]
-        [TestCase("jct_person_person")]
-        [TestCase("unique_identifier")]
-        [TestCase("provider")]
-        [TestCase("app")]
-        [TestCase("jct_person_app")]
-        [TestCase("phone_number")]
-        [TestCase("address")]
-        [TestCase("organization")]
-        [TestCase("employment_session")]
-        [TestCase("academic_session")]
-        [TestCase("resource")]
-        [TestCase("course")]
-        [TestCase("jct_course_subject")]
-        [TestCase("jct_course_grade")]
-        [TestCase("class")]
-        [TestCase("jct_class_period")]
-        [TestCase("jct_class_resource")]
-        [TestCase("lineitem")]
-        [TestCase("enrollment")]
-        [TestCase("mark")]
-        [TestCase("sync_job")]
-        [TestCase("sync_task")]
-        [TestCase("sync_job_status")]
-        [TestCase("sync_task_status")]
-        [TestCase("sync_error")]
+        [TestCase("log_enum_log_action")]
+        [TestCase("log_enum_true_false")]
+        [TestCase("log_enum_phone")]
+        [TestCase("log_enum_address")]
+        [TestCase("log_jct_person_address")]
+        [TestCase("log_enum_class")]
+        [TestCase("log_enum_gender")]
+        [TestCase("log_enum_importance")]
+        [TestCase("log_enum_organization")]
+        [TestCase("log_enum_role")]
+        [TestCase("log_enum_score_status")]
+        [TestCase("log_enum_session")]
+        [TestCase("log_enum_residence_status")]
+        [TestCase("log_enum_country")]
+        [TestCase("log_enum_state_province")]
+        [TestCase("log_enum_grade")]
+        [TestCase("log_enum_subject")]
+        [TestCase("log_enum_period")]
+        [TestCase("log_enum_category")]
+        [TestCase("log_enum_ethnic")]
+        [TestCase("log_enum_identifier")]
+        [TestCase("log_person")]
+        [TestCase("log_jct_person_role")]
+        [TestCase("log_jct_person_person")]
+        [TestCase("log_unique_identifier")]
+        [TestCase("log_provider")]
+        [TestCase("log_app")]
+        [TestCase("log_jct_person_app")]
+        [TestCase("log_phone_number")]
+        [TestCase("log_address")]
+        [TestCase("log_organization")]
+        [TestCase("log_employment_session")]
+        [TestCase("log_academic_session")]
+        [TestCase("log_resource")]
+        [TestCase("log_course")]
+        [TestCase("log_jct_course_subject")]
+        [TestCase("log_jct_course_grade")]
+        [TestCase("log_class")]
+        [TestCase("log_jct_class_period")]
+        [TestCase("log_jct_class_resource")]
+        [TestCase("log_lineitem")]
+        [TestCase("log_enrollment")]
+        [TestCase("log_mark")]
         public void Test_BuildSchema_CreatesExpectedTableWithProperColumns(String tableName)
         {
             List<String> expectedColumns = GetExpectedColumns(tableName);
 
             if (!CheckIfTableExists(tableName))
-                SchemaFactory.BuildSchema(connection);
+                LogFactory.BuildLogs(connection);
 
             Assert.True(CheckIfTableExists(tableName));
-            Assert.AreEqual(expectedColumns, GetColumnsInTable(tableName));
+
+            List<string> columnsInTable = GetColumnsInTable(tableName);
+
+            Assert.AreEqual(expectedColumns.Count, columnsInTable.Count);
+            foreach (string expectedColumName in expectedColumns)
+            {
+                if (columnsInTable.Contains(expectedColumName))
+                    Assert.Pass();
+                else
+                    Assert.Fail(tableName + " does not contain the expected column " + expectedColumName);
+            }
         }
 
         public bool CheckIfTableExists(string tableName)
         {
             string sql =
                 "SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = N'" + tableName + "'";
-
             int numberOfRecordsReturned = 0;
             IDataReader reader = null;
             try
@@ -105,15 +111,14 @@ namespace Netus2_Test.dbAccess_Tests
         private List<String> GetColumnsInTable(string tableName)
         {
             List<String> foundColumns = new List<String>();
-            string sql = "SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = N'" + tableName + "'";
-
+            string sql = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = N'" + tableName + "' AND COLUMN_NAME NOT LIKE 'populated_by'";
             IDataReader reader = null;
             try
             {
                 reader = connection.GetReader(sql);
                 while (reader.Read())
                 {
-                    foundColumns.Add(reader.GetString(3));
+                    foundColumns.Add(reader.GetString(reader.GetOrdinal("COLUMN_NAME")));
                 }
             }
             finally
@@ -129,20 +134,37 @@ namespace Netus2_Test.dbAccess_Tests
         {
             List<String> expectedColumns = new List<String>();
 
-            if ((tableName.Length >= 4) && (tableName.Substring(0, 4).Equals("enum")))
+            if (tableName.Equals("log_enum_log_action"))
             {
                 expectedColumns.Add(tableName + "_id");
+                expectedColumns.Add(tableName.Substring(4) + "_id");
                 expectedColumns.Add("netus2_code");
                 expectedColumns.Add("sis_code");
                 expectedColumns.Add("hr_code");
                 expectedColumns.Add("pip_code");
                 expectedColumns.Add("descript");
+                expectedColumns.Add("log_date");
+                expectedColumns.Add("log_user");
+            }
+            else if ((tableName.Length >= 8) && (tableName.Substring(0, 8).Equals("log_enum")))
+            {
+                expectedColumns.Add(tableName + "_id");
+                expectedColumns.Add(tableName.Substring(4) + "_id");
+                expectedColumns.Add("netus2_code");
+                expectedColumns.Add("sis_code");
+                expectedColumns.Add("hr_code");
+                expectedColumns.Add("pip_code");
+                expectedColumns.Add("descript");
+                expectedColumns.Add("log_date");
+                expectedColumns.Add("log_user");
+                expectedColumns.Add("enum_log_action_id");
             }
             else
             {
                 switch (tableName)
                 {
-                    case "person":
+                    case "log_person":
+                        expectedColumns.Add("log_person_id");
                         expectedColumns.Add("person_id");
                         expectedColumns.Add("first_name");
                         expectedColumns.Add("middle_name");
@@ -157,16 +179,28 @@ namespace Netus2_Test.dbAccess_Tests
                         expectedColumns.Add("created_by");
                         expectedColumns.Add("changed");
                         expectedColumns.Add("changed_by");
+                        expectedColumns.Add("log_date");
+                        expectedColumns.Add("log_user");
+                        expectedColumns.Add("enum_log_action_id");
                         break;
-                    case "jct_person_role":
+                    case "log_jct_person_role":
+                        expectedColumns.Add("log_jct_person_role_id");
                         expectedColumns.Add("person_id");
                         expectedColumns.Add("enum_role_id");
+                        expectedColumns.Add("log_date");
+                        expectedColumns.Add("log_user");
+                        expectedColumns.Add("enum_log_action_id");
                         break;
-                    case "jct_person_person":
+                    case "log_jct_person_person":
+                        expectedColumns.Add("log_jct_person_person_id");
                         expectedColumns.Add("person_one_id");
                         expectedColumns.Add("person_two_id");
+                        expectedColumns.Add("log_date");
+                        expectedColumns.Add("log_user");
+                        expectedColumns.Add("enum_log_action_id");
                         break;
-                    case "unique_identifier":
+                    case "log_unique_identifier":
+                        expectedColumns.Add("log_unique_identifier_id");
                         expectedColumns.Add("unique_identifier_id");
                         expectedColumns.Add("person_id");
                         expectedColumns.Add("unique_identifier");
@@ -176,20 +210,27 @@ namespace Netus2_Test.dbAccess_Tests
                         expectedColumns.Add("created_by");
                         expectedColumns.Add("changed");
                         expectedColumns.Add("changed_by");
+                        expectedColumns.Add("log_date");
+                        expectedColumns.Add("log_user");
+                        expectedColumns.Add("enum_log_action_id");
                         break;
-                    case "provider":
+                    case "log_provider":
+                        expectedColumns.Add("log_provider_id");
                         expectedColumns.Add("provider_id");
                         expectedColumns.Add("name");
                         expectedColumns.Add("url_standard_access");
                         expectedColumns.Add("url_admin_access");
-                        expectedColumns.Add("populated_by");
                         expectedColumns.Add("parent_provider_id");
                         expectedColumns.Add("created");
                         expectedColumns.Add("created_by");
                         expectedColumns.Add("changed");
                         expectedColumns.Add("changed_by");
+                        expectedColumns.Add("log_date");
+                        expectedColumns.Add("log_user");
+                        expectedColumns.Add("enum_log_action_id");
                         break;
-                    case "app":
+                    case "log_app":
+                        expectedColumns.Add("log_app_id");
                         expectedColumns.Add("app_id");
                         expectedColumns.Add("name");
                         expectedColumns.Add("provider_id");
@@ -197,12 +238,20 @@ namespace Netus2_Test.dbAccess_Tests
                         expectedColumns.Add("created_by");
                         expectedColumns.Add("changed");
                         expectedColumns.Add("changed_by");
+                        expectedColumns.Add("log_date");
+                        expectedColumns.Add("log_user");
+                        expectedColumns.Add("enum_log_action_id");
                         break;
-                    case "jct_person_app":
+                    case "log_jct_person_app":
+                        expectedColumns.Add("log_jct_person_app_id");
                         expectedColumns.Add("person_id");
                         expectedColumns.Add("app_id");
+                        expectedColumns.Add("log_date");
+                        expectedColumns.Add("log_user");
+                        expectedColumns.Add("enum_log_action_id");
                         break;
-                    case "phone_number":
+                    case "log_phone_number":
+                        expectedColumns.Add("log_phone_number_id");
                         expectedColumns.Add("phone_number_id");
                         expectedColumns.Add("person_id");
                         expectedColumns.Add("phone_number");
@@ -212,8 +261,12 @@ namespace Netus2_Test.dbAccess_Tests
                         expectedColumns.Add("created_by");
                         expectedColumns.Add("changed");
                         expectedColumns.Add("changed_by");
+                        expectedColumns.Add("log_date");
+                        expectedColumns.Add("log_user");
+                        expectedColumns.Add("enum_log_action_id");
                         break;
-                    case "address":
+                    case "log_address":
+                        expectedColumns.Add("log_address_id");
                         expectedColumns.Add("address_id");
                         expectedColumns.Add("address_line_1");
                         expectedColumns.Add("address_line_2");
@@ -230,12 +283,20 @@ namespace Netus2_Test.dbAccess_Tests
                         expectedColumns.Add("created_by");
                         expectedColumns.Add("changed");
                         expectedColumns.Add("changed_by");
+                        expectedColumns.Add("log_date");
+                        expectedColumns.Add("log_user");
+                        expectedColumns.Add("enum_log_action_id");
                         break;
-                    case "jct_person_address":
+                    case "log_jct_person_address":
+                        expectedColumns.Add("log_jct_person_address_id");
                         expectedColumns.Add("person_id");
                         expectedColumns.Add("address_id");
+                        expectedColumns.Add("log_date");
+                        expectedColumns.Add("log_user");
+                        expectedColumns.Add("enum_log_action_id");
                         break;
-                    case "employment_session":
+                    case "log_employment_session":
+                        expectedColumns.Add("log_employment_session_id");
                         expectedColumns.Add("employment_session_id");
                         expectedColumns.Add("name");
                         expectedColumns.Add("person_id");
@@ -248,8 +309,14 @@ namespace Netus2_Test.dbAccess_Tests
                         expectedColumns.Add("created_by");
                         expectedColumns.Add("changed");
                         expectedColumns.Add("changed_by");
+                        expectedColumns.Add("log_date");
+                        expectedColumns.Add("log_user");
+                        expectedColumns.Add("enum_log_action_id");
                         break;
-                    case "academic_session":
+                    case "log_academic_session":
+                        expectedColumns.Add("log_academic_session_id");
+                        expectedColumns.Add("term_code");
+                        expectedColumns.Add("school_year");
                         expectedColumns.Add("academic_session_id");
                         expectedColumns.Add("name");
                         expectedColumns.Add("start_date");
@@ -261,10 +328,12 @@ namespace Netus2_Test.dbAccess_Tests
                         expectedColumns.Add("created_by");
                         expectedColumns.Add("changed");
                         expectedColumns.Add("changed_by");
-                        expectedColumns.Add("term_code");
-                        expectedColumns.Add("school_year");
+                        expectedColumns.Add("log_date");
+                        expectedColumns.Add("log_user");
+                        expectedColumns.Add("enum_log_action_id");
                         break;
-                    case "organization":
+                    case "log_organization":
+                        expectedColumns.Add("log_organization_id");
                         expectedColumns.Add("organization_id");
                         expectedColumns.Add("name");
                         expectedColumns.Add("enum_organization_id");
@@ -275,8 +344,12 @@ namespace Netus2_Test.dbAccess_Tests
                         expectedColumns.Add("created_by");
                         expectedColumns.Add("changed");
                         expectedColumns.Add("changed_by");
+                        expectedColumns.Add("log_date");
+                        expectedColumns.Add("log_user");
+                        expectedColumns.Add("enum_log_action_id");
                         break;
-                    case "resource":
+                    case "log_resource":
+                        expectedColumns.Add("log_resource_id");
                         expectedColumns.Add("resource_id");
                         expectedColumns.Add("name");
                         expectedColumns.Add("enum_importance_id");
@@ -287,8 +360,12 @@ namespace Netus2_Test.dbAccess_Tests
                         expectedColumns.Add("created_by");
                         expectedColumns.Add("changed");
                         expectedColumns.Add("changed_by");
+                        expectedColumns.Add("log_date");
+                        expectedColumns.Add("log_user");
+                        expectedColumns.Add("enum_log_action_id");
                         break;
-                    case "course":
+                    case "log_course":
+                        expectedColumns.Add("log_course_id");
                         expectedColumns.Add("course_id");
                         expectedColumns.Add("name");
                         expectedColumns.Add("course_code");
@@ -296,16 +373,28 @@ namespace Netus2_Test.dbAccess_Tests
                         expectedColumns.Add("created_by");
                         expectedColumns.Add("changed");
                         expectedColumns.Add("changed_by");
+                        expectedColumns.Add("log_date");
+                        expectedColumns.Add("log_user");
+                        expectedColumns.Add("enum_log_action_id");
                         break;
-                    case "jct_course_subject":
+                    case "log_jct_course_subject":
+                        expectedColumns.Add("log_jct_course_subject_id");
                         expectedColumns.Add("course_id");
                         expectedColumns.Add("enum_subject_id");
+                        expectedColumns.Add("log_date");
+                        expectedColumns.Add("log_user");
+                        expectedColumns.Add("enum_log_action_id");
                         break;
-                    case "jct_course_grade":
+                    case "log_jct_course_grade":
+                        expectedColumns.Add("log_jct_course_grade_id");
                         expectedColumns.Add("course_id");
                         expectedColumns.Add("enum_grade_id");
+                        expectedColumns.Add("log_date");
+                        expectedColumns.Add("log_user");
+                        expectedColumns.Add("enum_log_action_id");
                         break;
-                    case "class":
+                    case "log_class":
+                        expectedColumns.Add("log_class_id");
                         expectedColumns.Add("class_id");
                         expectedColumns.Add("name");
                         expectedColumns.Add("class_code");
@@ -317,16 +406,28 @@ namespace Netus2_Test.dbAccess_Tests
                         expectedColumns.Add("created_by");
                         expectedColumns.Add("changed");
                         expectedColumns.Add("changed_by");
+                        expectedColumns.Add("log_date");
+                        expectedColumns.Add("log_user");
+                        expectedColumns.Add("enum_log_action_id");
                         break;
-                    case "jct_class_period":
+                    case "log_jct_class_period":
+                        expectedColumns.Add("log_jct_class_period_id");
                         expectedColumns.Add("class_id");
                         expectedColumns.Add("enum_period_id");
+                        expectedColumns.Add("log_date");
+                        expectedColumns.Add("log_user");
+                        expectedColumns.Add("enum_log_action_id");
                         break;
-                    case "jct_class_resource":
+                    case "log_jct_class_resource":
+                        expectedColumns.Add("log_jct_class_resource_id");
                         expectedColumns.Add("class_id");
                         expectedColumns.Add("resource_id");
+                        expectedColumns.Add("log_date");
+                        expectedColumns.Add("log_user");
+                        expectedColumns.Add("enum_log_action_id");
                         break;
-                    case "lineitem":
+                    case "log_lineitem":
+                        expectedColumns.Add("log_lineitem_id");
                         expectedColumns.Add("lineitem_id");
                         expectedColumns.Add("name");
                         expectedColumns.Add("descript");
@@ -340,8 +441,12 @@ namespace Netus2_Test.dbAccess_Tests
                         expectedColumns.Add("created_by");
                         expectedColumns.Add("changed");
                         expectedColumns.Add("changed_by");
+                        expectedColumns.Add("log_date");
+                        expectedColumns.Add("log_user");
+                        expectedColumns.Add("enum_log_action_id");
                         break;
-                    case "enrollment":
+                    case "log_enrollment":
+                        expectedColumns.Add("log_enrollment_id");
                         expectedColumns.Add("enrollment_id");
                         expectedColumns.Add("person_id");
                         expectedColumns.Add("class_id");
@@ -353,8 +458,12 @@ namespace Netus2_Test.dbAccess_Tests
                         expectedColumns.Add("created_by");
                         expectedColumns.Add("changed");
                         expectedColumns.Add("changed_by");
+                        expectedColumns.Add("log_date");
+                        expectedColumns.Add("log_user");
+                        expectedColumns.Add("enum_log_action_id");
                         break;
-                    case "mark":
+                    case "log_mark":
+                        expectedColumns.Add("log_mark_id");
                         expectedColumns.Add("mark_id");
                         expectedColumns.Add("lineitem_id");
                         expectedColumns.Add("person_id");
@@ -366,40 +475,15 @@ namespace Netus2_Test.dbAccess_Tests
                         expectedColumns.Add("created_by");
                         expectedColumns.Add("changed");
                         expectedColumns.Add("changed_by");
-                        break;
-                    case "sync_job":
-                        expectedColumns.Add("sync_job_id");
-                        expectedColumns.Add("name");
-                        expectedColumns.Add("timestamp");
-                        break;
-                    case "sync_task":
-                        expectedColumns.Add("sync_task_id");
-                        expectedColumns.Add("sync_job_id");
-                        expectedColumns.Add("name");
-                        expectedColumns.Add("timestamp");
-                        break;
-                    case "sync_job_status":
-                        expectedColumns.Add("sync_job_status_id");
-                        expectedColumns.Add("sync_job_id");
-                        expectedColumns.Add("enum_sync_status_id");
-                        expectedColumns.Add("timestamp");
-                        break;
-                    case "sync_task_status":
-                        expectedColumns.Add("sync_task_status_id");
-                        expectedColumns.Add("sync_task_id");
-                        expectedColumns.Add("enum_sync_status_id");
-                        expectedColumns.Add("timestamp");
-                        break;
-                    case "sync_error":
-                        expectedColumns.Add("sync_error_id");
-                        expectedColumns.Add("sync_job_id");
-                        expectedColumns.Add("sync_task_id");
-                        expectedColumns.Add("message");
-                        expectedColumns.Add("stack_trace");
-                        expectedColumns.Add("timestamp");
+                        expectedColumns.Add("log_date");
+                        expectedColumns.Add("log_user");
+                        expectedColumns.Add("enum_log_action_id");
                         break;
                     default:
                         Assert.Fail("I need to know what columns to expect for table " + tableName);
+                        expectedColumns.Add("log_date");
+                        expectedColumns.Add("log_user");
+                        expectedColumns.Add("enum_log_action_id");
                         break;
                 }
             }

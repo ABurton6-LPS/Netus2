@@ -6,9 +6,9 @@ using Netus2_DatabaseConnection.enumerations;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using static Netus2_Test.daoObject_Tests.TestDataValidator;
+using static Netus2_Test.Integration.daoObject_Tests.TestDataValidator;
 
-namespace Netus2_Test.daoObject_Tests
+namespace Netus2_Test.Integration.daoObject_Tests
 {
     class EndToEnd_StudentTest
     {
@@ -20,7 +20,6 @@ namespace Netus2_Test.daoObject_Tests
         IAcademicSessionDao academicSessionDaoImpl;
         IClassEnrolledDao classEnrolledDaoImpl;
         IMarkDao markDaoImpl;
-        ILineItemDao lineitemDaoImpl;
         IOrganizationDao organizationDaoImpl;
         ICourseDao courseDaoImpl;
         IResourceDao resourceDaoImpl;
@@ -29,8 +28,7 @@ namespace Netus2_Test.daoObject_Tests
         [SetUp]
         public void Setup()
         {
-            connection = DbConnectionFactory.GetConnection("Local");
-            connection.OpenConnection();
+            connection = DbConnectionFactory.GetNetus2Connection();
             connection.BeginTransaction();
 
             testDataBuilder = new TestDataBuilder(connection);
@@ -39,7 +37,6 @@ namespace Netus2_Test.daoObject_Tests
             academicSessionDaoImpl = new AcademicSessionDaoImpl();
             classEnrolledDaoImpl = new ClassEnrolledDaoImpl();
             markDaoImpl = new MarkDaoImpl();
-            lineitemDaoImpl = new LineItemDaoImpl();
             organizationDaoImpl = new OrganizationDaoImpl();
             courseDaoImpl = new CourseDaoImpl();
             resourceDaoImpl = new ResourceDaoImpl();
@@ -262,7 +259,8 @@ namespace Netus2_Test.daoObject_Tests
             string name = "New Organization";
             Enumeration orgType = Enum_Organization.values["school"];
             string identifier = "New Org";
-            Organization newOrg = new Organization(name, orgType, identifier);
+            string buildingCode = "Test Building Code";
+            Organization newOrg = new Organization(name, orgType, identifier, buildingCode);
             newOrg = organizationDaoImpl.Write(newOrg, connection);
 
             academicSession.Organization = newOrg;

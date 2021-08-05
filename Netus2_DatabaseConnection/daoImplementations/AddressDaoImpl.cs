@@ -111,82 +111,87 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 while (reader.Read())
                 {
                     AddressDao foundAddressDao = new AddressDao();
+
+                    List<string> columnNames = new List<string>();
                     for (int i = 0; i < reader.FieldCount; i++)
+                        columnNames.Add(reader.GetName(i));
+
+                    foreach (string columnName in columnNames)
                     {
-                        var value = reader.GetValue(i);
-                        switch (i)
+                        var value = reader.GetValue(reader.GetOrdinal(columnName));
+                        switch (columnName)
                         {
-                            case 0:
+                            case "address_id":
                                 if (value != DBNull.Value)
                                     foundAddressDao.address_id = (int)value;
                                 else
                                     foundAddressDao.address_id = null;
                                 break;
-                            case 1:
+                            case "address_line_1":
                                 foundAddressDao.address_line_1 = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 2:
+                            case "address_line_2":
                                 foundAddressDao.address_line_2 = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 3:
+                            case "address_line_3":
                                 foundAddressDao.address_line_3 = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 4:
+                            case "address_line_4":
                                 foundAddressDao.address_line_4 = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 5:
+                            case "apartment":
                                 foundAddressDao.apartment = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 6:
+                            case "city":
                                 foundAddressDao.city = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 7:
+                            case "enum_state_province_id":
                                 if (value != DBNull.Value)
                                     foundAddressDao.enum_state_province_id = (int)value;
                                 else
                                     foundAddressDao.enum_state_province_id = null;
                                 break;
-                            case 8:
+                            case "postal_code":
                                 foundAddressDao.postal_code = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 9:
+                            case "enum_country_id":
                                 if (value != DBNull.Value)
                                     foundAddressDao.enum_country_id = (int)value;
                                 else
                                     foundAddressDao.enum_country_id = null;
                                 break;
-                            case 10:
+                            case "is_current_id":
                                 if (value != DBNull.Value)
                                     foundAddressDao.is_current_id = (int)value;
                                 else
                                     foundAddressDao.is_current_id = null;
                                 break;
-                            case 11:
+                            case "enum_address_id":
                                 if (value != DBNull.Value)
                                     foundAddressDao.enum_address_id = (int)value;
                                 else
                                     foundAddressDao.enum_address_id = null;
                                 break;
-                            case 12:
+                            case "created":
                                 if (value != DBNull.Value)
                                     foundAddressDao.created = (DateTime)value;
                                 else
                                     foundAddressDao.created = null;
                                     break;
-                            case 13:
+                            case "created_by":
                                 foundAddressDao.created_by = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 14:
+                            case "changed":
                                 if (value != DBNull.Value)
                                     foundAddressDao.changed = (DateTime)value;
                                 else
                                     foundAddressDao.changed = null;
                                 break;
-                            case 15:
+                            case "changed_by":
                                 foundAddressDao.changed_by = value != DBNull.Value ? (string)value : null;
                                 break;
                             default:
-                                throw new Exception("Unexpected column found in address table: " + reader.GetName(i));
+                                throw new Exception("Unexpected column found in address table: " + columnName);
                         }
                     }
                     foundAddressDaos.Add(foundAddressDao);

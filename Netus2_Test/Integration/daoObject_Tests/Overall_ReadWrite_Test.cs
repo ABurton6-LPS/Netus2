@@ -6,7 +6,7 @@ using Netus2_DatabaseConnection.enumerations;
 using NUnit.Framework;
 using System;
 
-namespace Netus2_Test.daoObject_Tests
+namespace Netus2_Test.Integration.daoObject_Tests
 {
     class Overall_ReadWrite_Test
     {
@@ -30,8 +30,7 @@ namespace Netus2_Test.daoObject_Tests
         [SetUp]
         public void Setup()
         {
-            connection = DbConnectionFactory.GetConnection("Local");
-            connection.OpenConnection();
+            connection = DbConnectionFactory.GetNetus2Connection();
             connection.BeginTransaction();
             organizationDaoImpl = new OrganizationDaoImpl();
             academicSessionDaoImpl = new AcademicSessionDaoImpl();
@@ -54,7 +53,7 @@ namespace Netus2_Test.daoObject_Tests
         public void Overall_ReadWrite()
         {
             //Create District
-            Organization district = new Organization("Livonia Public Schools", Enum_Organization.values["district"], "LPS");
+            Organization district = new Organization("Livonia Public Schools", Enum_Organization.values["district"], "LPS", "DistrictBuildingCode");
             district = organizationDaoImpl.Write(district, connection);
             district = organizationDaoImpl.Read(district, connection)[0];
             Assert.IsTrue(district.Id > 0);
@@ -62,7 +61,7 @@ namespace Netus2_Test.daoObject_Tests
 
             //Create School and link it with the District
             //Either write the School with the District Id, or update the School once it has been added to the District
-            Organization school = new Organization("Livonia High School", Enum_Organization.values["school"], "LHS");
+            Organization school = new Organization("Livonia High School", Enum_Organization.values["school"], "LHS", "SchoolBuildingCode");
             school = organizationDaoImpl.Write(school, connection);
             district.Children.Add(school);
             organizationDaoImpl.Update(school, district.Id, connection);

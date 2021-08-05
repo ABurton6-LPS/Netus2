@@ -22,36 +22,41 @@ namespace Netus2_DatabaseConnection
                 while (reader.Read())
                 {
                     LogPerson logPerson = new LogPerson();
+
+                    List<string> columnNames = new List<string>();
                     for (int i = 0; i < reader.FieldCount; i++)
+                        columnNames.Add(reader.GetName(i));
+
+                    foreach (string columnName in columnNames)
                     {
-                        var value = reader.GetValue(i);
-                        switch (i)
+                        var value = reader.GetValue(reader.GetOrdinal(columnName));
+                        switch (columnName)
                         {
-                            case 0:
+                            case "log_person_id":
                                 logPerson.log_person_id = value != DBNull.Value ? (int)value : -1;
                                 break;
-                            case 1:
+                            case "person_id":
                                 if (value != DBNull.Value)
                                     logPerson.person_id = (int)value;
                                 else
                                     logPerson.person_id = null;
                                 break;
-                            case 2:
+                            case "first_name":
                                 logPerson.first_name = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 3:
+                            case "middle_name":
                                 logPerson.middle_name = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 4:
+                            case "last_name":
                                 logPerson.last_name = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 5:
+                            case "birth_date":
                                 if (value != DBNull.Value)
                                     logPerson.birth_date = (DateTime)value;
                                 else
                                     logPerson.birth_date = null;
                                 break;
-                            case 6:
+                            case "enum_gender_id":
                                 if (value != DBNull.Value)
                                 {
                                     logPerson.set_Gender((int)value);
@@ -59,59 +64,59 @@ namespace Netus2_DatabaseConnection
                                 else
                                     logPerson.Gender = null;
                                 break;
-                            case 7:
+                            case "enum_ethnic_id":
                                 if (value != DBNull.Value)
                                     logPerson.set_Ethnic((int)value);
                                 else
                                     logPerson.Ethnic = null;
                                 break;
-                            case 8:
+                            case "enum_residence_status_id":
                                 if (value != DBNull.Value)
                                     logPerson.set_ResidenceStatus((int)value);
                                 else
                                     logPerson.ResidenceStatus = null;
                                 break;
-                            case 9:
+                            case "login_name":
                                 logPerson.login_name = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 10:
+                            case "login_pw":
                                 logPerson.login_pw = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 11:
+                            case "created":
                                 if (value != DBNull.Value)
                                     logPerson.created = (DateTime)value;
                                 else
                                     logPerson.created = null;
                                 break;
-                            case 12:
+                            case "created_by":
                                 logPerson.created_by = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 13:
+                            case "changed":
                                 if (value != DBNull.Value)
                                     logPerson.changed = (DateTime)value;
                                 else
                                     logPerson.changed = null;
                                 break;
-                            case 14:
+                            case "changed_by":
                                 logPerson.changed_by = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 15:
+                            case "log_date":
                                 if (value != DBNull.Value)
                                     logPerson.log_date = (DateTime)value;
                                 else
                                     logPerson.log_date = null;
                                 break;
-                            case 16:
+                            case "log_user":
                                 logPerson.log_user = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 17:
+                            case "enum_log_action_id":
                                 if (value != DBNull.Value)
                                     logPerson.set_LogAction((int)value);
                                 else
                                     logPerson.LogAction = null;
                                 break;
                             default:
-                                throw new Exception("Unexpected column found in log_person table: " + reader.GetName(i));
+                                throw new Exception("Unexpected column found in log_person table: " + columnName);
                         }
                     }
                     logPeople.Add(logPerson);
@@ -139,43 +144,48 @@ namespace Netus2_DatabaseConnection
                 while (reader.Read())
                 {
                     LogJctPersonRole logJctPersonRole = new LogJctPersonRole();
+
+                    List<string> columnNames = new List<string>();
                     for (int i = 0; i < reader.FieldCount; i++)
+                        columnNames.Add(reader.GetName(i));
+
+                    foreach (string columnName in columnNames)
                     {
-                        var value = reader.GetValue(i);
-                        switch (i)
+                        var value = reader.GetValue(reader.GetOrdinal(columnName));
+                        switch (columnName)
                         {
-                            case 0:
+                            case "log_jct_person_role_id":
                                 logJctPersonRole.log_jct_person_role_id = value != DBNull.Value ? (int)value : -1;
                                 break;
-                            case 1:
+                            case "person_id":
                                 if (value != DBNull.Value)
                                     logJctPersonRole.person_id = (int)value;
                                 else
                                     logJctPersonRole.person_id = null;
                                 break;
-                            case 2:
+                            case "enum_role_id":
                                 if (value != DBNull.Value)
                                     logJctPersonRole.set_Role((int)value);
                                 else
                                     logJctPersonRole.Role = null;
                                 break;
-                            case 3:
+                            case "log_date":
                                 if (value != DBNull.Value)
                                     logJctPersonRole.log_date = (DateTime)value;
                                 else
                                     logJctPersonRole.log_date = null;
                                 break;
-                            case 4:
+                            case "log_user":
                                 logJctPersonRole.log_user = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 5:
+                            case "enum_log_action_id":
                                 if (value != DBNull.Value)
                                     logJctPersonRole.set_LogAction((int)value);
                                 else
                                     logJctPersonRole.LogAction = null;
                                 break;
                             default:
-                                throw new Exception("Unexpected column found in log_jct_person_role table: " + reader.GetName(i));
+                                throw new Exception("Unexpected column found in log_jct_person_role table: " + columnName);
                         }
                     }
                     logJctPersonRoles.Add(logJctPersonRole);
@@ -203,43 +213,48 @@ namespace Netus2_DatabaseConnection
                 while (reader.Read())
                 {
                     LogJctPersonPerson logJctPersonPerson = new LogJctPersonPerson();
+
+                    List<string> columnNames = new List<string>();
                     for (int i = 0; i < reader.FieldCount; i++)
+                        columnNames.Add(reader.GetName(i));
+
+                    foreach (string columnName in columnNames)
                     {
-                        var value = reader.GetValue(i);
-                        switch (i)
+                        var value = reader.GetValue(reader.GetOrdinal(columnName));
+                        switch (columnName)
                         {
-                            case 0:
+                            case "log_jct_person_person_id":
                                 logJctPersonPerson.log_jct_person_person_id = value != DBNull.Value ? (int)value : -1;
                                 break;
-                            case 1:
+                            case "person_one_id":
                                 if (value != DBNull.Value)
                                     logJctPersonPerson.person_one_id = (int)value;
                                 else
                                     logJctPersonPerson.person_one_id = null;
                                 break;
-                            case 2:
+                            case "person_two_id":
                                 if (value != DBNull.Value)
                                     logJctPersonPerson.person_two_id = (int)value;
                                 else
                                     logJctPersonPerson.person_two_id = null;
                                 break;
-                            case 3:
+                            case "log_date":
                                 if (value != DBNull.Value)
                                     logJctPersonPerson.log_date = (DateTime)value;
                                 else
                                     logJctPersonPerson.log_date = null;
                                 break;
-                            case 4:
+                            case "log_user":
                                 logJctPersonPerson.log_user = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 5:
+                            case "enum_log_action_id":
                                 if (value != DBNull.Value)
                                     logJctPersonPerson.set_LogAction((int)value);
                                 else
                                     logJctPersonPerson.LogAction = null;
                                 break;
                             default:
-                                throw new Exception("Unexpected column found in log_jct_person_person table: " + reader.GetName(i));
+                                throw new Exception("Unexpected column found in log_jct_person_person table: " + columnName);
                         }
                     }
                     logJctPersonPersons.Add(logJctPersonPerson);
@@ -267,76 +282,81 @@ namespace Netus2_DatabaseConnection
                 while (reader.Read())
                 {
                     LogUniqueIdentifier logUniqueIdentifier = new LogUniqueIdentifier();
+
+                    List<string> columnNames = new List<string>();
                     for (int i = 0; i < reader.FieldCount; i++)
+                        columnNames.Add(reader.GetName(i));
+
+                    foreach (string columnName in columnNames)
                     {
-                        var value = reader.GetValue(i);
-                        switch (i)
+                        var value = reader.GetValue(reader.GetOrdinal(columnName));
+                        switch (columnName)
                         {
-                            case 0:
+                            case "log_unique_identifier_id":
                                 logUniqueIdentifier.log_unique_identifier_id = value != DBNull.Value ? (int)value : -1;
                                 break;
-                            case 1:
+                            case "unique_identifier_id":
                                 if (value != DBNull.Value)
                                     logUniqueIdentifier.unique_identifier_id = (int)value;
                                 else
                                     logUniqueIdentifier.unique_identifier_id = null;
                                     break;
-                            case 2:
+                            case "person_id":
                                 if (value != DBNull.Value)
                                     logUniqueIdentifier.person_id = (int)value;
                                 else
                                     logUniqueIdentifier.person_id = null;
                                 break;
-                            case 3:
+                            case "unique_identifier":
                                 logUniqueIdentifier.unique_identifier = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 4:
+                            case "enum_identifier_id":
                                 if (value != DBNull.Value)
                                     logUniqueIdentifier.IdentifierType = Enum_Identifier.GetEnumFromId((int)value);
                                 else
                                     logUniqueIdentifier.IdentifierType = null;
                                 break;
-                            case 5:
+                            case "is_active_id":
                                 if (value != DBNull.Value)
                                     logUniqueIdentifier.IsActive = Enum_True_False.GetEnumFromId((int)value);
                                 else
                                     logUniqueIdentifier.IsActive = null;
                                 break;
-                            case 6:
+                            case "created":
                                 if (value != DBNull.Value)
                                     logUniqueIdentifier.created = (DateTime)value;
                                 else
                                     logUniqueIdentifier.created = null;
                                 break;
-                            case 7:
+                            case "created_by":
                                 logUniqueIdentifier.created_by = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 8:
+                            case "changed":
                                 if (value != DBNull.Value)
                                     logUniqueIdentifier.changed = (DateTime)value;
                                 else
                                     logUniqueIdentifier.changed = null;
                                 break;
-                            case 9:
+                            case "changed_by":
                                 logUniqueIdentifier.changed_by = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 10:
+                            case "log_date":
                                 if (value != DBNull.Value)
                                     logUniqueIdentifier.log_date = (DateTime)value;
                                 else
                                     logUniqueIdentifier.log_date = null;
                                 break;
-                            case 11:
+                            case "log_user":
                                 logUniqueIdentifier.log_user = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 12:
+                            case "enum_log_action_id":
                                 if (value != DBNull.Value)
                                     logUniqueIdentifier.set_LogAction((int)value);
                                 else
                                     logUniqueIdentifier.LogAction = null;
                                 break;
                             default:
-                                throw new Exception("Unexpected column found in log_unique_identifier table: " + reader.GetName(i));
+                                throw new Exception("Unexpected column found in log_unique_identifier table: " + columnName);
                         }
                     }
                     logUniqueIdentifiers.Add(logUniqueIdentifier);
@@ -364,70 +384,75 @@ namespace Netus2_DatabaseConnection
                 while (reader.Read())
                 {
                     LogProvider logProvider = new LogProvider();
+
+                    List<string> columnNames = new List<string>();
                     for (int i = 0; i < reader.FieldCount; i++)
+                        columnNames.Add(reader.GetName(i));
+
+                    foreach (string columnName in columnNames)
                     {
-                        var value = reader.GetValue(i);
-                        switch (i)
+                        var value = reader.GetValue(reader.GetOrdinal(columnName));
+                        switch (columnName)
                         {
-                            case 0:
+                            case "log_provider_id":
                                 logProvider.log_provider_id = value != DBNull.Value ? (int)value : -1;
                                 break;
-                            case 1:
+                            case "provider_id":
                                 if (value != DBNull.Value)
                                     logProvider.provider_id = (int)value;
                                 else
                                     logProvider.provider_id = null;
                                 break;
-                            case 2:
+                            case "name":
                                 logProvider.name = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 3:
+                            case "url_standard_access":
                                 logProvider.url_standard_access = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 4:
+                            case "url_admin_access":
                                 logProvider.url_admin_access = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 5:
+                            case "parent_provider_id":
                                 if (value != DBNull.Value)
                                     logProvider.parent_provider_id = (int)value;
                                 else
                                     logProvider.parent_provider_id = null;
                                 break;
-                            case 6:
+                            case "created":
                                 if (value != DBNull.Value)
                                     logProvider.created = (DateTime)value;
                                 else
                                     logProvider.created = null;
                                 break;
-                            case 7:
+                            case "created_by":
                                 logProvider.created_by = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 8:
+                            case "changed":
                                 if (value != DBNull.Value)
                                     logProvider.changed = (DateTime)value;
                                 else
                                     logProvider.changed = null;
                                 break;
-                            case 9:
+                            case "changed_by":
                                 logProvider.changed_by = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 10:
+                            case "log_date":
                                 if (value != DBNull.Value)
                                     logProvider.log_date = (DateTime)value;
                                 else
                                     logProvider.log_date = null;
                                 break;
-                            case 11:
+                            case "log_user":
                                 logProvider.log_user = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 12:
+                            case "enum_log_action_id":
                                 if (value != DBNull.Value)
                                     logProvider.set_LogAction((int)value);
                                 else
                                     logProvider.LogAction = null;
                                 break;
                             default:
-                                throw new Exception("Unexpected column found in log_provider table: " + reader.GetName(i));
+                                throw new Exception("Unexpected column found in log_provider table: " + columnName);
                         }
                     }
                     logProviders.Add(logProvider);
@@ -455,64 +480,69 @@ namespace Netus2_DatabaseConnection
                 while (reader.Read())
                 {
                     LogApp logApp = new LogApp();
+
+                    List<string> columnNames = new List<string>();
                     for (int i = 0; i < reader.FieldCount; i++)
+                        columnNames.Add(reader.GetName(i));
+
+                    foreach (string columnName in columnNames)
                     {
-                        var value = reader.GetValue(i);
-                        switch (i)
+                        var value = reader.GetValue(reader.GetOrdinal(columnName));
+                        switch (columnName)
                         {
-                            case 0:
+                            case "log_app_id":
                                 logApp.log_app_id = value != DBNull.Value ? (int)value : -1;
                                 break;
-                            case 1:
+                            case "app_id":
                                 if (value != DBNull.Value)
                                     logApp.app_id = (int)value;
                                 else
                                     logApp.app_id = null;
                                 break;
-                            case 2:
+                            case "name":
                                 logApp.name = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 3:
+                            case "provider_id":
                                 if (value != DBNull.Value)
                                     logApp.provider_id = (int)value;
                                 else
                                     logApp.provider_id = null;
                                 break;
-                            case 4:
+                            case "created":
                                 if (value != DBNull.Value)
                                     logApp.created = (DateTime)value;
                                 else
                                     logApp.created = null;
                                 break;
-                            case 5:
+                            case "created_by":
                                 logApp.created_by = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 6:
+                            case "changed":
                                 if (value != DBNull.Value)
                                     logApp.changed = (DateTime)value;
                                 else
                                     logApp.changed = null;
                                 break;
-                            case 7:
+                            case "changed_by":
                                 logApp.changed_by = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 8:
+                            case "log_date":
                                 if (value != DBNull.Value)
                                     logApp.log_date = (DateTime)value;
                                 else
                                     logApp.log_date = null;
                                 break;
-                            case 9:
+                            case "log_user":
                                 logApp.log_user = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 10:
+                            case "enum_log_action_id":
                                 if (value != DBNull.Value)
                                     logApp.set_LogAction((int)value);
                                 else
                                     logApp.LogAction = null;
                                 break;
                             default:
-                                throw new Exception("Unexpected column found in log_app table: " + reader.GetName(i));
+                                throw new Exception("Unexpected column found in log_app table: " + columnName);
                         }
                     }
                     logApps.Add(logApp);
@@ -540,43 +570,48 @@ namespace Netus2_DatabaseConnection
                 while (reader.Read())
                 {
                     LogJctPersonApp logJctPersonApp = new LogJctPersonApp();
+
+                    List<string> columnNames = new List<string>();
                     for (int i = 0; i < reader.FieldCount; i++)
+                        columnNames.Add(reader.GetName(i));
+
+                    foreach (string columnName in columnNames)
                     {
-                        var value = reader.GetValue(i);
-                        switch (i)
+                        var value = reader.GetValue(reader.GetOrdinal(columnName));
+                        switch (columnName)
                         {
-                            case 0:
+                            case "log_jct_person_app_id":
                                 logJctPersonApp.log_jct_person_app_id = value != DBNull.Value ? (int)value : -1;
                                 break;
-                            case 1:
+                            case "person_id":
                                 if (value != DBNull.Value)
                                     logJctPersonApp.person_id = (int)value;
                                 else
                                     logJctPersonApp.person_id = null;
                                 break;
-                            case 2:
+                            case "app_id":
                                 if (value != DBNull.Value)
                                     logJctPersonApp.app_id = (int)value;
                                 else
                                     logJctPersonApp.app_id = null;
                                 break;
-                            case 3:
+                            case "log_date":
                                 if (value != DBNull.Value)
                                     logJctPersonApp.log_date = (DateTime)value;
                                 else
                                     logJctPersonApp.log_date = null;
                                 break;
-                            case 4:
+                            case "log_user":
                                 logJctPersonApp.log_user = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 5:
+                            case "enum_log_action_id":
                                 if (value != DBNull.Value)
                                     logJctPersonApp.set_LogAction((int)value);
                                 else
                                     logJctPersonApp.LogAction = null;
                                 break;
                             default:
-                                throw new Exception("Unexpected column found in log_jct_person_app table: " + reader.GetName(i));
+                                throw new Exception("Unexpected column found in log_jct_person_app table: " + columnName);
                         }
                     }
                     logJctPersonApps.Add(logJctPersonApp);
@@ -604,49 +639,54 @@ namespace Netus2_DatabaseConnection
                 while (reader.Read())
                 {
                     LogJctClassPerson logJctClassPerson = new LogJctClassPerson();
+
+                    List<string> columnNames = new List<string>();
                     for (int i = 0; i < reader.FieldCount; i++)
+                        columnNames.Add(reader.GetName(i));
+
+                    foreach (string columnName in columnNames)
                     {
-                        var value = reader.GetValue(i);
-                        switch (i)
+                        var value = reader.GetValue(reader.GetOrdinal(columnName));
+                        switch (columnName)
                         {
-                            case 0:
+                            case "log_jct_class_person_id":
                                 logJctClassPerson.log_jct_class_person_id = value != DBNull.Value ? (int)value : -1;
                                 break;
-                            case 1:
+                            case "class_id":
                                 if (value != DBNull.Value)
                                     logJctClassPerson.class_id = (int)value;
                                 else
                                     logJctClassPerson.class_id = null;
                                 break;
-                            case 2:
+                            case "person_id":
                                 if (value != DBNull.Value)
                                     logJctClassPerson.person_id = (int)value;
                                 else
                                     logJctClassPerson.person_id = null;
                                 break;
-                            case 3:
+                            case "enum_role_id":
                                 if (value != DBNull.Value)
                                     logJctClassPerson.set_Role((int)value);
                                 else
                                     logJctClassPerson.Role = null;
                                 break;
-                            case 4:
+                            case "log_date":
                                 if (value != DBNull.Value)
                                     logJctClassPerson.log_date = (DateTime)value;
                                 else
                                     logJctClassPerson = null;
                                 break;
-                            case 5:
+                            case "log_user":
                                 logJctClassPerson.log_user = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 6:
+                            case "enum_log_action_id":
                                 if (value != DBNull.Value)
                                     logJctClassPerson.set_LogAction((int)value);
                                 else
                                     logJctClassPerson.LogAction = null;
                                 break;
                             default:
-                                throw new Exception("Unexpected column found in log_jct_class_person table: " + reader.GetName(i));
+                                throw new Exception("Unexpected column found in log_jct_class_person table: " + columnName);
                         }
                     }
                     logJctClassPersonDaos.Add(logJctClassPerson);
@@ -673,76 +713,81 @@ namespace Netus2_DatabaseConnection
                 while (reader.Read())
                 {
                     LogPhoneNumber logPhoneNumber = new LogPhoneNumber();
+
+                    List<string> columnNames = new List<string>();
                     for (int i = 0; i < reader.FieldCount; i++)
+                        columnNames.Add(reader.GetName(i));
+
+                    foreach (string columnName in columnNames)
                     {
-                        var value = reader.GetValue(i);
-                        switch (i)
+                        var value = reader.GetValue(reader.GetOrdinal(columnName));
+                        switch (columnName)
                         {
-                            case 0:
+                            case "log_phone_number_id":
                                 logPhoneNumber.log_phone_number_id = value != DBNull.Value ? (int)value : -1;
                                 break;
-                            case 1:
+                            case "phone_number_id":
                                 if (value != DBNull.Value)
                                     logPhoneNumber.phone_number_id = (int)value;
                                 else
                                     logPhoneNumber.phone_number_id = null;
                                 break;
-                            case 2:
+                            case "person_id":
                                 if (value != DBNull.Value)
                                     logPhoneNumber.person_id = (int)value;
                                 else
                                     logPhoneNumber.person_id = null;
                                 break;
-                            case 3:
+                            case "phone_number":
                                 logPhoneNumber.phone_number = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 4:
+                            case "is_primary_id":
                                 if (value != DBNull.Value)
                                     logPhoneNumber.set_IsPrimary((int)value);
                                 else
                                     logPhoneNumber.IsPrimary = null;
                                 break;
-                            case 5:
+                            case "enum_phone_id":
                                 if (value != DBNull.Value)
                                     logPhoneNumber.set_PhoneType((int)value);
                                 else
                                     logPhoneNumber.PhoneType = null;
                                 break;
-                            case 6:
+                            case "created":
                                 if (value != DBNull.Value)
                                     logPhoneNumber.created = (DateTime)value;
                                 else
                                     logPhoneNumber.created = null;
                                 break;
-                            case 7:
+                            case "created_by":
                                 logPhoneNumber.created_by = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 8:
+                            case "changed":
                                 if (value != DBNull.Value)
                                     logPhoneNumber.changed = (DateTime)value;
                                 else
                                     logPhoneNumber.changed = null;
                                 break;
-                            case 9:
+                            case "changed_by":
                                 logPhoneNumber.changed_by = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 10:
+                            case "log_date":
                                 if (value != DBNull.Value)
                                     logPhoneNumber.log_date = (DateTime)value;
                                 else
                                     logPhoneNumber.log_date = null;
                                 break;
-                            case 11:
+                            case "log_user":
                                 logPhoneNumber.log_user = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 12:
+                            case "enum_log_action_id":
                                 if (value != DBNull.Value)
                                     logPhoneNumber.set_LogAction((int)value);
                                 else
                                     logPhoneNumber.LogAction = null;
                                 break;
                             default:
-                                throw new Exception("Unexpected column found in log_phone_number table: " + reader.GetName(i));
+                                throw new Exception("Unexpected column found in log_phone_number table: " + columnName);
                         }
                     }
                     logPhoneNumbers.Add(logPhoneNumber);
@@ -770,100 +815,105 @@ namespace Netus2_DatabaseConnection
                 while (reader.Read())
                 {
                     LogAddress logAddress = new LogAddress();
+
+                    List<string> columnNames = new List<string>();
                     for (int i = 0; i < reader.FieldCount; i++)
+                        columnNames.Add(reader.GetName(i));
+
+                    foreach (string columnName in columnNames)
                     {
-                        var value = reader.GetValue(i);
-                        switch (i)
+                        var value = reader.GetValue(reader.GetOrdinal(columnName));
+                        switch (columnName)
                         {
-                            case 0:
+                            case "log_address_id":
                                 logAddress.log_address_id = value != DBNull.Value ? (int)value : -1;
                                 break;
-                            case 1:
+                            case "address_id":
                                 if (value != DBNull.Value)
                                     logAddress.address_id = (int)value;
                                 else
                                     logAddress.address_id = null;
                                 break;
-                            case 2:
+                            case "address_line_1":
                                 logAddress.address_line_1 = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 3:
+                            case "address_line_2":
                                 logAddress.address_line_2 = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 4:
+                            case "address_line_3":
                                 logAddress.address_line_3 = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 5:
+                            case "address_line_4":
                                 logAddress.address_line_4 = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 6:
+                            case "apartment":
                                 logAddress.apartment = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 7:
+                            case "city":
                                 logAddress.city = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 8:
+                            case "enum_state_province_id":
                                 if (value != DBNull.Value)
                                     logAddress.set_StateProvince((int)value);
                                 else
                                     logAddress.StateProvince = null;
                                 break;
-                            case 9:
+                            case "postal_code":
                                 logAddress.postal_code = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 10:
+                            case "enum_country_id":
                                 if (value != DBNull.Value)
                                     logAddress.set_Country((int)value);
                                 else
                                     logAddress.Country = null;
                                 break;
-                            case 11:
+                            case "is_current_id":
                                 if (value != DBNull.Value)
                                     logAddress.set_IsCurrent((int)value);
                                 else
                                     logAddress.IsCurrent = null;
                                 break;
-                            case 12:
+                            case "enum_address_id":
                                 if (value != DBNull.Value)
                                     logAddress.set_AddressType((int)value);
                                 else
                                     logAddress.AddressType = null;
                                 break;
-                            case 13:
+                            case "created":
                                 if (value != DBNull.Value)
                                     logAddress.created = (DateTime)value;
                                 else
                                     logAddress.created = null;
                                 break;
-                            case 14:
+                            case "created_by":
                                 logAddress.created_by = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 15:
+                            case "changed":
                                 if (value != DBNull.Value)
                                     logAddress.changed = (DateTime)value;
                                 else
                                     logAddress.changed = null;
                                 break;
-                            case 16:
+                            case "changed_by":
                                 logAddress.changed_by = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 17:
+                            case "log_date":
                                 if (value != DBNull.Value)
                                     logAddress.log_date = (DateTime)value;
                                 else
                                     logAddress.log_date = null;
                                 break;
-                            case 18:
+                            case "log_user":
                                 logAddress.log_user = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 19:
+                            case "enum_log_action_id":
                                 if (value != DBNull.Value)
                                     logAddress.set_LogAction((int)value);
                                 else
                                     logAddress.LogAction = null;
                                 break;
                             default:
-                                throw new Exception("Unexpected column found in log_address table: " + reader.GetName(i));
+                                throw new Exception("Unexpected column found in log_address table: " + columnName);
                         }
                     }
                     logAddresses.Add(logAddress);
@@ -891,43 +941,48 @@ namespace Netus2_DatabaseConnection
                 while (reader.Read())
                 {
                     LogJctPersonAddress logJctPersonAddress = new LogJctPersonAddress();
+
+                    List<string> columnNames = new List<string>();
                     for (int i = 0; i < reader.FieldCount; i++)
+                        columnNames.Add(reader.GetName(i));
+
+                    foreach (string columnName in columnNames)
                     {
-                        var value = reader.GetValue(i);
-                        switch (i)
+                        var value = reader.GetValue(reader.GetOrdinal(columnName));
+                        switch (columnName)
                         {
-                            case 0:
+                            case "log_jct_person_address_id":
                                 logJctPersonAddress.log_jct_person_address_id = value != DBNull.Value ? (int)value : -1;
                                 break;
-                            case 1:
+                            case "person_id":
                                 if (value != DBNull.Value)
                                     logJctPersonAddress.person_id = (int)value;
                                 else
                                     logJctPersonAddress.person_id = null;
                                 break;
-                            case 2:
+                            case "address_id":
                                 if (value != DBNull.Value)
                                     logJctPersonAddress.address_id = (int)value;
                                 else
                                     logJctPersonAddress.address_id = null;
                                 break;
-                            case 3:
+                            case "log_date":
                                 if (value != DBNull.Value)
                                     logJctPersonAddress.log_date = (DateTime)value;
                                 else
                                     logJctPersonAddress.log_date = null;
                                 break;
-                            case 4:
+                            case "log_user":
                                 logJctPersonAddress.log_user = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 5:
+                            case "enum_log_action_id":
                                 if (value != DBNull.Value)
                                     logJctPersonAddress.set_LogAction((int)value);
                                 else
                                     logJctPersonAddress.LogAction = null;
                                 break;
                             default:
-                                throw new Exception("Unexpected column found in log_jct_person_address table: " + reader.GetName(i));
+                                throw new Exception("Unexpected column found in log_jct_person_address table: " + columnName);
                         }
                     }
                     logJctPersonAddresss.Add(logJctPersonAddress);
@@ -955,94 +1010,99 @@ namespace Netus2_DatabaseConnection
                 while (reader.Read())
                 {
                     LogEmploymentSession logEmploymentSession = new LogEmploymentSession();
+
+                    List<string> columnNames = new List<string>();
                     for (int i = 0; i < reader.FieldCount; i++)
+                        columnNames.Add(reader.GetName(i));
+
+                    foreach (string columnName in columnNames)
                     {
-                        var value = reader.GetValue(i);
-                        switch (i)
+                        var value = reader.GetValue(reader.GetOrdinal(columnName));
+                        switch (columnName)
                         {
-                            case 0:
+                            case "log_employment_session_id":
                                 logEmploymentSession.log_employment_session_id = value != DBNull.Value ? (int)value : -1;
                                 break;
-                            case 1:
+                            case "employment_session_id":
                                 if (value != DBNull.Value)
                                     logEmploymentSession.employment_session_id = (int)value;
                                 else
                                     logEmploymentSession.employment_session_id = null;
                                 break;
-                            case 2:
+                            case "name":
                                 logEmploymentSession.name = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 3:
+                            case "person_id":
                                 if (value != DBNull.Value)
                                     logEmploymentSession.person_id = (int)value;
                                 else
                                     logEmploymentSession.person_id = null;
                                 break;
-                            case 4:
+                            case "start_date":
                                 if (value != DBNull.Value)
                                     logEmploymentSession.start_date = (DateTime)value;
                                 else
                                     logEmploymentSession.start_date = null;
                                 break;
-                            case 5:
+                            case "end_date":
                                 if (value != DBNull.Value)
                                     logEmploymentSession.end_date = (DateTime)value;
                                 else
                                     logEmploymentSession.end_date = null;
                                 break;
-                            case 6:
+                            case "is_primary_id":
                                 if (value != DBNull.Value)
                                     logEmploymentSession.set_IsPrimary((int)value);
                                 else
                                     logEmploymentSession.IsPrimary = null;
                                 break;
-                            case 7:
+                            case "enum_session_id":
                                 if (value != DBNull.Value)
                                     logEmploymentSession.set_SessionType((int)value);
                                 else
                                     logEmploymentSession.SessionType = null;
                                 break;
-                            case 8:
+                            case "organization_id":
                                 if (value != DBNull.Value)
                                     logEmploymentSession.organization_id = (int)value;
                                 else
                                     logEmploymentSession.organization_id = null;
                                 break;
-                            case 9:
+                            case "created":
                                 if (value != DBNull.Value)
                                     logEmploymentSession.created = (DateTime)value;
                                 else
                                     logEmploymentSession.created = null;
                                 break;
-                            case 10:
+                            case "created_by":
                                 logEmploymentSession.created_by = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 11:
+                            case "changed":
                                 if (value != DBNull.Value)
                                     logEmploymentSession.changed = (DateTime)value;
                                 else
                                     logEmploymentSession.changed = null;
                                 break;
-                            case 12:
+                            case "changed_by":
                                 logEmploymentSession.changed_by = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 13:
+                            case "log_date":
                                 if (value != DBNull.Value)
                                     logEmploymentSession.log_date = (DateTime)value;
                                 else
                                     logEmploymentSession.log_date = null;
                                 break;
-                            case 14:
+                            case "log_user":
                                 logEmploymentSession.log_user = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 15:
+                            case "enum_log_action_id":
                                 if (value != DBNull.Value)
                                     logEmploymentSession.set_LogAction((int)value);
                                 else
                                     logEmploymentSession.LogAction = null;
                                 break;
                             default:
-                                throw new Exception("Unexpected column found in log_employment_session table: " + reader.GetName(i));
+                                throw new Exception("Unexpected column found in log_employment_session table: " + columnName);
                         }
                     }
                     logEmploymentSessions.Add(logEmploymentSession);
@@ -1070,88 +1130,105 @@ namespace Netus2_DatabaseConnection
                 while (reader.Read())
                 {
                     LogAcademicSession logAcademicSession = new LogAcademicSession();
+
+                    List<string> columnNames = new List<string>();
                     for (int i = 0; i < reader.FieldCount; i++)
+                        columnNames.Add(reader.GetName(i));
+
+                    foreach (string columnName in columnNames)
                     {
-                        var value = reader.GetValue(i);
-                        switch (i)
+                        var value = reader.GetValue(reader.GetOrdinal(columnName));
+                        switch (columnName)
                         {
-                            case 0:
+                            case "log_academic_session_id":
                                 logAcademicSession.log_academic_session_id = value != DBNull.Value ? (int)value : -1;
                                 break;
-                            case 1:
+                            case "academic_session_id":
                                 if (value != DBNull.Value)
                                     logAcademicSession.academic_session_id = (int)value;
                                 else
                                     logAcademicSession.academic_session_id = null;
                                 break;
-                            case 2:
+                            case "term_code":
+                                if (value != DBNull.Value)
+                                    logAcademicSession.term_code = (string)value;
+                                else
+                                    logAcademicSession.term_code = null;
+                                break;
+                            case "school_year":
+                                if (value != DBNull.Value)
+                                    logAcademicSession.school_year = (int)value;
+                                else
+                                    logAcademicSession.school_year = null;
+                                break;
+                            case "name":
                                 logAcademicSession.name = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 3:
+                            case "start_date":
                                 if (value != DBNull.Value)
                                     logAcademicSession.start_date = (DateTime)value;
                                 else
                                     logAcademicSession.start_date = null;
                                 break;
-                            case 4:
+                            case "end_date":
                                 if (value != DBNull.Value)
                                     logAcademicSession.end_date = (DateTime)value;
                                 else
                                     logAcademicSession.end_date = null;
                                 break;
-                            case 5:
+                            case "enum_session_id":
                                 if (value != DBNull.Value)
                                     logAcademicSession.set_SessionType((int)value);
                                 else
                                     logAcademicSession.SessionType = null;
                                 break;
-                            case 6:
+                            case "parent_session_id":
                                 if (value != DBNull.Value)
                                     logAcademicSession.parent_session_id = (int)value;
                                 else
                                     logAcademicSession.parent_session_id = null;
                                 break;
-                            case 7:
+                            case "organization_id":
                                 if (value != DBNull.Value)
                                     logAcademicSession.organization_id = (int)value;
                                 else
                                     logAcademicSession.organization_id = null;
                                 break;
-                            case 8:
+                            case "created":
                                 if (value != DBNull.Value)
                                     logAcademicSession.created = (DateTime)value;
                                 else
                                     logAcademicSession.created = null;
                                 break;
-                            case 9:
+                            case "created_by":
                                 logAcademicSession.created_by = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 10:
+                            case "changed":
                                 if (value != DBNull.Value)
                                     logAcademicSession.changed = (DateTime)value;
                                 else
                                     logAcademicSession.changed = null;
                                 break;
-                            case 11:
+                            case "changed_by":
                                 logAcademicSession.changed_by = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 12:
+                            case "log_date":
                                 if (value != DBNull.Value)
                                     logAcademicSession.log_date = (DateTime)value;
                                 else
                                     logAcademicSession.log_date = null;
                                 break;
-                            case 13:
+                            case "log_user":
                                 logAcademicSession.log_user = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 14:
+                            case "enum_log_action_id":
                                 if (value != DBNull.Value)
                                     logAcademicSession.set_LogAction((int)value);
                                 else
                                     logAcademicSession.LogAction = null;
                                 break;
                             default:
-                                throw new Exception("Unexpected column found in log_academic_session table: " + reader.GetName(i));
+                                throw new Exception("Unexpected column found in log_academic_session table: " + columnName);
                         }
                     }
                     logAcademicSessions.Add(logAcademicSession);
@@ -1178,76 +1255,81 @@ namespace Netus2_DatabaseConnection
                 while (reader.Read())
                 {
                     LogOrganization logOrg = new LogOrganization();
+
+                    List<string> columnNames = new List<string>();
                     for (int i = 0; i < reader.FieldCount; i++)
+                        columnNames.Add(reader.GetName(i));
+
+                    foreach (string columnName in columnNames)
                     {
-                        var value = reader.GetValue(i);
-                        switch (i)
+                        var value = reader.GetValue(reader.GetOrdinal(columnName));
+                        switch (columnName)
                         {
-                            case 0:
+                            case "log_organization_id":
                                 logOrg.log_organization_id = value != DBNull.Value ? (int)value : -1;
                                 break;
-                            case 1:
+                            case "organization_id":
                                 if (value != DBNull.Value)
                                     logOrg.organization_id = (int)value;
                                 else
                                     logOrg.organization_id = null;
                                 break;
-                            case 2:
+                            case "name":
                                 logOrg.name = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 3:
+                            case "enum_organization_id":
                                 if (value != DBNull.Value)
                                     logOrg.set_OrganizationType((int)value);
                                 else
                                     logOrg.OrganizationType = null;
                                 break;
-                            case 4:
+                            case "identifier":
                                 logOrg.identifier = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 5:
+                            case "building_code":
                                 logOrg.building_code = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 6:
+                            case "organization_parent_id":
                                 if (value != DBNull.Value)
                                     logOrg.organization_parent_id = (int)value;
                                 else
                                     logOrg.organization_parent_id = null;
                                 break;
-                            case 7:
+                            case "created":
                                 if (value != DBNull.Value)
                                     logOrg.created = (DateTime)value;
                                 else
                                     logOrg.created = null;
                                 break;
-                            case 8:
+                            case "created_by":
                                 logOrg.created_by = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 9:
+                            case "changed":
                                 if (value != DBNull.Value)
                                     logOrg.changed = (DateTime)value;
                                 else
                                     logOrg.changed = null;
                                 break;
-                            case 10:
+                            case "changed_by":
                                 logOrg.changed_by = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 11:
+                            case "log_date":
                                 if (value != DBNull.Value)
                                     logOrg.log_date = (DateTime)value;
                                 else
                                     logOrg.log_date = null;
                                 break;
-                            case 12:
+                            case "log_user":
                                 logOrg.log_user = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 13:
+                            case "enum_log_action_id":
                                 if (value != DBNull.Value)
                                     logOrg.set_LogAction((int)value);
                                 else
                                     logOrg.LogAction = null;
                                 break;
                             default:
-                                throw new Exception("Unexpected column found in log_organization table: " + reader.GetName(i));
+                                throw new Exception("Unexpected column found in log_organization table: " + columnName);
                         }
                     }
                     logOrgs.Add(logOrg);
@@ -1274,73 +1356,78 @@ namespace Netus2_DatabaseConnection
                 while (reader.Read())
                 {
                     LogResource logResource = new LogResource();
+
+                    List<string> columnNames = new List<string>();
                     for (int i = 0; i < reader.FieldCount; i++)
+                        columnNames.Add(reader.GetName(i));
+
+                    foreach (string columnName in columnNames)
                     {
-                        var value = reader.GetValue(i);
-                        switch (i)
+                        var value = reader.GetValue(reader.GetOrdinal(columnName));
+                        switch (columnName)
                         {
-                            case 0:
+                            case "log_resource_id":
                                 logResource.log_resource_id = value != DBNull.Value ? (int)value : -1;
                                 break;
-                            case 1:
+                            case "resource_id":
                                 if (value != DBNull.Value)
                                     logResource.resource_id = (int)value;
                                 else
                                     logResource.resource_id = null;
                                 break;
-                            case 2:
+                            case "name":
                                 logResource.name = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 3:
+                            case "enum_importance_id":
                                 if (value != DBNull.Value)
                                     logResource.set_Importance((int)value);
                                 else
                                     logResource.Importance = null;
                                 break;
-                            case 4:
+                            case "vendor_resource_identification":
                                 logResource.vendor_resource_identification = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 5:
+                            case "vendor_identification":
                                 logResource.vendor_identification = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 6:
+                            case "application_identification":
                                 logResource.application_identification = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 7:
+                            case "created":
                                 if (value != DBNull.Value)
                                     logResource.created = (DateTime)value;
                                 else
                                     logResource.created = null;
                                 break;
-                            case 8:
+                            case "created_by":
                                 logResource.created_by = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 9:
+                            case "changed":
                                 if (value != DBNull.Value)
                                     logResource.changed = (DateTime)value;
                                 else
                                     logResource.changed = null;
                                 break;
-                            case 10:
+                            case "changed_by":
                                 logResource.changed_by = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 11:
+                            case "log_date":
                                 if (value != DBNull.Value)
                                     logResource.log_date = (DateTime)value;
                                 else
                                     logResource.log_date = null;
                                 break;
-                            case 12:
+                            case "log_user":
                                 logResource.log_user = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 13:
+                            case "enum_log_action_id":
                                 if (value != DBNull.Value)
                                     logResource.set_LogAction((int)value);
                                 else
                                     logResource.LogAction = null;
                                 break;
                             default:
-                                throw new Exception("Unexpected column found in log_resource table: " + reader.GetName(i));
+                                throw new Exception("Unexpected column found in log_resource table: " + columnName);
                         }
                     }
                     logResources.Add(logResource);
@@ -1367,61 +1454,66 @@ namespace Netus2_DatabaseConnection
                 while (reader.Read())
                 {
                     LogCourse logCourse = new LogCourse();
+
+                    List<string> columnNames = new List<string>();
                     for (int i = 0; i < reader.FieldCount; i++)
+                        columnNames.Add(reader.GetName(i));
+
+                    foreach (string columnName in columnNames)
                     {
-                        var value = reader.GetValue(i);
-                        switch (i)
+                        var value = reader.GetValue(reader.GetOrdinal(columnName));
+                        switch (columnName)
                         {
-                            case 0:
+                            case "log_course_id":
                                 logCourse.log_course_id = value != DBNull.Value ? (int)value : -1;
                                 break;
-                            case 1:
+                            case "course_id":
                                 if (value != DBNull.Value)
                                     logCourse.course_id = (int)value;
                                 else
                                     logCourse.course_id = null;
                                 break;
-                            case 2:
+                            case "name":
                                 logCourse.name = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 3:
+                            case "course_code":
                                 logCourse.course_code = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 4:
+                            case "created":
                                 if (value != DBNull.Value)
                                     logCourse.created = (DateTime)value;
                                 else
                                     logCourse.created = null;
                                 break;
-                            case 5:
+                            case "created_by":
                                 logCourse.created_by = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 6:
+                            case "changed":
                                 if (value != DBNull.Value)
                                     logCourse.changed = (DateTime)value;
                                 else
                                     logCourse.changed = null;
                                 break;
-                            case 7:
+                            case "changed_by":
                                 logCourse.changed_by = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 8:
+                            case "log_date":
                                 if (value != DBNull.Value)
                                     logCourse.log_date = (DateTime)value;
                                 else
                                     logCourse.log_date = null;
                                 break;
-                            case 9:
+                            case "log_user":
                                 logCourse.log_user = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 10:
+                            case "enum_log_action_id":
                                 if (value != DBNull.Value)
                                     logCourse.set_LogAction((int)value);
                                 else
                                     logCourse.LogAction = null;
                                 break;
                             default:
-                                throw new Exception("Unexpected column found in log_resource table: " + reader.GetName(i));
+                                throw new Exception("Unexpected column found in log_resource table: " + columnName);
                         }
                     }
                     logCourses.Add(logCourse);
@@ -1449,43 +1541,48 @@ namespace Netus2_DatabaseConnection
                 while (reader.Read())
                 {
                     LogJctCourseSubject logJctCourseSubject = new LogJctCourseSubject();
+
+                    List<string> columnNames = new List<string>();
                     for (int i = 0; i < reader.FieldCount; i++)
+                        columnNames.Add(reader.GetName(i));
+
+                    foreach (string columnName in columnNames)
                     {
-                        var value = reader.GetValue(i);
-                        switch (i)
+                        var value = reader.GetValue(reader.GetOrdinal(columnName));
+                        switch (columnName)
                         {
-                            case 0:
+                            case "log_jct_course_subject_id":
                                 logJctCourseSubject.log_jct_course_subject_id = value != DBNull.Value ? (int)value : -1;
                                 break;
-                            case 1:
+                            case "course_id":
                                 if (value != DBNull.Value)
                                     logJctCourseSubject.course_id = (int)value;
                                 else
                                     logJctCourseSubject.course_id = null;
                                 break;
-                            case 2:
+                            case "enum_subject_id":
                                 if (value != DBNull.Value)
                                     logJctCourseSubject.set_Subject((int)value);
                                 else
                                     logJctCourseSubject.Subject = null;
                                 break;
-                            case 3:
+                            case "log_date":
                                 if (value != DBNull.Value)
                                     logJctCourseSubject.log_date = (DateTime)value;
                                 else
                                     logJctCourseSubject.log_date = null;
                                 break;
-                            case 4:
+                            case "log_user":
                                 logJctCourseSubject.log_user = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 5:
+                            case "enum_log_action_id":
                                 if (value != DBNull.Value)
                                     logJctCourseSubject.set_LogAction((int)value);
                                 else
                                     logJctCourseSubject.LogAction = null;
                                 break;
                             default:
-                                throw new Exception("Unexpected column found in log_jct_course_subject table: " + reader.GetName(i));
+                                throw new Exception("Unexpected column found in log_jct_course_subject table: " + columnName);
                         }
                     }
                     logJctCourseSubjects.Add(logJctCourseSubject);
@@ -1513,43 +1610,48 @@ namespace Netus2_DatabaseConnection
                 while (reader.Read())
                 {
                     LogJctCourseGrade logJctCourseGrade = new LogJctCourseGrade();
+
+                    List<string> columnNames = new List<string>();
                     for (int i = 0; i < reader.FieldCount; i++)
+                        columnNames.Add(reader.GetName(i));
+
+                    foreach (string columnName in columnNames)
                     {
-                        var value = reader.GetValue(i);
-                        switch (i)
+                        var value = reader.GetValue(reader.GetOrdinal(columnName));
+                        switch (columnName)
                         {
-                            case 0:
+                            case "log_jct_course_grade_id":
                                 logJctCourseGrade.log_jct_course_grade_id = value != DBNull.Value ? (int)value : -1;
                                 break;
-                            case 1:
+                            case "course_id":
                                 if (value != DBNull.Value)
                                     logJctCourseGrade.course_id = (int)value;
                                 else
                                     logJctCourseGrade.course_id = null;
                                 break;
-                            case 2:
+                            case "enum_grade_id":
                                 if (value != DBNull.Value)
                                     logJctCourseGrade.set_Grade((int)value);
                                 else
                                     logJctCourseGrade.Grade = null;
                                 break;
-                            case 3:
+                            case "log_date":
                                 if (value != DBNull.Value)
                                     logJctCourseGrade.log_date = (DateTime)value;
                                 else
                                     logJctCourseGrade.log_date = null;
                                 break;
-                            case 4:
+                            case "log_user":
                                 logJctCourseGrade.log_user = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 5:
+                            case "enum_log_action_id":
                                 if (value != DBNull.Value)
                                     logJctCourseGrade.set_LogAction((int)value);
                                 else
                                     logJctCourseGrade.LogAction = null;
                                 break;
                             default:
-                                throw new Exception("Unexpected column found in log_jct_course_grade table: " + reader.GetName(i));
+                                throw new Exception("Unexpected column found in log_jct_course_grade table: " + columnName);
                         }
                     }
                     logJctCourseGrades.Add(logJctCourseGrade);
@@ -1576,82 +1678,87 @@ namespace Netus2_DatabaseConnection
                 while (reader.Read())
                 {
                     LogClass logClass = new LogClass();
+
+                    List<string> columnNames = new List<string>();
                     for (int i = 0; i < reader.FieldCount; i++)
+                        columnNames.Add(reader.GetName(i));
+
+                    foreach (string columnName in columnNames)
                     {
-                        var value = reader.GetValue(i);
-                        switch (i)
+                        var value = reader.GetValue(reader.GetOrdinal(columnName));
+                        switch (columnName)
                         {
-                            case 0:
+                            case "log_class_id":
                                 logClass.log_class_id = value != DBNull.Value ? (int)value : -1;
                                 break;
-                            case 1:
+                            case "class_id":
                                 if (value != DBNull.Value)
                                     logClass.class_id = (int)value;
                                 else
                                     logClass.class_id = null;
                                 break;
-                            case 2:
+                            case "name":
                                 logClass.name = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 3:
+                            case "class_code":
                                 logClass.class_code = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 4:
+                            case "enum_class_id":
                                 if (value != DBNull.Value)
                                     logClass.set_ClassType((int)value);
                                 else
                                     logClass.ClassType = null;
                                 break;
-                            case 5:
+                            case "room":
                                 logClass.room = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 6:
+                            case "course_id":
                                 if (value != DBNull.Value)
                                     logClass.course_id = (int)value;
                                 else
                                     logClass.course_id = null;
                                 break;
-                            case 7:
+                            case "academic_session_id":
                                 if (value != DBNull.Value)
                                     logClass.academic_session_id = (int)value;
                                 else
                                     logClass.academic_session_id = null;
                                 break;
-                            case 8:
+                            case "created":
                                 if (value != DBNull.Value)
                                     logClass.created = (DateTime)value;
                                 else
                                     logClass.created = null;
                                 break;
-                            case 9:
+                            case "created_by":
                                 logClass.created_by = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 10:
+                            case "changed":
                                 if (value != DBNull.Value)
                                     logClass.changed = (DateTime)value;
                                 else
                                     logClass.changed = null;
                                 break;
-                            case 11:
+                            case "changed_by":
                                 logClass.changed_by = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 12:
+                            case "log_date":
                                 if (value != DBNull.Value)
                                     logClass.log_date = (DateTime)value;
                                 else
                                     logClass.log_date = null;
                                 break;
-                            case 13:
+                            case "log_user":
                                 logClass.log_user = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 14:
+                            case "enum_log_action_id":
                                 if (value != DBNull.Value)
                                     logClass.set_LogAction((int)value);
                                 else
                                     logClass.LogAction = null;
                                 break;
                             default:
-                                throw new Exception("Unexpected column found in log_resource table: " + reader.GetName(i));
+                                throw new Exception("Unexpected column found in log_resource table: " + columnName);
                         }
                     }
                     logClasss.Add(logClass);
@@ -1679,43 +1786,48 @@ namespace Netus2_DatabaseConnection
                 while (reader.Read())
                 {
                     LogJctClassPeriod logJctClassPeriod = new LogJctClassPeriod();
+
+                    List<string> columnNames = new List<string>();
                     for (int i = 0; i < reader.FieldCount; i++)
+                        columnNames.Add(reader.GetName(i));
+
+                    foreach (string columnName in columnNames)
                     {
-                        var value = reader.GetValue(i);
-                        switch (i)
+                        var value = reader.GetValue(reader.GetOrdinal(columnName));
+                        switch (columnName)
                         {
-                            case 0:
+                            case "log_jct_class_period_id":
                                 logJctClassPeriod.log_jct_class_period_id = value != DBNull.Value ? (int)value : -1;
                                 break;
-                            case 1:
+                            case "class_id":
                                 if (value != DBNull.Value)
                                     logJctClassPeriod.class_id = (int)value;
                                 else
                                     logJctClassPeriod.class_id = null;
                                 break;
-                            case 2:
+                            case "enum_period_id":
                                 if (value != DBNull.Value)
                                     logJctClassPeriod.set_Period((int)value);
                                 else
                                     logJctClassPeriod.Period = null;
                                 break;
-                            case 3:
+                            case "log_date":
                                 if (value != DBNull.Value)
                                     logJctClassPeriod.log_date = (DateTime)value;
                                 else
                                     logJctClassPeriod.log_date = null;
                                 break;
-                            case 4:
+                            case "log_user":
                                 logJctClassPeriod.log_user = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 5:
+                            case "enum_log_action_id":
                                 if (value != DBNull.Value)
                                     logJctClassPeriod.set_LogAction((int)value);
                                 else
                                     logJctClassPeriod.LogAction = null;
                                 break;
                             default:
-                                throw new Exception("Unexpected column found in log_jct_class_period table: " + reader.GetName(i));
+                                throw new Exception("Unexpected column found in log_jct_class_period table: " + columnName);
                         }
                     }
                     logJctClassPeriods.Add(logJctClassPeriod);
@@ -1743,43 +1855,48 @@ namespace Netus2_DatabaseConnection
                 while (reader.Read())
                 {
                     LogJctClassResource logJctClassResource = new LogJctClassResource();
+
+                    List<string> columnNames = new List<string>();
                     for (int i = 0; i < reader.FieldCount; i++)
+                        columnNames.Add(reader.GetName(i));
+
+                    foreach (string columnName in columnNames)
                     {
-                        var value = reader.GetValue(i);
-                        switch (i)
+                        var value = reader.GetValue(reader.GetOrdinal(columnName));
+                        switch (columnName)
                         {
-                            case 0:
+                            case "log_jct_class_resource_id":
                                 logJctClassResource.log_jct_class_resource_id = value != DBNull.Value ? (int)value : -1;
                                 break;
-                            case 1:
+                            case "class_id":
                                 if (value != DBNull.Value)
                                     logJctClassResource.class_id = (int)value;
                                 else
                                     logJctClassResource.class_id = null;
                                 break;
-                            case 2:
+                            case "resource_id":
                                 if (value != DBNull.Value)
                                     logJctClassResource.resource_id = (int)value;
                                 else
                                     logJctClassResource.resource_id = null;
                                 break;
-                            case 3:
+                            case "log_date":
                                 if (value != DBNull.Value)
                                     logJctClassResource.log_date = (DateTime)value;
                                 else
                                     logJctClassResource.log_date = null;
                                 break;
-                            case 4:
+                            case "log_user":
                                 logJctClassResource.log_user = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 5:
+                            case "enum_log_action_id":
                                 if (value != DBNull.Value)
                                     logJctClassResource.set_LogAction((int)value);
                                 else
                                     logJctClassResource.LogAction = null;
                                 break;
                             default:
-                                throw new Exception("Unexpected column found in log_jct_class_resource table: " + reader.GetName(i));
+                                throw new Exception("Unexpected column found in log_jct_class_resource table: " + columnName);
                         }
                     }
                     logJctClassResources.Add(logJctClassResource);
@@ -1807,97 +1924,102 @@ namespace Netus2_DatabaseConnection
                 while (reader.Read())
                 {
                     LogLineItem logLineItem = new LogLineItem();
+
+                    List<string> columnNames = new List<string>();
                     for (int i = 0; i < reader.FieldCount; i++)
+                        columnNames.Add(reader.GetName(i));
+
+                    foreach (string columnName in columnNames)
                     {
-                        var value = reader.GetValue(i);
-                        switch (i)
+                        var value = reader.GetValue(reader.GetOrdinal(columnName));
+                        switch (columnName)
                         {
-                            case 0:
+                            case "log_lineitem_id":
                                 logLineItem.log_lineitem_id = value != DBNull.Value ? (int)value : -1;
                                 break;
-                            case 1:
+                            case "lineitem_id":
                                 if (value != DBNull.Value)
                                     logLineItem.lineitem_id = (int)value;
                                 else
                                     logLineItem.lineitem_id = null;
                                 break;
-                            case 2:
+                            case "name":
                                 logLineItem.name = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 3:
+                            case "descript":
                                 logLineItem.descript = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 4:
+                            case "assign_date":
                                 if (value != DBNull.Value)
                                     logLineItem.assign_date = (DateTime)value;
                                 else
                                     logLineItem.assign_date = null;
                                 break;
-                            case 5:
+                            case "due_date":
                                 if (value != DBNull.Value)
                                     logLineItem.due_date = (DateTime)value;
                                 else
                                     logLineItem = null;
                                 break;
-                            case 6:
+                            case "class_id":
                                 if (value != DBNull.Value)
                                     logLineItem.class_id = (int)value;
                                 else
                                     logLineItem.class_id = null;
                                 break;
-                            case 7:
+                            case "enum_category_id":
                                 if (value != DBNull.Value)
                                     logLineItem.set_Category((int)value);
                                 else
                                     logLineItem.Category = null;
                                 break;
-                            case 8:
+                            case "markValueMin":
                                 if (value != DBNull.Value)
                                     logLineItem.markValueMin = (double)value;
                                 else
                                     logLineItem.markValueMin = null;
                                 break;
-                            case 9:
+                            case "markValueMax":
                                 if (value != DBNull.Value)
                                     logLineItem.markValueMax = (double)value;
                                 else
                                     logLineItem.markValueMax = null;
                                 break;
-                            case 10:
+                            case "created":
                                 if (value != DBNull.Value)
                                     logLineItem.created = (DateTime)value;
                                 else
                                     logLineItem.created = null;
                                 break;
-                            case 11:
+                            case "created_by":
                                 logLineItem.created_by = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 12:
+                            case "changed":
                                 if (value != DBNull.Value)
                                     logLineItem.changed = (DateTime)value;
                                 else
                                     logLineItem.changed = null;
                                 break;
-                            case 13:
+                            case "changed_by":
                                 logLineItem.changed_by = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 14:
+                            case "log_date":
                                 if (value != DBNull.Value)
                                     logLineItem.log_date = (DateTime)value;
                                 else
                                     logLineItem.log_date = null;
                                 break;
-                            case 15:
+                            case "log_user":
                                 logLineItem.log_user = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 16:
+                            case "enum_log_action_id":
                                 if (value != DBNull.Value)
                                     logLineItem.set_LogAction((int)value);
                                 else
                                     logLineItem.LogAction = null;
                                 break;
                             default:
-                                throw new Exception("Unexpected column found in log_lineitem table: " + reader.GetName(i));
+                                throw new Exception("Unexpected column found in log_lineitem table: " + columnName);
                         }
                     }
                     logLineItems.Add(logLineItem);
@@ -1925,91 +2047,96 @@ namespace Netus2_DatabaseConnection
                 while (reader.Read())
                 {
                     LogEnrollment logEnrollment = new LogEnrollment();
+
+                    List<string> columnNames = new List<string>();
                     for (int i = 0; i < reader.FieldCount; i++)
+                        columnNames.Add(reader.GetName(i));
+
+                    foreach (string columnName in columnNames)
                     {
-                        var value = reader.GetValue(i);
-                        switch (i)
+                        var value = reader.GetValue(reader.GetOrdinal(columnName));
+                        switch (columnName)
                         {
-                            case 0:
+                            case "log_enrollment_id":
                                 logEnrollment.log_enrollment_id = value != DBNull.Value ? (int)value : -1;
                                 break;
-                            case 1:
+                            case "enrollment_id":
                                 if (value != DBNull.Value)
                                     logEnrollment.enrollment_id = (int)value;
                                 else
                                     logEnrollment.enrollment_id = null;
                                 break;
-                            case 2:
+                            case "person_id":
                                 if (value != DBNull.Value)
                                     logEnrollment.person_id = (int)value;
                                 else
                                     logEnrollment.person_id = null;
                                 break;
-                            case 3:
+                            case "class_id":
                                 if (value != DBNull.Value)
                                     logEnrollment.class_id = (int)value;
                                 else
                                     logEnrollment.class_id = null;
                                 break;
-                            case 4:
+                            case "enum_grade_id":
                                 if (value != DBNull.Value)
                                     logEnrollment.set_GradeLevel((int)value);
                                 else
                                     logEnrollment.GradeLevel = null;
                                 break;
-                            case 5:
+                            case "start_date":
                                 if (value != DBNull.Value)
                                     logEnrollment.start_date = (DateTime)value;
                                 else
                                     logEnrollment.start_date = null;
                                 break;
-                            case 6:
+                            case "end_date":
                                 if (value != DBNull.Value)
                                     logEnrollment.end_date = (DateTime)value;
                                 else
                                     logEnrollment.end_date = null;
                                 break;
-                            case 7:
+                            case "is_primary_id":
                                 if (value != DBNull.Value)
                                     logEnrollment.set_IsPrimary((int)value);
                                 else
                                     logEnrollment.IsPrimary = null;
                                 break;
-                            case 8:
+                            case "created":
                                 if (value != DBNull.Value)
                                     logEnrollment.created = (DateTime)value;
                                 else
                                     logEnrollment.created = null;
                                 break;
-                            case 9:
+                            case "created_by":
                                 logEnrollment.created_by = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 10:
+                            case "changed":
                                 if (value != DBNull.Value)
                                     logEnrollment.changed = (DateTime)value;
                                 else
                                     logEnrollment.changed = null;
                                 break;
-                            case 11:
+                            case "changed_by":
                                 logEnrollment.changed_by = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 12:
+                            case "log_date":
                                 if (value != DBNull.Value)
                                     logEnrollment.log_date = (DateTime)value;
                                 else
                                     logEnrollment.log_date = null;
                                 break;
-                            case 13:
+                            case "log_user":
                                 logEnrollment.log_user = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 14:
+                            case "enum_log_action_id":
                                 if (value != DBNull.Value)
                                     logEnrollment.set_LogAction((int)value);
                                 else
                                     logEnrollment.LogAction = null;
                                 break;
                             default:
-                                throw new Exception("Unexpected column found in log_enrollment table: " + reader.GetName(i));
+                                throw new Exception("Unexpected column found in log_enrollment table: " + columnName);
                         }
                     }
                     logEnrollments.Add(logEnrollment);
@@ -2037,88 +2164,93 @@ namespace Netus2_DatabaseConnection
                 while (reader.Read())
                 {
                     LogMark logMark = new LogMark();
+
+                    List<string> columnNames = new List<string>();
                     for (int i = 0; i < reader.FieldCount; i++)
+                        columnNames.Add(reader.GetName(i));
+
+                    foreach (string columnName in columnNames)
                     {
-                        var value = reader.GetValue(i);
-                        switch (i)
+                        var value = reader.GetValue(reader.GetOrdinal(columnName));
+                        switch (columnName)
                         {
-                            case 0:
+                            case "log_mark_id":
                                 logMark.log_mark_id = value != DBNull.Value ? (int)value : -1;
                                 break;
-                            case 1:
+                            case "mark_id":
                                 if (value != DBNull.Value)
                                     logMark.mark_id = (int)value;
                                 else
                                     logMark.mark_id = null;
                                 break;
-                            case 2:
+                            case "lineitem_id":
                                 if (value != DBNull.Value)
                                     logMark.lineitem_id = (int)value;
                                 else
                                     logMark.lineitem_id = null;
                                 break;
-                            case 3:
+                            case "person_id":
                                 if (value != DBNull.Value)
                                     logMark.person_id = (int)value;
                                 else
                                     logMark.person_id = null;
                                 break;
-                            case 4:
+                            case "enum_score_status_id":
                                 if (value != DBNull.Value)
                                     logMark.set_ScoreStatus((int)value);
                                 else
                                     logMark.ScoreStatus = null;
                                 break;
-                            case 5:
+                            case "score":
                                 if (value != DBNull.Value)
                                     logMark.score = (double)value;
                                 else
                                     logMark.score = null;
                                 break;
-                            case 6:
+                            case "score_date":
                                 if (value != DBNull.Value)
                                     logMark.score_date = (DateTime)value;
                                 else
                                     logMark.score_date = null;
                                 break;
-                            case 7:
+                            case "comment":
                                 logMark.comment = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 8:
+                            case "created":
                                 if (value != DBNull.Value)
                                     logMark.created = (DateTime)value;
                                 else
                                     logMark.created = null;
                                 break;
-                            case 9:
+                            case "created_by":
                                 logMark.created_by = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 10:
+                            case "changed":
                                 if (value != DBNull.Value)
                                     logMark.changed = (DateTime)value;
                                 else
                                     logMark.changed = null;
                                 break;
-                            case 11:
+                            case "changed_by":
                                 logMark.changed_by = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 12:
+                            case "log_date":
                                 if (value != DBNull.Value)
                                     logMark.log_date = (DateTime)value;
                                 else
                                     logMark.log_date = null;
                                 break;
-                            case 13:
+                            case "log_user":
                                 logMark.log_user = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 14:
+                            case "enum_log_action_id":
                                 if (value != DBNull.Value)
                                     logMark.set_LogAction((int)value);
                                 else
                                     logMark.LogAction = null;
                                 break;
                             default:
-                                throw new Exception("Unexpected column found in log_mark table: " + reader.GetName(i));
+                                throw new Exception("Unexpected column found in log_mark table: " + columnName);
                         }
                     }
                     logMarks.Add(logMark);
@@ -2146,43 +2278,48 @@ namespace Netus2_DatabaseConnection
                 while (reader.Read())
                 {
                     LogJctEnrollmentAcademicSession logJctEnrollmentAcademicSession = new LogJctEnrollmentAcademicSession();
+
+                    List<string> columnNames = new List<string>();
                     for (int i = 0; i < reader.FieldCount; i++)
+                        columnNames.Add(reader.GetName(i));
+
+                    foreach (string columnName in columnNames)
                     {
-                        var value = reader.GetValue(i);
-                        switch (i)
+                        var value = reader.GetValue(reader.GetOrdinal(columnName));
+                        switch (columnName)
                         {
-                            case 0:
+                            case "log_jct_enrollment_academic_session_id":
                                 logJctEnrollmentAcademicSession.log_jct_enrollment_academic_session_id = value != DBNull.Value ? (int)value : -1;
                                 break;
-                            case 1:
+                            case "enrollment_id":
                                 if (value != DBNull.Value)
                                     logJctEnrollmentAcademicSession.enrollment_id = (int)value;
                                 else
                                     logJctEnrollmentAcademicSession.enrollment_id = null;
                                 break;
-                            case 2:
+                            case "academic_session_id":
                                 if (value != DBNull.Value)
                                     logJctEnrollmentAcademicSession.academic_session_id = (int)value;
                                 else
                                     logJctEnrollmentAcademicSession.academic_session_id = null;
                                 break;
-                            case 3:
+                            case "log_date":
                                 if (value != DBNull.Value)
                                     logJctEnrollmentAcademicSession.log_date = (DateTime)value;
                                 else
                                     logJctEnrollmentAcademicSession.log_date = null;
                                 break;
-                            case 4:
+                            case "log_user":
                                 logJctEnrollmentAcademicSession.log_user = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 5:
+                            case "enum_log_action_id":
                                 if (value != DBNull.Value)
                                     logJctEnrollmentAcademicSession.set_LogAction((int)value);
                                 else
                                     logJctEnrollmentAcademicSession.LogAction = null;
                                 break;
                             default:
-                                throw new Exception("Unexpected column found in log_jct_enrollment_academic_session table: " + reader.GetName(i));
+                                throw new Exception("Unexpected column found in log_jct_enrollment_academic_session table: " + columnName);
                         }
                     }
                     logJctEnrollmentAcademicSessions.Add(logJctEnrollmentAcademicSession);

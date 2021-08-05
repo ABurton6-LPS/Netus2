@@ -98,43 +98,48 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 while (reader.Read())
                 {
                     CourseDao foundCourseDao = new CourseDao();
+
+                    List<string> columnNames = new List<string>();
                     for (int i = 0; i < reader.FieldCount; i++)
+                        columnNames.Add(reader.GetName(i));
+
+                    foreach (string columnName in columnNames)
                     {
-                        var value = reader.GetValue(i);
-                        switch (i)
+                        var value = reader.GetValue(reader.GetOrdinal(columnName));
+                        switch (columnName)
                         {
-                            case 0:
+                            case "course_id":
                                 if (value != DBNull.Value)
                                     foundCourseDao.course_id = (int)value;
                                 else
                                     foundCourseDao.course_id = null;
                                 break;
-                            case 1:
+                            case "name":
                                 foundCourseDao.name = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 2:
+                            case "course_code":
                                 foundCourseDao.course_code = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 3:
+                            case "created":
                                 if (value != DBNull.Value)
                                     foundCourseDao.created = (DateTime)value;
                                 else
                                     foundCourseDao.created = null;
                                 break;
-                            case 4:
+                            case "created_by":
                                 foundCourseDao.created_by = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 5:
+                            case "changed":
                                 if (value != DBNull.Value)
                                     foundCourseDao.changed = (DateTime)value;
                                 else
                                     foundCourseDao.changed = null;
                                 break;
-                            case 6:
+                            case "changed_by":
                                 foundCourseDao.changed_by = value != DBNull.Value ? (string)value : null;
                                 break;
                             default:
-                                throw new Exception("Unexpected column found in course table: " + reader.GetName(i));
+                                throw new Exception("Unexpected column found in course table: " + columnName);
                         }
                     }
                     foundCourseDaos.Add(foundCourseDao);

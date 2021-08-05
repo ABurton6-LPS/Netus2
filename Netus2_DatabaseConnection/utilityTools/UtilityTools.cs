@@ -1,8 +1,10 @@
 ﻿using Netus2_DatabaseConnection.dbAccess;
 using Netus2_DatabaseConnection.enumerations;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Netus2_DatabaseConnection.utilityTools
 {
@@ -17,8 +19,7 @@ namespace Netus2_DatabaseConnection.utilityTools
         {
             Dictionary<string, Enumeration> enumerations = new Dictionary<string, Enumeration>();
 
-            IConnectable connection = DbConnectionFactory.GetConnection("Netus2");
-            connection.OpenConnection();
+            IConnectable connection = DbConnectionFactory.GetNetus2Connection();
 
             IDataReader reader = null;
             try

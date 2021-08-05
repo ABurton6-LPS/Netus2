@@ -13,16 +13,12 @@ namespace Netus2_DatabaseConnection.dbAccess
         public GenericDatabaseConnection(string connectionString)
         {
             connection = new SqlConnection(connectionString);
+            connection.Open();
         }
 
         public ConnectionState GetState()
         {
             return connection.State;
-        }
-
-        public void OpenConnection()
-        {
-            connection.Open();
         }
 
         public void CloseConnection()

@@ -86,10 +86,61 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 {
                     ApplicationDao foundAppDao = new ApplicationDao();
 
-                    foundAppDao.app_id = reader.GetInt32(0);
-                    foundAppDao.name = reader.GetString(1);
-                    foundAppDao.provider_id = reader.GetInt32(2);
+                    List<string> columnNames = new List<string>();
+                    for (int i = 0; i < reader.FieldCount; i++)
+                        columnNames.Add(reader.GetName(i));
 
+                    foreach (string columnName in columnNames)
+                    {
+                        var value = reader.GetValue(reader.GetOrdinal(columnName));
+                        switch (columnName)
+                        {
+                            case "app_id":
+                                if (value != DBNull.Value)
+                                    foundAppDao.app_id = (int)value;
+                                else
+                                    foundAppDao.app_id = null;
+                                break;
+                            case "name":
+                                if (value != DBNull.Value)
+                                    foundAppDao.name = (string)value;
+                                else
+                                    foundAppDao.name = null;
+                                break;
+                            case "provider_id":
+                                if (value != DBNull.Value)
+                                    foundAppDao.provider_id = (int)value;
+                                else
+                                    foundAppDao.provider_id = null;
+                                break;
+                            case "created":
+                                if (value != DBNull.Value)
+                                    foundAppDao.created = (DateTime)value;
+                                else
+                                    foundAppDao.created = null;
+                                break;
+                            case "created_by":
+                                if (value != DBNull.Value)
+                                    foundAppDao.created_by = (string)value;
+                                else
+                                    foundAppDao.created_by = null;
+                                break;
+                            case "changed":
+                                if (value != DBNull.Value)
+                                    foundAppDao.changed = (DateTime)value;
+                                else
+                                    foundAppDao.changed = null;
+                                break;
+                            case "changed_by":
+                                if (value != DBNull.Value)
+                                    foundAppDao.changed_by = (string)value;
+                                else
+                                    foundAppDao.changed_by = null;
+                                break;
+                            default:
+                                throw new Exception("Unexpected column found in application table: " + columnName);
+                        }
+                    }
                     foundAppDaos.Add(foundAppDao);
                 }
             }

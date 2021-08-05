@@ -3,7 +3,7 @@ using Netus2_DatabaseConnection.dbAccess;
 using NUnit.Framework;
 using System.Data;
 
-namespace Netus2_Test.daoObject_Tests
+namespace Netus2_Test.Integration.daoObject_Tests
 {
     class TestDataValidator
     {
