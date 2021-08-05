@@ -8,7 +8,6 @@ using Netus2SisSync.UtilityTools;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data;
 using System.Diagnostics;
 using System.Threading;
 
@@ -52,31 +51,31 @@ namespace Netus2SisSync.SyncProcesses.Tasks
                         switch (i)
                         {
                             case 0:
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     myDataRow["name"] = (string)value;
                                 else
                                     myDataRow["name"] = null;
                                 break;
                             case 1:
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     myDataRow["enum_organization_id"] = ((string)value).ToLower();
                                 else
                                     myDataRow["enum_organization_id"] = null;
                                 break;
                             case 2:
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     myDataRow["identifier"] = (string)value;
                                 else
                                     myDataRow["identifier"] = null;
                                 break;
                             case 3:
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     myDataRow["building_code"] = (string)value;
                                 else
                                     myDataRow["building_code"] = null;
                                 break;
                             case 4:
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     myDataRow["organization_parent_id"] = (string)value;
                                 else
                                     myDataRow["organization_parent_id"] = null;
@@ -109,8 +108,7 @@ namespace Netus2SisSync.SyncProcesses.Tasks
             IConnectable connection = null;
             try
             {
-                connection = DbConnectionFactory.GetConnection("Netus2");
-                connection.OpenConnection();
+                connection = DbConnectionFactory.GetNetus2Connection();
 
                 task = SyncLogger.LogNewTask("Organization_SyncForChildRecords", job, connection);
 
@@ -119,8 +117,7 @@ namespace Netus2SisSync.SyncProcesses.Tasks
                 string sisIdentifier = row["identifier"].ToString() == "" ? null : row["identifier"].ToString();
                 string sisBuildingCode = row["building_code"].ToString() == "" ? null : row["building_code"].ToString();
 
-                Organization org = new Organization(sisName, sisEnumOrganization, sisIdentifier);
-                org.BuildingCode = sisBuildingCode;
+                Organization org = new Organization(sisName, sisEnumOrganization, sisIdentifier, sisBuildingCode);
 
                 IOrganizationDao orgDaoImpl = new OrganizationDaoImpl();
                 List<Organization> foundOrgs = orgDaoImpl.Read(org, connection);
@@ -166,8 +163,7 @@ namespace Netus2SisSync.SyncProcesses.Tasks
             IConnectable connection = null;
             try
             {
-                connection = DbConnectionFactory.GetConnection("Netus2");
-                connection.OpenConnection();
+                connection = DbConnectionFactory.GetNetus2Connection();
 
                 task = SyncLogger.LogNewTask("Organization_SyncForParentRecords", job, connection);
 
@@ -176,8 +172,7 @@ namespace Netus2SisSync.SyncProcesses.Tasks
                 string sisIdentifier = row["identifier"].ToString() == "" ? null : row["identifier"].ToString();
                 string sisBuildingCode = row["building_code"].ToString() == "" ? null : row["building_code"].ToString();
 
-                Organization org = new Organization(sisName, sisEnumOrganization, sisIdentifier);
-                org.BuildingCode = sisBuildingCode;
+                Organization org = new Organization(sisName, sisEnumOrganization, sisIdentifier, sisBuildingCode);
 
                 IOrganizationDao orgDaoImpl = new OrganizationDaoImpl();
                 List<Organization> foundOrgs = orgDaoImpl.Read(org, connection);

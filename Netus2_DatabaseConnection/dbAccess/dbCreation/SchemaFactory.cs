@@ -605,7 +605,7 @@
                     + "name varchar(150) NOT NULL,"
                     + "enum_organization_id int NOT NULL,"
                     + "identifier varchar(150),"
-                    + "building_code varchar(150) UNIQUE,"
+                    + "building_code varchar(150) NOT NULL UNIQUE,"
                     + "organization_parent_id int,"
                     + "created datetime NOT NULL,"
                     + "created_by varchar(150) NOT NULL,"

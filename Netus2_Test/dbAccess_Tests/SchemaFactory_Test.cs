@@ -14,8 +14,7 @@ namespace Netus2_Test.dbAccess_Tests
         [SetUp]
         public void Setup()
         {
-            connection = DbConnectionFactory.GetConnection("Local");
-            connection.OpenConnection();
+            connection = DbConnectionFactory.GetLocalConnection();
             connection.BeginTransaction();
         }
 
@@ -75,7 +74,16 @@ namespace Netus2_Test.dbAccess_Tests
                 SchemaFactory.BuildSchema(connection);
 
             Assert.True(CheckIfTableExists(tableName));
-            Assert.AreEqual(expectedColumns, GetColumnsInTable(tableName));
+            List<string> columnsInTable = GetColumnsInTable(tableName);
+
+            Assert.AreEqual(expectedColumns.Count, columnsInTable.Count);
+            foreach (string expectedColumName in expectedColumns)
+            {
+                if (columnsInTable.Contains(expectedColumName))
+                    Assert.Pass();
+                else
+                    Assert.Fail(tableName + " does not contain the expected column " + expectedColumName);
+            }
         }
 
         public bool CheckIfTableExists(string tableName)

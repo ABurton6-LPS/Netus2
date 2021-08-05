@@ -196,76 +196,81 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 while (reader.Read())
                 {
                     PersonDao foundPersonDao = new PersonDao();
+
+                    List<string> columnNames = new List<String>();
                     for (int i = 0; i < reader.FieldCount; i++)
+                        columnNames.Add(reader.GetName(i));
+
+                    foreach (string columnName in columnNames)
                     {
-                        var value = reader.GetValue(i);
-                        switch (i)
+                        var value = reader.GetValue(reader.GetOrdinal(columnName));
+                        switch (columnName)
                         {
-                            case 0:
+                            case "person_id":
                                 if (value != DBNull.Value)
                                     foundPersonDao.person_id = (int)value;
                                 else
                                     foundPersonDao.person_id = null;
                                 break;
-                            case 1:
+                            case "first_name":
                                 foundPersonDao.first_name = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 2:
+                            case "middle_name":
                                 foundPersonDao.middle_name = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 3:
+                            case "last_name":
                                 foundPersonDao.last_name = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 4:
+                            case "birth_date":
                                 if (value != DBNull.Value)
                                     foundPersonDao.birth_date = (DateTime)value;
                                 else
                                     foundPersonDao.birth_date = null;
                                 break;
-                            case 5:
+                            case "enum_gender_id":
                                 if (value != DBNull.Value)
                                     foundPersonDao.enum_gender_id = (int)value;
                                 else
                                     foundPersonDao.enum_gender_id = null;
                                 break;
-                            case 6:
+                            case "enum_ethnic_id":
                                 if (value != DBNull.Value)
                                     foundPersonDao.enum_ethnic_id = (int)value;
                                 else
                                     foundPersonDao.enum_ethnic_id = null;
                                 break;
-                            case 7:
+                            case "enum_residence_status_id":
                                 if (value != DBNull.Value)
                                     foundPersonDao.enum_residence_status_id = (int)value;
                                 else
                                     foundPersonDao.enum_residence_status_id = null;
                                 break;
-                            case 8:
+                            case "login_name":
                                 foundPersonDao.login_name = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 9:
+                            case "login_pw":
                                 foundPersonDao.login_pw = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 10:
+                            case "created":
                                 if (value != DBNull.Value)
                                     foundPersonDao.created = (DateTime)value;
                                 else
                                     foundPersonDao.created = null;
                                 break;
-                            case 11:
+                            case "created_by":
                                 foundPersonDao.created_by = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 12:
+                            case "changed":
                                 if (value != DBNull.Value)
                                     foundPersonDao.changed = (DateTime)value;
                                 else
                                     foundPersonDao.changed = null;
                                 break;
-                            case 13:
+                            case "changed_by":
                                 foundPersonDao.changed_by = value != DBNull.Value ? (string)value : null;
                                 break;
                             default:
-                                throw new Exception("Unexpected column found in person table: " + reader.GetName(i));
+                                throw new Exception("Unexpected column found in person table: " + columnName);
                         }
                     }
                     foundPeopleDao.Add(foundPersonDao);

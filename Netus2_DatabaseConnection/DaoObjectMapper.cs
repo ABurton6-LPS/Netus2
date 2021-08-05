@@ -236,8 +236,7 @@ namespace Netus2_DatabaseConnection
         public Organization MapOrganization(OrganizationDao organizationDao)
         {
             Enumeration orgType = Enum_Organization.GetEnumFromId((int)organizationDao.enum_organization_id);
-            Organization org = new Organization(organizationDao.name, orgType, organizationDao.identifier);
-            org.BuildingCode = organizationDao.building_code;
+            Organization org = new Organization(organizationDao.name, orgType, organizationDao.identifier, organizationDao.building_code);
             org.Id = organizationDao.organization_id != null ? (int)organizationDao.organization_id : -1;
 
             return org;

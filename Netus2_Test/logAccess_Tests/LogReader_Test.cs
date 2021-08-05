@@ -29,14 +29,11 @@ namespace Netus2_Test.logAccess_Tests
         IOrganizationDao organizationDaoImpl;
         IAcademicSessionDao academicSessionDaoImpl;
         IAddressDao addressDaoImpl;
-        Person teacher;
-        Person student;
 
         [SetUp]
         public void Setup()
         {
-            connection = DbConnectionFactory.GetConnection("Local");
-            connection.OpenConnection();
+            connection = DbConnectionFactory.GetNetus2Connection();
             connection.BeginTransaction();
             testDataBuilder = new TestDataBuilder(connection);
             logReader = new LogReader();
@@ -53,8 +50,6 @@ namespace Netus2_Test.logAccess_Tests
             organizationDaoImpl = new OrganizationDaoImpl();
             academicSessionDaoImpl = new AcademicSessionDaoImpl();
             addressDaoImpl = new AddressDaoImpl();
-            teacher = testDataBuilder.SimpleTeacher();
-            student = testDataBuilder.SimpleStudent();
         }
 
         [Test]
@@ -62,19 +57,24 @@ namespace Netus2_Test.logAccess_Tests
         {
             int preTestLogCount = logReader.Read_LogPerson(connection).Count;
 
-            teacher = personDaoImpl.Write(teacher, connection);
-            teacher.FirstName = "John";
-            personDaoImpl.Update(teacher, connection);
+            testDataBuilder.teacher.FirstName = "John";
+            personDaoImpl.Update(testDataBuilder.teacher, connection);
 
             List<LogPerson> logPeople = logReader.Read_LogPerson(connection);
+            List<LogPerson> thisPersonsLogs = new List<LogPerson>();
+
+            foreach (LogPerson logPerson in logPeople)
+            {
+                if (logPerson.person_id == testDataBuilder.teacher.Id)
+                    thisPersonsLogs.Add(logPerson);
+            }
 
             Assert.IsNotNull(logPeople);
             Assert.IsNotEmpty(logPeople);
             Assert.AreEqual(preTestLogCount + 1, logPeople.Count);
 
-            Assert_LogTable((int)logPeople[preTestLogCount].person_id, 1, "log_person", connection);
-            Assert.AreEqual(Enum_Log_Action.values["update"], logPeople[preTestLogCount].LogAction);
-            Assert_LogPerson(teacher, logPeople[preTestLogCount]);
+            Assert_LogTable(testDataBuilder.teacher.Id, thisPersonsLogs.Count, "log_person", connection);
+            Assert.AreEqual(Enum_Log_Action.values["update"], thisPersonsLogs[thisPersonsLogs.Count - 1].LogAction);
         }
 
         [Test]
@@ -82,18 +82,23 @@ namespace Netus2_Test.logAccess_Tests
         {
             int preTestLogCount = logReader.Read_LogPerson(connection).Count;
 
-            teacher = personDaoImpl.Write(teacher, connection);
-            personDaoImpl.Delete(teacher, connection);
+            personDaoImpl.Delete(testDataBuilder.teacher, connection);
 
             List<LogPerson> logPeople = logReader.Read_LogPerson(connection);
+            List<LogPerson> thisPersonsLogs = new List<LogPerson>();
+
+            foreach (LogPerson logPerson in logPeople)
+            {
+                if (logPerson.person_id == testDataBuilder.teacher.Id)
+                    thisPersonsLogs.Add(logPerson);
+            }
 
             Assert.IsNotNull(logPeople);
             Assert.IsNotEmpty(logPeople);
             Assert.AreEqual(preTestLogCount + 1, logPeople.Count);
 
-            Assert_LogTable((int)logPeople[preTestLogCount].person_id, 1, "log_person", connection);
-            Assert.AreEqual(Enum_Log_Action.values["delete"], logPeople[preTestLogCount].LogAction);
-            Assert_LogPerson(teacher, logPeople[preTestLogCount]);
+            Assert_LogTable(testDataBuilder.teacher.Id, thisPersonsLogs.Count, "log_person", connection);
+            Assert.AreEqual(Enum_Log_Action.values["delete"], thisPersonsLogs[thisPersonsLogs.Count - 1].LogAction);
         }
 
         [Test]
@@ -101,10 +106,8 @@ namespace Netus2_Test.logAccess_Tests
         {
             int preTestLogCount = logReader.Read_LogJctPersonRole(connection).Count;
 
-            teacher.Roles.Add(Enum_Role.values["primary teacher"]);
-            teacher = personDaoImpl.Write(teacher, connection);
-            teacher.Roles[0] = Enum_Role.values["administrator"];
-            personDaoImpl.Update(teacher, connection);
+            testDataBuilder.teacher.Roles[0] = Enum_Role.values["administrator"];
+            personDaoImpl.Update(testDataBuilder.teacher, connection);
 
             List<LogJctPersonRole> logJctPersonRoles = logReader.Read_LogJctPersonRole(connection);
 
@@ -115,7 +118,7 @@ namespace Netus2_Test.logAccess_Tests
             Assert_LogTable(logJctPersonRoles[preTestLogCount].log_jct_person_role_id, 1, "log_jct_person_role", connection);
             Assert.AreEqual(Enum_Log_Action.values["delete"], logJctPersonRoles[preTestLogCount].LogAction);
 
-            Assert.AreEqual(teacher.Id, logJctPersonRoles[preTestLogCount].person_id);
+            Assert.AreEqual(testDataBuilder.teacher.Id, logJctPersonRoles[preTestLogCount].person_id);
             Assert.AreEqual(Enum_Role.values["primary teacher"], logJctPersonRoles[preTestLogCount].Role);
         }
 
@@ -124,12 +127,8 @@ namespace Netus2_Test.logAccess_Tests
         {
             int preTestLogCount = logReader.Read_LogJctPersonPerson(connection).Count;
 
-            teacher = personDaoImpl.Write(teacher, connection);
-            student = personDaoImpl.Write(student, connection);
-            teacher.Relations.Add(student.Id);
-            personDaoImpl.Update(teacher, connection);
-            teacher.Relations.Clear();
-            personDaoImpl.Update(teacher, connection);
+            testDataBuilder.teacher.Relations.Clear();
+            personDaoImpl.Update(testDataBuilder.teacher, connection);
 
             List<LogJctPersonPerson> logJctPersonPersons = logReader.Read_LogJctPersonPerson(connection);
 
@@ -142,10 +141,10 @@ namespace Netus2_Test.logAccess_Tests
             Assert.AreEqual(Enum_Log_Action.values["delete"], logJctPersonPersons[preTestLogCount].LogAction);
             Assert.AreEqual(Enum_Log_Action.values["delete"], logJctPersonPersons[preTestLogCount + 1].LogAction);
 
-            Assert.AreEqual(teacher.Id, logJctPersonPersons[preTestLogCount].person_one_id);
-            Assert.AreEqual(student.Id, logJctPersonPersons[preTestLogCount].person_two_id);
-            Assert.AreEqual(teacher.Id, logJctPersonPersons[preTestLogCount + 1].person_two_id);
-            Assert.AreEqual(student.Id, logJctPersonPersons[preTestLogCount + 1].person_one_id);
+            Assert.AreEqual(testDataBuilder.teacher.Id, logJctPersonPersons[preTestLogCount].person_one_id);
+            Assert.AreEqual(testDataBuilder.student.Id, logJctPersonPersons[preTestLogCount].person_two_id);
+            Assert.AreEqual(testDataBuilder.teacher.Id, logJctPersonPersons[preTestLogCount + 1].person_two_id);
+            Assert.AreEqual(testDataBuilder.student.Id, logJctPersonPersons[preTestLogCount + 1].person_one_id);
         }
 
         [Test]
@@ -153,22 +152,25 @@ namespace Netus2_Test.logAccess_Tests
         {
             int preTestLogCount = logReader.Read_LogUniqueIdentifier(connection).Count;
 
-            teacher.UniqueIdentifiers.Add(testDataBuilder.SimpleUniqueIdentifier());
-            teacher = personDaoImpl.Write(teacher, connection);
-            teacher.UniqueIdentifiers[0].Identifier = "NewIdentifier";
-            personDaoImpl.Update(teacher, connection);
+            testDataBuilder.teacher.UniqueIdentifiers[0].Identifier = "NewIdentifier";
+            personDaoImpl.Update(testDataBuilder.teacher, connection);
 
             List<LogUniqueIdentifier> logUniqueIdentifiers = logReader.Read_LogUniqueIdentifier(connection);
+            List<LogUniqueIdentifier> thisUniqueIdsLogs = new List<LogUniqueIdentifier>();
+            foreach (LogUniqueIdentifier logUniqueIdentifier in logUniqueIdentifiers)
+            {
+                if (logUniqueIdentifier.unique_identifier_id == testDataBuilder.uniqueId_Teacher.Id)
+                    thisUniqueIdsLogs.Add(logUniqueIdentifier);
+            }
 
             Assert.IsNotNull(logUniqueIdentifiers);
             Assert.IsNotEmpty(logUniqueIdentifiers);
             Assert.AreEqual(preTestLogCount + 1, logUniqueIdentifiers.Count);
 
-            Assert_LogTable((int)logUniqueIdentifiers[preTestLogCount].unique_identifier_id, 1, "log_unique_identifier", connection);
-            Assert.AreEqual(Enum_Log_Action.values["update"], logUniqueIdentifiers[preTestLogCount].LogAction);
+            Assert_LogTable(testDataBuilder.uniqueId_Teacher.Id, thisUniqueIdsLogs.Count, "log_unique_identifier", connection);
+            Assert.AreEqual(Enum_Log_Action.values["update"], thisUniqueIdsLogs[thisUniqueIdsLogs.Count - 1].LogAction);
 
-            Assert.AreEqual(teacher.Id, logUniqueIdentifiers[preTestLogCount].person_id);
-            Assert_LogUniqueIdentifier(teacher.UniqueIdentifiers[0], logUniqueIdentifiers[preTestLogCount]);
+            Assert.AreEqual(testDataBuilder.teacher.Id, thisUniqueIdsLogs[thisUniqueIdsLogs.Count - 1].person_id);
         }
 
         [Test]
@@ -176,23 +178,25 @@ namespace Netus2_Test.logAccess_Tests
         {
             int preTestLogCount = logReader.Read_LogUniqueIdentifier(connection).Count;
 
-            teacher.UniqueIdentifiers.Add(testDataBuilder.SimpleUniqueIdentifier());
-            teacher = personDaoImpl.Write(teacher, connection);
-            UniqueIdentifier oldUniqueIdentifier = teacher.UniqueIdentifiers[0];
-            teacher.UniqueIdentifiers.Clear();
-            personDaoImpl.Update(teacher, connection);
+            testDataBuilder.teacher.UniqueIdentifiers.Clear();
+            personDaoImpl.Update(testDataBuilder.teacher, connection);
 
             List<LogUniqueIdentifier> logUniqueIdentifiers = logReader.Read_LogUniqueIdentifier(connection);
+            List<LogUniqueIdentifier> thisUniqueIdsLogs = new List<LogUniqueIdentifier>();
+            foreach(LogUniqueIdentifier logUniqueIdentifier in logUniqueIdentifiers)
+            {
+                if (logUniqueIdentifier.unique_identifier_id == testDataBuilder.uniqueId_Teacher.Id)
+                    thisUniqueIdsLogs.Add(logUniqueIdentifier);
+            }
 
             Assert.IsNotNull(logUniqueIdentifiers);
             Assert.IsNotEmpty(logUniqueIdentifiers);
             Assert.AreEqual(preTestLogCount + 1, logUniqueIdentifiers.Count);
 
-            Assert_LogTable((int)logUniqueIdentifiers[preTestLogCount].unique_identifier_id, 1, "log_unique_identifier", connection);
-            Assert.AreEqual(Enum_Log_Action.values["delete"], logUniqueIdentifiers[preTestLogCount].LogAction);
+            Assert_LogTable(testDataBuilder.uniqueId_Teacher.Id, thisUniqueIdsLogs.Count, "log_unique_identifier", connection);
+            Assert.AreEqual(Enum_Log_Action.values["delete"], thisUniqueIdsLogs[thisUniqueIdsLogs.Count - 1].LogAction);
 
-            Assert.AreEqual(teacher.Id, logUniqueIdentifiers[preTestLogCount].person_id);
-            Assert_LogUniqueIdentifier(oldUniqueIdentifier, logUniqueIdentifiers[preTestLogCount]);
+            Assert.AreEqual(testDataBuilder.teacher.Id, thisUniqueIdsLogs[thisUniqueIdsLogs.Count - 1].person_id);
         }
 
         [Test]
@@ -200,10 +204,8 @@ namespace Netus2_Test.logAccess_Tests
         {
             int preTestLogCount = logReader.Read_LogProvider(connection).Count;
 
-            Provider simpleProvider = testDataBuilder.SimpleProvider();
-            simpleProvider = providerDaoImpl.Write(simpleProvider, connection);
-            simpleProvider.Name = "New Provider Name";
-            providerDaoImpl.Update(simpleProvider, connection);
+            testDataBuilder.provider.Name = "New Provider Name";
+            providerDaoImpl.Update(testDataBuilder.provider, connection);
 
             List<LogProvider> logProviders = logReader.Read_LogProvider(connection);
 
@@ -214,7 +216,7 @@ namespace Netus2_Test.logAccess_Tests
             Assert_LogTable((int)logProviders[preTestLogCount].provider_id, 1, "log_provider", connection);
             Assert.AreEqual(Enum_Log_Action.values["update"], logProviders[preTestLogCount].LogAction);
 
-            Assert_LogProvider(simpleProvider, logProviders[preTestLogCount]);
+            Assert_LogProvider(testDataBuilder.provider, logProviders[preTestLogCount]);
         }
 
         [Test]
@@ -222,9 +224,8 @@ namespace Netus2_Test.logAccess_Tests
         {
             int preTestLogCount = logReader.Read_LogProvider(connection).Count;
 
-            Provider oldProvider = testDataBuilder.SimpleProvider();
-            oldProvider = providerDaoImpl.Write(oldProvider, connection);
-            providerDaoImpl.Delete(oldProvider, connection);
+            Provider oldProvider = testDataBuilder.provider;
+            providerDaoImpl.Delete(testDataBuilder.provider, connection);
 
             List<LogProvider> logProviders = logReader.Read_LogProvider(connection);
 
@@ -243,10 +244,7 @@ namespace Netus2_Test.logAccess_Tests
         {
             int preTestLogCount = logReader.Read_LogApp(connection).Count;
 
-            Provider provider = testDataBuilder.SimpleProvider();
-            provider = providerDaoImpl.Write(provider, connection);
-            Application app = testDataBuilder.SimpleApplication(provider);
-            app = applicationDaoImpl.Write(app, connection);
+            Application app = testDataBuilder.application;
             app.Name = "New Application";
             applicationDaoImpl.Update(app, connection);
 
@@ -256,7 +254,7 @@ namespace Netus2_Test.logAccess_Tests
             Assert.IsNotEmpty(logApps);
             Assert.AreEqual(preTestLogCount + 1, logApps.Count);
 
-            Assert_LogTable((int)logApps[preTestLogCount].app_id, 1, "log_app", connection);
+            Assert_LogTable((int)logApps[preTestLogCount].app_id, logApps.Count, "log_app", connection);
             Assert.AreEqual(Enum_Log_Action.values["update"], logApps[preTestLogCount].LogAction);
 
             Assert_LogApp(app, logApps[preTestLogCount]);
@@ -267,16 +265,8 @@ namespace Netus2_Test.logAccess_Tests
         {
             int preTestLogCount = logReader.Read_LogJctClassPerson(connection).Count;
 
-            Organization org = organizationDaoImpl.Write(testDataBuilder.SimpleOrg(), connection);
-            AcademicSession academicSession = academicSessionDaoImpl.Write(testDataBuilder.SimpleAcademicSession(org), connection);
-            Course course = courseDaoImpl.Write(testDataBuilder.SimpleCourse(), connection);
-
-            ClassEnrolled classEnrolled = testDataBuilder.SimpleClassEnrolled(course, academicSession);
-            Person teacher = personDaoImpl.Write(this.teacher, connection);
-            classEnrolled.AddStaff(teacher, Enum_Role.values["primary teacher"]);
-            classEnrolled = classEnrolledDaoImpl.Write(classEnrolled, connection);
-            classEnrolled.RemoveStaff(teacher, Enum_Role.values["primary teacher"]);
-            classEnrolledDaoImpl.Update(classEnrolled, connection);
+            testDataBuilder.classEnrolled.RemoveStaff(testDataBuilder.teacher, Enum_Role.values["primary teacher"]);
+            classEnrolledDaoImpl.Update(testDataBuilder.classEnrolled, connection);
 
             List<LogJctClassPerson> logJctClassPersons = logReader.Read_LogJctClassPerson(connection);
 
@@ -287,7 +277,7 @@ namespace Netus2_Test.logAccess_Tests
             Assert_LogTable(logJctClassPersons[preTestLogCount].log_jct_class_person_id, 1, "log_jct_class_person", connection);
             Assert.AreEqual(Enum_Log_Action.values["delete"], logJctClassPersons[preTestLogCount].LogAction);
 
-            Assert.AreEqual(teacher.Id, logJctClassPersons[preTestLogCount].person_id);
+            Assert.AreEqual(testDataBuilder.teacher.Id, logJctClassPersons[preTestLogCount].person_id);
             Assert.AreEqual(Enum_Role.values["primary teacher"], logJctClassPersons[preTestLogCount].Role);
         }
 
@@ -296,10 +286,7 @@ namespace Netus2_Test.logAccess_Tests
         {
             int preTestLogcount = logReader.Read_LogApp(connection).Count;
 
-            Provider provider = testDataBuilder.SimpleProvider();
-            provider = providerDaoImpl.Write(provider, connection);
-            Application app = testDataBuilder.SimpleApplication(provider);
-            app = applicationDaoImpl.Write(app, connection);
+            Application app = testDataBuilder.application;
             applicationDaoImpl.Delete(app, connection);
 
             List<LogApp> logApps = logReader.Read_LogApp(connection);
@@ -308,7 +295,7 @@ namespace Netus2_Test.logAccess_Tests
             Assert.IsNotEmpty(logApps);
             Assert.AreEqual(preTestLogcount + 1, logApps.Count);
 
-            Assert_LogTable((int)logApps[preTestLogcount].app_id, 1, "log_app", connection);
+            Assert_LogTable((int)logApps[preTestLogcount].app_id, logApps.Count, "log_app", connection);
             Assert.AreEqual(Enum_Log_Action.values["delete"], logApps[preTestLogcount].LogAction);
 
             Assert_LogApp(app, logApps[preTestLogcount]);
@@ -319,16 +306,10 @@ namespace Netus2_Test.logAccess_Tests
         {
             int preTestLogCount = logReader.Read_LogJctPersonApp(connection).Count;
 
-            Provider provider = testDataBuilder.SimpleProvider();
-            provider = providerDaoImpl.Write(provider, connection);
-            Application app = testDataBuilder.SimpleApplication(provider);
-            app = applicationDaoImpl.Write(app, connection);
-            teacher.Applications.Add(app);
-            teacher = personDaoImpl.Write(teacher, connection);
-            Application oldApplication = teacher.Applications[0];
-            teacher.Applications[0] =
-                new Application("old application", teacher.Applications[0].Provider);
-            personDaoImpl.Update(teacher, connection);
+            Application oldApplication = testDataBuilder.teacher.Applications[0];
+            testDataBuilder.teacher.Applications[0] =
+                new Application("old application", testDataBuilder.teacher.Applications[0].Provider);
+            personDaoImpl.Update(testDataBuilder.teacher, connection);
 
             List<LogJctPersonApp> logJctPersonApps = logReader.Read_LogJctPersonApp(connection);
 
@@ -339,7 +320,7 @@ namespace Netus2_Test.logAccess_Tests
             Assert_LogTable(logJctPersonApps[preTestLogCount].log_jct_person_app_id, 1, "log_jct_person_app", connection);
             Assert.AreEqual(Enum_Log_Action.values["delete"], logJctPersonApps[preTestLogCount].LogAction);
 
-            Assert.AreEqual(teacher.Id, logJctPersonApps[preTestLogCount].person_id);
+            Assert.AreEqual(testDataBuilder.teacher.Id, logJctPersonApps[preTestLogCount].person_id);
             Assert.AreEqual(oldApplication.Id, logJctPersonApps[preTestLogCount].app_id);
         }
 
@@ -348,22 +329,26 @@ namespace Netus2_Test.logAccess_Tests
         {
             int preTestLogCount = logReader.Read_LogPhoneNumber(connection).Count;
 
-            teacher.PhoneNumbers.Add(testDataBuilder.SimplePhoneNumber());
-            teacher = personDaoImpl.Write(teacher, connection);
-            teacher.PhoneNumbers[0].PhoneNumberValue = "8006532816";
-            personDaoImpl.Update(teacher, connection);
+            testDataBuilder.teacher.PhoneNumbers[0].PhoneNumberValue = "8006532816";
+            personDaoImpl.Update(testDataBuilder.teacher, connection);
 
             List<LogPhoneNumber> logPhoneNumbers = logReader.Read_LogPhoneNumber(connection);
+            List<LogPhoneNumber> thisPhoneNumbersLogs = new List<LogPhoneNumber>();
+
+            foreach (LogPhoneNumber logPhoneNumber in logPhoneNumbers)
+            {
+                if (logPhoneNumber.phone_number_id == testDataBuilder.phoneNumber_Teacher.Id)
+                    thisPhoneNumbersLogs.Add(logPhoneNumber);
+            }
 
             Assert.IsNotNull(logPhoneNumbers);
             Assert.IsNotEmpty(logPhoneNumbers);
             Assert.AreEqual(preTestLogCount + 1, logPhoneNumbers.Count);
 
-            Assert_LogTable((int)logPhoneNumbers[preTestLogCount].phone_number_id, 1, "log_phone_number", connection);
-            Assert.AreEqual(Enum_Log_Action.values["update"], logPhoneNumbers[preTestLogCount].LogAction);
+            Assert_LogTable(testDataBuilder.phoneNumber_Teacher.Id, thisPhoneNumbersLogs.Count, "log_phone_number", connection);
+            Assert.AreEqual(Enum_Log_Action.values["update"], thisPhoneNumbersLogs[thisPhoneNumbersLogs.Count - 1].LogAction);
 
-            Assert.AreEqual(teacher.Id, logPhoneNumbers[preTestLogCount].person_id);
-            Assert_LogPhoneNumber(teacher.PhoneNumbers[0], logPhoneNumbers[preTestLogCount]);
+            Assert.AreEqual(testDataBuilder.teacher.Id, thisPhoneNumbersLogs[thisPhoneNumbersLogs.Count - 1].person_id);
         }
 
         [Test]
@@ -371,23 +356,26 @@ namespace Netus2_Test.logAccess_Tests
         {
             int preTestLogCount = logReader.Read_LogPhoneNumber(connection).Count;
 
-            teacher.PhoneNumbers.Add(testDataBuilder.SimplePhoneNumber());
-            teacher = personDaoImpl.Write(teacher, connection);
-            PhoneNumber oldPhoneNumber = teacher.PhoneNumbers[0];
-            teacher.PhoneNumbers.Clear();
-            personDaoImpl.Update(teacher, connection);
+            testDataBuilder.teacher.PhoneNumbers.Clear();
+            personDaoImpl.Update(testDataBuilder.teacher, connection);
 
             List<LogPhoneNumber> logPhoneNumbers = logReader.Read_LogPhoneNumber(connection);
+            List<LogPhoneNumber> thisPhoneNumbersLogs = new List<LogPhoneNumber>();
+
+            foreach(LogPhoneNumber logPhoneNumber in logPhoneNumbers)
+            {
+                if (logPhoneNumber.phone_number_id == testDataBuilder.phoneNumber_Teacher.Id)
+                    thisPhoneNumbersLogs.Add(logPhoneNumber);
+            }
 
             Assert.IsNotNull(logPhoneNumbers);
             Assert.IsNotEmpty(logPhoneNumbers);
             Assert.AreEqual(preTestLogCount + 1, logPhoneNumbers.Count);
 
-            Assert_LogTable((int)logPhoneNumbers[preTestLogCount].phone_number_id, 1, "log_phone_number", connection);
-            Assert.AreEqual(Enum_Log_Action.values["delete"], logPhoneNumbers[preTestLogCount].LogAction);
+            Assert_LogTable(testDataBuilder.phoneNumber_Teacher.Id, thisPhoneNumbersLogs.Count, "log_phone_number", connection);
+            Assert.AreEqual(Enum_Log_Action.values["delete"], thisPhoneNumbersLogs[thisPhoneNumbersLogs.Count - 1].LogAction);
 
-            Assert.AreEqual(teacher.Id, logPhoneNumbers[preTestLogCount].person_id);
-            Assert_LogPhoneNumber(oldPhoneNumber, logPhoneNumbers[preTestLogCount]);
+            Assert.AreEqual(testDataBuilder.teacher.Id, thisPhoneNumbersLogs[thisPhoneNumbersLogs.Count - 1].person_id);
         }
 
         [Test]
@@ -395,7 +383,7 @@ namespace Netus2_Test.logAccess_Tests
         {
             int preTestLogCount = logReader.Read_LogAddress(connection).Count;
 
-            Address oldAddress = addressDaoImpl.Write(testDataBuilder.SimpleAddress(), connection);
+            Address oldAddress = testDataBuilder.address_Teacher;
             oldAddress.Line1 = "New Address Line 1";
             addressDaoImpl.Update(oldAddress, connection);
 
@@ -415,7 +403,7 @@ namespace Netus2_Test.logAccess_Tests
         {
             int preTestLogCount = logReader.Read_LogAddress(connection).Count;
 
-            Address oldAddress = addressDaoImpl.Write(testDataBuilder.SimpleAddress(), connection);
+            Address oldAddress = testDataBuilder.address_Teacher;
             addressDaoImpl.Delete(oldAddress, connection);
 
             List<LogAddress> logAddresses = logReader.Read_LogAddress(connection);
@@ -434,10 +422,8 @@ namespace Netus2_Test.logAccess_Tests
         {
             int preTestLogCount = logReader.Read_LogJctPersonAddress(connection).Count;
 
-            Person person = testDataBuilder.SimpleStudent();
-            Address oldAddress = addressDaoImpl.Write(testDataBuilder.SimpleAddress(), connection);
-            person.Addresses.Add(oldAddress);
-            person = personDaoImpl.Write(person, connection);
+            Person person = testDataBuilder.student;
+            Address oldAddress = testDataBuilder.address_Student;
             person.Addresses.Clear();
             personDaoImpl.Update(person, connection);
 
@@ -459,9 +445,7 @@ namespace Netus2_Test.logAccess_Tests
         {
             int preTestLogCount = logReader.Read_LogEmploymentSession(connection).Count;
 
-            Organization org = orgDaoImpl.Write(testDataBuilder.SimpleOrg(), connection);
-            teacher.EmploymentSessions.Add(testDataBuilder.SimpleEmploymentSession(org));
-            teacher = personDaoImpl.Write(teacher, connection);
+            Person teacher = testDataBuilder.teacher;
             EmploymentSession oldEmploymentSession = teacher.EmploymentSessions[0];
             teacher.EmploymentSessions[0].Name = "New Employment Session Name";
             personDaoImpl.Update(teacher, connection);
@@ -472,7 +456,7 @@ namespace Netus2_Test.logAccess_Tests
             Assert.IsNotEmpty(logEmploymentSessions);
             Assert.AreEqual(preTestLogCount + 1, logEmploymentSessions.Count);
 
-            Assert_LogTable((int)logEmploymentSessions[preTestLogCount].employment_session_id, 1, "log_employment_session", connection);
+            Assert_LogTable((int)logEmploymentSessions[preTestLogCount].employment_session_id, logEmploymentSessions.Count, "log_employment_session", connection);
             Assert.AreEqual(Enum_Log_Action.values["update"], logEmploymentSessions[preTestLogCount].LogAction);
 
             Assert.AreEqual(teacher.Id, logEmploymentSessions[preTestLogCount].person_id);
@@ -484,9 +468,7 @@ namespace Netus2_Test.logAccess_Tests
         {
             int preTestLogCount = logReader.Read_LogEmploymentSession(connection).Count;
 
-            Organization org = orgDaoImpl.Write(testDataBuilder.SimpleOrg(), connection);
-            teacher.EmploymentSessions.Add(testDataBuilder.SimpleEmploymentSession(org));
-            teacher = personDaoImpl.Write(teacher, connection);
+            Person teacher = testDataBuilder.teacher;
             EmploymentSession oldEmploymentSession = teacher.EmploymentSessions[0];
             teacher.EmploymentSessions.Clear();
             personDaoImpl.Update(teacher, connection);
@@ -497,7 +479,7 @@ namespace Netus2_Test.logAccess_Tests
             Assert.IsNotEmpty(logEmploymentSessions);
             Assert.AreEqual(preTestLogCount + 1, logEmploymentSessions.Count);
 
-            Assert_LogTable((int)logEmploymentSessions[preTestLogCount].employment_session_id, 1, "log_employment_session", connection);
+            Assert_LogTable((int)logEmploymentSessions[preTestLogCount].employment_session_id, logEmploymentSessions.Count, "log_employment_session", connection);
             Assert.AreEqual(Enum_Log_Action.values["delete"], logEmploymentSessions[preTestLogCount].LogAction);
 
             Assert.AreEqual(teacher.Id, logEmploymentSessions[preTestLogCount].person_id);
@@ -509,8 +491,7 @@ namespace Netus2_Test.logAccess_Tests
         {
             int preTestLogCount = logReader.Read_LogAcademicSession(connection).Count;
 
-            TestDataBuilder withData = new TestDataBuilder(connection);
-            Person student = withData.student;
+            Person student = testDataBuilder.student;
             AcademicSession oldAcademicSession = student.Enrollments[0].ClassEnrolled.AcademicSession;
             student.Enrollments[0].ClassEnrolled.AcademicSession.Name = "New Academic Session Name";
             academicSessionDaoImpl.Update(student.Enrollments[0].ClassEnrolled.AcademicSession, connection);
@@ -521,7 +502,7 @@ namespace Netus2_Test.logAccess_Tests
             Assert.IsNotEmpty(logAcademicSessions);
             Assert.AreEqual(preTestLogCount + 1, logAcademicSessions.Count);
 
-            Assert_LogTable((int)logAcademicSessions[preTestLogCount].academic_session_id, 1, "log_academic_session", connection);
+            Assert_LogTable((int)logAcademicSessions[preTestLogCount].academic_session_id, logAcademicSessions.Count, "log_academic_session", connection);
             Assert.AreEqual(Enum_Log_Action.values["update"], logAcademicSessions[preTestLogCount].LogAction);
 
             Assert_LogAcademicSession(oldAcademicSession, logAcademicSessions[preTestLogCount]);
@@ -532,9 +513,7 @@ namespace Netus2_Test.logAccess_Tests
         {
             int preTestLogCount = logReader.Read_LogAcademicSession(connection).Count;
 
-            TestDataBuilder withData = new TestDataBuilder(connection);
-            AcademicSession academicSession = new AcademicSession("Test Academic Session", Enum_Session.values["term"], withData.school, "T1");
-            academicSession = academicSessionDaoImpl.Write(academicSession, connection);
+            AcademicSession academicSession = testDataBuilder.schoolYear;
             academicSessionDaoImpl.Delete(academicSession, connection);
 
             List<LogAcademicSession> logAcademicSessions = logReader.Read_LogAcademicSession(connection);
@@ -554,8 +533,7 @@ namespace Netus2_Test.logAccess_Tests
         {
             int preTestLogCount = logReader.Read_LogOrganization(connection).Count;
 
-            Organization org = new Organization("testOrg", Enum_Organization.values["department"], "tO");
-            org = organizationDaoImpl.Write(org, connection);
+            Organization org = testDataBuilder.school;
             org.Name = "New Organization Name";
             orgDaoImpl.Update(org, connection);
 
@@ -565,7 +543,7 @@ namespace Netus2_Test.logAccess_Tests
             Assert.IsNotEmpty(logOrganizations);
             Assert.AreEqual(preTestLogCount + 1, logOrganizations.Count);
 
-            Assert_LogTable((int)logOrganizations[preTestLogCount].organization_id, 1, "log_organization", connection);
+            Assert_LogTable((int)logOrganizations[preTestLogCount].organization_id, logOrganizations.Count, "log_organization", connection);
             Assert.AreEqual(Enum_Log_Action.values["update"], logOrganizations[preTestLogCount].LogAction);
 
             Assert_LogOrganization(org, logOrganizations[preTestLogCount]);
@@ -576,8 +554,7 @@ namespace Netus2_Test.logAccess_Tests
         {
             int preTestLogCount = logReader.Read_LogOrganization(connection).Count;
 
-            Organization org = new Organization("testOrg", Enum_Organization.values["department"], "tO");
-            org = organizationDaoImpl.Write(org, connection);
+            Organization org = testDataBuilder.school;
             organizationDaoImpl.Delete(org, connection);
 
             List<LogOrganization> logOrganizations = logReader.Read_LogOrganization(connection);
@@ -586,7 +563,7 @@ namespace Netus2_Test.logAccess_Tests
             Assert.IsNotEmpty(logOrganizations);
             Assert.AreEqual(preTestLogCount + 1, logOrganizations.Count);
 
-            Assert_LogTable((int)logOrganizations[preTestLogCount].organization_id, 1, "log_organization", connection);
+            Assert_LogTable((int)logOrganizations[preTestLogCount].organization_id, logOrganizations.Count, "log_organization", connection);
             Assert.AreEqual(Enum_Log_Action.values["delete"], logOrganizations[preTestLogCount].LogAction);
 
             Assert_LogOrganization(org, logOrganizations[preTestLogCount]);
@@ -597,7 +574,7 @@ namespace Netus2_Test.logAccess_Tests
         {
             int preTestLogCount = logReader.Read_LogResource(connection).Count;
 
-            Resource oldResource = resourceDaoImpl.Write(new Resource("test resource", "test vendor id"), connection);
+            Resource oldResource = testDataBuilder.resource;
             Resource newResource = oldResource;
             newResource.Name = "different name";
             resourceDaoImpl.Update(newResource, connection); ;
@@ -619,7 +596,7 @@ namespace Netus2_Test.logAccess_Tests
         {
             int preTestLogCount = logReader.Read_LogResource(connection).Count;
 
-            Resource resource = resourceDaoImpl.Write(new Resource("test resource", "test vendor id"), connection);
+            Resource resource = testDataBuilder.resource;
             resourceDaoImpl.Delete(resource, connection); ;
 
             List<LogResource> logResources = logReader.Read_LogResource(connection);
@@ -639,7 +616,7 @@ namespace Netus2_Test.logAccess_Tests
         {
             int preTestLogCount = logReader.Read_LogCourse(connection).Count;
 
-            Course course = courseDaoImpl.Write(new Course("course name", "course code"), connection);
+            Course course = testDataBuilder.spanishCourse;
             course.Name = "New Course name";
             courseDaoImpl.Update(course, connection);
 
@@ -649,7 +626,7 @@ namespace Netus2_Test.logAccess_Tests
             Assert.IsNotEmpty(logCourses);
             Assert.AreEqual(preTestLogCount + 1, logCourses.Count);
 
-            Assert_LogTable((int)logCourses[preTestLogCount].course_id, 1, "log_course", connection);
+            Assert_LogTable((int)logCourses[preTestLogCount].course_id, logCourses.Count, "log_course", connection);
             Assert.AreEqual(Enum_Log_Action.values["update"], logCourses[preTestLogCount].LogAction);
 
             Assert_LogCourse(course, logCourses[preTestLogCount]);
@@ -660,7 +637,7 @@ namespace Netus2_Test.logAccess_Tests
         {
             int preTestLogCount = logReader.Read_LogCourse(connection).Count;
 
-            Course course = courseDaoImpl.Write(new Course("course name", "course code"), connection);
+            Course course = testDataBuilder.spanishCourse;
             courseDaoImpl.Delete(course, connection);
 
             List<LogCourse> logCourses = logReader.Read_LogCourse(connection);
@@ -669,7 +646,7 @@ namespace Netus2_Test.logAccess_Tests
             Assert.IsNotEmpty(logCourses);
             Assert.AreEqual(preTestLogCount + 1, logCourses.Count);
 
-            Assert_LogTable((int)logCourses[preTestLogCount].course_id, 1, "log_course", connection);
+            Assert_LogTable((int)logCourses[preTestLogCount].course_id, logCourses.Count, "log_course", connection);
             Assert.AreEqual(Enum_Log_Action.values["delete"], logCourses[preTestLogCount].LogAction);
 
             Assert_LogCourse(course, logCourses[preTestLogCount]);
@@ -680,8 +657,7 @@ namespace Netus2_Test.logAccess_Tests
         {
             int preTestLogCount = logReader.Read_LogJctCourseSubject(connection).Count;
 
-            TestDataBuilder withData = new TestDataBuilder(connection);
-            student = withData.student;
+            Person student = testDataBuilder.student;
             student.Enrollments[0].ClassEnrolled.Course.Subjects[0] = Enum_Subject.values["sci"];
             courseDaoImpl.Update(student.Enrollments[0].ClassEnrolled.Course, connection);
 
@@ -703,8 +679,7 @@ namespace Netus2_Test.logAccess_Tests
         {
             int preTestLogCount = logReader.Read_LogJctCourseGrade(connection).Count;
 
-            TestDataBuilder withData = new TestDataBuilder(connection);
-            student = withData.student;
+            Person student = testDataBuilder.student;
             student.Enrollments[0].ClassEnrolled.Course.Grades[0] = Enum_Grade.values["3"];
             courseDaoImpl.Update(student.Enrollments[0].ClassEnrolled.Course, connection);
 
@@ -726,11 +701,7 @@ namespace Netus2_Test.logAccess_Tests
         {
             int preTestLogCount = logReader.Read_LogClass(connection).Count;
 
-            Organization org = organizationDaoImpl.Write(testDataBuilder.SimpleOrg(), connection);
-            AcademicSession academicSession = academicSessionDaoImpl.Write(testDataBuilder.SimpleAcademicSession(org), connection);
-            Course course = courseDaoImpl.Write(testDataBuilder.SimpleCourse(), connection);
-            ClassEnrolled oldClass = new ClassEnrolled("class name", "class code", Enum_Class.values["scheduled"], "room", course, academicSession);
-            oldClass = classEnrolledDaoImpl.Write(oldClass, connection);
+            ClassEnrolled oldClass = testDataBuilder.classEnrolled;
             ClassEnrolled newClass = oldClass;
             newClass.Name = "New Class Name";
             classEnrolledDaoImpl.Update(newClass, connection);
@@ -741,7 +712,7 @@ namespace Netus2_Test.logAccess_Tests
             Assert.IsNotEmpty(logClasses);
             Assert.AreEqual(preTestLogCount + 1, logClasses.Count);
 
-            Assert_LogTable((int)logClasses[preTestLogCount].class_id, 1, "log_class", connection);
+            Assert_LogTable((int)logClasses[preTestLogCount].class_id, logClasses.Count, "log_class", connection);
             Assert.AreEqual(Enum_Log_Action.values["update"], logClasses[preTestLogCount].LogAction);
 
             Assert_LogClass(oldClass, logClasses[preTestLogCount]);
@@ -752,11 +723,7 @@ namespace Netus2_Test.logAccess_Tests
         {
             int preTestLogCount = logReader.Read_LogClass(connection).Count;
 
-            Organization org = organizationDaoImpl.Write(testDataBuilder.SimpleOrg(), connection);
-            AcademicSession academicSession = academicSessionDaoImpl.Write(testDataBuilder.SimpleAcademicSession(org), connection);
-            Course course = courseDaoImpl.Write(testDataBuilder.SimpleCourse(), connection);
-            ClassEnrolled oldClass = new ClassEnrolled("class name", "class code", Enum_Class.values["scheduled"], "room", course, academicSession);
-            oldClass = classEnrolledDaoImpl.Write(oldClass, connection);
+            ClassEnrolled oldClass = testDataBuilder.classEnrolled;
             classEnrolledDaoImpl.Delete(oldClass, connection);
 
             List<LogClass> logClasses = logReader.Read_LogClass(connection);
@@ -765,7 +732,7 @@ namespace Netus2_Test.logAccess_Tests
             Assert.IsNotEmpty(logClasses);
             Assert.AreEqual(preTestLogCount + 1, logClasses.Count);
 
-            Assert_LogTable((int)logClasses[preTestLogCount].class_id, 1, "log_class", connection);
+            Assert_LogTable((int)logClasses[preTestLogCount].class_id, logClasses.Count, "log_class", connection);
             Assert.AreEqual(Enum_Log_Action.values["delete"], logClasses[preTestLogCount].LogAction);
 
             Assert_LogClass(oldClass, logClasses[preTestLogCount]);
@@ -776,8 +743,7 @@ namespace Netus2_Test.logAccess_Tests
         {
             int preTestLogCount = logReader.Read_LogJctClassPeriod(connection).Count;
 
-            TestDataBuilder withData = new TestDataBuilder(connection);
-            student = withData.student;
+            Person student = testDataBuilder.student;
             student.Enrollments[0].ClassEnrolled.Periods[0] = Enum_Period.values["2"];
             classEnrolledDaoImpl.Update(student.Enrollments[0].ClassEnrolled, connection);
 
@@ -799,8 +765,7 @@ namespace Netus2_Test.logAccess_Tests
         {
             int preTestLogCount = logReader.Read_LogJctClassResource(connection).Count;
 
-            TestDataBuilder withData = new TestDataBuilder(connection);
-            student = withData.student;
+            Person student = testDataBuilder.student;
             Resource oldresource = student.Enrollments[0].ClassEnrolled.Resources[0];
             student.Enrollments[0].ClassEnrolled.Resources[0] = resourceDaoImpl.Write(new Resource("new resource", "2"), connection);
             classEnrolledDaoImpl.Update(student.Enrollments[0].ClassEnrolled, connection);
@@ -823,12 +788,7 @@ namespace Netus2_Test.logAccess_Tests
         {
             int preTestLogCount = logReader.Read_LogLineItem(connection).Count;
 
-            Organization org = organizationDaoImpl.Write(testDataBuilder.SimpleOrg(), connection);
-            AcademicSession academicSession = academicSessionDaoImpl.Write(testDataBuilder.SimpleAcademicSession(org), connection);
-            Course course = courseDaoImpl.Write(testDataBuilder.SimpleCourse(), connection);
-            ClassEnrolled classEnrolled = new ClassEnrolled("class name", "class code", Enum_Class.values["scheduled"], "room", course, academicSession);
-            classEnrolled = classEnrolledDaoImpl.Write(classEnrolled, connection);
-            LineItem oldLineItem = lineItemDaoImpl.Write(testDataBuilder.SimpleLineItem(classEnrolled), connection);
+            LineItem oldLineItem = testDataBuilder.lineItem;
             oldLineItem.Descript = "new Lineitem description";
             lineItemDaoImpl.Update(oldLineItem, connection);
 
@@ -849,12 +809,7 @@ namespace Netus2_Test.logAccess_Tests
         {
             int preTestLogCount = logReader.Read_LogLineItem(connection).Count;
 
-            Organization org = organizationDaoImpl.Write(testDataBuilder.SimpleOrg(), connection);
-            AcademicSession academicSession = academicSessionDaoImpl.Write(testDataBuilder.SimpleAcademicSession(org), connection);
-            Course course = courseDaoImpl.Write(testDataBuilder.SimpleCourse(), connection);
-            ClassEnrolled classEnrolled = new ClassEnrolled("class name", "class code", Enum_Class.values["scheduled"], "room", course, academicSession);
-            classEnrolled = classEnrolledDaoImpl.Write(classEnrolled, connection);
-            LineItem oldLineItem = lineItemDaoImpl.Write(testDataBuilder.SimpleLineItem(classEnrolled), connection);
+            LineItem oldLineItem = testDataBuilder.lineItem;
             lineItemDaoImpl.Delete(oldLineItem, connection);
 
             List<LogLineItem> logLineItems = logReader.Read_LogLineItem(connection);
@@ -874,8 +829,7 @@ namespace Netus2_Test.logAccess_Tests
         {
             int preTestLogCount = logReader.Read_LogEnrollment(connection).Count;
 
-            TestDataBuilder withData = new TestDataBuilder(connection);
-            student = withData.student;
+            Person student = testDataBuilder.student;
             Enrollment oldEnrollment = student.Enrollments[0];
             student.Enrollments[0].GradeLevel = Enum_Grade.values["1"];
             personDaoImpl.Update(student, connection);
@@ -884,13 +838,13 @@ namespace Netus2_Test.logAccess_Tests
 
             Assert.IsNotNull(logEnrollments);
             Assert.IsNotEmpty(logEnrollments);
-            Assert.AreEqual(preTestLogCount + 2, logEnrollments.Count);
+            Assert.AreEqual(preTestLogCount + 1, logEnrollments.Count);
 
-            Assert_LogTable((int)logEnrollments[preTestLogCount + 1].enrollment_id, 2, "log_enrollment", connection);
-            Assert.AreEqual(Enum_Log_Action.values["update"], logEnrollments[preTestLogCount + 1].LogAction);
+            Assert_LogTable((int)logEnrollments[preTestLogCount].enrollment_id, logEnrollments.Count, "log_enrollment", connection);
+            Assert.AreEqual(Enum_Log_Action.values["update"], logEnrollments[preTestLogCount].LogAction);
 
-            Assert.AreEqual(student.Id, logEnrollments[preTestLogCount + 1].person_id);
-            Assert_LogEnrollment(oldEnrollment, logEnrollments[preTestLogCount + 1]);
+            Assert.AreEqual(student.Id, logEnrollments[preTestLogCount].person_id);
+            Assert_LogEnrollment(oldEnrollment, logEnrollments[preTestLogCount]);
         }
 
         [Test]
@@ -898,8 +852,7 @@ namespace Netus2_Test.logAccess_Tests
         {
             int preTestLogCount = logReader.Read_LogEnrollment(connection).Count;
 
-            TestDataBuilder withData = new TestDataBuilder(connection);
-            student = withData.student;
+            Person student = testDataBuilder.student;
             Enrollment oldEnrollment = student.Enrollments[0];
             student.Enrollments.Clear();
             personDaoImpl.Update(student, connection);
@@ -908,13 +861,13 @@ namespace Netus2_Test.logAccess_Tests
 
             Assert.IsNotNull(logEnrollments);
             Assert.IsNotEmpty(logEnrollments);
-            Assert.AreEqual(preTestLogCount + 2, logEnrollments.Count);
+            Assert.AreEqual(preTestLogCount + 1, logEnrollments.Count);
 
-            Assert_LogTable((int)logEnrollments[preTestLogCount + 1].enrollment_id, 2, "log_enrollment", connection);
-            Assert.AreEqual(Enum_Log_Action.values["delete"], logEnrollments[preTestLogCount + 1].LogAction);
+            Assert_LogTable((int)logEnrollments[preTestLogCount].enrollment_id, logEnrollments.Count, "log_enrollment", connection);
+            Assert.AreEqual(Enum_Log_Action.values["delete"], logEnrollments[preTestLogCount].LogAction);
 
-            Assert.AreEqual(student.Id, logEnrollments[preTestLogCount + 1].person_id);
-            Assert_LogEnrollment(oldEnrollment, logEnrollments[preTestLogCount + 1]);
+            Assert.AreEqual(student.Id, logEnrollments[preTestLogCount].person_id);
+            Assert_LogEnrollment(oldEnrollment, logEnrollments[preTestLogCount]);
         }
 
         [Test]
@@ -922,8 +875,7 @@ namespace Netus2_Test.logAccess_Tests
         {
             int preTestLogCount = logReader.Read_LogMark(connection).Count;
 
-            TestDataBuilder withData = new TestDataBuilder(connection);
-            student = withData.student;
+            Person student = testDataBuilder.student;
             Mark oldMark = student.Marks[0];
             oldMark.Comment = "New comment for old mark";
             markDaoImpl.Update(oldMark, student.Id, connection);
@@ -932,13 +884,13 @@ namespace Netus2_Test.logAccess_Tests
 
             Assert.IsNotNull(logMarks);
             Assert.IsNotEmpty(logMarks);
-            Assert.AreEqual(preTestLogCount + 2, logMarks.Count);
+            Assert.AreEqual(preTestLogCount + 1, logMarks.Count);
 
-            Assert_LogTable((int)logMarks[preTestLogCount + 1].mark_id, 2, "log_mark", connection);
-            Assert.AreEqual(Enum_Log_Action.values["update"], logMarks[preTestLogCount + 1].LogAction);
+            Assert_LogTable((int)logMarks[preTestLogCount].mark_id, 2, "log_mark", connection);
+            Assert.AreEqual(Enum_Log_Action.values["update"], logMarks[preTestLogCount].LogAction);
 
-            Assert.AreEqual(student.Id, logMarks[preTestLogCount + 1].person_id);
-            Assert_LogMark(oldMark, logMarks[preTestLogCount + 1]);
+            Assert.AreEqual(student.Id, logMarks[preTestLogCount].person_id);
+            Assert_LogMark(oldMark, logMarks[preTestLogCount]);
         }
 
         [Test]
@@ -946,8 +898,7 @@ namespace Netus2_Test.logAccess_Tests
         {
             int preTestLogCount = logReader.Read_LogMark(connection).Count;
 
-            TestDataBuilder withData = new TestDataBuilder(connection);
-            student = withData.student;
+            Person student = testDataBuilder.student;
             Mark oldMark = student.Marks[0];
             markDaoImpl.Delete(oldMark, student.Id, connection);
 
@@ -955,13 +906,13 @@ namespace Netus2_Test.logAccess_Tests
 
             Assert.IsNotNull(logMarks);
             Assert.IsNotEmpty(logMarks);
-            Assert.AreEqual(preTestLogCount + 2, logMarks.Count);
+            Assert.AreEqual(preTestLogCount + 1, logMarks.Count);
 
-            Assert_LogTable((int)logMarks[preTestLogCount + 1].mark_id, 2, "log_mark", connection);
-            Assert.AreEqual(Enum_Log_Action.values["delete"], logMarks[preTestLogCount + 1].LogAction);
+            Assert_LogTable((int)logMarks[preTestLogCount].mark_id, 2, "log_mark", connection);
+            Assert.AreEqual(Enum_Log_Action.values["delete"], logMarks[preTestLogCount].LogAction);
 
-            Assert.AreEqual(student.Id, logMarks[preTestLogCount + 1].person_id);
-            Assert_LogMark(oldMark, logMarks[preTestLogCount + 1]);
+            Assert.AreEqual(student.Id, logMarks[preTestLogCount].person_id);
+            Assert_LogMark(oldMark, logMarks[preTestLogCount]);
         }
 
         [Test]
@@ -969,10 +920,10 @@ namespace Netus2_Test.logAccess_Tests
         {
             int preTestLogCount = logReader.Read_JctEnrollmentAcademicSession(connection).Count;
 
-            Organization org = organizationDaoImpl.Write(testDataBuilder.SimpleOrg(), connection);
-            AcademicSession academicSession = academicSessionDaoImpl.Write(testDataBuilder.SimpleAcademicSession(org), connection);
-            Person student = personDaoImpl.Write(testDataBuilder.SimpleStudent(), connection);
-            Enrollment enrollment = enrollmentDaoImpl.Write(testDataBuilder.SimpleEnrollment(null, academicSession), student.Id, connection);
+            Organization org = testDataBuilder.school;
+            AcademicSession academicSession = testDataBuilder.schoolYear;
+            Person student = testDataBuilder.student;
+            Enrollment enrollment = testDataBuilder.enrollment;
 
             AcademicSession newAcademicSession = new AcademicSession("New Academic Session Name", Enum_Session.values["grading period"], org, "T1");
             newAcademicSession = academicSessionDaoImpl.Write(newAcademicSession, connection);

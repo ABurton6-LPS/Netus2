@@ -87,70 +87,75 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 while (reader.Read())
                 {
                     MarkDao foundMarkDao = new MarkDao();
+
+                    List<string> columnNames = new List<String>();
                     for (int i = 0; i < reader.FieldCount; i++)
+                        columnNames.Add(reader.GetName(i));
+
+                    foreach (string columnName in columnNames)
                     {
-                        var value = reader.GetValue(i);
-                        switch (i)
+                        var value = reader.GetValue(reader.GetOrdinal(columnName));
+                        switch (columnName)
                         {
-                            case 0:
+                            case "mark_id":
                                 if (value != DBNull.Value)
                                     foundMarkDao.mark_id = (int)value;
                                 else
                                     foundMarkDao.mark_id = null;
                                 break;
-                            case 1:
+                            case "lineitem_id":
                                 if (value != DBNull.Value)
                                     foundMarkDao.lineitem_id = (int)value;
                                 else
                                     foundMarkDao.lineitem_id = null;
                                 break;
-                            case 2:
+                            case "person_id":
                                 if (value != DBNull.Value)
                                     foundMarkDao.person_id = (int)value;
                                 else
                                     foundMarkDao.person_id = null;
                                 break;
-                            case 3:
+                            case "enum_score_status_id":
                                 if (value != DBNull.Value)
                                     foundMarkDao.enum_score_status_id = (int)value;
                                 else
                                     foundMarkDao.enum_score_status_id = null;
                                 break;
-                            case 4:
+                            case "score":
                                 if (value != DBNull.Value)
                                     foundMarkDao.score = (double)value;
                                 else
                                     foundMarkDao.score = null;
                                 break;
-                            case 5:
+                            case "score_date":
                                 if (value != DBNull.Value)
                                     foundMarkDao.score_date = (DateTime)value;
                                 else
                                     foundMarkDao.score_date = null;
                                 break;
-                            case 6:
+                            case "comment":
                                 foundMarkDao.comment = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 7:
+                            case "created":
                                 if (value != DBNull.Value)
                                     foundMarkDao.created = (DateTime)value;
                                 else
                                     foundMarkDao.created = null;
                                 break;
-                            case 8:
+                            case "created_by":
                                 foundMarkDao.created_by = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 9:
+                            case "changed":
                                 if (value != DBNull.Value)
                                     foundMarkDao.changed = (DateTime)value;
                                 else
                                     foundMarkDao.changed = null;
                                 break;
-                            case 10:
+                            case "changed_by":
                                 foundMarkDao.changed_by = value != DBNull.Value ? (string)value : null;
                                 break;
                             default:
-                                throw new Exception("Unexpected column found in mark table: " + reader.GetName(i));
+                                throw new Exception("Unexpected column found in mark table: " + columnName);
                         }
                     }
                     foundMarkDaos.Add(foundMarkDao);

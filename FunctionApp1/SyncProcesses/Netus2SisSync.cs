@@ -11,13 +11,10 @@ namespace Netus2SisSync.SyncProcesses
         [FunctionName("Netus2SisSync")]
         public static void Run([TimerTrigger("0 */5 * * * *")]TimerInfo myTimer)
         {
-            IConnectable netus2Connection = DbConnectionFactory.GetConnection("Netus2");
-            IConnectable miStarConnection = DbConnectionFactory.GetConnection("MiStar");
+            IConnectable netus2Connection = DbConnectionFactory.GetNetus2Connection();
+            IConnectable miStarConnection = DbConnectionFactory.GetMiStarConnection();
             try
             {
-                netus2Connection.OpenConnection();
-                miStarConnection.OpenConnection();
-
                 SyncJob syncOrganizationJob = SyncLogger.LogNewJob("Organization_Start", netus2Connection);
                 SyncOrganization.Start(syncOrganizationJob, miStarConnection, netus2Connection);
                 SyncLogger.LogStatus(syncOrganizationJob, Enum_Sync_Status.values["end"], netus2Connection);

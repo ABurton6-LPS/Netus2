@@ -157,55 +157,60 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 while (reader.Read())
                 {
                     OrganizationDao foundOrganizationDao = new OrganizationDao();
+
+                    List<string> columnNames = new List<String>();
                     for (int i = 0; i < reader.FieldCount; i++)
+                        columnNames.Add(reader.GetName(i));
+
+                    foreach (string columnName in columnNames)
                     {
-                        var value = reader.GetValue(i);
-                        switch (i)
+                        var value = reader.GetValue(reader.GetOrdinal(columnName));
+                        switch (columnName)
                         {
-                            case 0:
+                            case "organization_id":
                                 if (value != DBNull.Value)
                                     foundOrganizationDao.organization_id = (int)value;
                                 else
                                     foundOrganizationDao.organization_id = null;
                                 break;
-                            case 1:
+                            case "name":
                                 foundOrganizationDao.name = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 2:
+                            case "enum_organization_id":
                                 if (value != DBNull.Value)
                                     foundOrganizationDao.enum_organization_id = (int)value;
                                 else
                                     foundOrganizationDao.enum_organization_id = null;
                                 break;
-                            case 3:
+                            case "identifier":
                                 foundOrganizationDao.identifier = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 4:
+                            case "building_code":
                                 foundOrganizationDao.building_code = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 5:
+                            case "organization_parent_id":
                                 foundOrganizationDao.organization_parent_id = value != DBNull.Value ? (int)value : -1;
                                 break;
-                            case 6:
+                            case "created":
                                 if (value != DBNull.Value)
                                     foundOrganizationDao.created = (DateTime)value;
                                 else
                                     foundOrganizationDao.created = null;
                                 break;
-                            case 7:
+                            case "created_by":
                                 foundOrganizationDao.created_by = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 8:
+                            case "changed":
                                 if (value != DBNull.Value)
                                     foundOrganizationDao.changed = (DateTime)value;
                                 else
                                     foundOrganizationDao.changed = null;
                                 break;
-                            case 9:
+                            case "changed_by":
                                 foundOrganizationDao.changed_by = value != DBNull.Value ? (string)value : null;
                                 break;
                             default:
-                                throw new Exception("Unexpected column found in organization table: " + reader.GetName(i));
+                                throw new Exception("Unexpected column found in organization table: " + columnName);
                         }
                     }
                     foundOrganizationsDaos.Add(foundOrganizationDao);

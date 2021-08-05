@@ -137,8 +137,7 @@ namespace Netus2SisSync.SyncProcesses.Tasks
             IConnectable connection = null;
             try
             {
-                connection = DbConnectionFactory.GetConnection("Netus2");
-                connection.OpenConnection();
+                connection = DbConnectionFactory.GetNetus2Connection();
 
                 task = SyncLogger.LogNewTask("Person_SynccForAllRecords", job, connection);
 

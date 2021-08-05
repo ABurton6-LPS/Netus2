@@ -13,8 +13,7 @@ namespace Netus2_Test.dbAccess_Tests
         [Test]
         public void Test_0_OpenConnection()
         {
-            connection = DbConnectionFactory.GetConnection("Local");
-            connection.OpenConnection();
+            connection = DbConnectionFactory.GetLocalConnection();
             connection.BeginTransaction();
         }
 

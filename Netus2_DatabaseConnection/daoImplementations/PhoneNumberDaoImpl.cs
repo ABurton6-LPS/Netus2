@@ -77,58 +77,63 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 while (reader.Read())
                 {
                     PhoneNumberDao foundPhoneNumberDao = new PhoneNumberDao();
+
+                    List<string> columnNames = new List<String>();
                     for (int i = 0; i < reader.FieldCount; i++)
+                        columnNames.Add(reader.GetName(i));
+
+                    foreach (string columnName in columnNames)
                     {
-                        var value = reader.GetValue(i);
-                        switch (i)
+                        var value = reader.GetValue(reader.GetOrdinal(columnName));
+                        switch (columnName)
                         {
-                            case 0:
+                            case "phone_number_id":
                                 if (value != DBNull.Value)
                                     foundPhoneNumberDao.phone_number_id = (int)value;
                                 else
                                     foundPhoneNumberDao.phone_number_id = null;
                                 break;
-                            case 1:
+                            case "person_id":
                                 if (value != DBNull.Value)
                                     foundPhoneNumberDao.person_id = (int)value;
                                 else
                                     foundPhoneNumberDao.person_id = null;
                                 break;
-                            case 2:
+                            case "phone_number":
                                 foundPhoneNumberDao.phone_number = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 3:
+                            case "is_primary_id":
                                 if (value != DBNull.Value)
                                     foundPhoneNumberDao.is_primary_id = (int)value;
                                 else
                                     foundPhoneNumberDao.is_primary_id = null;
                                 break;
-                            case 4:
+                            case "enum_phone_id":
                                 if (value != DBNull.Value)
                                     foundPhoneNumberDao.enum_phone_id = (int)value;
                                 else
                                     foundPhoneNumberDao.enum_phone_id = null;
                                 break;
-                            case 5:
+                            case "created":
                                 if (value != DBNull.Value)
                                     foundPhoneNumberDao.created = (DateTime)value;
                                 else
                                     foundPhoneNumberDao.created = null;
                                 break;
-                            case 6:
+                            case "created_by":
                                 foundPhoneNumberDao.created_by = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 7:
+                            case "changed":
                                 if (value != DBNull.Value)
                                     foundPhoneNumberDao.changed = (DateTime)value;
                                 else
                                     foundPhoneNumberDao.changed = null;
                                 break;
-                            case 8:
+                            case "changed_by":
                                 foundPhoneNumberDao.changed_by = value != DBNull.Value ? (string)value : null;
                                 break;
                             default:
-                                throw new Exception("Unexpected column found in phone_number table: " + reader.GetName(i));
+                                throw new Exception("Unexpected column found in phone_number table: " + columnName);
                         }
                     }
                     foundPhoneNumbersDao.Add(foundPhoneNumberDao);

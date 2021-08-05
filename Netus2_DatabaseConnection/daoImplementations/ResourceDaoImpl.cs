@@ -89,55 +89,60 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 while (reader.Read())
                 {
                     ResourceDao foundResourceDao = new ResourceDao();
+
+                    List<string> columnNames = new List<String>();
                     for (int i = 0; i < reader.FieldCount; i++)
+                        columnNames.Add(reader.GetName(i));
+
+                    foreach (string columnName in columnNames)
                     {
-                        var value = reader.GetValue(i);
-                        switch (i)
+                        var value = reader.GetValue(reader.GetOrdinal(columnName));
+                        switch (columnName)
                         {
-                            case 0:
+                            case "resource_id":
                                 if (value != DBNull.Value)
                                     foundResourceDao.resource_id = (int)value;
                                 else
                                     foundResourceDao.resource_id = null;
                                 break;
-                            case 1:
+                            case "name":
                                 foundResourceDao.name = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 2:
+                            case "enum_importance_id":
                                 if (value != DBNull.Value)
                                     foundResourceDao.enum_importance_id = (int)value;
                                 else
                                     foundResourceDao.enum_importance_id = null;
                                 break;
-                            case 3:
+                            case "vendor_resource_identification":
                                 foundResourceDao.vendor_resource_identification = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 4:
+                            case "vendor_identification":
                                 foundResourceDao.vendor_identification = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 5:
+                            case "application_identification":
                                 foundResourceDao.application_identification = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 6:
+                            case "created":
                                 if (value != DBNull.Value)
                                     foundResourceDao.created = (DateTime)value;
                                 else
                                     foundResourceDao.created = null;
                                 break;
-                            case 7:
+                            case "created_by":
                                 foundResourceDao.created_by = value != DBNull.Value ? (string)value : null;
                                 break;
-                            case 8:
+                            case "changed":
                                 if (value != DBNull.Value)
                                     foundResourceDao.changed = (DateTime)value;
                                 else
                                     foundResourceDao.changed = null;
                                     break;
-                            case 9:
+                            case "changed_by":
                                 foundResourceDao.changed_by = value != DBNull.Value ? (string)value : null;
                                 break;
                             default:
-                                throw new Exception("Unexpected column found in resource table: " + reader.GetName(i));
+                                throw new Exception("Unexpected column found in resource table: " + columnName);
                         }
                     }
                     foundResourceDaos.Add(foundResourceDao);

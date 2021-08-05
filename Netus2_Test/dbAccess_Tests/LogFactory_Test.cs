@@ -14,8 +14,7 @@ namespace Netus2_Test.dbAccess_Tests
         [SetUp]
         public void Setup()
         {
-            connection = DbConnectionFactory.GetConnection("Local");
-            connection.OpenConnection();
+            connection = DbConnectionFactory.GetLocalConnection();
             connection.BeginTransaction();
 
             if (!CheckIfTableExists("enum_log_action"))
@@ -73,7 +72,17 @@ namespace Netus2_Test.dbAccess_Tests
                 LogFactory.BuildLogs(connection);
 
             Assert.True(CheckIfTableExists(tableName));
-            Assert.AreEqual(expectedColumns, GetColumnsInTable(tableName));
+
+            List<string> columnsInTable = GetColumnsInTable(tableName);
+
+            Assert.AreEqual(expectedColumns.Count, columnsInTable.Count);
+            foreach (string expectedColumName in expectedColumns)
+            {
+                if (columnsInTable.Contains(expectedColumName))
+                    Assert.Pass();
+                else
+                    Assert.Fail(tableName + " does not contain the expected column " + expectedColumName);
+            }
         }
 
         public bool CheckIfTableExists(string tableName)
@@ -102,14 +111,14 @@ namespace Netus2_Test.dbAccess_Tests
         private List<String> GetColumnsInTable(string tableName)
         {
             List<String> foundColumns = new List<String>();
-            string sql = "SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = N'" + tableName + "' AND COLUMN_NAME NOT LIKE 'populated_by'";
+            string sql = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = N'" + tableName + "' AND COLUMN_NAME NOT LIKE 'populated_by'";
             IDataReader reader = null;
             try
             {
                 reader = connection.GetReader(sql);
                 while (reader.Read())
                 {
-                    foundColumns.Add(reader.GetString(3));
+                    foundColumns.Add(reader.GetString(reader.GetOrdinal("COLUMN_NAME")));
                 }
             }
             finally
@@ -306,6 +315,8 @@ namespace Netus2_Test.dbAccess_Tests
                         break;
                     case "log_academic_session":
                         expectedColumns.Add("log_academic_session_id");
+                        expectedColumns.Add("term_code");
+                        expectedColumns.Add("school_year");
                         expectedColumns.Add("academic_session_id");
                         expectedColumns.Add("name");
                         expectedColumns.Add("start_date");
