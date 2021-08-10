@@ -224,7 +224,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private Organization Read_Organization(int orgId, IConnectable connection)
         {
-            IOrganizationDao organizationDaoImpl = new OrganizationDaoImpl();
+            IOrganizationDao organizationDaoImpl = DaoImplFactory.GetOrganizationDaoImpl();
             return organizationDaoImpl.Read_WithOrganizationId(orgId, connection);
         }
 

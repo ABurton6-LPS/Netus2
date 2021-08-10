@@ -1,6 +1,5 @@
 ﻿using Moq;
-using Netus2_DatabaseConnection.enumerations;
-using System;
+using NUnit.Framework;
 using System.Collections.Generic;
 using System.Data;
 
@@ -22,6 +21,7 @@ namespace Netus2_DatabaseConnection.dbAccess
             testEnumKeys.Add("district");
             testEnumKeys.Add("school");
             testEnumKeys.Add("school year");
+            testEnumKeys.Add("semester");
             testEnumKeys.Add("male");
             testEnumKeys.Add("cau");
             testEnumKeys.Add("primary teacher");
@@ -40,6 +40,10 @@ namespace Netus2_DatabaseConnection.dbAccess
             testEnumKeys.Add("6");
             testEnumKeys.Add("submitted");
             testEnumKeys.Add("student id");
+            testEnumKeys.Add("tstsession");
+            testEnumKeys.Add("01652");
+            testEnumKeys.Add("staff");
+            testEnumKeys.Add("newtststatus");
         }
 
         public ConnectionState GetState()
@@ -113,6 +117,25 @@ namespace Netus2_DatabaseConnection.dbAccess
 
         public int InsertNewRecord(string sql)
         {
+            if (sql.Contains("INSERT INTO sync_error"))
+            {
+                string values = sql.Substring(82);
+                string[] separatedValues = values.Split(", '");
+
+                string errorMessage = separatedValues[1].Substring(0, separatedValues[1].Length - 1).Trim();
+
+                string fullStackTrace = separatedValues[2].Trim();
+                string stackTraceWithoutFrill = fullStackTrace.Substring(fullStackTrace.IndexOf("at ") + 3, fullStackTrace.Length - 4);
+                string[] stackTraceParts = stackTraceWithoutFrill.Split(" in ");
+                string stackTrace = "";
+                foreach(string stackTracePart in stackTraceParts)
+                {
+                    stackTrace += stackTracePart.Trim() + "\n";
+                }
+
+                Assert.Fail("An error was logged:\n" + errorMessage + "\n" + stackTrace);
+            }
+
             return 1;
         }
     }

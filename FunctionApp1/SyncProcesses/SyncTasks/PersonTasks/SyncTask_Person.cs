@@ -28,10 +28,6 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.PersonTasks
             try
             {
                 Enumeration sisPersonType = Enum_Role.values[row["person_type"].ToString()];
-                if (sisPersonType == Enum_Role.values["student"])
-                {
-                    int x = 0;
-                }
                 string sisId = row["SIS_ID"].ToString() == "" ? null : row["SIS_ID"].ToString();
                 string sisFirstName = row["first_name"].ToString() == "" ? null : row["first_name"].ToString();
                 string sisMiddleName = row["middle_name"].ToString() == "" ? null : row["middle_name"].ToString();
@@ -53,10 +49,10 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.PersonTasks
                     typeOfSisId = Enum_Identifier.values["student id"];
                 }
                 UniqueIdentifier uniqueId = new UniqueIdentifier(sisId, typeOfSisId, Enum_True_False.values["true"]);
-                IUniqueIdentifierDao uniqueIdentifierDaoImpl = new UniqueIdentifierDaoImpl();
+                IUniqueIdentifierDao uniqueIdentifierDaoImpl = DaoImplFactory.GetUniqueIdentifierDaoImpl();
                 List<UniqueIdentifier> foundUniqueIdentifiers = uniqueIdentifierDaoImpl.Read(uniqueId, -1, _netus2Connection);
 
-                IPersonDao personDaoImpl = new PersonDaoImpl();
+                IPersonDao personDaoImpl = DaoImplFactory.GetPersonDaoImpl();
                 Person person = person = new Person(sisFirstName, sisLastName, sisBirthDate, sisGender, sisEthnic);
 
                 if (foundUniqueIdentifiers.Count == 0)

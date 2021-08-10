@@ -7,27 +7,29 @@ using System;
 
 namespace Netus2_Test
 {
-    class TestDataBuilder
+    public class TestDataBuilder
     {
-        IOrganizationDao organizationDaoImpl = new OrganizationDaoImpl();
-        IAcademicSessionDao academicSessionDaoImpl = new AcademicSessionDaoImpl();
-        IPersonDao personDaoImpl = new PersonDaoImpl();
-        IEmploymentSessionDao employmentSessionDaoImpl = new EmploymentSessionDaoImpl();
-        ICourseDao courseDaoImpl = new CourseDaoImpl();
-        IClassEnrolledDao classEnrolledDaoImpl = new ClassEnrolledDaoImpl();
-        IResourceDao resourceDaoImpl = new ResourceDaoImpl();
-        ILineItemDao lineItemDaoImpl = new LineItemDaoImpl();
-        IEnrollmentDao enrollmentDaoImpl = new EnrollmentDaoImpl();
-        IMarkDao markDaoImpl = new MarkDaoImpl();
-        IUniqueIdentifierDao uniqueIdentifierDaoImpl = new UniqueIdentifierDaoImpl();
-        IAddressDao addressDaoImpl = new AddressDaoImpl();
-        IPhoneNumberDao phoneNumberDaoImpl = new PhoneNumberDaoImpl();
-        IProviderDao providerDaoImpl = new ProviderDaoImpl();
-        IApplicationDao applicationDaoImpl = new ApplicationDaoImpl();
+        IOrganizationDao organizationDaoImpl = DaoImplFactory.GetOrganizationDaoImpl();
+        IAcademicSessionDao academicSessionDaoImpl = DaoImplFactory.GetAcademicSessionDaoImpl();
+        IPersonDao personDaoImpl = DaoImplFactory.GetPersonDaoImpl();
+        IEmploymentSessionDao employmentSessionDaoImpl = DaoImplFactory.GetEmploymentSessionDaoImpl();
+        ICourseDao courseDaoImpl = DaoImplFactory.GetCourseDaoImpl();
+        IClassEnrolledDao classEnrolledDaoImpl = DaoImplFactory.GetClassEnrolledDaoImpl();
+        IResourceDao resourceDaoImpl = DaoImplFactory.GetResourceDaoImpl();
+        ILineItemDao lineItemDaoImpl = DaoImplFactory.GetLineItemDaoImpl();
+        IEnrollmentDao enrollmentDaoImpl = DaoImplFactory.GetEnrollmentDaoImpl();
+        IMarkDao markDaoImpl = DaoImplFactory.GetMarkDaoImpl();
+        IUniqueIdentifierDao uniqueIdentifierDaoImpl = DaoImplFactory.GetUniqueIdentifierDaoImpl();
+        IAddressDao addressDaoImpl = DaoImplFactory.GetAddressDaoImpl();
+        IPhoneNumberDao phoneNumberDaoImpl = DaoImplFactory.GetPhoneNumberDaoImpl();
+        IProviderDao providerDaoImpl = DaoImplFactory.GetProviderDaoImpl();
+        IApplicationDao applicationDaoImpl = DaoImplFactory.GetApplicationDaoImpl();
 
         public Organization district;
         public Organization school;
         public AcademicSession schoolYear;
+        public AcademicSession semester1;
+        public AcademicSession semester2;
         public Person teacher;
         public EmploymentSession employmentSession;
         public Course spanishCourse;
@@ -64,8 +66,7 @@ namespace Netus2_Test
             else
                 district.Id = 1;
 
-            school = new Organization("livonia high school", Enum_Organization.values["school"], "lhs", "sBc");
-            school.BuildingCode = DateTime.Now.ToString();
+            school = new Organization("livonia high school", Enum_Organization.values["school"], "lhs", DateTime.Now.ToString());
             if (connection != null)
                 school = organizationDaoImpl.Write(school, connection);
             else
@@ -77,14 +78,34 @@ namespace Netus2_Test
                 school = organizationDaoImpl.Read(school, connection)[0];
             }
 
-            schoolYear = new AcademicSession("2020 - 2021", Enum_Session.values["school year"], school, "T1");
+            schoolYear = new AcademicSession("2021", Enum_Session.values["school year"], school, "T1");
+            schoolYear.SchoolYear = 2021;
             if (connection != null)
                 schoolYear = academicSessionDaoImpl.Write(schoolYear, connection);
             else
                 schoolYear.Id = 1;
 
+            semester1 = new AcademicSession("Semester1", Enum_Session.values["semester"], school, "S1");
+            semester1.SchoolYear = 2021;
+            schoolYear.Children.Add(semester1);
+            if (connection != null)
+                semester1 = academicSessionDaoImpl.Write(semester1, connection);
+            else
+                semester1.Id = 2;
+
+            semester2 = new AcademicSession("Semester2", Enum_Session.values["semester"], school, "S2");
+            semester2.SchoolYear = 2021;
+            schoolYear.Children.Add(semester2);
+            if (connection != null)
+                semester2 = academicSessionDaoImpl.Write(semester2, connection);
+            else
+                semester2.Id = 3;
+
             teacher = new Person("John", "Smith", new DateTime(1985, 9, 6), Enum_Gender.values["male"], Enum_Ethnic.values["cau"]);
             teacher.Roles.Add(Enum_Role.values["primary teacher"]);
+            teacher.MiddleName = "Andrew";
+            teacher.LoginName = "JSmith";
+            teacher.LoginPw = "Login123@Home";
             if (connection != null)
                 teacher = personDaoImpl.Write(teacher, connection);
             else
@@ -118,7 +139,10 @@ namespace Netus2_Test
             if (connection != null)
                 uniqueId_Teacher = uniqueIdentifierDaoImpl.Write(uniqueId_Teacher, teacher.Id, connection);
             else
+            {
                 uniqueId_Teacher.Id = 1;
+                teacher.UniqueIdentifiers.Add(uniqueId_Teacher);
+            }
 
             employmentSession = new EmploymentSession("John Smith Employment", Enum_True_False.values["true"], school);
             if (connection != null)
@@ -146,18 +170,14 @@ namespace Netus2_Test
                 resource.Id = 1;
 
             classEnrolled = new ClassEnrolled("Mrs. Beckner 1st hour Spanish Class", "B_1_SPN", Enum_Class.values["scheduled"], "237", spanishCourse, schoolYear);
+            classEnrolled.Resources.Add(resource);
+            classEnrolled.AddStaff(teacher, Enum_Role.values["primary teacher"]);
+            classEnrolled.Periods.Add(Enum_Period.values["1"]);
+            classEnrolled.AcademicSession = semester1;
             if (connection != null)
                 classEnrolled = classEnrolledDaoImpl.Write(classEnrolled, connection);
             else
                 classEnrolled.Id = 1;
-            classEnrolled.Resources.Add(resource);
-            classEnrolled.AddStaff(teacher, Enum_Role.values["primary teacher"]);
-            classEnrolled.Periods.Add(Enum_Period.values["1"]);
-            if (connection != null)
-            {
-                classEnrolledDaoImpl.Update(classEnrolled, connection);
-                classEnrolled = classEnrolledDaoImpl.Read(classEnrolled, connection)[0];
-            }
 
             lineItem = new LineItem("Pop Quiz", new DateTime(2020, 9, 1), new DateTime(2020, 9, 1), classEnrolled, Enum_Category.values["test"], 0.0, 100.00);
             if (connection != null)
@@ -166,6 +186,10 @@ namespace Netus2_Test
                 lineItem.Id = 1;
 
             student = new Person("Tony", "McFarlian", new DateTime(2008, 9, 6), Enum_Gender.values["male"], Enum_Ethnic.values["cau"]);
+            student.ResidenceStatus = Enum_Residence_Status.values["01652"];
+            student.MiddleName = "Andrew";
+            student.LoginName = "TMcFarlian";
+            student.LoginPw = "WouldntYouLikeToKnow";
             if (connection != null)
                 student = personDaoImpl.Write(student, connection);
             else
@@ -210,7 +234,10 @@ namespace Netus2_Test
             if (connection != null)
                 uniqueId_Student = uniqueIdentifierDaoImpl.Write(uniqueId_Student, student.Id, connection);
             else
+            {
                 uniqueId_Student.Id = 2;
+                student.UniqueIdentifiers.Add(uniqueId_Student);
+            }
 
             phoneNumber_Student = new PhoneNumber("8001231234", Enum_True_False.values["true"], Enum_Phone.values["cell"]);
             if (connection != null)

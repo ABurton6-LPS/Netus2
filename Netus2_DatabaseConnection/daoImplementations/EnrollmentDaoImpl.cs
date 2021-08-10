@@ -39,7 +39,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private void Delete_JctEnrollmentAcademicSession(List<AcademicSession> academicSessions, int enrollmentId, IConnectable connection)
         {
-            IJctEnrollmentAcademicSessionDao jctEnrollmentAcademicSessionDaoImpl = new JctEnrollmentAcademicSessionDaoImpl();
+            IJctEnrollmentAcademicSessionDao jctEnrollmentAcademicSessionDaoImpl = DaoImplFactory.GetJctEnrollmentAcademicSessionDaoImpl();
             foreach (AcademicSession academicSession in academicSessions)
             {
                 jctEnrollmentAcademicSessionDaoImpl.Delete(enrollmentId, academicSession.Id, connection);
@@ -190,7 +190,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private ClassEnrolled Read_ClassEnrolled(int classEnrolledId, IConnectable connection)
         {
-            IClassEnrolledDao classEnrolledDaoImpl = new ClassEnrolledDaoImpl();
+            IClassEnrolledDao classEnrolledDaoImpl = DaoImplFactory.GetClassEnrolledDaoImpl();
             return classEnrolledDaoImpl.Read(classEnrolledId, connection);
         }
 
@@ -198,11 +198,11 @@ namespace Netus2_DatabaseConnection.daoImplementations
         {
             List<AcademicSession> foundAcademicSessions = new List<AcademicSession>();
 
-            IJctEnrollmentAcademicSessionDao jctEnrollmentAcademicSessionDaoImpl = new JctEnrollmentAcademicSessionDaoImpl();
+            IJctEnrollmentAcademicSessionDao jctEnrollmentAcademicSessionDaoImpl = DaoImplFactory.GetJctEnrollmentAcademicSessionDaoImpl();
             List<JctEnrollmentAcademicSessionDao> foundJctEnrollmentAcademicSessionDaos =
                 jctEnrollmentAcademicSessionDaoImpl.Read_WithEnrollmentId(enrollmentId, connection);
 
-            IAcademicSessionDao academicSessionDaoImpl = new AcademicSessionDaoImpl();
+            IAcademicSessionDao academicSessionDaoImpl = DaoImplFactory.GetAcademicSessionDaoImpl();
 
             foreach (JctEnrollmentAcademicSessionDao foundJctEnrollmentAcademicSessionDao in foundJctEnrollmentAcademicSessionDaos)
             {
@@ -284,7 +284,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private List<AcademicSession> Update_JctEnrollmentAcademicSession(List<AcademicSession> academicSessions, int enrollmentId, IConnectable connection)
         {
-            IJctEnrollmentAcademicSessionDao jctEnrollmentAcademicSessionDaoImpl = new JctEnrollmentAcademicSessionDaoImpl();
+            IJctEnrollmentAcademicSessionDao jctEnrollmentAcademicSessionDaoImpl = DaoImplFactory.GetJctEnrollmentAcademicSessionDaoImpl();
             List<JctEnrollmentAcademicSessionDao> foundJctEnrollmentAcademicSessionDaos =
                 jctEnrollmentAcademicSessionDaoImpl.Read_WithEnrollmentId(enrollmentId, connection);
             List<int> academicSessionIds = new List<int>();

@@ -28,13 +28,13 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.OrganizationTasks
             try
             {
                 string sisName = row["name"].ToString() == "" ? null : row["name"].ToString();
-                Enumeration sisEnumOrganization = Enum_Organization.values[row["enum_organization_id"].ToString()];
+                Enumeration sisEnumOrganization = Enum_Organization.values[row["enum_organization_id"].ToString().ToLower()];
                 string sisIdentifier = row["identifier"].ToString() == "" ? null : row["identifier"].ToString();
                 string sisBuildingCode = row["building_code"].ToString() == "" ? null : row["building_code"].ToString();
 
                 Organization org = new Organization(sisName, sisEnumOrganization, sisIdentifier, sisBuildingCode);
 
-                IOrganizationDao orgDaoImpl = new OrganizationDaoImpl();
+                IOrganizationDao orgDaoImpl = DaoImplFactory.GetOrganizationDaoImpl();
                 List<Organization> foundOrgs = orgDaoImpl.Read(org, _netus2Connection);
 
                 if (foundOrgs.Count == 0)

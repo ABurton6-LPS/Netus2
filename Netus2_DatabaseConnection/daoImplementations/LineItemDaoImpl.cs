@@ -35,7 +35,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private void Delete_Mark(LineItem lineItem, IConnectable connection)
         {
-            IMarkDao markDaoImpl = new MarkDaoImpl();
+            IMarkDao markDaoImpl = DaoImplFactory.GetMarkDaoImpl();
             List<Mark> foundMarks = markDaoImpl.Read_WithLineItemId(lineItem.Id, connection);
             foreach (Mark foundMark in foundMarks)
             {
@@ -202,7 +202,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private ClassEnrolled Read_ClassEnrolled(int classId, IConnectable connection)
         {
-            IClassEnrolledDao classEnrolledDaoImpl = new ClassEnrolledDaoImpl();
+            IClassEnrolledDao classEnrolledDaoImpl = DaoImplFactory.GetClassEnrolledDaoImpl();
             return classEnrolledDaoImpl.Read(classId, connection);
         }
 

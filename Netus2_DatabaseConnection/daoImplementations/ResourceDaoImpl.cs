@@ -32,7 +32,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private void Delete_JctClassResource(Resource resource, IConnectable connection)
         {
-            IJctClassResourceDao jctClassResourceDaoImpl = new JctClassResourceDaoImpl();
+            IJctClassResourceDao jctClassResourceDaoImpl = DaoImplFactory.GetJctClassResourceDaoImpl();
             List<JctClassResourceDao> foundJctClassResourceDaos =
                 jctClassResourceDaoImpl.Read_WithResourceId(resource.Id, connection);
 

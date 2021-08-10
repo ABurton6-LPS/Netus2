@@ -64,9 +64,9 @@ namespace Netus2SisSync.SyncProcesses.SyncJobs
                                 break;
                             case "SIS_ID":
                                 if (value != DBNull.Value && value != null)
-                                    myDataRow["SIS_ID"] = (int)value;
+                                    myDataRow["SIS_ID"] = (string)value;
                                 else
-                                    myDataRow["SIS_ID"] = -1;
+                                    myDataRow["SIS_ID"] = null;
                                 break;
                             case "first_name":
                                 if (value != DBNull.Value && value != null)

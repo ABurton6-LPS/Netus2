@@ -179,7 +179,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private LineItem Read_LineItem(int lineItemId, IConnectable connection)
         {
-            ILineItemDao lineItemDaoImpl = new LineItemDaoImpl();
+            ILineItemDao lineItemDaoImpl = DaoImplFactory.GetLineItemDaoImpl();
             return lineItemDaoImpl.Read(lineItemId, connection);
         }
 

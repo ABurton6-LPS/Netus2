@@ -34,21 +34,21 @@ namespace Netus2_Test.Integration.daoObject_Tests
 
             tdBuilder = new TestDataBuilder(connection);
 
-            organizationDaoImpl = new OrganizationDaoImpl();
-            academicSessionDaoImpl = new AcademicSessionDaoImpl();
-            personDaoImpl = new PersonDaoImpl();
-            employmentSessionDaoImpl = new EmploymentSessionDaoImpl();
-            courseDaoImpl = new CourseDaoImpl();
-            classEnrolledDaoImpl = new ClassEnrolledDaoImpl();
-            resourceDaoImpl = new ResourceDaoImpl();
-            lineItemDaoImpl = new LineItemDaoImpl();
-            enrollmentDaoImpl = new EnrollmentDaoImpl();
-            markDaoImpl = new MarkDaoImpl();
-            uniqueIdentifierDaoImpl = new UniqueIdentifierDaoImpl();
-            phoneNumberDaoImpl = new PhoneNumberDaoImpl();
-            providerDaoImpl = new ProviderDaoImpl();
-            applicationDaoImpl = new ApplicationDaoImpl();
-            addressDaoImpl = new AddressDaoImpl();
+            organizationDaoImpl = DaoImplFactory.GetOrganizationDaoImpl();
+            academicSessionDaoImpl = DaoImplFactory.GetAcademicSessionDaoImpl();
+            personDaoImpl = DaoImplFactory.GetPersonDaoImpl();
+            employmentSessionDaoImpl = DaoImplFactory.GetEmploymentSessionDaoImpl();
+            courseDaoImpl = DaoImplFactory.GetCourseDaoImpl();
+            classEnrolledDaoImpl = DaoImplFactory.GetClassEnrolledDaoImpl();
+            resourceDaoImpl = DaoImplFactory.GetResourceDaoImpl();
+            lineItemDaoImpl = DaoImplFactory.GetLineItemDaoImpl();
+            enrollmentDaoImpl = DaoImplFactory.GetEnrollmentDaoImpl();
+            markDaoImpl = DaoImplFactory.GetMarkDaoImpl();
+            uniqueIdentifierDaoImpl = DaoImplFactory.GetUniqueIdentifierDaoImpl();
+            addressDaoImpl = DaoImplFactory.GetAddressDaoImpl();
+            phoneNumberDaoImpl = DaoImplFactory.GetPhoneNumberDaoImpl();
+            providerDaoImpl = DaoImplFactory.GetProviderDaoImpl();
+            applicationDaoImpl = DaoImplFactory.GetApplicationDaoImpl();
         }
 
         [Test]

@@ -1,5 +1,4 @@
 ﻿using System.Data;
-using System.Data;
 
 namespace Netus2_DatabaseConnection.dbAccess
 {

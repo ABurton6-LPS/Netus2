@@ -3,6 +3,7 @@
     public static class DbConnectionFactory
     {
         public static bool TestMode = false;
+        public static IConnectable MockDatabaseConnection = null;
 
         private static string LocalDatabaseConnectionString = @"Data Source=ITDSL0995104653;Initial Catalog=Netus2;Integrated Security=SSPI";
         private static string SisDatabaseConnectionString = @"Data Source=tcp:lvboe-zangle.resa.net,1433;Initial Catalog=lvboe;Uid=lvnetus;Pwd=V67A#O9miN#TzQ5x2gzS";
@@ -14,7 +15,9 @@
         {
             if (TestMode)
             {
-                return new MockDatabaseConnection(MockDatabaseConnectionString);
+                if(MockDatabaseConnection == null)
+                    MockDatabaseConnection = new MockDatabaseConnection(MockDatabaseConnectionString);
+                return MockDatabaseConnection;
             }
             else
             {
@@ -26,7 +29,9 @@
         {
             if (TestMode)
             {
-                return new MockDatabaseConnection(MockDatabaseConnectionString);
+                if (MockDatabaseConnection == null)
+                    MockDatabaseConnection = new MockDatabaseConnection(MockDatabaseConnectionString);
+                return MockDatabaseConnection;
             }
             else
             {
@@ -38,7 +43,9 @@
         {
             if (TestMode)
             {
-                return new MockDatabaseConnection(MockDatabaseConnectionString);
+                if (MockDatabaseConnection == null)
+                    MockDatabaseConnection = new MockDatabaseConnection(MockDatabaseConnectionString);
+                return MockDatabaseConnection;
             }
             else
             {

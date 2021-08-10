@@ -56,8 +56,17 @@ namespace Netus2SisSync.SyncProcesses.SyncJobs
                         var value = reader.GetValue(reader.GetOrdinal(columnName));
                         switch (columnName)
                         {
-                            case "session_code":
-                                myDataRow["session_code"] = (string)value;
+                            case "school_code":
+                                myDataRow["school_code"] = (string)value;
+                                break;
+                            case "term_code":
+                                myDataRow["term_code"] = (string)value;
+                                break;
+                            case "school_year":
+                                if (value != DBNull.Value && value != null)
+                                    myDataRow["school_year"] = (int)value;
+                                else
+                                    myDataRow["school_year"] = -1;
                                 break;
                             case "name":
                                 myDataRow["name"] = (string)value;
@@ -80,9 +89,6 @@ namespace Netus2SisSync.SyncProcesses.SyncJobs
                             case "parent_session_code":
                                 if (value != DBNull.Value)
                                     myDataRow["parent_session_code"] = (string)value;
-                                break;
-                            case "organization_id":
-                                myDataRow["organization_id"] = (string)value;
                                 break;
                             default:
                                 throw new Exception("Unexpected column found in SIS lookup for Academic Session: " + columnName);

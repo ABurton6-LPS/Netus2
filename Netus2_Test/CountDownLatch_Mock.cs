@@ -1,6 +1,6 @@
 ﻿using Netus2_DatabaseConnection.utilityTools;
 
-namespace Netus2SisSync.UtilityTools
+namespace Netus2_Test
 {
     public class CountDownLatch_Mock : CountDownLatch
     {

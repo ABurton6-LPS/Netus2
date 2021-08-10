@@ -29,11 +29,11 @@ namespace Netus2_Test.Integration.daoObject_Tests
 
             testDataBuilder = new TestDataBuilder(connection);
 
-            orgDaoImpl = new OrganizationDaoImpl();
-            personDaoImpl = new PersonDaoImpl();
-            phoneNumberDaoImpl = new PhoneNumberDaoImpl();
-            providerDaoImpl = new ProviderDaoImpl();
-            appDaoImpl = new ApplicationDaoImpl();
+            orgDaoImpl = DaoImplFactory.GetOrganizationDaoImpl();
+            personDaoImpl = DaoImplFactory.GetPersonDaoImpl();
+            phoneNumberDaoImpl = DaoImplFactory.GetPhoneNumberDaoImpl();
+            providerDaoImpl = DaoImplFactory.GetProviderDaoImpl();
+            appDaoImpl = DaoImplFactory.GetApplicationDaoImpl();
         }
 
         [Test]

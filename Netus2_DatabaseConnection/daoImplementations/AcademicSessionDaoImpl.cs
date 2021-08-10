@@ -37,7 +37,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private void Delete_ClassesEnrolled(int academicSessionId, IConnectable connection)
         {
-            IClassEnrolledDao classEnrolledDaoImpl = new ClassEnrolledDaoImpl();
+            IClassEnrolledDao classEnrolledDaoImpl = DaoImplFactory.GetClassEnrolledDaoImpl();
             List<ClassEnrolled> foundClassEnrolleds = classEnrolledDaoImpl.Read_UsingAcademicSessionId(academicSessionId, connection);
             foreach (ClassEnrolled foundClassEnrolled in foundClassEnrolleds)
             {
@@ -61,7 +61,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private void UnlinkEnrollment(AcademicSession academicSession, IConnectable connection)
         {
-            IJctEnrollmentAcademicSessionDao jctEnrollmentAcademicSessionDaoImpl = new JctEnrollmentAcademicSessionDaoImpl();
+            IJctEnrollmentAcademicSessionDao jctEnrollmentAcademicSessionDaoImpl = DaoImplFactory.GetJctEnrollmentAcademicSessionDaoImpl();
             List<JctEnrollmentAcademicSessionDao> linksToBeRemoved = jctEnrollmentAcademicSessionDaoImpl.Read_WithAcademicSessionId(academicSession.Id, connection);
             foreach(JctEnrollmentAcademicSessionDao linkToBeRemoved in linksToBeRemoved)
             {
@@ -277,7 +277,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private Organization Read_Organization(int organizationId, IConnectable connection)
         {
-            IOrganizationDao organizationDaoImpl = new OrganizationDaoImpl();
+            IOrganizationDao organizationDaoImpl = DaoImplFactory.GetOrganizationDaoImpl();
             return organizationDaoImpl.Read_WithOrganizationId(organizationId, connection);
         }
 

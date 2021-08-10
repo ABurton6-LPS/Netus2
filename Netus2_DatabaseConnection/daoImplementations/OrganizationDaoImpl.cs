@@ -33,7 +33,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private void Delete_AcademicSession(Organization organization, IConnectable connection)
         {
-            IAcademicSessionDao academicSessionDaoImpl = new AcademicSessionDaoImpl();
+            IAcademicSessionDao academicSessionDaoImpl = DaoImplFactory.GetAcademicSessionDaoImpl();
             List<AcademicSession> foundAcademicSessions = academicSessionDaoImpl.Read_UsingOrganizationId(organization.Id, connection);
 
             foreach (AcademicSession foundAcademicSession in foundAcademicSessions)
@@ -53,13 +53,12 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private void UnlinkChildren(Organization organization, IConnectable connection)
         {
-            OrganizationDaoImpl orgDaoImpl = new OrganizationDaoImpl();
             List<Organization> childrenToRemove = new List<Organization>();
             foreach (Organization child in organization.Children)
             {
                 childrenToRemove.Add(child);
 
-                List<Organization> foundChildren = orgDaoImpl.Read(child, connection);
+                List<Organization> foundChildren = Read(child, connection);
                 if (foundChildren.Count == 1)
                     Update(foundChildren[0], connection);
                 else if (foundChildren.Count == 0)

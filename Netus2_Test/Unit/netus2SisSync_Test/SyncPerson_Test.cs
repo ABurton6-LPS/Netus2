@@ -1,28 +1,40 @@
 ﻿using NUnit.Framework;
 using Netus2_DatabaseConnection.dbAccess;
-using Netus2SisSync.UtilityTools;
 using System.Data;
 using Moq;
 using System.Collections.Generic;
 using System;
 using Netus2SisSync.SyncProcesses.SyncJobs;
-using Netus2SisSync.SyncProcesses.SyncTasks.OrganizationTasks;
+using Netus2_Test.MockDaoImpl;
+using Netus2_DatabaseConnection.daoImplementations;
+using Netus2SisSync.SyncProcesses.SyncTasks.PersonTasks;
+using Netus2SisSync.UtilityTools;
 
 namespace Netus2_Test.Unit.netus2SisSync_Test
 {
     class SyncPerson_Test
     {
+        TestDataBuilder tdBuilder;
         MockDatabaseConnection _sisConnection;
-        MockDatabaseConnection _netus2DbConnection;
+        MockDatabaseConnection _netus2Connection;
         CountDownLatch_Mock _latch;
+        MockPersonDaoImpl mockPersonDaoImpl;
+        MockUniqueIdentifierDaoImpl mockUniqueIdentifierDaoImpl;
 
         [SetUp]
         public void SetUp()
         {
             DbConnectionFactory.TestMode = true;
             _sisConnection = (MockDatabaseConnection)DbConnectionFactory.GetSisConnection();
-            _netus2DbConnection = (MockDatabaseConnection)DbConnectionFactory.GetNetus2Connection();
+            _netus2Connection = (MockDatabaseConnection)DbConnectionFactory.GetNetus2Connection();
             _latch = new CountDownLatch_Mock(0);
+
+            tdBuilder = new TestDataBuilder();
+            DaoImplFactory.MockAll = true;
+            mockPersonDaoImpl = new MockPersonDaoImpl();
+            DaoImplFactory.MockPersonDaoImpl = mockPersonDaoImpl;
+            mockUniqueIdentifierDaoImpl = new MockUniqueIdentifierDaoImpl();
+            DaoImplFactory.MockUniqueIdentifierDaoImpl = mockUniqueIdentifierDaoImpl;
         }
 
         [TestCase]
@@ -46,7 +58,7 @@ namespace Netus2_Test.Unit.netus2SisSync_Test
 
             SetMockReaderWithTestData(tstDataSet);
 
-            SyncJob_Person syncJob_Person = new SyncJob_Person("TestJob", DateTime.Now, _sisConnection, _netus2DbConnection);
+            SyncJob_Person syncJob_Person = new SyncJob_Person("TestJob", DateTime.Now, _sisConnection, _netus2Connection);
             syncJob_Person.ReadFromSis();
             DataTable results = syncJob_Person._dtPerson;
 
@@ -54,7 +66,7 @@ namespace Netus2_Test.Unit.netus2SisSync_Test
             Assert.NotNull(results);
             Assert.AreEqual(tstDataSet.Count, results.Rows.Count);
             Assert.AreEqual(emptyString, results.Rows[0]["person_type"].ToString());
-            Assert.AreEqual(-1, results.Rows[0]["SIS_ID"]);
+            Assert.AreEqual(emptyString, results.Rows[0]["SIS_ID"].ToString());
             Assert.AreEqual(emptyString, results.Rows[0]["first_name"].ToString());
             Assert.AreEqual(emptyString, results.Rows[0]["middle_name"].ToString());
             Assert.AreEqual(emptyString, results.Rows[0]["last_name"].ToString());
@@ -64,6 +76,156 @@ namespace Netus2_Test.Unit.netus2SisSync_Test
             Assert.AreEqual(emptyString, results.Rows[0]["enum_residence_status_id"].ToString());
             Assert.AreEqual(emptyString, results.Rows[0]["login_name"].ToString());
             Assert.AreEqual(emptyString, results.Rows[0]["login_pw"].ToString());
+        }
+
+        [TestCase]
+        public void SisRead_Person_TestData()
+        {
+            SisPersonTestData tstData = new SisPersonTestData();
+            tstData.PersonType = tdBuilder.teacher.Roles[0].Netus2Code;
+            tstData.SisId = tdBuilder.teacher.UniqueIdentifiers[0].Identifier;
+            tstData.FirstName = tdBuilder.teacher.FirstName;
+            tstData.MiddleName = tdBuilder.teacher.MiddleName;
+            tstData.LastName = tdBuilder.teacher.LastName;
+            tstData.BirthDate = tdBuilder.teacher.BirthDate;
+            tstData.Gender = tdBuilder.teacher.Gender.Netus2Code;
+            tstData.Ethnic = tdBuilder.teacher.Ethnic.Netus2Code;
+            tstData.ResStatus = null;
+            tstData.LoginName = tdBuilder.teacher.LoginName;
+            tstData.LoginPw = tdBuilder.teacher.LoginPw;
+
+            SisPersonTestData tstData2 = new SisPersonTestData();
+            tstData2.PersonType = tdBuilder.student.Roles[0].Netus2Code;
+            tstData2.SisId = tdBuilder.student.UniqueIdentifiers[0].Identifier;
+            tstData2.FirstName = tdBuilder.student.FirstName;
+            tstData2.MiddleName = tdBuilder.student.MiddleName;
+            tstData2.LastName = tdBuilder.student.LastName;
+            tstData2.BirthDate = tdBuilder.student.BirthDate;
+            tstData2.Gender = tdBuilder.student.Gender.Netus2Code;
+            tstData2.Ethnic = tdBuilder.student.Ethnic.Netus2Code;
+            tstData2.ResStatus = tdBuilder.student.ResidenceStatus.Netus2Code;
+            tstData2.LoginName = tdBuilder.student.LoginName;
+            tstData2.LoginPw = tdBuilder.student.LoginPw;
+
+            List<SisPersonTestData> tstDataSet = new List<SisPersonTestData>();
+            tstDataSet.Add(tstData);
+            tstDataSet.Add(tstData2);
+
+            SetMockReaderWithTestData(tstDataSet);
+
+            SyncJob_Person syncJob_Person = new SyncJob_Person("TestJob", DateTime.Now, _sisConnection, _netus2Connection);
+            syncJob_Person.ReadFromSis();
+            DataTable results = syncJob_Person._dtPerson;
+
+            string emptyString = "";
+            Assert.NotNull(results);
+            Assert.AreEqual(tstDataSet.Count, results.Rows.Count);
+            Assert.AreEqual(tstDataSet[0].PersonType, results.Rows[0]["person_type"]);
+            Assert.AreEqual(tstDataSet[0].SisId, results.Rows[0]["SIS_ID"]);
+            Assert.AreEqual(tstDataSet[0].FirstName, results.Rows[0]["first_name"]);
+            Assert.AreEqual(tstDataSet[0].MiddleName, results.Rows[0]["middle_name"]);
+            Assert.AreEqual(tstDataSet[0].LastName, results.Rows[0]["last_name"]);
+            Assert.AreEqual(tstDataSet[0].BirthDate, results.Rows[0]["birth_date"]);
+            Assert.AreEqual(tstDataSet[0].Gender, results.Rows[0]["enum_gender_id"]);
+            Assert.AreEqual(tstDataSet[0].Ethnic, results.Rows[0]["enum_ethnic_id"]);
+            Assert.AreEqual(emptyString, results.Rows[0]["enum_residence_status_id"].ToString());
+            Assert.AreEqual(tstDataSet[0].LoginName, results.Rows[0]["login_name"]);
+            Assert.AreEqual(tstDataSet[0].LoginPw, results.Rows[0]["login_pw"]);
+
+            Assert.AreEqual(tstDataSet[1].PersonType, results.Rows[1]["person_type"]);
+            Assert.AreEqual(tstDataSet[1].SisId, results.Rows[1]["SIS_ID"]);
+            Assert.AreEqual(tstDataSet[1].FirstName, results.Rows[1]["first_name"]);
+            Assert.AreEqual(tstDataSet[1].MiddleName, results.Rows[1]["middle_name"]);
+            Assert.AreEqual(tstDataSet[1].LastName, results.Rows[1]["last_name"]);
+            Assert.AreEqual(tstDataSet[1].BirthDate, results.Rows[1]["birth_date"]);
+            Assert.AreEqual(tstDataSet[1].Gender, results.Rows[1]["enum_gender_id"]);
+            Assert.AreEqual(tstDataSet[1].Ethnic, results.Rows[1]["enum_ethnic_id"]);
+            Assert.AreEqual(tstDataSet[1].ResStatus, results.Rows[1]["enum_residence_status_id"]);
+            Assert.AreEqual(tstDataSet[1].LoginName, results.Rows[1]["login_name"]);
+            Assert.AreEqual(tstDataSet[1].LoginPw, results.Rows[1]["login_pw"]);
+        }
+
+        [TestCase]
+        public void Sync_Person_ShouldWriteNewRecord()
+        {
+            SisPersonTestData tstData = new SisPersonTestData();
+            tstData.PersonType = tdBuilder.student.Roles[0].Netus2Code;
+            tstData.SisId = tdBuilder.student.UniqueIdentifiers[0].Identifier;
+            tstData.FirstName = tdBuilder.student.FirstName;
+            tstData.MiddleName = tdBuilder.student.MiddleName;
+            tstData.LastName = tdBuilder.student.LastName;
+            tstData.BirthDate = tdBuilder.student.BirthDate;
+            tstData.Gender = tdBuilder.student.Gender.Netus2Code;
+            tstData.Ethnic = tdBuilder.student.Ethnic.Netus2Code;
+            tstData.ResStatus = tdBuilder.student.ResidenceStatus.Netus2Code;
+            tstData.LoginName = tdBuilder.student.LoginName;
+            tstData.LoginPw = tdBuilder.student.LoginPw;
+
+            List<SisPersonTestData> tstDataSet = new List<SisPersonTestData>();
+            tstDataSet.Add(tstData);
+            DataRow row = BuildTestDataTable(tstDataSet).Rows[0];
+
+            new SyncTask_Person("TestTask", DateTime.Now,
+                new SyncJob_Person("TestJob", DateTime.Now, _sisConnection, _netus2Connection))
+                .Execute(row, _latch);
+
+            Assert.IsTrue(mockUniqueIdentifierDaoImpl.WasCalled_Read);
+            Assert.IsTrue(mockPersonDaoImpl.WasCalled_Write);
+        }
+
+        [TestCase]
+        public void Sync_Person_ShouldUpdateRecord()
+        {
+            mockUniqueIdentifierDaoImpl.ReadReturnData.Add(tdBuilder.uniqueId_Student);
+            mockPersonDaoImpl.ReadReturnData.Add(tdBuilder.student);
+
+            SisPersonTestData tstData = new SisPersonTestData();
+            tstData.PersonType = tdBuilder.student.Roles[0].Netus2Code;
+            tstData.SisId = tdBuilder.uniqueId_Student.Identifier;
+            tstData.FirstName = tdBuilder.student.FirstName;
+            tstData.MiddleName = tdBuilder.student.MiddleName;
+            tstData.LastName = tdBuilder.student.LastName;
+            tstData.BirthDate = tdBuilder.student.BirthDate;
+            tstData.Gender = tdBuilder.student.Gender.Netus2Code;
+            tstData.Ethnic = tdBuilder.student.Ethnic.Netus2Code;
+            tstData.ResStatus = "newtststatus";
+            tstData.LoginName = tdBuilder.student.LoginName;
+            tstData.LoginPw = tdBuilder.student.LoginPw;
+
+            List<SisPersonTestData> tstDataSet = new List<SisPersonTestData>();
+            tstDataSet.Add(tstData);
+            DataRow row = BuildTestDataTable(tstDataSet).Rows[0];
+
+            new SyncTask_Person("TestTask", DateTime.Now,
+                new SyncJob_Person("TestJob", DateTime.Now, _sisConnection, _netus2Connection))
+                .Execute(row, _latch);
+
+            Assert.IsTrue(mockUniqueIdentifierDaoImpl.WasCalled_Read);
+            Assert.IsTrue(mockPersonDaoImpl.WasCalled_Read);
+            Assert.IsTrue(mockPersonDaoImpl.WasCalled_Update);
+        }
+
+        private DataTable BuildTestDataTable(List<SisPersonTestData> tstDataSet)
+        {
+            DataTable dtPerson = DataTableFactory.CreateDataTable("Person");
+            foreach(SisPersonTestData tstData in tstDataSet)
+            {
+                DataRow row = dtPerson.NewRow();
+                row["person_type"] = tstData.PersonType;
+                row["SIS_ID"] = tstData.SisId;
+                row["first_name"] = tstData.FirstName;
+                row["middle_name"] = tstData.MiddleName;
+                row["last_name"] = tstData.LastName;
+                row["birth_date"] = tstData.BirthDate;
+                row["enum_gender_id"] = tstData.Gender;
+                row["enum_ethnic_id"] = tstData.Ethnic;
+                row["enum_residence_status_id"] = tstData.ResStatus;
+                row["login_name"] = tstData.LoginName;
+                row["login_pw"] = tstData.LoginPw;
+                dtPerson.Rows.Add(row);
+            }
+
+            return dtPerson;
         }
 
         private void SetMockReaderWithTestData(List<SisPersonTestData> tstDataSet)
@@ -162,7 +324,7 @@ namespace Netus2_Test.Unit.netus2SisSync_Test
     class SisPersonTestData
     {
         public string PersonType { get; set; }
-        public int? SisId { get; set; }
+        public string SisId { get; set; }
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
         public string LastName { get; set; }

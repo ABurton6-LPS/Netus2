@@ -16,7 +16,17 @@ namespace Netus2SisSync.UtilityTools
                 case "AcademicSession":
                     dtColumn = new DataColumn();
                     dtColumn.DataType = typeof(string);
-                    dtColumn.ColumnName = "session_code";
+                    dtColumn.ColumnName = "school_code";
+                    dtAcademicSession.Columns.Add(dtColumn);
+
+                    dtColumn = new DataColumn();
+                    dtColumn.DataType = typeof(string);
+                    dtColumn.ColumnName = "term_code";
+                    dtAcademicSession.Columns.Add(dtColumn);
+
+                    dtColumn = new DataColumn();
+                    dtColumn.DataType = typeof(int);
+                    dtColumn.ColumnName = "school_year";
                     dtAcademicSession.Columns.Add(dtColumn);
 
                     dtColumn = new DataColumn();
@@ -42,11 +52,6 @@ namespace Netus2SisSync.UtilityTools
                     dtColumn = new DataColumn();
                     dtColumn.DataType = typeof(string);
                     dtColumn.ColumnName = "parent_session_code";
-                    dtAcademicSession.Columns.Add(dtColumn);
-
-                    dtColumn = new DataColumn();
-                    dtColumn.DataType = typeof(string);
-                    dtColumn.ColumnName = "organization_id";
                     dtAcademicSession.Columns.Add(dtColumn);
                     break;
 
@@ -401,7 +406,7 @@ namespace Netus2SisSync.UtilityTools
                     dtAcademicSession.Columns.Add(dtColumn);
 
                     dtColumn = new DataColumn();
-                    dtColumn.DataType = typeof(int);
+                    dtColumn.DataType = typeof(string);
                     dtColumn.ColumnName = "SIS_ID";
                     dtAcademicSession.Columns.Add(dtColumn);
 
