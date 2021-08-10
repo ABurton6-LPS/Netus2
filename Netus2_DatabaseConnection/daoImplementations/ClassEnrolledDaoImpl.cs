@@ -38,7 +38,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private void Delete_Enrollment(ClassEnrolled classEnrolled, IConnectable connection)
         {
-            IEnrollmentDao enrollmentDaoImpl = new EnrollmentDaoImpl();
+            IEnrollmentDao enrollmentDaoImpl = DaoImplFactory.GetEnrollmentDaoImpl();
             List<Enrollment> enrollmentsFound = enrollmentDaoImpl.Read_WithClassId(classEnrolled.Id, connection);
             foreach (Enrollment foundEnrollment in enrollmentsFound)
             {
@@ -48,7 +48,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private void Delete_JctClassResource(ClassEnrolled classEnrolled, IConnectable connection)
         {
-            IJctClassResourceDao jctClassResourceDaoImpl = new JctClassResourceDaoImpl();
+            IJctClassResourceDao jctClassResourceDaoImpl = DaoImplFactory.GetJctClassResourceDaoImpl();
             foreach (Resource resource in classEnrolled.Resources)
             {
                 jctClassResourceDaoImpl.Delete(classEnrolled.Id, resource.Id, connection);
@@ -57,7 +57,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private void Delete_JctClassPerson(ClassEnrolled classEnrolled, IConnectable connection)
         {
-            IJctClassPersonDao jctClassPersonDaoImpl = new JctClassPersonDaoImpl();
+            IJctClassPersonDao jctClassPersonDaoImpl = DaoImplFactory.GetJctClassPersonDaoImpl();
             foreach (Person person in classEnrolled.GetStaff())
             {
                 jctClassPersonDaoImpl.Delete(classEnrolled.Id, person.Id, connection);
@@ -66,7 +66,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private void Delete_JctClassPeriod(ClassEnrolled classEnrolled, IConnectable connection)
         {
-            IJctClassPeriodDao jctClassPeriodDaoImpl = new JctClassPeriodDaoImpl();
+            IJctClassPeriodDao jctClassPeriodDaoImpl = DaoImplFactory.GetJctClassPeriodDaoImpl();
             foreach (Enumeration period in classEnrolled.Periods)
             {
                 jctClassPeriodDaoImpl.Delete(classEnrolled.Id, period.Id, connection);
@@ -75,7 +75,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private void Delete_LineItem(ClassEnrolled classEnrolled, IConnectable connection)
         {
-            ILineItemDao lineItemDaoImpl = new LineItemDaoImpl();
+            ILineItemDao lineItemDaoImpl = DaoImplFactory.GetLineItemDaoImpl();
             List<LineItem> foundLineItems = lineItemDaoImpl.Read_WithClassEnrolledId(classEnrolled.Id, connection);
             foreach (LineItem foundLineItem in foundLineItems)
             {
@@ -239,13 +239,13 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private AcademicSession Read_AcademicSession(int academicSessionId, IConnectable connection)
         {
-            IAcademicSessionDao academicSessionDaoImpl = new AcademicSessionDaoImpl();
+            IAcademicSessionDao academicSessionDaoImpl = DaoImplFactory.GetAcademicSessionDaoImpl();
             return academicSessionDaoImpl.Read_UsingAcademicSessionId(academicSessionId, connection);
         }
 
         private Course Read_Course(int courseId, IConnectable connection)
         {
-            ICourseDao courseDaoImpl = new CourseDaoImpl();
+            ICourseDao courseDaoImpl = DaoImplFactory.GetCourseDaoImpl();
             return courseDaoImpl.Read(courseId, connection);
         }
 
@@ -254,7 +254,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
             List<Enumeration> foundPeriods = new List<Enumeration>();
             List<int> idsFound = new List<int>();
 
-            IJctClassPeriodDao jctClassPeriodDaoImpl = new JctClassPeriodDaoImpl();
+            IJctClassPeriodDao jctClassPeriodDaoImpl = DaoImplFactory.GetJctClassPeriodDaoImpl();
             List<JctClassPeriodDao> foundJctClassPeriodDaos = jctClassPeriodDaoImpl.Read(classEnrolledId, connection);
             foreach (JctClassPeriodDao foundJctClassPeriodDao in foundJctClassPeriodDaos)
             {
@@ -271,8 +271,8 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private List<Person> Read_JctClassPerson_Staff(int classEnrolledId, IConnectable connection)
         {
-            IPersonDao personDaoImpl = new PersonDaoImpl();
-            IJctClassPersonDao jctClassPersonDaoImpl = new JctClassPersonDaoImpl();
+            IPersonDao personDaoImpl = DaoImplFactory.GetPersonDaoImpl();
+            IJctClassPersonDao jctClassPersonDaoImpl = DaoImplFactory.GetJctClassPersonDaoImpl();
 
             List<Person> foundPersons = new List<Person>();
             List<JctClassPersonDao> foundJctClassPersonDaos =
@@ -289,7 +289,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private List<Enumeration> Read_JctClassPerson_Roles(int classEnrolledId, IConnectable connection)
         {
-            IJctClassPersonDao jctClassPersonDaoImpl = new JctClassPersonDaoImpl();
+            IJctClassPersonDao jctClassPersonDaoImpl = DaoImplFactory.GetJctClassPersonDaoImpl();
 
             List<Enumeration> foundRoles = new List<Enumeration>();
             List<JctClassPersonDao> foundJctClassPersonDaos =
@@ -305,8 +305,8 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private List<Resource> Read_JctClassResource(int classEnrolledId, IConnectable connection)
         {
-            IResourceDao resourceDaoImpl = new ResourceDaoImpl();
-            IJctClassResourceDao jctClassResourceDaoImpl = new JctClassResourceDaoImpl();
+            IResourceDao resourceDaoImpl = DaoImplFactory.GetResourceDaoImpl();
+            IJctClassResourceDao jctClassResourceDaoImpl = DaoImplFactory.GetJctClassResourceDaoImpl();
 
             List<Resource> foundResources = new List<Resource>();
             List<JctClassResourceDao> foundJctClassResourceDaos =
@@ -397,7 +397,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         private List<Resource> UpdateResource(List<Resource> resources, int classId, IConnectable connection)
         {
             List<Resource> updatedResources = new List<Resource>();
-            IResourceDao resourceDaoImpl = new ResourceDaoImpl();
+            IResourceDao resourceDaoImpl = DaoImplFactory.GetResourceDaoImpl();
             foreach (Resource resource in resources)
             {
                 if (resource.Id != -1)
@@ -416,8 +416,8 @@ namespace Netus2_DatabaseConnection.daoImplementations
         private ClassEnrolled UpdateStaff(List<Person> staffs, List<Enumeration> roles, ClassEnrolled classEnrolled, IConnectable connection)
         {
             List<JctClassPersonDao> updatedJctClassPersonDaos = new List<JctClassPersonDao>();
-            IJctClassPersonDao jctClassPersonDaoImpl = new JctClassPersonDaoImpl();
-            IPersonDao personDaoImpl = new PersonDaoImpl();
+            IJctClassPersonDao jctClassPersonDaoImpl = DaoImplFactory.GetJctClassPersonDaoImpl();
+            IPersonDao personDaoImpl = DaoImplFactory.GetPersonDaoImpl();
             List<JctClassPersonDao> foundJctClassPersonDaos =
                 jctClassPersonDaoImpl.Read_WithClassId(classEnrolled.Id, connection);
 
@@ -467,7 +467,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private void UpdateJctClassResource(List<Resource> resources, int classId, IConnectable connection)
         {
-            IJctClassResourceDao jctClassResourceDaoImpl = new JctClassResourceDaoImpl();
+            IJctClassResourceDao jctClassResourceDaoImpl = DaoImplFactory.GetJctClassResourceDaoImpl();
             List<JctClassResourceDao> foundJctClassResourceDaos =
                 jctClassResourceDaoImpl.Read_WithClassId(classId, connection);
 
@@ -500,7 +500,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         private List<Enumeration> UpdateJctClassPeriod(List<Enumeration> periods, int classId, IConnectable connection)
         {
             List<Enumeration> updatedPeriods = new List<Enumeration>();
-            IJctClassPeriodDao jctClassPeriodDaoImpl = new JctClassPeriodDaoImpl();
+            IJctClassPeriodDao jctClassPeriodDaoImpl = DaoImplFactory.GetJctClassPeriodDaoImpl();
             List<JctClassPeriodDao> foundJctClassPeriodDaos =
                 jctClassPeriodDaoImpl.Read(classId, connection);
             List<int> periodIds = new List<int>();

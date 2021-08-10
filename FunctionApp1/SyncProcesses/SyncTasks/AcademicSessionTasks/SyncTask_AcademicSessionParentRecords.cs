@@ -35,12 +35,12 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AcademicSessionTasks
                 string termCode = sisSessionCode.Substring(sisSessionCode.IndexOf('-') + skipThisCharacterAndStartOnNextOne,
                     (sisSessionCode.Length - schoolCode.Length) - schoolYear.ToString().Length - numberOfDashesInSessionCode);
                 string sisName = row["name"].ToString() == "" ? null : row["name"].ToString();
-                Enumeration sisEnumSession = Enum_Session.values[row["enum_session_id"].ToString()];
+                Enumeration sisEnumSession = Enum_Session.values[row["enum_session_id"].ToString().ToLower()];
                 DateTime sisStartDate = DateTime.Parse(row["start_date"].ToString());
                 DateTime sisEndDate = DateTime.Parse(row["end_date"].ToString());
                 string sisOrganizationId = row["organization_id"].ToString() == "" ? null : row["organization_id"].ToString();
 
-                IOrganizationDao orgDaoImpl = new OrganizationDaoImpl();
+                IOrganizationDao orgDaoImpl = DaoImplFactory.GetOrganizationDaoImpl();
                 Organization org = orgDaoImpl.Read_WithBuildingCode(sisOrganizationId, _netus2Connection);
 
                 AcademicSession academicSession = new AcademicSession(sisName, sisEnumSession, org, termCode);
@@ -48,7 +48,7 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AcademicSessionTasks
                 academicSession.StartDate = sisStartDate;
                 academicSession.EndDate = sisEndDate;
 
-                IAcademicSessionDao academicSessionDaoImpl = new AcademicSessionDaoImpl();
+                IAcademicSessionDao academicSessionDaoImpl = DaoImplFactory.GetAcademicSessionDaoImpl();
                 List<AcademicSession> foundAcademicSessions = academicSessionDaoImpl.Read(academicSession, _netus2Connection);
 
                 if (foundAcademicSessions.Count == 1)

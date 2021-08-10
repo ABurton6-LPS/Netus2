@@ -29,7 +29,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private void DeleteJctPersonApp(Application application, IConnectable connection)
         {
-            IJctPersonAppDao jctPersonAppDaoImpl = new JctPersonAppDaoImpl();
+            IJctPersonAppDao jctPersonAppDaoImpl = DaoImplFactory.GetJctPersonAppDaoImpl();
             List<JctPersonAppDao> foundJctPersonAppDaos = jctPersonAppDaoImpl.Read_WithAppId(application.Id, connection);
 
             foreach (JctPersonAppDao foundJctPersonAppDao in foundJctPersonAppDaos)
@@ -162,7 +162,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private Provider Read_Provider(int providerId, IConnectable connection)
         {
-            IProviderDao providerDaoImpl = new ProviderDaoImpl();
+            IProviderDao providerDaoImpl = DaoImplFactory.GetProviderDaoImpl();
             return providerDaoImpl.Read_WithProviderId(providerId, connection);
         }
 

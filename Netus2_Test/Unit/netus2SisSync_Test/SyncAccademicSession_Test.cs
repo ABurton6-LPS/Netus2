@@ -7,14 +7,19 @@ using System.Collections.Generic;
 using System;
 using Netus2SisSync.SyncProcesses.SyncJobs;
 using Netus2SisSync.SyncProcesses.SyncTasks.AcademicSessionTasks;
+using Netus2_DatabaseConnection.daoImplementations;
+using Netus2_Test.MockDaoImpl;
 
 namespace Netus2_Test.Unit.netus2SisSync_Test
 {
     public class SyncAccademicSession_Test
     {
+        TestDataBuilder tdBuilder;
         MockDatabaseConnection _sisConnection;
         MockDatabaseConnection _netus2DbConnection;
         CountDownLatch_Mock _latch;
+        MockAcademicSessionDaoImpl mockAcademicSessionDaoImpl;
+        MockOrganizationDaoImpl mockOrganizationDaoImpl;
 
         [SetUp]
         public void SetUp()
@@ -23,6 +28,13 @@ namespace Netus2_Test.Unit.netus2SisSync_Test
             _sisConnection = (MockDatabaseConnection)DbConnectionFactory.GetSisConnection();
             _netus2DbConnection = (MockDatabaseConnection)DbConnectionFactory.GetNetus2Connection();
             _latch = new CountDownLatch_Mock(0);
+
+            tdBuilder = new TestDataBuilder();
+            DaoImplFactory.MockAll = true;
+            mockAcademicSessionDaoImpl = new MockAcademicSessionDaoImpl(tdBuilder);
+            DaoImplFactory.MockAcademicSessionDaoImpl = mockAcademicSessionDaoImpl;
+            mockOrganizationDaoImpl = new MockOrganizationDaoImpl(tdBuilder);
+            DaoImplFactory.MockOrganizationDaoImpl = mockOrganizationDaoImpl;
         }
 
         [TestCase]
@@ -56,6 +68,189 @@ namespace Netus2_Test.Unit.netus2SisSync_Test
             Assert.AreEqual(new DateTime().ToString(), results.Rows[0]["end_date"].ToString());
             Assert.AreEqual(emptyString, results.Rows[0]["parent_session_code"].ToString());
             Assert.AreEqual(emptyString, results.Rows[0]["organization_id"].ToString());
+        }
+
+        [TestCase]
+        public void SisRead_AcademicSession_TestData()
+        {
+            SisAcademicSessionTestData tstData = new SisAcademicSessionTestData();
+            tstData.SessionCode = tdBuilder.school.BuildingCode + "-" + tdBuilder.semester1.TermCode + "-" + tdBuilder.semester1.SchoolYear;
+            tstData.Name = tdBuilder.semester1.Name;
+            tstData.SessionId = tdBuilder.semester1.SessionType.Netus2Code;
+            tstData.StartDate = tdBuilder.semester1.StartDate;
+            tstData.EndDate = tdBuilder.semester1.EndDate;
+            tstData.ParSessionCode = tdBuilder.school.BuildingCode + "-" + tdBuilder.schoolYear.TermCode + "-" + tdBuilder.schoolYear.SchoolYear;
+            tstData.OrgId = tdBuilder.district.BuildingCode;
+
+            SisAcademicSessionTestData tstData2 = new SisAcademicSessionTestData();
+            tstData2.SessionCode = tdBuilder.school.BuildingCode + "-" + tdBuilder.semester2.TermCode + "-" + tdBuilder.semester2.SchoolYear;
+            tstData2.Name = tdBuilder.semester2.Name;
+            tstData2.SessionId = tdBuilder.semester2.SessionType.Netus2Code;
+            tstData2.StartDate = tdBuilder.semester2.StartDate;
+            tstData2.EndDate = tdBuilder.semester2.EndDate;
+            tstData2.ParSessionCode = tdBuilder.school.BuildingCode + "-" + tdBuilder.schoolYear.TermCode + "-" + tdBuilder.schoolYear.SchoolYear;
+            tstData2.OrgId = tdBuilder.district.BuildingCode;
+
+            List<SisAcademicSessionTestData> tstDataSet = new List<SisAcademicSessionTestData>();
+            tstDataSet.Add(tstData);
+            tstDataSet.Add(tstData2);
+
+            SetMockReaderWithTestData(tstDataSet);
+
+            SyncJob_AcademicSession syncJob_AcademicSession = new SyncJob_AcademicSession("TestJob", DateTime.Now, _sisConnection, _netus2DbConnection);
+            syncJob_AcademicSession.ReadFromSis();
+            DataTable results = syncJob_AcademicSession._dtAcademicSession;
+
+            Assert.NotNull(results);
+            Assert.AreEqual(tstDataSet.Count, results.Rows.Count);
+            Assert.AreEqual(tstDataSet[0].SessionCode, results.Rows[0]["session_code"].ToString());
+            Assert.AreEqual(tstDataSet[0].Name, results.Rows[0]["name"].ToString());
+            Assert.AreEqual(tstDataSet[0].SessionId, results.Rows[0]["enum_session_id"].ToString());
+            Assert.AreEqual(tstDataSet[0].StartDate.ToString(), results.Rows[0]["start_date"].ToString());
+            Assert.AreEqual(tstDataSet[0].EndDate.ToString(), results.Rows[0]["end_date"].ToString());
+            Assert.AreEqual(tstDataSet[0].ParSessionCode, results.Rows[0]["parent_session_code"].ToString());
+            Assert.AreEqual(tstDataSet[0].OrgId, results.Rows[0]["organization_id"].ToString());
+
+            Assert.NotNull(results);
+            Assert.AreEqual(tstDataSet.Count, results.Rows.Count);
+            Assert.AreEqual(tstDataSet[1].SessionCode, results.Rows[1]["session_code"].ToString());
+            Assert.AreEqual(tstDataSet[1].Name, results.Rows[1]["name"].ToString());
+            Assert.AreEqual(tstDataSet[1].SessionId, results.Rows[1]["enum_session_id"].ToString());
+            Assert.AreEqual(tstDataSet[1].StartDate.ToString(), results.Rows[1]["start_date"].ToString());
+            Assert.AreEqual(tstDataSet[1].EndDate.ToString(), results.Rows[1]["end_date"].ToString());
+            Assert.AreEqual(tstDataSet[1].ParSessionCode, results.Rows[1]["parent_session_code"].ToString());
+            Assert.AreEqual(tstDataSet[1].OrgId, results.Rows[1]["organization_id"].ToString());
+        }
+
+        [TestCase]
+        public void SyncChild_AcademicSession_ShouldWriteNewRecord()
+        {
+            SisAcademicSessionTestData tstData = new SisAcademicSessionTestData();
+            tstData.SessionCode = tdBuilder.school.BuildingCode + "-" + tdBuilder.schoolYear.TermCode + "-" + tdBuilder.schoolYear.SchoolYear;
+            tstData.Name = tdBuilder.schoolYear.Name;
+            tstData.SessionId = tdBuilder.schoolYear.SessionType.Netus2Code;
+            tstData.StartDate = tdBuilder.schoolYear.StartDate;
+            tstData.EndDate = tdBuilder.schoolYear.EndDate;
+            tstData.ParSessionCode = null;
+            tstData.OrgId = tdBuilder.district.BuildingCode;
+
+            List<SisAcademicSessionTestData> tstDataSet = new List<SisAcademicSessionTestData>();
+            tstDataSet.Add(tstData);
+            DataRow row = BuildTestDataTable(tstDataSet).Rows[0];
+
+            new SyncTask_AcademicSessionChildRecords("TestTask", DateTime.Now, 
+                new SyncJob_AcademicSession("TestJob", DateTime.Now, _sisConnection, _netus2DbConnection))
+                .Execute(row, _latch);
+
+            Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_ReadWithoutParentId);
+            Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_WriteWithoutParentId);
+        }
+
+        [TestCase]
+        public void SyncChild_AcademicSession_ShouldNeitherUpdateNorWriteRecord()
+        {
+            mockAcademicSessionDaoImpl._shouldReadReturnData = true;
+            mockOrganizationDaoImpl._shouldReadReturnData = true;
+
+            SisAcademicSessionTestData tstData = new SisAcademicSessionTestData();
+            tstData.SessionCode = tdBuilder.school.BuildingCode + "-" + tdBuilder.schoolYear.TermCode + "-" + tdBuilder.schoolYear.SchoolYear;
+            tstData.Name = tdBuilder.schoolYear.Name;
+            tstData.SessionId = tdBuilder.schoolYear.SessionType.Netus2Code;
+            tstData.StartDate = tdBuilder.schoolYear.StartDate;
+            tstData.EndDate = tdBuilder.schoolYear.EndDate;
+            tstData.ParSessionCode = null;
+            tstData.OrgId = tdBuilder.district.BuildingCode;
+
+            List<SisAcademicSessionTestData> tstDataSet = new List<SisAcademicSessionTestData>();
+            tstDataSet.Add(tstData);
+            DataRow row = BuildTestDataTable(tstDataSet).Rows[0];
+
+            new SyncTask_AcademicSessionChildRecords("TestTask", DateTime.Now,
+                new SyncJob_AcademicSession("TestJob", DateTime.Now, _sisConnection, _netus2DbConnection))
+                .Execute(row, _latch);
+
+            Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_ReadWithoutParentId);
+            Assert.IsFalse(mockAcademicSessionDaoImpl.WasCalled_WriteWithoutParentId);
+            Assert.IsFalse(mockAcademicSessionDaoImpl.WasCalled_UpdateWithoutParentId);
+        }
+
+        [TestCase]
+        public void SyncChild_AcademicSession_ShouldUpdateRecord()
+        {
+            mockAcademicSessionDaoImpl._shouldReadReturnData = true;
+            mockOrganizationDaoImpl._shouldReadReturnData = true;
+
+            SisAcademicSessionTestData tstData = new SisAcademicSessionTestData();
+            tstData.SessionCode = tdBuilder.school.BuildingCode + "-" + tdBuilder.schoolYear.TermCode + "-" + tdBuilder.schoolYear.SchoolYear;
+            tstData.Name = "NewTestName";
+            tstData.SessionId = tdBuilder.schoolYear.SessionType.Netus2Code;
+            tstData.StartDate = tdBuilder.schoolYear.StartDate;
+            tstData.EndDate = tdBuilder.schoolYear.EndDate;
+            tstData.ParSessionCode = null;
+            tstData.OrgId = tdBuilder.district.BuildingCode;
+
+            List<SisAcademicSessionTestData> tstDataSet = new List<SisAcademicSessionTestData>();
+            tstDataSet.Add(tstData);
+            DataRow row = BuildTestDataTable(tstDataSet).Rows[0];
+
+            new SyncTask_AcademicSessionChildRecords("TestTask", DateTime.Now,
+                new SyncJob_AcademicSession("TestJob", DateTime.Now, _sisConnection, _netus2DbConnection))
+                .Execute(row, _latch);
+
+            Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_ReadWithoutParentId);
+            Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_UpdateWithoutParentId);
+        }
+
+        [TestCase]
+        public void SyncParent_AcademicSession()
+        {
+            mockAcademicSessionDaoImpl._shouldReadReturnData = true;
+            mockOrganizationDaoImpl._shouldReadReturnData = true;
+
+            tdBuilder.district.Children.Clear();
+
+            SisAcademicSessionTestData tstData = new SisAcademicSessionTestData();
+            tstData.SessionCode = tdBuilder.school.BuildingCode + "-" + tdBuilder.semester1.TermCode + "-" + tdBuilder.semester1.SchoolYear;
+            tstData.Name = tdBuilder.semester1.Name;
+            tstData.SessionId = tdBuilder.semester1.SessionType.Netus2Code;
+            tstData.StartDate = tdBuilder.semester1.StartDate;
+            tstData.EndDate = tdBuilder.semester1.EndDate;
+            tstData.ParSessionCode = tdBuilder.school.BuildingCode + "-" + tdBuilder.schoolYear.TermCode + "-" + tdBuilder.schoolYear.SchoolYear;
+            tstData.OrgId = tdBuilder.district.BuildingCode;
+
+            List<SisAcademicSessionTestData> tstDataSet = new List<SisAcademicSessionTestData>();
+            tstDataSet.Add(tstData);
+            DataRow row = BuildTestDataTable(tstDataSet).Rows[0];
+
+            SyncJob_AcademicSession syncJob_AcademicSession =
+                new SyncJob_AcademicSession("TestJob", DateTime.Now, _sisConnection, _netus2DbConnection);
+            SyncTask_AcademicSessionParentRecords syncTask_AcademicSessionParentRecords =
+                new SyncTask_AcademicSessionParentRecords("TestTask", DateTime.Now, syncJob_AcademicSession);
+
+            syncTask_AcademicSessionParentRecords.Execute(row, _latch);
+
+            Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_ReadWithoutParentId);
+            Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_ReadUsingSchoolCodeTermCodeSchoolYear);
+            Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_UpdateWithParentId);
+        }
+
+        private DataTable BuildTestDataTable(List<SisAcademicSessionTestData> tstDataSet)
+        {
+            DataTable dtAcademicSession = DataTableFactory.CreateDataTable("AcademicSession");
+            foreach(SisAcademicSessionTestData tstData in tstDataSet)
+            {
+                DataRow row = dtAcademicSession.NewRow();
+                row["session_code"] = tstData.SessionCode;
+                row["name"] = tstData.Name;
+                row["enum_session_id"] = tstData.SessionId;
+                row["start_date"] = tstData.StartDate;
+                row["end_date"] = tstData.EndDate;
+                row["parent_session_code"] = tstData.ParSessionCode;
+                row["organization_id"] = tstData.OrgId;
+                dtAcademicSession.Rows.Add(row);
+            }
+
+            return dtAcademicSession;
         }
 
         private void SetMockReaderWithTestData(List<SisAcademicSessionTestData> tstDataSet)

@@ -32,7 +32,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private void Delete_ClassEnrolled(Course course, IConnectable connection)
         {
-            IClassEnrolledDao classEnrolledDaoImpl = new ClassEnrolledDaoImpl();
+            IClassEnrolledDao classEnrolledDaoImpl = DaoImplFactory.GetClassEnrolledDaoImpl();
             List<ClassEnrolled> foundClassEnrolleds = classEnrolledDaoImpl.Read_UsingCourseId(course.Id, connection);
             foreach (ClassEnrolled classEnrolled in foundClassEnrolleds)
             {
@@ -42,7 +42,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private void Delete_JctCourseSubject(Course course, IConnectable connection)
         {
-            IJctCourseSubjectDao jctCourseSubjectDaoImpl = new JctCourseSubjectDaoImpl();
+            IJctCourseSubjectDao jctCourseSubjectDaoImpl = DaoImplFactory.GetJctCourseSubjectDaoImpl();
             foreach (Enumeration subject in course.Subjects)
             {
                 jctCourseSubjectDaoImpl.Delete(course.Id, subject.Id, connection);
@@ -51,7 +51,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private void Delete_JctCourseGrade(Course course, IConnectable connection)
         {
-            IJctCourseGradeDao jctCourseGradeDaoImpl = new JctCourseGradeDaoImpl();
+            IJctCourseGradeDao jctCourseGradeDaoImpl = DaoImplFactory.GetJctCourseGradeDaoImpl();
             foreach (Enumeration grade in course.Grades)
             {
                 jctCourseGradeDaoImpl.Delete(course.Id, grade.Id, connection);
@@ -171,7 +171,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
             List<Enumeration> foundSubjects = new List<Enumeration>();
             List<int> idsFound = new List<int>();
 
-            IJctCourseSubjectDao jctCourseSubjectDaoImpl = new JctCourseSubjectDaoImpl();
+            IJctCourseSubjectDao jctCourseSubjectDaoImpl = DaoImplFactory.GetJctCourseSubjectDaoImpl();
             List<JctCourseSubjectDao> foundJctCourseSubjectDaos = jctCourseSubjectDaoImpl.Read(courseId, connection);
             foreach (JctCourseSubjectDao foundJctCourseSubjectDao in foundJctCourseSubjectDaos)
             {
@@ -191,7 +191,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
             List<Enumeration> foundGrades = new List<Enumeration>();
             List<int> idsFound = new List<int>();
 
-            IJctCourseGradeDao jctCourseGradeDaoImpl = new JctCourseGradeDaoImpl();
+            IJctCourseGradeDao jctCourseGradeDaoImpl = DaoImplFactory.GetJctCourseGradeDaoImpl();
             List<JctCourseGradeDao> foundJctCourseGradeDaos = jctCourseGradeDaoImpl.Read(courseId, connection);
             foreach (JctCourseGradeDao foundJctCourseGradeDao in foundJctCourseGradeDaos)
             {
@@ -270,7 +270,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         private List<Enumeration> UpdateJctCourseSubject(List<Enumeration> subjects, int courseId, IConnectable connection)
         {
             List<Enumeration> updatedSubjects = new List<Enumeration>();
-            IJctCourseSubjectDao jctCourseSubjectDaoImpl = new JctCourseSubjectDaoImpl();
+            IJctCourseSubjectDao jctCourseSubjectDaoImpl = DaoImplFactory.GetJctCourseSubjectDaoImpl();
             List<JctCourseSubjectDao> foundJctCourseSubjectDaos =
                 jctCourseSubjectDaoImpl.Read(courseId, connection);
             List<int> subjectIds = new List<int>();
@@ -308,7 +308,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         private List<Enumeration> UpdateJctCourseGrade(List<Enumeration> grades, int courseId, IConnectable connection)
         {
             List<Enumeration> updatedGrades = new List<Enumeration>();
-            IJctCourseGradeDao jctCourseGradeDaoImpl = new JctCourseGradeDaoImpl();
+            IJctCourseGradeDao jctCourseGradeDaoImpl = DaoImplFactory.GetJctCourseGradeDaoImpl();
             List<JctCourseGradeDao> foundJctCourseGradeDaos =
                 jctCourseGradeDaoImpl.Read(courseId, connection);
             List<int> gradeIds = new List<int>();

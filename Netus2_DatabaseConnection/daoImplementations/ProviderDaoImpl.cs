@@ -32,7 +32,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private void DeleteApplications(Provider provider, IConnectable connection)
         {
-            IApplicationDao appDaoImpl = new ApplicationDaoImpl();
+            IApplicationDao appDaoImpl = DaoImplFactory.GetApplicationDaoImpl();
             List<Application> foundApps = appDaoImpl.Read_UsingProviderId(provider.Id, connection);
 
             foreach (Application foundApp in foundApps)

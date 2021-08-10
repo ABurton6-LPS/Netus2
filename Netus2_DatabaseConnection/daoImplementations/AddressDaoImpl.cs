@@ -5,7 +5,6 @@ using Netus2_DatabaseConnection.dbAccess;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data;
 using System.Text;
 
 namespace Netus2_DatabaseConnection.daoImplementations
@@ -40,7 +39,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private void Delete_JctPersonAddress(int addressId, IConnectable connection)
         {
-            IJctPersonAddressDao jctPersonAddressDaoImpl = new JctPersonAddressDaoImpl();
+            IJctPersonAddressDao jctPersonAddressDaoImpl = DaoImplFactory.GetJctPersonAddressDaoImpl();
             List<JctPersonAddressDao> foundJctPersonAddressDaos =
                 jctPersonAddressDaoImpl.Read_WithAddressId(addressId, connection);
 

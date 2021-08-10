@@ -46,7 +46,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private void Delete_JctClassPerson(Person person, IConnectable connection)
         {
-            IJctClassPersonDao jctClassPersonDaoImpl = new JctClassPersonDaoImpl();
+            IJctClassPersonDao jctClassPersonDaoImpl = DaoImplFactory.GetJctClassPersonDaoImpl();
             List<JctClassPersonDao> foundJctClassPersonDaos =
                 jctClassPersonDaoImpl.Read_WithPersonId(person.Id, connection);
 
@@ -58,7 +58,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private void Delete_UniqueIdentifier(Person person, IConnectable connection)
         {
-            IUniqueIdentifierDao uniqueIdentifierDaoImpl = new UniqueIdentifierDaoImpl();
+            IUniqueIdentifierDao uniqueIdentifierDaoImpl = DaoImplFactory.GetUniqueIdentifierDaoImpl();
             List<UniqueIdentifier> foundUniqueIdentifiers = uniqueIdentifierDaoImpl.Read(null, person.Id, connection);
             foreach (UniqueIdentifier uniqueIdentifier in foundUniqueIdentifiers)
             {
@@ -68,7 +68,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private void Delete_EmploymentSession(Person person, IConnectable connection)
         {
-            IEmploymentSessionDao employmentSessionDaoImpl = new EmploymentSessionDaoImpl();
+            IEmploymentSessionDao employmentSessionDaoImpl = DaoImplFactory.GetEmploymentSessionDaoImpl();
             List<EmploymentSession> foundEmploymentSessions = employmentSessionDaoImpl.Read_WithPersonId(null, person.Id, connection);
             foreach (EmploymentSession fondEmploymentSession in foundEmploymentSessions)
             {
@@ -78,7 +78,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private void Delete_Enrollment(Person person, IConnectable connection)
         {
-            IEnrollmentDao enrollmentDaoImpl = new EnrollmentDaoImpl();
+            IEnrollmentDao enrollmentDaoImpl = DaoImplFactory.GetEnrollmentDaoImpl();
             List<Enrollment> foundEnrollments = enrollmentDaoImpl.Read(null, person.Id, connection);
             foreach (Enrollment enrollment in foundEnrollments)
             {
@@ -88,7 +88,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private void Delete_Mark(Person person, IConnectable connection)
         {
-            IMarkDao markDaoImpl = new MarkDaoImpl();
+            IMarkDao markDaoImpl = DaoImplFactory.GetMarkDaoImpl();
             List<Mark> foundMarks = markDaoImpl.Read(null, person.Id, connection);
             foreach (Mark mark in foundMarks)
             {
@@ -98,7 +98,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private void Delete_JctPersonAddress(Person person, IConnectable connection)
         {
-            IJctPersonAddressDao jctPersonAddressDaoImpl = new JctPersonAddressDaoImpl();
+            IJctPersonAddressDao jctPersonAddressDaoImpl = DaoImplFactory.GetJctPersonAddressDaoImpl();
             foreach (Address address in person.Addresses)
             {
                 jctPersonAddressDaoImpl.Delete(person.Id, address.Id, connection);
@@ -107,7 +107,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private void Delete_PhoneNumber(Person person, IConnectable connection)
         {
-            IPhoneNumberDao phoneNumberDaoImpl = new PhoneNumberDaoImpl();
+            IPhoneNumberDao phoneNumberDaoImpl = DaoImplFactory.GetPhoneNumberDaoImpl();
             foreach (PhoneNumber phoneNumber in person.PhoneNumbers)
             {
                 phoneNumberDaoImpl.Delete(phoneNumber, person.Id, connection);
@@ -116,7 +116,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private void Delete_JctPersonApp(Person person, IConnectable connection)
         {
-            IJctPersonAppDao jctPersonAppDaoImpl = new JctPersonAppDaoImpl();
+            IJctPersonAppDao jctPersonAppDaoImpl = DaoImplFactory.GetJctPersonAppDaoImpl();
             foreach (Application app in person.Applications)
             {
                 jctPersonAppDaoImpl.Delete(person.Id, app.Id, connection);
@@ -125,7 +125,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private void Delete_JctPersonRole(Person person, IConnectable connection)
         {
-            IJctPersonRoleDao jctPersonRoleDaoImpl = new JctPersonRoleDaoImpl();
+            IJctPersonRoleDao jctPersonRoleDaoImpl = DaoImplFactory.GetJctPersonRoleDaoImpl();
             foreach (Enumeration role in person.Roles)
             {
                 jctPersonRoleDaoImpl.Delete(person.Id, role.Id, connection);
@@ -134,7 +134,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private void Delete_JctPersonPerson(Person person, IConnectable connection)
         {
-            IJctPersonPersonDao jctPersonPersonDaoImpl = new JctPersonPersonDaoImpl();
+            IJctPersonPersonDao jctPersonPersonDaoImpl = DaoImplFactory.GetJctPersonPersonDaoImpl();
             foreach (int relationId in person.Relations)
             {
                 jctPersonPersonDaoImpl.Delete(person.Id, relationId, connection);
@@ -294,11 +294,11 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 result.Roles.AddRange(Read_JctPersonRole(result.Id, connection));
                 result.Relations.AddRange(Read_JctPersonPerson(result.Id, connection));
                 result.Addresses.AddRange(Read_JctPersonAddress(result.Id, connection));
-                result.PhoneNumbers.AddRange(new PhoneNumberDaoImpl().Read(null, result.Id, connection));
-                result.UniqueIdentifiers.AddRange(new UniqueIdentifierDaoImpl().Read(null, result.Id, connection));
-                result.EmploymentSessions.AddRange(new EmploymentSessionDaoImpl().Read_WithPersonId(null, result.Id, connection));
-                result.Enrollments.AddRange(new EnrollmentDaoImpl().Read(null, result.Id, connection));
-                result.Marks.AddRange(new MarkDaoImpl().Read(null, result.Id, connection));
+                result.PhoneNumbers.AddRange(DaoImplFactory.GetPhoneNumberDaoImpl().Read(null, result.Id, connection));
+                result.UniqueIdentifiers.AddRange(DaoImplFactory.GetUniqueIdentifierDaoImpl().Read(null, result.Id, connection));
+                result.EmploymentSessions.AddRange(DaoImplFactory.GetEmploymentSessionDaoImpl().Read_WithPersonId(null, result.Id, connection));
+                result.Enrollments.AddRange(DaoImplFactory.GetEnrollmentDaoImpl().Read(null, result.Id, connection));
+                result.Marks.AddRange(DaoImplFactory.GetMarkDaoImpl().Read(null, result.Id, connection));
             }
 
             return results;
@@ -306,8 +306,8 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private List<Application> Read_JctPersonApp(int personId, IConnectable connection)
         {
-            IApplicationDao appDaoImpl = new ApplicationDaoImpl();
-            IJctPersonAppDao jctPersonAppDaoImpl = new JctPersonAppDaoImpl();
+            IApplicationDao appDaoImpl = DaoImplFactory.GetApplicationDaoImpl();
+            IJctPersonAppDao jctPersonAppDaoImpl = DaoImplFactory.GetJctPersonAppDaoImpl();
 
             List<Application> foundApplications = new List<Application>();
             List<JctPersonAppDao> foundJctPersonAppDaos = jctPersonAppDaoImpl.Read_WithPersonId(personId, connection);
@@ -323,8 +323,8 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private List<Address> Read_JctPersonAddress(int personId, IConnectable connection)
         {
-            IAddressDao addressDaoImpl = new AddressDaoImpl();
-            IJctPersonAddressDao jctPersonAddressDaoImpl = new JctPersonAddressDaoImpl();
+            IAddressDao addressDaoImpl = DaoImplFactory.GetAddressDaoImpl();
+            IJctPersonAddressDao jctPersonAddressDaoImpl = DaoImplFactory.GetJctPersonAddressDaoImpl();
 
             List<Address> foundAddresss = new List<Address>();
             List<JctPersonAddressDao> foundJctPersonAddressDaos = jctPersonAddressDaoImpl.Read_WithPersonId(personId, connection);
@@ -343,7 +343,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
             List<Enumeration> foundRoles = new List<Enumeration>();
             List<int> idsFound = new List<int>();
 
-            IJctPersonRoleDao jctPersonRoleDaoImpl = new JctPersonRoleDaoImpl();
+            IJctPersonRoleDao jctPersonRoleDaoImpl = DaoImplFactory.GetJctPersonRoleDaoImpl();
             List<JctPersonRoleDao> foundJctPersonRoleDaos = jctPersonRoleDaoImpl.Read(personId, connection);
             foreach (JctPersonRoleDao foundJctPersonRoleDao in foundJctPersonRoleDaos)
             {
@@ -362,7 +362,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         {
             List<int> foundRelations = new List<int>();
 
-            IJctPersonPersonDao jctPersonPersonDaoImpl = new JctPersonPersonDaoImpl();
+            IJctPersonPersonDao jctPersonPersonDaoImpl = DaoImplFactory.GetJctPersonPersonDaoImpl();
             List<JctPersonPersonDao> foundJctPersonPersonDaos = jctPersonPersonDaoImpl.Read(personId, connection);
 
             foreach (JctPersonPersonDao foundJctPersonPersonDao in foundJctPersonPersonDaos)
@@ -467,7 +467,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         private List<Mark> UpdateMarks(List<Mark> marks, int personId, IConnectable connection)
         {
             List<Mark> updatedMarks = new List<Mark>();
-            IMarkDao markDaoImpl = new MarkDaoImpl();
+            IMarkDao markDaoImpl = DaoImplFactory.GetMarkDaoImpl();
 
             List<Mark> foundMarks =
                 markDaoImpl.Read(null, personId, connection);
@@ -490,7 +490,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         private List<Enrollment> UpdatedEnrollments(List<Enrollment> enrollments, int personId, IConnectable connection)
         {
             List<Enrollment> updatedEnrollments = new List<Enrollment>();
-            IEnrollmentDao enrollmentDaoImpl = new EnrollmentDaoImpl();
+            IEnrollmentDao enrollmentDaoImpl = DaoImplFactory.GetEnrollmentDaoImpl();
 
             List<Enrollment> foundEnrollments =
                 enrollmentDaoImpl.Read(null, personId, connection);
@@ -536,7 +536,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         private List<UniqueIdentifier> UpdateUniqueIdentifiers(List<UniqueIdentifier> uniqueIdentifieres, int personId, IConnectable connection)
         {
             List<UniqueIdentifier> updatedUniqueIdentifieres = new List<UniqueIdentifier>();
-            IUniqueIdentifierDao uniqueIdentifierDaoImpl = new UniqueIdentifierDaoImpl();
+            IUniqueIdentifierDao uniqueIdentifierDaoImpl = DaoImplFactory.GetUniqueIdentifierDaoImpl();
 
             List<UniqueIdentifier> foundUniqueIdentifiers =
                 uniqueIdentifierDaoImpl.Read(null, personId, connection);
@@ -558,7 +558,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private List<PhoneNumber> UpdatePhoneNumbers(List<PhoneNumber> phoneNumbers, int personId, IConnectable connection)
         {
-            IPhoneNumberDao phoneNumberDaoImpl = new PhoneNumberDaoImpl();
+            IPhoneNumberDao phoneNumberDaoImpl = DaoImplFactory.GetPhoneNumberDaoImpl();
             List<PhoneNumber> updatedPhoneNumberes = new List<PhoneNumber>();
 
             List<PhoneNumber> foundPhoneNumbers =
@@ -582,7 +582,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         private List<Address> UpdateAddresses(List<Address> addresses, int personId, IConnectable connection)
         {
             List<Address> updatedAddresses = new List<Address>();
-            IAddressDao addressDaoImpl = new AddressDaoImpl();
+            IAddressDao addressDaoImpl = DaoImplFactory.GetAddressDaoImpl();
             foreach (Address address in addresses)
             {
                 updatedAddresses.AddRange(addressDaoImpl.Read(address, connection));
@@ -595,7 +595,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private void UpdateJctPersonAddress(List<Address> addresses, int personId, IConnectable connection)
         {
-            IJctPersonAddressDao jctPersonAddressDaoImpl = new JctPersonAddressDaoImpl();
+            IJctPersonAddressDao jctPersonAddressDaoImpl = DaoImplFactory.GetJctPersonAddressDaoImpl();
             List<JctPersonAddressDao> foundJctPersonAddressDaos =
                 jctPersonAddressDaoImpl.Read_WithPersonId(personId, connection);
             List<int> addressIds = new List<int>();
@@ -627,7 +627,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         private List<Application> UpdateApplications(List<Application> apps, int personId, IConnectable connection)
         {
             List<Application> updatedApps = new List<Application>();
-            IApplicationDao appDaoImpl = new ApplicationDaoImpl();
+            IApplicationDao appDaoImpl = DaoImplFactory.GetApplicationDaoImpl();
             foreach (Application app in apps)
             {
                 appDaoImpl.Update(app, connection);
@@ -641,7 +641,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private void UpdateJctPersonApp(List<Application> apps, int personId, IConnectable connection)
         {
-            IJctPersonAppDao jctPersonAppDaoImpl = new JctPersonAppDaoImpl();
+            IJctPersonAppDao jctPersonAppDaoImpl = DaoImplFactory.GetJctPersonAppDaoImpl();
             List<JctPersonAppDao> foundJctPersonAppDaos =
                 jctPersonAppDaoImpl.Read_WithPersonId(personId, connection);
             List<int> appIds = new List<int>();
@@ -673,7 +673,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         private List<Enumeration> UpdateJctPersonRole(List<Enumeration> roles, int personId, IConnectable connection)
         {
             List<Enumeration> updatedRoles = new List<Enumeration>();
-            IJctPersonRoleDao jctPersonRoleDaoImpl = new JctPersonRoleDaoImpl();
+            IJctPersonRoleDao jctPersonRoleDaoImpl = DaoImplFactory.GetJctPersonRoleDaoImpl();
             List<JctPersonRoleDao> foundJctPersonRoleDaos =
                 jctPersonRoleDaoImpl.Read(personId, connection);
             List<int> roleIds = new List<int>();
@@ -711,7 +711,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         private List<int> UpdateJctPersonPerson(List<int> relations, int personId, IConnectable connection)
         {
             List<int> updatedRelations = new List<int>();
-            IJctPersonPersonDao jctPersonPersonDaoImpl = new JctPersonPersonDaoImpl();
+            IJctPersonPersonDao jctPersonPersonDaoImpl = DaoImplFactory.GetJctPersonPersonDaoImpl();
             List<JctPersonPersonDao> foundJctPersonPersonDaos =
                 jctPersonPersonDaoImpl.Read(personId, connection);
             List<int> foundRelations = new List<int>();

@@ -37,19 +37,18 @@ namespace Netus2_Test.Integration.logAccess_Tests
             connection.BeginTransaction();
             testDataBuilder = new TestDataBuilder(connection);
             logReader = new LogReader();
-            personDaoImpl = new PersonDaoImpl();
-            providerDaoImpl = new ProviderDaoImpl();
-            applicationDaoImpl = new ApplicationDaoImpl();
-            orgDaoImpl = new OrganizationDaoImpl();
-            resourceDaoImpl = new ResourceDaoImpl();
-            courseDaoImpl = new CourseDaoImpl();
-            classEnrolledDaoImpl = new ClassEnrolledDaoImpl();
-            lineItemDaoImpl = new LineItemDaoImpl();
-            markDaoImpl = new MarkDaoImpl();
-            enrollmentDaoImpl = new EnrollmentDaoImpl();
-            organizationDaoImpl = new OrganizationDaoImpl();
-            academicSessionDaoImpl = new AcademicSessionDaoImpl();
-            addressDaoImpl = new AddressDaoImpl();
+            organizationDaoImpl = DaoImplFactory.GetOrganizationDaoImpl();
+            academicSessionDaoImpl = DaoImplFactory.GetAcademicSessionDaoImpl();
+            personDaoImpl = DaoImplFactory.GetPersonDaoImpl();
+            courseDaoImpl = DaoImplFactory.GetCourseDaoImpl();
+            classEnrolledDaoImpl = DaoImplFactory.GetClassEnrolledDaoImpl();
+            resourceDaoImpl = DaoImplFactory.GetResourceDaoImpl();
+            lineItemDaoImpl = DaoImplFactory.GetLineItemDaoImpl();
+            enrollmentDaoImpl = DaoImplFactory.GetEnrollmentDaoImpl();
+            markDaoImpl = DaoImplFactory.GetMarkDaoImpl();
+            addressDaoImpl = DaoImplFactory.GetAddressDaoImpl();
+            providerDaoImpl = DaoImplFactory.GetProviderDaoImpl();
+            applicationDaoImpl = DaoImplFactory.GetApplicationDaoImpl();
         }
 
         [Test]

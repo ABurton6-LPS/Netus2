@@ -33,14 +33,14 @@ namespace Netus2_Test.Integration.daoObject_Tests
 
             testDataBuilder = new TestDataBuilder(connection);
 
-            personDaoImpl = new PersonDaoImpl();
-            academicSessionDaoImpl = new AcademicSessionDaoImpl();
-            classEnrolledDaoImpl = new ClassEnrolledDaoImpl();
-            markDaoImpl = new MarkDaoImpl();
-            organizationDaoImpl = new OrganizationDaoImpl();
-            courseDaoImpl = new CourseDaoImpl();
-            resourceDaoImpl = new ResourceDaoImpl();
-            providerDaoImpl = new ProviderDaoImpl();
+            organizationDaoImpl = DaoImplFactory.GetOrganizationDaoImpl();
+            academicSessionDaoImpl = DaoImplFactory.GetAcademicSessionDaoImpl();
+            personDaoImpl = DaoImplFactory.GetPersonDaoImpl();
+            courseDaoImpl = DaoImplFactory.GetCourseDaoImpl();
+            classEnrolledDaoImpl = DaoImplFactory.GetClassEnrolledDaoImpl();
+            resourceDaoImpl = DaoImplFactory.GetResourceDaoImpl();
+            markDaoImpl = DaoImplFactory.GetMarkDaoImpl();
+            providerDaoImpl = DaoImplFactory.GetProviderDaoImpl();
         }
 
         [Test]
