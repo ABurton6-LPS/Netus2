@@ -32,7 +32,9 @@
         private static string BuildScript_Sis_AcademicSession()
         {
             return "SELECT DISTINCT " +
-                "t.schoolc + '-' + tt.termc + '-' + CONVERT(VARCHAR(4),t.schyear) session_code, " +
+                "t.schoolc school_code, " +
+                "tt.termc term_code, " +
+                "t.schyear school_year, " +
                 "CASE CHARINDEX('Y',tt.termc,1) " +
                 "WHEN 0 THEN LTRIM(RTRIM(REPLACE(REPLACE(REPLACE(REPLACE(s.schname,'School',''),'High',''),'Middle',''),'Elementary',''))) + ' ' + CONVERT(VARCHAR(4), t.schyear) + ' ' + z.descript  " +
                 "ELSE LTRIM(RTRIM(REPLACE(REPLACE(REPLACE(REPLACE(s.schname,'School',''),'High',''),'Middle',''),'Elementary',''))) + ' ' + CONVERT(VARCHAR(4),t.schyear) + ' School Year'  " +
@@ -56,10 +58,9 @@
                 "WHEN tt.termc LIKE 'Q%' THEN t.schoolc + '-' + pS.termc + '-' + CONVERT(VARCHAR(4),t.schyear) " +
                 "WHEN tt.termc LIKE 'S%' THEN t.schoolc + '-' + pY.termc + '-' + CONVERT(VARCHAR(4),t.schyear) " +
                 "ELSE NULL " +
-                "END parent_session_code, " +
-                "s.schoolc organization_id " +
+                "END parent_session_code " +
                 "FROM TrackTerms tt " +
-                "JOIN track t ON tt.trkuniq=t.trkuniq AND t.trackc NOT LIKE 'S%' " +
+                "JOIN track t ON tt.trkuniq=t.trkuniq " +
                 "JOIN zterm z ON z.termc=tt.termc " +
                 "JOIN school s ON s.schoolc=t.schoolc " +
                 "LEFT JOIN TrackTerms pQ ON pQ.trkuniq=tt.trkuniq AND pQ.termc LIKE 'Q%' AND tt.termbegindate BETWEEN pQ.termbegindate AND pQ.termenddate AND tt.termenddate BETWEEN pQ.termbegindate AND pQ.termenddate " +
@@ -69,20 +70,19 @@
                 "AND NOT tt.termbegindate IS NULL " +
                 "AND NOT tt.termenddate IS NULL " +
                 "AND t.schyear >= (SELECT schyear FROM school WHERE schoolc='82095') " +
-                "ORDER BY session_code";
+                "ORDER BY school_code, term_code DESC, school_year";
         }
 
         private static string BuildScript_Sis_Person()
         {
             return "SELECT DISTINCT " +
                 "'student' person_type, " +
-                "sd.suniq SIS_ID, " +
-                "sd.firstname first_name, " +
+                "sd.suniq sis_id, " +
+                "REPLACE(sd.firstname,'''','''''') first_name, " +
                 "CASE " +
                 "WHEN sd.middlename = '' THEN NULL " +
-                "ELSE sd.middlename " +
-                "END middle_name, " +
-                "sd.lastname last_name, " +
+                "ELSE REPLACE(sd.middlename,'''','''''') END middle_name, " +
+                "REPLACE(sd.lastname,'''','''''') last_name, " +
                 "sd.birthdate birth_date, " +
                 "CASE " +
                 "WHEN sd.genderc = 'M' THEN 'male' " +
@@ -109,13 +109,12 @@
                 "UNION " +
                 "SELECT DISTINCT " +
                 "'staff' person_type, " +
-                "fd.funiq SIS_ID, " +
-                "fd.firstname first_name, " +
+                "fd.funiq sis_id, " +
+                "REPLACE(fd.firstname,'''','''''') first_name, " +
                 "CASE " +
                 "WHEN fd.middlename = '' THEN NULL " +
-                "ELSE fd.middlename " +
-                "END middle_name, " +
-                "fd.lastname last_name, " +
+                "ELSE REPLACE(fd.middlename,'''','''''') END middle_name, " +
+                "REPLACE(fd.lastname,'''','''''') last_name, " +
                 "fd.birthdate birth_date, " +
                 "'unset' enum_gender_id, " +
                 "'unset' enum_ethnic_id, " +

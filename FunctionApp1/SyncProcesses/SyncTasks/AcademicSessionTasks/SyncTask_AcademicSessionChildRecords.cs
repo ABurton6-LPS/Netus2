@@ -27,24 +27,19 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AcademicSessionTasks
         {
             try
             {
-                string sisSessionCode = row["session_code"].ToString() == "" ? null : row["session_code"].ToString();
-                int numberOfDashesInSessionCode = 2;
-                int skipThisCharacterAndStartOnNextOne = 1;
-                string schoolCode = sisSessionCode.Substring(0, (sisSessionCode.IndexOf('-')));
-                int schoolYear = Int32.Parse(sisSessionCode.Substring(sisSessionCode.LastIndexOf('-') + skipThisCharacterAndStartOnNextOne));
-                string termCode = sisSessionCode.Substring(sisSessionCode.IndexOf('-') + skipThisCharacterAndStartOnNextOne,
-                    (sisSessionCode.Length - schoolCode.Length) - schoolYear.ToString().Length - numberOfDashesInSessionCode);
+                string sisSchoolCode = row["school_code"].ToString() == "" ? null : row["school_code"].ToString();
+                string sisTermCode = row["term_code"].ToString() == "" ? null : row["term_code"].ToString();
+                int sisSchoolYear = Int32.Parse(row["school_year"].ToString() == "" ? "-1" : row["school_year"].ToString());
                 string sisName = row["name"].ToString() == "" ? null : row["name"].ToString();
                 Enumeration sisEnumSession = Enum_Session.values[row["enum_session_id"].ToString().ToLower()];
                 DateTime sisStartDate = DateTime.Parse(row["start_date"].ToString());
                 DateTime sisEndDate = DateTime.Parse(row["end_date"].ToString());
-                string sisOrganizationId = row["organization_id"].ToString() == "" ? null : row["organization_id"].ToString();
 
                 IOrganizationDao orgDaoImpl = DaoImplFactory.GetOrganizationDaoImpl();
-                Organization org = orgDaoImpl.Read_WithBuildingCode(sisOrganizationId, _netus2Connection);
+                Organization org = orgDaoImpl.Read_WithBuildingCode(sisSchoolCode, _netus2Connection);
 
-                AcademicSession academicSession = new AcademicSession(sisName, sisEnumSession, org, termCode);
-                academicSession.SchoolYear = schoolYear;
+                AcademicSession academicSession = new AcademicSession(sisName, sisEnumSession, org, sisTermCode);
+                academicSession.SchoolYear = sisSchoolYear;
                 academicSession.StartDate = sisStartDate;
                 academicSession.EndDate = sisEndDate;
 
