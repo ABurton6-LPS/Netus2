@@ -10,16 +10,14 @@ namespace Netus2SisSync.SyncProcesses
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public DateTime Timestamp { get; set; }
         public SyncJob Job { get; set; }
 
-        public SyncTask(string name, DateTime timestamp, SyncJob job)
+        public SyncTask(string name, SyncJob job)
         {
             Name = name;
-            Timestamp = timestamp;
             Job = job;
         }
 
-        public abstract void Execute(DataRow row, CountDownLatch latch);
+        public abstract void Execute(DataRow row);
     }
 }

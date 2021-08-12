@@ -16,14 +16,14 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AcademicSessionTasks
     {
         IConnectable _netus2Connection;
 
-        public SyncTask_AcademicSessionChildRecords(string name, DateTime timestamp, SyncJob job)
-            : base(name, timestamp, job)
+        public SyncTask_AcademicSessionChildRecords(string name, SyncJob job)
+            : base(name, job)
         {
             _netus2Connection = DbConnectionFactory.GetNetus2Connection();
             SyncLogger.LogNewTask(this, _netus2Connection);
         }
 
-        public override void Execute(DataRow row, CountDownLatch latch)
+        public override void Execute(DataRow row)
         {
             try
             {
@@ -79,7 +79,6 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AcademicSessionTasks
             {
                 SyncLogger.LogStatus(this, Enum_Sync_Status.values["end"], _netus2Connection);
                 _netus2Connection.CloseConnection();
-                latch.Signal();
             }
         }
     }

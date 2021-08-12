@@ -1,14 +1,14 @@
-using Microsoft.Azure.WebJobs;
-using Netus2_DatabaseConnection.dbAccess;
+﻿using Netus2_DatabaseConnection.dbAccess;
 using Netus2SisSync.SyncProcesses.SyncJobs;
+using NUnit.Framework;
 using System;
 
-namespace Netus2SisSync.SyncProcesses
+namespace Netus2_Test.Integration.Netus2Sync
 {
-    public static class Netus2SisSync
+    public class Netus2Sync_Test
     {
-        [FunctionName("Netus2SisSync")]
-        public static void Run([TimerTrigger("0 */5 * * * *")]TimerInfo myTimer)
+        [TestCase]
+        public void TestRun()
         {
             IConnectable netus2Connection = DbConnectionFactory.GetNetus2Connection();
             IConnectable sisConnection = DbConnectionFactory.GetSisConnection();
@@ -28,6 +28,6 @@ namespace Netus2SisSync.SyncProcesses
                 sisConnection.CloseConnection();
                 netus2Connection.CloseConnection();
             }
-        }        
+        }
     }
 }

@@ -15,8 +15,8 @@ namespace Netus2SisSync.SyncProcesses.SyncJobs
         IConnectable _netus2Connection;
         public DataTable _dtOrganization;
 
-        public SyncJob_Organization(string name, DateTime timestamp, IConnectable sisConnection, IConnectable netus2Connection)
-            : base(name, timestamp)
+        public SyncJob_Organization(string name, IConnectable sisConnection, IConnectable netus2Connection)
+            : base(name)
         {
             _sisConnection = sisConnection;
             _netus2Connection = netus2Connection;
@@ -107,13 +107,16 @@ namespace Netus2SisSync.SyncProcesses.SyncJobs
 
         private void RunJobTasks()
         {
-            TaskExecutor.ExecuteTask(new SyncTask_OrganizationChildRecords(
-                "SyncTask_OrganizationChildRecords", DateTime.Now, this),
-                _dtOrganization);
+            foreach (DataRow row in _dtOrganization.Rows)
+            {
+                SyncTask_OrganizationChildRecords syncTask = new SyncTask_OrganizationChildRecords(
+                    "SyncTask_OrganizationChildRecords", this);
+                syncTask.Execute(row);
 
-            TaskExecutor.ExecuteTask(new SyncTask_OrganizationParentRecords(
-                "SyncTask_OrganizationParentRecords", DateTime.Now, this),
-                _dtOrganization);
+                SyncTask_OrganizationParentRecords syncTaskParent = new SyncTask_OrganizationParentRecords(
+                    "SyncTask_OrganizationParentRecords", this);
+                syncTaskParent.Execute(row);
+            }
         }
     }
 }

@@ -15,8 +15,8 @@ namespace Netus2SisSync.SyncProcesses.SyncJobs
         IConnectable _netus2Connection;
         public DataTable _dtAcademicSession;
 
-        public SyncJob_AcademicSession(string name, DateTime timestamp, IConnectable sisConnection, IConnectable netus2Connection) 
-            : base(name, timestamp)
+        public SyncJob_AcademicSession(string name, IConnectable sisConnection, IConnectable netus2Connection) 
+            : base(name)
         {
             _sisConnection = sisConnection;
             _netus2Connection = netus2Connection;
@@ -64,7 +64,7 @@ namespace Netus2SisSync.SyncProcesses.SyncJobs
                                 break;
                             case "school_year":
                                 if (value != DBNull.Value && value != null)
-                                    myDataRow["school_year"] = (int)value;
+                                    myDataRow["school_year"] = Convert.ToInt32(value);
                                 else
                                     myDataRow["school_year"] = -1;
                                 break;
@@ -111,13 +111,16 @@ namespace Netus2SisSync.SyncProcesses.SyncJobs
 
         private void RunJobTasks()
         {
-            TaskExecutor.ExecuteTask(new SyncTask_AcademicSessionChildRecords(
-                "SyncTask_AcademicSessionChildRecords", DateTime.Now, this),
-                _dtAcademicSession);
+            foreach (DataRow row in _dtAcademicSession.Rows)
+            {
+                new SyncTask_AcademicSessionChildRecords(
+                "SyncTask_AcademicSessionChildRecords", this)
+                    .Execute(row);
 
-            TaskExecutor.ExecuteTask(new SyncTask_AcademicSessionChildRecords(
-                "SyncTask_AcademicSessionParentRecords", DateTime.Now, this),
-                _dtAcademicSession);
+                new SyncTask_AcademicSessionParentRecords(
+                "SyncTask_AcademicSessionParentRecords", this)
+                    .Execute(row);
+            }
         }
     }
 }

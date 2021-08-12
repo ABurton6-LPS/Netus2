@@ -407,7 +407,7 @@ namespace Netus2SisSync.UtilityTools
 
                     dtColumn = new DataColumn();
                     dtColumn.DataType = typeof(string);
-                    dtColumn.ColumnName = "SIS_ID";
+                    dtColumn.ColumnName = "sis_id";
                     dtAcademicSession.Columns.Add(dtColumn);
 
                     dtColumn = new DataColumn();
