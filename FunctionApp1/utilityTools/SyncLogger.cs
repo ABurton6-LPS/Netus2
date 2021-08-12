@@ -14,7 +14,7 @@ namespace Netus2SisSync.UtilityTools
             sql.Append("[name], [timestamp]");
             sql.Append(") VALUES (");
             sql.Append("'" + job.Name + "', ");
-            sql.Append("'" + job.Timestamp + "')");
+            sql.Append("'" + DateTime.Now + "')");
 
             job.Id = connection.InsertNewRecord(sql.ToString());
 
@@ -28,7 +28,7 @@ namespace Netus2SisSync.UtilityTools
             sql.Append(") VALUES (");
             sql.Append(task.Job.Id + ", ");
             sql.Append("'" + task.Name + "', ");
-            sql.Append("'" + task.Timestamp + "')");
+            sql.Append("'" + DateTime.Now + "')");
 
             task.Id = connection.InsertNewRecord(sql.ToString());
 
@@ -44,7 +44,7 @@ namespace Netus2SisSync.UtilityTools
             sql.Append(") VALUES (");
             sql.Append(job.Id + ", ");
             sql.Append(enumStatus.Id + ", ");
-            sql.Append("'" + job.Timestamp + "')");
+            sql.Append("'" + DateTime.Now + "')");
 
             connection.InsertNewRecord(sql.ToString());
         }
@@ -55,19 +55,31 @@ namespace Netus2SisSync.UtilityTools
             sql.Append(") VALUES (");
             sql.Append(task.Id + ", ");
             sql.Append(enumStatus.Id + ", ");
-            sql.Append("'" + task.Timestamp + "')");
+            sql.Append("'" + DateTime.Now + "')");
 
             connection.InsertNewRecord(sql.ToString());
         }
 
         public static void LogError(Exception e, SyncJob job, IConnectable connection)
         {
+            string errorMessage = e.Message;
+            while(e.Message.IndexOf('\'') > 0)
+            {
+                errorMessage = e.Message.Insert(e.Message.IndexOf('\''), "\'");
+            }
+
+            string errorStackTrace = e.StackTrace;
+            while(e.StackTrace.IndexOf('\'') > 0)
+            {
+                errorStackTrace = e.StackTrace.Insert(e.StackTrace.IndexOf('\''), "\'");
+            }
+
             StringBuilder sql = new StringBuilder("INSERT INTO sync_error(");
             sql.Append("sync_job_id, [message], stack_trace, [timestamp]");
             sql.Append(") VALUES (");
             sql.Append(job.Id + ", ");
-            sql.Append("'" + e.Message + "', ");
-            sql.Append("'" + e.StackTrace + "', ");
+            sql.Append("'" + errorMessage + "', ");
+            sql.Append("'" + errorStackTrace + "', ");
             sql.Append("'" + DateTime.Now + "')");
 
             connection.InsertNewRecord(sql.ToString());
@@ -77,12 +89,24 @@ namespace Netus2SisSync.UtilityTools
 
         public static void LogError(Exception e, SyncTask task, IConnectable connection)
         {
+            string errorMessage = e.Message;
+            while (e.Message.IndexOf('\'') > 0)
+            {
+                errorMessage = e.Message.Insert(e.Message.IndexOf('\''), "\'");
+            }
+
+            string errorStackTrace = e.StackTrace;
+            while (e.StackTrace.IndexOf('\'') > 0)
+            {
+                errorStackTrace = e.StackTrace.Insert(e.StackTrace.IndexOf('\''), "\'");
+            }
+
             StringBuilder sql = new StringBuilder("INSERT INTO sync_error(");
             sql.Append("sync_task_id, [message], stack_trace, [timestamp]");
             sql.Append(") VALUES (");
             sql.Append(task.Id + ", ");
-            sql.Append("'" + e.Message + "', ");
-            sql.Append("'" + e.StackTrace + "', ");
+            sql.Append("'" + errorMessage + "', ");
+            sql.Append("'" + errorStackTrace + "', ");
             sql.Append("'" + DateTime.Now + "')");
 
             connection.InsertNewRecord(sql.ToString());

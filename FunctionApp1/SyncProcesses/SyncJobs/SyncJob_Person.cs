@@ -15,8 +15,8 @@ namespace Netus2SisSync.SyncProcesses.SyncJobs
         IConnectable _netus2Connection;
         public DataTable _dtPerson;
 
-        public SyncJob_Person(string name, DateTime timestamp, IConnectable sisConnection, IConnectable netus2Connection)
-            : base(name, timestamp)
+        public SyncJob_Person(string name, IConnectable sisConnection, IConnectable netus2Connection)
+            : base(name)
         {
             _sisConnection = sisConnection;
             _netus2Connection = netus2Connection;
@@ -62,11 +62,11 @@ namespace Netus2SisSync.SyncProcesses.SyncJobs
                                 else
                                     myDataRow["person_type"] = null;
                                 break;
-                            case "SIS_ID":
+                            case "sis_id":
                                 if (value != DBNull.Value && value != null)
-                                    myDataRow["SIS_ID"] = (string)value;
+                                    myDataRow["sis_id"] = (string)value;
                                 else
-                                    myDataRow["SIS_ID"] = null;
+                                    myDataRow["sis_id"] = null;
                                 break;
                             case "first_name":
                                 if (value != DBNull.Value && value != null)
@@ -143,9 +143,12 @@ namespace Netus2SisSync.SyncProcesses.SyncJobs
 
         private void RunJobTasks()
         {
-            TaskExecutor.ExecuteTask(new SyncTask_Person(
-                "SyncTask_Person", DateTime.Now, this),
-                _dtPerson);
+            foreach(DataRow row in _dtPerson.Rows)
+            {
+                new SyncTask_Person(
+                "SyncTask_Person", this)
+                    .Execute(row);
+            }
         }
     }
 }

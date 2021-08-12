@@ -17,7 +17,6 @@ namespace Netus2_Test.Unit.netus2SisSync_Test
         TestDataBuilder tdBuilder;
         MockDatabaseConnection _sisConnection;
         MockDatabaseConnection _netus2Connection;
-        CountDownLatch_Mock _latch;
         MockPersonDaoImpl mockPersonDaoImpl;
         MockUniqueIdentifierDaoImpl mockUniqueIdentifierDaoImpl;
 
@@ -27,7 +26,6 @@ namespace Netus2_Test.Unit.netus2SisSync_Test
             DbConnectionFactory.TestMode = true;
             _sisConnection = (MockDatabaseConnection)DbConnectionFactory.GetSisConnection();
             _netus2Connection = (MockDatabaseConnection)DbConnectionFactory.GetNetus2Connection();
-            _latch = new CountDownLatch_Mock(0);
 
             tdBuilder = new TestDataBuilder();
             DaoImplFactory.MockAll = true;
@@ -58,7 +56,7 @@ namespace Netus2_Test.Unit.netus2SisSync_Test
 
             SetMockReaderWithTestData(tstDataSet);
 
-            SyncJob_Person syncJob_Person = new SyncJob_Person("TestJob", DateTime.Now, _sisConnection, _netus2Connection);
+            SyncJob_Person syncJob_Person = new SyncJob_Person("TestJob", _sisConnection, _netus2Connection);
             syncJob_Person.ReadFromSis();
             DataTable results = syncJob_Person._dtPerson;
 
@@ -113,7 +111,7 @@ namespace Netus2_Test.Unit.netus2SisSync_Test
 
             SetMockReaderWithTestData(tstDataSet);
 
-            SyncJob_Person syncJob_Person = new SyncJob_Person("TestJob", DateTime.Now, _sisConnection, _netus2Connection);
+            SyncJob_Person syncJob_Person = new SyncJob_Person("TestJob", _sisConnection, _netus2Connection);
             syncJob_Person.ReadFromSis();
             DataTable results = syncJob_Person._dtPerson;
 
@@ -165,9 +163,9 @@ namespace Netus2_Test.Unit.netus2SisSync_Test
             tstDataSet.Add(tstData);
             DataRow row = BuildTestDataTable(tstDataSet).Rows[0];
 
-            new SyncTask_Person("TestTask", DateTime.Now,
-                new SyncJob_Person("TestJob", DateTime.Now, _sisConnection, _netus2Connection))
-                .Execute(row, _latch);
+            new SyncTask_Person("TestTask",
+                new SyncJob_Person("TestJob", _sisConnection, _netus2Connection))
+                .Execute(row);
 
             Assert.IsTrue(mockUniqueIdentifierDaoImpl.WasCalled_Read);
             Assert.IsTrue(mockPersonDaoImpl.WasCalled_Write);
@@ -196,9 +194,9 @@ namespace Netus2_Test.Unit.netus2SisSync_Test
             tstDataSet.Add(tstData);
             DataRow row = BuildTestDataTable(tstDataSet).Rows[0];
 
-            new SyncTask_Person("TestTask", DateTime.Now,
-                new SyncJob_Person("TestJob", DateTime.Now, _sisConnection, _netus2Connection))
-                .Execute(row, _latch);
+            new SyncTask_Person("TestTask",
+                new SyncJob_Person("TestJob", _sisConnection, _netus2Connection))
+                .Execute(row);
 
             Assert.IsTrue(mockUniqueIdentifierDaoImpl.WasCalled_Read);
             Assert.IsTrue(mockPersonDaoImpl.WasCalled_Read);

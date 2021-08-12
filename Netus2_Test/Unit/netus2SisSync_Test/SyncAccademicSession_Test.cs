@@ -17,7 +17,6 @@ namespace Netus2_Test.Unit.netus2SisSync_Test
         TestDataBuilder tdBuilder;
         MockDatabaseConnection _sisConnection;
         MockDatabaseConnection _netus2DbConnection;
-        CountDownLatch_Mock _latch;
         MockAcademicSessionDaoImpl mockAcademicSessionDaoImpl;
         MockOrganizationDaoImpl mockOrganizationDaoImpl;
 
@@ -27,7 +26,6 @@ namespace Netus2_Test.Unit.netus2SisSync_Test
             DbConnectionFactory.TestMode = true;
             _sisConnection = (MockDatabaseConnection)DbConnectionFactory.GetSisConnection();
             _netus2DbConnection = (MockDatabaseConnection)DbConnectionFactory.GetNetus2Connection();
-            _latch = new CountDownLatch_Mock(0);
 
             tdBuilder = new TestDataBuilder();
             DaoImplFactory.MockAll = true;
@@ -55,7 +53,7 @@ namespace Netus2_Test.Unit.netus2SisSync_Test
 
             SetMockReaderWithTestData(tstDataSet);
 
-            SyncJob_AcademicSession syncJob_AcademicSession = new SyncJob_AcademicSession("TestJob", DateTime.Now, _sisConnection, _netus2DbConnection);
+            SyncJob_AcademicSession syncJob_AcademicSession = new SyncJob_AcademicSession("TestJob", _sisConnection, _netus2DbConnection);
             syncJob_AcademicSession.ReadFromSis();
             DataTable results = syncJob_AcademicSession._dtAcademicSession;
 
@@ -101,7 +99,7 @@ namespace Netus2_Test.Unit.netus2SisSync_Test
 
             SetMockReaderWithTestData(tstDataSet);
 
-            SyncJob_AcademicSession syncJob_AcademicSession = new SyncJob_AcademicSession("TestJob", DateTime.Now, _sisConnection, _netus2DbConnection);
+            SyncJob_AcademicSession syncJob_AcademicSession = new SyncJob_AcademicSession("TestJob", _sisConnection, _netus2DbConnection);
             syncJob_AcademicSession.ReadFromSis();
             DataTable results = syncJob_AcademicSession._dtAcademicSession;
 
@@ -145,9 +143,9 @@ namespace Netus2_Test.Unit.netus2SisSync_Test
             tstDataSet.Add(tstData);
             DataRow row = BuildTestDataTable(tstDataSet).Rows[0];
 
-            new SyncTask_AcademicSessionChildRecords("TestTask", DateTime.Now, 
-                new SyncJob_AcademicSession("TestJob", DateTime.Now, _sisConnection, _netus2DbConnection))
-                .Execute(row, _latch);
+            new SyncTask_AcademicSessionChildRecords("TestTask", 
+                new SyncJob_AcademicSession("TestJob", _sisConnection, _netus2DbConnection))
+                .Execute(row);
 
             Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_ReadWithoutParentId);
             Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_WriteWithoutParentId);
@@ -173,9 +171,9 @@ namespace Netus2_Test.Unit.netus2SisSync_Test
             tstDataSet.Add(tstData);
             DataRow row = BuildTestDataTable(tstDataSet).Rows[0];
 
-            new SyncTask_AcademicSessionChildRecords("TestTask", DateTime.Now,
-                new SyncJob_AcademicSession("TestJob", DateTime.Now, _sisConnection, _netus2DbConnection))
-                .Execute(row, _latch);
+            new SyncTask_AcademicSessionChildRecords("TestTask",
+                new SyncJob_AcademicSession("TestJob", _sisConnection, _netus2DbConnection))
+                .Execute(row);
 
             Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_ReadWithoutParentId);
             Assert.IsFalse(mockAcademicSessionDaoImpl.WasCalled_WriteWithoutParentId);
@@ -202,9 +200,9 @@ namespace Netus2_Test.Unit.netus2SisSync_Test
             tstDataSet.Add(tstData);
             DataRow row = BuildTestDataTable(tstDataSet).Rows[0];
 
-            new SyncTask_AcademicSessionChildRecords("TestTask", DateTime.Now,
-                new SyncJob_AcademicSession("TestJob", DateTime.Now, _sisConnection, _netus2DbConnection))
-                .Execute(row, _latch);
+            new SyncTask_AcademicSessionChildRecords("TestTask",
+                new SyncJob_AcademicSession("TestJob", _sisConnection, _netus2DbConnection))
+                .Execute(row);
 
             Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_ReadWithoutParentId);
             Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_UpdateWithoutParentId);
@@ -233,11 +231,11 @@ namespace Netus2_Test.Unit.netus2SisSync_Test
             DataRow row = BuildTestDataTable(tstDataSet).Rows[0];
 
             SyncJob_AcademicSession syncJob_AcademicSession =
-                new SyncJob_AcademicSession("TestJob", DateTime.Now, _sisConnection, _netus2DbConnection);
+                new SyncJob_AcademicSession("TestJob", _sisConnection, _netus2DbConnection);
             SyncTask_AcademicSessionParentRecords syncTask_AcademicSessionParentRecords =
-                new SyncTask_AcademicSessionParentRecords("TestTask", DateTime.Now, syncJob_AcademicSession);
+                new SyncTask_AcademicSessionParentRecords("TestTask", syncJob_AcademicSession);
 
-            syncTask_AcademicSessionParentRecords.Execute(row, _latch);
+            syncTask_AcademicSessionParentRecords.Execute(row);
 
             Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_ReadWithoutParentId);
             Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_ReadUsingSchoolCodeTermCodeSchoolYear);
