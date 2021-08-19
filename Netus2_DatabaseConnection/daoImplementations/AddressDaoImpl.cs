@@ -121,7 +121,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
                         switch (columnName)
                         {
                             case "address_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundAddressDao.address_id = (int)value;
                                 else
                                     foundAddressDao.address_id = null;
@@ -145,7 +145,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
                                 foundAddressDao.city = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "enum_state_province_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundAddressDao.enum_state_province_id = (int)value;
                                 else
                                     foundAddressDao.enum_state_province_id = null;
@@ -154,25 +154,25 @@ namespace Netus2_DatabaseConnection.daoImplementations
                                 foundAddressDao.postal_code = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "enum_country_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundAddressDao.enum_country_id = (int)value;
                                 else
                                     foundAddressDao.enum_country_id = null;
                                 break;
                             case "is_current_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundAddressDao.is_current_id = (int)value;
                                 else
                                     foundAddressDao.is_current_id = null;
                                 break;
                             case "enum_address_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundAddressDao.enum_address_id = (int)value;
                                 else
                                     foundAddressDao.enum_address_id = null;
                                 break;
                             case "created":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundAddressDao.created = (DateTime)value;
                                 else
                                     foundAddressDao.created = null;
@@ -181,7 +181,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
                                 foundAddressDao.created_by = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "changed":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundAddressDao.changed = (DateTime)value;
                                 else
                                     foundAddressDao.changed = null;

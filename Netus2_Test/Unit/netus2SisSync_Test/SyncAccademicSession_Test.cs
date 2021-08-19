@@ -10,7 +10,7 @@ using Netus2SisSync.SyncProcesses.SyncTasks.AcademicSessionTasks;
 using Netus2_DatabaseConnection.daoImplementations;
 using Netus2_Test.MockDaoImpl;
 
-namespace Netus2_Test.Unit.netus2SisSync_Test
+namespace Netus2_Test.Unit
 {
     public class SyncAccademicSession_Test
     {
@@ -240,6 +240,12 @@ namespace Netus2_Test.Unit.netus2SisSync_Test
             Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_ReadWithoutParentId);
             Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_ReadUsingSchoolCodeTermCodeSchoolYear);
             Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_UpdateWithParentId);
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            DbConnectionFactory.MockDatabaseConnection = null;
         }
 
         private DataTable BuildTestDataTable(List<SisAcademicSessionTestData> tstDataSet)

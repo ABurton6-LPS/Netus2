@@ -87,7 +87,7 @@ namespace Netus2SisSync.SyncProcesses.SyncJobs
                                     myDataRow["end_date"] = new DateTime();
                                 break;
                             case "parent_session_code":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     myDataRow["parent_session_code"] = (string)value;
                                 break;
                             default:

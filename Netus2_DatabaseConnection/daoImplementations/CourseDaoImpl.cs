@@ -109,7 +109,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
                         switch (columnName)
                         {
                             case "course_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundCourseDao.course_id = (int)value;
                                 else
                                     foundCourseDao.course_id = null;
@@ -121,7 +121,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
                                 foundCourseDao.course_code = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "created":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundCourseDao.created = (DateTime)value;
                                 else
                                     foundCourseDao.created = null;
@@ -130,7 +130,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
                                 foundCourseDao.created_by = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "changed":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundCourseDao.changed = (DateTime)value;
                                 else
                                     foundCourseDao.changed = null;

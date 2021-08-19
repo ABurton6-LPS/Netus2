@@ -78,13 +78,13 @@ namespace Netus2_DatabaseConnection.daoImplementations
                         switch (columnName)
                         {
                             case "unique_identifier_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundUniqueIdDao.unique_identifier_id = (int)value;
                                 else
                                     foundUniqueIdDao.unique_identifier_id = null;
                                 break;
                             case "person_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundUniqueIdDao.person_id = (int)value;
                                 else
                                     foundUniqueIdDao.person_id = null;
@@ -93,19 +93,19 @@ namespace Netus2_DatabaseConnection.daoImplementations
                                 foundUniqueIdDao.unique_identifier = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "enum_identifier_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundUniqueIdDao.enum_identifier_id = (int)value;
                                 else
                                     foundUniqueIdDao.enum_identifier_id = null;
                                 break;
                             case "is_active_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundUniqueIdDao.is_active_id = (int)value;
                                 else
                                     foundUniqueIdDao.is_active_id = null;
                                 break;
                             case "created":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundUniqueIdDao.created = (DateTime)value;
                                 else
                                     foundUniqueIdDao.created = null;
@@ -114,7 +114,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
                                 foundUniqueIdDao.created_by = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "changed":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundUniqueIdDao.changed = (DateTime)value;
                                 else
                                     foundUniqueIdDao.changed = null;

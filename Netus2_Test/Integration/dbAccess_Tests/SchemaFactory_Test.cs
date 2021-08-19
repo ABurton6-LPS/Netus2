@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 
-namespace Netus2_Test.Integration.dbAccess_Tests
+namespace Netus2_Test.Integration
 {
     public class SchemaFactory_Test
     {

@@ -89,7 +89,7 @@ namespace Netus2_Test
             semester1.SchoolYear = 2021;
             schoolYear.Children.Add(semester1);
             if (connection != null)
-                semester1 = academicSessionDaoImpl.Write(semester1, connection);
+                semester1 = academicSessionDaoImpl.Write(semester1, schoolYear.Id, connection);
             else
                 semester1.Id = 2;
 
@@ -97,7 +97,7 @@ namespace Netus2_Test
             semester2.SchoolYear = 2021;
             schoolYear.Children.Add(semester2);
             if (connection != null)
-                semester2 = academicSessionDaoImpl.Write(semester2, connection);
+                semester2 = academicSessionDaoImpl.Write(semester2, schoolYear.Id, connection);
             else
                 semester2.Id = 3;
 

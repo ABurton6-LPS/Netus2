@@ -141,7 +141,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
                         switch (columnName)
                         {
                             case "provider_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundProviderDao.provider_id = (int)value;
                                 else
                                     foundProviderDao.provider_id = null;
@@ -162,7 +162,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
                                 foundProviderDao.parent_provider_id = value != DBNull.Value ? (int)value : -1;
                                 break;
                             case "created":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundProviderDao.created = (DateTime)value;
                                 else
                                     foundProviderDao.created = null;
@@ -171,7 +171,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
                                 foundProviderDao.created_by = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "changed":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundProviderDao.changed = (DateTime)value;
                                 else
                                     foundProviderDao.changed = null;

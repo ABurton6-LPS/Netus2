@@ -90,10 +90,7 @@ namespace Netus2SisSync.UtilityTools
         public static void LogError(Exception e, SyncTask task, IConnectable connection)
         {
             string errorMessage = e.Message;
-            while (e.Message.IndexOf('\'') > 0)
-            {
-                errorMessage = e.Message.Insert(e.Message.IndexOf('\''), "\'");
-            }
+            errorMessage = e.Message.Replace("\'", "\'\'");
 
             string errorStackTrace = e.StackTrace;
             while (e.StackTrace.IndexOf('\'') > 0)

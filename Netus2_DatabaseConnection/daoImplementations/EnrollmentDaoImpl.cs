@@ -102,49 +102,49 @@ namespace Netus2_DatabaseConnection.daoImplementations
                         switch (columnName)
                         {
                             case "enrollment_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundEnrollmentDao.enrollment_id = (int)value;
                                 else
                                     foundEnrollmentDao.enrollment_id = null;
                                 break;
                             case "person_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundEnrollmentDao.person_id = (int)value;
                                 else
                                     foundEnrollmentDao.person_id = null;
                                 break;
                             case "class_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundEnrollmentDao.class_id = (int)value;
                                 else
                                     foundEnrollmentDao.class_id = null;
                                 break;
                             case "enum_grade_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundEnrollmentDao.enum_grade_id = (int)value;
                                 else
                                     foundEnrollmentDao.enum_grade_id = null;
                                 break;
                             case "start_date":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundEnrollmentDao.start_date = (DateTime)value;
                                 else
                                     foundEnrollmentDao.start_date = null;
                                 break;
                             case "end_date":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundEnrollmentDao.end_date = (DateTime)value;
                                 else
                                     foundEnrollmentDao.end_date = null;
                                 break;
                             case "is_primary_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundEnrollmentDao.is_primary_id = (int)value;
                                 else
                                     foundEnrollmentDao.is_primary_id = null;
                                 break;
                             case "created":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundEnrollmentDao.created = (DateTime)value;
                                 else
                                     foundEnrollmentDao.created = null;
@@ -153,7 +153,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
                                 foundEnrollmentDao.created_by = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "changed":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundEnrollmentDao.changed = (DateTime)value;
                                 else
                                     foundEnrollmentDao.changed = null;

@@ -100,7 +100,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
                         switch (columnName)
                         {
                             case "resource_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundResourceDao.resource_id = (int)value;
                                 else
                                     foundResourceDao.resource_id = null;
@@ -109,7 +109,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
                                 foundResourceDao.name = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "enum_importance_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundResourceDao.enum_importance_id = (int)value;
                                 else
                                     foundResourceDao.enum_importance_id = null;
@@ -124,7 +124,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
                                 foundResourceDao.application_identification = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "created":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundResourceDao.created = (DateTime)value;
                                 else
                                     foundResourceDao.created = null;
@@ -133,7 +133,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
                                 foundResourceDao.created_by = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "changed":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundResourceDao.changed = (DateTime)value;
                                 else
                                     foundResourceDao.changed = null;

@@ -98,37 +98,37 @@ namespace Netus2_DatabaseConnection.daoImplementations
                         switch (columnName)
                         {
                             case "mark_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundMarkDao.mark_id = (int)value;
                                 else
                                     foundMarkDao.mark_id = null;
                                 break;
                             case "lineitem_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundMarkDao.lineitem_id = (int)value;
                                 else
                                     foundMarkDao.lineitem_id = null;
                                 break;
                             case "person_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundMarkDao.person_id = (int)value;
                                 else
                                     foundMarkDao.person_id = null;
                                 break;
                             case "enum_score_status_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundMarkDao.enum_score_status_id = (int)value;
                                 else
                                     foundMarkDao.enum_score_status_id = null;
                                 break;
                             case "score":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundMarkDao.score = (double)value;
                                 else
                                     foundMarkDao.score = null;
                                 break;
                             case "score_date":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundMarkDao.score_date = (DateTime)value;
                                 else
                                     foundMarkDao.score_date = null;
@@ -137,7 +137,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
                                 foundMarkDao.comment = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "created":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundMarkDao.created = (DateTime)value;
                                 else
                                     foundMarkDao.created = null;
@@ -146,7 +146,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
                                 foundMarkDao.created_by = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "changed":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundMarkDao.changed = (DateTime)value;
                                 else
                                     foundMarkDao.changed = null;

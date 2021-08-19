@@ -73,7 +73,7 @@ namespace Netus2_DatabaseConnection.daoInterfaces
         /// <param name="termCode"></param>
         /// <param name="schoolYear"></param>
         /// <param name="connection"></param>
-        AcademicSession Read_UsingSchoolCode_TermCode_Schoolyear(string schoolCode, string termCode, int schoolYear, IConnectable connection);
+        AcademicSession Read_UsingBuildingCode_TermCode_Schoolyear(string schoolCode, string termCode, int schoolYear, IConnectable connection);
 
         /// <summary>
         /// <para>

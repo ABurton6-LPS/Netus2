@@ -27,10 +27,9 @@ namespace Netus2_DatabaseConnection.daoImplementations
             sql.Append("AND school_year " + (academicSessionDao.school_year != null ? "= " + academicSessionDao.school_year + " " : "IS NULL "));
             sql.Append("AND name " + (academicSessionDao.name != null ? "LIKE '" + academicSessionDao.name + "' " : "IS NULL "));
             sql.Append("AND start_date " + (academicSessionDao.start_date != null ? "= '" + academicSessionDao.start_date + "' " : "IS NULL "));
-            sql.Append("AND start_date " + (academicSessionDao.end_date != null ? "= '" + academicSessionDao.end_date + "' " : "IS NULL "));
+            sql.Append("AND end_date " + (academicSessionDao.end_date != null ? "= '" + academicSessionDao.end_date + "' " : "IS NULL "));
             sql.Append("AND enum_session_id " + (academicSessionDao.enum_session_id != null ? "= " + academicSessionDao.enum_session_id + " " : "IS NULL "));
-            sql.Append("AND parent_session_id " + (academicSessionDao.parent_session_id != null ? "= " + academicSessionDao.parent_session_id + " " : "IS NULL "));
-            sql.Append("AND organization_id " + (academicSessionDao.organization_id != null ? "= " + academicSessionDao.organization_id + " " : "IS NULL "));
+            sql.Append("AND organization_id " + (academicSessionDao.organization_id != null ? "= " + academicSessionDao.organization_id: "IS NULL"));
 
             connection.ExecuteNonQuery(sql.ToString());
         }
@@ -98,20 +97,20 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 return null;
         }
 
-        public AcademicSession Read_UsingSchoolCode_TermCode_Schoolyear(string schoolCode, string termCode, int schoolYear, IConnectable connection)
+        public AcademicSession Read_UsingBuildingCode_TermCode_Schoolyear(string buildingCode, string termCode, int schoolYear, IConnectable connection)
         {
             string sql = "SELECT * FROM academic_session WHERE 1=1 " + 
                 "AND term_code = '" + termCode + "' " + 
                 "AND school_year = " + schoolYear + " " +
                 "AND organization_id in (" +
-                "SELECT organization_id FROM organization WHERE building_code LIKE '" + schoolCode + "')";
+                "SELECT organization_id FROM organization WHERE building_code LIKE '" + buildingCode + "')";
 
             List<AcademicSession> resutls = Read(sql, connection);
             if (resutls.Count == 1)
                 return resutls[0];
             else if (resutls.Count > 1)
                 throw new Exception("Multiple academic_session records found linked to " +
-                    "schoolCode: " + schoolCode + 
+                    "buildingCode: " + buildingCode + 
                     ", termCode: " + termCode + 
                     ", schoolYear: " + schoolYear);
             else
@@ -174,70 +173,70 @@ namespace Netus2_DatabaseConnection.daoImplementations
                         switch (columnName)
                         {
                             case "academic_session_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundAsDao.academic_session_id = (int)value;
                                 else
                                     foundAsDao.academic_session_id = null;
                                 break;
                             case "term_code":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundAsDao.term_code = (string)value;
                                 else
                                     foundAsDao.term_code = null;
                                 break;
                             case "school_year":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundAsDao.school_year = (int)value;
                                 else
                                     foundAsDao.school_year = null;
                                 break;
                             case "name":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundAsDao.name = (string)value;
                                 else
                                     foundAsDao.name = null;
                                 break;
                             case "start_date":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundAsDao.start_date = (DateTime)value;
                                 else
                                     foundAsDao.start_date = null;
                                 break;
                             case "end_date":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundAsDao.end_date = (DateTime)value;
                                 else
                                     foundAsDao.end_date = null;
                                 break;
                             case "enum_session_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundAsDao.enum_session_id = (int)value;
                                 else
                                     foundAsDao.enum_session_id = null;
                                 break;
                             case "parent_session_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundAsDao.parent_session_id = (int)value;
                                 else
                                     foundAsDao.parent_session_id = null;
                                 break;
                             case "organization_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundAsDao.organization_id = (int)value;
                                 else
                                     foundAsDao.organization_id = null;
                                 break;
                             case "created":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundAsDao.created = (DateTime)value;
                                 else
-                                    foundAsDao.created = (DateTime)value;
+                                    foundAsDao.created = null;
                                 break;
                             case "created_by":
                                 foundAsDao.created_by = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "changed":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundAsDao.changed = (DateTime)value;
                                 else
                                     foundAsDao.changed = null;
@@ -290,7 +289,10 @@ namespace Netus2_DatabaseConnection.daoImplementations
         {
             List<AcademicSession> foundAcademicSessions = Read(academicSession, connection);
             if (foundAcademicSessions.Count == 0)
-                Write(academicSession, connection);
+                if (parentId == -1)
+                    Write(academicSession, connection);
+                else
+                    Write(academicSession, parentId, connection);
             else if (foundAcademicSessions.Count == 1)
             {
                 academicSession.Id = foundAcademicSessions[0].Id;

@@ -207,7 +207,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
                         switch (columnName)
                         {
                             case "person_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundPersonDao.person_id = (int)value;
                                 else
                                     foundPersonDao.person_id = null;
@@ -222,25 +222,25 @@ namespace Netus2_DatabaseConnection.daoImplementations
                                 foundPersonDao.last_name = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "birth_date":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundPersonDao.birth_date = (DateTime)value;
                                 else
                                     foundPersonDao.birth_date = null;
                                 break;
                             case "enum_gender_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundPersonDao.enum_gender_id = (int)value;
                                 else
                                     foundPersonDao.enum_gender_id = null;
                                 break;
                             case "enum_ethnic_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundPersonDao.enum_ethnic_id = (int)value;
                                 else
                                     foundPersonDao.enum_ethnic_id = null;
                                 break;
                             case "enum_residence_status_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundPersonDao.enum_residence_status_id = (int)value;
                                 else
                                     foundPersonDao.enum_residence_status_id = null;
@@ -252,7 +252,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
                                 foundPersonDao.login_pw = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "created":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundPersonDao.created = (DateTime)value;
                                 else
                                     foundPersonDao.created = null;
@@ -261,7 +261,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
                                 foundPersonDao.created_by = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "changed":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundPersonDao.changed = (DateTime)value;
                                 else
                                     foundPersonDao.changed = null;

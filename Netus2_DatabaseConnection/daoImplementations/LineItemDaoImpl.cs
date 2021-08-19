@@ -112,7 +112,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
                         switch (columnName)
                         {
                             case "lineitem_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundLineItemDao.lineitem_id = (int)value;
                                 else
                                     foundLineItemDao.lineitem_id = null;
@@ -124,43 +124,43 @@ namespace Netus2_DatabaseConnection.daoImplementations
                                 foundLineItemDao.descript = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "assign_date":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundLineItemDao.assign_date = (DateTime)value;
                                 else
                                     foundLineItemDao.assign_date = null;
                                 break;
                             case "due_date":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundLineItemDao.due_date = (DateTime)value;
                                 else
                                     foundLineItemDao.due_date = null;
                                 break;
                             case "class_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundLineItemDao.class_id = (int)value;
                                 else
                                     foundLineItemDao.class_id = null;
                                 break;
                             case "enum_category_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundLineItemDao.enum_category_id = (int)value;
                                 else
                                     foundLineItemDao.enum_category_id = null;
                                 break;
                             case "markValueMin":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundLineItemDao.markValueMin = (double)value;
                                 else
                                     foundLineItemDao.markValueMin = null;
                                 break;
                             case "markValueMax":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundLineItemDao.markValueMax = (double)value;
                                 else
                                     foundLineItemDao.markValueMax = null;
                                 break;
                             case "created":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundLineItemDao.created = (DateTime)value;
                                 else
                                     foundLineItemDao.created = null;
@@ -169,7 +169,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
                                 foundLineItemDao.created_by = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "changed":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundLineItemDao.changed = (DateTime)value;
                                 else
                                     foundLineItemDao.changed = null;

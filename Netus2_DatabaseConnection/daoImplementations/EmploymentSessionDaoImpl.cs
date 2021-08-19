@@ -137,7 +137,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
                         switch (columnName)
                         {
                             case "employment_session_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundEsDao.employment_session_id = (int)value;
                                 else
                                     foundEsDao.employment_session_id = null;
@@ -146,43 +146,43 @@ namespace Netus2_DatabaseConnection.daoImplementations
                                 foundEsDao.name = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "person_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundEsDao.person_id = (int)value;
                                 else
                                     foundEsDao.person_id = null;
                                 break;
                             case "start_date":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundEsDao.start_date = (DateTime)value;
                                 else
                                     foundEsDao.start_date = null;
                                 break;
                             case "end_date":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundEsDao.end_date = (DateTime)value;
                                 else
                                     foundEsDao.end_date = null;
                                 break;
                             case "is_primary_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundEsDao.is_primary_id = (int)value;
                                 else
                                     foundEsDao.is_primary_id = null;
                                 break;
                             case "enum_session_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundEsDao.enum_session_id = (int)value;
                                 else
                                     foundEsDao.enum_session_id = null;
                                 break;
                             case "organization_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundEsDao.organization_id = (int)value;
                                 else
                                     foundEsDao.organization_id = null;
                                 break;
                             case "created":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundEsDao.created = (DateTime)value;
                                 else
                                     foundEsDao.created = null;
@@ -191,7 +191,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
                                 foundEsDao.created_by = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "changed":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundEsDao.changed = (DateTime)value;
                                 else
                                     foundEsDao.changed = null;
