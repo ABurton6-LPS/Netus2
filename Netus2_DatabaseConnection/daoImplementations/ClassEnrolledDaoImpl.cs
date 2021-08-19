@@ -156,7 +156,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
                         switch (columnName)
                         {
                             case "class_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundClassEnrolledDao.class_id = (int)value;
                                 else
                                     foundClassEnrolledDao.class_id = null;
@@ -168,7 +168,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
                                 foundClassEnrolledDao.class_code = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "enum_class_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundClassEnrolledDao.enum_class_id = (int)value;
                                 else
                                     foundClassEnrolledDao.enum_class_id = null;
@@ -177,19 +177,19 @@ namespace Netus2_DatabaseConnection.daoImplementations
                                 foundClassEnrolledDao.room = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "course_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundClassEnrolledDao.course_id = (int)value;
                                 else
                                     foundClassEnrolledDao.course_id = null;
                                     break;
                             case "academic_session_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundClassEnrolledDao.academic_session_id = (int)value;
                                 else
                                     foundClassEnrolledDao.academic_session_id = null;
                                 break;
                             case "created":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundClassEnrolledDao.created = (DateTime)value;
                                 else
                                     foundClassEnrolledDao.created = null;
@@ -198,7 +198,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
                                 foundClassEnrolledDao.created_by = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "changed":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundClassEnrolledDao.changed = (DateTime)value;
                                 else
                                     foundClassEnrolledDao.changed = null;

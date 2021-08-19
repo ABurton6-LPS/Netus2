@@ -1,9 +1,8 @@
 ﻿using Netus2_DatabaseConnection.dbAccess;
 using Netus2SisSync.SyncProcesses.SyncJobs;
 using NUnit.Framework;
-using System;
 
-namespace Netus2_Test.Integration.Netus2Sync
+namespace Netus2_Test.Integration
 {
     public class Netus2Sync_Test
     {
@@ -14,14 +13,14 @@ namespace Netus2_Test.Integration.Netus2Sync
             IConnectable sisConnection = DbConnectionFactory.GetSisConnection();
             try
             {
-                new SyncJob_Organization("SyncJob_Organization", sisConnection, netus2Connection)
-                    .Start();
+                //new SyncJob_Organization("SyncJob_Organization", sisConnection, netus2Connection)
+                //    .Start();
 
-                new SyncJob_AcademicSession("SyncJob_AcademicSession", sisConnection, netus2Connection)
-                    .Start();
+                //new SyncJob_AcademicSession("SyncJob_AcademicSession", sisConnection, netus2Connection)
+                //    .Start();
 
-                new SyncJob_Person("SyncJob_Person", sisConnection, netus2Connection)
-                    .Start();
+                //new SyncJob_Person("SyncJob_Person", sisConnection, netus2Connection)
+                //    .Start();
             }
             finally
             {

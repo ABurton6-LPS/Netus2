@@ -9,6 +9,9 @@ namespace Netus2_DatabaseConnection.dbAccess
     {
         private ConnectionState state = ConnectionState.Open;
         public Mock<IDataReader> mockReader = new Mock<IDataReader>();
+        public string expectedReaderSql = null;
+        public string expectedNonQuerySql = null;
+        public string expectedNewRecordSql = null;
 
         private List<string> testEnumKeys = new List<string>();               
 
@@ -106,18 +109,33 @@ namespace Netus2_DatabaseConnection.dbAccess
 
                 return enumReader.Object;
             }
+            else if (expectedReaderSql != null)
+            {
+                Assert.AreEqual(expectedReaderSql, sql);
+                expectedReaderSql = null;
+            }
 
             return mockReader.Object;
         }
 
         public int ExecuteNonQuery(string sql)
         {
+            if (expectedNonQuerySql != null)
+            {
+                Assert.AreEqual(expectedNonQuerySql, sql);
+                expectedNonQuerySql = null;
+            }
             return 1;
         }
 
         public int InsertNewRecord(string sql)
         {
-            if (sql.Contains("INSERT INTO sync_error"))
+            if (expectedNewRecordSql != null)
+            {
+                Assert.AreEqual(expectedNewRecordSql, sql);
+                expectedNewRecordSql = null;
+            }
+            else if (sql.Contains("INSERT INTO sync_error"))
             {
                 string values = sql.Substring(82);
                 string[] separatedValues = values.Split(", '");

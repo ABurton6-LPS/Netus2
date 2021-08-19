@@ -7,9 +7,9 @@ using Netus2_DatabaseConnection.enumerations;
 using Netus2_DatabaseConnection.logObjects;
 using NUnit.Framework;
 using System.Collections.Generic;
-using static Netus2_Test.Integration.logAccess_Tests.LogTestValidator;
+using static Netus2_Test.Integration.LogTestValidator;
 
-namespace Netus2_Test.Integration.logAccess_Tests
+namespace Netus2_Test.Integration
 {
     class LogReader_Test
     {
@@ -19,7 +19,6 @@ namespace Netus2_Test.Integration.logAccess_Tests
         IPersonDao personDaoImpl;
         IProviderDao providerDaoImpl;
         IApplicationDao applicationDaoImpl;
-        IOrganizationDao orgDaoImpl;
         IResourceDao resourceDaoImpl;
         ICourseDao courseDaoImpl;
         IClassEnrolledDao classEnrolledDaoImpl;
@@ -501,7 +500,7 @@ namespace Netus2_Test.Integration.logAccess_Tests
             Assert.IsNotEmpty(logAcademicSessions);
             Assert.AreEqual(preTestLogCount + 1, logAcademicSessions.Count);
 
-            Assert_LogTable((int)logAcademicSessions[preTestLogCount].academic_session_id, logAcademicSessions.Count, "log_academic_session", connection);
+            Assert_LogTable((int)logAcademicSessions[preTestLogCount].academic_session_id, 1, "log_academic_session", connection);
             Assert.AreEqual(Enum_Log_Action.values["update"], logAcademicSessions[preTestLogCount].LogAction);
 
             Assert_LogAcademicSession(oldAcademicSession, logAcademicSessions[preTestLogCount]);
@@ -513,18 +512,23 @@ namespace Netus2_Test.Integration.logAccess_Tests
             int preTestLogCount = logReader.Read_LogAcademicSession(connection).Count;
 
             AcademicSession academicSession = testDataBuilder.schoolYear;
+
+            var expectOneNewRecordForThisDeletion = 1;
+            var eachChildNeedsToBeUpdatedAlso = academicSession.Children.Count;
+
             academicSessionDaoImpl.Delete(academicSession, connection);
 
             List<LogAcademicSession> logAcademicSessions = logReader.Read_LogAcademicSession(connection);
 
+            var expectedTestLogCount = preTestLogCount + expectOneNewRecordForThisDeletion + eachChildNeedsToBeUpdatedAlso;
             Assert.IsNotNull(logAcademicSessions);
             Assert.IsNotEmpty(logAcademicSessions);
-            Assert.AreEqual(preTestLogCount + 1, logAcademicSessions.Count);
+            Assert.AreEqual(expectedTestLogCount, logAcademicSessions.Count);
 
             Assert_LogTable((int)logAcademicSessions[preTestLogCount].academic_session_id, 1, "log_academic_session", connection);
-            Assert.AreEqual(Enum_Log_Action.values["delete"], logAcademicSessions[preTestLogCount].LogAction);
+            Assert.AreEqual(Enum_Log_Action.values["delete"], logAcademicSessions[expectedTestLogCount - 1].LogAction);
 
-            Assert_LogAcademicSession(academicSession, logAcademicSessions[preTestLogCount]);
+            Assert_LogAcademicSession(academicSession, logAcademicSessions[expectedTestLogCount - 1]);
         }
 
         [Test]
@@ -534,7 +538,7 @@ namespace Netus2_Test.Integration.logAccess_Tests
 
             Organization org = testDataBuilder.school;
             org.Name = "New Organization Name";
-            orgDaoImpl.Update(org, connection);
+            organizationDaoImpl.Update(org, connection);
 
             List<LogOrganization> logOrganizations = logReader.Read_LogOrganization(connection);
 
@@ -542,7 +546,7 @@ namespace Netus2_Test.Integration.logAccess_Tests
             Assert.IsNotEmpty(logOrganizations);
             Assert.AreEqual(preTestLogCount + 1, logOrganizations.Count);
 
-            Assert_LogTable((int)logOrganizations[preTestLogCount].organization_id, logOrganizations.Count, "log_organization", connection);
+            Assert_LogTable((int)logOrganizations[preTestLogCount].organization_id, 2, "log_organization", connection);
             Assert.AreEqual(Enum_Log_Action.values["update"], logOrganizations[preTestLogCount].LogAction);
 
             Assert_LogOrganization(org, logOrganizations[preTestLogCount]);
@@ -562,7 +566,7 @@ namespace Netus2_Test.Integration.logAccess_Tests
             Assert.IsNotEmpty(logOrganizations);
             Assert.AreEqual(preTestLogCount + 1, logOrganizations.Count);
 
-            Assert_LogTable((int)logOrganizations[preTestLogCount].organization_id, logOrganizations.Count, "log_organization", connection);
+            Assert_LogTable((int)logOrganizations[preTestLogCount].organization_id, 2, "log_organization", connection);
             Assert.AreEqual(Enum_Log_Action.values["delete"], logOrganizations[preTestLogCount].LogAction);
 
             Assert_LogOrganization(org, logOrganizations[preTestLogCount]);

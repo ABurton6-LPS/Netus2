@@ -6,9 +6,9 @@ using Netus2_DatabaseConnection.enumerations;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using static Netus2_Test.Integration.daoObject_Tests.TestDataValidator;
+using static Netus2_Test.Integration.TestDataValidator;
 
-namespace Netus2_Test.Integration.daoObject_Tests
+namespace Netus2_Test.Integration
 {
     class EndToEnd_StudentTest
     {
@@ -18,6 +18,7 @@ namespace Netus2_Test.Integration.daoObject_Tests
 
         IPersonDao personDaoImpl;
         IAcademicSessionDao academicSessionDaoImpl;
+        IEmploymentSessionDao employmentSessionDaoImpl;
         IClassEnrolledDao classEnrolledDaoImpl;
         IMarkDao markDaoImpl;
         IOrganizationDao organizationDaoImpl;
@@ -35,6 +36,7 @@ namespace Netus2_Test.Integration.daoObject_Tests
 
             organizationDaoImpl = DaoImplFactory.GetOrganizationDaoImpl();
             academicSessionDaoImpl = DaoImplFactory.GetAcademicSessionDaoImpl();
+            employmentSessionDaoImpl = DaoImplFactory.GetEmploymentSessionDaoImpl();
             personDaoImpl = DaoImplFactory.GetPersonDaoImpl();
             courseDaoImpl = DaoImplFactory.GetCourseDaoImpl();
             classEnrolledDaoImpl = DaoImplFactory.GetClassEnrolledDaoImpl();
@@ -265,15 +267,14 @@ namespace Netus2_Test.Integration.daoObject_Tests
 
             academicSession.Organization = newOrg;
             academicSessionDaoImpl.Update(academicSession, connection);
-
-            organizationDaoImpl.Delete(oldOrg, connection);
+            academicSession = academicSessionDaoImpl.Read(academicSession, connection)[0];
 
             AcademicSession result = academicSessionDaoImpl.Read(academicSession, connection)[0];
 
             AssertAcademicSession(academicSession, result);
             Assert_Table(result.Id, 1, "academic_session", connection);
             Assert.AreNotEqual(oldOrg.Id, result.Organization.Id);
-            Assert_Table(oldOrg.Id, 0, "organization", connection);
+            Assert_Table(oldOrg.Id, 1, "organization", connection);
             Assert_Table(result.Organization.Id, 1, "organization", connection);
         }
 

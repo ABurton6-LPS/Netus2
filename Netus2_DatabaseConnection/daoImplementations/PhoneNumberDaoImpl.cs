@@ -88,13 +88,13 @@ namespace Netus2_DatabaseConnection.daoImplementations
                         switch (columnName)
                         {
                             case "phone_number_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundPhoneNumberDao.phone_number_id = (int)value;
                                 else
                                     foundPhoneNumberDao.phone_number_id = null;
                                 break;
                             case "person_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundPhoneNumberDao.person_id = (int)value;
                                 else
                                     foundPhoneNumberDao.person_id = null;
@@ -103,19 +103,19 @@ namespace Netus2_DatabaseConnection.daoImplementations
                                 foundPhoneNumberDao.phone_number = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "is_primary_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundPhoneNumberDao.is_primary_id = (int)value;
                                 else
                                     foundPhoneNumberDao.is_primary_id = null;
                                 break;
                             case "enum_phone_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundPhoneNumberDao.enum_phone_id = (int)value;
                                 else
                                     foundPhoneNumberDao.enum_phone_id = null;
                                 break;
                             case "created":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundPhoneNumberDao.created = (DateTime)value;
                                 else
                                     foundPhoneNumberDao.created = null;
@@ -124,7 +124,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
                                 foundPhoneNumberDao.created_by = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "changed":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundPhoneNumberDao.changed = (DateTime)value;
                                 else
                                     foundPhoneNumberDao.changed = null;

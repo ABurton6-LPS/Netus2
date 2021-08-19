@@ -36,7 +36,7 @@ namespace Netus2_DatabaseConnection
                                 logPerson.log_person_id = value != DBNull.Value ? (int)value : -1;
                                 break;
                             case "person_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logPerson.person_id = (int)value;
                                 else
                                     logPerson.person_id = null;
@@ -51,13 +51,13 @@ namespace Netus2_DatabaseConnection
                                 logPerson.last_name = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "birth_date":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logPerson.birth_date = (DateTime)value;
                                 else
                                     logPerson.birth_date = null;
                                 break;
                             case "enum_gender_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                 {
                                     logPerson.set_Gender((int)value);
                                 }
@@ -65,13 +65,13 @@ namespace Netus2_DatabaseConnection
                                     logPerson.Gender = null;
                                 break;
                             case "enum_ethnic_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logPerson.set_Ethnic((int)value);
                                 else
                                     logPerson.Ethnic = null;
                                 break;
                             case "enum_residence_status_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logPerson.set_ResidenceStatus((int)value);
                                 else
                                     logPerson.ResidenceStatus = null;
@@ -83,7 +83,7 @@ namespace Netus2_DatabaseConnection
                                 logPerson.login_pw = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "created":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logPerson.created = (DateTime)value;
                                 else
                                     logPerson.created = null;
@@ -92,7 +92,7 @@ namespace Netus2_DatabaseConnection
                                 logPerson.created_by = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "changed":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logPerson.changed = (DateTime)value;
                                 else
                                     logPerson.changed = null;
@@ -101,7 +101,7 @@ namespace Netus2_DatabaseConnection
                                 logPerson.changed_by = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "log_date":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logPerson.log_date = (DateTime)value;
                                 else
                                     logPerson.log_date = null;
@@ -110,7 +110,7 @@ namespace Netus2_DatabaseConnection
                                 logPerson.log_user = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "enum_log_action_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logPerson.set_LogAction((int)value);
                                 else
                                     logPerson.LogAction = null;
@@ -158,19 +158,19 @@ namespace Netus2_DatabaseConnection
                                 logJctPersonRole.log_jct_person_role_id = value != DBNull.Value ? (int)value : -1;
                                 break;
                             case "person_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logJctPersonRole.person_id = (int)value;
                                 else
                                     logJctPersonRole.person_id = null;
                                 break;
                             case "enum_role_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logJctPersonRole.set_Role((int)value);
                                 else
                                     logJctPersonRole.Role = null;
                                 break;
                             case "log_date":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logJctPersonRole.log_date = (DateTime)value;
                                 else
                                     logJctPersonRole.log_date = null;
@@ -179,7 +179,7 @@ namespace Netus2_DatabaseConnection
                                 logJctPersonRole.log_user = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "enum_log_action_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logJctPersonRole.set_LogAction((int)value);
                                 else
                                     logJctPersonRole.LogAction = null;
@@ -227,19 +227,19 @@ namespace Netus2_DatabaseConnection
                                 logJctPersonPerson.log_jct_person_person_id = value != DBNull.Value ? (int)value : -1;
                                 break;
                             case "person_one_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logJctPersonPerson.person_one_id = (int)value;
                                 else
                                     logJctPersonPerson.person_one_id = null;
                                 break;
                             case "person_two_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logJctPersonPerson.person_two_id = (int)value;
                                 else
                                     logJctPersonPerson.person_two_id = null;
                                 break;
                             case "log_date":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logJctPersonPerson.log_date = (DateTime)value;
                                 else
                                     logJctPersonPerson.log_date = null;
@@ -248,7 +248,7 @@ namespace Netus2_DatabaseConnection
                                 logJctPersonPerson.log_user = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "enum_log_action_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logJctPersonPerson.set_LogAction((int)value);
                                 else
                                     logJctPersonPerson.LogAction = null;
@@ -296,13 +296,13 @@ namespace Netus2_DatabaseConnection
                                 logUniqueIdentifier.log_unique_identifier_id = value != DBNull.Value ? (int)value : -1;
                                 break;
                             case "unique_identifier_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logUniqueIdentifier.unique_identifier_id = (int)value;
                                 else
                                     logUniqueIdentifier.unique_identifier_id = null;
                                     break;
                             case "person_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logUniqueIdentifier.person_id = (int)value;
                                 else
                                     logUniqueIdentifier.person_id = null;
@@ -311,19 +311,19 @@ namespace Netus2_DatabaseConnection
                                 logUniqueIdentifier.unique_identifier = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "enum_identifier_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logUniqueIdentifier.IdentifierType = Enum_Identifier.GetEnumFromId((int)value);
                                 else
                                     logUniqueIdentifier.IdentifierType = null;
                                 break;
                             case "is_active_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logUniqueIdentifier.IsActive = Enum_True_False.GetEnumFromId((int)value);
                                 else
                                     logUniqueIdentifier.IsActive = null;
                                 break;
                             case "created":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logUniqueIdentifier.created = (DateTime)value;
                                 else
                                     logUniqueIdentifier.created = null;
@@ -332,7 +332,7 @@ namespace Netus2_DatabaseConnection
                                 logUniqueIdentifier.created_by = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "changed":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logUniqueIdentifier.changed = (DateTime)value;
                                 else
                                     logUniqueIdentifier.changed = null;
@@ -341,7 +341,7 @@ namespace Netus2_DatabaseConnection
                                 logUniqueIdentifier.changed_by = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "log_date":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logUniqueIdentifier.log_date = (DateTime)value;
                                 else
                                     logUniqueIdentifier.log_date = null;
@@ -350,7 +350,7 @@ namespace Netus2_DatabaseConnection
                                 logUniqueIdentifier.log_user = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "enum_log_action_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logUniqueIdentifier.set_LogAction((int)value);
                                 else
                                     logUniqueIdentifier.LogAction = null;
@@ -398,7 +398,7 @@ namespace Netus2_DatabaseConnection
                                 logProvider.log_provider_id = value != DBNull.Value ? (int)value : -1;
                                 break;
                             case "provider_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logProvider.provider_id = (int)value;
                                 else
                                     logProvider.provider_id = null;
@@ -413,13 +413,13 @@ namespace Netus2_DatabaseConnection
                                 logProvider.url_admin_access = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "parent_provider_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logProvider.parent_provider_id = (int)value;
                                 else
                                     logProvider.parent_provider_id = null;
                                 break;
                             case "created":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logProvider.created = (DateTime)value;
                                 else
                                     logProvider.created = null;
@@ -428,7 +428,7 @@ namespace Netus2_DatabaseConnection
                                 logProvider.created_by = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "changed":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logProvider.changed = (DateTime)value;
                                 else
                                     logProvider.changed = null;
@@ -437,7 +437,7 @@ namespace Netus2_DatabaseConnection
                                 logProvider.changed_by = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "log_date":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logProvider.log_date = (DateTime)value;
                                 else
                                     logProvider.log_date = null;
@@ -446,7 +446,7 @@ namespace Netus2_DatabaseConnection
                                 logProvider.log_user = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "enum_log_action_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logProvider.set_LogAction((int)value);
                                 else
                                     logProvider.LogAction = null;
@@ -494,7 +494,7 @@ namespace Netus2_DatabaseConnection
                                 logApp.log_app_id = value != DBNull.Value ? (int)value : -1;
                                 break;
                             case "app_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logApp.app_id = (int)value;
                                 else
                                     logApp.app_id = null;
@@ -503,13 +503,13 @@ namespace Netus2_DatabaseConnection
                                 logApp.name = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "provider_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logApp.provider_id = (int)value;
                                 else
                                     logApp.provider_id = null;
                                 break;
                             case "created":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logApp.created = (DateTime)value;
                                 else
                                     logApp.created = null;
@@ -518,7 +518,7 @@ namespace Netus2_DatabaseConnection
                                 logApp.created_by = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "changed":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logApp.changed = (DateTime)value;
                                 else
                                     logApp.changed = null;
@@ -527,7 +527,7 @@ namespace Netus2_DatabaseConnection
                                 logApp.changed_by = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "log_date":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logApp.log_date = (DateTime)value;
                                 else
                                     logApp.log_date = null;
@@ -536,7 +536,7 @@ namespace Netus2_DatabaseConnection
                                 logApp.log_user = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "enum_log_action_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logApp.set_LogAction((int)value);
                                 else
                                     logApp.LogAction = null;
@@ -584,19 +584,19 @@ namespace Netus2_DatabaseConnection
                                 logJctPersonApp.log_jct_person_app_id = value != DBNull.Value ? (int)value : -1;
                                 break;
                             case "person_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logJctPersonApp.person_id = (int)value;
                                 else
                                     logJctPersonApp.person_id = null;
                                 break;
                             case "app_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logJctPersonApp.app_id = (int)value;
                                 else
                                     logJctPersonApp.app_id = null;
                                 break;
                             case "log_date":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logJctPersonApp.log_date = (DateTime)value;
                                 else
                                     logJctPersonApp.log_date = null;
@@ -605,7 +605,7 @@ namespace Netus2_DatabaseConnection
                                 logJctPersonApp.log_user = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "enum_log_action_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logJctPersonApp.set_LogAction((int)value);
                                 else
                                     logJctPersonApp.LogAction = null;
@@ -653,25 +653,25 @@ namespace Netus2_DatabaseConnection
                                 logJctClassPerson.log_jct_class_person_id = value != DBNull.Value ? (int)value : -1;
                                 break;
                             case "class_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logJctClassPerson.class_id = (int)value;
                                 else
                                     logJctClassPerson.class_id = null;
                                 break;
                             case "person_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logJctClassPerson.person_id = (int)value;
                                 else
                                     logJctClassPerson.person_id = null;
                                 break;
                             case "enum_role_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logJctClassPerson.set_Role((int)value);
                                 else
                                     logJctClassPerson.Role = null;
                                 break;
                             case "log_date":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logJctClassPerson.log_date = (DateTime)value;
                                 else
                                     logJctClassPerson = null;
@@ -680,7 +680,7 @@ namespace Netus2_DatabaseConnection
                                 logJctClassPerson.log_user = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "enum_log_action_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logJctClassPerson.set_LogAction((int)value);
                                 else
                                     logJctClassPerson.LogAction = null;
@@ -727,13 +727,13 @@ namespace Netus2_DatabaseConnection
                                 logPhoneNumber.log_phone_number_id = value != DBNull.Value ? (int)value : -1;
                                 break;
                             case "phone_number_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logPhoneNumber.phone_number_id = (int)value;
                                 else
                                     logPhoneNumber.phone_number_id = null;
                                 break;
                             case "person_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logPhoneNumber.person_id = (int)value;
                                 else
                                     logPhoneNumber.person_id = null;
@@ -742,19 +742,19 @@ namespace Netus2_DatabaseConnection
                                 logPhoneNumber.phone_number = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "is_primary_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logPhoneNumber.set_IsPrimary((int)value);
                                 else
                                     logPhoneNumber.IsPrimary = null;
                                 break;
                             case "enum_phone_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logPhoneNumber.set_PhoneType((int)value);
                                 else
                                     logPhoneNumber.PhoneType = null;
                                 break;
                             case "created":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logPhoneNumber.created = (DateTime)value;
                                 else
                                     logPhoneNumber.created = null;
@@ -763,7 +763,7 @@ namespace Netus2_DatabaseConnection
                                 logPhoneNumber.created_by = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "changed":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logPhoneNumber.changed = (DateTime)value;
                                 else
                                     logPhoneNumber.changed = null;
@@ -772,7 +772,7 @@ namespace Netus2_DatabaseConnection
                                 logPhoneNumber.changed_by = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "log_date":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logPhoneNumber.log_date = (DateTime)value;
                                 else
                                     logPhoneNumber.log_date = null;
@@ -781,7 +781,7 @@ namespace Netus2_DatabaseConnection
                                 logPhoneNumber.log_user = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "enum_log_action_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logPhoneNumber.set_LogAction((int)value);
                                 else
                                     logPhoneNumber.LogAction = null;
@@ -829,7 +829,7 @@ namespace Netus2_DatabaseConnection
                                 logAddress.log_address_id = value != DBNull.Value ? (int)value : -1;
                                 break;
                             case "address_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logAddress.address_id = (int)value;
                                 else
                                     logAddress.address_id = null;
@@ -853,7 +853,7 @@ namespace Netus2_DatabaseConnection
                                 logAddress.city = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "enum_state_province_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logAddress.set_StateProvince((int)value);
                                 else
                                     logAddress.StateProvince = null;
@@ -862,25 +862,25 @@ namespace Netus2_DatabaseConnection
                                 logAddress.postal_code = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "enum_country_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logAddress.set_Country((int)value);
                                 else
                                     logAddress.Country = null;
                                 break;
                             case "is_current_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logAddress.set_IsCurrent((int)value);
                                 else
                                     logAddress.IsCurrent = null;
                                 break;
                             case "enum_address_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logAddress.set_AddressType((int)value);
                                 else
                                     logAddress.AddressType = null;
                                 break;
                             case "created":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logAddress.created = (DateTime)value;
                                 else
                                     logAddress.created = null;
@@ -889,7 +889,7 @@ namespace Netus2_DatabaseConnection
                                 logAddress.created_by = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "changed":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logAddress.changed = (DateTime)value;
                                 else
                                     logAddress.changed = null;
@@ -898,7 +898,7 @@ namespace Netus2_DatabaseConnection
                                 logAddress.changed_by = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "log_date":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logAddress.log_date = (DateTime)value;
                                 else
                                     logAddress.log_date = null;
@@ -907,7 +907,7 @@ namespace Netus2_DatabaseConnection
                                 logAddress.log_user = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "enum_log_action_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logAddress.set_LogAction((int)value);
                                 else
                                     logAddress.LogAction = null;
@@ -955,19 +955,19 @@ namespace Netus2_DatabaseConnection
                                 logJctPersonAddress.log_jct_person_address_id = value != DBNull.Value ? (int)value : -1;
                                 break;
                             case "person_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logJctPersonAddress.person_id = (int)value;
                                 else
                                     logJctPersonAddress.person_id = null;
                                 break;
                             case "address_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logJctPersonAddress.address_id = (int)value;
                                 else
                                     logJctPersonAddress.address_id = null;
                                 break;
                             case "log_date":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logJctPersonAddress.log_date = (DateTime)value;
                                 else
                                     logJctPersonAddress.log_date = null;
@@ -976,7 +976,7 @@ namespace Netus2_DatabaseConnection
                                 logJctPersonAddress.log_user = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "enum_log_action_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logJctPersonAddress.set_LogAction((int)value);
                                 else
                                     logJctPersonAddress.LogAction = null;
@@ -1024,7 +1024,7 @@ namespace Netus2_DatabaseConnection
                                 logEmploymentSession.log_employment_session_id = value != DBNull.Value ? (int)value : -1;
                                 break;
                             case "employment_session_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logEmploymentSession.employment_session_id = (int)value;
                                 else
                                     logEmploymentSession.employment_session_id = null;
@@ -1033,43 +1033,43 @@ namespace Netus2_DatabaseConnection
                                 logEmploymentSession.name = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "person_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logEmploymentSession.person_id = (int)value;
                                 else
                                     logEmploymentSession.person_id = null;
                                 break;
                             case "start_date":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logEmploymentSession.start_date = (DateTime)value;
                                 else
                                     logEmploymentSession.start_date = null;
                                 break;
                             case "end_date":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logEmploymentSession.end_date = (DateTime)value;
                                 else
                                     logEmploymentSession.end_date = null;
                                 break;
                             case "is_primary_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logEmploymentSession.set_IsPrimary((int)value);
                                 else
                                     logEmploymentSession.IsPrimary = null;
                                 break;
                             case "enum_session_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logEmploymentSession.set_SessionType((int)value);
                                 else
                                     logEmploymentSession.SessionType = null;
                                 break;
                             case "organization_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logEmploymentSession.organization_id = (int)value;
                                 else
                                     logEmploymentSession.organization_id = null;
                                 break;
                             case "created":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logEmploymentSession.created = (DateTime)value;
                                 else
                                     logEmploymentSession.created = null;
@@ -1078,7 +1078,7 @@ namespace Netus2_DatabaseConnection
                                 logEmploymentSession.created_by = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "changed":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logEmploymentSession.changed = (DateTime)value;
                                 else
                                     logEmploymentSession.changed = null;
@@ -1087,7 +1087,7 @@ namespace Netus2_DatabaseConnection
                                 logEmploymentSession.changed_by = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "log_date":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logEmploymentSession.log_date = (DateTime)value;
                                 else
                                     logEmploymentSession.log_date = null;
@@ -1096,7 +1096,7 @@ namespace Netus2_DatabaseConnection
                                 logEmploymentSession.log_user = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "enum_log_action_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logEmploymentSession.set_LogAction((int)value);
                                 else
                                     logEmploymentSession.LogAction = null;
@@ -1144,19 +1144,19 @@ namespace Netus2_DatabaseConnection
                                 logAcademicSession.log_academic_session_id = value != DBNull.Value ? (int)value : -1;
                                 break;
                             case "academic_session_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logAcademicSession.academic_session_id = (int)value;
                                 else
                                     logAcademicSession.academic_session_id = null;
                                 break;
                             case "term_code":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logAcademicSession.term_code = (string)value;
                                 else
                                     logAcademicSession.term_code = null;
                                 break;
                             case "school_year":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logAcademicSession.school_year = (int)value;
                                 else
                                     logAcademicSession.school_year = null;
@@ -1165,37 +1165,37 @@ namespace Netus2_DatabaseConnection
                                 logAcademicSession.name = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "start_date":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logAcademicSession.start_date = (DateTime)value;
                                 else
                                     logAcademicSession.start_date = null;
                                 break;
                             case "end_date":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logAcademicSession.end_date = (DateTime)value;
                                 else
                                     logAcademicSession.end_date = null;
                                 break;
                             case "enum_session_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logAcademicSession.set_SessionType((int)value);
                                 else
                                     logAcademicSession.SessionType = null;
                                 break;
                             case "parent_session_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logAcademicSession.parent_session_id = (int)value;
                                 else
                                     logAcademicSession.parent_session_id = null;
                                 break;
                             case "organization_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logAcademicSession.organization_id = (int)value;
                                 else
                                     logAcademicSession.organization_id = null;
                                 break;
                             case "created":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logAcademicSession.created = (DateTime)value;
                                 else
                                     logAcademicSession.created = null;
@@ -1204,7 +1204,7 @@ namespace Netus2_DatabaseConnection
                                 logAcademicSession.created_by = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "changed":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logAcademicSession.changed = (DateTime)value;
                                 else
                                     logAcademicSession.changed = null;
@@ -1213,7 +1213,7 @@ namespace Netus2_DatabaseConnection
                                 logAcademicSession.changed_by = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "log_date":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logAcademicSession.log_date = (DateTime)value;
                                 else
                                     logAcademicSession.log_date = null;
@@ -1222,7 +1222,7 @@ namespace Netus2_DatabaseConnection
                                 logAcademicSession.log_user = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "enum_log_action_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logAcademicSession.set_LogAction((int)value);
                                 else
                                     logAcademicSession.LogAction = null;
@@ -1269,7 +1269,7 @@ namespace Netus2_DatabaseConnection
                                 logOrg.log_organization_id = value != DBNull.Value ? (int)value : -1;
                                 break;
                             case "organization_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logOrg.organization_id = (int)value;
                                 else
                                     logOrg.organization_id = null;
@@ -1278,7 +1278,7 @@ namespace Netus2_DatabaseConnection
                                 logOrg.name = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "enum_organization_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logOrg.set_OrganizationType((int)value);
                                 else
                                     logOrg.OrganizationType = null;
@@ -1290,13 +1290,13 @@ namespace Netus2_DatabaseConnection
                                 logOrg.building_code = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "organization_parent_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logOrg.organization_parent_id = (int)value;
                                 else
                                     logOrg.organization_parent_id = null;
                                 break;
                             case "created":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logOrg.created = (DateTime)value;
                                 else
                                     logOrg.created = null;
@@ -1305,7 +1305,7 @@ namespace Netus2_DatabaseConnection
                                 logOrg.created_by = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "changed":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logOrg.changed = (DateTime)value;
                                 else
                                     logOrg.changed = null;
@@ -1314,7 +1314,7 @@ namespace Netus2_DatabaseConnection
                                 logOrg.changed_by = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "log_date":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logOrg.log_date = (DateTime)value;
                                 else
                                     logOrg.log_date = null;
@@ -1323,7 +1323,7 @@ namespace Netus2_DatabaseConnection
                                 logOrg.log_user = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "enum_log_action_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logOrg.set_LogAction((int)value);
                                 else
                                     logOrg.LogAction = null;
@@ -1370,7 +1370,7 @@ namespace Netus2_DatabaseConnection
                                 logResource.log_resource_id = value != DBNull.Value ? (int)value : -1;
                                 break;
                             case "resource_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logResource.resource_id = (int)value;
                                 else
                                     logResource.resource_id = null;
@@ -1379,7 +1379,7 @@ namespace Netus2_DatabaseConnection
                                 logResource.name = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "enum_importance_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logResource.set_Importance((int)value);
                                 else
                                     logResource.Importance = null;
@@ -1394,7 +1394,7 @@ namespace Netus2_DatabaseConnection
                                 logResource.application_identification = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "created":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logResource.created = (DateTime)value;
                                 else
                                     logResource.created = null;
@@ -1403,7 +1403,7 @@ namespace Netus2_DatabaseConnection
                                 logResource.created_by = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "changed":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logResource.changed = (DateTime)value;
                                 else
                                     logResource.changed = null;
@@ -1412,7 +1412,7 @@ namespace Netus2_DatabaseConnection
                                 logResource.changed_by = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "log_date":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logResource.log_date = (DateTime)value;
                                 else
                                     logResource.log_date = null;
@@ -1421,7 +1421,7 @@ namespace Netus2_DatabaseConnection
                                 logResource.log_user = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "enum_log_action_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logResource.set_LogAction((int)value);
                                 else
                                     logResource.LogAction = null;
@@ -1468,7 +1468,7 @@ namespace Netus2_DatabaseConnection
                                 logCourse.log_course_id = value != DBNull.Value ? (int)value : -1;
                                 break;
                             case "course_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logCourse.course_id = (int)value;
                                 else
                                     logCourse.course_id = null;
@@ -1480,7 +1480,7 @@ namespace Netus2_DatabaseConnection
                                 logCourse.course_code = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "created":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logCourse.created = (DateTime)value;
                                 else
                                     logCourse.created = null;
@@ -1489,7 +1489,7 @@ namespace Netus2_DatabaseConnection
                                 logCourse.created_by = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "changed":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logCourse.changed = (DateTime)value;
                                 else
                                     logCourse.changed = null;
@@ -1498,7 +1498,7 @@ namespace Netus2_DatabaseConnection
                                 logCourse.changed_by = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "log_date":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logCourse.log_date = (DateTime)value;
                                 else
                                     logCourse.log_date = null;
@@ -1507,7 +1507,7 @@ namespace Netus2_DatabaseConnection
                                 logCourse.log_user = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "enum_log_action_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logCourse.set_LogAction((int)value);
                                 else
                                     logCourse.LogAction = null;
@@ -1555,19 +1555,19 @@ namespace Netus2_DatabaseConnection
                                 logJctCourseSubject.log_jct_course_subject_id = value != DBNull.Value ? (int)value : -1;
                                 break;
                             case "course_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logJctCourseSubject.course_id = (int)value;
                                 else
                                     logJctCourseSubject.course_id = null;
                                 break;
                             case "enum_subject_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logJctCourseSubject.set_Subject((int)value);
                                 else
                                     logJctCourseSubject.Subject = null;
                                 break;
                             case "log_date":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logJctCourseSubject.log_date = (DateTime)value;
                                 else
                                     logJctCourseSubject.log_date = null;
@@ -1576,7 +1576,7 @@ namespace Netus2_DatabaseConnection
                                 logJctCourseSubject.log_user = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "enum_log_action_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logJctCourseSubject.set_LogAction((int)value);
                                 else
                                     logJctCourseSubject.LogAction = null;
@@ -1624,19 +1624,19 @@ namespace Netus2_DatabaseConnection
                                 logJctCourseGrade.log_jct_course_grade_id = value != DBNull.Value ? (int)value : -1;
                                 break;
                             case "course_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logJctCourseGrade.course_id = (int)value;
                                 else
                                     logJctCourseGrade.course_id = null;
                                 break;
                             case "enum_grade_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logJctCourseGrade.set_Grade((int)value);
                                 else
                                     logJctCourseGrade.Grade = null;
                                 break;
                             case "log_date":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logJctCourseGrade.log_date = (DateTime)value;
                                 else
                                     logJctCourseGrade.log_date = null;
@@ -1645,7 +1645,7 @@ namespace Netus2_DatabaseConnection
                                 logJctCourseGrade.log_user = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "enum_log_action_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logJctCourseGrade.set_LogAction((int)value);
                                 else
                                     logJctCourseGrade.LogAction = null;
@@ -1692,7 +1692,7 @@ namespace Netus2_DatabaseConnection
                                 logClass.log_class_id = value != DBNull.Value ? (int)value : -1;
                                 break;
                             case "class_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logClass.class_id = (int)value;
                                 else
                                     logClass.class_id = null;
@@ -1704,7 +1704,7 @@ namespace Netus2_DatabaseConnection
                                 logClass.class_code = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "enum_class_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logClass.set_ClassType((int)value);
                                 else
                                     logClass.ClassType = null;
@@ -1713,19 +1713,19 @@ namespace Netus2_DatabaseConnection
                                 logClass.room = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "course_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logClass.course_id = (int)value;
                                 else
                                     logClass.course_id = null;
                                 break;
                             case "academic_session_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logClass.academic_session_id = (int)value;
                                 else
                                     logClass.academic_session_id = null;
                                 break;
                             case "created":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logClass.created = (DateTime)value;
                                 else
                                     logClass.created = null;
@@ -1734,7 +1734,7 @@ namespace Netus2_DatabaseConnection
                                 logClass.created_by = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "changed":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logClass.changed = (DateTime)value;
                                 else
                                     logClass.changed = null;
@@ -1743,7 +1743,7 @@ namespace Netus2_DatabaseConnection
                                 logClass.changed_by = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "log_date":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logClass.log_date = (DateTime)value;
                                 else
                                     logClass.log_date = null;
@@ -1752,7 +1752,7 @@ namespace Netus2_DatabaseConnection
                                 logClass.log_user = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "enum_log_action_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logClass.set_LogAction((int)value);
                                 else
                                     logClass.LogAction = null;
@@ -1800,19 +1800,19 @@ namespace Netus2_DatabaseConnection
                                 logJctClassPeriod.log_jct_class_period_id = value != DBNull.Value ? (int)value : -1;
                                 break;
                             case "class_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logJctClassPeriod.class_id = (int)value;
                                 else
                                     logJctClassPeriod.class_id = null;
                                 break;
                             case "enum_period_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logJctClassPeriod.set_Period((int)value);
                                 else
                                     logJctClassPeriod.Period = null;
                                 break;
                             case "log_date":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logJctClassPeriod.log_date = (DateTime)value;
                                 else
                                     logJctClassPeriod.log_date = null;
@@ -1821,7 +1821,7 @@ namespace Netus2_DatabaseConnection
                                 logJctClassPeriod.log_user = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "enum_log_action_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logJctClassPeriod.set_LogAction((int)value);
                                 else
                                     logJctClassPeriod.LogAction = null;
@@ -1869,19 +1869,19 @@ namespace Netus2_DatabaseConnection
                                 logJctClassResource.log_jct_class_resource_id = value != DBNull.Value ? (int)value : -1;
                                 break;
                             case "class_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logJctClassResource.class_id = (int)value;
                                 else
                                     logJctClassResource.class_id = null;
                                 break;
                             case "resource_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logJctClassResource.resource_id = (int)value;
                                 else
                                     logJctClassResource.resource_id = null;
                                 break;
                             case "log_date":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logJctClassResource.log_date = (DateTime)value;
                                 else
                                     logJctClassResource.log_date = null;
@@ -1890,7 +1890,7 @@ namespace Netus2_DatabaseConnection
                                 logJctClassResource.log_user = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "enum_log_action_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logJctClassResource.set_LogAction((int)value);
                                 else
                                     logJctClassResource.LogAction = null;
@@ -1938,7 +1938,7 @@ namespace Netus2_DatabaseConnection
                                 logLineItem.log_lineitem_id = value != DBNull.Value ? (int)value : -1;
                                 break;
                             case "lineitem_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logLineItem.lineitem_id = (int)value;
                                 else
                                     logLineItem.lineitem_id = null;
@@ -1950,43 +1950,43 @@ namespace Netus2_DatabaseConnection
                                 logLineItem.descript = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "assign_date":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logLineItem.assign_date = (DateTime)value;
                                 else
                                     logLineItem.assign_date = null;
                                 break;
                             case "due_date":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logLineItem.due_date = (DateTime)value;
                                 else
                                     logLineItem = null;
                                 break;
                             case "class_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logLineItem.class_id = (int)value;
                                 else
                                     logLineItem.class_id = null;
                                 break;
                             case "enum_category_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logLineItem.set_Category((int)value);
                                 else
                                     logLineItem.Category = null;
                                 break;
                             case "markValueMin":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logLineItem.markValueMin = (double)value;
                                 else
                                     logLineItem.markValueMin = null;
                                 break;
                             case "markValueMax":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logLineItem.markValueMax = (double)value;
                                 else
                                     logLineItem.markValueMax = null;
                                 break;
                             case "created":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logLineItem.created = (DateTime)value;
                                 else
                                     logLineItem.created = null;
@@ -1995,7 +1995,7 @@ namespace Netus2_DatabaseConnection
                                 logLineItem.created_by = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "changed":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logLineItem.changed = (DateTime)value;
                                 else
                                     logLineItem.changed = null;
@@ -2004,7 +2004,7 @@ namespace Netus2_DatabaseConnection
                                 logLineItem.changed_by = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "log_date":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logLineItem.log_date = (DateTime)value;
                                 else
                                     logLineItem.log_date = null;
@@ -2013,7 +2013,7 @@ namespace Netus2_DatabaseConnection
                                 logLineItem.log_user = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "enum_log_action_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logLineItem.set_LogAction((int)value);
                                 else
                                     logLineItem.LogAction = null;
@@ -2061,49 +2061,49 @@ namespace Netus2_DatabaseConnection
                                 logEnrollment.log_enrollment_id = value != DBNull.Value ? (int)value : -1;
                                 break;
                             case "enrollment_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logEnrollment.enrollment_id = (int)value;
                                 else
                                     logEnrollment.enrollment_id = null;
                                 break;
                             case "person_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logEnrollment.person_id = (int)value;
                                 else
                                     logEnrollment.person_id = null;
                                 break;
                             case "class_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logEnrollment.class_id = (int)value;
                                 else
                                     logEnrollment.class_id = null;
                                 break;
                             case "enum_grade_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logEnrollment.set_GradeLevel((int)value);
                                 else
                                     logEnrollment.GradeLevel = null;
                                 break;
                             case "start_date":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logEnrollment.start_date = (DateTime)value;
                                 else
                                     logEnrollment.start_date = null;
                                 break;
                             case "end_date":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logEnrollment.end_date = (DateTime)value;
                                 else
                                     logEnrollment.end_date = null;
                                 break;
                             case "is_primary_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logEnrollment.set_IsPrimary((int)value);
                                 else
                                     logEnrollment.IsPrimary = null;
                                 break;
                             case "created":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logEnrollment.created = (DateTime)value;
                                 else
                                     logEnrollment.created = null;
@@ -2112,7 +2112,7 @@ namespace Netus2_DatabaseConnection
                                 logEnrollment.created_by = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "changed":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logEnrollment.changed = (DateTime)value;
                                 else
                                     logEnrollment.changed = null;
@@ -2121,7 +2121,7 @@ namespace Netus2_DatabaseConnection
                                 logEnrollment.changed_by = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "log_date":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logEnrollment.log_date = (DateTime)value;
                                 else
                                     logEnrollment.log_date = null;
@@ -2130,7 +2130,7 @@ namespace Netus2_DatabaseConnection
                                 logEnrollment.log_user = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "enum_log_action_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logEnrollment.set_LogAction((int)value);
                                 else
                                     logEnrollment.LogAction = null;
@@ -2178,37 +2178,37 @@ namespace Netus2_DatabaseConnection
                                 logMark.log_mark_id = value != DBNull.Value ? (int)value : -1;
                                 break;
                             case "mark_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logMark.mark_id = (int)value;
                                 else
                                     logMark.mark_id = null;
                                 break;
                             case "lineitem_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logMark.lineitem_id = (int)value;
                                 else
                                     logMark.lineitem_id = null;
                                 break;
                             case "person_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logMark.person_id = (int)value;
                                 else
                                     logMark.person_id = null;
                                 break;
                             case "enum_score_status_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logMark.set_ScoreStatus((int)value);
                                 else
                                     logMark.ScoreStatus = null;
                                 break;
                             case "score":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logMark.score = (double)value;
                                 else
                                     logMark.score = null;
                                 break;
                             case "score_date":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logMark.score_date = (DateTime)value;
                                 else
                                     logMark.score_date = null;
@@ -2217,7 +2217,7 @@ namespace Netus2_DatabaseConnection
                                 logMark.comment = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "created":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logMark.created = (DateTime)value;
                                 else
                                     logMark.created = null;
@@ -2226,7 +2226,7 @@ namespace Netus2_DatabaseConnection
                                 logMark.created_by = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "changed":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logMark.changed = (DateTime)value;
                                 else
                                     logMark.changed = null;
@@ -2235,7 +2235,7 @@ namespace Netus2_DatabaseConnection
                                 logMark.changed_by = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "log_date":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logMark.log_date = (DateTime)value;
                                 else
                                     logMark.log_date = null;
@@ -2244,7 +2244,7 @@ namespace Netus2_DatabaseConnection
                                 logMark.log_user = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "enum_log_action_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logMark.set_LogAction((int)value);
                                 else
                                     logMark.LogAction = null;
@@ -2292,19 +2292,19 @@ namespace Netus2_DatabaseConnection
                                 logJctEnrollmentAcademicSession.log_jct_enrollment_academic_session_id = value != DBNull.Value ? (int)value : -1;
                                 break;
                             case "enrollment_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logJctEnrollmentAcademicSession.enrollment_id = (int)value;
                                 else
                                     logJctEnrollmentAcademicSession.enrollment_id = null;
                                 break;
                             case "academic_session_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logJctEnrollmentAcademicSession.academic_session_id = (int)value;
                                 else
                                     logJctEnrollmentAcademicSession.academic_session_id = null;
                                 break;
                             case "log_date":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logJctEnrollmentAcademicSession.log_date = (DateTime)value;
                                 else
                                     logJctEnrollmentAcademicSession.log_date = null;
@@ -2313,7 +2313,7 @@ namespace Netus2_DatabaseConnection
                                 logJctEnrollmentAcademicSession.log_user = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "enum_log_action_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     logJctEnrollmentAcademicSession.set_LogAction((int)value);
                                 else
                                     logJctEnrollmentAcademicSession.LogAction = null;

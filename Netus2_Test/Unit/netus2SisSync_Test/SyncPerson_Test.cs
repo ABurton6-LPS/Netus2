@@ -10,7 +10,7 @@ using Netus2_DatabaseConnection.daoImplementations;
 using Netus2SisSync.SyncProcesses.SyncTasks.PersonTasks;
 using Netus2SisSync.UtilityTools;
 
-namespace Netus2_Test.Unit.netus2SisSync_Test
+namespace Netus2_Test.Unit
 {
     class SyncPerson_Test
     {
@@ -203,6 +203,12 @@ namespace Netus2_Test.Unit.netus2SisSync_Test
             Assert.IsTrue(mockPersonDaoImpl.WasCalled_Update);
         }
 
+        [TearDown]
+        public void TearDown()
+        {
+            DbConnectionFactory.MockDatabaseConnection = null;
+        }
+
         private DataTable BuildTestDataTable(List<SisPersonTestData> tstDataSet)
         {
             DataTable dtPerson = DataTableFactory.CreateDataTable("Person");
@@ -246,8 +252,8 @@ namespace Netus2_Test.Unit.netus2SisSync_Test
                 .Returns(() => tstDataSet[count].PersonType);
 
             reader.Setup(x => x.GetName(1))
-                .Returns(() => "SIS_ID");
-            reader.Setup(x => x.GetOrdinal("SIS_ID"))
+                .Returns(() => "sis_id");
+            reader.Setup(x => x.GetOrdinal("sis_id"))
                 .Returns(() => 1);
             reader.Setup(x => x.GetValue(1))
                 .Returns(() => tstDataSet[count].SisId);

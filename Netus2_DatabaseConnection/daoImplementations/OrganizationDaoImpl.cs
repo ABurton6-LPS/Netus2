@@ -167,7 +167,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
                         switch (columnName)
                         {
                             case "organization_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundOrganizationDao.organization_id = (int)value;
                                 else
                                     foundOrganizationDao.organization_id = null;
@@ -176,7 +176,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
                                 foundOrganizationDao.name = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "enum_organization_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundOrganizationDao.enum_organization_id = (int)value;
                                 else
                                     foundOrganizationDao.enum_organization_id = null;
@@ -191,7 +191,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
                                 foundOrganizationDao.organization_parent_id = value != DBNull.Value ? (int)value : -1;
                                 break;
                             case "created":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundOrganizationDao.created = (DateTime)value;
                                 else
                                     foundOrganizationDao.created = null;
@@ -200,7 +200,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
                                 foundOrganizationDao.created_by = value != DBNull.Value ? (string)value : null;
                                 break;
                             case "changed":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundOrganizationDao.changed = (DateTime)value;
                                 else
                                     foundOrganizationDao.changed = null;

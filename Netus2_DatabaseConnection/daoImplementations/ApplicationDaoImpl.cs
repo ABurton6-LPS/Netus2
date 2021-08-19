@@ -96,43 +96,43 @@ namespace Netus2_DatabaseConnection.daoImplementations
                         switch (columnName)
                         {
                             case "app_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundAppDao.app_id = (int)value;
                                 else
                                     foundAppDao.app_id = null;
                                 break;
                             case "name":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundAppDao.name = (string)value;
                                 else
                                     foundAppDao.name = null;
                                 break;
                             case "provider_id":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundAppDao.provider_id = (int)value;
                                 else
                                     foundAppDao.provider_id = null;
                                 break;
                             case "created":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundAppDao.created = (DateTime)value;
                                 else
                                     foundAppDao.created = null;
                                 break;
                             case "created_by":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundAppDao.created_by = (string)value;
                                 else
                                     foundAppDao.created_by = null;
                                 break;
                             case "changed":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundAppDao.changed = (DateTime)value;
                                 else
                                     foundAppDao.changed = null;
                                 break;
                             case "changed_by":
-                                if (value != DBNull.Value)
+                                if (value != DBNull.Value && value != null)
                                     foundAppDao.changed_by = (string)value;
                                 else
                                     foundAppDao.changed_by = null;

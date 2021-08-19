@@ -6,7 +6,7 @@ using Netus2_DatabaseConnection.enumerations;
 using NUnit.Framework;
 using System;
 
-namespace Netus2_Test.Integration.daoObject_Tests
+namespace Netus2_Test.Integration
 {
     class Overall_ReadWrite_Test
     {

@@ -10,7 +10,7 @@ using Netus2_DatabaseConnection.dbAccess;
 using Netus2_DatabaseConnection.daoImplementations;
 using Netus2_Test.MockDaoImpl;
 
-namespace Netus2_Test.Unit.netus2SisSync_Test
+namespace Netus2_Test.Unit
 {
     class SyncOrganization_Test
     {
@@ -203,6 +203,12 @@ namespace Netus2_Test.Unit.netus2SisSync_Test
             Assert.IsTrue(mockOrganizationDaoImpl.WasCalled_ReadWithoutParentId);
             Assert.IsTrue(mockOrganizationDaoImpl.WasCalled_ReadWithBuildingCode);
             Assert.IsTrue(mockOrganizationDaoImpl.WasCalled_UpdateWithParentId);
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            DbConnectionFactory.MockDatabaseConnection = null;
         }
 
         private DataTable BuildTestDataTable(List<SisOrganizationTestData> tstDataSet)

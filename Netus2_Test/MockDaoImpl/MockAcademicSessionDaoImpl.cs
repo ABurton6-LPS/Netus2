@@ -102,7 +102,7 @@ namespace Netus2_Test.MockDaoImpl
             return academicSessions;
         }
 
-        public AcademicSession Read_UsingSchoolCode_TermCode_Schoolyear(string schoolCode, string termCode, int schoolYear, IConnectable connection)
+        public AcademicSession Read_UsingBuildingCode_TermCode_Schoolyear(string schoolCode, string termCode, int schoolYear, IConnectable connection)
         {
             WasCalled_ReadUsingSchoolCodeTermCodeSchoolYear = true;
 
