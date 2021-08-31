@@ -1,8 +1,8 @@
 ﻿using Netus2_DatabaseConnection.daoInterfaces;
-using Netus2_DatabaseConnection.daoObjects;
 using Netus2_DatabaseConnection.dataObjects;
 using Netus2_DatabaseConnection.dbAccess;
 using Netus2_DatabaseConnection.enumerations;
+using Netus2_DatabaseConnection.utilityTools;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -27,19 +27,19 @@ namespace Netus2_DatabaseConnection.daoImplementations
             Delete_Mark(person, connection);
             Delete_JctClassPerson(person, connection);
 
-            PersonDao personDao = daoObjectMapper.MapPerson(person);
+            DataRow row = daoObjectMapper.MapPerson(person);
 
             StringBuilder sql = new StringBuilder("DELETE FROM person WHERE 1=1 ");
-            sql.Append("AND person_id " + (personDao.person_id != null ? "= " + personDao.person_id + " " : "IS NULL "));
-            sql.Append("AND first_name " + (personDao.first_name != null ? "LIKE '" + personDao.first_name + "' " : "IS NULL "));
-            sql.Append("AND middle_name " + (personDao.middle_name != null ? "LIKE '" + personDao.middle_name + "' " : "IS NULL "));
-            sql.Append("AND last_name " + (personDao.last_name != null ? "LIKE '" + personDao.last_name + "' " : "IS NULL "));
-            sql.Append("AND birth_date " + (personDao.birth_date != null ? "= '" + personDao.birth_date + "' " : "IS NULL "));
-            sql.Append("AND enum_gender_id " + (personDao.enum_gender_id != null ? "= " + personDao.enum_gender_id + " " : "IS NULL "));
-            sql.Append("AND enum_ethnic_id " + (personDao.enum_ethnic_id != null ? "= " + personDao.enum_ethnic_id + " " : "IS NULL "));
-            sql.Append("AND enum_residence_status_id " + (personDao.enum_residence_status_id != null ? "= " + personDao.enum_residence_status_id + " " : "IS NULL "));
-            sql.Append("AND login_name " + (personDao.login_name != null ? "LIKE '" + personDao.login_name + "' " : "IS NULL "));
-            sql.Append("AND login_pw " + (personDao.login_pw != null ? "LIKE '" + personDao.login_pw + "' " : "IS NULL"));
+            sql.Append("AND person_id " + (row["person_id"] != DBNull.Value ? "= " + row["person_id"] + " " : "IS NULL "));
+            sql.Append("AND first_name " + (row["first_name"] != DBNull.Value ? "LIKE '" + row["first_name"] + "' " : "IS NULL "));
+            sql.Append("AND middle_name " + (row["middle_name"] != DBNull.Value ? "LIKE '" + row["middle_name"] + "' " : "IS NULL "));
+            sql.Append("AND last_name " + (row["last_name"] != DBNull.Value ? "LIKE '" + row["last_name"] + "' " : "IS NULL "));
+            sql.Append("AND birth_date " + (row["birth_date"] != DBNull.Value ? "= '" + row["birth_date"] + "' " : "IS NULL "));
+            sql.Append("AND enum_gender_id " + (row["enum_gender_id"] != DBNull.Value ? "= " + row["enum_gender_id"] + " " : "IS NULL "));
+            sql.Append("AND enum_ethnic_id " + (row["enum_ethnic_id"] != DBNull.Value ? "= " + row["enum_ethnic_id"] + " " : "IS NULL "));
+            sql.Append("AND enum_residence_status_id " + (row["enum_residence_status_id"] != DBNull.Value ? "= " + row["enum_residence_status_id"] + " " : "IS NULL "));
+            sql.Append("AND login_name " + (row["login_name"] != DBNull.Value ? "LIKE '" + row["login_name"] + "' " : "IS NULL "));
+            sql.Append("AND login_pw " + (row["login_pw"] != DBNull.Value ? "LIKE '" + row["login_pw"] + "' " : "IS NULL"));
 
             connection.ExecuteNonQuery(sql.ToString());
         }
@@ -47,12 +47,12 @@ namespace Netus2_DatabaseConnection.daoImplementations
         private void Delete_JctClassPerson(Person person, IConnectable connection)
         {
             IJctClassPersonDao jctClassPersonDaoImpl = DaoImplFactory.GetJctClassPersonDaoImpl();
-            List<JctClassPersonDao> foundJctClassPersonDaos =
+            List<DataRow> foundJctClassPersonDaos =
                 jctClassPersonDaoImpl.Read_WithPersonId(person.Id, connection);
 
-            foreach (JctClassPersonDao foundClassPersonDao in foundJctClassPersonDaos)
+            foreach (DataRow foundClassPersonDao in foundJctClassPersonDaos)
             {
-                jctClassPersonDaoImpl.Delete((int)foundClassPersonDao.class_id, person.Id, connection);
+                jctClassPersonDaoImpl.Delete((int)foundClassPersonDao["class_id"], person.Id, connection);
             }
         }
 
@@ -154,31 +154,31 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         public List<Person> Read(Person person, IConnectable connection)
         {
-            PersonDao personDao = daoObjectMapper.MapPerson(person);
+            DataRow row = daoObjectMapper.MapPerson(person);
 
             StringBuilder sql = new StringBuilder("SELECT * FROM person WHERE 1=1 ");
-            if (personDao.person_id != null)
-                sql.Append("AND person_id = " + personDao.person_id + " ");
+            if (row["person_id"] != DBNull.Value)
+                sql.Append("AND person_id = " + row["person_id"] + " ");
             else
             {
-                if (personDao.first_name != null)
-                    sql.Append("AND first_name LIKE '" + personDao.first_name + "' ");
-                if (personDao.middle_name != null)
-                    sql.Append("AND middle_name LIKE '" + personDao.middle_name + "' ");
-                if (personDao.last_name != null)
-                    sql.Append("AND last_name LIKE '" + personDao.last_name + "' ");
-                if (personDao.birth_date != null)
-                    sql.Append("AND datediff(day, birth_date, '" + personDao.birth_date.ToString() + "') = 0 ");
-                if (personDao.enum_gender_id != null)
-                    sql.Append("AND enum_gender_id = " + personDao.enum_gender_id + " ");
-                if (personDao.enum_ethnic_id != null)
-                    sql.Append("AND enum_ethnic_id = " + personDao.enum_ethnic_id + " ");
-                if (personDao.enum_residence_status_id != null)
-                    sql.Append("AND enum_residence_status_id = " + personDao.enum_residence_status_id + " ");
-                if (personDao.login_name != null)
-                    sql.Append("AND login_name LIKE '" + personDao.login_name + "' ");
-                if (personDao.login_pw != null)
-                    sql.Append("AND login_pw LIKE '" + personDao.login_pw + "' ");
+                if (row["first_name"] != DBNull.Value)
+                    sql.Append("AND first_name LIKE '" + row["first_name"] + "' ");
+                if (row["middle_name"] != DBNull.Value)
+                    sql.Append("AND middle_name LIKE '" + row["middle_name"] + "' ");
+                if (row["last_name"] != DBNull.Value)
+                    sql.Append("AND last_name LIKE '" + row["last_name"] + "' ");
+                if (row["birth_date"] != DBNull.Value)
+                    sql.Append("AND datediff(day, birth_date, '" + row["birth_date"].ToString() + "') = 0 ");
+                if (row["enum_gender_id"] != DBNull.Value)
+                    sql.Append("AND enum_gender_id = " + row["enum_gender_id"] + " ");
+                if (row["enum_ethnic_id"] != DBNull.Value)
+                    sql.Append("AND enum_ethnic_id = " + row["enum_ethnic_id"] + " ");
+                if (row["enum_residence_status_id"] != DBNull.Value)
+                    sql.Append("AND enum_residence_status_id = " + row["enum_residence_status_id"] + " ");
+                if (row["login_name"] != DBNull.Value)
+                    sql.Append("AND login_name LIKE '" + row["login_name"] + "' ");
+                if (row["login_pw"] != DBNull.Value)
+                    sql.Append("AND login_pw LIKE '" + row["login_pw"] + "' ");
             }
 
 
@@ -187,94 +187,13 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private List<Person> Read(string sql, IConnectable connection)
         {
-            List<PersonDao> foundPeopleDao = new List<PersonDao>();
+            DataTable dtPerson = new DataTableFactory().Dt_Netus2_Person;
 
             IDataReader reader = null;
             try
             {
                 reader = connection.GetReader(sql);
-                while (reader.Read())
-                {
-                    PersonDao foundPersonDao = new PersonDao();
-
-                    List<string> columnNames = new List<string>();
-                    for (int i = 0; i < reader.FieldCount; i++)
-                        columnNames.Add(reader.GetName(i));
-
-                    foreach (string columnName in columnNames)
-                    {
-                        var value = reader.GetValue(reader.GetOrdinal(columnName));
-                        switch (columnName)
-                        {
-                            case "person_id":
-                                if (value != DBNull.Value && value != null)
-                                    foundPersonDao.person_id = (int)value;
-                                else
-                                    foundPersonDao.person_id = null;
-                                break;
-                            case "first_name":
-                                foundPersonDao.first_name = value != DBNull.Value ? (string)value : null;
-                                break;
-                            case "middle_name":
-                                foundPersonDao.middle_name = value != DBNull.Value ? (string)value : null;
-                                break;
-                            case "last_name":
-                                foundPersonDao.last_name = value != DBNull.Value ? (string)value : null;
-                                break;
-                            case "birth_date":
-                                if (value != DBNull.Value && value != null)
-                                    foundPersonDao.birth_date = (DateTime)value;
-                                else
-                                    foundPersonDao.birth_date = null;
-                                break;
-                            case "enum_gender_id":
-                                if (value != DBNull.Value && value != null)
-                                    foundPersonDao.enum_gender_id = (int)value;
-                                else
-                                    foundPersonDao.enum_gender_id = null;
-                                break;
-                            case "enum_ethnic_id":
-                                if (value != DBNull.Value && value != null)
-                                    foundPersonDao.enum_ethnic_id = (int)value;
-                                else
-                                    foundPersonDao.enum_ethnic_id = null;
-                                break;
-                            case "enum_residence_status_id":
-                                if (value != DBNull.Value && value != null)
-                                    foundPersonDao.enum_residence_status_id = (int)value;
-                                else
-                                    foundPersonDao.enum_residence_status_id = null;
-                                break;
-                            case "login_name":
-                                foundPersonDao.login_name = value != DBNull.Value ? (string)value : null;
-                                break;
-                            case "login_pw":
-                                foundPersonDao.login_pw = value != DBNull.Value ? (string)value : null;
-                                break;
-                            case "created":
-                                if (value != DBNull.Value && value != null)
-                                    foundPersonDao.created = (DateTime)value;
-                                else
-                                    foundPersonDao.created = null;
-                                break;
-                            case "created_by":
-                                foundPersonDao.created_by = value != DBNull.Value ? (string)value : null;
-                                break;
-                            case "changed":
-                                if (value != DBNull.Value && value != null)
-                                    foundPersonDao.changed = (DateTime)value;
-                                else
-                                    foundPersonDao.changed = null;
-                                break;
-                            case "changed_by":
-                                foundPersonDao.changed_by = value != DBNull.Value ? (string)value : null;
-                                break;
-                            default:
-                                throw new Exception("Unexpected column found in person table: " + columnName);
-                        }
-                    }
-                    foundPeopleDao.Add(foundPersonDao);
-                }
+                dtPerson.Load(reader);
             }
             finally
             {
@@ -283,9 +202,9 @@ namespace Netus2_DatabaseConnection.daoImplementations
             }
 
             List<Person> results = new List<Person>();
-            foreach (PersonDao foundPersonDao in foundPeopleDao)
+            foreach (DataRow row in dtPerson.Rows)
             {
-                results.Add(daoObjectMapper.MapPerson(foundPersonDao));
+                results.Add(daoObjectMapper.MapPerson(row));
             }
 
             foreach (Person result in results)
@@ -310,11 +229,11 @@ namespace Netus2_DatabaseConnection.daoImplementations
             IJctPersonAppDao jctPersonAppDaoImpl = DaoImplFactory.GetJctPersonAppDaoImpl();
 
             List<Application> foundApplications = new List<Application>();
-            List<JctPersonAppDao> foundJctPersonAppDaos = jctPersonAppDaoImpl.Read_WithPersonId(personId, connection);
+            List<DataRow> foundJctPersonAppDaos = jctPersonAppDaoImpl.Read_WithPersonId(personId, connection);
 
-            foreach (JctPersonAppDao foundJctPersonAppDao in foundJctPersonAppDaos)
+            foreach (DataRow foundJctPersonAppDao in foundJctPersonAppDaos)
             {
-                int appId = (int)foundJctPersonAppDao.app_id;
+                int appId = (int)foundJctPersonAppDao["app_id"];
                 foundApplications.Add(appDaoImpl.Read_UsingAppId(appId, connection));
             }
 
@@ -327,11 +246,11 @@ namespace Netus2_DatabaseConnection.daoImplementations
             IJctPersonAddressDao jctPersonAddressDaoImpl = DaoImplFactory.GetJctPersonAddressDaoImpl();
 
             List<Address> foundAddresss = new List<Address>();
-            List<JctPersonAddressDao> foundJctPersonAddressDaos = jctPersonAddressDaoImpl.Read_WithPersonId(personId, connection);
+            List<DataRow> foundJctPersonAddressDaos = jctPersonAddressDaoImpl.Read_WithPersonId(personId, connection);
 
-            foreach (JctPersonAddressDao foundJctPersonAddressDao in foundJctPersonAddressDaos)
+            foreach (DataRow foundJctPersonAddressDao in foundJctPersonAddressDaos)
             {
-                int addressId = (int)foundJctPersonAddressDao.address_id;
+                int addressId = (int)foundJctPersonAddressDao["address_id"];
                 foundAddresss.Add(addressDaoImpl.Read_UsingAdddressId(addressId, connection));
             }
 
@@ -344,10 +263,10 @@ namespace Netus2_DatabaseConnection.daoImplementations
             List<int> idsFound = new List<int>();
 
             IJctPersonRoleDao jctPersonRoleDaoImpl = DaoImplFactory.GetJctPersonRoleDaoImpl();
-            List<JctPersonRoleDao> foundJctPersonRoleDaos = jctPersonRoleDaoImpl.Read(personId, connection);
-            foreach (JctPersonRoleDao foundJctPersonRoleDao in foundJctPersonRoleDaos)
+            List<DataRow> foundJctPersonRoleDaos = jctPersonRoleDaoImpl.Read(personId, connection);
+            foreach (DataRow foundJctPersonRoleDao in foundJctPersonRoleDaos)
             {
-                idsFound.Add((int)foundJctPersonRoleDao.enum_role_id);
+                idsFound.Add((int)foundJctPersonRoleDao["enum_role_id"]);
             }
 
             foreach (int idFound in idsFound)
@@ -363,11 +282,11 @@ namespace Netus2_DatabaseConnection.daoImplementations
             List<int> foundRelations = new List<int>();
 
             IJctPersonPersonDao jctPersonPersonDaoImpl = DaoImplFactory.GetJctPersonPersonDaoImpl();
-            List<JctPersonPersonDao> foundJctPersonPersonDaos = jctPersonPersonDaoImpl.Read(personId, connection);
+            List<DataRow> foundJctPersonPersonDaos = jctPersonPersonDaoImpl.Read(personId, connection);
 
-            foreach (JctPersonPersonDao foundJctPersonPersonDao in foundJctPersonPersonDaos)
+            foreach (DataRow foundJctPersonPersonDao in foundJctPersonPersonDaos)
             {
-                foundRelations.Add((int)foundJctPersonPersonDao.person_two_id);
+                foundRelations.Add((int)foundJctPersonPersonDao["person_two_id"]);
             }
 
             return foundRelations;
@@ -390,23 +309,23 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private void UpdateInternals(Person person, IConnectable connection)
         {
-            PersonDao personDao = daoObjectMapper.MapPerson(person);
+            DataRow row = daoObjectMapper.MapPerson(person);
 
-            if (personDao.person_id != null)
+            if (row["person_id"] != DBNull.Value)
             {
                 StringBuilder sql = new StringBuilder("UPDATE person SET ");
-                sql.Append("first_name = " + (personDao.first_name != null ? "'" + personDao.first_name + "', " : "NULL, "));
-                sql.Append("middle_name = " + (personDao.middle_name != null ? "'" + personDao.middle_name + "', " : "NULL, "));
-                sql.Append("last_name = " + (personDao.last_name != null ? "'" + personDao.last_name + "', " : "NULL, "));
-                sql.Append("birth_date = " + (personDao.birth_date != null ? "'" + personDao.birth_date + "', " : "NULL, "));
-                sql.Append("enum_gender_id = " + (personDao.enum_gender_id != null ? "'" + personDao.enum_gender_id + "', " : "NULL, "));
-                sql.Append("enum_ethnic_id = " + (personDao.enum_ethnic_id != null ? "'" + personDao.enum_ethnic_id + "', " : "NULL, "));
-                sql.Append("enum_residence_status_id = " + (personDao.enum_residence_status_id != null ? "'" + personDao.enum_residence_status_id + "', " : "NULL, "));
-                sql.Append("login_name = " + (personDao.login_name != null ? "'" + personDao.login_name + "', " : "NULL, "));
-                sql.Append("login_pw = " + (personDao.login_pw != null ? "'" + personDao.login_pw + "', " : "NULL, "));
+                sql.Append("first_name = " + (row["first_name"] != DBNull.Value ? "'" + row["first_name"] + "', " : "NULL, "));
+                sql.Append("middle_name = " + (row["middle_name"] != DBNull.Value ? "'" + row["middle_name"] + "', " : "NULL, "));
+                sql.Append("last_name = " + (row["last_name"] != DBNull.Value ? "'" + row["last_name"] + "', " : "NULL, "));
+                sql.Append("birth_date = " + (row["birth_date"] != DBNull.Value ? "'" + row["birth_date"] + "', " : "NULL, "));
+                sql.Append("enum_gender_id = " + (row["enum_gender_id"] != DBNull.Value ? "'" + row["enum_gender_id"] + "', " : "NULL, "));
+                sql.Append("enum_ethnic_id = " + (row["enum_ethnic_id"] != DBNull.Value ? "'" + row["enum_ethnic_id"] + "', " : "NULL, "));
+                sql.Append("enum_residence_status_id = " + (row["enum_residence_status_id"] != DBNull.Value ? "'" + row["enum_residence_status_id"] + "', " : "NULL, "));
+                sql.Append("login_name = " + (row["login_name"] != DBNull.Value ? "'" + row["login_name"] + "', " : "NULL, "));
+                sql.Append("login_pw = " + (row["login_pw"] != DBNull.Value ? "'" + row["login_pw"] + "', " : "NULL, "));
                 sql.Append("changed = GETDATE(), ");
                 sql.Append("changed_by = 'Netus2' ");
-                sql.Append("WHERE person_id = " + personDao.person_id);
+                sql.Append("WHERE person_id = " + row["person_id"]);
 
                 connection.ExecuteNonQuery(sql.ToString());
 
@@ -426,18 +345,18 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         public Person Write(Person person, IConnectable connection)
         {
-            PersonDao personDao = daoObjectMapper.MapPerson(person);
+            DataRow row = daoObjectMapper.MapPerson(person);
 
             StringBuilder sqlValues = new StringBuilder();
-            sqlValues.Append(personDao.first_name != null ? "'" + personDao.first_name + "', " : "NULL, ");
-            sqlValues.Append(personDao.middle_name != null ? "'" + personDao.middle_name + "', " : "NULL, ");
-            sqlValues.Append(personDao.last_name != null ? "'" + personDao.last_name + "', " : "NULL, ");
-            sqlValues.Append(personDao.birth_date != null ? "'" + personDao.birth_date + "', " : "NULL, ");
-            sqlValues.Append(personDao.enum_gender_id != null ? personDao.enum_gender_id + ", " : "NULL, ");
-            sqlValues.Append(personDao.enum_ethnic_id != null ? personDao.enum_ethnic_id + ", " : "NULL, ");
-            sqlValues.Append(personDao.enum_residence_status_id != null ? personDao.enum_residence_status_id + ", " : "NULL, ");
-            sqlValues.Append(personDao.login_name != null ? "'" + personDao.login_name + "', " : "NULL, ");
-            sqlValues.Append(personDao.login_pw != null ? "'" + personDao.login_pw + "', " : "NULL, ");
+            sqlValues.Append(row["first_name"] != DBNull.Value ? "'" + row["first_name"] + "', " : "NULL, ");
+            sqlValues.Append(row["middle_name"] != DBNull.Value ? "'" + row["middle_name"] + "', " : "NULL, ");
+            sqlValues.Append(row["last_name"] != DBNull.Value ? "'" + row["last_name"] + "', " : "NULL, ");
+            sqlValues.Append(row["birth_date"] != DBNull.Value ? "'" + row["birth_date"] + "', " : "NULL, ");
+            sqlValues.Append(row["enum_gender_id"] != DBNull.Value ? row["enum_gender_id"] + ", " : "NULL, ");
+            sqlValues.Append(row["enum_ethnic_id"] != DBNull.Value ? row["enum_ethnic_id"] + ", " : "NULL, ");
+            sqlValues.Append(row["enum_residence_status_id"] != DBNull.Value ? row["enum_residence_status_id"] + ", " : "NULL, ");
+            sqlValues.Append(row["login_name"] != DBNull.Value ? "'" + row["login_name"] + "', " : "NULL, ");
+            sqlValues.Append(row["login_pw"] != DBNull.Value ? "'" + row["login_pw"] + "', " : "NULL, ");
             sqlValues.Append("GETDATE(), ");
             sqlValues.Append("'Netus2'");
 
@@ -447,9 +366,9 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 "enum_residence_status_id, login_name, login_pw, created, created_by) " +
                 "VALUES (" + sqlValues.ToString() + ")";
 
-            personDao.person_id = connection.InsertNewRecord(sql);
+            row["person_id"] = connection.InsertNewRecord(sql);
 
-            Person result = daoObjectMapper.MapPerson(personDao);
+            Person result = daoObjectMapper.MapPerson(row);
 
             result.UniqueIdentifiers = UpdateUniqueIdentifiers(person.UniqueIdentifiers, result.Id, connection);
             result.PhoneNumbers = UpdatePhoneNumbers(person.PhoneNumbers, result.Id, connection);
@@ -596,7 +515,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         private void UpdateJctPersonAddress(List<Address> addresses, int personId, IConnectable connection)
         {
             IJctPersonAddressDao jctPersonAddressDaoImpl = DaoImplFactory.GetJctPersonAddressDaoImpl();
-            List<JctPersonAddressDao> foundJctPersonAddressDaos =
+            List<DataRow> foundJctPersonAddressDaos =
                 jctPersonAddressDaoImpl.Read_WithPersonId(personId, connection);
             List<int> addressIds = new List<int>();
             List<int> foundAddressIds = new List<int>();
@@ -606,9 +525,9 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 addressIds.Add(address.Id);
             }
 
-            foreach (JctPersonAddressDao jctPersonAddressDao in foundJctPersonAddressDaos)
+            foreach (DataRow jctPersonAddressDao in foundJctPersonAddressDaos)
             {
-                foundAddressIds.Add((int)jctPersonAddressDao.address_id);
+                foundAddressIds.Add((int)jctPersonAddressDao["address_id"]);
             }
 
             foreach (int addressId in addressIds)
@@ -642,7 +561,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         private void UpdateJctPersonApp(List<Application> apps, int personId, IConnectable connection)
         {
             IJctPersonAppDao jctPersonAppDaoImpl = DaoImplFactory.GetJctPersonAppDaoImpl();
-            List<JctPersonAppDao> foundJctPersonAppDaos =
+            List<DataRow> foundJctPersonAppDaos =
                 jctPersonAppDaoImpl.Read_WithPersonId(personId, connection);
             List<int> appIds = new List<int>();
             List<int> foundAppIds = new List<int>();
@@ -652,9 +571,9 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 appIds.Add(app.Id);
             }
 
-            foreach (JctPersonAppDao jctPersonAppDao in foundJctPersonAppDaos)
+            foreach (DataRow jctPersonAppDao in foundJctPersonAppDaos)
             {
-                foundAppIds.Add((int)jctPersonAppDao.app_id);
+                foundAppIds.Add((int)jctPersonAppDao["app_id"]);
             }
 
             foreach (int appId in appIds)
@@ -674,7 +593,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         {
             List<Enumeration> updatedRoles = new List<Enumeration>();
             IJctPersonRoleDao jctPersonRoleDaoImpl = DaoImplFactory.GetJctPersonRoleDaoImpl();
-            List<JctPersonRoleDao> foundJctPersonRoleDaos =
+            List<DataRow> foundJctPersonRoleDaos =
                 jctPersonRoleDaoImpl.Read(personId, connection);
             List<int> roleIds = new List<int>();
             List<int> foundRoleIds = new List<int>();
@@ -684,9 +603,9 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 roleIds.Add(role.Id);
             }
 
-            foreach (JctPersonRoleDao jctPersonRoleDao in foundJctPersonRoleDaos)
+            foreach (DataRow jctPersonRoleDao in foundJctPersonRoleDaos)
             {
-                foundRoleIds.Add((int)jctPersonRoleDao.enum_role_id);
+                foundRoleIds.Add((int)jctPersonRoleDao["enum_role_id"]);
             }
 
             foreach (int roleId in roleIds)
@@ -694,7 +613,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 if (foundRoleIds.Contains(roleId) == false)
                     jctPersonRoleDaoImpl.Write(personId, roleId, connection);
 
-                int enumRoleId = (int)jctPersonRoleDaoImpl.Read(personId, roleId, connection).enum_role_id;
+                int enumRoleId = (int)jctPersonRoleDaoImpl.Read(personId, roleId, connection)["enum_role_id"];
 
                 updatedRoles.Add(Enum_Role.GetEnumFromId(enumRoleId));
             }
@@ -712,20 +631,20 @@ namespace Netus2_DatabaseConnection.daoImplementations
         {
             List<int> updatedRelations = new List<int>();
             IJctPersonPersonDao jctPersonPersonDaoImpl = DaoImplFactory.GetJctPersonPersonDaoImpl();
-            List<JctPersonPersonDao> foundJctPersonPersonDaos =
+            List<DataRow> foundJctPersonPersonDaos =
                 jctPersonPersonDaoImpl.Read(personId, connection);
             List<int> foundRelations = new List<int>();
 
-            foreach (JctPersonPersonDao jctPersonPersonDao in foundJctPersonPersonDaos)
+            foreach (DataRow jctPersonPersonDao in foundJctPersonPersonDaos)
             {
-                foundRelations.Add((int)jctPersonPersonDao.person_two_id);
+                foundRelations.Add((int)jctPersonPersonDao["person_two_id"]);
             }
 
             foreach (int relation in relations)
             {
                 if (foundRelations.Contains(relation) == false)
                     jctPersonPersonDaoImpl.Write(personId, relation, connection);
-                updatedRelations.Add((int)jctPersonPersonDaoImpl.Read(personId, relation, connection).person_two_id);
+                updatedRelations.Add((int)jctPersonPersonDaoImpl.Read(personId, relation, connection)["person_two_id"]);
             }
 
             foreach (int foundRelation in foundRelations)

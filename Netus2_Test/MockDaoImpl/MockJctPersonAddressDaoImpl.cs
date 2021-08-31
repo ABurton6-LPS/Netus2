@@ -1,7 +1,8 @@
 ﻿using Netus2_DatabaseConnection.daoInterfaces;
-using Netus2_DatabaseConnection.daoObjects;
 using Netus2_DatabaseConnection.dbAccess;
+using Netus2_DatabaseConnection.utilityTools;
 using System.Collections.Generic;
+using System.Data;
 
 namespace Netus2_Test.MockDaoImpl
 {
@@ -25,59 +26,59 @@ namespace Netus2_Test.MockDaoImpl
             WasCalled_Delete = true;
         }
 
-        public JctPersonAddressDao Read(int personId, int addressId, IConnectable connection)
+        public DataRow Read(int personId, int addressId, IConnectable connection)
         {
             WasCalled_Read = true;
 
-            JctPersonAddressDao jctPersonAddressDao = new JctPersonAddressDao();
-            jctPersonAddressDao.person_id = tdBuilder.student.Id;
-            jctPersonAddressDao.address_id = tdBuilder.student.Addresses[0].Id;
+            DataRow row = new DataTableFactory().Dt_Netus2_JctPersonAddress.NewRow();
+            row["person_id"] = tdBuilder.student.Id;
+            row["address_id"] = tdBuilder.student.Addresses[0].Id;
 
             if (_shouldReadReturnData)
-                return jctPersonAddressDao;
+                return row;
             else 
                 return null;
         }
 
-        public List<JctPersonAddressDao> Read_WithAddressId(int addressId, IConnectable connection)
+        public List<DataRow> Read_WithAddressId(int addressId, IConnectable connection)
         {
             WasCalled_ReadWithAddressId = true;
 
-            List<JctPersonAddressDao> list = new List<JctPersonAddressDao>();
-            JctPersonAddressDao jctPersonAddressDao = new JctPersonAddressDao();
-            jctPersonAddressDao.person_id = tdBuilder.student.Id;
-            jctPersonAddressDao.address_id = addressId;
+            List<DataRow> list = new List<DataRow>();
+            DataRow row = new DataTableFactory().Dt_Netus2_JctPersonAddress.NewRow();
+            row["person_id"] = tdBuilder.student.Id;
+            row["address_id"] = addressId;
 
             if (_shouldReadReturnData)
-                list.Add(jctPersonAddressDao);
+                list.Add(row);
 
             return list;
         }
 
-        public List<JctPersonAddressDao> Read_WithPersonId(int personId, IConnectable connection)
+        public List<DataRow> Read_WithPersonId(int personId, IConnectable connection)
         {
             WasCalled_ReadWithPersonId = true;
 
-            List<JctPersonAddressDao> list = new List<JctPersonAddressDao>();
-            JctPersonAddressDao jctPersonAddressDao = new JctPersonAddressDao();
-            jctPersonAddressDao.person_id = personId;
-            jctPersonAddressDao.address_id = tdBuilder.student.Addresses[0].Id; ;
+            List<DataRow> list = new List<DataRow>();
+            DataRow row = new DataTableFactory().Dt_Netus2_JctPersonAddress.NewRow();
+            row["person_id"] = personId;
+            row["address_id"] = tdBuilder.student.Addresses[0].Id; ;
 
             if (_shouldReadReturnData)
-                list.Add(jctPersonAddressDao);
+                list.Add(row);
 
             return list;
         }
 
-        public JctPersonAddressDao Write(int personId, int addressId, IConnectable connection)
+        public DataRow Write(int personId, int addressId, IConnectable connection)
         {
             WasCalled_Write = true;
 
-            JctPersonAddressDao jctPersonAddressDao = new JctPersonAddressDao();
-            jctPersonAddressDao.person_id = personId;
-            jctPersonAddressDao.address_id = addressId;
+            DataRow row = new DataTableFactory().Dt_Netus2_JctPersonAddress.NewRow();
+            row["person_id"] = personId;
+            row["address_id"] = addressId;
 
-            return jctPersonAddressDao;
+            return row;
         }
     }
 }

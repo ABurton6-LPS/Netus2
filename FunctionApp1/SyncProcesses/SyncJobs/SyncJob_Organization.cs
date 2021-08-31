@@ -1,5 +1,6 @@
 ﻿using Netus2_DatabaseConnection.dbAccess;
 using Netus2_DatabaseConnection.enumerations;
+using Netus2_DatabaseConnection.utilityTools;
 using Netus2SisSync.SyncProcesses.SyncTasks.OrganizationTasks;
 using Netus2SisSync.UtilityTools;
 using System;
@@ -38,60 +39,12 @@ namespace Netus2SisSync.SyncProcesses.SyncJobs
 
         public void ReadFromSis()
         {
-            _dtOrganization = DataTableFactory.CreateDataTable("Organization");
+            _dtOrganization = new DataTableFactory().Dt_Sis_Organization;
             IDataReader reader = null;
             try
             {
                 reader = _sisConnection.GetReader(SyncScripts.ReadSis_Organization_SQL);
-                while (reader.Read())
-                {
-                    DataRow myDataRow = _dtOrganization.NewRow();
-
-                    List<string> columnNames = new List<string>();
-                    for (int i = 0; i < reader.FieldCount; i++)
-                        columnNames.Add(reader.GetName(i));
-
-                    foreach (string columnName in columnNames)
-                    {
-                        var value = reader.GetValue(reader.GetOrdinal(columnName));
-                        switch (columnName)
-                        {
-                            case "name":
-                                if (value != DBNull.Value && value != null)
-                                    myDataRow["name"] = (string)value;
-                                else
-                                    myDataRow["name"] = null;
-                                break;
-                            case "enum_organization_id":
-                                if (value != DBNull.Value && value != null)
-                                    myDataRow["enum_organization_id"] = ((string)value).ToLower();
-                                else
-                                    myDataRow["enum_organization_id"] = null;
-                                break;
-                            case "identifier":
-                                if (value != DBNull.Value && value != null)
-                                    myDataRow["identifier"] = (string)value;
-                                else
-                                    myDataRow["identifier"] = null;
-                                break;
-                            case "building_code":
-                                if (value != DBNull.Value && value != null)
-                                    myDataRow["building_code"] = (string)value;
-                                else
-                                    myDataRow["building_code"] = null;
-                                break;
-                            case "organization_parent_id":
-                                if (value != DBNull.Value && value != null)
-                                    myDataRow["organization_parent_id"] = (string)value;
-                                else
-                                    myDataRow["organization_parent_id"] = null;
-                                break;
-                            default:
-                                throw new Exception("Unexpected column found in SIS lookup for Organization: " + columnName);
-                        }
-                    }
-                    _dtOrganization.Rows.Add(myDataRow);
-                }
+                _dtOrganization.Load(reader);
             }
             catch (Exception e)
             {

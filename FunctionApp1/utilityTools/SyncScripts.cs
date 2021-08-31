@@ -8,6 +8,8 @@
 
         public static string ReadSis_Person_SQL = BuildScript_Sis_Person();
 
+        public static string ReadSis_Address_SQL = BuildScript_Sis_Address();
+
         private static string BuildScript_Sis_Organization()
         {
             return "SELECT " +
@@ -129,6 +131,11 @@
                 "AND fd.firstname NOT IN ('', ' ,', ',', '1', '2', '3', '4') " +
                 "AND NOT (fd.emailaddr = '' OR fd.emailaddr IS NULL OR REPLACE(fd.emailaddr,'@livoniapublicschools.org','') LIKE '%@%') " +
                 "ORDER BY last_name, first_name";
+        }
+
+        private static string BuildScript_Sis_Address()
+        {
+            return "";
         }
     }
 }

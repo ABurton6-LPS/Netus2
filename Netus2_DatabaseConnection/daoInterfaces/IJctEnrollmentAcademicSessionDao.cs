@@ -1,6 +1,6 @@
-﻿using Netus2_DatabaseConnection.daoObjects;
-using Netus2_DatabaseConnection.dbAccess;
+﻿using Netus2_DatabaseConnection.dbAccess;
 using System.Collections.Generic;
+using System.Data;
 
 namespace Netus2_DatabaseConnection.daoInterfaces
 {
@@ -12,21 +12,21 @@ namespace Netus2_DatabaseConnection.daoInterfaces
         /// <param name="enrollmentId"/>
         /// <param name="academicSessionId"/>
         /// <param name="connection"/>
-        JctEnrollmentAcademicSessionDao Read(int enrollmentId, int academicSessionId, IConnectable connection);
+        DataRow Read(int enrollmentId, int academicSessionId, IConnectable connection);
 
         /// <summary>
         /// Read the JctEnrollmentAcademicSessionDao from the database that have the provided enrollmentId.
         /// </summary>
         /// <param name="enrollmentId"/>
         /// <param name="connection"/>
-        List<JctEnrollmentAcademicSessionDao> Read_WithEnrollmentId(int enrollmentId, IConnectable connection);
+        List<DataRow> Read_WithEnrollmentId(int enrollmentId, IConnectable connection);
 
         /// <summary>
         /// Read the JctEnrollmentAcademicSessionDao from the database that have the provided academicSessionId.
         /// </summary>
         /// <param name="enrollmentId"/>
         /// <param name="connection"/>
-        List<JctEnrollmentAcademicSessionDao> Read_WithAcademicSessionId(int academicSessionId, IConnectable connection);
+        List<DataRow> Read_WithAcademicSessionId(int academicSessionId, IConnectable connection);
 
         /// <summary>
         /// Populates the database with a new JctEnrollmentAcademicSessionDao record, linked to the provided
@@ -35,7 +35,7 @@ namespace Netus2_DatabaseConnection.daoInterfaces
         /// <param name="enrollmentId"/>
         /// <param name="academicSessionId"/>
         /// <param name="connection"/>
-        JctEnrollmentAcademicSessionDao Write(int enrollmentId, int academicSessionId, IConnectable connection);
+        DataRow Write(int enrollmentId, int academicSessionId, IConnectable connection);
 
         /// <summary>
         /// Deletes from the database, the JctEnrollmentAcademicSessionDao which is linked to the

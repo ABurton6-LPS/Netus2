@@ -1,7 +1,7 @@
 ﻿using Netus2_DatabaseConnection.daoInterfaces;
-using Netus2_DatabaseConnection.daoObjects;
 using Netus2_DatabaseConnection.dataObjects;
 using Netus2_DatabaseConnection.dbAccess;
+using Netus2_DatabaseConnection.utilityTools;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -17,18 +17,18 @@ namespace Netus2_DatabaseConnection.daoImplementations
         {
             Delete_Mark(lineItem, connection);
 
-            LineItemDao lineItemDao = daoObjectMapper.MapLineItem(lineItem);
+            DataRow row = daoObjectMapper.MapLineItem(lineItem);
 
             StringBuilder sql = new StringBuilder("DELETE FROM lineitem WHERE 1=1 ");
-            sql.Append("AND lineitem_id = " + lineItemDao.lineitem_id + " ");
-            sql.Append("AND name " + (lineItemDao.name != null ? "= '" + lineItemDao.name + "' " : "IS NULL "));
-            sql.Append("AND descript " + (lineItemDao.descript != null ? "= '" + lineItemDao.descript + "' " : "IS NULL "));
-            sql.Append("AND assign_date " + (lineItemDao.assign_date != null ? "= '" + lineItemDao.assign_date + "' " : "IS NULL "));
-            sql.Append("AND due_date " + (lineItemDao.due_date != null ? "= '" + lineItemDao.due_date + "' " : "IS NULL "));
-            sql.Append("AND class_id " + (lineItemDao.class_id != null ? "= " + lineItemDao.class_id + " " : "IS NULL "));
-            sql.Append("AND enum_category_id " + (lineItemDao.enum_category_id != null ? "= " + lineItemDao.enum_category_id + " " : "IS NULL "));
-            sql.Append("AND markValueMin " + (lineItemDao.markValueMin != null ? "= " + lineItemDao.markValueMin + " " : "IS NULL "));
-            sql.Append("AND markValueMax " + (lineItemDao.markValueMax != null ? "= " + lineItemDao.markValueMax + " " : "IS NULL "));
+            sql.Append("AND lineitem_id = " + row["lineitem_id"] + " ");
+            sql.Append("AND name " + (row["name"] != DBNull.Value ? "= '" + row["name"] + "' " : "IS NULL "));
+            sql.Append("AND descript " + (row["descript"] != DBNull.Value ? "= '" + row["descript"] + "' " : "IS NULL "));
+            sql.Append("AND assign_date " + (row["assign_date"] != DBNull.Value ? "= '" + row["assign_date"] + "' " : "IS NULL "));
+            sql.Append("AND due_date " + (row["due_date"] != DBNull.Value ? "= '" + row["due_date"] + "' " : "IS NULL "));
+            sql.Append("AND class_id " + (row["class_id"] != DBNull.Value ? "= " + row["class_id"] + " " : "IS NULL "));
+            sql.Append("AND enum_category_id " + (row["enum_category_id"] != DBNull.Value ? "= " + row["enum_category_id"] + " " : "IS NULL "));
+            sql.Append("AND markValueMin " + (row["markValueMin"] != DBNull.Value ? "= " + row["markValueMin"] + " " : "IS NULL "));
+            sql.Append("AND markValueMax " + (row["markValueMax"] != DBNull.Value ? "= " + row["markValueMax"] + " " : "IS NULL "));
 
             connection.ExecuteNonQuery(sql.ToString());
         }
@@ -45,29 +45,29 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         public List<LineItem> Read(LineItem lineItem, IConnectable connection)
         {
-            LineItemDao lineItemDao = daoObjectMapper.MapLineItem(lineItem);
+            DataRow row = daoObjectMapper.MapLineItem(lineItem);
 
             StringBuilder sql = new StringBuilder("SELECT * FROM lineItem WHERE 1=1 ");
-            if (lineItemDao.lineitem_id != null)
-                sql.Append("AND lineItem_id = " + lineItemDao.lineitem_id + " ");
+            if (row["lineitem_id"] != DBNull.Value)
+                sql.Append("AND lineItem_id = " + row["lineitem_id"] + " ");
             else
             {
-                if (lineItemDao.name != null)
-                    sql.Append("AND name = '" + lineItemDao.name + "' ");
-                if (lineItemDao.descript != null)
-                    sql.Append("AND descript = '" + lineItemDao.descript + "' ");
-                if (lineItemDao.assign_date != null)
-                    sql.Append("AND assign_date = '" + lineItemDao.assign_date.ToString() + "' ");
-                if (lineItemDao.due_date != null)
-                    sql.Append("AND due_date = '" + lineItemDao.due_date.ToString() + "' ");
-                if (lineItemDao.class_id != null)
-                    sql.Append("AND class_id = " + lineItemDao.class_id + " ");
-                if (lineItemDao.enum_category_id != null)
-                    sql.Append("AND enum_category_id = " + lineItemDao.enum_category_id + " ");
-                if (lineItemDao.markValueMin != null)
-                    sql.Append("AND markValueMin = " + lineItemDao.markValueMin + " ");
-                if (lineItemDao.markValueMax != null)
-                    sql.Append("AND markValueMax = " + lineItemDao.markValueMax + " ");
+                if (row["name"] != DBNull.Value)
+                    sql.Append("AND name = '" + row["name"] + "' ");
+                if (row["descript"] != DBNull.Value)
+                    sql.Append("AND descript = '" + row["descript"] + "' ");
+                if (row["assign_date"] != DBNull.Value)
+                    sql.Append("AND assign_date = '" + row["assign_date"].ToString() + "' ");
+                if (row["due_date"] != DBNull.Value)
+                    sql.Append("AND due_date = '" + row["due_date"].ToString() + "' ");
+                if (row["class_id"] != DBNull.Value)
+                    sql.Append("AND class_id = " + row["class_id"] + " ");
+                if (row["enum_category_id"] != DBNull.Value)
+                    sql.Append("AND enum_category_id = " + row["enum_category_id"] + " ");
+                if (row["markValueMin"] != DBNull.Value)
+                    sql.Append("AND markValueMin = " + row["markValueMin"] + " ");
+                if (row["markValueMax"] != DBNull.Value)
+                    sql.Append("AND markValueMax = " + row["markValueMax"] + " ");
             }
 
             return Read(sql.ToString(), connection);
@@ -92,97 +92,13 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private List<LineItem> Read(string sql, IConnectable connection)
         {
-            List<LineItemDao> foundLineItemDaos = new List<LineItemDao>();
+            DataTable dtLineItem = new DataTableFactory().Dt_Netus2_LineItem;
 
             IDataReader reader = null;
             try
             {
                 reader = connection.GetReader(sql);
-                while (reader.Read())
-                {
-                    LineItemDao foundLineItemDao = new LineItemDao();
-
-                    List<string> columnNames = new List<string>();
-                    for (int i = 0; i < reader.FieldCount; i++)
-                        columnNames.Add(reader.GetName(i));
-
-                    foreach (string columnName in columnNames)
-                    {
-                        var value = reader.GetValue(reader.GetOrdinal(columnName));
-                        switch (columnName)
-                        {
-                            case "lineitem_id":
-                                if (value != DBNull.Value && value != null)
-                                    foundLineItemDao.lineitem_id = (int)value;
-                                else
-                                    foundLineItemDao.lineitem_id = null;
-                                break;
-                            case "name":
-                                foundLineItemDao.name = value != DBNull.Value ? (string)value : null;
-                                break;
-                            case "descript":
-                                foundLineItemDao.descript = value != DBNull.Value ? (string)value : null;
-                                break;
-                            case "assign_date":
-                                if (value != DBNull.Value && value != null)
-                                    foundLineItemDao.assign_date = (DateTime)value;
-                                else
-                                    foundLineItemDao.assign_date = null;
-                                break;
-                            case "due_date":
-                                if (value != DBNull.Value && value != null)
-                                    foundLineItemDao.due_date = (DateTime)value;
-                                else
-                                    foundLineItemDao.due_date = null;
-                                break;
-                            case "class_id":
-                                if (value != DBNull.Value && value != null)
-                                    foundLineItemDao.class_id = (int)value;
-                                else
-                                    foundLineItemDao.class_id = null;
-                                break;
-                            case "enum_category_id":
-                                if (value != DBNull.Value && value != null)
-                                    foundLineItemDao.enum_category_id = (int)value;
-                                else
-                                    foundLineItemDao.enum_category_id = null;
-                                break;
-                            case "markValueMin":
-                                if (value != DBNull.Value && value != null)
-                                    foundLineItemDao.markValueMin = (double)value;
-                                else
-                                    foundLineItemDao.markValueMin = null;
-                                break;
-                            case "markValueMax":
-                                if (value != DBNull.Value && value != null)
-                                    foundLineItemDao.markValueMax = (double)value;
-                                else
-                                    foundLineItemDao.markValueMax = null;
-                                break;
-                            case "created":
-                                if (value != DBNull.Value && value != null)
-                                    foundLineItemDao.created = (DateTime)value;
-                                else
-                                    foundLineItemDao.created = null;
-                                break;
-                            case "created_by":
-                                foundLineItemDao.created_by = value != DBNull.Value ? (string)value : null;
-                                break;
-                            case "changed":
-                                if (value != DBNull.Value && value != null)
-                                    foundLineItemDao.changed = (DateTime)value;
-                                else
-                                    foundLineItemDao.changed = null;
-                                break;
-                            case "changed_by":
-                                foundLineItemDao.changed_by = value != DBNull.Value ? (string)value : null;
-                                break;
-                            default:
-                                throw new Exception("Unexpected column found in lineItem table: " + columnName);
-                        }
-                    }
-                    foundLineItemDaos.Add(foundLineItemDao);
-                }
+                dtLineItem.Load(reader);                
             }
             finally
             {
@@ -191,10 +107,10 @@ namespace Netus2_DatabaseConnection.daoImplementations
             }
 
             List<LineItem> results = new List<LineItem>();
-            foreach (LineItemDao foundLineItemDao in foundLineItemDaos)
+            foreach (DataRow row in dtLineItem.Rows)
             {
-                ClassEnrolled classEnrolled = Read_ClassEnrolled((int)foundLineItemDao.class_id, connection);
-                results.Add(daoObjectMapper.MapLineItem(foundLineItemDao, classEnrolled));
+                ClassEnrolled classEnrolled = Read_ClassEnrolled((int)row["class_id"], connection);
+                results.Add(daoObjectMapper.MapLineItem(row, classEnrolled));
             }
 
             return results;
@@ -223,22 +139,22 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private void UpdateInternals(LineItem lineItem, IConnectable connection)
         {
-            LineItemDao lineItemDao = daoObjectMapper.MapLineItem(lineItem);
+            DataRow row = daoObjectMapper.MapLineItem(lineItem);
 
-            if(lineItemDao.lineitem_id != null)
+            if(row["lineitem_id"] != DBNull.Value)
             {
                 StringBuilder sql = new StringBuilder("UPDATE lineItem SET ");
-                sql.Append("name = " + (lineItemDao.name != null ? "'" + lineItemDao.name + "', " : "NULL, "));
-                sql.Append("descript = " + (lineItemDao.descript != null ? "'" + lineItemDao.descript + "', " : "NULL, "));
-                sql.Append("assign_date = " + (lineItemDao.assign_date != null ? "'" + lineItemDao.assign_date.ToString() + "', " : "NULL, "));
-                sql.Append("due_date = " + (lineItemDao.due_date != null ? "'" + lineItemDao.due_date.ToString() + "', " : "NULL, "));
-                sql.Append("class_id = " + (lineItemDao.class_id != null ? lineItemDao.class_id + ", " : "NULL, "));
-                sql.Append("enum_category_id = " + (lineItemDao.enum_category_id != null ? lineItemDao.enum_category_id + ", " : "NULL, "));
-                sql.Append("markValueMin = " + (lineItemDao.markValueMin != null ? lineItemDao.markValueMin + ", " : "NULL, "));
-                sql.Append("markValueMax = " + (lineItemDao.markValueMax != null ? lineItemDao.markValueMax + ", " : "NULL, "));
+                sql.Append("name = " + (row["name"] != DBNull.Value ? "'" + row["name"] + "', " : "NULL, "));
+                sql.Append("descript = " + (row["descript"] != DBNull.Value ? "'" + row["descript"] + "', " : "NULL, "));
+                sql.Append("assign_date = " + (row["assign_date"] != DBNull.Value ? "'" + row["assign_date"].ToString() + "', " : "NULL, "));
+                sql.Append("due_date = " + (row["due_date"] != DBNull.Value ? "'" + row["due_date"].ToString() + "', " : "NULL, "));
+                sql.Append("class_id = " + (row["class_id"] != DBNull.Value ? row["class_id"] + ", " : "NULL, "));
+                sql.Append("enum_category_id = " + (row["enum_category_id"] != DBNull.Value ? row["enum_category_id"] + ", " : "NULL, "));
+                sql.Append("markValueMin = " + (row["markValueMin"] != DBNull.Value ? row["markValueMin"] + ", " : "NULL, "));
+                sql.Append("markValueMax = " + (row["markValueMax"] != DBNull.Value ? row["markValueMax"] + ", " : "NULL, "));
                 sql.Append("changed = GETDATE(), ");
                 sql.Append("changed_by = 'Netus2' ");
-                sql.Append("WHERE lineItem_id = " + lineItemDao.lineitem_id);
+                sql.Append("WHERE lineItem_id = " + row["lineitem_id"]);
 
                 connection.ExecuteNonQuery(sql.ToString());
             }
@@ -250,17 +166,17 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         public LineItem Write(LineItem lineItem, IConnectable connection)
         {
-            LineItemDao lineItemDao = daoObjectMapper.MapLineItem(lineItem);
+            DataRow row = daoObjectMapper.MapLineItem(lineItem);
 
             StringBuilder sqlValues = new StringBuilder();
-            sqlValues.Append(lineItemDao.name != null ? "'" + lineItemDao.name + "', " : "NULL, ");
-            sqlValues.Append(lineItemDao.descript != null ? "'" + lineItemDao.descript + "', " : "NULL, ");
-            sqlValues.Append(lineItemDao.assign_date != null ? "'" + lineItemDao.assign_date.ToString() + "', " : "NULL, ");
-            sqlValues.Append(lineItemDao.due_date != null ? "'" + lineItemDao.due_date.ToString() + "', " : "NULL, ");
-            sqlValues.Append(lineItemDao.class_id != null ? lineItemDao.class_id + ", " : "NULL, ");
-            sqlValues.Append(lineItemDao.enum_category_id != null ? lineItemDao.enum_category_id + ", " : "NULL, ");
-            sqlValues.Append(lineItemDao.markValueMin != null ? lineItemDao.markValueMin + ", " : "NULL, ");
-            sqlValues.Append(lineItemDao.markValueMax != null ? lineItemDao.markValueMax + ", " : "NULL, ");
+            sqlValues.Append(row["name"] != DBNull.Value ? "'" + row["name"] + "', " : "NULL, ");
+            sqlValues.Append(row["descript"] != DBNull.Value ? "'" + row["descript"] + "', " : "NULL, ");
+            sqlValues.Append(row["assign_date"] != DBNull.Value ? "'" + row["assign_date"].ToString() + "', " : "NULL, ");
+            sqlValues.Append(row["due_date"] != DBNull.Value ? "'" + row["due_date"].ToString() + "', " : "NULL, ");
+            sqlValues.Append(row["class_id"] != DBNull.Value ? row["class_id"] + ", " : "NULL, ");
+            sqlValues.Append(row["enum_category_id"] != DBNull.Value ? row["enum_category_id"] + ", " : "NULL, ");
+            sqlValues.Append(row["markValueMin"] != DBNull.Value ? row["markValueMin"] + ", " : "NULL, ");
+            sqlValues.Append(row["markValueMax"] != DBNull.Value ? row["markValueMax"] + ", " : "NULL, ");
             sqlValues.Append("GETDATE(), ");
             sqlValues.Append("'Netus2'");
 
@@ -269,10 +185,10 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 "(name, descript, assign_date, due_date, class_id, enum_category_id, markValueMin, markValueMax, created, created_by) " +
                 "VALUES (" + sqlValues.ToString() + ")";
 
-            lineItemDao.lineitem_id = connection.InsertNewRecord(sql);
+            row["lineitem_id"] = connection.InsertNewRecord(sql);
 
-            ClassEnrolled classEnrolled = Read_ClassEnrolled((int)lineItemDao.class_id, connection);
-            LineItem result = daoObjectMapper.MapLineItem(lineItemDao, classEnrolled);
+            ClassEnrolled classEnrolled = Read_ClassEnrolled((int)row["class_id"], connection);
+            LineItem result = daoObjectMapper.MapLineItem(row, classEnrolled);
 
             return result;
         }

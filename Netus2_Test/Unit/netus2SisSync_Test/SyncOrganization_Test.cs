@@ -9,8 +9,9 @@ using Netus2SisSync.SyncProcesses.SyncTasks.OrganizationTasks;
 using Netus2_DatabaseConnection.dbAccess;
 using Netus2_DatabaseConnection.daoImplementations;
 using Netus2_Test.MockDaoImpl;
+using Netus2_DatabaseConnection.utilityTools;
 
-namespace Netus2_Test.Unit
+namespace Netus2_Test.Unit.SyncProcess
 {
     class SyncOrganization_Test
     {
@@ -213,7 +214,7 @@ namespace Netus2_Test.Unit
 
         private DataTable BuildTestDataTable(List<SisOrganizationTestData> tstDataSet)
         {
-            DataTable dtOrganization = DataTableFactory.CreateDataTable("Organization");
+            DataTable dtOrganization = new DataTableFactory().Dt_Sis_Organization;
             foreach (SisOrganizationTestData tstData in tstDataSet)
             {
                 DataRow row = dtOrganization.NewRow();
@@ -238,77 +239,74 @@ namespace Netus2_Test.Unit
                 .Callback(() => count++);
 
             reader.Setup(x => x.FieldCount)
-                .Returns(() => 8);
+                .Returns(() => 10);
+
+            reader.Setup(x => x.GetValues(It.IsAny<object[]>()))
+                .Callback<object[]>(
+                    (values) =>
+                    {
+                        values[0] = 1;
+                        values[1] = tstDataSet[count].Name;
+                        values[2] = 1;
+                        values[3] = tstDataSet[count].Ident;
+                        values[4] = tstDataSet[count].BldgCode;
+                        values[5] = 1;
+                        values[6] = new DateTime();
+                        values[7] = "Test";
+                        values[8] = new DateTime();
+                        values[9] = "Test";
+                    }
+                ).Returns(count);
 
             reader.Setup(x => x.GetName(0))
                 .Returns(() => "organization_id");
             reader.Setup(x => x.GetOrdinal("organization_id"))
                 .Returns(() => 0);
-            reader.Setup(x => x.GetValue(0))
-                .Returns(() => 1);
 
             reader.Setup(x => x.GetName(1))
                 .Returns(() => "name");
             reader.Setup(x => x.GetOrdinal("name"))
                 .Returns(() => 1);
-            reader.Setup(x => x.GetValue(1))
-                .Returns(() => tstDataSet[count].Name);
 
             reader.Setup(x => x.GetName(2))
                 .Returns(() => "enum_organization_id");
             reader.Setup(x => x.GetOrdinal("enum_organization_id"))
                 .Returns(() => 2);
-            reader.Setup(x => x.GetValue(2))
-                .Returns(() => 1);
 
             reader.Setup(x => x.GetName(3))
                 .Returns(() => "identifier");
             reader.Setup(x => x.GetOrdinal("identifier"))
                 .Returns(() => 3);
-            reader.Setup(x => x.GetValue(3))
-                .Returns(() => tstDataSet[count].Ident);
 
             reader.Setup(x => x.GetName(4))
                 .Returns(() => "building_code");
             reader.Setup(x => x.GetOrdinal("building_code"))
                 .Returns(() => 4);
-            reader.Setup(x => x.GetValue(4))
-                .Returns(() => tstDataSet[count].BldgCode);
 
             reader.Setup(x => x.GetName(5))
                 .Returns(() => "organization_parent_id");
             reader.Setup(x => x.GetOrdinal("organization_parent_id"))
                 .Returns(() => 5);
-            reader.Setup(x => x.GetValue(5))
-                .Returns(() => 1);
 
             reader.Setup(x => x.GetName(6))
                 .Returns(() => "created");
             reader.Setup(x => x.GetOrdinal("created"))
                 .Returns(() => 6);
-            reader.Setup(x => x.GetValue(6))
-                .Returns(() => new DateTime());
 
             reader.Setup(x => x.GetName(7))
                 .Returns(() => "created_by");
             reader.Setup(x => x.GetOrdinal("created_by"))
                 .Returns(() => 7);
-            reader.Setup(x => x.GetValue(7))
-                .Returns(() => "Test");
 
             reader.Setup(x => x.GetName(8))
                 .Returns(() => "changed");
             reader.Setup(x => x.GetOrdinal("changed"))
                 .Returns(() => 8);
-            reader.Setup(x => x.GetValue(8))
-                .Returns(() => new DateTime());
 
             reader.Setup(x => x.GetName(9))
                 .Returns(() => "changed_by");
             reader.Setup(x => x.GetOrdinal("changed_by"))
                 .Returns(() => 9);
-            reader.Setup(x => x.GetValue(9))
-                .Returns(() => "Test");
 
             _netus2Connection.mockReader = reader;
         }
@@ -325,40 +323,52 @@ namespace Netus2_Test.Unit
             reader.Setup(x => x.FieldCount)
                 .Returns(() => 5);
 
+            reader.Setup(x => x.GetValues(It.IsAny<object[]>()))
+                .Callback<object[]>(
+                    (values) =>
+                    {
+                        values[0] = tstDataSet[count].Name;
+                        values[1] = tstDataSet[count].OrgId;
+                        values[2] = tstDataSet[count].Ident;
+                        values[3] = tstDataSet[count].BldgCode;
+                        values[4] = tstDataSet[count].ParOrgId;
+                    }
+                ).Returns(count);
+
             reader.Setup(x => x.GetName(0))
                 .Returns(() => "name");
             reader.Setup(x => x.GetOrdinal("name"))
                 .Returns(() => 0);
-            reader.Setup(x => x.GetValue(0))
-                .Returns(() => tstDataSet[count].Name);
+            reader.Setup(x => x.GetFieldType(0))
+                .Returns(() => typeof(string));
 
             reader.Setup(x => x.GetName(1))
                 .Returns(() => "enum_organization_id");
             reader.Setup(x => x.GetOrdinal("enum_organization_id"))
                 .Returns(() => 1);
-            reader.Setup(x => x.GetValue(1))
-                .Returns(() => tstDataSet[count].OrgId);
+            reader.Setup(x => x.GetFieldType(1))
+                .Returns(() => typeof(string));
 
             reader.Setup(x => x.GetName(2))
                 .Returns(() => "identifier");
             reader.Setup(x => x.GetOrdinal("identifier"))
                 .Returns(() => 2);
-            reader.Setup(x => x.GetValue(2))
-                .Returns(() => tstDataSet[count].Ident);
+            reader.Setup(x => x.GetFieldType(2))
+                .Returns(() => typeof(string));
 
             reader.Setup(x => x.GetName(3))
                 .Returns(() => "building_code");
             reader.Setup(x => x.GetOrdinal("building_code"))
                 .Returns(() => 3);
-            reader.Setup(x => x.GetValue(3))
-                .Returns(() => tstDataSet[count].BldgCode);
+            reader.Setup(x => x.GetFieldType(3))
+                .Returns(() => typeof(string));
 
             reader.Setup(x => x.GetName(4))
                 .Returns(() => "organization_parent_id");
             reader.Setup(x => x.GetOrdinal("organization_parent_id"))
                 .Returns(() => 4);
-            reader.Setup(x => x.GetValue(4))
-                .Returns(() => tstDataSet[count].ParOrgId);
+            reader.Setup(x => x.GetFieldType(4))
+                .Returns(() => typeof(string));
 
             _sisConnection.mockReader = reader;
         }

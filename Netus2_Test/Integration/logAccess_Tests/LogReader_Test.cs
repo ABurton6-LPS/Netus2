@@ -702,14 +702,14 @@ namespace Netus2_Test.Integration
         [Test]
         public void LogClass_Update()
         {
-            int preTestLogCount = logReader.Read_LogClass(connection).Count;
+            int preTestLogCount = logReader.Read_LogClassEnrolled(connection).Count;
 
             ClassEnrolled oldClass = testDataBuilder.classEnrolled;
             ClassEnrolled newClass = oldClass;
             newClass.Name = "New Class Name";
             classEnrolledDaoImpl.Update(newClass, connection);
 
-            List<LogClass> logClasses = logReader.Read_LogClass(connection);
+            List<LogClass> logClasses = logReader.Read_LogClassEnrolled(connection);
 
             Assert.IsNotNull(logClasses);
             Assert.IsNotEmpty(logClasses);
@@ -724,12 +724,12 @@ namespace Netus2_Test.Integration
         [Test]
         public void LogClass_Delete()
         {
-            int preTestLogCount = logReader.Read_LogClass(connection).Count;
+            int preTestLogCount = logReader.Read_LogClassEnrolled(connection).Count;
 
             ClassEnrolled oldClass = testDataBuilder.classEnrolled;
             classEnrolledDaoImpl.Delete(oldClass, connection);
 
-            List<LogClass> logClasses = logReader.Read_LogClass(connection);
+            List<LogClass> logClasses = logReader.Read_LogClassEnrolled(connection);
 
             Assert.IsNotNull(logClasses);
             Assert.IsNotEmpty(logClasses);

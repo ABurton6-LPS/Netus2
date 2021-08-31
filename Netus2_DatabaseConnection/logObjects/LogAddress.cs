@@ -6,7 +6,7 @@ namespace Netus2_DatabaseConnection.logObjects
     public class LogAddress
     {
         public int log_address_id { get; set; }
-        public int? address_id { get; set; }
+        public int address_id { get; set; }
         public string address_line_1 { get; set; }
         public string address_line_2 { get; set; }
         public string address_line_3 { get; set; }
@@ -14,11 +14,11 @@ namespace Netus2_DatabaseConnection.logObjects
         public string apartment { get; set; }
         public string city { get; set; }
         public string postal_code { get; set; }
-        public DateTime? created { get; set; }
+        public DateTime created { get; set; }
         public string created_by { get; set; }
-        public DateTime? changed { get; set; }
+        public DateTime changed { get; set; }
         public string changed_by { get; set; }
-        public DateTime? log_date { get; set; }
+        public DateTime log_date { get; set; }
         public string log_user { get; set; }
 
         public Enumeration AddressType;

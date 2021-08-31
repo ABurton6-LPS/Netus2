@@ -1,7 +1,7 @@
 ﻿using Netus2_DatabaseConnection.daoInterfaces;
-using Netus2_DatabaseConnection.daoObjects;
 using Netus2_DatabaseConnection.dataObjects;
 using Netus2_DatabaseConnection.dbAccess;
+using Netus2_DatabaseConnection.utilityTools;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -17,12 +17,12 @@ namespace Netus2_DatabaseConnection.daoImplementations
         {
             DeleteJctPersonApp(appliction, connection);
 
-            ApplicationDao appDao = daoObjectMapper.MapApp(appliction);
+            DataRow row = daoObjectMapper.MapApp(appliction);
 
             StringBuilder sql = new StringBuilder("DELETE FROM app WHERE 1=1 ");
-            sql.Append("AND app_id " + (appDao.app_id != null ? "= " + appDao.app_id + " " : "IS NULL "));
-            sql.Append("AND name " + (appDao.name != null ? "LIKE '" + appDao.name + "' " : "IS NULL "));
-            sql.Append("AND provider_id " + (appDao.provider_id != null ? "= " + appDao.provider_id + " " : "IS NULL "));
+            sql.Append("AND app_id " + (row["app_id"] != DBNull.Value ? "= " + row["app_id"] + " " : "IS NULL "));
+            sql.Append("AND name " + (row["name"] != DBNull.Value ? "LIKE '" + row["name"] + "' " : "IS NULL "));
+            sql.Append("AND provider_id " + (row["provider_id"] != DBNull.Value ? "= " + row["provider_id"] + " " : "IS NULL "));
 
             connection.ExecuteNonQuery(sql.ToString());
         }
@@ -30,11 +30,11 @@ namespace Netus2_DatabaseConnection.daoImplementations
         private void DeleteJctPersonApp(Application application, IConnectable connection)
         {
             IJctPersonAppDao jctPersonAppDaoImpl = DaoImplFactory.GetJctPersonAppDaoImpl();
-            List<JctPersonAppDao> foundJctPersonAppDaos = jctPersonAppDaoImpl.Read_WithAppId(application.Id, connection);
+            List<DataRow> foundDataRows = jctPersonAppDaoImpl.Read_WithAppId(application.Id, connection);
 
-            foreach (JctPersonAppDao foundJctPersonAppDao in foundJctPersonAppDaos)
+            foreach (DataRow foundDataRow in foundDataRows)
             {
-                jctPersonAppDaoImpl.Delete((int)foundJctPersonAppDao.person_id, (int)foundJctPersonAppDao.app_id, connection);
+                jctPersonAppDaoImpl.Delete((int)foundDataRow["person_id"], (int)foundDataRow["app_id"], connection);
             }
         }
 
@@ -59,17 +59,17 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         public List<Application> Read(Application application, IConnectable connection)
         {
-            ApplicationDao appDao = daoObjectMapper.MapApp(application);
+            DataRow row = daoObjectMapper.MapApp(application);
 
             StringBuilder sql = new StringBuilder("SELECT * FROM app WHERE 1=1 ");
-            if (appDao.app_id != null)
-                sql.Append("AND app_id = " + appDao.app_id + " ");
+            if (row["app_id"] != DBNull.Value)
+                sql.Append("AND app_id = " + row["app_id"] + " ");
             else
             {
-                if (appDao.name != null)
-                    sql.Append("AND name LIKE '" + appDao.name + "' ");
-                if (appDao.provider_id != null)
-                    sql.Append("AND provider_id = " + appDao.provider_id + " ");
+                if (row["name"] != DBNull.Value)
+                    sql.Append("AND name LIKE '" + row["name"] + "' ");
+                if (row["provider_id"] != DBNull.Value)
+                    sql.Append("AND provider_id = " + row["provider_id"] + " ");
             }
 
             return Read(sql.ToString(), connection);
@@ -77,72 +77,12 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private List<Application> Read(string sql, IConnectable connection)
         {
-            List<ApplicationDao> foundAppDaos = new List<ApplicationDao>();
+            DataTable dtApplication = new DataTableFactory().Dt_Netus2_Application;
             IDataReader reader = null;
             try
             {
                 reader = connection.GetReader(sql);
-                while (reader.Read())
-                {
-                    ApplicationDao foundAppDao = new ApplicationDao();
-
-                    List<string> columnNames = new List<string>();
-                    for (int i = 0; i < reader.FieldCount; i++)
-                        columnNames.Add(reader.GetName(i));
-
-                    foreach (string columnName in columnNames)
-                    {
-                        var value = reader.GetValue(reader.GetOrdinal(columnName));
-                        switch (columnName)
-                        {
-                            case "app_id":
-                                if (value != DBNull.Value && value != null)
-                                    foundAppDao.app_id = (int)value;
-                                else
-                                    foundAppDao.app_id = null;
-                                break;
-                            case "name":
-                                if (value != DBNull.Value && value != null)
-                                    foundAppDao.name = (string)value;
-                                else
-                                    foundAppDao.name = null;
-                                break;
-                            case "provider_id":
-                                if (value != DBNull.Value && value != null)
-                                    foundAppDao.provider_id = (int)value;
-                                else
-                                    foundAppDao.provider_id = null;
-                                break;
-                            case "created":
-                                if (value != DBNull.Value && value != null)
-                                    foundAppDao.created = (DateTime)value;
-                                else
-                                    foundAppDao.created = null;
-                                break;
-                            case "created_by":
-                                if (value != DBNull.Value && value != null)
-                                    foundAppDao.created_by = (string)value;
-                                else
-                                    foundAppDao.created_by = null;
-                                break;
-                            case "changed":
-                                if (value != DBNull.Value && value != null)
-                                    foundAppDao.changed = (DateTime)value;
-                                else
-                                    foundAppDao.changed = null;
-                                break;
-                            case "changed_by":
-                                if (value != DBNull.Value && value != null)
-                                    foundAppDao.changed_by = (string)value;
-                                else
-                                    foundAppDao.changed_by = null;
-                                break;
-                            default:
-                                throw new Exception("Unexpected column found in application table: " + columnName);
-                        }
-                    }
-                    foundAppDaos.Add(foundAppDao);
-                }
+                dtApplication.Load(reader);
             }
             finally
             {
@@ -151,10 +91,10 @@ namespace Netus2_DatabaseConnection.daoImplementations
             }
 
             List<Application> results = new List<Application>();
-            foreach (ApplicationDao foundAppDao in foundAppDaos)
+            foreach (DataRow row in dtApplication.Rows)
             {
-                Provider foundProvider = Read_Provider((int)foundAppDao.provider_id, connection);
-                results.Add(daoObjectMapper.MapApp(foundAppDao, foundProvider));
+                Provider foundProvider = Read_Provider((int)row["provider_id"], connection);
+                results.Add(daoObjectMapper.MapApp(row, foundProvider));
             }
 
             return results;
@@ -183,32 +123,32 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private void UpdateInternals(Application application, IConnectable connection)
         {
-            ApplicationDao appDao = daoObjectMapper.MapApp(application);
+            DataRow row = daoObjectMapper.MapApp(application);
 
             StringBuilder sql = new StringBuilder("UPDATE app SET ");
-            sql.Append("name = " + (appDao.name != null ? "'" + appDao.name + "', " : "NULL, "));
-            sql.Append("provider_id = " + (appDao.provider_id != null ? appDao.provider_id + ", " : "NULL, "));
+            sql.Append("name = " + (row["name"] != DBNull.Value ? "'" + row["name"] + "', " : "NULL, "));
+            sql.Append("provider_id = " + (row["provider_id"] != DBNull.Value ? row["provider_id"] + ", " : "NULL, "));
             sql.Append("changed = GETDATE(), ");
             sql.Append("changed_by = 'Netus2' ");
-            sql.Append("WHERE app_id = " + appDao.app_id);
+            sql.Append("WHERE app_id = " + row["app_id"]);
 
             connection.ExecuteNonQuery(sql.ToString());
         }
 
         public Application Write(Application application, IConnectable connection)
         {
-            ApplicationDao appDao = daoObjectMapper.MapApp(application);
+            DataRow row = daoObjectMapper.MapApp(application);
 
             StringBuilder sql = new StringBuilder("INSERT INTO app (name, provider_id, created, created_by) VALUES (");
-            sql.Append(appDao.name != null ? "'" + appDao.name + "', " : "NULL, ");
-            sql.Append(appDao.provider_id != null ? appDao.provider_id + ", " : "NULL, ");
+            sql.Append(row["name"] != DBNull.Value ? "'" + row["name"] + "', " : "NULL, ");
+            sql.Append(row["provider_id"] != DBNull.Value ? row["provider_id"] + ", " : "NULL, ");
             sql.Append("GETDATE(), ");
             sql.Append("'Netus2')");
 
-            appDao.app_id = connection.InsertNewRecord(sql.ToString());
+            row["app_id"] = connection.InsertNewRecord(sql.ToString());
 
-            Provider foundProvider = Read_Provider((int)appDao.provider_id, connection);
-            return daoObjectMapper.MapApp(appDao, foundProvider);
+            Provider foundProvider = Read_Provider((int)row["provider_id"], connection);
+            return daoObjectMapper.MapApp(row, foundProvider);
         }
     }
 }

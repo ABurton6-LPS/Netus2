@@ -1,573 +1,1157 @@
-﻿using Netus2_DatabaseConnection.daoObjects;
-using Netus2_DatabaseConnection.dataObjects;
+﻿using Netus2_DatabaseConnection.dataObjects;
 using Netus2_DatabaseConnection.enumerations;
+using Netus2_DatabaseConnection.utilityTools;
 using System;
 using System.Collections.Generic;
+using System.Data;
 
 namespace Netus2_DatabaseConnection
 {
     public class DaoObjectMapper
     {
-        public PersonDao MapPerson(Person person)
+        public DataRow MapPerson(Person person)
         {
-            PersonDao personDao = new PersonDao();
+            DataRow row = new DataTableFactory().Dt_Netus2_Person.NewRow();
 
             if (person.Id != -1)
-                personDao.person_id = person.Id;
+                row["person_id"] = person.Id;
             else
-                personDao.person_id = null;
+                row["person_id"] = DBNull.Value;
 
-            personDao.first_name = person.FirstName;
-            personDao.middle_name = person.MiddleName;
-            personDao.last_name = person.LastName;
-            personDao.birth_date = person.BirthDate;
-            personDao.enum_gender_id = person.Gender?.Id;
-            personDao.enum_ethnic_id = person.Ethnic?.Id;
-            personDao.enum_residence_status_id = person.ResidenceStatus?.Id;
-            personDao.login_name = person.LoginName;
-            personDao.login_pw = person.LoginPw;
+            if (person.FirstName != null)
+                row["first_name"] = person.FirstName;
+            else
+                row["first_name"] = DBNull.Value;
 
-            return personDao;
+            if (person.MiddleName != null)
+                row["middle_name"] = person.MiddleName;
+            else
+                row["middle_name"] = DBNull.Value;
+
+            if (person.LastName != null)
+                row["last_name"] = person.LastName;
+            else
+                row["last_name"] = DBNull.Value;
+
+            if (person.BirthDate != new DateTime())
+                row["birth_date"] = person.BirthDate;
+            else
+                row["birth_date"] = new DateTime();
+
+            if (person.Gender != null)
+                row["enum_gender_id"] = person.Gender.Id;
+            else
+                row["enum_gender_id"] = DBNull.Value;
+
+            if (person.Ethnic != null)
+                row["enum_ethnic_id"] = person.Ethnic.Id;
+            else
+                row["enum_ethnic_id"] = DBNull.Value;
+
+            if (person.ResidenceStatus != null)
+                row["enum_residence_status_id"] = person.ResidenceStatus.Id;
+            else
+                row["enum_residence_status_id"] = DBNull.Value;
+
+            if (person.LoginName != null)
+                row["login_name"] = person.LoginName;
+            else
+                row["login_name"] = DBNull.Value;
+
+            if (person.LoginPw != null)
+                row["login_pw"] = person.LoginPw;
+            else
+                row["login_pw"] = DBNull.Value;
+
+            return row;
         }
 
-        public Person MapPerson(PersonDao personDao)
+        public Person MapPerson(DataRow row)
         {
-            Enumeration gender = Enum_Gender.GetEnumFromId((int)personDao.enum_gender_id);
-            Enumeration ethnic = Enum_Ethnic.GetEnumFromId((int)personDao.enum_ethnic_id);
+            Enumeration gender = null;
+            if(row["enum_gender_id"] != DBNull.Value)
+                gender = Enum_Gender.GetEnumFromId((int)row["enum_gender_id"]);
 
-            Person person = new Person(personDao.first_name, personDao.last_name, (DateTime)personDao.birth_date, gender, ethnic);
+            Enumeration ethnic = null;
+            if(row["enum_ethnic_id"] != DBNull.Value)
+                ethnic = Enum_Ethnic.GetEnumFromId((int)row["enum_ethnic_id"]);
 
-            person.Id = personDao.person_id != null ? (int)personDao.person_id : -1;
-            person.MiddleName = personDao.middle_name;
-            person.ResidenceStatus = personDao.enum_residence_status_id != null ? Enum_Residence_Status.GetEnumFromId((int)personDao.enum_residence_status_id) : null;
-            person.LoginName = personDao.login_name;
-            person.LoginPw = personDao.login_pw;
+            string firstName = null;
+            if (row["first_name"] != DBNull.Value)
+                firstName = (string)row["first_name"];
+
+            string lastName = null;
+            if (row["last_name"] != DBNull.Value)
+                lastName = (string)row["last_name"];
+
+            DateTime birthDate = new DateTime();
+            if ((DateTime)row["birth_date"] != new DateTime())
+                birthDate = (DateTime)row["birth_date"];
+
+            Person person = new Person(firstName, lastName, birthDate, gender, ethnic);
+
+            if (row["person_id"] != DBNull.Value)
+                person.Id = (int)row["person_id"];
+            else
+                person.Id = -1;
+
+            if (row["middle_name"] != DBNull.Value)
+                person.MiddleName = (string)row["middle_name"];
+            else
+                person.MiddleName = null;
+
+            if (row["enum_residence_status_id"] != DBNull.Value)
+                person.ResidenceStatus = Enum_Residence_Status.GetEnumFromId((int)row["enum_residence_status_id"]);
+            else
+                person.ResidenceStatus = null;
+
+            if (row["login_name"] != DBNull.Value)
+                person.LoginName = (string)row["login_name"];
+            else
+                person.LoginName = null;
+
+            if (row["login_pw"] != DBNull.Value)
+                person.LoginPw = (string)row["login_pw"];
+            else
+                person.LoginPw = null;
 
             return person;
         }
 
-        public PhoneNumberDao MapPhoneNumber(PhoneNumber phoneNumber, int personId)
+        public DataRow MapPhoneNumber(PhoneNumber phoneNumber, int personId)
         {
-            PhoneNumberDao phoneNumberDao = new PhoneNumberDao();
+            DataRow row = new DataTableFactory().Dt_Netus2_PhoneNumber.NewRow();
 
             if (phoneNumber.Id != -1)
-                phoneNumberDao.phone_number_id = phoneNumber.Id;
+                row["phone_number_id"] = phoneNumber.Id;
             else
-                phoneNumberDao.phone_number_id = null;
+                row["phone_number_id"] = DBNull.Value;
             
             if (personId != -1)
-                phoneNumberDao.person_id = personId;
+                row["person_id"] = personId;
             else
-                phoneNumberDao.person_id = null;
+                row["person_id"] = DBNull.Value;
 
-            phoneNumberDao.phone_number = phoneNumber.PhoneNumberValue;
-            phoneNumberDao.is_primary_id = phoneNumber.IsPrimary?.Id;
-            phoneNumberDao.enum_phone_id = phoneNumber.PhoneType?.Id;
+            if (phoneNumber.PhoneNumberValue != null)
+                row["phone_number"] = phoneNumber.PhoneNumberValue;
+            else
+                row["phone_number"] = DBNull.Value;
 
-            return phoneNumberDao;
+            if (phoneNumber.IsPrimary != null)
+                row["is_primary_id"] = phoneNumber.IsPrimary.Id;
+            else
+                row["is_primary_id"] = DBNull.Value;
+
+            if (phoneNumber.PhoneType != null)
+                row["enum_phone_id"] = phoneNumber.PhoneType.Id;
+            else
+                row["enum_phone_id"] = DBNull.Value;
+
+            return row;
         }
 
-        public PhoneNumber MapPhoneNumber(PhoneNumberDao phoneNumberDao)
+        public PhoneNumber MapPhoneNumber(DataRow row)
         {
-            Enumeration isPrimary = Enum_True_False.GetEnumFromId((int)phoneNumberDao.is_primary_id);
-            Enumeration phoneType = Enum_Phone.GetEnumFromId((int)phoneNumberDao.enum_phone_id);
-            PhoneNumber phoneNumber = new PhoneNumber(phoneNumberDao.phone_number, isPrimary, phoneType);
+            Enumeration isPrimary = null;
+            if(row["is_primary_id"] != DBNull.Value)
+                isPrimary = Enum_True_False.GetEnumFromId((int)row["is_primary_id"]);
 
-            phoneNumber.Id = phoneNumberDao.phone_number_id != null ? (int)phoneNumberDao.phone_number_id : -1;
+            Enumeration phoneType = null;
+            if(row["enum_phone_id"] != DBNull.Value)
+                phoneType = Enum_Phone.GetEnumFromId((int)row["enum_phone_id"]);
+
+            string strPhoneNumber = null;
+            if (row["phone_number"] != DBNull.Value)
+                strPhoneNumber = (string)row["phone_number"];
+
+            PhoneNumber phoneNumber = new PhoneNumber(strPhoneNumber, isPrimary, phoneType);
+
+            if (row["phone_number_id"] != DBNull.Value)
+                phoneNumber.Id = (int)row["phone_number_id"];
+            else
+                phoneNumber.Id = -1;
 
             return phoneNumber;
         }
 
-        public ProviderDao MapProvider(Provider provider, int parentId)
+        public DataRow MapProvider(Provider provider, int parentId)
         {
-            ProviderDao providerDao = new ProviderDao();
+            DataRow row = new DataTableFactory().Dt_Netus2_Provider.NewRow();
 
             if (provider.Id != -1)
-                providerDao.provider_id = provider.Id;
+                row["provider_id"] = provider.Id;
             else
-                providerDao.provider_id = null;
+                row["provider_id"] = DBNull.Value;
 
-            providerDao.name = provider.Name;
-            providerDao.url_standard_access = provider.UrlStandardAccess;
-            providerDao.url_admin_access = provider.UrlAdminAccess;
-            providerDao.populated_by = provider.PopulatedBy;
+            if (provider.Name != null)
+                row["name"] = provider.Name;
+            else
+                row["name"] = DBNull.Value;
+
+            if (provider.UrlStandardAccess != null)
+                row["url_standard_access"] = provider.UrlStandardAccess;
+            else
+                row["url_standard_access"] = DBNull.Value;
+
+            if (provider.UrlAdminAccess != null)
+                row["url_admin_access"] = provider.UrlAdminAccess;
+            else
+                row["url_admin_access"] = DBNull.Value;
+
+            if (provider.PopulatedBy != null)
+                row["populated_by"] = provider.PopulatedBy;
+            else
+                row["populated_by"] = DBNull.Value;
             
             if (parentId != -1)
-                providerDao.parent_provider_id = parentId;
+                row["parent_provider_id"] = parentId;
             else
-                providerDao.parent_provider_id = null;
+                row["parent_provider_id"] = DBNull.Value;
 
-            return providerDao;
+            return row;
         }
 
-        public Provider MapProvider(ProviderDao providerDao)
+        public Provider MapProvider(DataRow row)
         {
-            Provider provider = new Provider(providerDao.name);
-            provider.Id = providerDao.provider_id != null ? (int)providerDao.provider_id : -1;
-            provider.UrlStandardAccess = providerDao.url_standard_access;
-            provider.UrlAdminAccess = providerDao.url_admin_access;
-            provider.PopulatedBy = providerDao.populated_by;
+            string name = null;
+            if (row["name"] != DBNull.Value)
+                name = (string)row["name"];
+
+            Provider provider = new Provider(name);
+
+            if (row["provider_id"] != DBNull.Value)
+                provider.Id = (int)row["provider_id"];
+            else
+                provider.Id = -1;
+
+            if (row["url_standard_access"] != DBNull.Value)
+                provider.UrlStandardAccess = (string)row["url_standard_access"];
+            else
+                provider.UrlStandardAccess = null;
+
+            if (row["url_admin_access"] != DBNull.Value)
+                provider.UrlAdminAccess = (string)row["url_admin_access"];
+            else
+                provider.UrlAdminAccess = null;
+
+            if (row["populated_by"] != DBNull.Value)
+                provider.PopulatedBy = (string)row["populated_by"];
+            else
+                provider.PopulatedBy = null;
 
             return provider;
         }
 
-        public ApplicationDao MapApp(Application application)
+        public DataRow MapApp(Application application)
         {
-            ApplicationDao appDao = new ApplicationDao();
-            if (application.Id != -1)
-                appDao.app_id = application.Id;
-            else
-                appDao.app_id = null;
+            DataRow row = new DataTableFactory().Dt_Netus2_Application.NewRow();
 
-            appDao.name = application.Name;
+            if (application.Id != -1)
+                row["app_id"] = application.Id;
+            else
+                row["app_id"] = DBNull.Value;
+
+            if (application.Name != null)
+                row["name"] = application.Name;
+            else
+                row["name"] = DBNull.Value;
             
             if (application.Provider != null && application.Provider.Id != -1)
-                appDao.provider_id = application.Provider.Id;
+                row["provider_id"] = application.Provider.Id;
             else
-                appDao.provider_id = null;
+                row["provider_id"] = DBNull.Value;
 
-            return appDao;
+            return row;
         }
 
-        public Application MapApp(ApplicationDao appDao, Provider provider)
+        public Application MapApp(DataRow row, Provider provider)
         {
-            Application application = new Application(appDao.name, provider);
-            application.Id = appDao.app_id != null ? (int)appDao.app_id : -1;
+            string name = null;
+            if (row["name"] != DBNull.Value)
+                name = (string)row["name"];
+
+            Application application = new Application(name, provider);
+
+            if (row["app_id"] != DBNull.Value)
+                application.Id = (int)row["app_id"];
+            else
+                application.Id = -1;
 
             return application;
         }
 
-        public AddressDao MapAddress(Address address)
+        public DataRow MapAddress(Address address)
         {
-            AddressDao addressDao = new AddressDao();
+            DataRow row = new DataTableFactory().Dt_Netus2_Address.NewRow();
+
             if (address.Id != -1)
-                addressDao.address_id = address.Id;
+                row["address_id"] = address.Id;
             else
-                addressDao.address_id = null;
+                row["address_id"] = DBNull.Value;
 
-            addressDao.address_line_1 = address.Line1;
-            addressDao.address_line_2 = address.Line2;
-            addressDao.address_line_3 = address.Line3;
-            addressDao.address_line_4 = address.Line4;
-            addressDao.apartment = address.Apartment;
-            addressDao.city = address.City;
-            addressDao.enum_state_province_id = address.StateProvince?.Id;
-            addressDao.postal_code = address.PostalCode;
-            addressDao.enum_country_id = address.Country?.Id;
-            addressDao.is_current_id = address.IsCurrent?.Id;
-            addressDao.enum_address_id = address.AddressType?.Id;
+            if (address.Line1 != null)
+                row["address_line_1"] = address.Line1;
+            else
+                row["address_line_1"] = DBNull.Value;
 
-            return addressDao;
+            if (address.Line2 != null)
+                row["address_line_2"] = address.Line2;
+            else
+                row["address_line_2"] = DBNull.Value;
+
+            if (address.Line3 != null)
+                row["address_line_3"] = address.Line3;
+            else
+                row["address_line_3"] = DBNull.Value;
+
+            if (address.Line4 != null)
+                row["address_line_4"] = address.Line4;
+            else
+                row["address_line_4"] = DBNull.Value;
+
+            if (address.Apartment != null)
+                row["apartment"] = address.Apartment;
+            else
+                row["apartment"] = DBNull.Value;
+
+            if (address.City != null)
+                row["city"] = address.City;
+            else
+                row["city"] = DBNull.Value;
+
+            if (address.StateProvince != null)
+                row["enum_state_province_id"] = address.StateProvince.Id;
+            else
+                row["enum_state_province_id"] = DBNull.Value;
+
+            if (address.PostalCode != null)
+                row["postal_code"] = address.PostalCode;
+            else
+                row["postal_code"] = DBNull.Value;
+
+            if (address.Country != null)
+                row["enum_country_id"] = address.Country.Id;
+            else
+                row["enum_country_id"] = DBNull.Value;
+
+            if (address.IsCurrent != null)
+                row["is_current_id"] = address.IsCurrent.Id;
+            else
+                row["is_current_id"] = DBNull.Value;
+
+            if (address.AddressType != null)
+                row["enum_address_id"] = address.AddressType.Id;
+            else
+                row["enum_address_id"] = DBNull.Value;
+
+            return row;
         }
 
-        public Address MapAddress(AddressDao addressDao)
+        public Address MapAddress(DataRow row)
         {
-            Enumeration stateProvince = Enum_State_Province.GetEnumFromId((int)addressDao.enum_state_province_id);
-            Enumeration country = Enum_Country.GetEnumFromId((int)addressDao.enum_country_id);
-            Enumeration isCurrent = Enum_True_False.GetEnumFromId((int)addressDao.is_current_id);
-            Enumeration addressType = Enum_Address.GetEnumFromId((int)addressDao.enum_address_id);
+            Enumeration stateProvince = null;
+            if(row["enum_state_province_id"] != DBNull.Value)
+                stateProvince = Enum_State_Province.GetEnumFromId((int)row["enum_state_province_id"]);
 
-            Address address = new Address(addressDao.address_line_1, addressDao.city, stateProvince, country, isCurrent, addressType);
+            Enumeration country = null;
+            if(row["enum_country_id"] != DBNull.Value)
+                country = Enum_Country.GetEnumFromId((int)row["enum_country_id"]);
 
-            address.Id = addressDao.address_id != null ? (int)addressDao.address_id : -1;
-            address.Line2 = addressDao.address_line_2;
-            address.Line3 = addressDao.address_line_3;
-            address.Line4 = addressDao.address_line_4;
-            address.Apartment = addressDao.apartment;
-            address.PostalCode = addressDao.postal_code;
+            Enumeration isCurrent = null;
+            if (row["is_current_id"] != DBNull.Value)
+                isCurrent = Enum_True_False.GetEnumFromId((int)row["is_current_id"]);
+
+            Enumeration addressType = null;
+            if (row["enum_address_id"] != DBNull.Value)
+                addressType = Enum_Address.GetEnumFromId((int)row["enum_address_id"]);
+
+            string line1 = null;
+            if (row["address_line_1"] != DBNull.Value)
+                line1 = (string)row["address_line_1"];
+
+            string city = null;
+            if (row["city"] != DBNull.Value)
+                city = (string)row["city"];
+
+            Address address = new Address(line1, city, stateProvince, country, isCurrent, addressType);
+
+            if (row["address_id"] != DBNull.Value)
+                address.Id = (int)row["address_id"];
+            else
+                address.Id = -1;
+
+            if (row["address_line_2"] != DBNull.Value)
+                address.Line2 = (string)row["address_line_2"];
+            else
+                address.Line2 = null;
+
+            if (row["address_line_3"] != DBNull.Value)
+                address.Line3 = (string)row["address_line_3"];
+            else
+                address.Line3 = null;
+
+            if (row["address_line_4"] != DBNull.Value)
+                address.Line4 = (string)row["address_line_4"];
+            else
+                address.Line4 = null;
+
+            if (row["apartment"] != DBNull.Value)
+                address.Apartment = (string)row["apartment"];
+            else
+                address.Apartment = null;
+
+            if (row["postal_code"] != DBNull.Value)
+                address.PostalCode = (string)row["postal_code"];
+            else
+                address.PostalCode = null;
 
             return address;
         }
 
-        public UniqueIdentifierDao MapUniqueIdentifier(UniqueIdentifier uniqueId, int personId)
+        public DataRow MapUniqueIdentifier(UniqueIdentifier uniqueId, int personId)
         {
-            UniqueIdentifierDao uniqueIdDao = new UniqueIdentifierDao();
+            DataRow row = new DataTableFactory().Dt_Netus2_UniqueIdentifier.NewRow();
 
             if (uniqueId.Id != -1)
-                uniqueIdDao.unique_identifier_id = uniqueId.Id;
+                row["unique_identifier_id"] = uniqueId.Id;
             else
-                uniqueIdDao.unique_identifier_id = null;
+                row["unique_identifier_id"] = DBNull.Value;
             
             if (personId != -1)
-                uniqueIdDao.person_id = personId;
+                row["person_id"] = personId;
             else
-                uniqueIdDao.person_id = null;
-            
-            uniqueIdDao.unique_identifier = uniqueId.Identifier;
-            uniqueIdDao.enum_identifier_id = uniqueId.IdentifierType?.Id;
-            uniqueIdDao.is_active_id = uniqueId.IsActive?.Id;
+                row["person_id"] = DBNull.Value;
 
-            return uniqueIdDao;
+            if (uniqueId.Identifier != null)
+                row["unique_identifier"] = uniqueId.Identifier;
+            else
+                row["unique_identifier"] = DBNull.Value;
+
+            if (uniqueId.IdentifierType != null)
+                row["enum_identifier_id"] = uniqueId.IdentifierType.Id;
+            else
+                row["enum_identifier_id"] = DBNull.Value;
+
+            if (uniqueId.IsActive != null)
+                row["is_active_id"] = uniqueId.IsActive.Id;
+            else
+                row["is_active_id"] = DBNull.Value;
+
+            return row;
         }
 
-        public UniqueIdentifier MapUniqueIdentifier(UniqueIdentifierDao uniqueIdDao)
+        public UniqueIdentifier MapUniqueIdentifier(DataRow row)
         {
-            Enumeration identifierType = Enum_Identifier.GetEnumFromId((int)uniqueIdDao.enum_identifier_id);
-            Enumeration isActive = Enum_True_False.GetEnumFromId((int)uniqueIdDao.is_active_id);
-            UniqueIdentifier uniqueId = new UniqueIdentifier(uniqueIdDao.unique_identifier, identifierType, isActive);
+            Enumeration identifierType = null;
+            if (row["enum_identifier_id"] != DBNull.Value)
+                identifierType = Enum_Identifier.GetEnumFromId((int)row["enum_identifier_id"]);
 
-            uniqueId.Id = uniqueIdDao.unique_identifier_id != null ? (int)uniqueIdDao.unique_identifier_id : -1;
+            Enumeration isActive = null;
+            if(row["is_active_id"] != DBNull.Value)
+                isActive = Enum_True_False.GetEnumFromId((int)row["is_active_id"]);
+
+            string uniqueIdentifier = null;
+            if (row["unique_identifier"] != DBNull.Value)
+                uniqueIdentifier = (string)row["unique_identifier"];
+
+            UniqueIdentifier uniqueId = new UniqueIdentifier(uniqueIdentifier, identifierType, isActive);
+
+            if (row["unique_identifier_id"] != DBNull.Value)
+                uniqueId.Id = (int)row["unique_identifier_id"];
+            else
+                uniqueId.Id = -1;
 
             return uniqueId;
         }
 
-        public OrganizationDao MapOrganization(Organization organization, int parentOrganizationId)
+        public DataRow MapOrganization(Organization organization, int parentOrganizationId)
         {
-            OrganizationDao orgDao = new OrganizationDao();
+            DataRow row = new DataTableFactory().Dt_Netus2_Organization.NewRow();
 
             if (organization.Id != -1)
-                orgDao.organization_id = organization.Id;
+                row["organization_id"] = organization.Id;
             else
-                orgDao.organization_id = null;
+                row["organization_id"] = DBNull.Value;
 
-            orgDao.name = organization.Name;
-            orgDao.enum_organization_id = organization.OrganizationType?.Id;
-            orgDao.identifier = organization.Identifier;
-            orgDao.building_code = organization.BuildingCode;
+            if (organization.Name != null)
+                row["name"] = organization.Name;
+            else
+                row["name"] = DBNull.Value;
+
+            if (organization.OrganizationType != null)
+                row["enum_organization_id"] = organization.OrganizationType.Id;
+            else
+                row["enum_organization_id"] = DBNull.Value;
+
+            if (organization.Identifier != null)
+                row["identifier"] = organization.Identifier;
+            else
+                row["identifier"] = DBNull.Value;
+
+            if (organization.BuildingCode != null)
+                row["building_code"] = organization.BuildingCode;
+            else
+                row["building_code"] = DBNull.Value;
 
             if (parentOrganizationId != -1)
-                orgDao.organization_parent_id = parentOrganizationId;
+                row["organization_parent_id"] = parentOrganizationId;
             else
-                orgDao.organization_parent_id = null;
+                row["organization_parent_id"] = DBNull.Value;
 
-            return orgDao;
+            return row;
         }
 
-        public Organization MapOrganization(OrganizationDao organizationDao)
+        public Organization MapOrganization(DataRow row)
         {
-            Enumeration orgType = Enum_Organization.GetEnumFromId((int)organizationDao.enum_organization_id);
-            Organization org = new Organization(organizationDao.name, orgType, organizationDao.identifier, organizationDao.building_code);
-            org.Id = organizationDao.organization_id != null ? (int)organizationDao.organization_id : -1;
+            Enumeration orgType = null;
+            if(row["enum_organization_id"] != DBNull.Value)
+                orgType = Enum_Organization.GetEnumFromId((int)row["enum_organization_id"]);
+
+            string name = null;
+            if (row["name"] != DBNull.Value)
+                name = (string)row["name"];
+
+            string identifier = null;
+            if (row["identifier"] != DBNull.Value)
+                identifier = (string)row["identifier"];
+
+            string buildingCode = null;
+            if (row["building_code"] != DBNull.Value)
+                buildingCode = (string)row["building_code"];
+
+            Organization org = new Organization(name, orgType, identifier, buildingCode);
+
+            if (row["organization_id"] != DBNull.Value)
+                org.Id = (int)row["organization_id"];
+            else
+                org.Id = -1;
 
             return org;
         }
 
-        public EmploymentSessionDao MapEmploymentSession_WithPersonId(EmploymentSession employmentSession, int personId)
+        public DataRow MapEmploymentSession_WithPersonId(EmploymentSession employmentSession, int personId)
         {
-            EmploymentSessionDao esDao = new EmploymentSessionDao();
+            DataRow row = new DataTableFactory().Dt_Netus2_EmploymentSession.NewRow();
 
             if (employmentSession.Id != -1)
-                esDao.employment_session_id = employmentSession.Id;
+                row["employment_session_id"] = employmentSession.Id;
             else
-                esDao.employment_session_id = null;
+                row["employment_session_id"] = DBNull.Value;
 
-            esDao.name = employmentSession.Name;
+            if (employmentSession.Name != null)
+                row["name"] = employmentSession.Name;
+            else
+                row["name"] = DBNull.Value;
             
             if (personId != -1)
-                esDao.person_id = personId;
+                row["person_id"] = personId;
             else
-                esDao.person_id = null;
+                row["person_id"] = DBNull.Value;
 
-            esDao.start_date = employmentSession.StartDate;
-            esDao.end_date = employmentSession.EndDate;
-            esDao.is_primary_id = employmentSession.IsPrimary?.Id;
-            esDao.enum_session_id = employmentSession.GetSessionType()?.Id;
+            if (employmentSession.StartDate != new DateTime())
+                row["start_date"] = employmentSession.StartDate;
+            else
+                row["start_date"] = new DateTime();
+
+            if (employmentSession.EndDate != new DateTime())
+                row["end_date"] = employmentSession.EndDate;
+            else
+                row["end_date"] = new DateTime();
+
+            if (employmentSession.IsPrimary != null)
+                row["is_primary_id"] = employmentSession.IsPrimary.Id;
+            else
+                row["is_primary_id"] = DBNull.Value;
+
+            if (employmentSession.SessionType != null)
+                row["enum_session_id"] = employmentSession.SessionType.Id;
+            else
+                row["enum_session_id"] = DBNull.Value;
 
             if (employmentSession.Organization != null && employmentSession.Organization.Id != -1)
-                esDao.organization_id = employmentSession.Organization.Id;
+                row["organization_id"] = employmentSession.Organization.Id;
             else
-                esDao.organization_id = null;
+                row["organization_id"] = DBNull.Value;
 
-            return esDao;
+            return row;
         }
 
-        public EmploymentSessionDao MapEmploymentSession_WithOrganizationId(EmploymentSession employmentSession, int organizationId)
+        public DataRow MapEmploymentSession_WithOrganizationId(EmploymentSession employmentSession, int organizationId)
         {
-            EmploymentSessionDao esDao = new EmploymentSessionDao();
+            DataRow row = new DataTableFactory().Dt_Netus2_EmploymentSession.NewRow();
 
             if (employmentSession.Id != -1)
-                esDao.employment_session_id = employmentSession.Id;
+                row["employment_session_id"] = employmentSession.Id;
             else
-                esDao.employment_session_id = null;
+                row["employment_session_id"] = DBNull.Value;
 
-            esDao.name = employmentSession.Name;
-            esDao.person_id = null;
-            esDao.start_date = employmentSession.StartDate;
-            esDao.end_date = employmentSession.EndDate;
-            esDao.is_primary_id = employmentSession.IsPrimary?.Id;
-            esDao.enum_session_id = employmentSession.GetSessionType()?.Id;
-            
+            if (employmentSession.Name != null)
+
+                if (employmentSession.Name != null)
+                    row["name"] = employmentSession.Name;
+                else
+                    row["name"] = DBNull.Value;
+
+            row["person_id"] = DBNull.Value;
+
+            if (employmentSession.StartDate != new DateTime())
+                row["start_date"] = employmentSession.StartDate;
+            else
+                row["start_date"] = new DateTime();
+
+            if (employmentSession.EndDate != new DateTime())
+                row["end_date"] = employmentSession.EndDate;
+            else
+                row["end_date"] = new DateTime();
+
+            if (employmentSession.IsPrimary != null)
+                row["is_primary_id"] = employmentSession.IsPrimary.Id;
+            else
+                row["is_primary_id"] = DBNull.Value;
+
+            if (employmentSession.SessionType != null)
+                row["enum_session_id"] = employmentSession.SessionType.Id;
+            else
+                row["enum_session_id"] = DBNull.Value;
+
             if (organizationId != -1)
-                esDao.organization_id = organizationId;
+                row["organization_id"] = organizationId;
             else
-                esDao.organization_id = null;
+                row["organization_id"] = DBNull.Value;
 
-            return esDao;
+            return row;
         }
 
-        public EmploymentSession MapEmploymentSession(EmploymentSessionDao employmentSessionDao, Organization org)
+        public EmploymentSession MapEmploymentSession(DataRow row, Organization org)
         {
-            string name = employmentSessionDao.name;
-            Enumeration isPrimary = Enum_True_False.values["true"];
+            string name = null;
+            if(row["name"] != DBNull.Value)
+                name = (string)row["name"];
+
+            Enumeration isPrimary = null;
+            if (row["is_primary_id"] != DBNull.Value)
+                isPrimary = Enum_True_False.GetEnumFromId((int)row["is_primary_id"]);
+
             EmploymentSession es = new EmploymentSession(name, isPrimary, org);
 
-            es.Id = employmentSessionDao.employment_session_id != null ? (int)employmentSessionDao.employment_session_id : -1;
-            es.StartDate = (DateTime)employmentSessionDao.start_date;
-            es.EndDate = (DateTime)employmentSessionDao.end_date;
-            es.IsPrimary = Enum_True_False.GetEnumFromId((int)employmentSessionDao.is_primary_id);
+            if (row["employment_session_id"] != DBNull.Value)
+                es.Id = (int)row["employment_session_id"];
+            else
+                es.Id = -1;
+
+            if ((DateTime)row["start_date"] != new DateTime())
+                es.StartDate = (DateTime)row["start_date"];
+            else
+                es.StartDate = new DateTime();
+
+            if ((DateTime)row["end_date"] != new DateTime())
+                es.EndDate = (DateTime)row["end_date"];
+            else
+                es.EndDate = new DateTime();
+
+            if (row["is_primary_id"] != DBNull.Value)
+                es.IsPrimary = Enum_True_False.GetEnumFromId((int)row["is_primary_id"]);
+            else
+                es.IsPrimary = null;
 
             return es;
         }
 
-        public EnrollmentDao MapEnrollment(Enrollment enrollment, int personId)
+        public DataRow MapEnrollment(Enrollment enrollment, int personId)
         {
-            EnrollmentDao enrollmentDao = new EnrollmentDao();
+            DataRow row = new DataTableFactory().Dt_Netus2_Enrollment.NewRow();
 
             if (enrollment.Id != -1)
-                enrollmentDao.enrollment_id = enrollment.Id;
+                row["enrollment_id"] = enrollment.Id;
             else
-                enrollmentDao.enrollment_id = null;
+                row["enrollment_id"] = DBNull.Value;
 
             if (personId != -1)
-                enrollmentDao.person_id = personId;
+                row["person_id"] = personId;
             else
-                enrollmentDao.person_id = null;
+                row["person_id"] = DBNull.Value;
 
             if (enrollment.ClassEnrolled != null && enrollment.ClassEnrolled.Id != -1)
-                enrollmentDao.class_id = enrollment.ClassEnrolled.Id;
+                row["class_id"] = enrollment.ClassEnrolled.Id;
             else
-                enrollmentDao.class_id = null;
+                row["class_id"] = DBNull.Value;
 
-            enrollmentDao.enum_grade_id = enrollment.GradeLevel?.Id;
-            enrollmentDao.start_date = enrollment.StartDate;
-            enrollmentDao.end_date = enrollment.EndDate;
-            enrollmentDao.is_primary_id = enrollment.IsPrimary?.Id;
+            if (enrollment.GradeLevel != null)
+                row["enum_grade_id"] = enrollment.GradeLevel.Id;
+            else
+                row["enum_grade_id"] = DBNull.Value;
 
-            return enrollmentDao;
+            if (enrollment.StartDate != new DateTime())
+                row["start_date"] = enrollment.StartDate;
+            else
+                row["start_date"] = new DateTime();
+
+            if (enrollment.EndDate != new DateTime())
+                row["end_date"] = enrollment.EndDate;
+            else
+                row["end_date"] = new DateTime();
+
+            if (enrollment.IsPrimary != null)
+                row["is_primary_id"] = enrollment.IsPrimary.Id;
+            else
+                row["is_primary_id"] = DBNull.Value;
+
+            return row;
         }
 
-        public Enrollment MapEnrollment(EnrollmentDao enrollmentDao, ClassEnrolled classEnrolled, List<AcademicSession> academicSessions)
+        public Enrollment MapEnrollment(DataRow row, ClassEnrolled classEnrolled, List<AcademicSession> academicSessions)
         {
-            Enumeration gradeLevel = Enum_Grade.GetEnumFromId((int)enrollmentDao.enum_grade_id);
-            DateTime startDate = (DateTime)enrollmentDao.start_date;
-            DateTime? endDate = enrollmentDao.end_date;
-            Enumeration isPrimary = Enum_True_False.GetEnumFromId((int)enrollmentDao.is_primary_id);
+            Enumeration gradeLevel = null;
+            if(row["is_primary_id"] != DBNull.Value)
+                gradeLevel = Enum_Grade.GetEnumFromId((int)row["enum_grade_id"]);
+
+            DateTime startDate = new DateTime();
+            if(row["start_date"] != DBNull.Value)
+                startDate = (DateTime)row["start_date"];
+
+            DateTime endDate = new DateTime();
+            if(row["end_date"] != DBNull.Value)
+                endDate = (DateTime)row["end_date"];
+
+            Enumeration isPrimary = null;
+            if(row["is_primary_id"] != DBNull.Value)
+                isPrimary = Enum_True_False.GetEnumFromId((int)row["is_primary_id"]);
 
             Enrollment enrollment = new Enrollment(gradeLevel, startDate, endDate, isPrimary, classEnrolled, academicSessions);
-            enrollment.Id = enrollmentDao.enrollment_id != null ? (int)enrollmentDao.enrollment_id : -1;
+
+            if (row["enrollment_id"] != DBNull.Value)
+                enrollment.Id = (int)row["enrollment_id"];
+            else
+                enrollment.Id = -1;
 
             return enrollment;
         }
 
-        public ClassEnrolledDao MapClassEnrolled(ClassEnrolled classEnrolled)
+        public DataRow MapClassEnrolled(ClassEnrolled classEnrolled)
         {
-            ClassEnrolledDao classEnrolledDao = new ClassEnrolledDao();
+            DataRow row = new DataTableFactory().Dt_Netus2_ClassEnrolled.NewRow();
 
             if (classEnrolled.Id != -1)
-                classEnrolledDao.class_id = classEnrolled.Id;
+                row["class_id"] = classEnrolled.Id;
             else
-                classEnrolledDao.class_id = null;
+                row["class_id"] = DBNull.Value;
 
-            classEnrolledDao.name = classEnrolled.Name;
-            classEnrolledDao.class_code = classEnrolled.ClassCode;
-            classEnrolledDao.enum_class_id = classEnrolled.ClassType?.Id;
-            classEnrolledDao.room = classEnrolled.Room;
+            if (classEnrolled.Name != null)
+                row["name"] = classEnrolled.Name;
+            else
+                row["name"] = DBNull.Value;
+
+            if (classEnrolled.ClassCode != null)
+                row["class_code"] = classEnrolled.ClassCode;
+            else
+                row["class_code"] = DBNull.Value;
+
+            if (classEnrolled.ClassType != null)
+                row["enum_class_id"] = classEnrolled.ClassType.Id;
+            else
+                row["enum_class_id"] = DBNull.Value;
+
+            if (classEnrolled.Room != null)
+                row["room"] = classEnrolled.Room;
+            else
+                row["room"] = DBNull.Value;
             
             if (classEnrolled.Course != null && classEnrolled.Course.Id != -1)
-                classEnrolledDao.course_id = classEnrolled.Course.Id;
+                row["course_id"] = classEnrolled.Course.Id;
             else
-                classEnrolledDao.course_id = null;
+                row["course_id"] = DBNull.Value;
 
             if (classEnrolled.AcademicSession != null && classEnrolled.AcademicSession.Id != -1)
-                classEnrolledDao.academic_session_id = classEnrolled.AcademicSession.Id;
+                row["academic_session_id"] = classEnrolled.AcademicSession.Id;
             else
-                classEnrolledDao.academic_session_id = null;
+                row["academic_session_id"] = DBNull.Value;
 
-            return classEnrolledDao;
+            return row;
         }
 
-        public ClassEnrolled MapClassEnrolled(ClassEnrolledDao classEnrolledDao, AcademicSession academicSession, Course course)
+        public ClassEnrolled MapClassEnrolled(DataRow row, AcademicSession academicSession, Course course)
         {
-            string name = classEnrolledDao.name;
-            string classCode = classEnrolledDao.class_code;
-            Enumeration classType = Enum_Class.GetEnumFromId((int)classEnrolledDao.enum_class_id);
-            string room = classEnrolledDao.room;
+            string name = null;
+            if(row["name"] != DBNull.Value)
+                name = (string)row["name"];
+
+            string classCode = null;
+            if(row["class_code"] != DBNull.Value)
+                classCode = (string)row["class_code"];
+
+            Enumeration classType = null;
+            if(row["enum_class_id"] != DBNull.Value)
+                classType = Enum_Class.GetEnumFromId((int)row["enum_class_id"]);
+
+            string room = null;
+            if (row["room"] != DBNull.Value)
+                room = (string)row["room"];
 
             ClassEnrolled classEnrolled = new ClassEnrolled(name, classCode, classType, room, course, academicSession);
-            classEnrolled.Id = classEnrolledDao.class_id != null ? (int)classEnrolledDao.class_id : -1;
+
+            if (row["class_id"] != DBNull.Value)
+                classEnrolled.Id = (int)row["class_id"];
+            else
+                classEnrolled.Id = -1;
 
             return classEnrolled;
         }
 
-        public CourseDao MapCourse(Course course)
+        public DataRow MapCourse(Course course)
         {
-            CourseDao courseDao = new CourseDao();
+            DataRow row = new DataTableFactory().Dt_Netus2_Course.NewRow();
 
             if (course.Id != -1)
-                courseDao.course_id = course.Id;
+                row["course_id"] = course.Id;
             else
-                courseDao.course_id = null;
+                row["course_id"] = DBNull.Value;
 
-            courseDao.name = course.Name;
-            courseDao.course_code = course.CourseCode;
+            if (course.Name != null)
+                row["name"] = course.Name;
+            else
+                row["name"] = DBNull.Value;
 
-            return courseDao;
+            if (course.CourseCode != null)
+                row["course_code"] = course.CourseCode;
+            else
+                row["course_code"] = DBNull.Value;
+
+            return row;
         }
 
-        public Course MapCourse(CourseDao courseDao)
+        public Course MapCourse(DataRow row)
         {
-            string name = courseDao.name;
-            string courseCode = courseDao.course_code;
+            string name = null;
+            if(row["name"] != DBNull.Value)
+                name = (string)row["name"];
+
+            string courseCode = null;
+            if(row["course_code"] != DBNull.Value)
+                courseCode = (string)row["course_code"];
 
             Course course = new Course(name, courseCode);
-            course.Id = courseDao.course_id != null ? (int)courseDao.course_id : -1;
+
+            if (row["course_id"] != DBNull.Value)
+                course.Id = (int)row["course_id"];
+            else
+                course.Id = -1;
 
             return course;
         }
 
-        public AcademicSessionDao MapAcademicSession(AcademicSession academicSession, int parentId)
+        public DataRow MapAcademicSession(AcademicSession academicSession, int parentId)
         {
-            AcademicSessionDao academicSessionDao = new AcademicSessionDao();
+            DataRow row = new DataTableFactory().Dt_Netus2_AcademicSession.NewRow();
 
             if (academicSession.Id != -1)
-                academicSessionDao.academic_session_id = academicSession.Id;
+                row["academic_session_id"] = academicSession.Id;
             else
-                academicSessionDao.academic_session_id = null;
+                row["academic_session_id"] = DBNull.Value;
 
-            academicSessionDao.term_code = academicSession.TermCode;
-            academicSessionDao.school_year = academicSession.SchoolYear;
-            academicSessionDao.name = academicSession.Name;
-            academicSessionDao.start_date = academicSession.StartDate;
-            academicSessionDao.end_date = academicSession.EndDate;
-            academicSessionDao.enum_session_id = academicSession.SessionType?.Id;
+            if (academicSession.TermCode != null)
+                row["term_code"] = academicSession.TermCode;
+            else
+                row["term_code"] = DBNull.Value;
+
+            if (academicSession.SchoolYear != -1)
+                row["school_year"] = academicSession.SchoolYear;
+            else
+                row["school_year"] = DBNull.Value;
+
+            if (academicSession.Name != null)
+                row["name"] = academicSession.Name;
+            else
+                row["name"] = DBNull.Value;
+
+            if (academicSession.StartDate != new DateTime())
+                row["start_date"] = academicSession.StartDate;
+            else
+                row["start_date"] = new DateTime();
+
+            if (academicSession.EndDate != new DateTime())
+                row["end_date"] = academicSession.EndDate;
+            else
+                row["end_date"] = new DateTime();
+
+            if (academicSession.SessionType != null)
+                row["enum_session_id"] = academicSession.SessionType.Id;
+            else
+                row["enum_session_id"] = DBNull.Value;
 
             if (parentId != -1)
-                academicSessionDao.parent_session_id = parentId;
+                row["parent_session_id"] = parentId;
             else
-                academicSessionDao.parent_session_id = null;
+                row["parent_session_id"] = DBNull.Value;
 
             if (academicSession.Organization != null && academicSession.Organization.Id != -1)
-                academicSessionDao.organization_id = academicSession.Organization.Id;
+                row["organization_id"] = academicSession.Organization.Id;
             else
-                academicSessionDao.organization_id = null;
+                row["organization_id"] = DBNull.Value;
 
-            return academicSessionDao;
+            return row;
         }
 
-        public AcademicSession MapAcademicSession(AcademicSessionDao academicSessionDao, Organization org)
+        public AcademicSession MapAcademicSession(DataRow row, Organization org)
         {
-            string name = academicSessionDao.name;
-            Enumeration sessionType = Enum_Session.GetEnumFromId((int)academicSessionDao.enum_session_id);
-            AcademicSession academicSession = new AcademicSession(name, sessionType, org, academicSessionDao.term_code);
+            string name = null;
+            if(row["name"] != DBNull.Value)
+                name = (string)row["name"];
 
-            academicSession.Id = academicSessionDao.academic_session_id != null ? (int)academicSessionDao.academic_session_id : -1;
-            academicSession.StartDate = (DateTime)academicSessionDao.start_date;
-            academicSession.EndDate = (DateTime)academicSessionDao.end_date;
-            academicSession.SchoolYear = (int)academicSessionDao.school_year;
+            Enumeration sessionType = null;
+            if (row["enum_session_id"] != DBNull.Value)
+                sessionType = Enum_Session.GetEnumFromId((int)row["enum_session_id"]);
+
+            string termCode = null;
+            if (row["term_code"] != DBNull.Value)
+                termCode = (string)row["term_code"];
+
+            AcademicSession academicSession = new AcademicSession(name, sessionType, org, termCode);
+
+            if (row["academic_session_id"] != DBNull.Value)
+                academicSession.Id = (int)row["academic_session_id"];
+            else
+                academicSession.Id = -1;
+
+            if ((DateTime)row["start_date"] != new DateTime())
+                academicSession.StartDate = (DateTime)row["start_date"];
+            else
+                academicSession.StartDate = new DateTime();
+
+            if ((DateTime)row["end_date"] != new DateTime())
+                academicSession.EndDate = (DateTime)row["end_date"];
+            else
+                academicSession.EndDate = new DateTime();
+
+            if (row["school_year"] != DBNull.Value)
+                academicSession.SchoolYear = (int)row["school_year"];
+            else
+                academicSession.SchoolYear = -1;
 
             return academicSession;
         }
 
-        public ResourceDao MapResource(Resource resource)
+        public DataRow MapResource(Resource resource)
         {
-            ResourceDao resourceDao = new ResourceDao();
+            DataRow row = new DataTableFactory().Dt_Netus2_Resource.NewRow();
 
             if (resource.Id != -1)
-                resourceDao.resource_id = resource.Id;
+                row["resource_id"] = resource.Id;
             else
-                resourceDao.resource_id = null;
+                row["resource_id"] = DBNull.Value;
 
-            resourceDao.name = resource.Name;
-            resourceDao.enum_importance_id = resource.Importance?.Id;
-            resourceDao.vendor_resource_identification = resource.VendorResourceId;
-            resourceDao.vendor_identification = resource.VendorId;
-            resourceDao.application_identification = resource.ApplicationId;
+            if (resource.Name != null)
+                row["name"] = resource.Name;
+            else
+                row["name"] = DBNull.Value;
 
-            return resourceDao;
+            if (resource.Importance != null)
+                row["enum_importance_id"] = resource.Importance.Id;
+            else
+                row["enum_importance_id"] = DBNull.Value;
+
+            if (resource.VendorResourceId != null)
+                row["vendor_resource_identification"] = resource.VendorResourceId;
+            else
+                row["vendor_resource_identification"] = DBNull.Value;
+
+            if (resource.VendorId != null)
+                row["vendor_identification"] = resource.VendorId;
+            else
+                row["vendor_identification"] = DBNull.Value;
+
+            if (resource.ApplicationId != null)
+                row["application_identification"] = resource.ApplicationId;
+            else
+                row["application_identification"] = DBNull.Value;
+
+            return row;
         }
 
-        public Resource MapResource(ResourceDao resourceDao)
+        public Resource MapResource(DataRow row)
         {
-            string name = resourceDao.name;
-            string vendorResourceId = resourceDao.vendor_resource_identification;
+            string name = null;
+            if(row["name"] != DBNull.Value)
+                name = (string)row["name"];
+
+            string vendorResourceId = null;
+            if (row["vendor_resource_identification"] != DBNull.Value)
+                vendorResourceId = (string)row["vendor_resource_identification"];
 
             Resource resource = new Resource(name, vendorResourceId);
 
-            resource.Id = resourceDao.resource_id != null ? (int)resourceDao.resource_id : -1;
-            resource.Importance = resourceDao.enum_importance_id != null ? Enum_Importance.GetEnumFromId((int)resourceDao.enum_importance_id) : null;
-            resource.VendorId = resourceDao.vendor_identification;
-            resource.ApplicationId = resourceDao.application_identification;
+            if (row["resource_id"] != DBNull.Value)
+                resource.Id = (int)row["resource_id"];
+            else
+                resource.Id = -1;
+
+            if (row["enum_importance_id"] != DBNull.Value)
+                resource.Importance = Enum_Importance.GetEnumFromId((int)row["enum_importance_id"]);
+            else
+                resource.Importance = null;
+
+            if (row["vendor_identification"] != DBNull.Value)
+                resource.VendorId = (string)row["vendor_identification"];
+            else
+                resource.VendorId = null;
+
+            if (row["application_identification"] != DBNull.Value)
+                resource.ApplicationId = (string)row["application_identification"];
+            else
+                resource.ApplicationId = null;
 
             return resource;
         }
 
-        public MarkDao MapMark(Mark mark, int personId)
+        public DataRow MapMark(Mark mark, int personId)
         {
-            MarkDao markDao = new MarkDao();
+            DataRow row = new DataTableFactory().Dt_Netus2_Mark.NewRow();
 
             if (mark.Id != -1)
-                markDao.mark_id = mark.Id;
+                row["mark_id"] = mark.Id;
             else
-                markDao.mark_id = null;
+                row["mark_id"] = DBNull.Value;
 
             if (mark.LineItem != null && mark.LineItem.Id != -1)
-                markDao.lineitem_id = mark.LineItem.Id;
+                row["lineitem_id"] = mark.LineItem.Id;
             else
-                markDao.lineitem_id = null;
+                row["lineitem_id"] = DBNull.Value;
 
             if (personId != -1)
-                markDao.person_id = personId;
+                row["person_id"] = personId;
             else
-                markDao.person_id = null;
+                row["person_id"] = DBNull.Value;
 
-            markDao.enum_score_status_id = mark.ScoreStatus?.Id;
-            markDao.score = mark.Score;
-            markDao.score_date = mark.ScoreDate;
-            markDao.comment = mark.Comment;
+            if (mark.ScoreStatus != null)
+                row["enum_score_status_id"] = mark.ScoreStatus.Id;
+            else
+                row["enum_score_status_id"] = DBNull.Value;
 
-            return markDao;
+            if (mark.Score != -1)
+                row["score"] = mark.Score;
+            else
+                row["score"] = DBNull.Value;
+
+            if (mark.ScoreDate != new DateTime())
+                row["score_date"] = mark.ScoreDate;
+            else
+                row["score_date"] = new DateTime();
+
+            if (mark.Comment != null)
+                row["comment"] = mark.Comment;
+            else
+                row["comment"] = DBNull.Value;
+
+            return row;
         }
 
-        public Mark MapMark(MarkDao markDao, LineItem lineItem)
+        public Mark MapMark(DataRow row, LineItem lineItem)
         {
-            Enumeration scoreStatus = markDao.enum_score_status_id != null ?
-                Enum_Score_Status.GetEnumFromId((int)markDao.enum_score_status_id) : null;
-            double score = (double)markDao.score;
-            DateTime scoreDate = (DateTime)markDao.score_date;
+            Enumeration scoreStatus = null;
+            if(row["enum_score_status_id"] != DBNull.Value)
+                scoreStatus = Enum_Score_Status.GetEnumFromId((int)row["enum_score_status_id"]);
+
+            double score = -1;
+            if(row["score"] != DBNull.Value)
+                score = (double)row["score"];
+
+            DateTime scoreDate = new DateTime();
+            if ((DateTime)row["score_date"] != new DateTime())
+                scoreDate = (DateTime)row["score_date"];
 
             Mark mark = new Mark(lineItem, scoreStatus, score, scoreDate);
-            mark.Id = markDao.mark_id != null ? (int)markDao.mark_id : -1;
+
+            if (row["mark_id"] != DBNull.Value)
+                mark.Id = (int)row["mark_id"];
+            else
+                mark.Id = -1;
 
             return mark;
         }
 
-        public LineItemDao MapLineItem(LineItem lineItem)
+        public DataRow MapLineItem(LineItem lineItem)
         {
-            LineItemDao lineItemDao = new LineItemDao();
+            DataRow row = new DataTableFactory().Dt_Netus2_LineItem.NewRow();
 
             if (lineItem.Id != -1)
-                lineItemDao.lineitem_id = lineItem.Id;
+                row["lineitem_id"] = lineItem.Id;
             else
-                lineItemDao.lineitem_id = null;
+                row["lineitem_id"] = DBNull.Value;
 
-            lineItemDao.name = lineItem.Name;
-            lineItemDao.descript = lineItem.Descript;
-            lineItemDao.assign_date = lineItem.AssignDate;
-            lineItemDao.due_date = lineItem.DueDate;
+            if (lineItem.Name != null)
+                row["name"] = lineItem.Name;
+            else
+                row["name"] = DBNull.Value;
+
+            if (lineItem.Descript != null)
+                row["descript"] = lineItem.Descript;
+            else
+                row["descript"] = DBNull.Value;
+
+            if (lineItem.AssignDate != new DateTime())
+                row["assign_date"] = lineItem.AssignDate;
+            else
+                row["assign_date"] = new DateTime();
+
+            if (lineItem.DueDate != new DateTime())
+                row["due_date"] = lineItem.DueDate;
+            else
+                row["due_date"] = new DateTime();
             
             if (lineItem.ClassAssigned != null && lineItem.ClassAssigned.Id != -1)
-                lineItemDao.class_id = lineItem.ClassAssigned.Id;
+                row["class_id"] = lineItem.ClassAssigned.Id;
             else
-                lineItemDao.class_id = null;
-            
-            lineItemDao.enum_category_id = lineItem.Category?.Id;
-            lineItemDao.markValueMin = lineItem.MarkValueMin;
-            lineItemDao.markValueMax = lineItem.MarkValueMax;
+                row["class_id"] = DBNull.Value;
 
-            return lineItemDao;
+            if (lineItem.Category != null)
+                row["enum_category_id"] = lineItem.Category.Id;
+            else
+                row["enum_category_id"] = DBNull.Value;
+
+            if (lineItem.MarkValueMin != -1)
+                row["markValueMin"] = lineItem.MarkValueMin;
+            else
+                row["markValeMin"] = DBNull.Value;
+
+            if (lineItem.MarkValueMax != -1)
+                row["markValueMax"] = lineItem.MarkValueMax;
+            else
+                row["markValueMax"] = DBNull.Value;
+
+            return row;
         }
 
-        public LineItem MapLineItem(LineItemDao lineItemDao, ClassEnrolled classEnrolled)
+        public LineItem MapLineItem(DataRow row, ClassEnrolled classEnrolled)
         {
-            string name = lineItemDao.name;
-            DateTime assignDate = (DateTime)lineItemDao.assign_date;
-            DateTime dueDate = (DateTime)lineItemDao.due_date;
-            Enumeration category = lineItemDao.enum_category_id != null ? Enum_Category.GetEnumFromId((int)lineItemDao.enum_category_id) : null;
-            double markMin = (double)lineItemDao.markValueMin;
-            double markMax = (double)lineItemDao.markValueMax;
+            string name = null;
+            if(row["name"] != DBNull.Value)
+                name = (string)row["name"];
+
+            DateTime assignDate = new DateTime();
+            if((DateTime)row["assign_date"] != new DateTime())
+                assignDate = (DateTime)row["assign_date"];
+
+            DateTime dueDate = new DateTime();
+            if ((DateTime)row["due_date"] != new DateTime())
+                dueDate = (DateTime)row["due_date"];
+
+            Enumeration category = null;
+            if(row["enum_category_id"] != DBNull.Value)
+                category = Enum_Category.GetEnumFromId((int)row["enum_category_id"]);
+
+            double markMin = -1;
+            if(row["markValueMin"] != DBNull.Value)
+                markMin = (double)row["markValueMin"];
+
+            double markMax = -1;
+            if(row["markValueMax"] != DBNull.Value)
+                markMax = (double)row["markValueMax"];
 
             LineItem lineItem = new LineItem(name, assignDate, dueDate, classEnrolled, category, markMin, markMax);
-            lineItem.Id = lineItemDao.lineitem_id != null ? (int)lineItemDao.lineitem_id : -1;
+
+            if (row["lineitem_id"] != DBNull.Value)
+                lineItem.Id = (int)row["lineitem_id"];
+            else
+                lineItem.Id = -1;
 
             return lineItem;
         }

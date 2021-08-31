@@ -1,7 +1,7 @@
 ﻿using Netus2_DatabaseConnection.daoInterfaces;
-using Netus2_DatabaseConnection.daoObjects;
 using Netus2_DatabaseConnection.dataObjects;
 using Netus2_DatabaseConnection.dbAccess;
+using Netus2_DatabaseConnection.utilityTools;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -20,17 +20,17 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         public void Delete(Mark mark, int personId, IConnectable connection)
         {
-            MarkDao markDao = daoObjectMapper.MapMark(mark, personId);
+            DataRow row = daoObjectMapper.MapMark(mark, personId);
 
             StringBuilder sql = new StringBuilder("DELETE FROM mark WHERE 1=1 ");
-            sql.Append("AND mark_id = " + markDao.mark_id + " ");
-            sql.Append("AND lineitem_id " + (markDao.lineitem_id != null ? "= " + markDao.lineitem_id + " " : "IS NULL "));
-            if (markDao.person_id != null)
-                sql.Append("AND person_id = " + markDao.person_id + " ");
-            sql.Append("AND enum_score_status_id " + (markDao.enum_score_status_id != null ? "= " + markDao.enum_score_status_id + " " : "IS NULL "));
-            sql.Append("AND score " + (markDao.score != null ? "= " + markDao.score + " " : "IS NULL "));
-            sql.Append("AND score_date " + (markDao.score_date != null ? "= '" + markDao.score_date + "' " : "IS NULL "));
-            sql.Append("AND comment " + (markDao.comment != null ? "= '" + markDao.comment + "' " : "IS NULL "));
+            sql.Append("AND mark_id = " + row["mark_id"] + " ");
+            sql.Append("AND lineitem_id " + (row["lineitem_id"] != DBNull.Value ? "= " + row["lineitem_id"] + " " : "IS NULL "));
+            if (row["person_id"] != DBNull.Value)
+                sql.Append("AND person_id = " + row["person_id"] + " ");
+            sql.Append("AND enum_score_status_id " + (row["enum_score_status_id"] != DBNull.Value ? "= " + row["enum_score_status_id"] + " " : "IS NULL "));
+            sql.Append("AND score " + (row["score"] != DBNull.Value ? "= " + row["score"] + " " : "IS NULL "));
+            sql.Append("AND score_date " + (row["score_date"] != DBNull.Value ? "= '" + row["score_date"] + "' " : "IS NULL "));
+            sql.Append("AND comment " + (row["comment"] != DBNull.Value ? "= '" + row["comment"] + "' " : "IS NULL "));
 
             connection.ExecuteNonQuery(sql.ToString());
         }
@@ -45,24 +45,24 @@ namespace Netus2_DatabaseConnection.daoImplementations
             }
             else
             {
-                MarkDao markDao = daoObjectMapper.MapMark(mark, personId);
+                DataRow row = daoObjectMapper.MapMark(mark, personId);
 
-                if (markDao.mark_id != null)
-                    sql.Append("AND mark_id = " + markDao.mark_id + " ");
+                if (row["mark_id"] != DBNull.Value)
+                    sql.Append("AND mark_id = " + row["mark_id"] + " ");
                 else
                 {
-                    if (markDao.lineitem_id != null)
-                        sql.Append("AND lineitem_id = " + markDao.lineitem_id + " ");
-                    if (markDao.person_id != null)
-                        sql.Append("AND person_id = " + markDao.person_id + " ");
-                    if (markDao.enum_score_status_id != null)
-                        sql.Append("AND enum_score_status_id = " + markDao.enum_score_status_id + " ");
-                    if (markDao.score != null)
-                        sql.Append("AND score = " + markDao.score + " ");
-                    if (markDao.score_date != null)
-                        sql.Append("AND score_date = '" + markDao.score_date.ToString() + "' ");
-                    if (markDao.comment != null)
-                        sql.Append("AND comment = '" + markDao.comment + "' ");
+                    if (row["lineitem_id"] != DBNull.Value)
+                        sql.Append("AND lineitem_id = " + row["lineitem_id"] + " ");
+                    if (row["person_id"] != DBNull.Value)
+                        sql.Append("AND person_id = " + row["person_id"] + " ");
+                    if (row["enum_score_status_id"] != DBNull.Value)
+                        sql.Append("AND enum_score_status_id = " + row["enum_score_status_id"] + " ");
+                    if (row["score"] != DBNull.Value)
+                        sql.Append("AND score = " + row["score"] + " ");
+                    if (row["score_date"] != DBNull.Value)
+                        sql.Append("AND score_date = '" + row["score_date"].ToString() + "' ");
+                    if (row["comment"] != DBNull.Value)
+                        sql.Append("AND comment = '" + row["comment"] + "' ");
                 }
             }
 
@@ -78,88 +78,13 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private List<Mark> Read(string sql, IConnectable connection)
         {
-            List<MarkDao> foundMarkDaos = new List<MarkDao>();
+            DataTable dtMark = new DataTableFactory().Dt_Netus2_Mark;
 
             IDataReader reader = null;
             try
             {
                 reader = connection.GetReader(sql);
-                while (reader.Read())
-                {
-                    MarkDao foundMarkDao = new MarkDao();
-
-                    List<string> columnNames = new List<string>();
-                    for (int i = 0; i < reader.FieldCount; i++)
-                        columnNames.Add(reader.GetName(i));
-
-                    foreach (string columnName in columnNames)
-                    {
-                        var value = reader.GetValue(reader.GetOrdinal(columnName));
-                        switch (columnName)
-                        {
-                            case "mark_id":
-                                if (value != DBNull.Value && value != null)
-                                    foundMarkDao.mark_id = (int)value;
-                                else
-                                    foundMarkDao.mark_id = null;
-                                break;
-                            case "lineitem_id":
-                                if (value != DBNull.Value && value != null)
-                                    foundMarkDao.lineitem_id = (int)value;
-                                else
-                                    foundMarkDao.lineitem_id = null;
-                                break;
-                            case "person_id":
-                                if (value != DBNull.Value && value != null)
-                                    foundMarkDao.person_id = (int)value;
-                                else
-                                    foundMarkDao.person_id = null;
-                                break;
-                            case "enum_score_status_id":
-                                if (value != DBNull.Value && value != null)
-                                    foundMarkDao.enum_score_status_id = (int)value;
-                                else
-                                    foundMarkDao.enum_score_status_id = null;
-                                break;
-                            case "score":
-                                if (value != DBNull.Value && value != null)
-                                    foundMarkDao.score = (double)value;
-                                else
-                                    foundMarkDao.score = null;
-                                break;
-                            case "score_date":
-                                if (value != DBNull.Value && value != null)
-                                    foundMarkDao.score_date = (DateTime)value;
-                                else
-                                    foundMarkDao.score_date = null;
-                                break;
-                            case "comment":
-                                foundMarkDao.comment = value != DBNull.Value ? (string)value : null;
-                                break;
-                            case "created":
-                                if (value != DBNull.Value && value != null)
-                                    foundMarkDao.created = (DateTime)value;
-                                else
-                                    foundMarkDao.created = null;
-                                break;
-                            case "created_by":
-                                foundMarkDao.created_by = value != DBNull.Value ? (string)value : null;
-                                break;
-                            case "changed":
-                                if (value != DBNull.Value && value != null)
-                                    foundMarkDao.changed = (DateTime)value;
-                                else
-                                    foundMarkDao.changed = null;
-                                break;
-                            case "changed_by":
-                                foundMarkDao.changed_by = value != DBNull.Value ? (string)value : null;
-                                break;
-                            default:
-                                throw new Exception("Unexpected column found in mark table: " + columnName);
-                        }
-                    }
-                    foundMarkDaos.Add(foundMarkDao);
-                }
+                dtMark.Load(reader);
             }
             finally
             {
@@ -168,10 +93,10 @@ namespace Netus2_DatabaseConnection.daoImplementations
             }
 
             List<Mark> results = new List<Mark>();
-            foreach (MarkDao foundMarkDao in foundMarkDaos)
+            foreach (DataRow row in dtMark.Rows)
             {
-                LineItem lineItem = Read_LineItem((int)foundMarkDao.lineitem_id, connection);
-                results.Add(daoObjectMapper.MapMark(foundMarkDao, lineItem));
+                LineItem lineItem = Read_LineItem((int)row["lineitem_id"], connection);
+                results.Add(daoObjectMapper.MapMark(row, lineItem));
             }
 
             return results;
@@ -201,20 +126,20 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private void UpdateInternals(Mark mark, int personId, IConnectable connection)
         {
-            MarkDao markDao = daoObjectMapper.MapMark(mark, personId);
+            DataRow row = daoObjectMapper.MapMark(mark, personId);
 
-            if (markDao.mark_id != null)
+            if (row["mark_id"] != DBNull.Value)
             {
                 StringBuilder sql = new StringBuilder("UPDATE mark SET ");
-                sql.Append("lineitem_id = " + (markDao.lineitem_id != null ? markDao.lineitem_id + ", " : "NULL, "));
-                sql.Append("person_id = " + (markDao.person_id != null ? markDao.person_id + ", " : "NULL, "));
-                sql.Append("enum_score_status_id = " + (markDao.enum_score_status_id != null ? markDao.enum_score_status_id + ", " : "NULL, "));
-                sql.Append("score = " + (markDao.score != null ? markDao.score + ", " : "NULL, "));
-                sql.Append("score_date = " + (markDao.score_date != null ? "'" + markDao.score_date + "', " : "NULL, "));
-                sql.Append("comment = " + (markDao.comment != null ? "'" + markDao.comment + "', " : "NULL, "));
+                sql.Append("lineitem_id = " + (row["lineitem_id"] != DBNull.Value ? row["lineitem_id"] + ", " : "NULL, "));
+                sql.Append("person_id = " + (row["person_id"] != DBNull.Value ? row["person_id"] + ", " : "NULL, "));
+                sql.Append("enum_score_status_id = " + (row["enum_score_status_id"] != DBNull.Value ? row["enum_score_status_id"] + ", " : "NULL, "));
+                sql.Append("score = " + (row["score"] != DBNull.Value ? row["score"] + ", " : "NULL, "));
+                sql.Append("score_date = " + (row["score_date"] != DBNull.Value ? "'" + row["score_date"] + "', " : "NULL, "));
+                sql.Append("comment = " + (row["comment"] != DBNull.Value ? "'" + row["comment"] + "', " : "NULL, "));
                 sql.Append("changed = GETDATE(), ");
                 sql.Append("changed_by = 'Netus2' ");
-                sql.Append("WHERE mark_id = " + markDao.mark_id);
+                sql.Append("WHERE mark_id = " + row["mark_id"]);
 
                 connection.ExecuteNonQuery(sql.ToString());
             }
@@ -224,15 +149,15 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         public Mark Write(Mark mark, int personId, IConnectable connection)
         {
-            MarkDao markDao = daoObjectMapper.MapMark(mark, personId);
+            DataRow row = daoObjectMapper.MapMark(mark, personId);
 
             StringBuilder sqlValues = new StringBuilder();
-            sqlValues.Append(markDao.lineitem_id != null ? markDao.lineitem_id + ", " : "NULL, ");
-            sqlValues.Append(markDao.person_id != null ? markDao.person_id + ", " : "NULL, ");
-            sqlValues.Append(markDao.enum_score_status_id != null ? markDao.enum_score_status_id + ", " : "NULL, ");
-            sqlValues.Append(markDao.score != null ? markDao.score + ", " : "NULL, ");
-            sqlValues.Append(markDao.score_date != null ? "'" + markDao.score_date.ToString() + "', " : "NULL, ");
-            sqlValues.Append(markDao.comment != null ? "'" + markDao.comment + "', " : "NULL, ");
+            sqlValues.Append(row["lineitem_id"] != DBNull.Value ? row["lineitem_id"] + ", " : "NULL, ");
+            sqlValues.Append(row["person_id"] != DBNull.Value ? row["person_id"] + ", " : "NULL, ");
+            sqlValues.Append(row["enum_score_status_id"] != DBNull.Value ? row["enum_score_status_id"] + ", " : "NULL, ");
+            sqlValues.Append(row["score"] != DBNull.Value ? row["score"] + ", " : "NULL, ");
+            sqlValues.Append(row["score_date"] != DBNull.Value ? "'" + row["score_date"].ToString() + "', " : "NULL, ");
+            sqlValues.Append(row["comment"] != DBNull.Value ? "'" + row["comment"] + "', " : "NULL, ");
             sqlValues.Append("GETDATE(), ");
             sqlValues.Append("'Netus2'");
 
@@ -241,11 +166,11 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 "(lineitem_id, person_id, enum_score_status_id, score, score_date, comment, created, created_by) " +
                 "VALUES (" + sqlValues.ToString() + ")";
 
-            markDao.mark_id = connection.InsertNewRecord(sql);
+            row["mark_id"] = connection.InsertNewRecord(sql);
 
-            LineItem lineItem = Read_LineItem((int)markDao.lineitem_id, connection);
+            LineItem lineItem = Read_LineItem((int)row["lineitem_id"], connection);
 
-            Mark result = daoObjectMapper.MapMark(markDao, lineItem);
+            Mark result = daoObjectMapper.MapMark(row, lineItem);
 
             return result;
         }

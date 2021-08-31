@@ -137,12 +137,10 @@ namespace Netus2_Test
 
             uniqueId_Teacher = new UniqueIdentifier(DateTime.Now.ToString() + "_teacher", Enum_Identifier.values["state id"], Enum_True_False.values["true"]);
             if (connection != null)
-                uniqueId_Teacher = uniqueIdentifierDaoImpl.Write(uniqueId_Teacher, teacher.Id, connection);
+                uniqueId_Teacher = uniqueIdentifierDaoImpl.Write(uniqueId_Teacher, teacher.Id, connection); 
             else
-            {
                 uniqueId_Teacher.Id = 1;
-                teacher.UniqueIdentifiers.Add(uniqueId_Teacher);
-            }
+            teacher.UniqueIdentifiers.Add(uniqueId_Teacher);
 
             employmentSession = new EmploymentSession("John Smith Employment", Enum_True_False.values["true"], school);
             if (connection != null)

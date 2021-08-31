@@ -1,6 +1,6 @@
-﻿using Netus2_DatabaseConnection.daoObjects;
-using Netus2_DatabaseConnection.dbAccess;
+﻿using Netus2_DatabaseConnection.dbAccess;
 using System.Collections.Generic;
+using System.Data;
 
 namespace Netus2_DatabaseConnection.daoInterfaces
 {
@@ -11,7 +11,7 @@ namespace Netus2_DatabaseConnection.daoInterfaces
         /// </summary>
         /// <param name="personOneId"/>
         /// <param name="connection"/>
-        List<JctPersonPersonDao> Read(int personOneId, IConnectable connection);
+        List<DataRow> Read(int personOneId, IConnectable connection);
 
         /// <summary>
         /// Read the specific JctPersonPerson object from the database that references the primary key of a Person object, personOneId, 
@@ -20,7 +20,7 @@ namespace Netus2_DatabaseConnection.daoInterfaces
         /// <param name="personOneId"/>
         /// <param name="personTwoId"/>
         /// <param name="connection"/>
-        JctPersonPersonDao Read(int personOneId, int personTwoId, IConnectable connection);
+        DataRow Read(int personOneId, int personTwoId, IConnectable connection);
 
         /// <summary>
         /// <para>
@@ -34,7 +34,7 @@ namespace Netus2_DatabaseConnection.daoInterfaces
         /// <param name="personOneId"/>
         /// <param name="personTwoId"/>
         /// <param name="connection"/>
-        JctPersonPersonDao Write(int personOneId, int personTwoId, IConnectable connection);
+        DataRow Write(int personOneId, int personTwoId, IConnectable connection);
 
         /// <summary>
         /// <para>

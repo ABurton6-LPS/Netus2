@@ -1,6 +1,6 @@
 ﻿using Netus2_DatabaseConnection.daoInterfaces;
-using Netus2_DatabaseConnection.daoObjects;
 using Netus2_DatabaseConnection.dbAccess;
+using Netus2_DatabaseConnection.utilityTools;
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
@@ -17,46 +17,46 @@ namespace Netus2_DatabaseConnection.daoImplementations
             connection.ExecuteNonQuery(sql);
         }
 
-        public JctClassResourceDao Read(int classId, int resourceId, IConnectable connection)
+        public DataRow Read(int classId, int resourceId, IConnectable connection)
         {
             string sql = "SELECT * FROM jct_class_resource WHERE class_id = " + classId +
                 " AND resourceId = " + resourceId;
 
-            List<JctClassResourceDao> results = Read(sql, connection);
+            List<DataRow> results = Read(sql, connection);
             if (results.Count > 0)
                 return results[0];
             else
                 return null;
         }
 
-        public List<JctClassResourceDao> Read_WithClassId(int classId, IConnectable connection)
+        public List<DataRow> Read_WithClassId(int classId, IConnectable connection)
         {
             string sql = "SELECT * FROM jct_class_resource WHERE class_id = " + classId;
 
             return Read(sql, connection);
         }
 
-        public List<JctClassResourceDao> Read_WithResourceId(int resourceId, IConnectable connection)
+        public List<DataRow> Read_WithResourceId(int resourceId, IConnectable connection)
         {
             string sql = "SELECT * FROM jct_class_resource WHERE resource_id = " + resourceId;
 
             return Read(sql, connection);
         }
 
-        private List<JctClassResourceDao> Read(string sql, IConnectable connection)
+        private List<DataRow> Read(string sql, IConnectable connection)
         {
-            List<JctClassResourceDao> jctClassResourceDaos = new List<JctClassResourceDao>();
+            List<DataRow> jctClassResourceDaos = new List<DataRow>();
+            DataTable dtJctClassResource = new DataTableFactory().Dt_Netus2_JctClassResource;
 
             IDataReader reader = null;
             try
             {
                 reader = connection.GetReader(sql);
-                while (reader.Read())
+                dtJctClassResource.Load(reader);
+
+                foreach(DataRow row in dtJctClassResource.Rows)
                 {
-                    JctClassResourceDao foundJctClassResourceDao = new JctClassResourceDao();
-                    foundJctClassResourceDao.class_id = reader.GetInt32(0);
-                    foundJctClassResourceDao.resource_id = reader.GetInt32(1);
-                    jctClassResourceDaos.Add(foundJctClassResourceDao);
+                    jctClassResourceDaos.Add(row);
                 }
             }
             finally
@@ -67,7 +67,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
             return jctClassResourceDaos;
         }
 
-        public JctClassResourceDao Write(int classId, int resourceId, IConnectable connection)
+        public DataRow Write(int classId, int resourceId, IConnectable connection)
         {
             StringBuilder sql = new StringBuilder("INSERT INTO jct_class_resource (class_id, resource_id) VALUES (");
             sql.Append(classId + ", ");
@@ -75,9 +75,9 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
             connection.ExecuteNonQuery(sql.ToString());
 
-            JctClassResourceDao jctClassResourceDao = new JctClassResourceDao();
-            jctClassResourceDao.class_id = classId;
-            jctClassResourceDao.resource_id = resourceId;
+            DataRow jctClassResourceDao = new DataTableFactory().Dt_Netus2_JctClassResource.NewRow();
+            jctClassResourceDao["class_id"] = classId;
+            jctClassResourceDao["resource_id"] = resourceId;
 
             return jctClassResourceDao;
         }

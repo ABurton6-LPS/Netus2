@@ -12,10 +12,10 @@ namespace Netus2_DatabaseConnection.dataObjects
         public List<AcademicSession> AcademicSessions { get; set; }
         public Enumeration GradeLevel { get; set; }
         public DateTime StartDate { get; set; }
-        public DateTime? EndDate { get; set; }
+        public DateTime EndDate { get; set; }
         public Enumeration IsPrimary { get; set; }
 
-        public Enrollment(Enumeration gradeLevel, DateTime startDate, DateTime? endDate, Enumeration isPrimary, ClassEnrolled classEnrolled, List<AcademicSession> academicSessions)
+        public Enrollment(Enumeration gradeLevel, DateTime startDate, DateTime endDate, Enumeration isPrimary, ClassEnrolled classEnrolled, List<AcademicSession> academicSessions)
         {
             Id = -1;
             GradeLevel = gradeLevel;

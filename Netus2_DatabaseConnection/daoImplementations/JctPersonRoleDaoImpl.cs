@@ -1,6 +1,6 @@
 ﻿using Netus2_DatabaseConnection.daoInterfaces;
-using Netus2_DatabaseConnection.daoObjects;
 using Netus2_DatabaseConnection.dbAccess;
+using Netus2_DatabaseConnection.utilityTools;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -19,13 +19,13 @@ namespace Netus2_DatabaseConnection.daoImplementations
             connection.ExecuteNonQuery(sql.ToString());
         }
 
-        public JctPersonRoleDao Read(int personId, int roleId, IConnectable connection)
+        public DataRow Read(int personId, int roleId, IConnectable connection)
         {
             StringBuilder sql = new StringBuilder("SELECT * FROM jct_person_role WHERE 1=1 ");
             sql.Append("AND person_id = " + personId + " ");
             sql.Append("AND enum_role_id = " + roleId);
 
-            List<JctPersonRoleDao> results = Read(sql.ToString(), connection);
+            List<DataRow> results = Read(sql.ToString(), connection);
             if (results.Count == 1)
                 return results[0];
             else if (results.Count == 0)
@@ -35,7 +35,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
                     "person_id = " + personId + ", role_id = " + roleId);
         }
 
-        public List<JctPersonRoleDao> Read(int personId, IConnectable connection)
+        public List<DataRow> Read(int personId, IConnectable connection)
         {
             StringBuilder sql = new StringBuilder("SELECT * FROM jct_person_role WHERE 1=1 ");
             sql.Append("AND person_id = " + personId);
@@ -43,19 +43,20 @@ namespace Netus2_DatabaseConnection.daoImplementations
             return Read(sql.ToString(), connection);
         }
 
-        private List<JctPersonRoleDao> Read(string sql, IConnectable connection)
+        private List<DataRow> Read(string sql, IConnectable connection)
         {
-            List<JctPersonRoleDao> jctPersonRoleDaos = new List<JctPersonRoleDao>();
+            List<DataRow> jctPersonRoleDaos = new List<DataRow>();
+            DataTable dtJctPersonRole = new DataTableFactory().Dt_Netus2_JctPersonRole;
+
             IDataReader reader = null;
             try
             {
                 reader = connection.GetReader(sql.ToString());
-                while (reader.Read())
+                dtJctPersonRole.Load(reader);
+
+                foreach(DataRow row in dtJctPersonRole.Rows)
                 {
-                    JctPersonRoleDao foundJctPersonRoleDao = new JctPersonRoleDao();
-                    foundJctPersonRoleDao.person_id = reader.GetInt32(0);
-                    foundJctPersonRoleDao.enum_role_id = reader.GetInt32(1);
-                    jctPersonRoleDaos.Add(foundJctPersonRoleDao);
+                    jctPersonRoleDaos.Add(row);
                 }
             }
             finally
@@ -66,7 +67,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
             return jctPersonRoleDaos;
         }
 
-        public JctPersonRoleDao Write(int personId, int roleId, IConnectable connection)
+        public DataRow Write(int personId, int roleId, IConnectable connection)
         {
             StringBuilder sql = new StringBuilder("INSERT INTO jct_person_role (person_id, enum_role_id) VALUES (");
             sql.Append(personId + ", ");
@@ -74,9 +75,9 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
             connection.ExecuteNonQuery(sql.ToString());
 
-            JctPersonRoleDao jctPersonRoleDao = new JctPersonRoleDao();
-            jctPersonRoleDao.person_id = personId;
-            jctPersonRoleDao.enum_role_id = roleId;
+            DataRow jctPersonRoleDao = new DataTableFactory().Dt_Netus2_JctPersonRole.NewRow();
+            jctPersonRoleDao["person_id"] = personId;
+            jctPersonRoleDao["enum_role_id"] = roleId;
 
             return jctPersonRoleDao;
         }

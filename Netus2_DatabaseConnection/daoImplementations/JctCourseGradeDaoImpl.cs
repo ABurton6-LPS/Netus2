@@ -1,6 +1,6 @@
 ﻿using Netus2_DatabaseConnection.daoInterfaces;
-using Netus2_DatabaseConnection.daoObjects;
 using Netus2_DatabaseConnection.dbAccess;
+using Netus2_DatabaseConnection.utilityTools;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -19,13 +19,13 @@ namespace Netus2_DatabaseConnection.daoImplementations
             connection.ExecuteNonQuery(sql.ToString());
         }
 
-        public JctCourseGradeDao Read(int courseId, int gradeId, IConnectable connection)
+        public DataRow Read(int courseId, int gradeId, IConnectable connection)
         {
             StringBuilder sql = new StringBuilder("SELECT * FROM jct_course_grade WHERE 1=1 ");
             sql.Append("AND course_id = " + courseId + " ");
             sql.Append("AND enum_grade_id = " + gradeId);
 
-            List<JctCourseGradeDao> results = Read(sql.ToString(), connection);
+            List<DataRow> results = Read(sql.ToString(), connection);
             if (results.Count == 1)
                 return results[0];
             else if (results.Count == 0)
@@ -35,7 +35,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
                     "course_id = " + courseId + ", grade_id = " + gradeId);
         }
 
-        public List<JctCourseGradeDao> Read(int courseId, IConnectable connection)
+        public List<DataRow> Read(int courseId, IConnectable connection)
         {
             StringBuilder sql = new StringBuilder("SELECT * FROM jct_course_grade WHERE 1=1 ");
             sql.Append("AND course_id = " + courseId);
@@ -43,19 +43,20 @@ namespace Netus2_DatabaseConnection.daoImplementations
             return Read(sql.ToString(), connection);
         }
 
-        private List<JctCourseGradeDao> Read(string sql, IConnectable connection)
+        private List<DataRow> Read(string sql, IConnectable connection)
         {
-            List<JctCourseGradeDao> jctCourseGradeDaos = new List<JctCourseGradeDao>();
+            List<DataRow> jctCourseGradeDaos = new List<DataRow>();
+            DataTable dtJctCourseGrade = new DataTableFactory().Dt_Netus2_JctCourseGrade;
+
             IDataReader reader = null;
             try
             {
                 reader = connection.GetReader(sql.ToString());
-                while (reader.Read())
+                dtJctCourseGrade.Load(reader);
+
+                foreach(DataRow row in dtJctCourseGrade.Rows)
                 {
-                    JctCourseGradeDao foundJctCourseGradeDao = new JctCourseGradeDao();
-                    foundJctCourseGradeDao.course_id = reader.GetInt32(0);
-                    foundJctCourseGradeDao.enum_grade_id = reader.GetInt32(1);
-                    jctCourseGradeDaos.Add(foundJctCourseGradeDao);
+                    jctCourseGradeDaos.Add(row);
                 }
             }
             finally
@@ -66,7 +67,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
             return jctCourseGradeDaos;
         }
 
-        public JctCourseGradeDao Write(int courseId, int gradeId, IConnectable connection)
+        public DataRow Write(int courseId, int gradeId, IConnectable connection)
         {
             StringBuilder sql = new StringBuilder("INSERT INTO jct_course_grade (course_id, enum_grade_id) VALUES (");
             sql.Append(courseId + ", ");
@@ -74,9 +75,9 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
             connection.ExecuteNonQuery(sql.ToString());
 
-            JctCourseGradeDao jctCourseGradeDao = new JctCourseGradeDao();
-            jctCourseGradeDao.course_id = courseId;
-            jctCourseGradeDao.enum_grade_id = gradeId;
+            DataRow jctCourseGradeDao = new DataTableFactory().Dt_Netus2_JctCourseGrade.NewRow();
+            jctCourseGradeDao["course_id"] = courseId;
+            jctCourseGradeDao["enum_grade_id"] = gradeId;
 
             return jctCourseGradeDao;
         }

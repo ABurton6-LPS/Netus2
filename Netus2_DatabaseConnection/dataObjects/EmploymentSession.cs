@@ -7,17 +7,12 @@ namespace Netus2_DatabaseConnection.dataObjects
     {
         public Enumeration IsPrimary { get; set; }
 
-        private Enumeration SessionType;
+        public Enumeration SessionType;
 
         public EmploymentSession(string name, Enumeration isPrimary, Organization organization) : base(name, organization)
         {
             IsPrimary = isPrimary;
             SessionType = Enum_Session.values["employment"];
-        }
-
-        public Enumeration GetSessionType()
-        {
-            return SessionType;
         }
 
         public override string ToString()
