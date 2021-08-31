@@ -1,6 +1,6 @@
 ﻿using Netus2_DatabaseConnection.daoInterfaces;
-using Netus2_DatabaseConnection.daoObjects;
 using Netus2_DatabaseConnection.dbAccess;
+using Netus2_DatabaseConnection.utilityTools;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -19,13 +19,13 @@ namespace Netus2_DatabaseConnection.daoImplementations
             connection.ExecuteNonQuery(sql.ToString());
         }
 
-        public JctPersonAddressDao Read(int personId, int addressId, IConnectable connection)
+        public DataRow Read(int personId, int addressId, IConnectable connection)
         {
             StringBuilder sql = new StringBuilder("SELECT * FROM jct_person_address WHERE 1=1 ");
             sql.Append("AND person_id = " + personId + " ");
             sql.Append("AND address_id = " + addressId);
 
-            List<JctPersonAddressDao> results = Read(sql.ToString(), connection);
+            List<DataRow> results = Read(sql.ToString(), connection);
             if (results.Count == 0)
                 return null;
             else if (results.Count == 1)
@@ -35,33 +35,33 @@ namespace Netus2_DatabaseConnection.daoImplementations
                     "person_id = " + personId + ", address_Id = " + addressId);
         }
 
-        public List<JctPersonAddressDao> Read_WithPersonId(int personId, IConnectable connection)
+        public List<DataRow> Read_WithPersonId(int personId, IConnectable connection)
         {
             string sql = "SELECT * FROM jct_person_address where person_id = " + personId;
 
             return Read(sql, connection);
         }
-        public List<JctPersonAddressDao> Read_WithAddressId(int addressId, IConnectable connection)
+        public List<DataRow> Read_WithAddressId(int addressId, IConnectable connection)
         {
             string sql = "SELECT * FROM jct_person_address where address_id = " + addressId;
 
             return Read(sql, connection);
         }
 
-        private List<JctPersonAddressDao> Read(string sql, IConnectable connection)
+        private List<DataRow> Read(string sql, IConnectable connection)
         {
-            List<JctPersonAddressDao> jctPersonAddressDaos = new List<JctPersonAddressDao>();
+            List<DataRow> jctPersonAddressDaos = new List<DataRow>();
+            DataTable dtJctPersonAddress = new DataTableFactory().Dt_Netus2_JctPersonAddress;
 
             IDataReader reader = null;
             try
             {
                 reader = connection.GetReader(sql);
-                while (reader.Read())
+                dtJctPersonAddress.Load(reader);
+
+                foreach(DataRow row in dtJctPersonAddress.Rows)
                 {
-                    JctPersonAddressDao foundJctPersonAddressDao = new JctPersonAddressDao();
-                    foundJctPersonAddressDao.person_id = reader.GetInt32(0);
-                    foundJctPersonAddressDao.address_id = reader.GetInt32(1);
-                    jctPersonAddressDaos.Add(foundJctPersonAddressDao);
+                    jctPersonAddressDaos.Add(row);
                 }
             }
             finally
@@ -72,7 +72,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
             return jctPersonAddressDaos;
         }
 
-        public JctPersonAddressDao Write(int personId, int addressId, IConnectable connection)
+        public DataRow Write(int personId, int addressId, IConnectable connection)
         {
             StringBuilder sql = new StringBuilder("INSERT INTO jct_person_address (person_id, address_id) VALUES (");
             sql.Append(personId + ", ");
@@ -80,9 +80,9 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
             connection.ExecuteNonQuery(sql.ToString());
 
-            JctPersonAddressDao jctPersonAddressDao = new JctPersonAddressDao();
-            jctPersonAddressDao.person_id = personId;
-            jctPersonAddressDao.address_id = addressId;
+            DataRow jctPersonAddressDao = new DataTableFactory().Dt_Netus2_JctPersonAddress.NewRow();
+            jctPersonAddressDao["person_id"] = personId;
+            jctPersonAddressDao["address_id"] = addressId;
 
             return jctPersonAddressDao;
         }

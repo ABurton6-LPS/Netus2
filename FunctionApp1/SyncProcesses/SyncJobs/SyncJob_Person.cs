@@ -1,5 +1,6 @@
 ﻿using Netus2_DatabaseConnection.dbAccess;
 using Netus2_DatabaseConnection.enumerations;
+using Netus2_DatabaseConnection.utilityTools;
 using Netus2SisSync.SyncProcesses.SyncTasks.PersonTasks;
 using Netus2SisSync.UtilityTools;
 using System;
@@ -38,96 +39,12 @@ namespace Netus2SisSync.SyncProcesses.SyncJobs
 
         public void ReadFromSis()
         {
-            _dtPerson = DataTableFactory.CreateDataTable("Person");
+            _dtPerson = new DataTableFactory().Dt_Sis_Person;
             IDataReader reader = null;
             try
             {
                 reader = _sisConnection.GetReader(SyncScripts.ReadSis_Person_SQL);
-                while (reader.Read())
-                {
-                    DataRow myDataRow = _dtPerson.NewRow();
-
-                    List<string> columnNames = new List<string>();
-                    for (int i = 0; i < reader.FieldCount; i++)
-                        columnNames.Add(reader.GetName(i));
-
-                    foreach (string columnName in columnNames)
-                    {
-                        var value = reader.GetValue(reader.GetOrdinal(columnName));
-                        switch (columnName)
-                        {
-                            case "person_type":
-                                if (value != DBNull.Value && value != null)
-                                    myDataRow["person_type"] = (string)value;
-                                else
-                                    myDataRow["person_type"] = null;
-                                break;
-                            case "sis_id":
-                                if (value != DBNull.Value && value != null)
-                                    myDataRow["sis_id"] = (string)value;
-                                else
-                                    myDataRow["sis_id"] = null;
-                                break;
-                            case "first_name":
-                                if (value != DBNull.Value && value != null)
-                                    myDataRow["first_name"] = (string)value;
-                                else
-                                    myDataRow["first_name"] = null;
-                                break;
-                            case "middle_name":
-                                if (value != DBNull.Value && value != null)
-                                    myDataRow["middle_name"] = (string)value;
-                                else
-                                    myDataRow["middle_name"] = null;
-                                break;
-                            case "last_name":
-                                if (value != DBNull.Value && value != null)
-                                    myDataRow["last_name"] = (string)value;
-                                else
-                                    myDataRow["last_name"] = null;
-                                break;
-                            case "birth_date":
-                                if (value != DBNull.Value && value != null)
-                                    myDataRow["birth_date"] = (DateTime)value;
-                                else
-                                    myDataRow["birth_date"] = new DateTime();
-                                break;
-                            case "enum_gender_id":
-                                if (value != DBNull.Value && value != null)
-                                    myDataRow["enum_gender_id"] = (string)value;
-                                else
-                                    myDataRow["enum_gender_id"] = null;
-                                break;
-                            case "enum_ethnic_id":
-                                if (value != DBNull.Value && value != null)
-                                    myDataRow["enum_ethnic_id"] = (string)value;
-                                else
-                                    myDataRow["enum_ethnic_id"] = null;
-                                break;
-                            case "enum_residence_status_id":
-                                if (value != DBNull.Value && value != null)
-                                    myDataRow["enum_residence_status_id"] = (string)value;
-                                else
-                                    myDataRow["enum_residence_status_id"] = null;
-                                break;
-                            case "login_name":
-                                if (value != DBNull.Value && value != null)
-                                    myDataRow["login_name"] = (string)value;
-                                else
-                                    myDataRow["login_name"] = null;
-                                break;
-                            case "login_pw":
-                                if (value != DBNull.Value && value != null)
-                                    myDataRow["login_pw"] = (string)value;
-                                else
-                                    myDataRow["login_pw"] = null;
-                                break;
-                            default:
-                                throw new Exception("Unexpected column found in SIS lookup for Unique Identifier: " + columnName);
-                        }
-                    }
-                    _dtPerson.Rows.Add(myDataRow);
-                }
+                _dtPerson.Load(reader);
             }
             catch (Exception e)
             {

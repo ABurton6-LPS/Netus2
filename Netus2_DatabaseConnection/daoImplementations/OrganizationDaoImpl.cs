@@ -1,7 +1,7 @@
 ﻿using Netus2_DatabaseConnection.daoInterfaces;
-using Netus2_DatabaseConnection.daoObjects;
 using Netus2_DatabaseConnection.dataObjects;
 using Netus2_DatabaseConnection.dbAccess;
+using Netus2_DatabaseConnection.utilityTools;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -19,14 +19,14 @@ namespace Netus2_DatabaseConnection.daoImplementations
             Delete_EmploymentSessions(organization, connection);
             Delete_AcademicSession(organization, connection);
 
-            OrganizationDao organizationDao = daoObjectMapper.MapOrganization(organization, -1);
+            DataRow row = daoObjectMapper.MapOrganization(organization, -1);
 
             StringBuilder sql = new StringBuilder("DELETE FROM organization WHERE 1=1 ");
-            sql.Append("AND organization_id = " + organizationDao.organization_id + " ");
-            sql.Append("AND name " + (organizationDao.name != null ? "LIKE '" + organizationDao.name + "' " : "IS NULL "));
-            sql.Append("AND enum_organization_id " + (organizationDao.enum_organization_id != null ? "= " + organizationDao.enum_organization_id + " " : "IS NULL "));
-            sql.Append("AND identifier " + (organizationDao.identifier != null ? "LIKE '" + organizationDao.identifier + "' " : "IS NULL "));
-            sql.Append("AND building_code " + (organizationDao.building_code != null ? "LIKE '" + organizationDao.building_code + "' " : "IS NULL "));
+            sql.Append("AND organization_id = " + row["organization_id"] + " ");
+            sql.Append("AND name " + (row["name"] != DBNull.Value ? "LIKE '" + row["name"] + "' " : "IS NULL "));
+            sql.Append("AND enum_organization_id " + (row["enum_organization_id"] != DBNull.Value ? "= " + row["enum_organization_id"] + " " : "IS NULL "));
+            sql.Append("AND identifier " + (row["identifier"] != DBNull.Value ? "LIKE '" + row["identifier"] + "' " : "IS NULL "));
+            sql.Append("AND building_code " + (row["building_code"] != DBNull.Value ? "LIKE '" + row["building_code"] + "' " : "IS NULL "));
 
             connection.ExecuteNonQuery(sql.ToString());
         }
@@ -122,23 +122,23 @@ namespace Netus2_DatabaseConnection.daoImplementations
             }
             else
             {
-                OrganizationDao organizationDao = daoObjectMapper.MapOrganization(organization, parentId);
+                DataRow row = daoObjectMapper.MapOrganization(organization, parentId);
 
                 sql.Append("SELECT * FROM organization WHERE 1=1 ");
-                if (organizationDao.organization_id != null)
-                    sql.Append("AND organization_id = " + organizationDao.organization_id + " ");
+                if (row["organization_id"] != DBNull.Value)
+                    sql.Append("AND organization_id = " + row["organization_id"] + " ");
                 else
                 {
-                    if (organizationDao.name != null)
-                        sql.Append("AND name LIKE '" + organizationDao.name + "' ");
-                    if (organizationDao.enum_organization_id != null)
-                        sql.Append("AND enum_organization_id = " + organizationDao.enum_organization_id + " ");
-                    if (organizationDao.identifier != null)
-                        sql.Append("AND identifier LIKE '" + organizationDao.identifier + "' ");
-                    if (organizationDao.building_code != null)
-                        sql.Append("AND building_code LIKE '" + organizationDao.building_code + "' ");
-                    if (organizationDao.organization_parent_id != null)
-                        sql.Append("AND organization_parent_id = " + organizationDao.organization_parent_id);
+                    if (row["name"] != DBNull.Value)
+                        sql.Append("AND name LIKE '" + row["name"] + "' ");
+                    if (row["enum_organization_id"] != DBNull.Value)
+                        sql.Append("AND enum_organization_id = " + row["enum_organization_id"] + " ");
+                    if (row["identifier"] != DBNull.Value)
+                        sql.Append("AND identifier LIKE '" + row["identifier"] + "' ");
+                    if (row["building_code"] != DBNull.Value)
+                        sql.Append("AND building_code LIKE '" + row["building_code"] + "' ");
+                    if (row["organization_parent_id"] != DBNull.Value)
+                        sql.Append("AND organization_parent_id = " + row["organization_parent_id"]);
                 }
             }
 
@@ -147,73 +147,13 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private List<Organization> Read(string sql, IConnectable connection)
         {
-            List<OrganizationDao> foundOrganizationsDaos = new List<OrganizationDao>();
+            DataTable dtOrganization = new DataTableFactory().Dt_Netus2_Organization;
 
             IDataReader reader = null;
             try
             {
                 reader = connection.GetReader(sql);
-                while (reader.Read())
-                {
-                    OrganizationDao foundOrganizationDao = new OrganizationDao();
-
-                    List<string> columnNames = new List<string>();
-                    for (int i = 0; i < reader.FieldCount; i++)
-                        columnNames.Add(reader.GetName(i));
-
-                    foreach (string columnName in columnNames)
-                    {
-                        var value = reader.GetValue(reader.GetOrdinal(columnName));
-                        switch (columnName)
-                        {
-                            case "organization_id":
-                                if (value != DBNull.Value && value != null)
-                                    foundOrganizationDao.organization_id = (int)value;
-                                else
-                                    foundOrganizationDao.organization_id = null;
-                                break;
-                            case "name":
-                                foundOrganizationDao.name = value != DBNull.Value ? (string)value : null;
-                                break;
-                            case "enum_organization_id":
-                                if (value != DBNull.Value && value != null)
-                                    foundOrganizationDao.enum_organization_id = (int)value;
-                                else
-                                    foundOrganizationDao.enum_organization_id = null;
-                                break;
-                            case "identifier":
-                                foundOrganizationDao.identifier = value != DBNull.Value ? (string)value : null;
-                                break;
-                            case "building_code":
-                                foundOrganizationDao.building_code = value != DBNull.Value ? (string)value : null;
-                                break;
-                            case "organization_parent_id":
-                                foundOrganizationDao.organization_parent_id = value != DBNull.Value ? (int)value : -1;
-                                break;
-                            case "created":
-                                if (value != DBNull.Value && value != null)
-                                    foundOrganizationDao.created = (DateTime)value;
-                                else
-                                    foundOrganizationDao.created = null;
-                                break;
-                            case "created_by":
-                                foundOrganizationDao.created_by = value != DBNull.Value ? (string)value : null;
-                                break;
-                            case "changed":
-                                if (value != DBNull.Value && value != null)
-                                    foundOrganizationDao.changed = (DateTime)value;
-                                else
-                                    foundOrganizationDao.changed = null;
-                                break;
-                            case "changed_by":
-                                foundOrganizationDao.changed_by = value != DBNull.Value ? (string)value : null;
-                                break;
-                            default:
-                                throw new Exception("Unexpected column found in organization table: " + columnName);
-                        }
-                    }
-                    foundOrganizationsDaos.Add(foundOrganizationDao);
-                }
+                dtOrganization.Load(reader);
             }
             finally
             {
@@ -222,9 +162,9 @@ namespace Netus2_DatabaseConnection.daoImplementations
             }
 
             List<Organization> results = new List<Organization>();
-            foreach (OrganizationDao foundOrganizationDao in foundOrganizationsDaos)
+            foreach (DataRow row in dtOrganization.Rows)
             {
-                results.Add(daoObjectMapper.MapOrganization(foundOrganizationDao));
+                results.Add(daoObjectMapper.MapOrganization(row));
             }
 
             foreach (Organization result in results)
@@ -257,19 +197,19 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private void UpdateInternals(Organization organization, int parentOrganizationId, IConnectable connection)
         {
-            OrganizationDao organizationDao = daoObjectMapper.MapOrganization(organization, parentOrganizationId);
+            DataRow row = daoObjectMapper.MapOrganization(organization, parentOrganizationId);
 
-            if (organizationDao.organization_id != null)
+            if (row["organization_id"] != DBNull.Value)
             {
                 StringBuilder sql = new StringBuilder("UPDATE organization SET ");
-                sql.Append("name = " + (organizationDao.name != null ? "'" + organizationDao.name + "', " : "NULL, "));
-                sql.Append("enum_organization_id = " + (organizationDao.enum_organization_id != null ? organizationDao.enum_organization_id + ", " : "NULL, "));
-                sql.Append("identifier = " + (organizationDao.identifier != null ? "'" + organizationDao.identifier + "', " : "NULL, "));
-                sql.Append("building_code = " + (organizationDao.building_code != null ? "'" + organizationDao.building_code + "', " : "NULL, "));
-                sql.Append("organization_parent_id = " + (organizationDao.organization_parent_id != null ? organizationDao.organization_parent_id + ", " : "NULL, "));
+                sql.Append("name = " + (row["name"] != DBNull.Value ? "'" + row["name"] + "', " : "NULL, "));
+                sql.Append("enum_organization_id = " + (row["enum_organization_id"] != DBNull.Value ? row["enum_organization_id"] + ", " : "NULL, "));
+                sql.Append("identifier = " + (row["identifier"] != DBNull.Value ? "'" + row["identifier"] + "', " : "NULL, "));
+                sql.Append("building_code = " + (row["building_code"] != DBNull.Value ? "'" + row["building_code"] + "', " : "NULL, "));
+                sql.Append("organization_parent_id = " + (row["organization_parent_id"] != DBNull.Value ? row["organization_parent_id"] + ", " : "NULL, "));
                 sql.Append("changed = GETDATE(), ");
                 sql.Append("changed_by = 'Netus2' ");
-                sql.Append("WHERE organization_id = " + organizationDao.organization_id);
+                sql.Append("WHERE organization_id = " + row["organization_id"]);
 
                 connection.ExecuteNonQuery(sql.ToString());
             }
@@ -286,14 +226,14 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         public Organization Write(Organization organization, int parentOrganizationId, IConnectable connection)
         {
-            OrganizationDao organizationDao = daoObjectMapper.MapOrganization(organization, parentOrganizationId);
+            DataRow row = daoObjectMapper.MapOrganization(organization, parentOrganizationId);
 
             StringBuilder sqlValues = new StringBuilder();
-            sqlValues.Append(organizationDao.name != null ? "'" + organizationDao.name + "', " : "NULL, ");
-            sqlValues.Append(organizationDao.enum_organization_id != null ? organizationDao.enum_organization_id + ", " : "NULL, ");
-            sqlValues.Append(organizationDao.identifier != null ? "'" + organizationDao.identifier + "', " : "NULL, ");
-            sqlValues.Append(organizationDao.building_code != null ? "'" + organizationDao.building_code + "', " : "NULL, ");
-            sqlValues.Append(organizationDao.organization_parent_id != null ? organizationDao.organization_parent_id + ", " : "NULL, ");
+            sqlValues.Append(row["name"] != DBNull.Value ? "'" + row["name"] + "', " : "NULL, ");
+            sqlValues.Append(row["enum_organization_id"] != DBNull.Value ? row["enum_organization_id"] + ", " : "NULL, ");
+            sqlValues.Append(row["identifier"] != DBNull.Value ? "'" + row["identifier"] + "', " : "NULL, ");
+            sqlValues.Append(row["building_code"] != DBNull.Value ? "'" + row["building_code"] + "', " : "NULL, ");
+            sqlValues.Append(row["organization_parent_id"] != DBNull.Value ? row["organization_parent_id"] + ", " : "NULL, ");
             sqlValues.Append("GETDATE(), ");
             sqlValues.Append("'Netus2'");
 
@@ -303,8 +243,8 @@ namespace Netus2_DatabaseConnection.daoImplementations
             sql.Append(sqlValues.ToString());
             sql.Append(")");
 
-            organizationDao.organization_id = connection.InsertNewRecord(sql.ToString());
-            Organization resultOrg = daoObjectMapper.MapOrganization(organizationDao);
+            row["organization_id"] = connection.InsertNewRecord(sql.ToString());
+            Organization resultOrg = daoObjectMapper.MapOrganization(row);
 
             return resultOrg;
         }

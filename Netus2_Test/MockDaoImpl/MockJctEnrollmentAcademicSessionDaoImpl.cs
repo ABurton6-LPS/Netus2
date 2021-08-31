@@ -1,7 +1,8 @@
 ﻿using Netus2_DatabaseConnection.daoInterfaces;
-using Netus2_DatabaseConnection.daoObjects;
 using Netus2_DatabaseConnection.dbAccess;
+using Netus2_DatabaseConnection.utilityTools;
 using System.Collections.Generic;
+using System.Data;
 
 namespace Netus2_Test.MockDaoImpl
 {
@@ -14,13 +15,13 @@ namespace Netus2_Test.MockDaoImpl
         public bool WasCalled_WithEnrollmentId = false;
         public bool WasCalled_Write = false;
 
-        private JctEnrollmentAcademicSessionDao dao = new JctEnrollmentAcademicSessionDao();
+        private DataRow row = new DataTableFactory().Dt_Netus2_JctEnrollmentAcademicSession.NewRow();
 
         public MockJctEnrollmentAcademicSessionDaoImpl(TestDataBuilder tdBuilder)
         {
             this.tdBuilder = tdBuilder;
-            dao.academic_session_id = tdBuilder.schoolYear.Id;
-            dao.enrollment_id = tdBuilder.enrollment.Id;
+            row["academic_session_id"] = tdBuilder.schoolYear.Id;
+            row["enrollment_id"] = tdBuilder.enrollment.Id;
         }
 
         public void Delete(int enrollmentId, int academicSessionId, IConnectable connection)
@@ -28,32 +29,32 @@ namespace Netus2_Test.MockDaoImpl
             WasCalled_Delete = true;
         }
 
-        public JctEnrollmentAcademicSessionDao Read(int enrollmentId, int academicSessionId, IConnectable connection)
+        public DataRow Read(int enrollmentId, int academicSessionId, IConnectable connection)
         {
             WasCalled_Read = true;            
-            return dao;
+            return row;
         }
 
-        public List<JctEnrollmentAcademicSessionDao> Read_WithAcademicSessionId(int academicSessionId, IConnectable connection)
+        public List<DataRow> Read_WithAcademicSessionId(int academicSessionId, IConnectable connection)
         {
             WasCalled_ReadWithAcademicSessionId = true;
-            List<JctEnrollmentAcademicSessionDao> list = new List<JctEnrollmentAcademicSessionDao>();
-            list.Add(dao);
+            List<DataRow> list = new List<DataRow>();
+            list.Add(row);
             return list;
         }
 
-        public List<JctEnrollmentAcademicSessionDao> Read_WithEnrollmentId(int enrollmentId, IConnectable connection)
+        public List<DataRow> Read_WithEnrollmentId(int enrollmentId, IConnectable connection)
         {
             WasCalled_WithEnrollmentId = true;
-            List<JctEnrollmentAcademicSessionDao> list = new List<JctEnrollmentAcademicSessionDao>();
-            list.Add(dao);
+            List<DataRow> list = new List<DataRow>();
+            list.Add(row);
             return list;
         }
 
-        public JctEnrollmentAcademicSessionDao Write(int enrollmentId, int academicSessionId, IConnectable connection)
+        public DataRow Write(int enrollmentId, int academicSessionId, IConnectable connection)
         {
             WasCalled_Write = true;
-            return dao;
+            return row;
         }
     }
 }

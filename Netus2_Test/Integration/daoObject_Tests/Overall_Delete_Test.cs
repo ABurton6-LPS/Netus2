@@ -1,6 +1,7 @@
 ﻿using Netus2_DatabaseConnection.daoImplementations;
 using Netus2_DatabaseConnection.daoInterfaces;
 using Netus2_DatabaseConnection.dbAccess;
+using Netus2SisSync.UtilityTools;
 using NUnit.Framework;
 
 namespace Netus2_Test.Integration

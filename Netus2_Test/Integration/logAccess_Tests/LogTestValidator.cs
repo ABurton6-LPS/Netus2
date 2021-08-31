@@ -76,7 +76,7 @@ namespace Netus2_Test.Integration
             Assert.AreEqual(expected.StartDate, actual.start_date);
             Assert.AreEqual(expected.EndDate, actual.end_date);
             Assert.AreEqual(expected.IsPrimary, actual.IsPrimary);
-            Assert.AreEqual(expected.GetSessionType(), actual.SessionType);
+            Assert.AreEqual(expected.SessionType, actual.SessionType);
             Assert.AreEqual(expected.Organization.Id, actual.organization_id);
         }
 

@@ -200,7 +200,7 @@ namespace Netus2_Test.Integration
                 AssertOrganization(expected.Organization, actual.Organization);
             }
             Assert.AreEqual(expected.IsPrimary, expected.IsPrimary);
-            Assert.AreEqual(expected.GetSessionType(), expected.GetSessionType());
+            Assert.AreEqual(expected.SessionType, expected.SessionType);
         }
 
         public static void AssertEnrollment(Enrollment expected, Enrollment actual)

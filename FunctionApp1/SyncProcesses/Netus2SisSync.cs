@@ -20,8 +20,11 @@ namespace Netus2SisSync.SyncProcesses
                 new SyncJob_AcademicSession("SyncJob_AcademicSession", sisConnection, netus2Connection)
                     .Start();
 
-                new SyncJob_Person("SyncJob_Person", sisConnection, netus2Connection)
-                    .Start();
+                //new SyncJob_Person("SyncJob_Person", sisConnection, netus2Connection)
+                //    .Start();
+
+                //new SyncJob_Address("SyncJob_Address", sisConnection, netus2Connection)
+                //    .Start();
             }
             finally
             {

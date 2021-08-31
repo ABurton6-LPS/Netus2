@@ -1,7 +1,7 @@
 ﻿using Netus2_DatabaseConnection.daoInterfaces;
-using Netus2_DatabaseConnection.daoObjects;
 using Netus2_DatabaseConnection.dataObjects;
 using Netus2_DatabaseConnection.dbAccess;
+using Netus2_DatabaseConnection.utilityTools;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -19,17 +19,17 @@ namespace Netus2_DatabaseConnection.daoImplementations
             UnlinkEnrollment(academicSession, connection);
             Delete_ClassesEnrolled(academicSession.Id, connection);
 
-            AcademicSessionDao academicSessionDao = daoObjectMapper.MapAcademicSession(academicSession, -1);
+            DataRow row = daoObjectMapper.MapAcademicSession(academicSession, -1);
 
             StringBuilder sql = new StringBuilder("DELETE FROM academic_session WHERE 1=1 ");
-            sql.Append("AND academic_session_id = " + academicSessionDao.academic_session_id + " ");
-            sql.Append("AND term_code " + (academicSessionDao.term_code != null ? "LIKE '" + academicSessionDao.term_code + "' " : "IS NULL "));
-            sql.Append("AND school_year " + (academicSessionDao.school_year != null ? "= " + academicSessionDao.school_year + " " : "IS NULL "));
-            sql.Append("AND name " + (academicSessionDao.name != null ? "LIKE '" + academicSessionDao.name + "' " : "IS NULL "));
-            sql.Append("AND start_date " + (academicSessionDao.start_date != null ? "= '" + academicSessionDao.start_date + "' " : "IS NULL "));
-            sql.Append("AND end_date " + (academicSessionDao.end_date != null ? "= '" + academicSessionDao.end_date + "' " : "IS NULL "));
-            sql.Append("AND enum_session_id " + (academicSessionDao.enum_session_id != null ? "= " + academicSessionDao.enum_session_id + " " : "IS NULL "));
-            sql.Append("AND organization_id " + (academicSessionDao.organization_id != null ? "= " + academicSessionDao.organization_id: "IS NULL"));
+            sql.Append("AND academic_session_id = " + row["academic_session_id"] + " ");
+            sql.Append("AND term_code " + (row["term_code"] != DBNull.Value ? "LIKE '" + row["term_code"] + "' " : "IS NULL "));
+            sql.Append("AND school_year " + (row["school_year"] != DBNull.Value ? "= " + row["school_year"] + " " : "IS NULL "));
+            sql.Append("AND name " + (row["name"] != DBNull.Value ? "LIKE '" + row["name"] + "' " : "IS NULL "));
+            sql.Append("AND start_date " + (row["start_date"] != DBNull.Value ? "= '" + row["start_date"] + "' " : "IS NULL "));
+            sql.Append("AND end_date " + (row["end_date"] != DBNull.Value ? "= '" + row["end_date"] + "' " : "IS NULL "));
+            sql.Append("AND enum_session_id " + (row["enum_session_id"] != DBNull.Value ? "= " + row["enum_session_id"] + " " : "IS NULL "));
+            sql.Append("AND organization_id " + (row["organization_id"] != DBNull.Value ? "= " + row["organization_id"]: "IS NULL"));
 
             connection.ExecuteNonQuery(sql.ToString());
         }
@@ -61,10 +61,10 @@ namespace Netus2_DatabaseConnection.daoImplementations
         private void UnlinkEnrollment(AcademicSession academicSession, IConnectable connection)
         {
             IJctEnrollmentAcademicSessionDao jctEnrollmentAcademicSessionDaoImpl = DaoImplFactory.GetJctEnrollmentAcademicSessionDaoImpl();
-            List<JctEnrollmentAcademicSessionDao> linksToBeRemoved = jctEnrollmentAcademicSessionDaoImpl.Read_WithAcademicSessionId(academicSession.Id, connection);
-            foreach(JctEnrollmentAcademicSessionDao linkToBeRemoved in linksToBeRemoved)
+            List<DataRow> linksToBeRemoved = jctEnrollmentAcademicSessionDaoImpl.Read_WithAcademicSessionId(academicSession.Id, connection);
+            foreach(DataRow linkToBeRemoved in linksToBeRemoved)
             {
-                jctEnrollmentAcademicSessionDaoImpl.Delete((int)linkToBeRemoved.enrollment_id, (int)linkToBeRemoved.academic_session_id, connection);
+                jctEnrollmentAcademicSessionDaoImpl.Delete((int)linkToBeRemoved["enrollment_id"], (int)linkToBeRemoved["academic_session_id"], connection);
             }
         }
 
@@ -126,27 +126,27 @@ namespace Netus2_DatabaseConnection.daoImplementations
         {
             StringBuilder sql = new StringBuilder("");
 
-            AcademicSessionDao academicSessionDao = daoObjectMapper.MapAcademicSession(academicSession, parentId);
+            DataRow row = daoObjectMapper.MapAcademicSession(academicSession, parentId);
 
             sql.Append("SELECT * FROM academic_session WHERE 1=1 ");
-            if (academicSessionDao.academic_session_id != null)
-                sql.Append("AND academic_session_id = " + academicSessionDao.academic_session_id + " ");
+            if (row["academic_session_id"] != DBNull.Value)
+                sql.Append("AND academic_session_id = " + row["academic_session_id"] + " ");
             else
             {
-                if (academicSessionDao.name != null)
-                    sql.Append("AND name = '" + academicSessionDao.name + "' ");
-                if (academicSessionDao.term_code != null)
-                    sql.Append("AND term_code = '" + academicSessionDao.term_code + "' ");
-                if (academicSessionDao.school_year != null)
-                    sql.Append("AND school_year = " + academicSessionDao.school_year + " ");
-                if (academicSessionDao.start_date != null)
-                    sql.Append("AND start_date = '" + academicSessionDao.start_date + "' ");
-                if (academicSessionDao.end_date != null)
-                    sql.Append("AND end_date = '" + academicSessionDao.end_date + "' ");
-                if (academicSessionDao.enum_session_id != null)
-                    sql.Append("AND enum_session_id = " + academicSessionDao.enum_session_id + " ");
-                if (academicSessionDao.parent_session_id != null)
-                    sql.Append("AND parent_session_id = " + academicSessionDao.parent_session_id + " ");
+                if (row["name"] != DBNull.Value)
+                    sql.Append("AND name = '" + row["name"] + "' ");
+                if (row["term_code"] != DBNull.Value)
+                    sql.Append("AND term_code = '" + row["term_code"] + "' ");
+                if (row["school_year"] != DBNull.Value)
+                    sql.Append("AND school_year = " + row["school_year"] + " ");
+                if (row["start_date"] != DBNull.Value)
+                    sql.Append("AND start_date = '" + row["start_date"] + "' ");
+                if (row["end_date"] != DBNull.Value)
+                    sql.Append("AND end_date = '" + row["end_date"] + "' ");
+                if (row["enum_session_id"] != DBNull.Value)
+                    sql.Append("AND enum_session_id = " + row["enum_session_id"] + " ");
+                if (row["parent_session_id"] != DBNull.Value)
+                    sql.Append("AND parent_session_id = " + row["parent_session_id"] + " ");
             }
 
             return Read(sql.ToString(), connection);
@@ -154,102 +154,12 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private List<AcademicSession> Read(string sql, IConnectable connection)
         {
-            List<AcademicSessionDao> foundAsDaos = new List<AcademicSessionDao>();
+            DataTable dtAcademicSession = new DataTableFactory().Dt_Netus2_AcademicSession;
             IDataReader reader = null;
             try
             {
-                reader = connection.GetReader(sql.ToString());
-                while (reader.Read())
-                {
-                    AcademicSessionDao foundAsDao = new AcademicSessionDao();
-
-                    List<string> columnNames = new List<string>();
-                    for (int i = 0; i < reader.FieldCount; i++)
-                        columnNames.Add(reader.GetName(i));
-
-                    foreach(string columnName in columnNames)
-                    {
-                        var value = reader.GetValue(reader.GetOrdinal(columnName));
-                        switch (columnName)
-                        {
-                            case "academic_session_id":
-                                if (value != DBNull.Value && value != null)
-                                    foundAsDao.academic_session_id = (int)value;
-                                else
-                                    foundAsDao.academic_session_id = null;
-                                break;
-                            case "term_code":
-                                if (value != DBNull.Value && value != null)
-                                    foundAsDao.term_code = (string)value;
-                                else
-                                    foundAsDao.term_code = null;
-                                break;
-                            case "school_year":
-                                if (value != DBNull.Value && value != null)
-                                    foundAsDao.school_year = (int)value;
-                                else
-                                    foundAsDao.school_year = null;
-                                break;
-                            case "name":
-                                if (value != DBNull.Value && value != null)
-                                    foundAsDao.name = (string)value;
-                                else
-                                    foundAsDao.name = null;
-                                break;
-                            case "start_date":
-                                if (value != DBNull.Value && value != null)
-                                    foundAsDao.start_date = (DateTime)value;
-                                else
-                                    foundAsDao.start_date = null;
-                                break;
-                            case "end_date":
-                                if (value != DBNull.Value && value != null)
-                                    foundAsDao.end_date = (DateTime)value;
-                                else
-                                    foundAsDao.end_date = null;
-                                break;
-                            case "enum_session_id":
-                                if (value != DBNull.Value && value != null)
-                                    foundAsDao.enum_session_id = (int)value;
-                                else
-                                    foundAsDao.enum_session_id = null;
-                                break;
-                            case "parent_session_id":
-                                if (value != DBNull.Value && value != null)
-                                    foundAsDao.parent_session_id = (int)value;
-                                else
-                                    foundAsDao.parent_session_id = null;
-                                break;
-                            case "organization_id":
-                                if (value != DBNull.Value && value != null)
-                                    foundAsDao.organization_id = (int)value;
-                                else
-                                    foundAsDao.organization_id = null;
-                                break;
-                            case "created":
-                                if (value != DBNull.Value && value != null)
-                                    foundAsDao.created = (DateTime)value;
-                                else
-                                    foundAsDao.created = null;
-                                break;
-                            case "created_by":
-                                foundAsDao.created_by = value != DBNull.Value ? (string)value : null;
-                                break;
-                            case "changed":
-                                if (value != DBNull.Value && value != null)
-                                    foundAsDao.changed = (DateTime)value;
-                                else
-                                    foundAsDao.changed = null;
-                                break;
-                            case "changed_by":
-                                foundAsDao.changed_by = value != DBNull.Value ? (string)value : null;
-                                break;
-                            default:
-                                throw new Exception("Unexpected column found in academic_session table: " + columnName);
-                        }
-                    }
-                    foundAsDaos.Add(foundAsDao);
-                }
+                reader = connection.GetReader(sql);
+                dtAcademicSession.Load(reader);
             }
             finally
             {
@@ -258,10 +168,10 @@ namespace Netus2_DatabaseConnection.daoImplementations
             }
 
             List<AcademicSession> results = new List<AcademicSession>();
-            foreach (AcademicSessionDao foundAsDao in foundAsDaos)
-            {
-                Organization foundOrg = Read_Organization((int)foundAsDao.organization_id, connection);
-                AcademicSession result = daoObjectMapper.MapAcademicSession(foundAsDao, foundOrg);
+            foreach (DataRow row in dtAcademicSession.Rows)
+            {                
+                Organization foundOrg = Read_Organization((int)row["organization_id"], connection);
+                AcademicSession result = daoObjectMapper.MapAcademicSession(row, foundOrg);
                 result.Children.AddRange(Read_Children(result, connection));
                 results.Add(result);
             }
@@ -305,22 +215,22 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private void UpdateInternals(AcademicSession academicSession, int parentId, IConnectable connection)
         {
-            AcademicSessionDao asDao = daoObjectMapper.MapAcademicSession(academicSession, parentId);
+            DataRow row = daoObjectMapper.MapAcademicSession(academicSession, parentId);
 
-            if (asDao.academic_session_id != null)
+            if (row["academic_session_id"] != DBNull.Value)
             {
                 StringBuilder sql = new StringBuilder("UPDATE academic_session SET ");
-                sql.Append("term_code = " + (asDao.term_code != null ? "'" + asDao.term_code + "', " : "NULL, "));
-                sql.Append("school_year = " + (asDao.school_year != null ? asDao.school_year + ", " : "NULL, "));
-                sql.Append("name = " + (asDao.name != null ? "'" + asDao.name + "', " : "NULL, "));
-                sql.Append("start_date = " + (asDao.start_date != null ? "'" + asDao.start_date + "', " : "NULL, "));
-                sql.Append("end_date = " + (asDao.end_date != null ? "'" + asDao.end_date + "', " : "NULL, "));
-                sql.Append("enum_session_id = " + (asDao.enum_session_id != null ? asDao.enum_session_id + ", " : "NULL, "));
-                sql.Append("parent_session_id = " + (asDao.parent_session_id != null ? asDao.parent_session_id + ", " : "NULL, "));
-                sql.Append("organization_id = " + (asDao.organization_id != null ? asDao.organization_id + ", " : "NULL, "));
+                sql.Append("term_code = " + (row["term_code"] != DBNull.Value ? "'" + row["term_code"] + "', " : "NULL, "));
+                sql.Append("school_year = " + (row["school_year"] != DBNull.Value ? row["school_year"] + ", " : "NULL, "));
+                sql.Append("name = " + (row["name"] != DBNull.Value ? "'" + row["name"] + "', " : "NULL, "));
+                sql.Append("start_date = " + (row["start_date"] != DBNull.Value ? "'" + row["start_date"] + "', " : "NULL, "));
+                sql.Append("end_date = " + (row["end_date"] != DBNull.Value ? "'" + row["end_date"] + "', " : "NULL, "));
+                sql.Append("enum_session_id = " + (row["enum_session_id"] != DBNull.Value ? row["enum_session_id"] + ", " : "NULL, "));
+                sql.Append("parent_session_id = " + (row["parent_session_id"] != DBNull.Value ? row["parent_session_id"] + ", " : "NULL, "));
+                sql.Append("organization_id = " + (row["organization_id"] != DBNull.Value ? row["organization_id"] + ", " : "NULL, "));
                 sql.Append("changed = GETDATE(), ");
                 sql.Append("changed_by = 'Netus2' ");
-                sql.Append("WHERE academic_session_id = " + asDao.academic_session_id);
+                sql.Append("WHERE academic_session_id = " + row["academic_session_id"]);
 
                 connection.ExecuteNonQuery(sql.ToString());
             }
@@ -337,26 +247,26 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         public AcademicSession Write(AcademicSession academicSession, int parentId, IConnectable connection)
         {
-            AcademicSessionDao asDao = daoObjectMapper.MapAcademicSession(academicSession, parentId);
+            DataRow row = daoObjectMapper.MapAcademicSession(academicSession, parentId);
 
             StringBuilder sql = new StringBuilder("INSERT INTO academic_session (");
             sql.Append("term_code, school_year, name, start_date, end_date, enum_session_id, parent_session_id, organization_id, created, created_by");
             sql.Append(") VALUES (");
-            sql.Append(asDao.term_code != null ? "'" + asDao.term_code + "', " : "NULL, ");
-            sql.Append(asDao.school_year != null ? asDao.school_year + ", " : "NULL, ");
-            sql.Append(asDao.name != null ? "'" + asDao.name + "', " : "NULL, ");
-            sql.Append(asDao.start_date != null ? "'" + asDao.start_date + "', " : "NULL, ");
-            sql.Append(asDao.end_date != null ? "'" + asDao.end_date + "', " : "NULL, ");
-            sql.Append(asDao.enum_session_id != null ? asDao.enum_session_id + ", " : "NULL, ");
-            sql.Append(asDao.parent_session_id != null ? asDao.parent_session_id + ", " : "NULL, ");
-            sql.Append(asDao.organization_id != null ? asDao.organization_id + ", " : "NULL, ");
+            sql.Append(row["term_code"] != DBNull.Value ? "'" + row["term_code"] + "', " : "NULL, ");
+            sql.Append(row["school_year"] != DBNull.Value ? row["school_year"] + ", " : "NULL, ");
+            sql.Append(row["name"] != DBNull.Value ? "'" + row["name"] + "', " : "NULL, ");
+            sql.Append(row["start_date"] != DBNull.Value ? "'" + row["start_date"] + "', " : "NULL, ");
+            sql.Append(row["end_date"] != DBNull.Value ? "'" + row["end_date"] + "', " : "NULL, ");
+            sql.Append(row["enum_session_id"] != DBNull.Value ? row["enum_session_id"] + ", " : "NULL, ");
+            sql.Append(row["parent_session_id"] != DBNull.Value ? row["parent_session_id"] + ", " : "NULL, ");
+            sql.Append(row["organization_id"] != DBNull.Value ? row["organization_id"] + ", " : "NULL, ");
             sql.Append("GETDATE(), ");
             sql.Append("'Netus2')");
 
-            asDao.academic_session_id = connection.InsertNewRecord(sql.ToString());
+            row["academic_session_id"] = connection.InsertNewRecord(sql.ToString());
 
-            Organization foundOrg = Read_Organization((int)asDao.organization_id, connection);
-            return daoObjectMapper.MapAcademicSession(asDao, foundOrg);
+            Organization foundOrg = Read_Organization((int)row["organization_id"], connection);
+            return daoObjectMapper.MapAcademicSession(row, foundOrg);
         }
     }
 }

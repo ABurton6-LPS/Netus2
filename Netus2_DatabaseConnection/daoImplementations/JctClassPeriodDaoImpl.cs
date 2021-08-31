@@ -1,6 +1,6 @@
 ﻿using Netus2_DatabaseConnection.daoInterfaces;
-using Netus2_DatabaseConnection.daoObjects;
 using Netus2_DatabaseConnection.dbAccess;
+using Netus2_DatabaseConnection.utilityTools;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -19,13 +19,13 @@ namespace Netus2_DatabaseConnection.daoImplementations
             connection.ExecuteNonQuery(sql.ToString());
         }
 
-        public JctClassPeriodDao Read(int classId, int periodId, IConnectable connection)
+        public DataRow Read(int classId, int periodId, IConnectable connection)
         {
             StringBuilder sql = new StringBuilder("SELECT * FROM jct_class_period WHERE 1=1 ");
             sql.Append("AND class_id = " + classId + " ");
             sql.Append("AND enum_period_id = " + periodId);
 
-            List<JctClassPeriodDao> results = Read(sql.ToString(), connection);
+            List<DataRow> results = Read(sql.ToString(), connection);
             if (results.Count == 1)
                 return results[0];
             else if (results.Count == 0)
@@ -35,7 +35,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
                     "class_id = " + classId + ", period_id = " + periodId);
         }
 
-        public List<JctClassPeriodDao> Read(int classId, IConnectable connection)
+        public List<DataRow> Read(int classId, IConnectable connection)
         {
             StringBuilder sql = new StringBuilder("SELECT * FROM jct_class_period WHERE 1=1 ");
             sql.Append("AND class_id = " + classId);
@@ -43,19 +43,19 @@ namespace Netus2_DatabaseConnection.daoImplementations
             return Read(sql.ToString(), connection);
         }
 
-        private List<JctClassPeriodDao> Read(string sql, IConnectable connection)
+        private List<DataRow> Read(string sql, IConnectable connection)
         {
-            List<JctClassPeriodDao> jctClassPeriodDaos = new List<JctClassPeriodDao>();
+            DataTable dtJctClassPeriod = new DataTableFactory().Dt_Netus2_JctClassPeriod;
+            List<DataRow> foundDataRows = new List<DataRow>();
             IDataReader reader = null;
             try
             {
                 reader = connection.GetReader(sql.ToString());
-                while (reader.Read())
+                dtJctClassPeriod.Load(reader);
+
+                foreach(DataRow row in dtJctClassPeriod.Rows)
                 {
-                    JctClassPeriodDao foundJctClassPeriodDao = new JctClassPeriodDao();
-                    foundJctClassPeriodDao.class_id = reader.GetInt32(0);
-                    foundJctClassPeriodDao.enum_period_id = reader.GetInt32(1);
-                    jctClassPeriodDaos.Add(foundJctClassPeriodDao);
+                    foundDataRows.Add(row);
                 }
             }
             finally
@@ -63,10 +63,10 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 if (reader != null)
                     reader.Close();
             }
-            return jctClassPeriodDaos;
+            return foundDataRows;
         }
 
-        public JctClassPeriodDao Write(int classId, int periodId, IConnectable connection)
+        public DataRow Write(int classId, int periodId, IConnectable connection)
         {
             StringBuilder sql = new StringBuilder("INSERT INTO jct_class_period (class_id, enum_period_id) VALUES (");
             sql.Append(classId + ", ");
@@ -74,9 +74,9 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
             connection.ExecuteNonQuery(sql.ToString());
 
-            JctClassPeriodDao jctClassPeriodDao = new JctClassPeriodDao();
-            jctClassPeriodDao.class_id = classId;
-            jctClassPeriodDao.enum_period_id = periodId;
+            DataRow jctClassPeriodDao = new DataTableFactory().Dt_Netus2_JctClassPeriod.NewRow();
+            jctClassPeriodDao["class_id"] = classId;
+            jctClassPeriodDao["enum_period_id"] = periodId;
 
             return jctClassPeriodDao;
         }

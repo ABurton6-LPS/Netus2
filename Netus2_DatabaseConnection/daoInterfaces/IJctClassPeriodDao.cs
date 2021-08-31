@@ -1,6 +1,6 @@
-﻿using Netus2_DatabaseConnection.daoObjects;
-using Netus2_DatabaseConnection.dbAccess;
+﻿using Netus2_DatabaseConnection.dbAccess;
 using System.Collections.Generic;
+using System.Data;
 
 namespace Netus2_DatabaseConnection.daoInterfaces
 {
@@ -11,27 +11,27 @@ namespace Netus2_DatabaseConnection.daoInterfaces
         /// </summary>
         /// <param name="classId"/>
         /// <param name="connection"/>
-        List<JctClassPeriodDao> Read(int classId, IConnectable connection);
+        List<DataRow> Read(int classId, IConnectable connection);
 
         /// <summary>
-        /// Read the JctClassPeriodDao from the database that has the provided classId and periodId.
+        /// Read the DataRow from the database that has the provided classId and periodId.
         /// </summary>
         /// <param name="classId"/>
         /// <param name="periodId"/>
         /// <param name="connection"/>
-        JctClassPeriodDao Read(int classId, int periodId, IConnectable connection);
+        DataRow Read(int classId, int periodId, IConnectable connection);
 
         /// <summary>
-        /// Populates the database with a new JctClassPeriodDao record, linked to the provided
+        /// Populates the database with a new DataRow record, linked to the provided
         /// classId and periodId.
         /// </summary>
         /// <param name="classId"/>
         /// <param name="periodId"/>
         /// <param name="connection"/>
-        JctClassPeriodDao Write(int classId, int periodId, IConnectable connection);
+        DataRow Write(int classId, int periodId, IConnectable connection);
 
         /// <summary>
-        /// Deletes from the database, the JctClassPeriodDao which is linked to the
+        /// Deletes from the database, the DataRow which is linked to the
         /// classId and periodId provided.
         /// </summary>
         /// <param name="classId"/>

@@ -1,7 +1,7 @@
 ﻿using Netus2_DatabaseConnection.daoInterfaces;
-using Netus2_DatabaseConnection.daoObjects;
 using Netus2_DatabaseConnection.dataObjects;
 using Netus2_DatabaseConnection.dbAccess;
+using Netus2_DatabaseConnection.utilityTools;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -22,17 +22,17 @@ namespace Netus2_DatabaseConnection.daoImplementations
         {
             Delete_JctEnrollmentAcademicSession(enrollment.AcademicSessions, enrollment.Id, connection);
 
-            EnrollmentDao enrollmentDao = daoObjectMapper.MapEnrollment(enrollment, personId);
+            DataRow row = daoObjectMapper.MapEnrollment(enrollment, personId);
 
             StringBuilder sql = new StringBuilder("DELETE FROM enrollment WHERE 1=1 ");
-            sql.Append("AND enrollment_id = " + enrollmentDao.enrollment_id + " ");
-            if (enrollmentDao.person_id != null)
-                sql.Append("AND person_id = " + enrollmentDao.person_id + " ");
-            sql.Append("AND class_id " + (enrollmentDao.class_id != null ? "= " + enrollmentDao.class_id + " " : "IS NULL "));
-            sql.Append("AND enum_grade_id " + (enrollmentDao.enum_grade_id != null ? "= " + enrollmentDao.enum_grade_id + " " : "IS NULL "));
-            sql.Append("AND start_date " + (enrollmentDao.start_date != null ? "= '" + enrollmentDao.start_date + "' " : "IS NULL "));
-            sql.Append("AND end_date " + (enrollmentDao.end_date != null ? "= '" + enrollmentDao.end_date + "' " : "IS NULL "));
-            sql.Append("AND is_primary_id " + (enrollmentDao.is_primary_id != null ? " = " + enrollmentDao.is_primary_id + " " : "IS NULL "));
+            sql.Append("AND enrollment_id = " + row["enrollment_id"] + " ");
+            if (row["person_id"] != DBNull.Value)
+                sql.Append("AND person_id = " + row["person_id"] + " ");
+            sql.Append("AND class_id " + (row["class_id"] != DBNull.Value ? "= " + row["class_id"] + " " : "IS NULL "));
+            sql.Append("AND enum_grade_id " + (row["enum_grade_id"] != DBNull.Value ? "= " + row["enum_grade_id"] + " " : "IS NULL "));
+            sql.Append("AND start_date " + (row["start_date"] != DBNull.Value ? "= '" + row["start_date"] + "' " : "IS NULL "));
+            sql.Append("AND end_date " + (row["end_date"] != DBNull.Value ? "= '" + row["end_date"] + "' " : "IS NULL "));
+            sql.Append("AND is_primary_id " + (row["is_primary_id"] != DBNull.Value ? " = " + row["is_primary_id"] + " " : "IS NULL "));
 
             connection.ExecuteNonQuery(sql.ToString());
         }
@@ -61,20 +61,20 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 sql.Append("SELECT * FROM enrollment WHERE person_id = " + personId);
             else
             {
-                EnrollmentDao enrollmentDao = daoObjectMapper.MapEnrollment(enrollment, personId);
+                DataRow row = daoObjectMapper.MapEnrollment(enrollment, personId);
                 sql.Append("SELECT * FROM enrollment WHERE 1=1 ");
-                if (enrollmentDao.enrollment_id != null)
-                    sql.Append("AND enrollment_id = " + enrollmentDao.enrollment_id + " ");
+                if (row["enrollment_id"] != DBNull.Value)
+                    sql.Append("AND enrollment_id = " + row["enrollment_id"] + " ");
                 else
                 {
-                    if (enrollmentDao.person_id != null)
-                        sql.Append("AND person_id = " + enrollmentDao.person_id + " ");
-                    if (enrollmentDao.class_id != null)
-                        sql.Append("AND class_id = " + enrollmentDao.class_id + " ");
-                    if (enrollmentDao.enum_grade_id != null)
-                        sql.Append("AND enum_grade_id = " + enrollmentDao.enum_grade_id + " ");
-                    if (enrollmentDao.is_primary_id != null)
-                        sql.Append("AND is_primary_id = " + enrollmentDao.is_primary_id + " ");
+                    if (row["person_id"] != DBNull.Value)
+                        sql.Append("AND person_id = " + row["person_id"] + " ");
+                    if (row["class_id"] != DBNull.Value)
+                        sql.Append("AND class_id = " + row["class_id"] + " ");
+                    if (row["enum_grade_id"] != DBNull.Value)
+                        sql.Append("AND enum_grade_id = " + row["enum_grade_id"] + " ");
+                    if (row["is_primary_id"] != DBNull.Value)
+                        sql.Append("AND is_primary_id = " + row["is_primary_id"] + " ");
                 }
             }
 
@@ -83,90 +83,12 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private List<Enrollment> Read(string sql, IConnectable connection)
         {
-            List<EnrollmentDao> foundEnrollmentDaos = new List<EnrollmentDao>();
+            DataTable dtEnrollment = new DataTableFactory().Dt_Netus2_Enrollment;
             IDataReader reader = null;
             try
             {
                 reader = connection.GetReader(sql);
-                while (reader.Read())
-                {
-                    EnrollmentDao foundEnrollmentDao = new EnrollmentDao();
-
-                    List<string> columnNames = new List<string>();
-                    for (int i = 0; i < reader.FieldCount; i++)
-                        columnNames.Add(reader.GetName(i));
-
-                    foreach (string columnName in columnNames)
-                    {
-                        var value = reader.GetValue(reader.GetOrdinal(columnName));
-                        switch (columnName)
-                        {
-                            case "enrollment_id":
-                                if (value != DBNull.Value && value != null)
-                                    foundEnrollmentDao.enrollment_id = (int)value;
-                                else
-                                    foundEnrollmentDao.enrollment_id = null;
-                                break;
-                            case "person_id":
-                                if (value != DBNull.Value && value != null)
-                                    foundEnrollmentDao.person_id = (int)value;
-                                else
-                                    foundEnrollmentDao.person_id = null;
-                                break;
-                            case "class_id":
-                                if (value != DBNull.Value && value != null)
-                                    foundEnrollmentDao.class_id = (int)value;
-                                else
-                                    foundEnrollmentDao.class_id = null;
-                                break;
-                            case "enum_grade_id":
-                                if (value != DBNull.Value && value != null)
-                                    foundEnrollmentDao.enum_grade_id = (int)value;
-                                else
-                                    foundEnrollmentDao.enum_grade_id = null;
-                                break;
-                            case "start_date":
-                                if (value != DBNull.Value && value != null)
-                                    foundEnrollmentDao.start_date = (DateTime)value;
-                                else
-                                    foundEnrollmentDao.start_date = null;
-                                break;
-                            case "end_date":
-                                if (value != DBNull.Value && value != null)
-                                    foundEnrollmentDao.end_date = (DateTime)value;
-                                else
-                                    foundEnrollmentDao.end_date = null;
-                                break;
-                            case "is_primary_id":
-                                if (value != DBNull.Value && value != null)
-                                    foundEnrollmentDao.is_primary_id = (int)value;
-                                else
-                                    foundEnrollmentDao.is_primary_id = null;
-                                break;
-                            case "created":
-                                if (value != DBNull.Value && value != null)
-                                    foundEnrollmentDao.created = (DateTime)value;
-                                else
-                                    foundEnrollmentDao.created = null;
-                                break;
-                            case "created_by":
-                                foundEnrollmentDao.created_by = value != DBNull.Value ? (string)value : null;
-                                break;
-                            case "changed":
-                                if (value != DBNull.Value && value != null)
-                                    foundEnrollmentDao.changed = (DateTime)value;
-                                else
-                                    foundEnrollmentDao.changed = null;
-                                break;
-                            case "changed_by":
-                                foundEnrollmentDao.changed_by = value != DBNull.Value ? (string)value : null;
-                                break;
-                            default:
-                                throw new Exception("Unexpected column found in enrollment table: " + columnName);
-                        }
-                    }
-                    foundEnrollmentDaos.Add(foundEnrollmentDao);
-                }
+                dtEnrollment.Load(reader);
             }
             finally
             {
@@ -175,13 +97,13 @@ namespace Netus2_DatabaseConnection.daoImplementations
             }
 
             List<Enrollment> results = new List<Enrollment>();
-            foreach (EnrollmentDao foundEnrollmentDao in foundEnrollmentDaos)
+            foreach (DataRow foundEnrollmentDao in dtEnrollment.Rows)
             {
                 ClassEnrolled foundClassEnrolled = null;
-                if (foundEnrollmentDao.class_id != null)
-                    foundClassEnrolled = Read_ClassEnrolled((int)foundEnrollmentDao.class_id, connection);
+                if (foundEnrollmentDao["class_id"] != DBNull.Value)
+                    foundClassEnrolled = Read_ClassEnrolled((int)foundEnrollmentDao["class_id"], connection);
 
-                List<AcademicSession> academicSessions = Read_AcademicSessions((int)foundEnrollmentDao.enrollment_id, connection);
+                List<AcademicSession> academicSessions = Read_AcademicSessions((int)foundEnrollmentDao["enrollment_id"], connection);
                 results.Add(daoObjectMapper.MapEnrollment(foundEnrollmentDao, foundClassEnrolled, academicSessions));
             }
 
@@ -199,15 +121,15 @@ namespace Netus2_DatabaseConnection.daoImplementations
             List<AcademicSession> foundAcademicSessions = new List<AcademicSession>();
 
             IJctEnrollmentAcademicSessionDao jctEnrollmentAcademicSessionDaoImpl = DaoImplFactory.GetJctEnrollmentAcademicSessionDaoImpl();
-            List<JctEnrollmentAcademicSessionDao> foundJctEnrollmentAcademicSessionDaos =
+            List<DataRow> foundJctEnrollmentAcademicSessionDaos =
                 jctEnrollmentAcademicSessionDaoImpl.Read_WithEnrollmentId(enrollmentId, connection);
 
             IAcademicSessionDao academicSessionDaoImpl = DaoImplFactory.GetAcademicSessionDaoImpl();
 
-            foreach (JctEnrollmentAcademicSessionDao foundJctEnrollmentAcademicSessionDao in foundJctEnrollmentAcademicSessionDaos)
+            foreach (DataRow foundJctEnrollmentAcademicSessionDao in foundJctEnrollmentAcademicSessionDaos)
             {
                 foundAcademicSessions.Add(
-                    academicSessionDaoImpl.Read_UsingAcademicSessionId((int)foundJctEnrollmentAcademicSessionDao.academic_session_id, connection));
+                    academicSessionDaoImpl.Read_UsingAcademicSessionId((int)foundJctEnrollmentAcademicSessionDao["academic_session_id"], connection));
             }
 
             return foundAcademicSessions;
@@ -230,24 +152,24 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private void UpdateInternals(Enrollment enrollment, int personId, IConnectable connection)
         {
-            EnrollmentDao enrollmentDao = daoObjectMapper.MapEnrollment(enrollment, personId);
+            DataRow row = daoObjectMapper.MapEnrollment(enrollment, personId);
 
-            if (enrollmentDao.enrollment_id != null)
+            if (row["enrollment_id"] != DBNull.Value)
             {
                 StringBuilder sql = new StringBuilder("UPDATE enrollment SET ");
-                sql.Append("person_id = " + (enrollmentDao.person_id != null ? enrollmentDao.person_id + ", " : "NULL, "));
-                sql.Append("class_id = " + (enrollmentDao.class_id != null ? enrollmentDao.class_id + ", " : "NULL, "));
-                sql.Append("enum_grade_id = " + (enrollmentDao.enum_grade_id != null ? enrollmentDao.enum_grade_id + ", " : "NULL, "));
-                sql.Append("start_date = " + (enrollmentDao.start_date != null ? "'" + enrollmentDao.start_date + "', " : "NULL, "));
-                sql.Append("end_date = " + (enrollmentDao.end_date != null ? "'" + enrollmentDao.end_date + "', " : "NULL, "));
-                sql.Append("is_primary_id = " + (enrollmentDao.is_primary_id != null ? +enrollmentDao.is_primary_id + ", " : "NULL, "));
+                sql.Append("person_id = " + (row["person_id"] != DBNull.Value ? row["person_id"] + ", " : "NULL, "));
+                sql.Append("class_id = " + (row["class_id"] != DBNull.Value ? row["class_id"] + ", " : "NULL, "));
+                sql.Append("enum_grade_id = " + (row["enum_grade_id"] != DBNull.Value ? row["enum_grade_id"] + ", " : "NULL, "));
+                sql.Append("start_date = " + (row["start_date"] != DBNull.Value ? "'" + row["start_date"] + "', " : "NULL, "));
+                sql.Append("end_date = " + (row["end_date"] != DBNull.Value ? "'" + row["end_date"] + "', " : "NULL, "));
+                sql.Append("is_primary_id = " + (row["is_primary_id"] != DBNull.Value ? row["is_primary_id"] + ", " : "NULL, "));
                 sql.Append("changed = GETDATE(), ");
                 sql.Append("changed_by = 'Netus2' ");
-                sql.Append("WHERE enrollment_id = " + enrollmentDao.enrollment_id);
+                sql.Append("WHERE enrollment_id = " + row["enrollment_id"]);
 
                 connection.ExecuteNonQuery(sql.ToString());
 
-                Update_JctEnrollmentAcademicSession(enrollment.AcademicSessions, (int)enrollmentDao.enrollment_id, connection);
+                Update_JctEnrollmentAcademicSession(enrollment.AcademicSessions, (int)row["enrollment_id"], connection);
             }
             else
             {
@@ -257,35 +179,35 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         public Enrollment Write(Enrollment enrollment, int personId, IConnectable connection)
         {
-            EnrollmentDao enrollmentDao = daoObjectMapper.MapEnrollment(enrollment, personId);
+            DataRow row = daoObjectMapper.MapEnrollment(enrollment, personId);
 
             StringBuilder sql = new StringBuilder("INSERT INTO enrollment (");
             sql.Append("person_id, class_id, enum_grade_id, start_date, end_date, is_primary_id, created, created_by");
             sql.Append(") VALUES (");
-            sql.Append(enrollmentDao.person_id != null ? enrollmentDao.person_id + ", " : "NULL, ");
-            sql.Append(enrollmentDao.class_id != null ? enrollmentDao.class_id + ", " : "NULL, ");
-            sql.Append(enrollmentDao.enum_grade_id != null ? enrollmentDao.enum_grade_id + ", " : "NULL, ");
-            sql.Append(enrollmentDao.start_date != null ? "'" + enrollmentDao.start_date + "', " : "NULL, ");
-            sql.Append(enrollmentDao.end_date != null ? "'" + enrollmentDao.end_date + "', " : "NULL, ");
-            sql.Append(enrollmentDao.is_primary_id != null ? enrollmentDao.is_primary_id + ", " : "NULL, ");
+            sql.Append(row["person_id"] != DBNull.Value ? row["person_id"] + ", " : "NULL, ");
+            sql.Append(row["class_id"] != DBNull.Value ? row["class_id"] + ", " : "NULL, ");
+            sql.Append(row["enum_grade_id"] != DBNull.Value ? row["enum_grade_id"] + ", " : "NULL, ");
+            sql.Append(row["start_date"] != DBNull.Value ? "'" + row["start_date"] + "', " : "NULL, ");
+            sql.Append(row["end_date"] != DBNull.Value ? "'" + row["end_date"] + "', " : "NULL, ");
+            sql.Append(row["is_primary_id"] != DBNull.Value ? row["is_primary_id"] + ", " : "NULL, ");
             sql.Append("GETDATE(), ");
             sql.Append("'Netus2')");
 
-            enrollmentDao.enrollment_id = connection.InsertNewRecord(sql.ToString());
+            row["enrollment_id"] = connection.InsertNewRecord(sql.ToString());
 
             ClassEnrolled foundClassEnrolled = null;
 
-            if (enrollmentDao.class_id != null)
-                foundClassEnrolled = Read_ClassEnrolled((int)enrollmentDao.class_id, connection);
+            if (row["class_id"] != DBNull.Value)
+                foundClassEnrolled = Read_ClassEnrolled((int)row["class_id"], connection);
 
-            List<AcademicSession> foundAcademicSessions = Update_JctEnrollmentAcademicSession(enrollment.AcademicSessions, (int)enrollmentDao.enrollment_id, connection);
-            return daoObjectMapper.MapEnrollment(enrollmentDao, foundClassEnrolled, foundAcademicSessions);
+            List<AcademicSession> foundAcademicSessions = Update_JctEnrollmentAcademicSession(enrollment.AcademicSessions, (int)row["enrollment_id"], connection);
+            return daoObjectMapper.MapEnrollment(row, foundClassEnrolled, foundAcademicSessions);
         }
 
         private List<AcademicSession> Update_JctEnrollmentAcademicSession(List<AcademicSession> academicSessions, int enrollmentId, IConnectable connection)
         {
             IJctEnrollmentAcademicSessionDao jctEnrollmentAcademicSessionDaoImpl = DaoImplFactory.GetJctEnrollmentAcademicSessionDaoImpl();
-            List<JctEnrollmentAcademicSessionDao> foundJctEnrollmentAcademicSessionDaos =
+            List<DataRow> foundJctEnrollmentAcademicSessionDaos =
                 jctEnrollmentAcademicSessionDaoImpl.Read_WithEnrollmentId(enrollmentId, connection);
             List<int> academicSessionIds = new List<int>();
             List<int> foundAcademicSessionsIds = new List<int>();
@@ -295,9 +217,9 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 academicSessionIds.Add(academicSession.Id);
             }
 
-            foreach (JctEnrollmentAcademicSessionDao foundJctEnrollmentAcademicSessionDao in foundJctEnrollmentAcademicSessionDaos)
+            foreach (DataRow foundJctEnrollmentAcademicSessionDao in foundJctEnrollmentAcademicSessionDaos)
             {
-                foundAcademicSessionsIds.Add((int)foundJctEnrollmentAcademicSessionDao.academic_session_id);
+                foundAcademicSessionsIds.Add((int)foundJctEnrollmentAcademicSessionDao["academic_session_id"]);
             }
 
             foreach (int academicSessionId in academicSessionIds)

@@ -1,6 +1,6 @@
 ﻿using Netus2_DatabaseConnection.daoInterfaces;
-using Netus2_DatabaseConnection.daoObjects;
 using Netus2_DatabaseConnection.dbAccess;
+using Netus2_DatabaseConnection.utilityTools;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -19,7 +19,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
             connection.ExecuteNonQuery(sql.ToString());
         }
 
-        public List<JctPersonPersonDao> Read(int personOneId, IConnectable connection)
+        public List<DataRow> Read(int personOneId, IConnectable connection)
         {
             StringBuilder sql = new StringBuilder("SELECT * FROM jct_person_person WHERE 1=1 ");
             sql.Append("AND person_one_id = " + personOneId);
@@ -27,13 +27,13 @@ namespace Netus2_DatabaseConnection.daoImplementations
             return Read(sql.ToString(), connection);
         }
 
-        public JctPersonPersonDao Read(int personOneId, int personTwoId, IConnectable connection)
+        public DataRow Read(int personOneId, int personTwoId, IConnectable connection)
         {
             StringBuilder sql = new StringBuilder("SELECT * FROM jct_person_person WHERE 1=1 ");
             sql.Append("AND person_one_id = " + personOneId + " ");
             sql.Append("AND person_two_id = " + personTwoId);
 
-            List<JctPersonPersonDao> results = Read(sql.ToString(), connection);
+            List<DataRow> results = Read(sql.ToString(), connection);
             if (results.Count == 0)
                 return null;
             if (results.Count == 1)
@@ -43,19 +43,20 @@ namespace Netus2_DatabaseConnection.daoImplementations
                     "person_one_id = " + personOneId + ", person_two_id = " + personTwoId);
         }
 
-        private List<JctPersonPersonDao> Read(string sql, IConnectable connection)
+        private List<DataRow> Read(string sql, IConnectable connection)
         {
-            List<JctPersonPersonDao> jctPersonPersonDaos = new List<JctPersonPersonDao>();
+            List<DataRow> jctPersonPersonDaos = new List<DataRow>();
+            DataTable dtJctPersonPerson = new DataTableFactory().Dt_Netus2_JctPersonPerson;
+
             IDataReader reader = null;
             try
             {
                 reader = connection.GetReader(sql.ToString());
-                while (reader.Read())
+                dtJctPersonPerson.Load(reader);
+
+                foreach(DataRow row in dtJctPersonPerson.Rows)
                 {
-                    JctPersonPersonDao foundJctPersonPersonDao = new JctPersonPersonDao();
-                    foundJctPersonPersonDao.person_one_id = reader.GetInt32(0);
-                    foundJctPersonPersonDao.person_two_id = reader.GetInt32(1);
-                    jctPersonPersonDaos.Add(foundJctPersonPersonDao);
+                    jctPersonPersonDaos.Add(row);
                 }
             }
             finally
@@ -66,7 +67,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
             return jctPersonPersonDaos;
         }
 
-        public JctPersonPersonDao Write(int personOneId, int personTwoId, IConnectable connection)
+        public DataRow Write(int personOneId, int personTwoId, IConnectable connection)
         {
             StringBuilder sql = new StringBuilder("INSERT INTO jct_person_person (person_one_id, person_two_id) VALUES (");
             sql.Append(personOneId + ", ");
@@ -74,9 +75,9 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
             connection.ExecuteNonQuery(sql.ToString());
 
-            JctPersonPersonDao jctPersonPersonDao = new JctPersonPersonDao();
-            jctPersonPersonDao.person_one_id = personOneId;
-            jctPersonPersonDao.person_two_id = personTwoId;
+            DataRow jctPersonPersonDao = new DataTableFactory().Dt_Netus2_JctPersonPerson.NewRow();
+            jctPersonPersonDao["person_one_id"] = personOneId;
+            jctPersonPersonDao["person_two_id"] = personTwoId;
 
             return jctPersonPersonDao;
         }

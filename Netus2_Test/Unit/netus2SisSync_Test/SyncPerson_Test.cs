@@ -9,8 +9,9 @@ using Netus2_Test.MockDaoImpl;
 using Netus2_DatabaseConnection.daoImplementations;
 using Netus2SisSync.SyncProcesses.SyncTasks.PersonTasks;
 using Netus2SisSync.UtilityTools;
+using Netus2_DatabaseConnection.utilityTools;
 
-namespace Netus2_Test.Unit
+namespace Netus2_Test.Unit.SyncProcess
 {
     class SyncPerson_Test
     {
@@ -44,7 +45,7 @@ namespace Netus2_Test.Unit
             tstData.FirstName = null;
             tstData.MiddleName = null;
             tstData.LastName = null;
-            tstData.BirthDate = null;
+            tstData.BirthDate = new DateTime();
             tstData.Gender = null;
             tstData.Ethnic = null;
             tstData.ResStatus = null;
@@ -186,7 +187,7 @@ namespace Netus2_Test.Unit
             tstData.BirthDate = tdBuilder.student.BirthDate;
             tstData.Gender = tdBuilder.student.Gender.Netus2Code;
             tstData.Ethnic = tdBuilder.student.Ethnic.Netus2Code;
-            tstData.ResStatus = "newtststatus";
+            tstData.ResStatus = "01656";
             tstData.LoginName = tdBuilder.student.LoginName;
             tstData.LoginPw = tdBuilder.student.LoginPw;
 
@@ -211,7 +212,7 @@ namespace Netus2_Test.Unit
 
         private DataTable BuildTestDataTable(List<SisPersonTestData> tstDataSet)
         {
-            DataTable dtPerson = DataTableFactory.CreateDataTable("Person");
+            DataTable dtPerson = new DataTableFactory().Dt_Sis_Person;
             foreach(SisPersonTestData tstData in tstDataSet)
             {
                 DataRow row = dtPerson.NewRow();
@@ -244,82 +245,100 @@ namespace Netus2_Test.Unit
             reader.Setup(x => x.FieldCount)
                 .Returns(() => 11);
 
+            reader.Setup(x => x.GetValues(It.IsAny<object[]>()))
+                .Callback<object[]>(
+                    (values) =>
+                    {
+                        values[0] = tstDataSet[count].PersonType;
+                        values[1] = tstDataSet[count].SisId;
+                        values[2] = tstDataSet[count].FirstName;
+                        values[3] = tstDataSet[count].MiddleName;
+                        values[4] = tstDataSet[count].LastName;
+                        values[5] = tstDataSet[count].BirthDate;
+                        values[6] = tstDataSet[count].Gender;
+                        values[7] = tstDataSet[count].Ethnic;
+                        values[8] = tstDataSet[count].ResStatus;
+                        values[9] = tstDataSet[count].LoginName;
+                        values[10] = tstDataSet[count].LoginPw;
+                    }
+                ).Returns(count);
+
             reader.Setup(x => x.GetName(0))
                 .Returns(() => "person_type");
             reader.Setup(x => x.GetOrdinal("person_type"))
                 .Returns(() => 0);
-            reader.Setup(x => x.GetValue(0))
-                .Returns(() => tstDataSet[count].PersonType);
+            reader.Setup(x => x.GetFieldType(0))
+                .Returns(() => typeof(string));
 
             reader.Setup(x => x.GetName(1))
                 .Returns(() => "sis_id");
             reader.Setup(x => x.GetOrdinal("sis_id"))
                 .Returns(() => 1);
-            reader.Setup(x => x.GetValue(1))
-                .Returns(() => tstDataSet[count].SisId);
+            reader.Setup(x => x.GetFieldType(1))
+                .Returns(() => typeof(string));
 
             reader.Setup(x => x.GetName(2))
                 .Returns(() => "first_name");
             reader.Setup(x => x.GetOrdinal("first_name"))
                 .Returns(() => 2);
-            reader.Setup(x => x.GetValue(2))
-                .Returns(() => tstDataSet[count].FirstName);
+            reader.Setup(x => x.GetFieldType(2))
+                .Returns(() => typeof(string));
 
             reader.Setup(x => x.GetName(3))
                 .Returns(() => "middle_name");
             reader.Setup(x => x.GetOrdinal("middle_name"))
                 .Returns(() => 3);
-            reader.Setup(x => x.GetValue(3))
-                .Returns(() => tstDataSet[count].MiddleName);
+            reader.Setup(x => x.GetFieldType(3))
+                .Returns(() => typeof(string));
 
             reader.Setup(x => x.GetName(4))
                 .Returns(() => "last_name");
             reader.Setup(x => x.GetOrdinal("last_name"))
                 .Returns(() => 4);
-            reader.Setup(x => x.GetValue(4))
-                .Returns(() => tstDataSet[count].LastName);
+            reader.Setup(x => x.GetFieldType(4))
+                .Returns(() => typeof(string));
 
             reader.Setup(x => x.GetName(5))
                 .Returns(() => "birth_date");
             reader.Setup(x => x.GetOrdinal("birth_date"))
                 .Returns(() => 5);
-            reader.Setup(x => x.GetValue(5))
-                .Returns(() => tstDataSet[count].BirthDate);
+            reader.Setup(x => x.GetFieldType(5))
+                .Returns(() => typeof(DateTime));
 
             reader.Setup(x => x.GetName(6))
                 .Returns(() => "enum_gender_id");
             reader.Setup(x => x.GetOrdinal("enum_gender_id"))
                 .Returns(() => 6);
-            reader.Setup(x => x.GetValue(6))
-                .Returns(() => tstDataSet[count].Gender);
+            reader.Setup(x => x.GetFieldType(6))
+                .Returns(() => typeof(string));
 
             reader.Setup(x => x.GetName(7))
                 .Returns(() => "enum_ethnic_id");
             reader.Setup(x => x.GetOrdinal("enum_ethnic_id"))
                 .Returns(() => 7);
-            reader.Setup(x => x.GetValue(7))
-                .Returns(() => tstDataSet[count].Ethnic);
+            reader.Setup(x => x.GetFieldType(7))
+                .Returns(() => typeof(string));
 
             reader.Setup(x => x.GetName(8))
                 .Returns(() => "enum_residence_status_id");
             reader.Setup(x => x.GetOrdinal("enum_residence_status_id"))
                 .Returns(() => 8);
-            reader.Setup(x => x.GetValue(8))
-                .Returns(() => tstDataSet[count].ResStatus);
+            reader.Setup(x => x.GetFieldType(8))
+                .Returns(() => typeof(string));
 
             reader.Setup(x => x.GetName(9))
                 .Returns(() => "login_name");
             reader.Setup(x => x.GetOrdinal("login_name"))
                 .Returns(() => 9);
-            reader.Setup(x => x.GetValue(9))
-                .Returns(() => tstDataSet[count].LoginName);
+            reader.Setup(x => x.GetFieldType(9))
+                .Returns(() => typeof(string));
 
             reader.Setup(x => x.GetName(10))
                 .Returns(() => "login_pw");
             reader.Setup(x => x.GetOrdinal("login_pw"))
                 .Returns(() => 10);
-            reader.Setup(x => x.GetValue(10))
-                .Returns(() => tstDataSet[count].LoginPw);
+            reader.Setup(x => x.GetFieldType(10))
+                .Returns(() => typeof(string));
 
             _sisConnection.mockReader = reader;
         }
@@ -332,7 +351,7 @@ namespace Netus2_Test.Unit
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
         public string LastName { get; set; }
-        public DateTime? BirthDate { get; set; }
+        public DateTime BirthDate { get; set; }
         public string Gender { get; set; }
         public string Ethnic { get; set; }
         public string ResStatus { get; set; }
