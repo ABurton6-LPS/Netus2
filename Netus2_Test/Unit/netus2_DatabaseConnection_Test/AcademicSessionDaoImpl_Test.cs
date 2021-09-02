@@ -40,7 +40,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
 
             tdBuilder.schoolYear.Children.Clear();
 
-            _netus2DbConnection.expectedReaderSql =
+            _netus2DbConnection.expectedNonQuerySql =
                 "DELETE FROM academic_session " +
                 "WHERE 1=1 " +
                 "AND academic_session_id = " + tdBuilder.schoolYear.Id + " " +
@@ -50,7 +50,6 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "AND start_date = '" + tdBuilder.schoolYear.StartDate + "' " +
                 "AND end_date = '" + tdBuilder.schoolYear.EndDate + "' " +
                 "AND enum_session_id = " + tdBuilder.schoolYear.SessionType.Id + " " +
-                "AND parent_session_id IS NULL " +
                 "AND organization_id = " + tdBuilder.schoolYear.Organization.Id;
 
             academicSessionDaoImpl.Delete(tdBuilder.schoolYear, _netus2DbConnection);
