@@ -6,33 +6,33 @@ using System.Data;
 
 namespace Netus2_Test.MockDaoImpl
 {
-    public class MockJctPersonAddressDaoImpl : IJctPersonAddressDao
+    public class MockJctPersonAppDaoImpl : IJctPersonAppDao
     {
         public TestDataBuilder tdBuilder;
         public bool WasCalled_Delete = false;
         public bool WasCalled_Read = false;
-        public bool WasCalled_ReadWithAddressId = false;
+        public bool WasCalled_ReadWithAppId = false;
         public bool WasCalled_ReadWithPersonId = false;
         public bool WasCalled_Write = false;
         public bool _shouldReadReturnData = false;
 
-        public MockJctPersonAddressDaoImpl (TestDataBuilder tdBuilder)
+        public MockJctPersonAppDaoImpl(TestDataBuilder tdBuilder)
         {
             this.tdBuilder = tdBuilder;
         }
 
-        public void Delete(int personId, int addressId, IConnectable connection)
+        public void Delete(int personId, int appId, IConnectable connection)
         {
             WasCalled_Delete = true;
         }
 
-        public DataRow Read(int personId, int addressId, IConnectable connection)
+        public DataRow Read(int personId, int appId, IConnectable connection)
         {
             WasCalled_Read = true;
 
-            DataRow row = new DataTableFactory().Dt_Netus2_JctPersonAddress.NewRow();
+            DataRow row = new DataTableFactory().Dt_Netus2_JctPersonApp.NewRow();
             row["person_id"] = tdBuilder.student.Id;
-            row["address_id"] = tdBuilder.student.Addresses[0].Id;
+            row["app_id"] = tdBuilder.application.Id;
 
             if (_shouldReadReturnData)
                 return row;
@@ -40,14 +40,14 @@ namespace Netus2_Test.MockDaoImpl
                 return null;
         }
 
-        public List<DataRow> Read_WithAddressId(int addressId, IConnectable connection)
+        public List<DataRow> Read_WithAppId(int appId, IConnectable connection)
         {
-            WasCalled_ReadWithAddressId = true;
+            WasCalled_ReadWithAppId = true;
 
             List<DataRow> list = new List<DataRow>();
-            DataRow row = new DataTableFactory().Dt_Netus2_JctPersonAddress.NewRow();
+            DataRow row = new DataTableFactory().Dt_Netus2_JctPersonApp.NewRow();
             row["person_id"] = tdBuilder.student.Id;
-            row["address_id"] = addressId;
+            row["app_id"] = appId;
 
             if (_shouldReadReturnData)
                 list.Add(row);
@@ -60,9 +60,9 @@ namespace Netus2_Test.MockDaoImpl
             WasCalled_ReadWithPersonId = true;
 
             List<DataRow> list = new List<DataRow>();
-            DataRow row = new DataTableFactory().Dt_Netus2_JctPersonAddress.NewRow();
+            DataRow row = new DataTableFactory().Dt_Netus2_JctPersonApp.NewRow();
             row["person_id"] = personId;
-            row["address_id"] = tdBuilder.student.Addresses[0].Id;
+            row["app_id"] = tdBuilder.application;
 
             if (_shouldReadReturnData)
                 list.Add(row);
@@ -70,13 +70,13 @@ namespace Netus2_Test.MockDaoImpl
             return list;
         }
 
-        public DataRow Write(int personId, int addressId, IConnectable connection)
+        public DataRow Write(int personId, int appId, IConnectable connection)
         {
             WasCalled_Write = true;
 
-            DataRow row = new DataTableFactory().Dt_Netus2_JctPersonAddress.NewRow();
+            DataRow row = new DataTableFactory().Dt_Netus2_JctPersonApp.NewRow();
             row["person_id"] = personId;
-            row["address_id"] = addressId;
+            row["app_id"] = appId;
 
             return row;
         }
