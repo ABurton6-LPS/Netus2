@@ -147,6 +147,29 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
             tstDataSet.Add(daoObjectMapper.MapAddress(tdBuilder.address_Teacher));
             SetMockReaderWithTestData(tstDataSet);
 
+            _netus2DbConnection.expectedNonQuerySql =
+                "UPDATE address SET " +
+                "address_line_1 = '" + tdBuilder.address_Teacher.Line1 + "', " +
+                "address_line_2 = NULL, " +
+                "address_line_3 = NULL, " +
+                "address_line_4 = NULL, " +
+                "apartment = NULL, " +
+                "city = '" + tdBuilder.address_Teacher.City + "', " +
+                "enum_state_province_id = " + tdBuilder.address_Teacher.StateProvince.Id + ", " +
+                "postal_code = NULL, " +
+                "enum_country_id = " + tdBuilder.address_Teacher.Country.Id + ", " +
+                "is_current_id = " + tdBuilder.address_Teacher.IsCurrent.Id + ", " +
+                "enum_address_id = " + tdBuilder.address_Teacher.AddressType.Id + ", " +
+                "changed = GETDATE(), " +
+                "changed_by = 'Netus2' " +
+                "WHERE address_id = " + tdBuilder.address_Teacher.Id;
+
+            addressDaoImpl.Update(tdBuilder.address_Teacher, _netus2DbConnection);
+        }
+
+        [TestCase]
+        public void Write_ShouldUseExpectedSql()
+        {
             _netus2DbConnection.expectedNewRecordSql =
                 "INSERT INTO address (" +
                 "address_line_1, " +
@@ -176,20 +199,6 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 tdBuilder.address_Teacher.AddressType.Id + ", " +
                 "GETDATE(), " +
                 "'Netus2')";
-
-            addressDaoImpl.Update(tdBuilder.address_Teacher, _netus2DbConnection);
-        }
-
-        [TestCase]
-        public void Write_ShouldUseExpectedSql()
-        {
-            _netus2DbConnection.expectedNewRecordSql =
-                "INSERT INTO address (" +
-                "address_line_1, " +
-                "address_line_2, " +
-                "address_line_3, " +
-                "address_line_4, a" +
-                "partment, city, enum_state_province_id, postal_code, enum_country_id, is_current_id, enum_address_id, created, created_by) VALUES ('teacher addr', NULL, NULL, NULL, NULL, 'somewhere', 1, NULL, 1, 1, 1, GETDATE(), 'Netus2')";
 
             addressDaoImpl.Write(tdBuilder.address_Teacher, _netus2DbConnection);
         }
