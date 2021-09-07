@@ -30,7 +30,7 @@ namespace Netus2_Test.Unit.SyncProcess
 
             tdBuilder = new TestDataBuilder();
             DaoImplFactory.MockAll = true;
-            mockPersonDaoImpl = new MockPersonDaoImpl();
+            mockPersonDaoImpl = new MockPersonDaoImpl(tdBuilder);
             DaoImplFactory.MockPersonDaoImpl = mockPersonDaoImpl;
             mockUniqueIdentifierDaoImpl = new MockUniqueIdentifierDaoImpl();
             DaoImplFactory.MockUniqueIdentifierDaoImpl = mockUniqueIdentifierDaoImpl;
@@ -176,7 +176,7 @@ namespace Netus2_Test.Unit.SyncProcess
         public void Sync_Person_ShouldUpdateRecord()
         {
             mockUniqueIdentifierDaoImpl.ReadReturnData.Add(tdBuilder.uniqueId_Student);
-            mockPersonDaoImpl.ReadReturnData.Add(tdBuilder.student);
+            mockPersonDaoImpl._shouldReadReturnData = true;
 
             SisPersonTestData tstData = new SisPersonTestData();
             tstData.PersonType = tdBuilder.student.Roles[0].Netus2Code;

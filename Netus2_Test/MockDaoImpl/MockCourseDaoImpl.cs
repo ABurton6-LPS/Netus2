@@ -5,58 +5,58 @@ using System.Collections.Generic;
 
 namespace Netus2_Test.MockDaoImpl
 {
-    public class MockPersonDaoImpl : IPersonDao
+    public class MockCourseDaoImpl : ICourseDao
     {
         public TestDataBuilder tdBuilder;
         public bool WasCalled_Delete = false;
         public bool WasCalled_Read = false;
-        public bool WasCalled_ReadUsingPersonId = false;
+        public bool WasCalled_ReadUsingCourseId = false;
         public bool WasCalled_Update = false;
         public bool WasCalled_Write = false;
         public bool _shouldReadReturnData = false;
 
-        public MockPersonDaoImpl(TestDataBuilder tdBuilder)
+        public MockCourseDaoImpl(TestDataBuilder tdBuilder)
         {
             this.tdBuilder = tdBuilder;
         }
 
-        public void Delete(Person person, IConnectable connection)
+        public void Delete(Course course, IConnectable connection)
         {
-            WasCalled_Delete = true;
+            WasCalled_Delete = false;
         }
 
-        public List<Person> Read(Person person, IConnectable connection)
+        public List<Course> Read(Course course, IConnectable connection)
         {
             WasCalled_Read = true;
 
-            List<Person> returnData = new List<Person>();
+            List<Course> returnData = new List<Course>();
 
             if (_shouldReadReturnData)
-                returnData.Add(tdBuilder.student);
+                returnData.Add(tdBuilder.spanishCourse);
 
             return returnData;
         }
 
-        public Person Read_UsingPersonId(int personId, IConnectable connection)
+        public Course Read(int courseId, IConnectable connection)
         {
-            WasCalled_ReadUsingPersonId = true;
+            WasCalled_ReadUsingCourseId = true;
 
             if (_shouldReadReturnData)
-                return tdBuilder.student;
+                return tdBuilder.spanishCourse;
             else
                 return null;
         }
 
-        public void Update(Person person, IConnectable connection)
+        public void Update(Course course, IConnectable connection)
         {
             WasCalled_Update = true;
         }
 
-        public Person Write(Person person, IConnectable connection)
+        public Course Write(Course course, IConnectable connection)
         {
             WasCalled_Write = true;
 
-            return tdBuilder.student;
+            return tdBuilder.spanishCourse;
         }
     }
 }

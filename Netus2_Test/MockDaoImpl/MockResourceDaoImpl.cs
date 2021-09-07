@@ -5,58 +5,58 @@ using System.Collections.Generic;
 
 namespace Netus2_Test.MockDaoImpl
 {
-    public class MockPersonDaoImpl : IPersonDao
+    public class MockResourceDaoImpl : IResourceDao
     {
         public TestDataBuilder tdBuilder;
         public bool WasCalled_Delete = false;
         public bool WasCalled_Read = false;
-        public bool WasCalled_ReadUsingPersonId = false;
+        public bool WasCalled_ReadUsingResourceId = false;
         public bool WasCalled_Update = false;
         public bool WasCalled_Write = false;
         public bool _shouldReadReturnData = false;
 
-        public MockPersonDaoImpl(TestDataBuilder tdBuilder)
+        public MockResourceDaoImpl(TestDataBuilder tdBuilder)
         {
             this.tdBuilder = tdBuilder;
         }
 
-        public void Delete(Person person, IConnectable connection)
+        public void Delete(Resource resource, IConnectable connection)
         {
             WasCalled_Delete = true;
         }
 
-        public List<Person> Read(Person person, IConnectable connection)
+        public List<Resource> Read(Resource resource, IConnectable connection)
         {
             WasCalled_Read = true;
 
-            List<Person> returnData = new List<Person>();
+            List<Resource> returnData = new List<Resource>();
 
             if (_shouldReadReturnData)
-                returnData.Add(tdBuilder.student);
+                returnData.Add(tdBuilder.resource);
 
             return returnData;
         }
 
-        public Person Read_UsingPersonId(int personId, IConnectable connection)
+        public Resource Read_UsingResourceId(int resourceId, IConnectable connection)
         {
-            WasCalled_ReadUsingPersonId = true;
+            WasCalled_ReadUsingResourceId = true;
 
             if (_shouldReadReturnData)
-                return tdBuilder.student;
+                return tdBuilder.resource;
             else
                 return null;
         }
 
-        public void Update(Person person, IConnectable connection)
+        public void Update(Resource resource, IConnectable connection)
         {
             WasCalled_Update = true;
         }
 
-        public Person Write(Person person, IConnectable connection)
+        public Resource Write(Resource resource, IConnectable connection)
         {
             WasCalled_Write = true;
 
-            return tdBuilder.student;
+            return tdBuilder.resource;
         }
     }
 }

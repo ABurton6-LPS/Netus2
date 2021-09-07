@@ -112,6 +112,9 @@ namespace Netus2_DatabaseConnection.dbAccess
             else if (expectedReaderSql != null)
             {
                 Assert.AreEqual(expectedReaderSql, sql);
+                Assert.IsNull(expectedNewRecordSql);
+                Assert.IsNull(expectedNonQuerySql);
+
                 expectedReaderSql = null;
             }
 
@@ -123,6 +126,8 @@ namespace Netus2_DatabaseConnection.dbAccess
             if (expectedNonQuerySql != null)
             {
                 Assert.AreEqual(expectedNonQuerySql, sql);
+                Assert.IsNull(expectedNewRecordSql);
+                Assert.IsNull(expectedReaderSql);
                 expectedNonQuerySql = null;
             }
             return 1;
@@ -133,6 +138,9 @@ namespace Netus2_DatabaseConnection.dbAccess
             if (expectedNewRecordSql != null)
             {
                 Assert.AreEqual(expectedNewRecordSql, sql);
+                Assert.IsNull(expectedNonQuerySql);
+                Assert.IsNull(expectedReaderSql);
+
                 expectedNewRecordSql = null;
             }
             else if (sql.Contains("INSERT INTO sync_error"))

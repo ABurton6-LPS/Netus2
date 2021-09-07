@@ -59,6 +59,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
         public void DeleteClassEnrolled_ShouldCallExpectedMethod()
         {
             MockClassEnrolledDaoImpl mockClassEnrolledDaoImpl = new MockClassEnrolledDaoImpl(tdBuilder);
+            mockClassEnrolledDaoImpl._shouldReadReturnData = true;
             DaoImplFactory.MockClassEnrolledDaoImpl = mockClassEnrolledDaoImpl;
             DaoImplFactory.MockOrganizationDaoImpl = new MockOrganizationDaoImpl(tdBuilder);
             DaoImplFactory.MockJctEnrollmentAcademicSessionDaoImpl = new MockJctEnrollmentAcademicSessionDaoImpl(tdBuilder);
@@ -140,7 +141,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
         }
 
         [TestCase]
-        public void ReadUsingSchoolCodeTermCodeSchoolyear_ShouldUseExpectedSql()
+        public void ReadUsingBuildingCodeTermCodeSchoolyear_ShouldUseExpectedSql()
         {
             _netus2DbConnection.expectedReaderSql =
                 "SELECT * FROM academic_session WHERE 1=1 " +
@@ -208,6 +209,36 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "AND parent_session_id = " + tdBuilder.schoolYear.Id + " ";
 
             academicSessionDaoImpl.Read(tdBuilder.semester1, tdBuilder.schoolYear.Id, _netus2DbConnection);
+        }
+
+        [TestCase]
+        public void ReadOrganization_ShouldCallExpectedMethods()
+        {
+            List<DataRow> tstDataSet = new List<DataRow>();
+            tstDataSet.Add(daoObjectMapper.MapAcademicSession(tdBuilder.schoolYear, -1));
+            SetMockReaderWithTestData(tstDataSet);
+
+            MockOrganizationDaoImpl mockOrganizationDaoImpl = new MockOrganizationDaoImpl(tdBuilder);
+            DaoImplFactory.MockOrganizationDaoImpl = mockOrganizationDaoImpl;
+
+            academicSessionDaoImpl.Read(tdBuilder.schoolYear, _netus2DbConnection);
+
+            Assert.IsTrue(mockOrganizationDaoImpl.WasCalled_ReadWithOrganizationId);
+        }
+
+        [TestCase]
+        public void ReadChildren_ShouldUseExpectedSql()
+        {
+            RemoveAllButFirstChild(tdBuilder.schoolYear);
+
+            List<DataRow> tstDataSet = new List<DataRow>();
+            tstDataSet.Add(daoObjectMapper.MapAcademicSession(tdBuilder.schoolYear, -1));
+            SetMockReaderWithTestData(tstDataSet);
+
+            _netus2DbConnection.expectedReaderSql =
+                "SELECT * FROM academic_session WHERE parent_session_id = " + tdBuilder.schoolYear.Id;
+
+            academicSessionDaoImpl.Read_Children(tdBuilder.schoolYear, _netus2DbConnection);
         }
 
         [TestCase]

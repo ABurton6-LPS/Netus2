@@ -15,6 +15,7 @@ namespace Netus2_Test.MockDaoImpl
         public bool WasCalled_UsingCourseId = false;
         public bool WasCalled_Update = false;
         public bool WasCalled_Write = false;
+        public bool _shouldReadReturnData = false;
 
 
         public MockClassEnrolledDaoImpl(TestDataBuilder tdBuilder)
@@ -30,30 +31,46 @@ namespace Netus2_Test.MockDaoImpl
         public List<ClassEnrolled> Read(ClassEnrolled classEnrolled, IConnectable connection)
         {
             WasCalled_Read = true;
+
             List<ClassEnrolled> list = new List<ClassEnrolled>();
-            list.Add(tdBuilder.classEnrolled);
+
+            if (_shouldReadReturnData)
+                list.Add(tdBuilder.classEnrolled);
+            
             return list;
         }
 
         public ClassEnrolled Read(int classId, IConnectable connection)
         {
             WasCalled_ReadWithClassId = true;
-            return tdBuilder.classEnrolled;
+
+            if (_shouldReadReturnData)
+                return tdBuilder.classEnrolled;
+            else
+                return null;
         }
 
         public List<ClassEnrolled> Read_UsingAcademicSessionId(int academicSessionId, IConnectable connection)
         {
             WasCalled_UsingAcademicSessionId = true;
+
             List<ClassEnrolled> list = new List<ClassEnrolled>();
-            list.Add(tdBuilder.classEnrolled);
+
+            if(_shouldReadReturnData)
+                list.Add(tdBuilder.classEnrolled);
+
             return list;
         }
 
         public List<ClassEnrolled> Read_UsingCourseId(int courseId, IConnectable connection)
         {
             WasCalled_UsingCourseId = true;
+
             List<ClassEnrolled> list = new List<ClassEnrolled>();
-            list.Add(tdBuilder.classEnrolled);
+
+            if(_shouldReadReturnData)
+                list.Add(tdBuilder.classEnrolled);
+
             return list;
         }
 
@@ -65,6 +82,7 @@ namespace Netus2_Test.MockDaoImpl
         public ClassEnrolled Write(ClassEnrolled classEnrolled, IConnectable connection)
         {
             WasCalled_Write = true;
+
             return tdBuilder.classEnrolled;
         }
     }
