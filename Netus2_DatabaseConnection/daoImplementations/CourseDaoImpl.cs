@@ -74,7 +74,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
             DataRow row = daoObjectMapper.MapCourse(course);
 
-            sql.Append("SELECT * FROM course WHERE 1=1");
+            sql.Append("SELECT * FROM course WHERE 1=1 ");
             if (row["course_id"] != DBNull.Value)
                 sql.Append("AND course_id = " + row["course_id"] + " ");
             else
@@ -243,9 +243,13 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 if (foundSubjectIds.Contains(subjectId) == false)
                     jctCourseSubjectDaoImpl.Write(courseId, subjectId, connection);
 
-                int enumSubjectId = (int)jctCourseSubjectDaoImpl.Read(courseId, subjectId, connection)["enum_subject_id"];
 
-                updatedSubjects.Add(Enum_Subject.GetEnumFromId(enumSubjectId));
+                DataRow jctCourseSubject = jctCourseSubjectDaoImpl.Read(courseId, subjectId, connection);
+                if(jctCourseSubject != null)
+                {
+                    int enumSubjectId = (int)jctCourseSubject["enum_subject_id"];
+                    updatedSubjects.Add(Enum_Subject.GetEnumFromId(enumSubjectId));
+                }
             }
 
             foreach (int foundSubjectId in foundSubjectIds)
@@ -281,9 +285,12 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 if (foundGradeIds.Contains(gradeId) == false)
                     jctCourseGradeDaoImpl.Write(courseId, gradeId, connection);
 
-                int enumGradeId = (int)jctCourseGradeDaoImpl.Read(courseId, gradeId, connection)["enum_grade_id"];
-
-                updatedGrades.Add(Enum_Grade.GetEnumFromId(enumGradeId));
+                DataRow jctCourseGrade = jctCourseGradeDaoImpl.Read(courseId, gradeId, connection);
+                if(jctCourseGrade != null)
+                {
+                    int enumGradeId = (int)jctCourseGrade["enum_grade_id"];
+                    updatedGrades.Add(Enum_Grade.GetEnumFromId(enumGradeId));
+                }
             }
 
             foreach (int foundGradeId in foundGradeIds)
