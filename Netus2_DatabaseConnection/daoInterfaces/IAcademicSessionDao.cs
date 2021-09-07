@@ -74,6 +74,13 @@ namespace Netus2_DatabaseConnection.daoInterfaces
         /// <param name="schoolYear"></param>
         /// <param name="connection"></param>
         AcademicSession Read_UsingBuildingCode_TermCode_Schoolyear(string schoolCode, string termCode, int schoolYear, IConnectable connection);
+        
+        /// <summary>
+        /// Returns a list containing the child Academic Sessions for the parent Academic Session passed in.
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="connection"></param>
+        List<AcademicSession> Read_Children(AcademicSession parent, IConnectable connection);
 
         /// <summary>
         /// <para>

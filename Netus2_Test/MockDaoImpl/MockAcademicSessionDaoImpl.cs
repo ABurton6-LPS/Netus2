@@ -15,6 +15,7 @@ namespace Netus2_Test.MockDaoImpl
         public bool WasCalled_ReadUsingClassEnrolledId = false;
         public bool WasCalled_ReadUsingOrganizationId = false;
         public bool WasCalled_ReadUsingSchoolCodeTermCodeSchoolYear = false;
+        public bool WasCalled_ReadChildren = false;
         public bool WasCalled_UpdateWithoutParentId = false;
         public bool WasCalled_UpdateWithParentId = false;
         public bool WasCalled_WriteWithoutParentId = false;
@@ -110,6 +111,16 @@ namespace Netus2_Test.MockDaoImpl
                 return tdBuilder.schoolYear;
             else
                 return null;
+        }
+
+        public List<AcademicSession> Read_Children(AcademicSession parent, IConnectable connection)
+        {
+            WasCalled_ReadChildren = true;
+
+            if (_shouldReadReturnData && parent.Children.Count > 0)
+                return parent.Children;
+            else
+                return new List<AcademicSession>();
         }
 
         public void Update(AcademicSession academicSession, IConnectable connection)

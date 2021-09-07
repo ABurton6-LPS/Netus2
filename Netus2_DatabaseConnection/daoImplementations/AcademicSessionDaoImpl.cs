@@ -178,7 +178,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
             return results;
         }
 
-        private List<AcademicSession> Read_Children(AcademicSession parent, IConnectable connection)
+        public List<AcademicSession> Read_Children(AcademicSession parent, IConnectable connection)
         {
             string sql = "SELECT * FROM academic_session WHERE parent_session_id = " + parent.Id;
             return Read(sql, connection);

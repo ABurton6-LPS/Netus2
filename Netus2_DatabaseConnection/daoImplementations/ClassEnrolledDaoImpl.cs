@@ -103,7 +103,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
             DataRow row = daoObjectMapper.MapClassEnrolled(classEnrolled);
 
-            sql.Append("SELECT * FROM class WHERE 1=1");
+            sql.Append("SELECT * FROM class WHERE 1=1 ");
             if (row["class_id"] != DBNull.Value)
                 sql.Append("AND class_id = " + row["class_id"] + " ");
             else
@@ -452,9 +452,14 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 if (foundPeriodIds.Contains(periodId) == false)
                     jctClassPeriodDaoImpl.Write(classId, periodId, connection);
 
-                int enumPeriodId = (int)jctClassPeriodDaoImpl.Read(classId, periodId, connection)["enum_period_id"];
+                DataRow jctClassPeriodDao = jctClassPeriodDaoImpl.Read(classId, periodId, connection);
 
-                updatedPeriods.Add(Enum_Period.GetEnumFromId(enumPeriodId));
+                if(jctClassPeriodDao != null)
+                {
+                    int enumPeriodId = (int)jctClassPeriodDao["enum_period_id"];
+
+                    updatedPeriods.Add(Enum_Period.GetEnumFromId(enumPeriodId));
+                }                
             }
 
             foreach (int foundPeriodId in foundPeriodIds)
