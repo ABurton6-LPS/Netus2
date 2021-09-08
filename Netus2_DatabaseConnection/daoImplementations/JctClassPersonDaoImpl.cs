@@ -12,7 +12,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         public void Delete(int classId, int personId, IConnectable connection)
         {
             string sql = "DELETE FROM jct_class_person WHERE class_id = " + classId +
-                "AND person_id = " + personId;
+                " AND person_id = " + personId;
 
             connection.ExecuteNonQuery(sql);
         }
@@ -20,7 +20,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         public DataRow Read(int classId, int personId, IConnectable connection)
         {
             string sql = "SELECT * FROM jct_class_person WHERE class_id = " + classId +
-                " AND personId = " + personId;
+                " AND person_id = " + personId;
 
             List<DataRow> result = Read(sql, connection);
             if (result.Count > 0)
