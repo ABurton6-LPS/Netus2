@@ -639,12 +639,12 @@ namespace Netus2_DatabaseConnection
             else
                 es.Id = -1;
 
-            if ((DateTime)row["start_date"] != new DateTime())
+            if (row["start_date"] != DBNull.Value)
                 es.StartDate = (DateTime)row["start_date"];
             else
                 es.StartDate = new DateTime();
 
-            if ((DateTime)row["end_date"] != new DateTime())
+            if (row["end_date"] != DBNull.Value)
                 es.EndDate = (DateTime)row["end_date"];
             else
                 es.EndDate = new DateTime();

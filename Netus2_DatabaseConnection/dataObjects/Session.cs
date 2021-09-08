@@ -15,6 +15,8 @@ namespace Netus2_DatabaseConnection.dataObjects
         {
             Id = -1;
             Name = name;
+            StartDate = new DateTime();
+            EndDate = new DateTime();
             Organization = organization;
         }
 
