@@ -37,13 +37,13 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         public List<DataRow> Read_WithEnrollmentId(int enrollmentId, IConnectable connection)
         {
-            string sql = "SELECT * FROM jct_enrollment_academic_session where enrollment_id = " + enrollmentId;
+            string sql = "SELECT * FROM jct_enrollment_academic_session WHERE enrollment_id = " + enrollmentId;
 
             return Read(sql, connection);
         }
         public List<DataRow> Read_WithAcademicSessionId(int academicSessionId, IConnectable connection)
         {
-            string sql = "SELECT * FROM jct_enrollment_academic_session where academic_session_id = " + academicSessionId;
+            string sql = "SELECT * FROM jct_enrollment_academic_session WHERE academic_session_id = " + academicSessionId;
 
             return Read(sql, connection);
         }
