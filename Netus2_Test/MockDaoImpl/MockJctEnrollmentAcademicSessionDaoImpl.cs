@@ -12,7 +12,7 @@ namespace Netus2_Test.MockDaoImpl
         public bool WasCalled_Delete = false;
         public bool WasCalled_Read = false;
         public bool WasCalled_ReadWithAcademicSessionId = false;
-        public bool WasCalled_WithEnrollmentId = false;
+        public bool WasCalled_ReadWithEnrollmentId = false;
         public bool WasCalled_Write = false;
 
         private DataRow row = new DataTableFactory().Dt_Netus2_JctEnrollmentAcademicSession.NewRow();
@@ -45,7 +45,7 @@ namespace Netus2_Test.MockDaoImpl
 
         public List<DataRow> Read_WithEnrollmentId(int enrollmentId, IConnectable connection)
         {
-            WasCalled_WithEnrollmentId = true;
+            WasCalled_ReadWithEnrollmentId = true;
             List<DataRow> list = new List<DataRow>();
             list.Add(row);
             return list;
