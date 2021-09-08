@@ -1,11 +1,7 @@
-﻿using Moq;
-using Netus2_DatabaseConnection;
+﻿using Netus2_DatabaseConnection;
 using Netus2_DatabaseConnection.daoImplementations;
 using Netus2_DatabaseConnection.dbAccess;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Data;
 
 namespace Netus2_Test.Unit.Netus2_DBConnection
 {
@@ -14,7 +10,6 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
         TestDataBuilder tdBuilder;
         MockDatabaseConnection _netus2DbConnection;
         JctClassPeriodDaoImpl jctClassPeriodDaoImpl;
-        DaoObjectMapper daoObjectMapper;
 
         [SetUp]
         public void SetUp()
@@ -25,8 +20,6 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
             _netus2DbConnection = (MockDatabaseConnection)DbConnectionFactory.GetNetus2Connection();
 
             jctClassPeriodDaoImpl = new JctClassPeriodDaoImpl();
-
-            daoObjectMapper = new DaoObjectMapper();
         }
 
         [TestCase]
