@@ -37,13 +37,13 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         public List<DataRow> Read_WithPersonId(int personId, IConnectable connection)
         {
-            string sql = "SELECT * FROM jct_person_app where person_id = " + personId;
+            string sql = "SELECT * FROM jct_person_app WHERE person_id = " + personId;
 
             return Read(sql, connection);
         }
         public List<DataRow> Read_WithAppId(int appId, IConnectable connection)
         {
-            string sql = "SELECT * FROM jct_person_app where app_id = " + appId;
+            string sql = "SELECT * FROM jct_person_app WHERE app_id = " + appId;
 
             return Read(sql, connection);
         }
