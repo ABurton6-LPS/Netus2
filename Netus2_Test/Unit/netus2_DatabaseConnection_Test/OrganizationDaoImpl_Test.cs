@@ -53,7 +53,15 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
             SetMockReaderWithTestData(tstDataSet);
 
             _netus2DbConnection.expectedNonQuerySql =
-                "";
+                "UPDATE organization SET " +
+                "name = '" + tdBuilder.school.Name + "', " +
+                "enum_organization_id = " + tdBuilder.school.OrganizationType.Id + ", " +
+                "identifier = '" + tdBuilder.school.Identifier + "', " +
+                "building_code = '" + tdBuilder.school.BuildingCode + "', " +
+                "organization_parent_id = NULL, " +
+                "changed = GETDATE(), " +
+                "changed_by = 'Netus2' " +
+                "WHERE organization_id = " + tdBuilder.school.Id;
 
             organizationDaoImpl.Delete(tdBuilder.district, _netus2DbConnection);
         }
@@ -74,6 +82,221 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
             Assert.IsTrue(mockEmploymentSessionDaoImpl.WasCalled_DeleteWithOrganizationId);
             Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_ReadUsingOrganizationId);
             Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_Delete);
+        }
+
+        [TestCase]
+        public void ReadWithBuildingCode_ShouldUseExpectedSql()
+        {
+            _netus2DbConnection.expectedReaderSql =
+                "SELECT * FROM organization WHERE building_code LIKE ('" + tdBuilder.school.BuildingCode + "')";
+
+            organizationDaoImpl.Read_WithBuildingCode(tdBuilder.school.BuildingCode, _netus2DbConnection);
+        }
+
+        [TestCase]
+        public void ReadWithOrganizationId_ShouldUseExpectedSql()
+        {
+            _netus2DbConnection.expectedReaderSql =
+                "SELECT * FROM organization WHERE organization_id = " + tdBuilder.school.Id;
+
+            organizationDaoImpl.Read_WithOrganizationId(tdBuilder.school.Id, _netus2DbConnection);
+        }
+
+        [TestCase]
+        public void ReadWithAcademicSessionId_ShouldUseExpectedSql()
+        {
+            _netus2DbConnection.expectedReaderSql =
+                "SELECT * FROM organization WHERE organization_id IN (" +
+                "SELECT organization_id FROM academic_session WHERE academic_session_id = " +
+                tdBuilder.schoolYear.Id + ")";
+
+            organizationDaoImpl.Read_WithAcademicSessionId(tdBuilder.schoolYear.Id, _netus2DbConnection);
+        }
+
+        [TestCase]
+        public void Read_WithoutParentId_ShouldUseExpectedSql()
+        {
+            _netus2DbConnection.expectedReaderSql =
+                "SELECT * FROM organization " +
+                "WHERE 1=1 " +
+                "AND organization_id = " + tdBuilder.school.Id +" ";
+
+            organizationDaoImpl.Read(tdBuilder.school, _netus2DbConnection);
+        }
+
+        [TestCase]
+        public void Read_WhileOrganizationIsNull_ShouldUseExpectedSql()
+        {
+            _netus2DbConnection.expectedReaderSql =
+                "SELECT * FROM organization WHERE organization_parent_id = " + tdBuilder.district.Id;
+
+            organizationDaoImpl.Read(null, tdBuilder.district.Id, _netus2DbConnection);
+        }
+
+        [TestCase]
+        public void Read_WhileOrganizationIsNotNew_ShouldUseExpectedSql()
+        {
+            _netus2DbConnection.expectedReaderSql =
+                "SELECT * FROM organization " +
+                "WHERE 1=1 " +
+                "AND organization_id = " + tdBuilder.school.Id + " ";
+
+            organizationDaoImpl.Read(tdBuilder.school, tdBuilder.district.Id, _netus2DbConnection);
+        }
+
+        [TestCase]
+        public void Read_WhileOrganizationIsNew_ShouldUseExpectedSql()
+        {
+            tdBuilder.school.Id = -1;
+
+            _netus2DbConnection.expectedReaderSql =
+                "SELECT * FROM organization " +
+                "WHERE 1=1 " +
+                "AND name LIKE '" + tdBuilder.school.Name + "' " +
+                "AND enum_organization_id = " + tdBuilder.school.OrganizationType.Id + " " +
+                "AND identifier LIKE '" + tdBuilder.school.Identifier + "' " +
+                "AND building_code LIKE '" + tdBuilder.school.BuildingCode + "' " +
+                "AND organization_parent_id = " + tdBuilder.district.Id;
+
+            organizationDaoImpl.Read(tdBuilder.school, tdBuilder.district.Id, _netus2DbConnection);
+        }
+
+        [TestCase]
+        public void Update_WhileParentIdIsNotused_AndRecordIsNotFound_ShouldUseExpectedSql()
+        {
+            _netus2DbConnection.expectedNewRecordSql =
+                "INSERT INTO organization (" +
+                "name, " +
+                "enum_organization_id, " +
+                "identifier, " +
+                "building_code, " +
+                "organization_parent_id, " +
+                "created, " +
+                "created_by" +
+                ") VALUES (" +
+                "'" + tdBuilder.school.Name + "', " +
+                tdBuilder.school.OrganizationType.Id + ", " +
+                "'" + tdBuilder.school.Identifier + "', " +
+                "'" + tdBuilder.school.BuildingCode + "', " +
+                "NULL, " +
+                "GETDATE(), " +
+                "'Netus2')";
+
+            organizationDaoImpl.Update(tdBuilder.school, _netus2DbConnection);
+        }
+
+        [TestCase]
+        public void Update_WhileParentIdIsNotused_AndRecordIsFound_ShouldUseExpectedSql()
+        {
+            List<DataRow> tstDataSet = new List<DataRow>();
+            tstDataSet.Add(daoObjectMapper.MapOrganization(tdBuilder.school, tdBuilder.schoolYear.Id));
+            SetMockReaderWithTestData(tstDataSet);
+
+            _netus2DbConnection.expectedNonQuerySql =
+                "UPDATE organization SET " +
+                "name = '" + tdBuilder.school.Name + "', " +
+                "enum_organization_id = " + tdBuilder.school.OrganizationType.Id + ", " +
+                "identifier = '" + tdBuilder.school.Identifier + "', " +
+                "building_code = '" + tdBuilder.school.BuildingCode + "', " +
+                "organization_parent_id = NULL, " +
+                "changed = GETDATE(), " +
+                "changed_by = 'Netus2' " +
+                "WHERE organization_id = " + tdBuilder.school.Id;
+
+            organizationDaoImpl.Update(tdBuilder.school, _netus2DbConnection);
+        }
+
+        [TestCase]
+        public void Update_WhileParentIdIsused_AndRecordIsNotFound_ShouldUseExpectedSql()
+        {
+            _netus2DbConnection.expectedNewRecordSql =
+                "INSERT INTO organization (" +
+                "name, " +
+                "enum_organization_id, " +
+                "identifier, " +
+                "building_code, " +
+                "organization_parent_id, " +
+                "created, " +
+                "created_by" +
+                ") VALUES (" +
+                "'" + tdBuilder.school.Name + "', " +
+                tdBuilder.school.OrganizationType.Id + ", " +
+                "'" + tdBuilder.school.Identifier + "', " +
+                "'" + tdBuilder.school.BuildingCode + "', " +
+                tdBuilder.district.Id + ", " +
+                "GETDATE(), " +
+                "'Netus2')";
+
+            organizationDaoImpl.Update(tdBuilder.school, tdBuilder.district.Id, _netus2DbConnection);
+        }
+
+        [TestCase]
+        public void Update_WhileParentIdIsused_AndRecordIsFound_ShouldUseExpectedSql()
+        {
+            List<DataRow> tstDataSet = new List<DataRow>();
+            tstDataSet.Add(daoObjectMapper.MapOrganization(tdBuilder.school, tdBuilder.schoolYear.Id));
+            SetMockReaderWithTestData(tstDataSet);
+
+            _netus2DbConnection.expectedNonQuerySql =
+                "UPDATE organization SET " +
+                "name = '" + tdBuilder.school.Name + "', " +
+                "enum_organization_id = " + tdBuilder.school.OrganizationType.Id + ", " +
+                "identifier = '" + tdBuilder.school.Identifier + "', " +
+                "building_code = '" + tdBuilder.school.BuildingCode + "', " +
+                "organization_parent_id = " + tdBuilder.district.Id + ", " +
+                "changed = GETDATE(), " +
+                "changed_by = 'Netus2' " +
+                "WHERE organization_id = " + tdBuilder.school.Id;
+
+            organizationDaoImpl.Update(tdBuilder.school, tdBuilder.district.Id, _netus2DbConnection);
+        }
+
+        [TestCase]
+        public void Write_WhileNotUsingParentId_ShouldUseExpectedSql()
+        {
+            _netus2DbConnection.expectedNewRecordSql =
+                "INSERT INTO organization (" +
+                "name, " +
+                "enum_organization_id, " +
+                "identifier, " +
+                "building_code, " +
+                "organization_parent_id, " +
+                "created, " +
+                "created_by" +
+                ") VALUES (" +
+                "'" + tdBuilder.school.Name + "', " +
+                tdBuilder.school.OrganizationType.Id + ", " +
+                "'" + tdBuilder.school.Identifier + "', " +
+                "'" + tdBuilder.school.BuildingCode + "', " +
+                "NULL, " +
+                "GETDATE(), " +
+                "'Netus2')";
+
+            organizationDaoImpl.Write(tdBuilder.school, _netus2DbConnection);
+        }
+
+        [TestCase]
+        public void Write_WhileUsingParentId_ShouldUseExpectedSql()
+        {
+            _netus2DbConnection.expectedNewRecordSql =
+                "INSERT INTO organization (" +
+                "name, " +
+                "enum_organization_id, " +
+                "identifier, " +
+                "building_code, " +
+                "organization_parent_id, " +
+                "created, " +
+                "created_by" +
+                ") VALUES (" +
+                "'" + tdBuilder.school.Name + "', " +
+                tdBuilder.school.OrganizationType.Id + ", " +
+                "'" + tdBuilder.school.Identifier + "', " +
+                "'" + tdBuilder.school.BuildingCode + "', " +
+                tdBuilder.district.Id + ", " +
+                "GETDATE(), " +
+                "'Netus2')";
+
+            organizationDaoImpl.Write(tdBuilder.school, tdBuilder.district.Id, _netus2DbConnection);
         }
 
         [TearDown]
