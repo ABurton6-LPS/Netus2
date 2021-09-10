@@ -56,15 +56,8 @@ namespace Netus2_DatabaseConnection.daoImplementations
             List<Organization> childrenToRemove = new List<Organization>();
             foreach (Organization child in organization.Children)
             {
+                Update(child, connection);
                 childrenToRemove.Add(child);
-
-                List<Organization> foundChildren = Read(child, connection);
-                if (foundChildren.Count == 1)
-                    Update(foundChildren[0], connection);
-                else if (foundChildren.Count == 0)
-                    return;
-                else
-                    throw new Exception(foundChildren.Count + " Organization records found matching:\n" + child.ToString());
             }
             foreach (Organization child in childrenToRemove)
             {
@@ -190,7 +183,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 organization.Id = foundOrganizations[0].Id;
                 UpdateInternals(organization, parentOrganizationId, connection);
             }
-            else if (foundOrganizations.Count > 1)
+            else
                 throw new Exception(foundOrganizations.Count + " Organizations found matching the description of:\n" +
                     organization.ToString());
         }
