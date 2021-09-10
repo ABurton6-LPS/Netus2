@@ -42,7 +42,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private void Delete_EmploymentSessions(Organization organization, IConnectable connection)
         {
-            IEmploymentSessionDao employmentSessionsDaoImpl = new EmploymentSessionDaoImpl();
+            IEmploymentSessionDao employmentSessionsDaoImpl = DaoImplFactory.GetEmploymentSessionDaoImpl();
             List<EmploymentSession> foundEmploymentSessions = employmentSessionsDaoImpl.Read_WithOrganizationId(null, organization.Id, connection);
 
             foreach (EmploymentSession foundEmploymentSession in foundEmploymentSessions)
