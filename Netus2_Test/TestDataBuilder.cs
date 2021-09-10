@@ -178,6 +178,7 @@ namespace Netus2_Test
                 classEnrolled.Id = 1;
 
             lineItem = new LineItem("Pop Quiz", new DateTime(2020, 9, 1), new DateTime(2020, 9, 1), classEnrolled, Enum_Category.values["test"], 0.0, 100.00);
+            lineItem.Descript = "Test Line Item";
             if (connection != null)
                 lineItem = lineItemDaoImpl.Write(lineItem, connection);
             else
@@ -223,6 +224,7 @@ namespace Netus2_Test
                 enrollment.Id = 1;
 
             mark = new Mark(lineItem, Enum_Score_Status.values["submitted"], 100.00, new DateTime(2020, 9, 1));
+            mark.Comment = "I like this test!";
             if (connection != null)
                 mark = markDaoImpl.Write(mark, student.Id, connection);
             else
