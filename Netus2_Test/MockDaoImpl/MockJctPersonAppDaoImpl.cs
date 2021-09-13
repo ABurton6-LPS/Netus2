@@ -62,7 +62,7 @@ namespace Netus2_Test.MockDaoImpl
             List<DataRow> list = new List<DataRow>();
             DataRow row = new DataTableFactory().Dt_Netus2_JctPersonApp.NewRow();
             row["person_id"] = personId;
-            row["app_id"] = tdBuilder.application;
+            row["app_id"] = tdBuilder.application.Id;
 
             if (_shouldReadReturnData)
                 list.Add(row);
