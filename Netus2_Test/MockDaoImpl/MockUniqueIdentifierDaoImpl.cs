@@ -7,11 +7,17 @@ namespace Netus2_Test.MockDaoImpl
 {
     public class MockUniqueIdentifierDaoImpl : IUniqueIdentifierDao
     {
+        TestDataBuilder tdBuilder;
         public bool WasCalled_Delete = false;
         public bool WasCalled_Read = false;
         public bool WasCalled_Update = false;
         public bool WasCalled_Write = false;
-        public List<UniqueIdentifier> ReadReturnData = new List<UniqueIdentifier>();
+        public bool _shouldReadReturnData = false;
+
+        public MockUniqueIdentifierDaoImpl(TestDataBuilder tdBuilder)
+        {
+            this.tdBuilder = tdBuilder;
+        }
 
         public void Delete(UniqueIdentifier uniqueId, int personId, IConnectable connection)
         {
@@ -21,7 +27,18 @@ namespace Netus2_Test.MockDaoImpl
         public List<UniqueIdentifier> Read(UniqueIdentifier uniqueId, int personId, IConnectable connection)
         {
             WasCalled_Read = true;
-            return ReadReturnData;
+
+            List <UniqueIdentifier> returnData =  new List<UniqueIdentifier>();
+
+            if (_shouldReadReturnData)
+            {
+                if (personId == tdBuilder.student.Id)
+                    returnData.Add(tdBuilder.uniqueId_Student);
+                else
+                    returnData.Add(tdBuilder.uniqueId_Teacher);
+            }
+
+            return returnData;
         }
 
         public void Update(UniqueIdentifier uniqueId, int personId, IConnectable connection)
@@ -32,7 +49,11 @@ namespace Netus2_Test.MockDaoImpl
         public UniqueIdentifier Write(UniqueIdentifier uniqueId, int personId, IConnectable connection)
         {
             WasCalled_Write = true;
-            return uniqueId;
+
+            if (personId == tdBuilder.student.Id)
+                return tdBuilder.uniqueId_Student;
+            else
+                return tdBuilder.uniqueId_Teacher;
         }
     }
 }

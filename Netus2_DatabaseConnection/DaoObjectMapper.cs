@@ -1153,6 +1153,11 @@ namespace Netus2_DatabaseConnection
             else
                 lineItem.Id = -1;
 
+            if (row["descript"] != DBNull.Value)
+                lineItem.Descript = (string)row["descript"];
+            else
+                lineItem.Descript = null;
+
             return lineItem;
         }
     }

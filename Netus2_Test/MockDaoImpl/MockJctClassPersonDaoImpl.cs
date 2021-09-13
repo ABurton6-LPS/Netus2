@@ -71,7 +71,7 @@ namespace Netus2_Test.MockDaoImpl
                 {
                     for (int x = 0; x < tdBuilder.classEnrolled.GetStaff()[i].Roles.Count; x++)
                     {
-                        if(i == personId)
+                        if(tdBuilder.classEnrolled.GetStaff()[i].Id == personId)
                         {
                             DataRow row = new DataTableFactory().Dt_Netus2_JctClassPerson.NewRow();
                             row["class_id"] = tdBuilder.classEnrolled.Id;

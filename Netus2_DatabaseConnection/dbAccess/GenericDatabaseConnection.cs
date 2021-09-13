@@ -86,7 +86,12 @@ namespace Netus2_DatabaseConnection.dbAccess
                 command = new SqlCommand(sql, (SqlConnection)connection);
             }
 
-            return command.ExecuteNonQuery();
+            int returnValue = command.ExecuteNonQuery();
+            if(returnValue == 0)
+            {
+                throw new Exception("SQL Non-Query did not affect any rows:\n" + sql);
+            }
+            return returnValue;
         }
 
         public int InsertNewRecord(string sql)
@@ -98,6 +103,7 @@ namespace Netus2_DatabaseConnection.dbAccess
 
             int idOfInsertedRecord = -1;
             int numberOfInsertedRecords = ExecuteNonQuery(sql);
+
 
             if (numberOfInsertedRecords != 1)
             {

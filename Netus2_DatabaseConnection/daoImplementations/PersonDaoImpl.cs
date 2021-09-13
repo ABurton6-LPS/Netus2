@@ -432,7 +432,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         private List<EmploymentSession> UpdateEmploymentSessions(List<EmploymentSession> employmentSessions, int personId, IConnectable connection)
         {
             List<EmploymentSession> updatedEmploymentSessions = new List<EmploymentSession>();
-            IEmploymentSessionDao employmentSessionDaoImpl = new EmploymentSessionDaoImpl();
+            IEmploymentSessionDao employmentSessionDaoImpl = DaoImplFactory.GetEmploymentSessionDaoImpl();
 
             List<EmploymentSession> foundEmploymentSessions =
                 employmentSessionDaoImpl.Read_WithPersonId(null, personId, connection);
@@ -613,9 +613,13 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 if (foundRoleIds.Contains(roleId) == false)
                     jctPersonRoleDaoImpl.Write(personId, roleId, connection);
 
-                int enumRoleId = (int)jctPersonRoleDaoImpl.Read(personId, roleId, connection)["enum_role_id"];
+                DataRow jctPersonRoleDao = jctPersonRoleDaoImpl.Read(personId, roleId, connection);
+                if(jctPersonRoleDao != null)
+                {
+                    int enumRoleId = (int)jctPersonRoleDao["enum_role_id"];
 
-                updatedRoles.Add(Enum_Role.GetEnumFromId(enumRoleId));
+                    updatedRoles.Add(Enum_Role.GetEnumFromId(enumRoleId));
+                }
             }
 
             foreach (int foundRoleId in foundRoleIds)
@@ -644,7 +648,10 @@ namespace Netus2_DatabaseConnection.daoImplementations
             {
                 if (foundRelations.Contains(relation) == false)
                     jctPersonPersonDaoImpl.Write(personId, relation, connection);
-                updatedRelations.Add((int)jctPersonPersonDaoImpl.Read(personId, relation, connection)["person_two_id"]);
+
+                DataRow jctPersonPersonDao = jctPersonPersonDaoImpl.Read(personId, relation, connection);
+                if(jctPersonPersonDao != null)
+                    updatedRelations.Add((int)jctPersonPersonDao["person_two_id"]);
             }
 
             foreach (int foundRelation in foundRelations)
