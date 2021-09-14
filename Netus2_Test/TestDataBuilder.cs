@@ -46,6 +46,7 @@ namespace Netus2_Test
         public Address address_Teacher;
         public Address address_Student;
         public Provider provider;
+        public Provider provider_parent;
         public Application application;
 
         public TestDataBuilder(IConnectable connection)
@@ -162,6 +163,9 @@ namespace Netus2_Test
             }
 
             resource = new Resource("I do not know what a resource is", "Something a vendor would know");
+            resource.Importance = Enum_Importance.values["primary"];
+            resource.VendorId = "123IDK";
+            resource.ApplicationId = "Not an actual app id";
             if (connection != null)
                 resource = resourceDaoImpl.Write(resource, connection);
             else
@@ -252,10 +256,23 @@ namespace Netus2_Test
             }
 
             provider = new Provider("new provider");
+            provider.UrlStandardAccess = "StandardAccessUrl";
+            provider.UrlAdminAccess = "AdminAccessUrl";
+            provider.PopulatedBy = "TestDataBuilder";
             if (connection != null)
                 provider = providerDaoImpl.Write(provider, connection);
             else
                 provider.Id = 1;
+
+            provider_parent = new Provider("new provider_parent");
+            provider_parent.UrlStandardAccess = "StandardAccessUrl";
+            provider_parent.UrlAdminAccess = "AdminAccessUrl";
+            provider_parent.PopulatedBy = "TestDataBuilder";
+            provider_parent.Children.Add(provider);
+            if (connection != null)
+                provider_parent = providerDaoImpl.Write(provider_parent, connection);
+            else
+                provider_parent.Id = 2;
 
             application = new Application("new application", provider);
             if (connection != null)
