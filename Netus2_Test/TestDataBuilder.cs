@@ -163,6 +163,9 @@ namespace Netus2_Test
             }
 
             resource = new Resource("I do not know what a resource is", "Something a vendor would know");
+            resource.Importance = Enum_Importance.values["primary"];
+            resource.VendorId = "123IDK";
+            resource.ApplicationId = "Not an actual app id";
             if (connection != null)
                 resource = resourceDaoImpl.Write(resource, connection);
             else

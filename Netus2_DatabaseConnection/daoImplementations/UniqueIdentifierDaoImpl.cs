@@ -37,7 +37,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
             {
                 DataRow row = daoObjectMapper.MapUniqueIdentifier(uniqueId, personId);
 
-                sql.Append("SELECT * FROM unique_identifier WHERE 1=1");
+                sql.Append("SELECT * FROM unique_identifier WHERE 1=1 ");
                 if (row["unique_identifier_id"] != DBNull.Value)
                     sql.Append("AND unique_identifier_id = " + row["unique_identifier_id"] + " ");
                 else

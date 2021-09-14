@@ -47,6 +47,7 @@ namespace Netus2_DatabaseConnection.dbAccess
             testEnumKeys.Add("01652");
             testEnumKeys.Add("staff");
             testEnumKeys.Add("01656");
+            testEnumKeys.Add("primary");
         }
 
         public ConnectionState GetState()
