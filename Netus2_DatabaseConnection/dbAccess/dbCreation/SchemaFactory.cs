@@ -12,7 +12,6 @@
         {
             BuildEnumLogAction(connection);
             BuildEnumSyncStatus(connection);
-            BuildEnumJobStatus(connection);
             BuildEnumTrueFalse(connection);
             BuildEnumPhone(connection);
             BuildEnumAddress(connection);
@@ -73,7 +72,7 @@
             string sql =
                 "CREATE TABLE enum_log_action ("
                     + "enum_log_action_id int IDENTITY(1,1) PRIMARY KEY,"
-                    + "netus2_code varchar(20) NOT NULL,"
+                    + "netus2_code varchar(20) NOT NULL UNIQUE,"
                     + "sis_code varchar(20),"
                     + "hr_code varchar(20),"
                     + "pip_code varchar(20),"
@@ -92,20 +91,6 @@
                 + "hr_code varchar(20), "
                 + "pip_code varchar(20), "
                 + "descript varchar(1150) NOT NULL)";
-
-            connection.ExecuteNonQuery(sql);
-        }
-
-        private static void BuildEnumJobStatus(IConnectable connection)
-        {
-            string sql =
-                "CREATE TABLE enum_job_status ("
-                + "enum_job_status_id int IDENTITY(1,1) PRIMARY KEY,"
-                + "netus2_code varchar(20) NOT NULL,"
-                + "sis_code varchar(20),"
-                + "hr_code varchar(20),"
-                + "pip_code varchar(20),"
-                + "descript varchar(150) NOT NULL)";
 
             connection.ExecuteNonQuery(sql);
         }
@@ -384,8 +369,8 @@
                     + "middle_name varchar(30),"
                     + "last_name varchar(30) NOT NULL,"
                     + "birth_date date NOT NULL,"
-                    + "enum_gender_id int NOT NULL,"
-                    + "enum_ethnic_id int NOT NULL,"
+                    + "enum_gender_id int,"
+                    + "enum_ethnic_id int,"
                     + "enum_residence_status_id int,"
                     + "login_name varchar(150),"
                     + "login_pw varchar(150),"

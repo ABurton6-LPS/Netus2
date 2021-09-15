@@ -6,8 +6,11 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Netus2_DatabaseConnection", "Netus2_DatabaseConnection\Netus2_DatabaseConnection.csproj", "{5038E061-06FA-487B-8511-57284498DBBB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Netus2_Test", "Netus2_Test\Netus2_Test.csproj", "{95A683EB-97B0-4A04-BE9F-C84810BDED01}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D655B67F-9203-4B4B-9D15-DCE38C78FF5D} = {D655B67F-9203-4B4B-9D15-DCE38C78FF5D}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Netus2SisSync", "FunctionApp1\Netus2SisSync.csproj", "{D655B67F-9203-4B4B-9D15-DCE38C78FF5D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Netus2SisSync", "Netus2SisSync\Netus2SisSync.csproj", "{D655B67F-9203-4B4B-9D15-DCE38C78FF5D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

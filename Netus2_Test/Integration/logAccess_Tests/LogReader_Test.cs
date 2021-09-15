@@ -211,7 +211,7 @@ namespace Netus2_Test.Integration
             Assert.IsNotEmpty(logProviders);
             Assert.AreEqual(preTestLogCount + 1, logProviders.Count);
 
-            Assert_LogTable((int)logProviders[preTestLogCount].provider_id, 1, "log_provider", connection);
+            Assert_LogTable((int)logProviders[preTestLogCount].provider_id, preTestLogCount + 1, "log_provider", connection);
             Assert.AreEqual(Enum_Log_Action.values["update"], logProviders[preTestLogCount].LogAction);
 
             Assert_LogProvider(testDataBuilder.provider, logProviders[preTestLogCount]);
@@ -231,7 +231,7 @@ namespace Netus2_Test.Integration
             Assert.IsNotEmpty(logProviders);
             Assert.AreEqual(preTestLogCount + 1, logProviders.Count);
 
-            Assert_LogTable((int)logProviders[preTestLogCount].provider_id, 1, "log_provider", connection);
+            Assert_LogTable((int)logProviders[preTestLogCount].provider_id, preTestLogCount + 1, "log_provider", connection);
             Assert.AreEqual(Enum_Log_Action.values["delete"], logProviders[preTestLogCount].LogAction);
 
             Assert_LogProvider(oldProvider, logProviders[preTestLogCount]);
