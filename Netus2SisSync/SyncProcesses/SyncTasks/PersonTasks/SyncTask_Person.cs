@@ -3,7 +3,6 @@ using Netus2_DatabaseConnection.daoInterfaces;
 using Netus2_DatabaseConnection.dataObjects;
 using Netus2_DatabaseConnection.dbAccess;
 using Netus2_DatabaseConnection.enumerations;
-using Netus2_DatabaseConnection.utilityTools;
 using Netus2SisSync.UtilityTools;
 using System;
 using System.Collections.Generic;
@@ -32,7 +31,11 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.PersonTasks
                 string sisFirstName = row["first_name"].ToString() == "" ? null : row["first_name"].ToString();
                 string sisMiddleName = row["middle_name"].ToString() == "" ? null : row["middle_name"].ToString();
                 string sisLastName = row["last_name"].ToString() == "" ? null : row["last_name"].ToString();
-                DateTime sisBirthDate = DateTime.Parse(row["birth_date"].ToString());
+
+                DateTime sisBirthDate = new DateTime();
+                if(row["birth_date"] != DBNull.Value)
+                    sisBirthDate = DateTime.Parse(row["birth_date"].ToString());
+
                 Enumeration sisGender = Enum_Gender.values[row["enum_gender_id"].ToString()];
                 Enumeration sisEthnic = row["enum_ethnic_id"].ToString() == "unset" ? Enum_Ethnic.values["unset"] : Enum_Ethnic.GetEnumFromSisCode(row["enum_ethnic_id"].ToString());
                 Enumeration sisResidenceStatus = Enum_Residence_Status.values[row["enum_residence_status_id"].ToString()];
@@ -107,7 +110,7 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.PersonTasks
             catch (Exception e)
             {
                 Debug.WriteLine(e.Message + "\n" + e.StackTrace);
-                SyncLogger.LogError(e, this, _netus2Connection);
+                SyncLogger.LogError(e, this, row, _netus2Connection);
             }
             finally
             {

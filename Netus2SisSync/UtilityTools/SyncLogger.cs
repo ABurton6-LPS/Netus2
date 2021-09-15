@@ -2,6 +2,7 @@
 using Netus2_DatabaseConnection.enumerations;
 using Netus2SisSync.SyncProcesses;
 using System;
+using System.Data;
 using System.Text;
 
 namespace Netus2SisSync.UtilityTools
@@ -89,6 +90,11 @@ namespace Netus2SisSync.UtilityTools
 
         public static void LogError(Exception e, SyncTask task, IConnectable connection)
         {
+            LogError(e, task, null, connection);
+        }
+
+        public static void LogError(Exception e, SyncTask task, DataRow row, IConnectable connection)
+        {
             string errorMessage = e.Message;
             errorMessage = e.Message.Replace("\'", "\'\'");
 
@@ -96,6 +102,17 @@ namespace Netus2SisSync.UtilityTools
             while (e.StackTrace.IndexOf('\'') > 0)
             {
                 errorStackTrace = e.StackTrace.Insert(e.StackTrace.IndexOf('\''), "\'");
+            }
+            
+            if(row != null)
+            {
+                StringBuilder dataThatCausedError = new StringBuilder();
+                foreach (DataColumn col in row.Table.Columns)
+                {
+                    dataThatCausedError.AppendFormat("{0},", row[col]);
+                }
+                dataThatCausedError = dataThatCausedError.Remove(dataThatCausedError.Length - 1, 1);
+                errorStackTrace += "\nData That Caused Error:\n" + dataThatCausedError.ToString() + ";";
             }
 
             StringBuilder sql = new StringBuilder("INSERT INTO sync_error(");

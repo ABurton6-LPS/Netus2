@@ -1108,7 +1108,7 @@ namespace Netus2_DatabaseConnection.utilityTools
             dtProvider.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(string);
+            dtColumn.DataType = typeof(int);
             dtColumn.ColumnName = "parent_provider_id";
             dtProvider.Columns.Add(dtColumn);
 
@@ -2563,7 +2563,7 @@ namespace Netus2_DatabaseConnection.utilityTools
             dtLogProvider.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(string);
+            dtColumn.DataType = typeof(int);
             dtColumn.ColumnName = "parent_provider_id";
             dtLogProvider.Columns.Add(dtColumn);
 
