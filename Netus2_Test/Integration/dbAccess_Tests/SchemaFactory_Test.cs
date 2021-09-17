@@ -143,7 +143,6 @@ namespace Netus2_Test.Integration
                 expectedColumns.Add("netus2_code");
                 expectedColumns.Add("sis_code");
                 expectedColumns.Add("hr_code");
-                expectedColumns.Add("pip_code");
                 expectedColumns.Add("descript");
             }
             else
@@ -277,7 +276,8 @@ namespace Netus2_Test.Integration
                         expectedColumns.Add("name");
                         expectedColumns.Add("enum_organization_id");
                         expectedColumns.Add("identifier");
-                        expectedColumns.Add("building_code");
+                        expectedColumns.Add("sis_building_code");
+                        expectedColumns.Add("hr_building_code");
                         expectedColumns.Add("organization_parent_id");
                         expectedColumns.Add("created");
                         expectedColumns.Add("created_by");

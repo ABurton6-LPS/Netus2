@@ -17,51 +17,72 @@ namespace Netus2_DatabaseConnection.utilityTools
 
         public static Dictionary<string, Enumeration> PopulateEnumValues(string tableName)
         {
-            Dictionary<string, Enumeration> enumerations = new Dictionary<string, Enumeration>();
-
             IConnectable connection = DbConnectionFactory.GetNetus2Connection();
+
+            DataTable tdEnumeration = new DataTableFactory().Dt_Netus2_Enumeration;
+
+            string sql = "SELECT * FROM " + tableName;
 
             IDataReader reader = null;
             try
             {
-                reader = connection.GetReader("SELECT * FROM " + tableName);
-                while (reader.Read())
-                {
-                    Enumeration enumeration = new Enumeration();
-                    for (int i = 0; i < reader.FieldCount; i++)
-                    {
-                        var value = reader.GetValue(i);
-                        switch (i)
-                        {
-                            case 0:
-                                enumeration.Id = value != DBNull.Value ? (int)value : -1;
-                                break;
-                            case 1:
-                                enumeration.Netus2Code = value != DBNull.Value ? ((string)value).ToLower() : null;
-                                break;
-                            case 2:
-                                enumeration.SisCode = value != DBNull.Value ? (string)value : null;
-                                break;
-                            case 3:
-                                enumeration.HrCode = value != DBNull.Value ? (string)value : null;
-                                break;
-                            case 4:
-                                enumeration.PipCode = value != DBNull.Value ? (string)value : null;
-                                break;
-                            case 5:
-                                enumeration.Descript = value != DBNull.Value ? (string)value : null;
-                                break;
-                            default:
-                                throw new Exception("Unexpected column found in " + tableName + " table: " + reader.GetName(i));
-                        }
-                    }
-                    enumerations.Add(enumeration.Netus2Code, enumeration);
-                }
+                reader = connection.GetReader(sql);
+                tdEnumeration.Load(reader);
             }
             finally
             {
                 if (reader != null)
                     reader.Close();
+            }
+
+            Dictionary<string, Enumeration> enumerations = new Dictionary<string, Enumeration>();
+            foreach (DataRow row in tdEnumeration.Rows)
+            {
+                Enumeration enumeration = new Enumeration();
+                foreach(DataColumn column in row.Table.Columns)
+                {
+                    string columnName = column.ColumnName;
+                    switch (columnName)
+                    {
+                        case "netus2_code":
+                            if (row[columnName] != DBNull.Value)
+                                enumeration.Netus2Code = row[columnName] != DBNull.Value ? ((string)row[columnName]).ToLower() : null;
+                            else
+                                enumeration.Netus2Code = null;
+                            break;
+                        case "sis_code":
+                            if (row[columnName] != DBNull.Value)
+                                enumeration.SisCode = row[columnName] != DBNull.Value ? (string)row[columnName] : null;
+                            else
+                                enumeration.SisCode = null;
+                            break;
+                        case "hr_code":
+                            if (row[columnName] != DBNull.Value)
+                                enumeration.HrCode = row[columnName] != DBNull.Value ? (string)row[columnName] : null;
+                            else
+                                enumeration.HrCode = null;
+                            break;
+                        case "descript":
+                            if (row[columnName] != DBNull.Value)
+                                enumeration.Descript = row[columnName] != DBNull.Value ? (string)row[columnName] : null;
+                            else
+                                enumeration.Descript = null;
+                            break;
+                        default:
+                            if (columnName.EndsWith("_id"))
+                            {
+                                if (row[columnName] != DBNull.Value)
+                                    enumeration.Id = row[columnName] != DBNull.Value ? (int)row[columnName] : -1;
+                                else
+                                    enumeration.Id = -1;
+
+                                break;
+                            }
+                            else
+                                throw new Exception("Unexpected column found in " + tableName + " table: " + columnName);
+                    }
+                }
+                enumerations.Add(enumeration.Netus2Code, enumeration);
             }
 
             connection.CloseConnection();

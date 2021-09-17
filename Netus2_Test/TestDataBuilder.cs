@@ -61,13 +61,15 @@ namespace Netus2_Test
 
         private void BuildTestData(IConnectable connection)
         {
-            district = new Organization("livonia public schools", Enum_Organization.values["district"], "lps", "dBc");
+            Enumeration orgEnum = Enum_Organization.values["district"];
+            district = new Organization("livonia public schools", orgEnum, "lps", "dBc");
             if (connection != null)
                 district = organizationDaoImpl.Write(district, connection);
             else
                 district.Id = 1;
 
             school = new Organization("livonia high school", Enum_Organization.values["school"], "lhs", DateTime.Now.ToString());
+            school.HrBuildingCode = "hr building code";
             if (connection != null)
                 school = organizationDaoImpl.Write(school, connection);
             else

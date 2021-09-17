@@ -488,10 +488,15 @@ namespace Netus2_DatabaseConnection
             else
                 row["identifier"] = DBNull.Value;
 
-            if (organization.BuildingCode != null)
-                row["building_code"] = organization.BuildingCode;
+            if (organization.SisBuildingCode != null)
+                row["sis_building_code"] = organization.SisBuildingCode;
             else
-                row["building_code"] = DBNull.Value;
+                row["sis_building_code"] = DBNull.Value;
+
+            if (organization.HrBuildingCode != null)
+                row["hr_building_code"] = organization.HrBuildingCode;
+            else
+                row["hr_building_code"] = DBNull.Value;
 
             if (parentOrganizationId != -1)
                 row["organization_parent_id"] = parentOrganizationId;
@@ -515,16 +520,21 @@ namespace Netus2_DatabaseConnection
             if (row["identifier"] != DBNull.Value)
                 identifier = (string)row["identifier"];
 
-            string buildingCode = null;
-            if (row["building_code"] != DBNull.Value)
-                buildingCode = (string)row["building_code"];
+            string sisBuildingCode = null;
+            if (row["sis_building_code"] != DBNull.Value)
+                sisBuildingCode = (string)row["sis_building_code"];
 
-            Organization org = new Organization(name, orgType, identifier, buildingCode);
+            Organization org = new Organization(name, orgType, identifier, sisBuildingCode);
 
             if (row["organization_id"] != DBNull.Value)
                 org.Id = (int)row["organization_id"];
             else
                 org.Id = -1;
+
+            if (row["hr_building_code"] != DBNull.Value)
+                org.HrBuildingCode = (string)row["hr_building_code"];
+            else
+                org.HrBuildingCode = null;
 
             return org;
         }

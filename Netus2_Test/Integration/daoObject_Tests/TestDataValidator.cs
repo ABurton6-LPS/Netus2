@@ -178,7 +178,7 @@ namespace Netus2_Test.Integration
             Assert.AreEqual(expected.Name, actual.Name);
             Assert.AreEqual(expected.OrganizationType, actual.OrganizationType);
             Assert.AreEqual(expected.Identifier, actual.Identifier);
-            Assert.AreEqual(expected.BuildingCode, actual.BuildingCode);
+            Assert.AreEqual(expected.SisBuildingCode, actual.SisBuildingCode);
             Assert.AreEqual(expected.Children.Count, actual.Children.Count);
             for (int i = 0; i < expected.Children.Count; i++)
             {
@@ -310,8 +310,25 @@ namespace Netus2_Test.Integration
             }
             else if (tableName.Length > 9 && tableName.Substring(0, 9) == "jct_class")
             {
-                sql = "SELECT * FROM " + tableName + " WHERE class_id = " + id;
-                Assert.AreEqual(expectedNumberOfRecords, RunSql(sql, connection));
+                if(tableName == "jct_class_person")
+                {
+                    sql = "SELECT * FROM " + tableName + " WHERE class_id = " + id;
+                    int foundNumberOfRecords = RunSql(sql, connection);
+                    if (foundNumberOfRecords == 0)
+                    {
+                        sql = "SELECT * FROM " + tableName + " WHERE person_id = " + id;
+                        Assert.AreEqual(expectedNumberOfRecords, RunSql(sql, connection));
+                    }
+                    else
+                    {
+                        Assert.Pass();
+                    }
+                }
+                else
+                {
+                    sql = "SELECT * FROM " + tableName + " WHERE class_id = " + id;
+                    Assert.AreEqual(expectedNumberOfRecords, RunSql(sql, connection));
+                }
             }
             else if (tableName.Length > 10 && tableName.Substring(0, 10) == "jct_course")
             {

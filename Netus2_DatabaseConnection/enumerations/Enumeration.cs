@@ -6,7 +6,6 @@
         public string Netus2Code;
         public string SisCode;
         public string HrCode;
-        public string PipCode;
         public string Descript;
 
         public override string ToString()
@@ -16,7 +15,6 @@
                 "Netus2Code: " + Netus2Code + " " +
                 "SisCode: " + SisCode + " " +
                 "HrCode: " + HrCode + " " +
-                "PipCode: " + PipCode + " " +
                 "Descript: " + Descript;
         }
     }

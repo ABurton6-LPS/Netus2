@@ -149,10 +149,10 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "AND school_year = " + tdBuilder.schoolYear.SchoolYear + " " +
                 "AND organization_id in (" +
                 "SELECT organization_id FROM organization WHERE building_code LIKE '" +
-                tdBuilder.school.BuildingCode + "')";
+                tdBuilder.school.SisBuildingCode + "')";
 
             academicSessionDaoImpl.Read_UsingBuildingCode_TermCode_Schoolyear(
-                tdBuilder.school.BuildingCode, 
+                tdBuilder.school.SisBuildingCode, 
                 tdBuilder.schoolYear.TermCode, 
                 tdBuilder.schoolYear.SchoolYear,
                 _netus2DbConnection);

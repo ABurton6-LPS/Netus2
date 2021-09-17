@@ -75,24 +75,24 @@ namespace Netus2_Test.Unit.SyncProcess
         public void SisRead_AcademicSession_TestData()
         {
             SisAcademicSessionTestData tstData = new SisAcademicSessionTestData();
-            tstData.SchoolCode = tdBuilder.district.BuildingCode;
+            tstData.SchoolCode = tdBuilder.district.SisBuildingCode;
             tstData.TermCode = tdBuilder.semester1.TermCode;
             tstData.SchoolYear = tdBuilder.semester1.SchoolYear;
             tstData.Name = tdBuilder.semester1.Name;
             tstData.SessionId = tdBuilder.semester1.SessionType.Netus2Code;
             tstData.StartDate = tdBuilder.semester1.StartDate;
             tstData.EndDate = tdBuilder.semester1.EndDate;
-            tstData.ParSessionCode = tdBuilder.school.BuildingCode + "-" + tdBuilder.schoolYear.TermCode + "-" + tdBuilder.schoolYear.SchoolYear;
+            tstData.ParSessionCode = tdBuilder.school.SisBuildingCode + "-" + tdBuilder.schoolYear.TermCode + "-" + tdBuilder.schoolYear.SchoolYear;
 
             SisAcademicSessionTestData tstData2 = new SisAcademicSessionTestData();
-            tstData2.SchoolCode = tdBuilder.district.BuildingCode;
+            tstData2.SchoolCode = tdBuilder.district.SisBuildingCode;
             tstData2.TermCode = tdBuilder.semester2.TermCode;
             tstData2.SchoolYear = tdBuilder.semester2.SchoolYear;
             tstData2.Name = tdBuilder.semester2.Name;
             tstData2.SessionId = tdBuilder.semester2.SessionType.Netus2Code;
             tstData2.StartDate = tdBuilder.semester2.StartDate;
             tstData2.EndDate = tdBuilder.semester2.EndDate;
-            tstData2.ParSessionCode = tdBuilder.school.BuildingCode + "-" + tdBuilder.schoolYear.TermCode + "-" + tdBuilder.schoolYear.SchoolYear;
+            tstData2.ParSessionCode = tdBuilder.school.SisBuildingCode + "-" + tdBuilder.schoolYear.TermCode + "-" + tdBuilder.schoolYear.SchoolYear;
 
             List<SisAcademicSessionTestData> tstDataSet = new List<SisAcademicSessionTestData>();
             tstDataSet.Add(tstData);
@@ -131,7 +131,7 @@ namespace Netus2_Test.Unit.SyncProcess
         public void SyncChild_AcademicSession_ShouldWriteNewRecord()
         {
             SisAcademicSessionTestData tstData = new SisAcademicSessionTestData();
-            tstData.SchoolCode = tdBuilder.district.BuildingCode;
+            tstData.SchoolCode = tdBuilder.district.SisBuildingCode;
             tstData.TermCode = tdBuilder.schoolYear.TermCode;
             tstData.SchoolYear = tdBuilder.schoolYear.SchoolYear;
             tstData.Name = tdBuilder.schoolYear.Name;
@@ -159,7 +159,7 @@ namespace Netus2_Test.Unit.SyncProcess
             mockOrganizationDaoImpl._shouldReadReturnData = true;
 
             SisAcademicSessionTestData tstData = new SisAcademicSessionTestData();
-            tstData.SchoolCode = tdBuilder.district.BuildingCode;
+            tstData.SchoolCode = tdBuilder.district.SisBuildingCode;
             tstData.TermCode = tdBuilder.schoolYear.TermCode;
             tstData.SchoolYear = tdBuilder.schoolYear.SchoolYear;
             tstData.Name = tdBuilder.schoolYear.Name;
@@ -188,7 +188,7 @@ namespace Netus2_Test.Unit.SyncProcess
             mockOrganizationDaoImpl._shouldReadReturnData = true;
 
             SisAcademicSessionTestData tstData = new SisAcademicSessionTestData();
-            tstData.SchoolCode = tdBuilder.district.BuildingCode;
+            tstData.SchoolCode = tdBuilder.district.SisBuildingCode;
             tstData.TermCode = tdBuilder.schoolYear.TermCode;
             tstData.SchoolYear = tdBuilder.schoolYear.SchoolYear;
             tstData.Name = "NewTestName";
@@ -218,14 +218,14 @@ namespace Netus2_Test.Unit.SyncProcess
             tdBuilder.district.Children.Clear();
 
             SisAcademicSessionTestData tstData = new SisAcademicSessionTestData();
-            tstData.SchoolCode = tdBuilder.district.BuildingCode;
+            tstData.SchoolCode = tdBuilder.district.SisBuildingCode;
             tstData.TermCode = tdBuilder.schoolYear.TermCode;
             tstData.SchoolYear = tdBuilder.schoolYear.SchoolYear;
             tstData.Name = tdBuilder.semester1.Name;
             tstData.SessionId = tdBuilder.semester1.SessionType.Netus2Code;
             tstData.StartDate = tdBuilder.semester1.StartDate;
             tstData.EndDate = tdBuilder.semester1.EndDate;
-            tstData.ParSessionCode = tdBuilder.school.BuildingCode + "-" + tdBuilder.schoolYear.TermCode + "-" + tdBuilder.schoolYear.SchoolYear;
+            tstData.ParSessionCode = tdBuilder.school.SisBuildingCode + "-" + tdBuilder.schoolYear.TermCode + "-" + tdBuilder.schoolYear.SchoolYear;
 
             List<SisAcademicSessionTestData> tstDataSet = new List<SisAcademicSessionTestData>();
             tstDataSet.Add(tstData);

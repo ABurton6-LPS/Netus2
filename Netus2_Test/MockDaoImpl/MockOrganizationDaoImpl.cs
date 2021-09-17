@@ -64,7 +64,7 @@ namespace Netus2_Test.MockDaoImpl
                 return null;
         }
 
-        public Organization Read_WithBuildingCode(string buildingCode, IConnectable connection)
+        public Organization Read_WithSisBuildingCode(string sisBuildingCode, IConnectable connection)
         {
             WasCalled_ReadWithBuildingCode = true;
 

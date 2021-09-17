@@ -36,7 +36,7 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AcademicSessionTasks
                 DateTime sisEndDate = DateTime.Parse(row["end_date"].ToString());
 
                 IOrganizationDao orgDaoImpl = DaoImplFactory.GetOrganizationDaoImpl();
-                Organization org = orgDaoImpl.Read_WithBuildingCode(sisSchoolCode, _netus2Connection);
+                Organization org = orgDaoImpl.Read_WithSisBuildingCode(sisSchoolCode, _netus2Connection);
 
                 AcademicSession academicSession = new AcademicSession(sisName, sisEnumSession, org, sisTermCode);
                 academicSession.SchoolYear = sisSchoolYear;

@@ -69,15 +69,15 @@ namespace Netus2_Test.Unit.SyncProcess
             tstData.Name = tdBuilder.district.Name;
             tstData.OrgId = tdBuilder.district.OrganizationType.Netus2Code;
             tstData.Ident = tdBuilder.district.Identifier;
-            tstData.BldgCode = tdBuilder.district.BuildingCode;
+            tstData.BldgCode = tdBuilder.district.SisBuildingCode;
             tstData.ParOrgId = null;
 
             SisOrganizationTestData tstData2 = new SisOrganizationTestData();
             tstData2.Name = tdBuilder.school.Name;
             tstData2.OrgId = tdBuilder.school.OrganizationType.Netus2Code;
             tstData2.Ident = tdBuilder.school.Identifier;
-            tstData2.BldgCode = tdBuilder.school.BuildingCode;
-            tstData2.ParOrgId = tdBuilder.district.BuildingCode;
+            tstData2.BldgCode = tdBuilder.school.SisBuildingCode;
+            tstData2.ParOrgId = tdBuilder.district.SisBuildingCode;
 
             List<SisOrganizationTestData> tstDataSet = new List<SisOrganizationTestData>();
             tstDataSet.Add(tstData);
@@ -112,8 +112,8 @@ namespace Netus2_Test.Unit.SyncProcess
             tstData.Name = tdBuilder.school.Name;
             tstData.OrgId = tdBuilder.school.OrganizationType.Netus2Code;
             tstData.Ident = tdBuilder.school.Identifier;
-            tstData.BldgCode = tdBuilder.school.BuildingCode;
-            tstData.ParOrgId = tdBuilder.district.BuildingCode;
+            tstData.BldgCode = tdBuilder.school.SisBuildingCode;
+            tstData.ParOrgId = tdBuilder.district.SisBuildingCode;
 
             List<SisOrganizationTestData> tstDataSet = new List<SisOrganizationTestData>();
             tstDataSet.Add(tstData);
@@ -136,8 +136,8 @@ namespace Netus2_Test.Unit.SyncProcess
             tstData.Name = tdBuilder.school.Name;
             tstData.OrgId = tdBuilder.school.OrganizationType.Netus2Code;
             tstData.Ident = tdBuilder.school.Identifier;
-            tstData.BldgCode = tdBuilder.school.BuildingCode;
-            tstData.ParOrgId = tdBuilder.district.BuildingCode;
+            tstData.BldgCode = tdBuilder.school.SisBuildingCode;
+            tstData.ParOrgId = tdBuilder.district.SisBuildingCode;
 
             List<SisOrganizationTestData> tstDataSet = new List<SisOrganizationTestData>();
             tstDataSet.Add(tstData);
@@ -161,8 +161,8 @@ namespace Netus2_Test.Unit.SyncProcess
             tstData.Name = "NewTestName";
             tstData.OrgId = tdBuilder.school.OrganizationType.Netus2Code;
             tstData.Ident = tdBuilder.school.Identifier;
-            tstData.BldgCode = tdBuilder.school.BuildingCode;
-            tstData.ParOrgId = tdBuilder.district.BuildingCode;
+            tstData.BldgCode = tdBuilder.school.SisBuildingCode;
+            tstData.ParOrgId = tdBuilder.district.SisBuildingCode;
 
             List<SisOrganizationTestData> tstDataSet = new List<SisOrganizationTestData>();
             tstDataSet.Add(tstData);
@@ -185,8 +185,8 @@ namespace Netus2_Test.Unit.SyncProcess
             tstData.Name = tdBuilder.school.Name;
             tstData.OrgId = tdBuilder.school.OrganizationType.Netus2Code;
             tstData.Ident = tdBuilder.school.Identifier;
-            tstData.BldgCode = tdBuilder.school.BuildingCode;
-            tstData.ParOrgId = tdBuilder.district.BuildingCode;
+            tstData.BldgCode = tdBuilder.school.SisBuildingCode;
+            tstData.ParOrgId = tdBuilder.district.SisBuildingCode;
 
             List<SisOrganizationTestData> tstDataSet = new List<SisOrganizationTestData>();
             tstDataSet.Add(tstData);
@@ -239,7 +239,7 @@ namespace Netus2_Test.Unit.SyncProcess
                 .Callback(() => count++);
 
             reader.Setup(x => x.FieldCount)
-                .Returns(() => 10);
+                .Returns(() => 11);
 
             reader.Setup(x => x.GetValues(It.IsAny<object[]>()))
                 .Callback<object[]>(
@@ -250,11 +250,12 @@ namespace Netus2_Test.Unit.SyncProcess
                         values[2] = 1;
                         values[3] = tstDataSet[count].Ident;
                         values[4] = tstDataSet[count].BldgCode;
-                        values[5] = 1;
-                        values[6] = new DateTime();
-                        values[7] = "Test";
-                        values[8] = new DateTime();
-                        values[9] = "Test";
+                        values[5] = "Test HR Building Code";
+                        values[6] = 1;
+                        values[7] = new DateTime();
+                        values[8] = "Test";
+                        values[9] = new DateTime();
+                        values[10] = "Test";
                     }
                 ).Returns(count);
 
@@ -279,34 +280,39 @@ namespace Netus2_Test.Unit.SyncProcess
                 .Returns(() => 3);
 
             reader.Setup(x => x.GetName(4))
-                .Returns(() => "building_code");
-            reader.Setup(x => x.GetOrdinal("building_code"))
+                .Returns(() => "sis_building_code");
+            reader.Setup(x => x.GetOrdinal("sis_building_code"))
                 .Returns(() => 4);
 
             reader.Setup(x => x.GetName(5))
-                .Returns(() => "organization_parent_id");
-            reader.Setup(x => x.GetOrdinal("organization_parent_id"))
+                .Returns(() => "hr_building_code");
+            reader.Setup(x => x.GetOrdinal("hr_building_code"))
                 .Returns(() => 5);
 
             reader.Setup(x => x.GetName(6))
-                .Returns(() => "created");
-            reader.Setup(x => x.GetOrdinal("created"))
+                .Returns(() => "organization_parent_id");
+            reader.Setup(x => x.GetOrdinal("organization_parent_id"))
                 .Returns(() => 6);
 
             reader.Setup(x => x.GetName(7))
-                .Returns(() => "created_by");
-            reader.Setup(x => x.GetOrdinal("created_by"))
+                .Returns(() => "created");
+            reader.Setup(x => x.GetOrdinal("created"))
                 .Returns(() => 7);
 
             reader.Setup(x => x.GetName(8))
-                .Returns(() => "changed");
-            reader.Setup(x => x.GetOrdinal("changed"))
+                .Returns(() => "created_by");
+            reader.Setup(x => x.GetOrdinal("created_by"))
                 .Returns(() => 8);
 
             reader.Setup(x => x.GetName(9))
+                .Returns(() => "changed");
+            reader.Setup(x => x.GetOrdinal("changed"))
+                .Returns(() => 9);
+
+            reader.Setup(x => x.GetName(10))
                 .Returns(() => "changed_by");
             reader.Setup(x => x.GetOrdinal("changed_by"))
-                .Returns(() => 9);
+                .Returns(() => 10);
 
             _netus2Connection.mockReader = reader;
         }
