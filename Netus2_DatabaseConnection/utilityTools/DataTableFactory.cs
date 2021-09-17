@@ -10,6 +10,8 @@ namespace Netus2_DatabaseConnection.utilityTools
         public DataTable Dt_Sis_Organization = null;
         public DataTable Dt_Sis_Person = null;
 
+        public DataTable Dt_Netus2_Enumeration = null;
+
         public DataTable Dt_Netus2_AcademicSession = null;
         public DataTable Dt_Netus2_Address = null;
         public DataTable Dt_Netus2_Application = null;
@@ -68,6 +70,8 @@ namespace Netus2_DatabaseConnection.utilityTools
             Dt_Sis_Address = CreateDataTable_Sis_Address();
             Dt_Sis_Organization = CreateDataTable_Sis_Organization();
             Dt_Sis_Person = CreateDataTable_Sis_Person();
+
+            Dt_Netus2_Enumeration = CreateDataTable_Netus2_Enumeration();
 
             Dt_Netus2_AcademicSession = CreateDataTable_Netus2_AcademicSession();
             Dt_Netus2_Address = CreateDataTable_Netus2_Address();
@@ -267,6 +271,39 @@ namespace Netus2_DatabaseConnection.utilityTools
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(string);
             dtColumn.ColumnName = "login_pw";
+            dtPerson.Columns.Add(dtColumn);
+
+            return dtPerson;
+        }
+
+        private DataTable CreateDataTable_Netus2_Enumeration()
+        {
+            DataTable dtPerson = new DataTable("Enumeration");
+            DataColumn dtColumn;
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(int);
+            dtColumn.ColumnName = "enum_id";
+            dtPerson.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "netus2_code";
+            dtPerson.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "sis_code";
+            dtPerson.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "hr_code";
+            dtPerson.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "descript";
             dtPerson.Columns.Add(dtColumn);
 
             return dtPerson;
@@ -906,7 +943,12 @@ namespace Netus2_DatabaseConnection.utilityTools
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(string);
-            dtColumn.ColumnName = "building_code";
+            dtColumn.ColumnName = "sis_building_code";
+            dtOrganization.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "hr_building_code";
             dtOrganization.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
@@ -2306,7 +2348,12 @@ namespace Netus2_DatabaseConnection.utilityTools
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(string);
-            dtColumn.ColumnName = "building_code";
+            dtColumn.ColumnName = "sis_building_code";
+            dtLogOrganization.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "hr_building_code";
             dtLogOrganization.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();

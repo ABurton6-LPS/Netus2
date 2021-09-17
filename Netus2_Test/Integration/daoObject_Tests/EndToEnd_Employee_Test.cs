@@ -189,7 +189,7 @@ namespace Netus2_Test.Integration
         }
 
         [Test]
-        public void GivenPersonWithRelation_WhenRelatedPersonIsDeleted_ShouldAlsoDeleteAllRellatedTableRecords()
+        public void GivenStudentWithTeacher_WhenTeacherIsDeleted_ShouldAlsoDeleteAllRellatedTableRecords()
         {
             Person student = testDataBuilder.student;
             Person teacher = testDataBuilder.teacher;
@@ -203,6 +203,8 @@ namespace Netus2_Test.Integration
             Assert_Table(teacher.Addresses[0].Id, expectedNumberOfRecords, "address", connection);
             Assert_Table(teacher.EmploymentSessions[0].Id, expectedNumberOfRecords, "employment_session", connection);
             Assert_Table(teacher.UniqueIdentifiers[0].Id, expectedNumberOfRecords, "unique_identifier", connection);
+            Assert_Table(teacher.Id, expectedNumberOfRecords, "jct_class_person", connection);
+
 
             personDaoImpl.Delete(teacher, connection);
 
@@ -210,10 +212,42 @@ namespace Netus2_Test.Integration
             Assert_Table(student.Id, 0, "jct_person_person", connection);
             Assert_Table(teacher.Id, 0, "jct_person_role", connection);
             Assert_Table(teacher.Id, 0, "jct_person_app", connection);
-            Assert_Table(teacher.Id, 0, "phone_number", connection);
-            Assert_Table(teacher.Id, 0, "address", connection);
-            Assert_Table(teacher.Id, 0, "employment_session", connection);
-            Assert_Table(teacher.Id, 0, "unique_identifier", connection);
+            Assert_Table(teacher.PhoneNumbers[0].Id, 0, "phone_number", connection);
+            Assert_Table(teacher.Id, 0, "jct_person_address", connection);
+            Assert_Table(teacher.EmploymentSessions[0].Id, 0, "employment_session", connection);
+            Assert_Table(teacher.UniqueIdentifiers[0].Id, 0, "unique_identifier", connection);
+            Assert_Table(student.Id, 0, "jct_class_person", connection);
+        }
+
+        [Test]
+        public void GivenTeacherWithStudent_WhenStudentIsDeleted_ShouldAlsoDeleteAllRellatedTableRecords()
+        {
+            Person student = testDataBuilder.student;
+            Person teacher = testDataBuilder.teacher;
+
+            int expectedNumberOfRecords = 1;
+            Assert_Table(student.Id, expectedNumberOfRecords, "jct_person_person", connection);
+            Assert_Table(teacher.Id, expectedNumberOfRecords, "jct_person_person", connection);
+            Assert_Table(student.Id, expectedNumberOfRecords, "jct_person_role", connection);
+            Assert_Table(student.Id, expectedNumberOfRecords, "jct_person_app", connection);
+            Assert_Table(student.PhoneNumbers[0].Id, expectedNumberOfRecords, "phone_number", connection);
+            Assert_Table(student.Addresses[0].Id, expectedNumberOfRecords, "address", connection);
+            Assert_Table(student.Enrollments[0].Id, expectedNumberOfRecords, "enrollment", connection);
+            Assert_Table(student.UniqueIdentifiers[0].Id, expectedNumberOfRecords, "unique_identifier", connection);
+            Assert_Table(student.Marks[0].Id, expectedNumberOfRecords, "mark", connection);
+
+
+            personDaoImpl.Delete(student, connection);
+
+            Assert_Table(student.Id, 0, "jct_person_person", connection);
+            Assert_Table(teacher.Id, 0, "jct_person_person", connection);
+            Assert_Table(student.Id, 0, "jct_person_role", connection);
+            Assert_Table(student.Id, 0, "jct_person_app", connection);
+            Assert_Table(student.PhoneNumbers[0].Id, 0, "phone_number", connection);
+            Assert_Table(student.Id, 0, "jct_person_address", connection);
+            Assert_Table(student.Enrollments[0].Id, 0, "enrollment", connection);
+            Assert_Table(student.UniqueIdentifiers[0].Id, 0, "unique_identifier", connection);
+            Assert_Table(student.Marks[0].Id, 0, "mark", connection);
         }
 
         [Test]

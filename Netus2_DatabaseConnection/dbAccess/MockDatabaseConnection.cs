@@ -1,4 +1,5 @@
 ﻿using Moq;
+using Netus2_DatabaseConnection.utilityTools;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Data;
@@ -13,10 +14,12 @@ namespace Netus2_DatabaseConnection.dbAccess
         public string expectedNonQuerySql = null;
         public string expectedNewRecordSql = null;
 
-        private List<string> testEnumKeys = new List<string>();               
+        private List<DataRow> testEnums = new List<DataRow>();               
 
         public MockDatabaseConnection(string connectionString)
         {
+            List<string> testEnumKeys = new List<string>();
+
             testEnumKeys.Add("start");
             testEnumKeys.Add("end");
             testEnumKeys.Add("error");
@@ -48,6 +51,16 @@ namespace Netus2_DatabaseConnection.dbAccess
             testEnumKeys.Add("staff");
             testEnumKeys.Add("01656");
             testEnumKeys.Add("primary");
+
+            DataTable mockEnumDataTable = new DataTableFactory().Dt_Netus2_Enumeration;
+
+            foreach(string testEnumKey in testEnumKeys)
+            {
+                DataRow newRow = mockEnumDataTable.NewRow();
+                newRow["netus2_code"] = testEnumKey;
+                newRow["descript"] = "Test Enum";
+                testEnums.Add(newRow);
+            }            
         }
 
         public ConnectionState GetState()
@@ -79,34 +92,62 @@ namespace Netus2_DatabaseConnection.dbAccess
         {
             if (sql.Contains("SELECT * FROM enum_"))
             {
+                int count = -1;
                 var enumReader = new Mock<IDataReader>();
 
-                int count = -1;
-
                 enumReader.Setup(x => x.Read())
-                    .Returns(() => count < testEnumKeys.Count - 1)
+                    .Returns(() => count < testEnums.Count - 1)
                     .Callback(() => count++);
 
                 enumReader.Setup(x => x.FieldCount)
-                    .Returns(() => 6);
+                    .Returns(() => 5);
 
-                enumReader.Setup(x => x.GetValue(0))
+                enumReader.Setup(x => x.GetValues(It.IsAny<object[]>()))
+                .Callback<object[]>(
+                    (values) =>
+                    {
+                        values[0] = testEnums[count]["enum_id"];
+                        values[1] = testEnums[count]["netus2_code"];
+                        values[2] = testEnums[count]["sis_code"];
+                        values[3] = testEnums[count]["hr_code"];
+                        values[4] = testEnums[count]["descript"];
+                    }
+                ).Returns(count);
+
+                enumReader.Setup(x => x.GetName(0))
+                .Returns(() => "enum_id");
+                enumReader.Setup(x => x.GetOrdinal("enum_id"))
+                    .Returns(() => 0);
+                enumReader.Setup(x => x.GetFieldType(0))
+                    .Returns(() => typeof(int));
+
+                enumReader.Setup(x => x.GetName(1))
+                .Returns(() => "netus2_code");
+                enumReader.Setup(x => x.GetOrdinal("netus2_code"))
                     .Returns(() => 1);
+                enumReader.Setup(x => x.GetFieldType(1))
+                    .Returns(() => typeof(string));
 
-                enumReader.Setup(x => x.GetValue(1))
-                    .Returns(() => testEnumKeys[count]);
+                enumReader.Setup(x => x.GetName(2))
+                .Returns(() => "sis_code");
+                enumReader.Setup(x => x.GetOrdinal("sis_code"))
+                    .Returns(() => 2);
+                enumReader.Setup(x => x.GetFieldType(2))
+                    .Returns(() => typeof(string));
 
-                enumReader.Setup(x => x.GetValue(2))
-                    .Returns(() => null);
+                enumReader.Setup(x => x.GetName(3))
+                .Returns(() => "hr_code");
+                enumReader.Setup(x => x.GetOrdinal("hr_code"))
+                    .Returns(() => 3);
+                enumReader.Setup(x => x.GetFieldType(3))
+                    .Returns(() => typeof(string));
 
-                enumReader.Setup(x => x.GetValue(3))
-                    .Returns(() => null);
-
-                enumReader.Setup(x => x.GetValue(4))
-                    .Returns(() => null);
-
-                enumReader.Setup(x => x.GetValue(5))
-                    .Returns(() => "TestEnum");
+                enumReader.Setup(x => x.GetName(4))
+                .Returns(() => "descript");
+                enumReader.Setup(x => x.GetOrdinal("descript"))
+                    .Returns(() => 4);
+                enumReader.Setup(x => x.GetFieldType(4))
+                    .Returns(() => typeof(string));
 
                 return enumReader.Object;
             }

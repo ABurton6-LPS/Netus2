@@ -26,7 +26,8 @@ namespace Netus2_DatabaseConnection.daoImplementations
             sql.Append("AND name " + (row["name"] != DBNull.Value ? "LIKE '" + row["name"] + "' " : "IS NULL "));
             sql.Append("AND enum_organization_id " + (row["enum_organization_id"] != DBNull.Value ? "= " + row["enum_organization_id"] + " " : "IS NULL "));
             sql.Append("AND identifier " + (row["identifier"] != DBNull.Value ? "LIKE '" + row["identifier"] + "' " : "IS NULL "));
-            sql.Append("AND building_code " + (row["building_code"] != DBNull.Value ? "LIKE '" + row["building_code"] + "' " : "IS NULL "));
+            sql.Append("AND sis_building_code " + (row["sis_building_code"] != DBNull.Value ? "LIKE '" + row["sis_building_code"] + "' " : "IS NULL "));
+            sql.Append("AND hr_building_code " + (row["hr_building_code"] != DBNull.Value ? "LIKE '" + row["hr_building_code"] + "' " : "IS NULL "));
 
             connection.ExecuteNonQuery(sql.ToString());
         }
@@ -65,9 +66,9 @@ namespace Netus2_DatabaseConnection.daoImplementations
             }
         }
 
-        public Organization Read_WithBuildingCode(string buildingCode, IConnectable connection)
+        public Organization Read_WithSisBuildingCode(string sisBuildingCode, IConnectable connection)
         {
-            string sql = "SELECT * FROM organization WHERE building_code LIKE ('" + buildingCode + "')";
+            string sql = "SELECT * FROM organization WHERE sis_building_code LIKE ('" + sisBuildingCode + "')";
 
             List<Organization> results = Read(sql, connection);
             if (results.Count > 0)
@@ -128,8 +129,10 @@ namespace Netus2_DatabaseConnection.daoImplementations
                         sql.Append("AND enum_organization_id = " + row["enum_organization_id"] + " ");
                     if (row["identifier"] != DBNull.Value)
                         sql.Append("AND identifier LIKE '" + row["identifier"] + "' ");
-                    if (row["building_code"] != DBNull.Value)
-                        sql.Append("AND building_code LIKE '" + row["building_code"] + "' ");
+                    if (row["sis_building_code"] != DBNull.Value)
+                        sql.Append("AND sis_building_code LIKE '" + row["sis_building_code"] + "' ");
+                    if (row["hr_building_code"] != DBNull.Value)
+                        sql.Append("AND hr_building_code LIKE '" + row["hr_building_code"] + "' ");
                     if (row["organization_parent_id"] != DBNull.Value)
                         sql.Append("AND organization_parent_id = " + row["organization_parent_id"]);
                 }
@@ -198,7 +201,8 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 sql.Append("name = " + (row["name"] != DBNull.Value ? "'" + row["name"] + "', " : "NULL, "));
                 sql.Append("enum_organization_id = " + (row["enum_organization_id"] != DBNull.Value ? row["enum_organization_id"] + ", " : "NULL, "));
                 sql.Append("identifier = " + (row["identifier"] != DBNull.Value ? "'" + row["identifier"] + "', " : "NULL, "));
-                sql.Append("building_code = " + (row["building_code"] != DBNull.Value ? "'" + row["building_code"] + "', " : "NULL, "));
+                sql.Append("sis_building_code = " + (row["sis_building_code"] != DBNull.Value ? "'" + row["sis_building_code"] + "', " : "NULL, "));
+                sql.Append("hr_building_code = " + (row["hr_building_code"] != DBNull.Value ? "'" + row["hr_building_code"] + "', " : "NULL, "));
                 sql.Append("organization_parent_id = " + (row["organization_parent_id"] != DBNull.Value ? row["organization_parent_id"] + ", " : "NULL, "));
                 sql.Append("changed = GETDATE(), ");
                 sql.Append("changed_by = 'Netus2' ");
@@ -225,13 +229,14 @@ namespace Netus2_DatabaseConnection.daoImplementations
             sqlValues.Append(row["name"] != DBNull.Value ? "'" + row["name"] + "', " : "NULL, ");
             sqlValues.Append(row["enum_organization_id"] != DBNull.Value ? row["enum_organization_id"] + ", " : "NULL, ");
             sqlValues.Append(row["identifier"] != DBNull.Value ? "'" + row["identifier"] + "', " : "NULL, ");
-            sqlValues.Append(row["building_code"] != DBNull.Value ? "'" + row["building_code"] + "', " : "NULL, ");
+            sqlValues.Append(row["sis_building_code"] != DBNull.Value ? "'" + row["sis_building_code"] + "', " : "NULL, ");
+            sqlValues.Append(row["hr_building_code"] != DBNull.Value ? "'" + row["hr_building_code"] + "', " : "NULL, ");
             sqlValues.Append(row["organization_parent_id"] != DBNull.Value ? row["organization_parent_id"] + ", " : "NULL, ");
             sqlValues.Append("GETDATE(), ");
             sqlValues.Append("'Netus2'");
 
             StringBuilder sql = new StringBuilder("INSERT INTO organization (");
-            sql.Append("name, enum_organization_id, identifier, building_code, organization_parent_id, created, created_by");
+            sql.Append("name, enum_organization_id, identifier, sis_building_code, hr_building_code, organization_parent_id, created, created_by");
             sql.Append(") VALUES (");
             sql.Append(sqlValues.ToString());
             sql.Append(")");

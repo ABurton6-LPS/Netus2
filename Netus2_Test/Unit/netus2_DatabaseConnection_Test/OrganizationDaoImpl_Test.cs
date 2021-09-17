@@ -40,7 +40,8 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "AND name LIKE '" + tdBuilder.school.Name + "' " +
                 "AND enum_organization_id = " + tdBuilder.school.OrganizationType.Id + " " +
                 "AND identifier LIKE '" + tdBuilder.school.Identifier + "' " +
-                "AND building_code LIKE '" + tdBuilder.school.BuildingCode + "' ";
+                "AND sis_building_code LIKE '" + tdBuilder.school.SisBuildingCode + "' " +
+                "AND hr_building_code LIKE '" + tdBuilder.school.HrBuildingCode + "' ";
 
             organizationDaoImpl.Delete(tdBuilder.school, _netus2DbConnection);
         }
@@ -57,7 +58,8 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "name = '" + tdBuilder.school.Name + "', " +
                 "enum_organization_id = " + tdBuilder.school.OrganizationType.Id + ", " +
                 "identifier = '" + tdBuilder.school.Identifier + "', " +
-                "building_code = '" + tdBuilder.school.BuildingCode + "', " +
+                "sis_building_code = '" + tdBuilder.school.SisBuildingCode + "', " +
+                "hr_building_code = '" + tdBuilder.school.HrBuildingCode + "', " +
                 "organization_parent_id = NULL, " +
                 "changed = GETDATE(), " +
                 "changed_by = 'Netus2' " +
@@ -85,12 +87,12 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
         }
 
         [TestCase]
-        public void ReadWithBuildingCode_ShouldUseExpectedSql()
+        public void ReadWithSisBuildingCode_ShouldUseExpectedSql()
         {
             _netus2DbConnection.expectedReaderSql =
-                "SELECT * FROM organization WHERE building_code LIKE ('" + tdBuilder.school.BuildingCode + "')";
+                "SELECT * FROM organization WHERE sis_building_code LIKE ('" + tdBuilder.school.SisBuildingCode + "')";
 
-            organizationDaoImpl.Read_WithBuildingCode(tdBuilder.school.BuildingCode, _netus2DbConnection);
+            organizationDaoImpl.Read_WithSisBuildingCode(tdBuilder.school.SisBuildingCode, _netus2DbConnection);
         }
 
         [TestCase]
@@ -155,7 +157,8 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "AND name LIKE '" + tdBuilder.school.Name + "' " +
                 "AND enum_organization_id = " + tdBuilder.school.OrganizationType.Id + " " +
                 "AND identifier LIKE '" + tdBuilder.school.Identifier + "' " +
-                "AND building_code LIKE '" + tdBuilder.school.BuildingCode + "' " +
+                "AND sis_building_code LIKE '" + tdBuilder.school.SisBuildingCode + "' " +
+                "AND hr_building_code LIKE '" + tdBuilder.school.HrBuildingCode + "' " +
                 "AND organization_parent_id = " + tdBuilder.district.Id;
 
             organizationDaoImpl.Read(tdBuilder.school, tdBuilder.district.Id, _netus2DbConnection);
@@ -169,7 +172,8 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "name, " +
                 "enum_organization_id, " +
                 "identifier, " +
-                "building_code, " +
+                "sis_building_code, " +
+                "hr_building_code, " +
                 "organization_parent_id, " +
                 "created, " +
                 "created_by" +
@@ -177,7 +181,8 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "'" + tdBuilder.school.Name + "', " +
                 tdBuilder.school.OrganizationType.Id + ", " +
                 "'" + tdBuilder.school.Identifier + "', " +
-                "'" + tdBuilder.school.BuildingCode + "', " +
+                "'" + tdBuilder.school.SisBuildingCode + "', " +
+                "'" + tdBuilder.school.HrBuildingCode + "', " +
                 "NULL, " +
                 "GETDATE(), " +
                 "'Netus2')";
@@ -197,7 +202,8 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "name = '" + tdBuilder.school.Name + "', " +
                 "enum_organization_id = " + tdBuilder.school.OrganizationType.Id + ", " +
                 "identifier = '" + tdBuilder.school.Identifier + "', " +
-                "building_code = '" + tdBuilder.school.BuildingCode + "', " +
+                "sis_building_code = '" + tdBuilder.school.SisBuildingCode + "', " +
+                "hr_building_code = '" + tdBuilder.school.HrBuildingCode + "', " +
                 "organization_parent_id = NULL, " +
                 "changed = GETDATE(), " +
                 "changed_by = 'Netus2' " +
@@ -214,7 +220,8 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "name, " +
                 "enum_organization_id, " +
                 "identifier, " +
-                "building_code, " +
+                "sis_building_code, " +
+                "hr_building_code, " +
                 "organization_parent_id, " +
                 "created, " +
                 "created_by" +
@@ -222,7 +229,8 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "'" + tdBuilder.school.Name + "', " +
                 tdBuilder.school.OrganizationType.Id + ", " +
                 "'" + tdBuilder.school.Identifier + "', " +
-                "'" + tdBuilder.school.BuildingCode + "', " +
+                "'" + tdBuilder.school.SisBuildingCode + "', " +
+                "'" + tdBuilder.school.HrBuildingCode + "', " +
                 tdBuilder.district.Id + ", " +
                 "GETDATE(), " +
                 "'Netus2')";
@@ -242,7 +250,8 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "name = '" + tdBuilder.school.Name + "', " +
                 "enum_organization_id = " + tdBuilder.school.OrganizationType.Id + ", " +
                 "identifier = '" + tdBuilder.school.Identifier + "', " +
-                "building_code = '" + tdBuilder.school.BuildingCode + "', " +
+                "sis_building_code = '" + tdBuilder.school.SisBuildingCode + "', " +
+                "hr_building_code = '" + tdBuilder.school.HrBuildingCode + "', " +
                 "organization_parent_id = " + tdBuilder.district.Id + ", " +
                 "changed = GETDATE(), " +
                 "changed_by = 'Netus2' " +
@@ -259,7 +268,8 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "name, " +
                 "enum_organization_id, " +
                 "identifier, " +
-                "building_code, " +
+                "sis_building_code, " +
+                "hr_building_code, " +
                 "organization_parent_id, " +
                 "created, " +
                 "created_by" +
@@ -267,7 +277,8 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "'" + tdBuilder.school.Name + "', " +
                 tdBuilder.school.OrganizationType.Id + ", " +
                 "'" + tdBuilder.school.Identifier + "', " +
-                "'" + tdBuilder.school.BuildingCode + "', " +
+                "'" + tdBuilder.school.SisBuildingCode + "', " +
+                "'" + tdBuilder.school.HrBuildingCode + "', " +
                 "NULL, " +
                 "GETDATE(), " +
                 "'Netus2')";
@@ -283,7 +294,8 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "name, " +
                 "enum_organization_id, " +
                 "identifier, " +
-                "building_code, " +
+                "sis_building_code, " +
+                "hr_building_code, " +
                 "organization_parent_id, " +
                 "created, " +
                 "created_by" +
@@ -291,7 +303,8 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "'" + tdBuilder.school.Name + "', " +
                 tdBuilder.school.OrganizationType.Id + ", " +
                 "'" + tdBuilder.school.Identifier + "', " +
-                "'" + tdBuilder.school.BuildingCode + "', " +
+                "'" + tdBuilder.school.SisBuildingCode + "', " +
+                "'" + tdBuilder.school.HrBuildingCode + "', " +
                 tdBuilder.district.Id + ", " +
                 "GETDATE(), " +
                 "'Netus2')";
@@ -315,7 +328,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 .Callback(() => count++);
 
             reader.Setup(x => x.FieldCount)
-                .Returns(() => 10);
+                .Returns(() => 11);
 
             reader.Setup(x => x.GetValues(It.IsAny<object[]>()))
                 .Callback<object[]>(
@@ -325,12 +338,13 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                         values[1] = tstDataSet[count]["name"];
                         values[2] = tstDataSet[count]["enum_organization_id"];
                         values[3] = tstDataSet[count]["identifier"];
-                        values[4] = tstDataSet[count]["building_code"];
-                        values[5] = tstDataSet[count]["organization_parent_id"];
-                        values[6] = tstDataSet[count]["created"];
-                        values[7] = tstDataSet[count]["created_by"];
-                        values[8] = tstDataSet[count]["changed"];
-                        values[9] = tstDataSet[count]["changed_by"];
+                        values[4] = tstDataSet[count]["sis_building_code"];
+                        values[5] = tstDataSet[count]["hr_building_code"];
+                        values[6] = tstDataSet[count]["organization_parent_id"];
+                        values[7] = tstDataSet[count]["created"];
+                        values[8] = tstDataSet[count]["created_by"];
+                        values[9] = tstDataSet[count]["changed"];
+                        values[10] = tstDataSet[count]["changed_by"];
                     }
                 ).Returns(count);
 
@@ -363,45 +377,52 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 .Returns(() => typeof(string));
 
             reader.Setup(x => x.GetName(4))
-                .Returns(() => "building_code");
-            reader.Setup(x => x.GetOrdinal("building_code"))
+                .Returns(() => "sis_building_code");
+            reader.Setup(x => x.GetOrdinal("sis_building_code"))
                 .Returns(() => 4);
             reader.Setup(x => x.GetFieldType(4))
                 .Returns(() => typeof(string));
 
             reader.Setup(x => x.GetName(5))
-                .Returns(() => "organization_parent_id");
-            reader.Setup(x => x.GetOrdinal("organization_parent_id"))
+                .Returns(() => "hr_building_code");
+            reader.Setup(x => x.GetOrdinal("hr_building_code"))
                 .Returns(() => 5);
             reader.Setup(x => x.GetFieldType(5))
-                .Returns(() => typeof(int));
-
-            reader.Setup(x => x.GetName(6))
-                .Returns(() => "created");
-            reader.Setup(x => x.GetOrdinal("created"))
-                .Returns(() => 6);
-            reader.Setup(x => x.GetFieldType(6))
-                .Returns(() => typeof(DateTime));
-
-            reader.Setup(x => x.GetName(7))
-                .Returns(() => "created_by");
-            reader.Setup(x => x.GetOrdinal("created_by"))
-                .Returns(() => 7);
-            reader.Setup(x => x.GetFieldType(7))
                 .Returns(() => typeof(string));
 
-            reader.Setup(x => x.GetName(8))
-                .Returns(() => "changed");
-            reader.Setup(x => x.GetOrdinal("changed"))
-                .Returns(() => 8);
-            reader.Setup(x => x.GetFieldType(8))
+            reader.Setup(x => x.GetName(6))
+                .Returns(() => "organization_parent_id");
+            reader.Setup(x => x.GetOrdinal("organization_parent_id"))
+                .Returns(() => 6);
+            reader.Setup(x => x.GetFieldType(6))
+                .Returns(() => typeof(int));
+
+            reader.Setup(x => x.GetName(7))
+                .Returns(() => "created");
+            reader.Setup(x => x.GetOrdinal("created"))
+                .Returns(() => 7);
+            reader.Setup(x => x.GetFieldType(7))
                 .Returns(() => typeof(DateTime));
 
+            reader.Setup(x => x.GetName(8))
+                .Returns(() => "created_by");
+            reader.Setup(x => x.GetOrdinal("created_by"))
+                .Returns(() => 8);
+            reader.Setup(x => x.GetFieldType(8))
+                .Returns(() => typeof(string));
+
             reader.Setup(x => x.GetName(9))
-                .Returns(() => "changed_by");
-            reader.Setup(x => x.GetOrdinal("changed_by"))
+                .Returns(() => "changed");
+            reader.Setup(x => x.GetOrdinal("changed"))
                 .Returns(() => 9);
             reader.Setup(x => x.GetFieldType(9))
+                .Returns(() => typeof(DateTime));
+
+            reader.Setup(x => x.GetName(10))
+                .Returns(() => "changed_by");
+            reader.Setup(x => x.GetOrdinal("changed_by"))
+                .Returns(() => 10);
+            reader.Setup(x => x.GetFieldType(10))
                 .Returns(() => typeof(string));
 
             _netus2DbConnection.mockReader = reader;

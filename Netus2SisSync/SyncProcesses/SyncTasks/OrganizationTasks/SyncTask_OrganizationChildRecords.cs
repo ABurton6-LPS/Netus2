@@ -48,7 +48,7 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.OrganizationTasks
                     if ((org.Name != foundOrgs[0].Name) ||
                         (org.OrganizationType != foundOrgs[0].OrganizationType) ||
                         (org.Identifier != foundOrgs[0].Identifier) ||
-                        (org.BuildingCode != foundOrgs[0].BuildingCode))
+                        (org.SisBuildingCode != foundOrgs[0].SisBuildingCode))
                     {
                         orgDaoImpl.Update(org, _netus2Connection);
                     }

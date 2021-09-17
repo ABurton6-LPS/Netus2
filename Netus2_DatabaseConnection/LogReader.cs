@@ -1454,11 +1454,17 @@ namespace Netus2_DatabaseConnection
                             else
                                 logOrg.identifier = null;
                             break;
-                        case "building_code":
+                        case "sis_building_code":
                             if (row[columnName] != DBNull.Value)
-                                logOrg.building_code = (string)row[columnName];
+                                logOrg.sis_building_code = (string)row[columnName];
                             else
-                                logOrg.building_code = null;
+                                logOrg.sis_building_code = null;
+                            break;
+                        case "hr_building_code":
+                            if (row[columnName] != DBNull.Value)
+                                logOrg.hr_building_code = (string)row[columnName];
+                            else
+                                logOrg.hr_building_code = null;
                             break;
                         case "organization_parent_id":
                             if (row[columnName] != DBNull.Value)

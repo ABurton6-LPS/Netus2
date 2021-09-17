@@ -75,7 +75,6 @@
                     + "netus2_code varchar(20) NOT NULL UNIQUE,"
                     + "sis_code varchar(20),"
                     + "hr_code varchar(20),"
-                    + "pip_code varchar(20),"
                     + "descript varchar(150) NOT NULL)";
 
             connection.ExecuteNonQuery(sql);
@@ -89,7 +88,6 @@
                 + "netus2_code varchar(20) NOT NULL, "
                 + "sis_code varchar(20), "
                 + "hr_code varchar(20), "
-                + "pip_code varchar(20), "
                 + "descript varchar(1150) NOT NULL)";
 
             connection.ExecuteNonQuery(sql);
@@ -103,7 +101,6 @@
                     + "netus2_code varchar(20) NOT NULL UNIQUE,"
                     + "sis_code varchar(20),"
                     + "hr_code varchar(20),"
-                    + "pip_code varchar(20),"
                     + "descript varchar(150) NOT NULL)";
 
             connection.ExecuteNonQuery(sql);
@@ -117,7 +114,6 @@
                     + "netus2_code varchar(20) NOT NULL UNIQUE,"
                     + "sis_code varchar(20),"
                     + "hr_code varchar(20),"
-                    + "pip_code varchar(20),"
                     + "descript varchar(150) NOT NULL)";
 
             connection.ExecuteNonQuery(sql);
@@ -131,7 +127,6 @@
                     + "netus2_code varchar(20) NOT NULL UNIQUE,"
                     + "sis_code varchar(20),"
                     + "hr_code varchar(20),"
-                    + "pip_code varchar(20),"
                     + "descript varchar(150) NOT NULL)";
 
             connection.ExecuteNonQuery(sql);
@@ -145,7 +140,6 @@
                     + "netus2_code varchar(20) NOT NULL UNIQUE,"
                     + "sis_code varchar(20),"
                     + "hr_code varchar(20),"
-                    + "pip_code varchar(20),"
                     + "descript varchar(150) NOT NULL)";
 
             connection.ExecuteNonQuery(sql);
@@ -159,7 +153,6 @@
                     + "netus2_code varchar(20) NOT NULL UNIQUE,"
                     + "sis_code varchar(20),"
                     + "hr_code varchar(20),"
-                    + "pip_code varchar(20),"
                     + "descript varchar(150) NOT NULL)";
 
             connection.ExecuteNonQuery(sql);
@@ -173,7 +166,6 @@
                     + "netus2_code varchar(20) NOT NULL UNIQUE,"
                     + "sis_code varchar(20),"
                     + "hr_code varchar(20),"
-                    + "pip_code varchar(20),"
                     + "descript varchar(150) NOT NULL)";
 
             connection.ExecuteNonQuery(sql);
@@ -187,7 +179,6 @@
                     + "netus2_code varchar(20) NOT NULL UNIQUE,"
                     + "sis_code varchar(20),"
                     + "hr_code varchar(20),"
-                    + "pip_code varchar(20),"
                     + "descript varchar(150) NOT NULL)";
 
             connection.ExecuteNonQuery(sql);
@@ -201,7 +192,6 @@
                     + "netus2_code varchar(20) NOT NULL UNIQUE,"
                     + "sis_code varchar(20),"
                     + "hr_code varchar(20),"
-                    + "pip_code varchar(20),"
                     + "descript varchar(150) NOT NULL)";
 
             connection.ExecuteNonQuery(sql);
@@ -215,7 +205,6 @@
                     + "netus2_code varchar(20) NOT NULL UNIQUE,"
                     + "sis_code varchar(20),"
                     + "hr_code varchar(20),"
-                    + "pip_code varchar(20),"
                     + "descript varchar(150) NOT NULL)";
 
             connection.ExecuteNonQuery(sql);
@@ -229,7 +218,6 @@
                     + "netus2_code varchar(20) NOT NULL UNIQUE,"
                     + "sis_code varchar(20),"
                     + "hr_code varchar(20),"
-                    + "pip_code varchar(20),"
                     + "descript varchar(150) NOT NULL)";
 
             connection.ExecuteNonQuery(sql);
@@ -242,7 +230,6 @@
                     + "netus2_code varchar(20) NOT NULL UNIQUE,"
                     + "sis_code varchar(20),"
                     + "hr_code varchar(20),"
-                    + "pip_code varchar(20),"
                     + "descript varchar(150) NOT NULL)";
 
             connection.ExecuteNonQuery(sql);
@@ -256,7 +243,6 @@
                     + "netus2_code varchar(20) NOT NULL UNIQUE,"
                     + "sis_code varchar(20),"
                     + "hr_code varchar(20),"
-                    + "pip_code varchar(20),"
                     + "descript varchar(150) NOT NULL)";
 
             connection.ExecuteNonQuery(sql);
@@ -270,7 +256,6 @@
                     + "netus2_code varchar(20) NOT NULL UNIQUE,"
                     + "sis_code varchar(20),"
                     + "hr_code varchar(20),"
-                    + "pip_code varchar(20),"
                     + "descript varchar(150) NOT NULL)";
 
             connection.ExecuteNonQuery(sql);
@@ -284,7 +269,6 @@
                     + "netus2_code varchar(20) NOT NULL UNIQUE,"
                     + "sis_code varchar(20),"
                     + "hr_code varchar(20),"
-                    + "pip_code varchar(20),"
                     + "descript varchar(150) NOT NULL)";
 
             connection.ExecuteNonQuery(sql);
@@ -298,7 +282,6 @@
                     + "netus2_code varchar(20) NOT NULL UNIQUE,"
                     + "sis_code varchar(20),"
                     + "hr_code varchar(20),"
-                    + "pip_code varchar(20),"
                     + "descript varchar(150) NOT NULL)";
 
             connection.ExecuteNonQuery(sql);
@@ -312,7 +295,6 @@
                     + "netus2_code varchar(20) NOT NULL UNIQUE,"
                     + "sis_code varchar(20),"
                     + "hr_code varchar(20),"
-                    + "pip_code varchar(20),"
                     + "descript varchar(150) NOT NULL)";
 
             connection.ExecuteNonQuery(sql);
@@ -326,7 +308,6 @@
                     + "netus2_code varchar(20) NOT NULL UNIQUE,"
                     + "sis_code varchar(20),"
                     + "hr_code varchar(20),"
-                    + "pip_code varchar(20),"
                     + "descript varchar(150) NOT NULL)";
 
             connection.ExecuteNonQuery(sql);
@@ -340,7 +321,6 @@
                     + "netus2_code varchar(20) NOT NULL UNIQUE,"
                     + "sis_code varchar(20),"
                     + "hr_code varchar(20),"
-                    + "pip_code varchar(20),"
                     + "descript varchar(150) NOT NULL)";
 
             connection.ExecuteNonQuery(sql);
@@ -354,7 +334,6 @@
                     + "netus2_code varchar(20) NOT NULL UNIQUE,"
                     + "sis_code varchar(20),"
                     + "hr_code varchar(20),"
-                    + "pip_code varchar(20),"
                     + "descript varchar(150) NOT NULL)";
 
             connection.ExecuteNonQuery(sql);
@@ -590,7 +569,8 @@
                     + "name varchar(150) NOT NULL,"
                     + "enum_organization_id int NOT NULL,"
                     + "identifier varchar(150),"
-                    + "building_code varchar(150) NOT NULL UNIQUE,"
+                    + "sis_building_code varchar(150) NOT NULL UNIQUE,"
+                    + "hr_building_code varchar(150),"
                     + "organization_parent_id int,"
                     + "created datetime NOT NULL,"
                     + "created_by varchar(150) NOT NULL,"

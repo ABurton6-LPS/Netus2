@@ -29,11 +29,11 @@ namespace Netus2_DatabaseConnection.daoInterfaces
         Organization Read_WithAcademicSessionId(int academicSessionId, IConnectable connection);
 
         /// <summary>
-        /// Returns the specific Organization object, which is linked to the provided buildingCode.
+        /// Returns the specific Organization object, which is linked to the provided sisBuildingCode.
         /// </summary>
-        /// <param name="buildingCode"></param>
+        /// <param name="sisBuildingCode"></param>
         /// <param name="connection"></param>
-        Organization Read_WithBuildingCode(string buildingCode, IConnectable connection);
+        Organization Read_WithSisBuildingCode(string sisBuildingCode, IConnectable connection);
 
         /// <summary>
         /// Returns a list of Organization objects, read from the database, which match the parameters provided in the 
