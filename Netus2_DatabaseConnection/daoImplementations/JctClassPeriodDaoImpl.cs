@@ -46,23 +46,14 @@ namespace Netus2_DatabaseConnection.daoImplementations
         private List<DataRow> Read(string sql, IConnectable connection)
         {
             DataTable dtJctClassPeriod = new DataTableFactory().Dt_Netus2_JctClassPeriod;
-            List<DataRow> foundDataRows = new List<DataRow>();
-            IDataReader reader = null;
-            try
-            {
-                reader = connection.GetReader(sql.ToString());
-                dtJctClassPeriod.Load(reader);
+            dtJctClassPeriod = connection.ReadIntoDataTable(sql, dtJctClassPeriod).Result;
 
-                foreach(DataRow row in dtJctClassPeriod.Rows)
-                {
-                    foundDataRows.Add(row);
-                }
-            }
-            finally
+            List<DataRow> foundDataRows = new List<DataRow>();
+            foreach (DataRow row in dtJctClassPeriod.Rows)
             {
-                if (reader != null)
-                    reader.Close();
+                foundDataRows.Add(row);
             }
+
             return foundDataRows;
         }
 

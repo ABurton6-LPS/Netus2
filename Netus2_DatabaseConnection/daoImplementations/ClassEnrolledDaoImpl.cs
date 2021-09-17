@@ -137,21 +137,11 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private List<ClassEnrolled> Read(string sql, IConnectable connection)
         {
-            DataTable tdClassEnrolled = new DataTableFactory().Dt_Netus2_ClassEnrolled;
-            IDataReader reader = null;
-            try
-            {
-                reader = connection.GetReader(sql.ToString());
-                tdClassEnrolled.Load(reader);
-            }
-            finally
-            {
-                if (reader != null)
-                    reader.Close();
-            }
+            DataTable dtClassEnrolled = new DataTableFactory().Dt_Netus2_ClassEnrolled;
+            dtClassEnrolled = connection.ReadIntoDataTable(sql, dtClassEnrolled).Result;
 
             List<ClassEnrolled> results = new List<ClassEnrolled>();
-            foreach (DataRow row in tdClassEnrolled.Rows)
+            foreach (DataRow row in dtClassEnrolled.Rows)
             {
                 AcademicSession foundAcademicSession = Read_AcademicSession((int)row["academic_session_id"], connection);
                 Course foundCourse = Read_Course((int)row["course_id"], connection);

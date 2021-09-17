@@ -122,18 +122,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         private List<Provider> Read(string sql, IConnectable connection)
         {
             DataTable dtProvider = new DataTableFactory().Dt_Netus2_Provider;
-
-            IDataReader reader = null;
-            try
-            {
-                reader = connection.GetReader(sql);
-                dtProvider.Load(reader);
-            }
-            finally
-            {
-                if (reader != null)
-                    reader.Close();
-            }
+            dtProvider = connection.ReadIntoDataTable(sql, dtProvider).Result;
 
             List<Provider> results = new List<Provider>();
             foreach (DataRow row in dtProvider.Rows)

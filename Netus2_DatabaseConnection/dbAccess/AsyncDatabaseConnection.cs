@@ -1,16 +1,18 @@
-﻿using System;
+﻿using Netus2_DatabaseConnection.utilityTools;
+using System;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Threading.Tasks;
 
 namespace Netus2_DatabaseConnection.dbAccess
 {
-    public class GenericDatabaseConnection// : IConnectable
+    public class AsyncDatabaseConnection : IConnectable
     {
-        private IDbConnection connection;
-        private IDbTransaction transaction = null;
+        private SqlConnection connection;
+        private SqlTransaction transaction = null;
 
-        public GenericDatabaseConnection(string connectionString)
+        public AsyncDatabaseConnection(string connectionString)
         {
             connection = new SqlConnection(connectionString);
             connection.Open();
@@ -47,50 +49,67 @@ namespace Netus2_DatabaseConnection.dbAccess
             }
         }
 
-        public IDataReader GetReader(string sql)
+        public async Task<DataTable> ReadIntoDataTable(string sql, DataTable dt)
         {
+
             if ((sql == null) || (sql == "") || !(sql.ToUpper().Substring(0, 6).Contains("SELECT")))
             {
                 throw new Exception("SQL must begin with 'SELECT'.");
             }
 
-            SqlCommand command = null;
-
             if (transaction != null)
             {
-                command = new SqlCommand(sql, (SqlConnection)connection, (SqlTransaction)transaction);
+                using (var command = new SqlCommand(sql, connection, transaction))
+                {
+                    using (var reader = await command.ExecuteReaderAsync())
+                    {
+                        dt.Load(reader);
+                    }
+                }
             }
             else
             {
-                command = new SqlCommand(sql, (SqlConnection)connection);
+                using (var command = new SqlCommand(sql, connection))
+                {
+                    using (var reader = await command.ExecuteReaderAsync())
+                    {
+                        dt.Load(reader);
+                    }
+                }
             }
 
-            return command.ExecuteReader();
+            return dt;
         }
 
-        public int ExecuteNonQuery(string sql)
+        public async Task<int> ExecuteNonQuery(string sql)
         {
             if ((sql == null) || (sql == "") || (sql.ToUpper().Substring(0, 6).Contains("SELECT")))
             {
                 throw new Exception("SQL Cannot be empty, null, or a query.");
             }
 
-            IDbCommand command = null;
+            int returnValue = 0;
 
             if (transaction != null)
             {
-                command = new SqlCommand(sql, (SqlConnection)connection, (SqlTransaction)transaction);
+                using (var command = new SqlCommand(sql, connection, transaction))
+                {
+                    returnValue = await command.ExecuteNonQueryAsync();
+                }
             }
             else
             {
-                command = new SqlCommand(sql, (SqlConnection)connection);
+                using (var command = new SqlCommand(sql, connection))
+                {
+                    returnValue = await command.ExecuteNonQueryAsync();
+                }
             }
 
-            int returnValue = command.ExecuteNonQuery();
             if(returnValue == 0)
             {
                 throw new Exception("SQL Non-Query did not affect any rows:\n" + sql);
             }
+
             return returnValue;
         }
 
@@ -102,8 +121,7 @@ namespace Netus2_DatabaseConnection.dbAccess
             }
 
             int idOfInsertedRecord = -1;
-            int numberOfInsertedRecords = ExecuteNonQuery(sql);
-
+            int numberOfInsertedRecords = ExecuteNonQuery(sql).Result;
 
             if (numberOfInsertedRecords != 1)
             {
@@ -115,7 +133,11 @@ namespace Netus2_DatabaseConnection.dbAccess
             IDataReader reader = null;
             try
             {
-                reader = GetReader(sql);
+                if(transaction != null)
+                    reader = new SqlCommand(sql, connection, transaction).ExecuteReader();
+                else
+                    reader = new SqlCommand(sql, connection).ExecuteReader();
+
                 while (reader.Read())
                 {
                     idOfInsertedRecord = (int)reader.GetDecimal(0);

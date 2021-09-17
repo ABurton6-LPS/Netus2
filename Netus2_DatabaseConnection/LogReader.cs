@@ -12,21 +12,10 @@ namespace Netus2_DatabaseConnection
     {
         public List<LogPerson> Read_LogPerson(IConnectable connection)
         {
-            DataTable dtLogPerson = new DataTableFactory().Dt_Netus2_Log_Person;
-
             string sql = "SELECT * FROM log_person";
 
-            IDataReader reader = null;
-            try
-            {
-                reader = connection.GetReader(sql);
-                dtLogPerson.Load(reader);
-            }
-            finally
-            {
-                if (reader != null)
-                    reader.Close();
-            }
+            DataTable dtLogPerson = new DataTableFactory().Dt_Netus2_Log_Person;
+            dtLogPerson = connection.ReadIntoDataTable(sql, dtLogPerson).Result;
 
             List<LogPerson> logPeople = new List<LogPerson>();
             foreach (DataRow row in dtLogPerson.Rows)
@@ -156,21 +145,10 @@ namespace Netus2_DatabaseConnection
 
         public List<LogJctPersonRole> Read_LogJctPersonRole(IConnectable connection)
         {
-            DataTable dtLogJctpersonRole = new DataTableFactory().Dt_Netus2_Log_JctPersonRole;
-
             string sql = "SELECT * FROM log_jct_person_role";
 
-            IDataReader reader = null;
-            try
-            {
-                reader = connection.GetReader(sql);
-                dtLogJctpersonRole.Load(reader);
-            }
-            finally
-            {
-                if (reader != null)
-                    reader.Close();
-            }
+            DataTable dtLogJctpersonRole = new DataTableFactory().Dt_Netus2_Log_JctPersonRole;
+            dtLogJctpersonRole = connection.ReadIntoDataTable(sql, dtLogJctpersonRole).Result;
 
             List<LogJctPersonRole> logJctPersonRoles = new List<LogJctPersonRole>();
             foreach (DataRow row in dtLogJctpersonRole.Rows)
@@ -228,21 +206,10 @@ namespace Netus2_DatabaseConnection
 
         public List<LogJctPersonPerson> Read_LogJctPersonPerson(IConnectable connection)
         {
-            DataTable dtLogJctPersonPerson = new DataTableFactory().Dt_Netus2_Log_JctPersonPerson;
-
             string sql = "SELECT * FROM log_jct_person_person";
 
-            IDataReader reader = null;
-            try
-            {
-                reader = connection.GetReader(sql);
-                dtLogJctPersonPerson.Load(reader);
-            }
-            finally
-            {
-                if (reader != null)
-                    reader.Close();
-            }
+            DataTable dtLogJctPersonPerson = new DataTableFactory().Dt_Netus2_Log_JctPersonPerson;
+            dtLogJctPersonPerson = connection.ReadIntoDataTable(sql, dtLogJctPersonPerson).Result;
 
             List<LogJctPersonPerson> logJctPersonPersons = new List<LogJctPersonPerson>();
             foreach (DataRow row in dtLogJctPersonPerson.Rows)
@@ -301,21 +268,10 @@ namespace Netus2_DatabaseConnection
 
         public List<LogUniqueIdentifier> Read_LogUniqueIdentifier(IConnectable connection)
         {
-            DataTable dtLogUniqueIdentifier = new DataTableFactory().Dt_Netus2_Log_UniqueIdentifier;
-
             string sql = "SELECT * FROM log_unique_identifier";
 
-            IDataReader reader = null;
-            try
-            {
-                reader = connection.GetReader(sql);
-                dtLogUniqueIdentifier.Load(reader);
-            }
-            finally
-            {
-                if (reader != null)
-                    reader.Close();
-            }
+            DataTable dtLogUniqueIdentifier = new DataTableFactory().Dt_Netus2_Log_UniqueIdentifier;
+            dtLogUniqueIdentifier = connection.ReadIntoDataTable(sql, dtLogUniqueIdentifier).Result;
 
             List<LogUniqueIdentifier> logUniqueIdentifiers = new List<LogUniqueIdentifier>();
             foreach (DataRow row in dtLogUniqueIdentifier.Rows)
@@ -416,21 +372,10 @@ namespace Netus2_DatabaseConnection
 
         public List<LogProvider> Read_LogProvider(IConnectable connection)
         {
-            DataTable dtLogProvider = new DataTableFactory().Dt_Netus2_Log_Provider;
-
             string sql = "SELECT * FROM log_provider";
 
-            IDataReader reader = null;
-            try
-            {
-                reader = connection.GetReader(sql);
-                dtLogProvider.Load(reader);
-            }
-            finally
-            {
-                if (reader != null)
-                    reader.Close();
-            }
+            DataTable dtLogProvider = new DataTableFactory().Dt_Netus2_Log_Provider;
+            dtLogProvider = connection.ReadIntoDataTable(sql, dtLogProvider).Result;
 
             List<LogProvider> logProviders = new List<LogProvider>();
             foreach(DataRow row in dtLogProvider.Rows)
@@ -531,21 +476,10 @@ namespace Netus2_DatabaseConnection
 
         public List<LogApp> Read_LogApp(IConnectable connection)
         {
-            DataTable dtLogApp = new DataTableFactory().Dt_Netus2_Log_Application;
-
             string sql = "SELECT * FROM log_app";
 
-            IDataReader reader = null;
-            try
-            {
-                reader = connection.GetReader(sql);
-                dtLogApp.Load(reader);
-            }
-            finally
-            {
-                if (reader != null)
-                    reader.Close();
-            }
+            DataTable dtLogApp = new DataTableFactory().Dt_Netus2_Log_Application;
+            dtLogApp = connection.ReadIntoDataTable(sql, dtLogApp).Result;
 
             List<LogApp> logApps = new List<LogApp>();
             foreach (DataRow row in dtLogApp.Rows)
@@ -634,21 +568,10 @@ namespace Netus2_DatabaseConnection
 
         public List<LogJctPersonApp> Read_LogJctPersonApp(IConnectable connection)
         {
-            DataTable dtLogJctPersonApp = new DataTableFactory().Dt_Netus2_Log_JctPersonApp;
-
             string sql = "SELECT * FROM log_jct_person_app";
 
-            IDataReader reader = null;
-            try
-            {
-                reader = connection.GetReader(sql);
-                dtLogJctPersonApp.Load(reader);
-            }
-            finally
-            {
-                if (reader != null)
-                    reader.Close();
-            }
+            DataTable dtLogJctPersonApp = new DataTableFactory().Dt_Netus2_Log_JctPersonApp;
+            dtLogJctPersonApp = connection.ReadIntoDataTable(sql, dtLogJctPersonApp).Result;
 
             List<LogJctPersonApp> logJctPersonApps = new List<LogJctPersonApp>();
             foreach (DataRow row in dtLogJctPersonApp.Rows)
@@ -707,21 +630,10 @@ namespace Netus2_DatabaseConnection
 
         public List<LogJctClassPerson> Read_LogJctClassPerson(IConnectable connection)
         {
-            DataTable dtLogJctClassPerson = new DataTableFactory().Dt_Netus2_Log_JctClassPerson;
-
             string sql = "SELECT * FROM log_jct_class_person";
 
-            IDataReader reader = null;
-            try
-            {
-                reader = connection.GetReader(sql);
-                dtLogJctClassPerson.Load(reader);
-            }
-            finally
-            {
-                if (reader != null)
-                    reader.Close();
-            }
+            DataTable dtLogJctClassPerson = new DataTableFactory().Dt_Netus2_Log_JctClassPerson;
+            dtLogJctClassPerson = connection.ReadIntoDataTable(sql, dtLogJctClassPerson).Result;
 
             List<LogJctClassPerson> logJctClassPersonDaos = new List<LogJctClassPerson>();
             foreach (DataRow row in dtLogJctClassPerson.Rows)
@@ -786,21 +698,10 @@ namespace Netus2_DatabaseConnection
 
         public List<LogPhoneNumber> Read_LogPhoneNumber(IConnectable connection)
         {
-            DataTable dtLogPhoneNumber = new DataTableFactory().Dt_Netus2_Log_PhoneNumber;
-
             string sql = "SELECT * FROM log_phone_number";
 
-            IDataReader reader = null;
-            try
-            {
-                reader = connection.GetReader(sql);
-                dtLogPhoneNumber.Load(reader);
-            }
-            finally
-            {
-                if (reader != null)
-                    reader.Close();
-            }
+            DataTable dtLogPhoneNumber = new DataTableFactory().Dt_Netus2_Log_PhoneNumber;
+            dtLogPhoneNumber = connection.ReadIntoDataTable(sql, dtLogPhoneNumber).Result;
 
             List<LogPhoneNumber> logPhoneNumbers = new List<LogPhoneNumber>();
             foreach (DataRow row in dtLogPhoneNumber.Rows)
@@ -898,21 +799,10 @@ namespace Netus2_DatabaseConnection
 
         public List<LogAddress> Read_LogAddress(IConnectable connection)
         {
-            DataTable dtLogAddress = new DataTableFactory().Dt_Netus2_Log_Address;
-
             string sql = "SELECT * FROM log_address";
 
-            IDataReader reader = null;
-            try
-            {
-                reader = connection.GetReader(sql);
-                dtLogAddress.Load(reader);
-            }
-            finally
-            {
-                if (reader != null)
-                    reader.Close();
-            }
+            DataTable dtLogAddress = new DataTableFactory().Dt_Netus2_Log_Address;
+            dtLogAddress = connection.ReadIntoDataTable(sql, dtLogAddress).Result;
 
             List<LogAddress> logAddresses = new List<LogAddress>();
             foreach (DataRow row in dtLogAddress.Rows)
@@ -1055,21 +945,10 @@ namespace Netus2_DatabaseConnection
 
         public List<LogJctPersonAddress> Read_LogJctPersonAddress(IConnectable connection)
         {
-            DataTable dtLogJctPersonAddress = new DataTableFactory().Dt_Netus2_Log_JctPersonAddress;
-
             string sql = "SELECT * FROM log_jct_person_address";
 
-            IDataReader reader = null;
-            try
-            {
-                reader = connection.GetReader(sql);
-                dtLogJctPersonAddress.Load(reader);
-            }
-            finally
-            {
-                if (reader != null)
-                    reader.Close();
-            }
+            DataTable dtLogJctPersonAddress = new DataTableFactory().Dt_Netus2_Log_JctPersonAddress;
+            dtLogJctPersonAddress = connection.ReadIntoDataTable(sql, dtLogJctPersonAddress).Result;
 
             List<LogJctPersonAddress> logJctPersonAddresss = new List<LogJctPersonAddress>();
             foreach (DataRow row in dtLogJctPersonAddress.Rows)
@@ -1128,21 +1007,10 @@ namespace Netus2_DatabaseConnection
 
         public List<LogEmploymentSession> Read_LogEmploymentSession(IConnectable connection)
         {
-            DataTable dtLogEmploymentSession = new DataTableFactory().Dt_Netus2_Log_EmploymentSession;
-
             string sql = "SELECT * FROM log_employment_session";
 
-            IDataReader reader = null;
-            try
-            {
-                reader = connection.GetReader(sql);
-                dtLogEmploymentSession.Load(reader);
-            }
-            finally
-            {
-                if (reader != null)
-                    reader.Close();
-            }
+            DataTable dtLogEmploymentSession = new DataTableFactory().Dt_Netus2_Log_EmploymentSession;
+            dtLogEmploymentSession = connection.ReadIntoDataTable(sql, dtLogEmploymentSession).Result;
 
             List<LogEmploymentSession> logEmploymentSessions = new List<LogEmploymentSession>();
             foreach (DataRow row in dtLogEmploymentSession.Rows)
@@ -1261,21 +1129,10 @@ namespace Netus2_DatabaseConnection
 
         public List<LogAcademicSession> Read_LogAcademicSession(IConnectable connection)
         {
-            DataTable dtLogAcademicSession = new DataTableFactory().Dt_Netus2_Log_AcademicSession;
-
             string sql = "SELECT * FROM log_academic_session";
 
-            IDataReader reader = null;
-            try
-            {
-                reader = connection.GetReader(sql);
-                dtLogAcademicSession.Load(reader);
-            }
-            finally
-            {
-                if (reader != null)
-                    reader.Close();
-            }
+            DataTable dtLogAcademicSession = new DataTableFactory().Dt_Netus2_Log_AcademicSession;
+            dtLogAcademicSession = connection.ReadIntoDataTable(sql, dtLogAcademicSession).Result;
 
             List<LogAcademicSession> logAcademicSessions = new List<LogAcademicSession>();
             foreach (DataRow row in dtLogAcademicSession.Rows)
@@ -1400,20 +1257,10 @@ namespace Netus2_DatabaseConnection
 
         public List<LogOrganization> Read_LogOrganization(IConnectable connection)
         {
-            DataTable dtLogOrganization = new DataTableFactory().Dt_Netus2_Log_Organization;
-
             string sql = "SELECT * FROM log_organization";
-            IDataReader reader = null;
-            try
-            {
-                reader = connection.GetReader(sql);
-                dtLogOrganization.Load(reader);
-            }
-            finally
-            {
-                if (reader != null)
-                    reader.Close();
-            }
+
+            DataTable dtLogOrganization = new DataTableFactory().Dt_Netus2_Log_Organization;
+            dtLogOrganization = connection.ReadIntoDataTable(sql, dtLogOrganization).Result;
 
             List<LogOrganization> logOrgs = new List<LogOrganization>();
             foreach (DataRow row in dtLogOrganization.Rows)
@@ -1526,20 +1373,10 @@ namespace Netus2_DatabaseConnection
 
         public List<LogResource> Read_LogResource(IConnectable connection)
         {
-            DataTable dtLogResource = new DataTableFactory().Dt_Netus2_Log_Resource;
-
             string sql = "SELECT * FROM log_resource";
-            IDataReader reader = null;
-            try
-            {
-                reader = connection.GetReader(sql);
-                dtLogResource.Load(reader);
-            }
-            finally
-            {
-                if (reader != null)
-                    reader.Close();
-            }
+
+            DataTable dtLogResource = new DataTableFactory().Dt_Netus2_Log_Resource;
+            dtLogResource = connection.ReadIntoDataTable(sql, dtLogResource).Result;
 
             List<LogResource> logResources = new List<LogResource>();
            foreach(DataRow row in dtLogResource.Rows)
@@ -1646,20 +1483,10 @@ namespace Netus2_DatabaseConnection
 
         public List<LogCourse> Read_LogCourse(IConnectable connection)
         {
-            DataTable dtLogCourse = new DataTableFactory().Dt_Netus2_Log_Course;
-
             string sql = "SELECT * FROM log_course";
-            IDataReader reader = null;
-            try
-            {
-                reader = connection.GetReader(sql);
-                dtLogCourse.Load(reader);
-            }
-            finally
-            {
-                if (reader != null)
-                    reader.Close();
-            }
+
+            DataTable dtLogCourse = new DataTableFactory().Dt_Netus2_Log_Course;
+            dtLogCourse = connection.ReadIntoDataTable(sql, dtLogCourse).Result;
 
             List<LogCourse> logCourses = new List<LogCourse>();
             foreach(DataRow row in dtLogCourse.Rows)
@@ -1748,21 +1575,10 @@ namespace Netus2_DatabaseConnection
 
         public List<LogJctCourseSubject> Read_LogJctCourseSubject(IConnectable connection)
         {
-            DataTable dtLogJctCourseSubject = new DataTableFactory().Dt_Netus2_Log_JctCourseSubject;
-
             string sql = "SELECT * FROM log_jct_course_subject";
 
-            IDataReader reader = null;
-            try
-            {
-                reader = connection.GetReader(sql);
-                dtLogJctCourseSubject.Load(reader);
-            }
-            finally
-            {
-                if (reader != null)
-                    reader.Close();
-            }
+            DataTable dtLogJctCourseSubject = new DataTableFactory().Dt_Netus2_Log_JctCourseSubject;
+            dtLogJctCourseSubject = connection.ReadIntoDataTable(sql, dtLogJctCourseSubject).Result;
 
             List<LogJctCourseSubject> logJctCourseSubjects = new List<LogJctCourseSubject>();
             foreach(DataRow row in dtLogJctCourseSubject.Rows)
@@ -1821,21 +1637,10 @@ namespace Netus2_DatabaseConnection
 
         public List<LogJctCourseGrade> Read_LogJctCourseGrade(IConnectable connection)
         {
-            DataTable dtLogJctCourseGrade = new DataTableFactory().Dt_Netus2_Log_JctCourseGrade;
-
             string sql = "SELECT * FROM log_jct_course_grade";
 
-            IDataReader reader = null;
-            try
-            {
-                reader = connection.GetReader(sql);
-                dtLogJctCourseGrade.Load(reader);
-            }
-            finally
-            {
-                if (reader != null)
-                    reader.Close();
-            }
+            DataTable dtLogJctCourseGrade = new DataTableFactory().Dt_Netus2_Log_JctCourseGrade;
+            dtLogJctCourseGrade = connection.ReadIntoDataTable(sql, dtLogJctCourseGrade).Result;
 
             List<LogJctCourseGrade> logJctCourseGrades = new List<LogJctCourseGrade>();
             foreach(DataRow row in dtLogJctCourseGrade.Rows)
@@ -1894,20 +1699,10 @@ namespace Netus2_DatabaseConnection
 
         public List<LogClass> Read_LogClassEnrolled(IConnectable connection)
         {
-            DataTable dtLogClassEnrolled = new DataTableFactory().Dt_Netus2_Log_ClassEnrolled;
-
             string sql = "SELECT * FROM log_class";
-            IDataReader reader = null;
-            try
-            {
-                reader = connection.GetReader(sql);
-                dtLogClassEnrolled.Load(reader);
-            }
-            finally
-            {
-                if (reader != null)
-                    reader.Close();
-            }
+
+            DataTable dtLogClassEnrolled = new DataTableFactory().Dt_Netus2_Log_ClassEnrolled;
+            dtLogClassEnrolled = connection.ReadIntoDataTable(sql, dtLogClassEnrolled).Result;
 
             List<LogClass> logClasssEnrolled = new List<LogClass>();
             foreach(DataRow row in dtLogClassEnrolled.Rows)
@@ -2017,21 +1812,10 @@ namespace Netus2_DatabaseConnection
 
         public List<LogJctClassPeriod> Read_LogJctClassPeriod(IConnectable connection)
         {
-            DataTable dtLogJctClassPeriod = new DataTableFactory().Dt_Netus2_Log_JctClassPeriod;
-
             string sql = "SELECT * FROM log_jct_class_period";
 
-            IDataReader reader = null;
-            try
-            {
-                reader = connection.GetReader(sql);
-                dtLogJctClassPeriod.Load(reader);
-            }
-            finally
-            {
-                if (reader != null)
-                    reader.Close();
-            }
+            DataTable dtLogJctClassPeriod = new DataTableFactory().Dt_Netus2_Log_JctClassPeriod;
+            dtLogJctClassPeriod = connection.ReadIntoDataTable(sql, dtLogJctClassPeriod).Result;
 
             List<LogJctClassPeriod> logJctClassPeriods = new List<LogJctClassPeriod>();
             foreach(DataRow row in dtLogJctClassPeriod.Rows)
@@ -2090,21 +1874,10 @@ namespace Netus2_DatabaseConnection
 
         public List<LogJctClassResource> Read_LogJctClassResource(IConnectable connection)
         {
-            DataTable dtLogJctClassResource = new DataTableFactory().Dt_Netus2_Log_JctClassResource;
-
             string sql = "SELECT * FROM log_jct_class_resource";
 
-            IDataReader reader = null;
-            try
-            {
-                reader = connection.GetReader(sql);
-                dtLogJctClassResource.Load(reader);
-            }
-            finally
-            {
-                if (reader != null)
-                    reader.Close();
-            }
+            DataTable dtLogJctClassResource = new DataTableFactory().Dt_Netus2_Log_JctClassResource;
+            dtLogJctClassResource = connection.ReadIntoDataTable(sql, dtLogJctClassResource).Result;
 
             List<LogJctClassResource> logJctClassResources = new List<LogJctClassResource>();
             foreach (DataRow row in dtLogJctClassResource.Rows)
@@ -2160,21 +1933,10 @@ namespace Netus2_DatabaseConnection
 
         public List<LogLineItem> Read_LogLineItem(IConnectable connection)
         {
-            DataTable dtLogLineItem = new DataTableFactory().Dt_Netus2_Log_LineItem;
-
             string sql = "SELECT * FROM log_lineitem";
 
-            IDataReader reader = null;
-            try
-            {
-                reader = connection.GetReader(sql);
-                dtLogLineItem.Load(reader);
-            }
-            finally
-            {
-                if (reader != null)
-                    reader.Close();
-            }
+            DataTable dtLogLineItem = new DataTableFactory().Dt_Netus2_Log_LineItem;
+            dtLogLineItem = connection.ReadIntoDataTable(sql, dtLogLineItem).Result;
 
             List<LogLineItem> logLineItems = new List<LogLineItem>();
             foreach(DataRow row in dtLogLineItem.Rows)
@@ -2293,21 +2055,10 @@ namespace Netus2_DatabaseConnection
 
         public List<LogEnrollment> Read_LogEnrollment(IConnectable connection)
         {
-            DataTable dtLogEnrollment = new DataTableFactory().Dt_Netus2_Log_Enrollment;
-
             string sql = "SELECT * FROM log_enrollment";
 
-            IDataReader reader = null;
-            try
-            {
-                reader = connection.GetReader(sql);
-                dtLogEnrollment.Load(reader);
-            }
-            finally
-            {
-                if (reader != null)
-                    reader.Close();
-            }
+            DataTable dtLogEnrollment = new DataTableFactory().Dt_Netus2_Log_Enrollment;
+            dtLogEnrollment = connection.ReadIntoDataTable(sql, dtLogEnrollment).Result;
 
             List<LogEnrollment> logEnrollments = new List<LogEnrollment>();
             foreach(DataRow row in dtLogEnrollment.Rows)
@@ -2420,21 +2171,10 @@ namespace Netus2_DatabaseConnection
 
         public List<LogMark> Read_LogMark(IConnectable connection)
         {
-            DataTable dtLogMark = new DataTableFactory().Dt_Netus2_Log_Mark;
-
             string sql = "SELECT * FROM log_mark";
 
-            IDataReader reader = null;
-            try
-            {
-                reader = connection.GetReader(sql);
-                dtLogMark.Load(reader);
-            }
-            finally
-            {
-                if (reader != null)
-                    reader.Close();
-            }
+            DataTable dtLogMark = new DataTableFactory().Dt_Netus2_Log_Mark;
+            dtLogMark = connection.ReadIntoDataTable(sql, dtLogMark).Result;
 
             List<LogMark> logMarks = new List<LogMark>();
             foreach(DataRow row in dtLogMark.Rows)
@@ -2535,21 +2275,10 @@ namespace Netus2_DatabaseConnection
 
         public List<LogJctEnrollmentAcademicSession> Read_JctEnrollmentAcademicSession(IConnectable connection)
         {
-            DataTable dtLogJctEnrollmentAcademicSession = new DataTableFactory().Dt_Netus2_Log_JctEnrollmentAcademicSession;
-
             string sql = "SELECT * FROM log_jct_enrollment_academic_session";
 
-            IDataReader reader = null;
-            try
-            {
-                reader = connection.GetReader(sql);
-                dtLogJctEnrollmentAcademicSession.Load(reader);
-            }
-            finally
-            {
-                if (reader != null)
-                    reader.Close();
-            }
+            DataTable dtLogJctEnrollmentAcademicSession = new DataTableFactory().Dt_Netus2_Log_JctEnrollmentAcademicSession;
+            dtLogJctEnrollmentAcademicSession = connection.ReadIntoDataTable(sql, dtLogJctEnrollmentAcademicSession).Result;
 
             List<LogJctEnrollmentAcademicSession> logJctEnrollmentAcademicSessions = new List<LogJctEnrollmentAcademicSession>();
             foreach(DataRow row in dtLogJctEnrollmentAcademicSession.Rows)

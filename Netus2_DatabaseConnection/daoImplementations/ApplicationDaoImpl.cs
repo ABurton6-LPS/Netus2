@@ -78,17 +78,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         private List<Application> Read(string sql, IConnectable connection)
         {
             DataTable dtApplication = new DataTableFactory().Dt_Netus2_Application;
-            IDataReader reader = null;
-            try
-            {
-                reader = connection.GetReader(sql);
-                dtApplication.Load(reader);
-            }
-            finally
-            {
-                if (reader != null)
-                    reader.Close();
-            }
+            dtApplication = connection.ReadIntoDataTable(sql, dtApplication).Result;
 
             List<Application> results = new List<Application>();
             foreach (DataRow row in dtApplication.Rows)

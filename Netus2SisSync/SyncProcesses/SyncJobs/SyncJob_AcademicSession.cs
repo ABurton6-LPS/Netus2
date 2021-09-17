@@ -1,4 +1,5 @@
-﻿using Netus2_DatabaseConnection.dbAccess;
+﻿using Netus2_DatabaseConnection;
+using Netus2_DatabaseConnection.dbAccess;
 using Netus2_DatabaseConnection.enumerations;
 using Netus2_DatabaseConnection.utilityTools;
 using Netus2SisSync.SyncProcesses.SyncTasks.AcademicSessionTasks;
@@ -7,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
+using System.Threading;
 
 namespace Netus2SisSync.SyncProcesses.SyncJobs
 {
@@ -40,36 +42,27 @@ namespace Netus2SisSync.SyncProcesses.SyncJobs
         public void ReadFromSis()
         {
             _dtAcademicSession = new DataTableFactory().Dt_Sis_AcademicSession;
-            IDataReader reader = null;
-            try
-            {
-                reader = _sisConnection.GetReader(SyncScripts.ReadSiS_AcademicSession_SQL);
-                _dtAcademicSession.Load(reader);
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e.Message + "\n" + e.StackTrace);
-                SyncLogger.LogError(e, this, _netus2Connection);
-            }
-            finally
-            {
-                if (reader != null)
-                    reader.Close();
-            }
+            _dtAcademicSession = _sisConnection.ReadIntoDataTable(SyncScripts.ReadSiS_AcademicSession_SQL, _dtAcademicSession).Result;
         }
 
         private void RunJobTasks()
         {
+            CountDownLatch childLatch = new CountDownLatch(_dtAcademicSession.Rows.Count);
             foreach (DataRow row in _dtAcademicSession.Rows)
             {
-                new SyncTask_AcademicSessionChildRecords(
-                "SyncTask_AcademicSessionChildRecords", this)
-                    .Execute(row);
-
-                new SyncTask_AcademicSessionParentRecords(
-                "SyncTask_AcademicSessionParentRecords", this)
-                    .Execute(row);
+                new Thread(syncThread => SyncTask.Execute_AcademicSession_ChildRecordSync(this, row, childLatch))
+                    .Start();
             }
+            childLatch.Wait();
+
+
+            CountDownLatch parentLatch = new CountDownLatch(_dtAcademicSession.Rows.Count);
+            foreach (DataRow row in _dtAcademicSession.Rows)
+            {
+                new Thread(syncThread => SyncTask.Execute_AcademicSession_ParentRecordSync(this, row, parentLatch))
+                    .Start();
+            }
+            parentLatch.Wait();
         }
     }
 }

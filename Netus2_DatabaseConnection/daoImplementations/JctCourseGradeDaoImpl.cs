@@ -45,25 +45,15 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private List<DataRow> Read(string sql, IConnectable connection)
         {
-            List<DataRow> jctCourseGradeDaos = new List<DataRow>();
             DataTable dtJctCourseGrade = new DataTableFactory().Dt_Netus2_JctCourseGrade;
+            dtJctCourseGrade = connection.ReadIntoDataTable(sql, dtJctCourseGrade).Result;
 
-            IDataReader reader = null;
-            try
+            List<DataRow> jctCourseGradeDaos = new List<DataRow>();
+            foreach(DataRow row in dtJctCourseGrade.Rows)
             {
-                reader = connection.GetReader(sql.ToString());
-                dtJctCourseGrade.Load(reader);
+                jctCourseGradeDaos.Add(row);
+            }
 
-                foreach(DataRow row in dtJctCourseGrade.Rows)
-                {
-                    jctCourseGradeDaos.Add(row);
-                }
-            }
-            finally
-            {
-                if (reader != null)
-                    reader.Close();
-            }
             return jctCourseGradeDaos;
         }
 
