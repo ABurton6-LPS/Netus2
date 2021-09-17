@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using System.Threading.Tasks;
 
 namespace Netus2_DatabaseConnection.dbAccess
 {
@@ -31,24 +32,19 @@ namespace Netus2_DatabaseConnection.dbAccess
         void RollbackTransaction();
 
         /// <summary>
-        /// Provide a SQL statement as a string, and it will provide the IDataReader object that can be used
-        /// to retrieve the results of your SQL query.
+        /// Provide a SQL statement as a string, and the DataTable object that your query should fill, and
+        /// it will return a filled DataTable object containing the data that resulted from your SQL query.
         /// </summary>
         /// <param name="sql"></param>
-        /// <returns>
-        /// <para>
-        /// IDataReader object that can be iterated through to retrive the results of your query.
-        /// </para>
-        /// Note: Make sure you close this reader when you are done, and before opening another.
-        /// </returns>
-        IDataReader GetReader(string sql);
+        /// <param name="dt"></param>
+        Task<DataTable> ReadIntoDataTable(string sql, DataTable dt);
 
         /// <summary>
         /// Use this to pass in a SQL statement which is neither a Query or an Insert statement.
         /// </summary>
         /// <param name="sql"></param>
         /// <returns>The number of recoreds affected.</returns>
-        int ExecuteNonQuery(string sql);
+        Task<int> ExecuteNonQuery(string sql);
 
         /// <summary>
         /// Use this to pass in a SQL statement for the insertion of a single record into a database table.

@@ -19,24 +19,13 @@ namespace Netus2_DatabaseConnection.utilityTools
         {
             IConnectable connection = DbConnectionFactory.GetNetus2Connection();
 
-            DataTable tdEnumeration = new DataTableFactory().Dt_Netus2_Enumeration;
-
             string sql = "SELECT * FROM " + tableName;
 
-            IDataReader reader = null;
-            try
-            {
-                reader = connection.GetReader(sql);
-                tdEnumeration.Load(reader);
-            }
-            finally
-            {
-                if (reader != null)
-                    reader.Close();
-            }
+            DataTable dtEnumeration = new DataTableFactory().Dt_Netus2_Enumeration;
+            dtEnumeration = connection.ReadIntoDataTable(sql, dtEnumeration).Result;
 
             Dictionary<string, Enumeration> enumerations = new Dictionary<string, Enumeration>();
-            foreach (DataRow row in tdEnumeration.Rows)
+            foreach (DataRow row in dtEnumeration.Rows)
             {
                 Enumeration enumeration = new Enumeration();
                 foreach(DataColumn column in row.Table.Columns)

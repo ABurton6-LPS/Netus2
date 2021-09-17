@@ -155,17 +155,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         private List<AcademicSession> Read(string sql, IConnectable connection)
         {
             DataTable dtAcademicSession = new DataTableFactory().Dt_Netus2_AcademicSession;
-            IDataReader reader = null;
-            try
-            {
-                reader = connection.GetReader(sql);
-                dtAcademicSession.Load(reader);
-            }
-            finally
-            {
-                if (reader != null)
-                    reader.Close();
-            }
+            dtAcademicSession = connection.ReadIntoDataTable(sql, dtAcademicSession).Result;
 
             List<AcademicSession> results = new List<AcademicSession>();
             foreach (DataRow row in dtAcademicSession.Rows)

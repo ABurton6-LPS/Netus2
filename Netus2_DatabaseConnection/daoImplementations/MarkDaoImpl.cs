@@ -79,18 +79,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         private List<Mark> Read(string sql, IConnectable connection)
         {
             DataTable dtMark = new DataTableFactory().Dt_Netus2_Mark;
-
-            IDataReader reader = null;
-            try
-            {
-                reader = connection.GetReader(sql);
-                dtMark.Load(reader);
-            }
-            finally
-            {
-                if (reader != null)
-                    reader.Close();
-            }
+            dtMark = connection.ReadIntoDataTable(sql, dtMark).Result;
 
             List<Mark> results = new List<Mark>();
             foreach (DataRow row in dtMark.Rows)

@@ -10,6 +10,7 @@ using Netus2_DatabaseConnection.daoImplementations;
 using Netus2SisSync.SyncProcesses.SyncTasks.PersonTasks;
 using Netus2SisSync.UtilityTools;
 using Netus2_DatabaseConnection.utilityTools;
+using Netus2_DatabaseConnection;
 
 namespace Netus2_Test.Unit.SyncProcess
 {
@@ -166,7 +167,7 @@ namespace Netus2_Test.Unit.SyncProcess
 
             new SyncTask_Person("TestTask",
                 new SyncJob_Person("TestJob", _sisConnection, _netus2Connection))
-                .Execute(row);
+                .Execute(row, new CountDownLatch(0));
 
             Assert.IsTrue(mockUniqueIdentifierDaoImpl.WasCalled_Read);
             Assert.IsTrue(mockPersonDaoImpl.WasCalled_Write);
@@ -197,7 +198,7 @@ namespace Netus2_Test.Unit.SyncProcess
 
             new SyncTask_Person("TestTask",
                 new SyncJob_Person("TestJob", _sisConnection, _netus2Connection))
-                .Execute(row);
+                .Execute(row, new CountDownLatch(0));
 
             Assert.IsTrue(mockUniqueIdentifierDaoImpl.WasCalled_Read);
             Assert.IsTrue(mockPersonDaoImpl.WasCalled_Read);

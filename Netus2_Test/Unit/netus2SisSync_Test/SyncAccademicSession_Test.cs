@@ -10,6 +10,7 @@ using Netus2SisSync.SyncProcesses.SyncTasks.AcademicSessionTasks;
 using Netus2_DatabaseConnection.daoImplementations;
 using Netus2_Test.MockDaoImpl;
 using Netus2_DatabaseConnection.utilityTools;
+using Netus2_DatabaseConnection;
 
 namespace Netus2_Test.Unit.SyncProcess
 {
@@ -146,7 +147,7 @@ namespace Netus2_Test.Unit.SyncProcess
 
             new SyncTask_AcademicSessionChildRecords("TestTask", 
                 new SyncJob_AcademicSession("TestJob", _sisConnection, _netus2DbConnection))
-                .Execute(row);
+                .Execute(row, new CountDownLatch(0));
 
             Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_ReadWithoutParentId);
             Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_WriteWithoutParentId);
@@ -174,7 +175,7 @@ namespace Netus2_Test.Unit.SyncProcess
 
             new SyncTask_AcademicSessionChildRecords("TestTask",
                 new SyncJob_AcademicSession("TestJob", _sisConnection, _netus2DbConnection))
-                .Execute(row);
+                .Execute(row, new CountDownLatch(0));
 
             Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_ReadWithoutParentId);
             Assert.IsFalse(mockAcademicSessionDaoImpl.WasCalled_WriteWithoutParentId);
@@ -203,7 +204,7 @@ namespace Netus2_Test.Unit.SyncProcess
 
             new SyncTask_AcademicSessionChildRecords("TestTask",
                 new SyncJob_AcademicSession("TestJob", _sisConnection, _netus2DbConnection))
-                .Execute(row);
+                .Execute(row, new CountDownLatch(0));
 
             Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_ReadWithoutParentId);
             Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_UpdateWithoutParentId);
@@ -236,7 +237,7 @@ namespace Netus2_Test.Unit.SyncProcess
             SyncTask_AcademicSessionParentRecords syncTask_AcademicSessionParentRecords =
                 new SyncTask_AcademicSessionParentRecords("TestTask", syncJob_AcademicSession);
 
-            syncTask_AcademicSessionParentRecords.Execute(row);
+            syncTask_AcademicSessionParentRecords.Execute(row, new CountDownLatch(0));
 
             Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_ReadWithoutParentId);
             Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_ReadUsingSchoolCodeTermCodeSchoolYear);

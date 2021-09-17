@@ -1,5 +1,6 @@
 ﻿using Netus2_DatabaseConnection.dataObjects;
 using Netus2_DatabaseConnection.dbAccess;
+using Netus2_DatabaseConnection.utilityTools;
 using NUnit.Framework;
 using System.Data;
 
@@ -17,7 +18,7 @@ namespace Netus2_Test.Integration
             Assert.AreEqual(expected.Gender, actual.Gender);
             Assert.AreEqual(expected.Ethnic, actual.Ethnic);
             Assert.AreEqual(expected.Roles.Count, actual.Roles.Count);
-            Assert_Table(actual.Id, expected.Roles.Count, "jct_person_role", connection);
+            Assert_Table(actual.Id, expected.Roles.Count, "jct_person_role", new DataTableFactory().Dt_Netus2_JctPersonRole, connection);
             for (int i = 0; i < expected.Roles.Count; i++)
             {
                 Assert.AreEqual(expected.Roles[i], actual.Roles[i]);
@@ -26,7 +27,7 @@ namespace Netus2_Test.Integration
             Assert.AreEqual(expected.LoginName, actual.LoginName);
             Assert.AreEqual(expected.LoginPw, actual.LoginPw);
             Assert.AreEqual(expected.Relations.Count, actual.Relations.Count);
-            Assert_Table(actual.Id, expected.Relations.Count, "jct_person_person", connection);
+            Assert_Table(actual.Id, expected.Relations.Count, "jct_person_person", new DataTableFactory().Dt_Netus2_JctPersonPerson, connection);
             for (int i = 0; i < expected.Relations.Count; i++)
             {
                 Assert.AreEqual(expected.Relations[i], actual.Relations[i]);
@@ -34,44 +35,44 @@ namespace Netus2_Test.Integration
             Assert.AreEqual(expected.PhoneNumbers.Count, actual.PhoneNumbers.Count);
             for (int i = 0; i < expected.PhoneNumbers.Count; i++)
             {
-                Assert_Table(actual.PhoneNumbers[i].Id, expected.PhoneNumbers.Count, "phone_number", connection);
+                Assert_Table(actual.PhoneNumbers[i].Id, expected.PhoneNumbers.Count, "phone_number", new DataTableFactory().Dt_Netus2_PhoneNumber, connection);
                 AssertPhoneNumber(expected.PhoneNumbers[i], actual.PhoneNumbers[i]);
             }
             Assert.AreEqual(expected.Applications.Count, actual.Applications.Count);
             for (int i = 0; i < expected.Applications.Count; i++)
             {
-                Assert_Table(actual.Applications[i].Id, expected.Applications.Count, "app", connection);
-                Assert_Table(actual.Id, expected.Applications.Count, "jct_person_app", connection);
+                Assert_Table(actual.Applications[i].Id, expected.Applications.Count, "app", new DataTableFactory().Dt_Netus2_Application, connection);
+                Assert_Table(actual.Id, expected.Applications.Count, "jct_person_app", new DataTableFactory().Dt_Netus2_JctPersonApp, connection);
                 AssertApplication(expected.Applications[i], actual.Applications[i]);
             }
             Assert.AreEqual(expected.Addresses.Count, actual.Addresses.Count);
             for (int i = 0; i < expected.Addresses.Count; i++)
             {
-                Assert_Table(actual.Addresses[i].Id, expected.Addresses.Count, "address", connection);
+                Assert_Table(actual.Addresses[i].Id, expected.Addresses.Count, "address", new DataTableFactory().Dt_Netus2_Address, connection);
                 AssertAddress(expected.Addresses[i], actual.Addresses[i]);
             }
             Assert.AreEqual(expected.UniqueIdentifiers.Count, actual.UniqueIdentifiers.Count);
             for (int i = 0; i < expected.UniqueIdentifiers.Count; i++)
             {
-                Assert_Table(actual.UniqueIdentifiers[i].Id, expected.UniqueIdentifiers.Count, "unique_identifier", connection);
+                Assert_Table(actual.UniqueIdentifiers[i].Id, expected.UniqueIdentifiers.Count, "unique_identifier", new DataTableFactory().Dt_Netus2_UniqueIdentifier, connection);
                 AssertUniqueIdentifier(expected.UniqueIdentifiers[i], actual.UniqueIdentifiers[i]);
             }
             Assert.AreEqual(expected.Marks.Count, actual.Marks.Count);
             for (int i = 0; i < expected.Marks.Count; i++)
             {
-                Assert_Table(actual.Marks[i].Id, expected.Marks.Count, "mark", connection);
+                Assert_Table(actual.Marks[i].Id, expected.Marks.Count, "mark", new DataTableFactory().Dt_Netus2_Mark, connection);
                 AssertMark(expected.Marks[i], actual.Marks[i]);
             }
             Assert.AreEqual(expected.Enrollments.Count, actual.Enrollments.Count);
             for (int i = 0; i < expected.Enrollments.Count; i++)
             {
-                Assert_Table(actual.Enrollments[i].Id, expected.Enrollments.Count, "enrollment", connection);
+                Assert_Table(actual.Enrollments[i].Id, expected.Enrollments.Count, "enrollment", new DataTableFactory().Dt_Netus2_Enrollment, connection);
                 AssertEnrollment(expected.Enrollments[i], actual.Enrollments[i]);
             }
             Assert.AreEqual(expected.EmploymentSessions.Count, actual.EmploymentSessions.Count);
             for (int i = 0; i < expected.EmploymentSessions.Count; i++)
             {
-                Assert_Table(actual.EmploymentSessions[i].Id, expected.EmploymentSessions.Count, "employment_session", connection);
+                Assert_Table(actual.EmploymentSessions[i].Id, expected.EmploymentSessions.Count, "employment_session", new DataTableFactory().Dt_Netus2_EmploymentSession, connection);
                 AssertEmploymentSession(expected.EmploymentSessions[i], actual.EmploymentSessions[i]);
             }
         }
@@ -299,25 +300,25 @@ namespace Netus2_Test.Integration
             }
         }
 
-        public static void Assert_Table(int id, int expectedNumberOfRecords, string tableName, IConnectable connection)
+        public static void Assert_Table(int id, int expectedNumberOfRecords, string tableName, DataTable dt, IConnectable connection)
         {
             string sql = "";
 
             if (tableName == "jct_person_person")
             {
                 sql = "SELECT * FROM " + tableName + " WHERE (person_one_id = " + id + "OR person_two_id = " + id + ")";
-                Assert.AreEqual(expectedNumberOfRecords * 2, RunSql(sql, connection));
+                Assert.AreEqual(expectedNumberOfRecords * 2, RunSql(sql, dt, connection));
             }
             else if (tableName.Length > 9 && tableName.Substring(0, 9) == "jct_class")
             {
                 if(tableName == "jct_class_person")
                 {
                     sql = "SELECT * FROM " + tableName + " WHERE class_id = " + id;
-                    int foundNumberOfRecords = RunSql(sql, connection);
+                    int foundNumberOfRecords = RunSql(sql, dt, connection);
                     if (foundNumberOfRecords == 0)
                     {
                         sql = "SELECT * FROM " + tableName + " WHERE person_id = " + id;
-                        Assert.AreEqual(expectedNumberOfRecords, RunSql(sql, connection));
+                        Assert.AreEqual(expectedNumberOfRecords, RunSql(sql, dt, connection));
                     }
                     else
                     {
@@ -327,42 +328,34 @@ namespace Netus2_Test.Integration
                 else
                 {
                     sql = "SELECT * FROM " + tableName + " WHERE class_id = " + id;
-                    Assert.AreEqual(expectedNumberOfRecords, RunSql(sql, connection));
+                    Assert.AreEqual(expectedNumberOfRecords, RunSql(sql, dt, connection));
                 }
             }
             else if (tableName.Length > 10 && tableName.Substring(0, 10) == "jct_course")
             {
                 sql = "SELECT * FROM " + tableName + " WHERE course_id = " + id;
-                Assert.AreEqual(expectedNumberOfRecords, RunSql(sql, connection));
+                Assert.AreEqual(expectedNumberOfRecords, RunSql(sql, dt, connection));
             }
             else if (tableName.Substring(0, 3) == "jct")
             {
                 sql = "SELECT * FROM " + tableName + " WHERE person_id = " + id;
-                Assert.AreEqual(expectedNumberOfRecords, RunSql(sql, connection));
+                Assert.AreEqual(expectedNumberOfRecords, RunSql(sql, dt, connection));
             }
             else
             {
                 sql = "SELECT * FROM " + tableName + " WHERE " + tableName + "_id = " + id;
-                Assert.AreEqual(expectedNumberOfRecords, RunSql(sql, connection));
+                Assert.AreEqual(expectedNumberOfRecords, RunSql(sql, dt, connection));
             }
         }
 
-        private static int RunSql(string sql, IConnectable connection)
+        private static int RunSql(string sql, DataTable dt, IConnectable connection)
         {
-            IDataReader reader = null;
+            dt = connection.ReadIntoDataTable(sql, dt).Result;
+
             int recordsFound = 0;
-            try
+            foreach(DataRow row in dt.Rows)
             {
-                reader = connection.GetReader(sql);
-                while (reader.Read())
-                {
-                    recordsFound++;
-                }
-            }
-            finally
-            {
-                if (reader != null)
-                    reader.Close();
+                recordsFound++;
             }
 
             return recordsFound;

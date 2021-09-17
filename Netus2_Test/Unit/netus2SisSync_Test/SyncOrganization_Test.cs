@@ -10,6 +10,7 @@ using Netus2_DatabaseConnection.dbAccess;
 using Netus2_DatabaseConnection.daoImplementations;
 using Netus2_Test.MockDaoImpl;
 using Netus2_DatabaseConnection.utilityTools;
+using Netus2_DatabaseConnection;
 
 namespace Netus2_Test.Unit.SyncProcess
 {
@@ -121,7 +122,7 @@ namespace Netus2_Test.Unit.SyncProcess
 
             new SyncTask_OrganizationChildRecords("TestTask", 
                 new SyncJob_Organization("TestJob", _sisConnection, _netus2Connection))
-                .Execute(row);
+                .Execute(row, new CountDownLatch(0));
 
             Assert.IsTrue(mockOrganizationDaoImpl.WasCalled_ReadWithoutParentId);
             Assert.IsTrue(mockOrganizationDaoImpl.WasCalled_WriteWithoutParentId);
@@ -145,7 +146,7 @@ namespace Netus2_Test.Unit.SyncProcess
 
             new SyncTask_OrganizationChildRecords("TestTask",
                 new SyncJob_Organization("TestJob", _sisConnection, _netus2Connection))
-                .Execute(row);
+                .Execute(row, new CountDownLatch(0));
 
             Assert.IsTrue(mockOrganizationDaoImpl.WasCalled_ReadWithoutParentId);
             Assert.IsFalse(mockOrganizationDaoImpl.WasCalled_WriteWithoutParentId);
@@ -170,7 +171,7 @@ namespace Netus2_Test.Unit.SyncProcess
 
             new SyncTask_OrganizationChildRecords("TestTask",
                 new SyncJob_Organization("TestJob", _sisConnection, _netus2Connection))
-                .Execute(row);
+                .Execute(row, new CountDownLatch(0));
 
             Assert.IsTrue(mockOrganizationDaoImpl.WasCalled_ReadWithoutParentId);
             Assert.IsTrue(mockOrganizationDaoImpl.WasCalled_UpdateWithoutParentId);
@@ -199,7 +200,7 @@ namespace Netus2_Test.Unit.SyncProcess
             SyncTask_OrganizationParentRecords syncTask_OrganizationParentRecords =
                 new SyncTask_OrganizationParentRecords("TestTask", syncJob_Organization);
 
-            syncTask_OrganizationParentRecords.Execute(row);
+            syncTask_OrganizationParentRecords.Execute(row, new CountDownLatch(0));
 
             Assert.IsTrue(mockOrganizationDaoImpl.WasCalled_ReadWithoutParentId);
             Assert.IsTrue(mockOrganizationDaoImpl.WasCalled_ReadWithBuildingCode);

@@ -84,17 +84,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         private List<Enrollment> Read(string sql, IConnectable connection)
         {
             DataTable dtEnrollment = new DataTableFactory().Dt_Netus2_Enrollment;
-            IDataReader reader = null;
-            try
-            {
-                reader = connection.GetReader(sql);
-                dtEnrollment.Load(reader);
-            }
-            finally
-            {
-                if (reader != null)
-                    reader.Close();
-            }
+            dtEnrollment = connection.ReadIntoDataTable(sql, dtEnrollment).Result;
 
             List<Enrollment> results = new List<Enrollment>();
             foreach (DataRow foundEnrollmentDao in dtEnrollment.Rows)

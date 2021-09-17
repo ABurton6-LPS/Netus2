@@ -1,4 +1,5 @@
-﻿using Netus2_DatabaseConnection.dbAccess;
+﻿using Netus2_DatabaseConnection;
+using Netus2_DatabaseConnection.dbAccess;
 using Netus2_DatabaseConnection.enumerations;
 using Netus2_DatabaseConnection.utilityTools;
 using Netus2SisSync.SyncProcesses.SyncTasks.AddressTasks;
@@ -7,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
+using System.Threading;
 
 namespace Netus2SisSync.SyncProcesses.SyncJobs
 {
@@ -40,57 +42,18 @@ namespace Netus2SisSync.SyncProcesses.SyncJobs
         public void ReadFromSis()
         {
             _dtAddress = new DataTableFactory().Dt_Sis_Address;
-            IDataReader reader = null;
-            try
-            {
-                reader = _sisConnection.GetReader(SyncScripts.ReadSis_Address_SQL);
-                while (reader.Read())
-                {
-                    DataRow myDataRow = _dtAddress.NewRow();
-
-                    List<string> columnNames = new List<string>();
-                    for (int i = 0; i < reader.FieldCount; i++)
-                        columnNames.Add(reader.GetName(i));
-
-                    foreach (string columnName in columnNames)
-                    {
-                        var value = reader.GetValue(reader.GetOrdinal(columnName));
-                        switch (columnName)
-                        {
-                            case "":
-                                if (value != DBNull.Value && value != null)
-                                    myDataRow[""] = (string)value;
-                                else
-                                    myDataRow[""] = null;
-                                break;
-                            default:
-                                throw new Exception("Unexpected column found in SIS lookup for Unique Identifier: " + columnName);
-                        }
-                    }
-                    _dtAddress.Rows.Add(myDataRow);
-                }
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e.Message + "\n" + e.StackTrace);
-                SyncLogger.LogError(e, this, _netus2Connection);
-            }
-            finally
-            {
-                if (reader != null)
-                    reader.Close();
-                _sisConnection.CloseConnection();
-            }
+            _dtAddress = _sisConnection.ReadIntoDataTable(SyncScripts.ReadSis_Address_SQL, _dtAddress).Result;
         }
 
         private void RunJobTasks()
         {
-            foreach(DataRow row in _dtAddress.Rows)
+            CountDownLatch latch = new CountDownLatch(_dtAddress.Rows.Count);
+            foreach (DataRow row in _dtAddress.Rows)
             {
-                new SyncTask_Address(
-                "SyncTask_Address", this)
-                    .Execute(row);
+                new Thread(syncThread => SyncTask.Execute_Address_RecordSync(this, row, latch))
+                    .Start();
             }
+            latch.Wait();
         }
     }
 }

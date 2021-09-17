@@ -69,18 +69,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         private List<PhoneNumber> Read(string sql, IConnectable connection)
         {
             DataTable dtPhoneNumber = new DataTableFactory().Dt_Netus2_PhoneNumber;
-
-            IDataReader reader = null;
-            try
-            {
-                reader = connection.GetReader(sql);
-                dtPhoneNumber.Load(reader);
-            }
-            finally
-            {
-                if (reader != null)
-                    reader.Close();
-            }
+            dtPhoneNumber = connection.ReadIntoDataTable(sql, dtPhoneNumber).Result;
 
             List<PhoneNumber> results = new List<PhoneNumber>();
             foreach (DataRow row in dtPhoneNumber.Rows)

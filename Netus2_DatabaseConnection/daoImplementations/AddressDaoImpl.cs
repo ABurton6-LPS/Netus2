@@ -103,17 +103,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         private List<Address> Read(string sql, IConnectable connection)
         {
             DataTable dtAddress = new DataTableFactory().Dt_Netus2_Address;
-            IDataReader reader = null;
-            try
-            {
-                reader = connection.GetReader(sql);
-                dtAddress.Load(reader);
-            }
-            finally
-            {
-                if (reader != null)
-                    reader.Close();
-            }
+            dtAddress = connection.ReadIntoDataTable(sql, dtAddress).Result;
 
             List<Address> results = new List<Address>();
             foreach (DataRow row in dtAddress.Rows)

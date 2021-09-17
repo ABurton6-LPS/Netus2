@@ -119,17 +119,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         private List<EmploymentSession> Read(string sql, IConnectable connection)
         {
             DataTable dtEmploymentSession = new DataTableFactory().Dt_Netus2_EmploymentSession;
-            IDataReader reader = null;
-            try
-            {
-                reader = connection.GetReader(sql.ToString());
-                dtEmploymentSession.Load(reader);
-            }
-            finally
-            {
-                if (reader != null)
-                    reader.Close();
-            }
+            dtEmploymentSession = connection.ReadIntoDataTable(sql, dtEmploymentSession).Result;
 
             List<EmploymentSession> results = new List<EmploymentSession>();
             foreach (DataRow foundEsDao in dtEmploymentSession.Rows)

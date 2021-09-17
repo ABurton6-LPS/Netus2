@@ -93,18 +93,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         private List<LineItem> Read(string sql, IConnectable connection)
         {
             DataTable dtLineItem = new DataTableFactory().Dt_Netus2_LineItem;
-
-            IDataReader reader = null;
-            try
-            {
-                reader = connection.GetReader(sql);
-                dtLineItem.Load(reader);                
-            }
-            finally
-            {
-                if (reader != null)
-                    reader.Close();
-            }
+            dtLineItem = connection.ReadIntoDataTable(sql, dtLineItem).Result;
 
             List<LineItem> results = new List<LineItem>();
             foreach (DataRow row in dtLineItem.Rows)

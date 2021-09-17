@@ -1,9 +1,9 @@
-﻿using Netus2_DatabaseConnection.daoImplementations;
+﻿using Netus2_DatabaseConnection;
+using Netus2_DatabaseConnection.daoImplementations;
 using Netus2_DatabaseConnection.daoInterfaces;
 using Netus2_DatabaseConnection.dataObjects;
 using Netus2_DatabaseConnection.dbAccess;
 using Netus2_DatabaseConnection.enumerations;
-using Netus2_DatabaseConnection.utilityTools;
 using Netus2SisSync.UtilityTools;
 using System;
 using System.Collections.Generic;
@@ -23,7 +23,7 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AcademicSessionTasks
             SyncLogger.LogNewTask(this, _netus2Connection);
         }
 
-        public override void Execute(DataRow row)
+        public override void Execute(DataRow row, CountDownLatch latch)
         {
             try
             {
@@ -93,6 +93,7 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AcademicSessionTasks
             {
                 SyncLogger.LogStatus(this, Enum_Sync_Status.values["end"], _netus2Connection);
                 _netus2Connection.CloseConnection();
+                latch.Signal();
             }
         }
     }

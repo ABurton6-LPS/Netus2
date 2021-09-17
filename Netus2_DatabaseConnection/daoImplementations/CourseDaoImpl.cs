@@ -91,17 +91,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         private List<Course> Read(string sql, IConnectable connection)
         {
             DataTable dtCourse = new DataTableFactory().Dt_Netus2_Course;
-            IDataReader reader = null;
-            try
-            {
-                reader = connection.GetReader(sql);
-                dtCourse.Load(reader);
-            }
-            finally
-            {
-                if (reader != null)
-                    reader.Close();
-            }
+            dtCourse = connection.ReadIntoDataTable(sql, dtCourse).Result;
 
             List<Course> results = new List<Course>();
             foreach (DataRow foundCourseDao in dtCourse.Rows)

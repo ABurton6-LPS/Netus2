@@ -159,7 +159,7 @@ namespace Netus2_Test.Integration
             Assert.AreEqual(expected.Comment, actual.comment);
         }
 
-        public static void Assert_LogTable(int id, int expectedNumberOfRecords, string tableName, IConnectable connection)
+        public static void Assert_LogTable(int id, int expectedNumberOfRecords, string tableName, DataTable dt, IConnectable connection)
         {
             string sql = "";
             if (tableName.Substring(0, 7) == "log_jct")
@@ -167,25 +167,17 @@ namespace Netus2_Test.Integration
             else
                 sql = "SELECT * FROM " + tableName + " WHERE " + tableName.Substring(4) + "_id = " + id;
 
-            Assert.AreEqual(expectedNumberOfRecords, RunSql(sql, connection));
+            Assert.AreEqual(expectedNumberOfRecords, RunSql(sql, dt, connection));
         }
 
-        private static int RunSql(string sql, IConnectable connection)
+        private static int RunSql(string sql, DataTable dt, IConnectable connection)
         {
-            IDataReader reader = null;
+            dt = connection.ReadIntoDataTable(sql, dt).Result;
+
             int recordsFound = 0;
-            try
+            foreach (DataRow row in dt.Rows)
             {
-                reader = connection.GetReader(sql);
-                while (reader.Read())
-                {
-                    recordsFound++;
-                }
-            }
-            finally
-            {
-                if (reader != null)
-                    reader.Close();
+                recordsFound++;
             }
 
             return recordsFound;

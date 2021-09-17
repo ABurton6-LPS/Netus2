@@ -88,43 +88,37 @@ namespace Netus2_Test.Integration
         public bool CheckIfTableExists(string tableName)
         {
             string sql =
-                "SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = N'" + tableName + "'";
-            int numberOfRecordsReturned = 0;
-            IDataReader reader = null;
-            try
-            {
-                reader = connection.GetReader(sql);
-                while (reader.Read())
-                {
-                    numberOfRecordsReturned++;
-                }
-            }
-            finally
-            {
-                if (reader != null)
-                    reader.Close();
-            }
+                "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = N'" + tableName + "'";
 
-            return numberOfRecordsReturned > 0;
+            DataTable schemaResultTable = new DataTable();
+
+            DataColumn dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "TABLE_NAME";
+            schemaResultTable.Columns.Add(dtColumn);
+
+            schemaResultTable = connection.ReadIntoDataTable(sql, schemaResultTable).Result;
+
+            return schemaResultTable.Rows.Count > 0;
         }
 
         private List<String> GetColumnsInTable(string tableName)
         {
             List<String> foundColumns = new List<String>();
             string sql = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = N'" + tableName + "' AND COLUMN_NAME NOT LIKE 'populated_by'";
-            IDataReader reader = null;
-            try
+
+            DataTable schemaResultTable = new DataTable();
+
+            DataColumn dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "COLUMN_NAME";
+            schemaResultTable.Columns.Add(dtColumn);
+
+            schemaResultTable = connection.ReadIntoDataTable(sql, schemaResultTable).Result;
+
+            foreach(DataRow row in schemaResultTable.Rows)
             {
-                reader = connection.GetReader(sql);
-                while (reader.Read())
-                {
-                    foundColumns.Add(reader.GetString(reader.GetOrdinal("COLUMN_NAME")));
-                }
-            }
-            finally
-            {
-                if (reader != null)
-                    reader.Close();
+                foundColumns.Add((string)row["COLUMN_NAME"]);
             }
 
             return foundColumns;
