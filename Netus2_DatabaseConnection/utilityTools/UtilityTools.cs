@@ -22,7 +22,7 @@ namespace Netus2_DatabaseConnection.utilityTools
             string sql = "SELECT * FROM " + tableName;
 
             DataTable dtEnumeration = new DataTableFactory().Dt_Netus2_Enumeration;
-            dtEnumeration = connection.ReadIntoDataTable(sql, dtEnumeration).Result;
+            dtEnumeration = connection.ReadIntoDataTable(sql, dtEnumeration);
 
             Dictionary<string, Enumeration> enumerations = new Dictionary<string, Enumeration>();
             foreach (DataRow row in dtEnumeration.Rows)
@@ -58,17 +58,11 @@ namespace Netus2_DatabaseConnection.utilityTools
                                 enumeration.Descript = null;
                             break;
                         default:
-                            if (columnName.EndsWith("_id"))
-                            {
-                                if (row[columnName] != DBNull.Value)
-                                    enumeration.Id = row[columnName] != DBNull.Value ? (int)row[columnName] : -1;
-                                else
-                                    enumeration.Id = -1;
-
-                                break;
-                            }
+                            if (row[columnName] != DBNull.Value)
+                                enumeration.Id = row[columnName] != DBNull.Value ? (int)row[columnName] : -1;
                             else
-                                throw new Exception("Unexpected column found in " + tableName + " table: " + columnName);
+                                enumeration.Id = -1;
+                            break;
                     }
                 }
                 enumerations.Add(enumeration.Netus2Code, enumeration);

@@ -58,7 +58,7 @@ namespace Netus2_Test.Unit.SyncProcess
 
             SetMockReaderWithTestData(tstDataSet);
 
-            SyncJob_Person syncJob_Person = new SyncJob_Person("TestJob", _sisConnection, _netus2Connection);
+            SyncJob_Person syncJob_Person = new SyncJob_Person("TestJob", _sisConnection);
             syncJob_Person.ReadFromSis();
             DataTable results = syncJob_Person._dtPerson;
 
@@ -113,7 +113,7 @@ namespace Netus2_Test.Unit.SyncProcess
 
             SetMockReaderWithTestData(tstDataSet);
 
-            SyncJob_Person syncJob_Person = new SyncJob_Person("TestJob", _sisConnection, _netus2Connection);
+            SyncJob_Person syncJob_Person = new SyncJob_Person("TestJob", _sisConnection);
             syncJob_Person.ReadFromSis();
             DataTable results = syncJob_Person._dtPerson;
 
@@ -166,7 +166,7 @@ namespace Netus2_Test.Unit.SyncProcess
             DataRow row = BuildTestDataTable(tstDataSet).Rows[0];
 
             new SyncTask_Person("TestTask",
-                new SyncJob_Person("TestJob", _sisConnection, _netus2Connection))
+                new SyncJob_Person("TestJob", _sisConnection))
                 .Execute(row, new CountDownLatch(0));
 
             Assert.IsTrue(mockUniqueIdentifierDaoImpl.WasCalled_Read);
@@ -197,7 +197,7 @@ namespace Netus2_Test.Unit.SyncProcess
             DataRow row = BuildTestDataTable(tstDataSet).Rows[0];
 
             new SyncTask_Person("TestTask",
-                new SyncJob_Person("TestJob", _sisConnection, _netus2Connection))
+                new SyncJob_Person("TestJob", _sisConnection))
                 .Execute(row, new CountDownLatch(0));
 
             Assert.IsTrue(mockUniqueIdentifierDaoImpl.WasCalled_Read);

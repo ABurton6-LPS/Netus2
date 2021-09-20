@@ -14,13 +14,12 @@ namespace Netus2SisSync.SyncProcesses
             IConnectable sisConnection = DbConnectionFactory.GetSisConnection();
             try
             {
-                new SyncJob_Organization("SyncJob_Organization", sisConnection, netus2Connection)
+                new SyncJob_Organization("SyncJob_Organization").Start();
+
+                new SyncJob_AcademicSession("SyncJob_AcademicSession", sisConnection)
                     .Start();
 
-                new SyncJob_AcademicSession("SyncJob_AcademicSession", sisConnection, netus2Connection)
-                    .Start();
-
-                new SyncJob_Person("SyncJob_Person", sisConnection, netus2Connection)
+                new SyncJob_Person("SyncJob_Person", sisConnection)
                     .Start();
 
                 //new SyncJob_Address("SyncJob_Address", sisConnection, netus2Connection)

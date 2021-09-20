@@ -98,7 +98,7 @@ namespace Netus2_Test.Integration
             dtColumn.ColumnName = "TABLE_NAME";
             schemaResultTable.Columns.Add(dtColumn);
 
-            schemaResultTable = connection.ReadIntoDataTable(sql, schemaResultTable).Result;
+            schemaResultTable = connection.ReadIntoDataTable(sql, schemaResultTable);
 
             return schemaResultTable.Rows.Count > 0;
         }
@@ -115,7 +115,7 @@ namespace Netus2_Test.Integration
             dtColumn.ColumnName = "COLUMN_NAME";
             schemaResultTable.Columns.Add(dtColumn);
 
-            schemaResultTable = connection.ReadIntoDataTable(sql, schemaResultTable).Result;
+            schemaResultTable = connection.ReadIntoDataTable(sql, schemaResultTable);
 
             foreach (DataRow row in schemaResultTable.Rows)
             {

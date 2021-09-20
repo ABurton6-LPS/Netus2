@@ -20,7 +20,7 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.PersonTasks
             : base(name, job)
         {
             _netus2Connection = DbConnectionFactory.GetNetus2Connection();
-            SyncLogger.LogNewTask(this, _netus2Connection);
+            SyncLogger.LogNewTask(this);
         }
 
         public override void Execute(DataRow row, CountDownLatch latch)
@@ -111,11 +111,11 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.PersonTasks
             catch (Exception e)
             {
                 Debug.WriteLine(e.Message + "\n" + e.StackTrace);
-                SyncLogger.LogError(e, this, row, _netus2Connection);
+                SyncLogger.LogError(e, this, row);
             }
             finally
             {
-                SyncLogger.LogStatus(this, Enum_Sync_Status.values["end"], _netus2Connection);
+                SyncLogger.LogStatus(this, Enum_Sync_Status.values["end"]);
                 _netus2Connection.CloseConnection();
                 latch.Signal();
             }

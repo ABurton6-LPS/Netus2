@@ -51,7 +51,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         private List<DataRow> Read(string sql, IConnectable connection)
         {
             DataTable dtJctPersonApp = new DataTableFactory().Dt_Netus2_JctPersonApp;
-            dtJctPersonApp = connection.ReadIntoDataTable(sql, dtJctPersonApp).Result;
+            dtJctPersonApp = connection.ReadIntoDataTable(sql, dtJctPersonApp);
             
             List<DataRow> jctPersonAppDaos = new List<DataRow>();
             foreach (DataRow row in dtJctPersonApp.Rows)

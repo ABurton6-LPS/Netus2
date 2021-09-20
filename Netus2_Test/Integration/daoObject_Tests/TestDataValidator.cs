@@ -350,7 +350,7 @@ namespace Netus2_Test.Integration
 
         private static int RunSql(string sql, DataTable dt, IConnectable connection)
         {
-            dt = connection.ReadIntoDataTable(sql, dt).Result;
+            dt = connection.ReadIntoDataTable(sql, dt);
 
             int recordsFound = 0;
             foreach(DataRow row in dt.Rows)

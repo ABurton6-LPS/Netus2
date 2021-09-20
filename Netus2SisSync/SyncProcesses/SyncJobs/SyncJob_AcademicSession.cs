@@ -2,12 +2,8 @@
 using Netus2_DatabaseConnection.dbAccess;
 using Netus2_DatabaseConnection.enumerations;
 using Netus2_DatabaseConnection.utilityTools;
-using Netus2SisSync.SyncProcesses.SyncTasks.AcademicSessionTasks;
 using Netus2SisSync.UtilityTools;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Diagnostics;
 using System.Threading;
 
 namespace Netus2SisSync.SyncProcesses.SyncJobs
@@ -15,15 +11,13 @@ namespace Netus2SisSync.SyncProcesses.SyncJobs
     public class SyncJob_AcademicSession : SyncJob
     {
         IConnectable _sisConnection;
-        IConnectable _netus2Connection;
         public DataTable _dtAcademicSession;
 
-        public SyncJob_AcademicSession(string name, IConnectable sisConnection, IConnectable netus2Connection) 
+        public SyncJob_AcademicSession(string name, IConnectable sisConnection) 
             : base(name)
         {
             _sisConnection = sisConnection;
-            _netus2Connection = netus2Connection;
-            SyncLogger.LogNewJob(this, _netus2Connection);
+            SyncLogger.LogNewJob(this);
         }
 
         public void Start()
@@ -35,14 +29,14 @@ namespace Netus2SisSync.SyncProcesses.SyncJobs
             }
             finally
             {
-                SyncLogger.LogStatus(this, Enum_Sync_Status.values["end"], _netus2Connection);
+                SyncLogger.LogStatus(this, Enum_Sync_Status.values["end"]);
             }
         }
 
         public void ReadFromSis()
         {
             _dtAcademicSession = new DataTableFactory().Dt_Sis_AcademicSession;
-            _dtAcademicSession = _sisConnection.ReadIntoDataTable(SyncScripts.ReadSiS_AcademicSession_SQL, _dtAcademicSession).Result;
+            _dtAcademicSession = _sisConnection.ReadIntoDataTable(SyncScripts.ReadSiS_AcademicSession_SQL, _dtAcademicSession);
         }
 
         private void RunJobTasks()

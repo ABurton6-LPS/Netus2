@@ -3,129 +3,197 @@ using Netus2_DatabaseConnection.enumerations;
 using Netus2SisSync.SyncProcesses;
 using System;
 using System.Data;
+using System.Diagnostics;
 using System.Text;
 
 namespace Netus2SisSync.UtilityTools
 {
     public static class SyncLogger
     {
-        public static void LogNewJob(SyncJob job, IConnectable connection)
+        public static void LogNewJob(SyncJob job)
         {
-            StringBuilder sql = new StringBuilder("INSERT INTO sync_job(");
-            sql.Append("[name], [timestamp]");
-            sql.Append(") VALUES (");
-            sql.Append("'" + job.Name + "', ");
-            sql.Append("'" + DateTime.Now + "')");
-
-            job.Id = connection.InsertNewRecord(sql.ToString());
-
-            LogStatus(job, Enum_Sync_Status.values["start"], connection);
-        }
-
-        public static SyncTask LogNewTask(SyncTask task, IConnectable connection)
-        {
-            StringBuilder sql = new StringBuilder("INSERT INTO sync_task(");
-            sql.Append("sync_job_id, [name], [timestamp]");
-            sql.Append(") VALUES (");
-            sql.Append(task.Job.Id + ", ");
-            sql.Append("'" + task.Name + "', ");
-            sql.Append("'" + DateTime.Now + "')");
-
-            task.Id = connection.InsertNewRecord(sql.ToString());
-
-            LogStatus(task, Enum_Sync_Status.values["start"], connection);
-
-            return task;
-        }
-
-        public static void LogStatus(SyncJob job, Enumeration enumStatus, IConnectable connection)
-        {
-            StringBuilder sql = new StringBuilder("INSERT INTO sync_job_status (");
-            sql.Append("sync_job_id, enum_sync_status_id, [timestamp]");
-            sql.Append(") VALUES (");
-            sql.Append(job.Id + ", ");
-            sql.Append(enumStatus.Id + ", ");
-            sql.Append("'" + DateTime.Now + "')");
-
-            connection.InsertNewRecord(sql.ToString());
-        }
-        public static void LogStatus(SyncTask task, Enumeration enumStatus, IConnectable connection)
-        {
-            StringBuilder sql = new StringBuilder("INSERT INTO sync_task_status (");
-            sql.Append("sync_task_id, enum_sync_status_id, [timestamp]");
-            sql.Append(") VALUES (");
-            sql.Append(task.Id + ", ");
-            sql.Append(enumStatus.Id + ", ");
-            sql.Append("'" + DateTime.Now + "')");
-
-            connection.InsertNewRecord(sql.ToString());
-        }
-
-        public static void LogError(Exception e, SyncJob job, IConnectable connection)
-        {
-            string errorMessage = e.Message;
-            while(e.Message.IndexOf('\'') > 0)
+            IConnectable connection = DbConnectionFactory.GetNetus2Connection();
+            try
             {
-                errorMessage = e.Message.Insert(e.Message.IndexOf('\''), "\'");
+
+                StringBuilder sql = new StringBuilder("INSERT INTO sync_job(");
+                sql.Append("[name], [timestamp]");
+                sql.Append(") VALUES (");
+                sql.Append("'" + job.Name + "', ");
+                sql.Append("'" + DateTime.Now + "')");
+
+                job.Id = connection.InsertNewRecord(sql.ToString());
+
+                LogStatus(job, Enum_Sync_Status.values["start"]);
             }
-
-            string errorStackTrace = e.StackTrace;
-            while(e.StackTrace.IndexOf('\'') > 0)
+            catch(Exception e)
             {
-                errorStackTrace = e.StackTrace.Insert(e.StackTrace.IndexOf('\''), "\'");
+                LogError(e, job);
             }
-
-            StringBuilder sql = new StringBuilder("INSERT INTO sync_error(");
-            sql.Append("sync_job_id, [message], stack_trace, [timestamp]");
-            sql.Append(") VALUES (");
-            sql.Append(job.Id + ", ");
-            sql.Append("'" + errorMessage + "', ");
-            sql.Append("'" + errorStackTrace + "', ");
-            sql.Append("'" + DateTime.Now + "')");
-
-            connection.InsertNewRecord(sql.ToString());
-
-            LogStatus(job, Enum_Sync_Status.values["error"], connection);
+            finally
+            {
+                connection.CloseConnection();
+            }            
         }
 
-        public static void LogError(Exception e, SyncTask task, IConnectable connection)
+        public static void LogNewTask(SyncTask task)
         {
-            LogError(e, task, null, connection);
+            IConnectable connection = DbConnectionFactory.GetNetus2Connection();
+            try
+            {
+                StringBuilder sql = new StringBuilder("INSERT INTO sync_task(");
+                sql.Append("sync_job_id, [name], [timestamp]");
+                sql.Append(") VALUES (");
+                sql.Append(task.Job.Id + ", ");
+                sql.Append("'" + task.Name + "', ");
+                sql.Append("'" + DateTime.Now + "')");
+
+                task.Id = connection.InsertNewRecord(sql.ToString());
+
+                LogStatus(task, Enum_Sync_Status.values["start"]);
+            }
+            catch (Exception e)
+            {
+                LogError(e, task, null);
+            }
+            finally
+            {
+                connection.CloseConnection();
+            }
         }
 
-        public static void LogError(Exception e, SyncTask task, DataRow row, IConnectable connection)
+        public static void LogStatus(SyncJob job, Enumeration enumStatus)
         {
-            string errorMessage = e.Message;
-            errorMessage = e.Message.Replace("\'", "\'\'");
+            IConnectable connection = DbConnectionFactory.GetNetus2Connection();
+            try
+            {
+                StringBuilder sql = new StringBuilder("INSERT INTO sync_job_status (");
+                sql.Append("sync_job_id, enum_sync_status_id, [timestamp]");
+                sql.Append(") VALUES (");
+                sql.Append(job.Id + ", ");
+                sql.Append(enumStatus.Id + ", ");
+                sql.Append("'" + DateTime.Now + "')");
 
-            string errorStackTrace = e.StackTrace;
-            while (e.StackTrace.IndexOf('\'') > 0)
-            {
-                errorStackTrace = e.StackTrace.Insert(e.StackTrace.IndexOf('\''), "\'");
+                connection.InsertNewRecord(sql.ToString());
             }
-            
-            if(row != null)
+            catch (Exception e)
             {
-                StringBuilder dataThatCausedError = new StringBuilder();
-                foreach (DataColumn col in row.Table.Columns)
+                LogError(e, job);
+            }
+            finally
+            {
+                connection.CloseConnection();
+            }
+        }
+
+        public static void LogStatus(SyncTask task, Enumeration enumStatus)
+        {
+            IConnectable connection = DbConnectionFactory.GetNetus2Connection();
+            try
+            {
+                StringBuilder sql = new StringBuilder("INSERT INTO sync_task_status (");
+                sql.Append("sync_task_id, enum_sync_status_id, [timestamp]");
+                sql.Append(") VALUES (");
+                sql.Append(task.Id + ", ");
+                sql.Append(enumStatus.Id + ", ");
+                sql.Append("'" + DateTime.Now + "')");
+
+                connection.InsertNewRecord(sql.ToString());
+            }
+            catch(Exception e)
+            {
+                LogError(e, task, null);
+            }
+            finally
+            {
+                connection.CloseConnection();
+            }
+        }
+
+        public static void LogError(Exception e, SyncJob job)
+        {
+            LogStatus(job, Enum_Sync_Status.values["error"]);
+
+            IConnectable connection = DbConnectionFactory.GetNetus2Connection();
+            try
+            {
+                string errorMessage = e.Message;
+                while (e.Message.IndexOf('\'') > 0)
                 {
-                    dataThatCausedError.AppendFormat("{0},", row[col]);
+                    errorMessage = e.Message.Insert(e.Message.IndexOf('\''), "\'");
                 }
-                dataThatCausedError = dataThatCausedError.Remove(dataThatCausedError.Length - 1, 1);
-                errorStackTrace += "\nData That Caused Error:\n" + dataThatCausedError.ToString() + ";";
+
+                string errorStackTrace = e.StackTrace;
+                while (e.StackTrace.IndexOf('\'') > 0)
+                {
+                    errorStackTrace = e.StackTrace.Insert(e.StackTrace.IndexOf('\''), "\'");
+                }
+
+                StringBuilder sql = new StringBuilder("INSERT INTO sync_error(");
+                sql.Append("sync_job_id, [message], stack_trace, [timestamp]");
+                sql.Append(") VALUES (");
+                sql.Append(job.Id + ", ");
+                sql.Append("'" + errorMessage + "', ");
+                sql.Append("'" + errorStackTrace + "', ");
+                sql.Append("'" + DateTime.Now + "')");
+
+                connection.InsertNewRecord(sql.ToString());
             }
+            catch(Exception cantEvenLogError)
+            {
+                Debug.WriteLine(cantEvenLogError.Message + "\n" + cantEvenLogError.StackTrace);
+            }
+            finally
+            {
+                connection.CloseConnection();
+            }
+        }
 
-            StringBuilder sql = new StringBuilder("INSERT INTO sync_error(");
-            sql.Append("sync_task_id, [message], stack_trace, [timestamp]");
-            sql.Append(") VALUES (");
-            sql.Append(task.Id + ", ");
-            sql.Append("'" + errorMessage + "', ");
-            sql.Append("'" + errorStackTrace + "', ");
-            sql.Append("'" + DateTime.Now + "')");
+        public static void LogError(Exception e, SyncTask task, DataRow row)
+        {
+            LogStatus(task, Enum_Sync_Status.values["error"]);
 
-            connection.InsertNewRecord(sql.ToString());
+            IConnectable connection = DbConnectionFactory.GetNetus2Connection();
+            try
+            {
+                string errorMessage = e.Message;
+                errorMessage = e.Message.Replace("\'", "\'\'");
 
-            LogStatus(task, Enum_Sync_Status.values["error"], connection);
+                string errorStackTrace = e.StackTrace;
+                while (e.StackTrace.IndexOf('\'') > 0)
+                {
+                    errorStackTrace = e.StackTrace.Insert(e.StackTrace.IndexOf('\''), "\'");
+                }
+
+                if (row != null)
+                {
+                    StringBuilder dataThatCausedError = new StringBuilder();
+                    foreach (DataColumn col in row.Table.Columns)
+                    {
+                        dataThatCausedError.AppendFormat("{0},", row[col]);
+                    }
+                    dataThatCausedError = dataThatCausedError.Remove(dataThatCausedError.Length - 1, 1);
+                    errorStackTrace += "\nData For Failed Task:\n" + dataThatCausedError.ToString() + ";";
+                }
+
+                StringBuilder sql = new StringBuilder("INSERT INTO sync_error(");
+                sql.Append("sync_task_id, [message], stack_trace, [timestamp]");
+                sql.Append(") VALUES (");
+                sql.Append(task.Id + ", ");
+                sql.Append("'" + errorMessage + "', ");
+                sql.Append("'" + errorStackTrace + "', ");
+                sql.Append("'" + DateTime.Now + "')");
+
+                connection.InsertNewRecord(sql.ToString());
+            }
+            catch (Exception cantEvenLogError)
+            {
+                Debug.WriteLine(cantEvenLogError.Message + "\n" + cantEvenLogError.StackTrace);
+            }
+            finally
+            {
+                connection.CloseConnection();
+            }
         }
     }
 }

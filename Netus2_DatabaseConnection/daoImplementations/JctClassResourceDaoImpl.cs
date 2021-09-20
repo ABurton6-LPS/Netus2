@@ -46,7 +46,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         private List<DataRow> Read(string sql, IConnectable connection)
         {
             DataTable dtJctClassResource = new DataTableFactory().Dt_Netus2_JctClassResource;
-            dtJctClassResource = connection.ReadIntoDataTable(sql, dtJctClassResource).Result;
+            dtJctClassResource = connection.ReadIntoDataTable(sql, dtJctClassResource);
 
             List<DataRow> jctClassResourceDaos = new List<DataRow>();
             foreach (DataRow row in dtJctClassResource.Rows)

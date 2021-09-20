@@ -9,24 +9,13 @@ namespace Netus2_Test.Integration
         [TestCase]
         public void TestRun()
         {
-            //IConnectable netus2Connection = DbConnectionFactory.GetNetus2Connection();
-            //IConnectable sisConnection = DbConnectionFactory.GetSisConnection();
-            //try
-            //{
-            //    new SyncJob_Organization("SyncJob_Organization", sisConnection, netus2Connection)
-            //        .Start();
+            new SyncJob_Organization("SyncJob_Organization").Start();
 
-            //    new SyncJob_AcademicSession("SyncJob_AcademicSession", sisConnection, netus2Connection)
-            //        .Start();
+            //new SyncJob_AcademicSession("SyncJob_AcademicSession", sisConnection, netus2Connection)
+            //    .Start();
 
-            //    new SyncJob_Person("SyncJob_Person", sisConnection, netus2Connection)
-            //        .Start();
-            //}
-            //finally
-            //{
-            //    sisConnection.CloseConnection();
-            //    netus2Connection.CloseConnection();
-            //}
+            //new SyncJob_Person("SyncJob_Person", sisConnection, netus2Connection)
+            //    .Start();
         }
     }
 }

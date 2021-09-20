@@ -46,7 +46,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         private List<DataRow> Read(string sql, IConnectable connection)
         {
             DataTable dtJctPersonRole = new DataTableFactory().Dt_Netus2_JctPersonRole;
-            dtJctPersonRole = connection.ReadIntoDataTable(sql, dtJctPersonRole).Result;
+            dtJctPersonRole = connection.ReadIntoDataTable(sql, dtJctPersonRole);
 
             List<DataRow> jctPersonRoleDaos = new List<DataRow>();
             foreach (DataRow row in dtJctPersonRole.Rows)

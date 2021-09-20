@@ -15,15 +15,13 @@ namespace Netus2SisSync.SyncProcesses.SyncJobs
     public class SyncJob_Person : SyncJob
     {
         IConnectable _sisConnection;
-        IConnectable _netus2Connection;
         public DataTable _dtPerson;
 
-        public SyncJob_Person(string name, IConnectable sisConnection, IConnectable netus2Connection)
+        public SyncJob_Person(string name, IConnectable sisConnection)
             : base(name)
         {
             _sisConnection = sisConnection;
-            _netus2Connection = netus2Connection;
-            SyncLogger.LogNewJob(this, _netus2Connection);
+            SyncLogger.LogNewJob(this);
         }
 
         public void Start()
@@ -35,14 +33,14 @@ namespace Netus2SisSync.SyncProcesses.SyncJobs
             }
             finally
             {
-                SyncLogger.LogStatus(this, Enum_Sync_Status.values["end"], _netus2Connection);
+                SyncLogger.LogStatus(this, Enum_Sync_Status.values["end"]);
             }
         }
 
         public void ReadFromSis()
         {
             _dtPerson = new DataTableFactory().Dt_Sis_Person;
-            _dtPerson = _sisConnection.ReadIntoDataTable(SyncScripts.ReadSis_Person_SQL, _dtPerson).Result;
+            _dtPerson = _sisConnection.ReadIntoDataTable(SyncScripts.ReadSis_Person_SQL, _dtPerson);
         }
 
         private void RunJobTasks()

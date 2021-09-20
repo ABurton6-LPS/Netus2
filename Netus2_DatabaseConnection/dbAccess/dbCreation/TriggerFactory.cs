@@ -43,6 +43,7 @@
             BuildEnumCategory_UpdateTrigger(connection);
             BuildEnumEthnic_UpdateTrigger(connection);
             BuildEnumIdentifier_UpdateTrigger(connection);
+            BuildEnumSyncStatus_UpdateTrigger(connection);
         }
 
         private static void BuildDeleteEnumTriggers(IConnectable connection)
@@ -67,6 +68,7 @@
             BuildEnumCategory_DeleteTrigger(connection);
             BuildEnumEthnic_DeleteTrigger(connection);
             BuildEnumIdentifier_DeleteTrigger(connection);
+            BuildEnumSyncStatus_DeleteTrigger(connection);
         }
 
         private static void BuildInsertTableTriggers(IConnectable connection)
@@ -470,6 +472,23 @@
             connection.ExecuteNonQuery(sql);
         }
 
+        private static void BuildEnumSyncStatus_UpdateTrigger(IConnectable connection)
+        {
+            string sql =
+                "CREATE TRIGGER trigger_enum_sync_status_update ON enum_sync_status "
+                + "AFTER update "
+                + "AS "
+                + "BEGIN "
+                + "INSERT INTO log_enum_sync_status "
+                + "(enum_sync_status_id, netus2_code, sis_code, hr_code, descript, log_date, log_user, enum_log_action_id) "
+                + "SELECT d.enum_sync_status_id, d.netus2_code, d.sis_code, d.hr_code, d.descript, GETDATE(), SUSER_SNAME(), "
+                + "(SELECT enum_log_action_id FROM enum_log_action WHERE netus2_code LIKE 'update') "
+                + "FROM inserted d "
+                + "END";
+
+            connection.ExecuteNonQuery(sql);
+        }
+
         private static void BuildEnumLogAction_DeleteTrigger(IConnectable connection)
         {
             string sql =
@@ -801,6 +820,23 @@
                 + "INSERT INTO log_enum_identifier "
                 + "(enum_identifier_id, netus2_code, sis_code, hr_code, descript, log_date, log_user, enum_log_action_id) "
                 + "SELECT d.enum_identifier_id, d.netus2_code, d.sis_code, d.hr_code, d.descript, GETDATE(), SUSER_SNAME(), "
+                + "(SELECT enum_log_action_id FROM enum_log_action WHERE netus2_code LIKE 'delete') "
+                + "FROM deleted d "
+                + "END";
+
+            connection.ExecuteNonQuery(sql);
+        }
+
+        private static void BuildEnumSyncStatus_DeleteTrigger(IConnectable connection)
+        {
+            string sql =
+                "CREATE TRIGGER trigger_enum_sync_status_delete ON enum_sync_status "
+                + "AFTER delete "
+                + "AS "
+                + "BEGIN "
+                + "INSERT INTO log_enum_sync_status "
+                + "(enum_sync_status_id, netus2_code, sis_code, hr_code, descript, log_date, log_user, enum_log_action_id) "
+                + "SELECT d.enum_sync_status_id, d.netus2_code, d.sis_code, d.hr_code, d.descript, GETDATE(), SUSER_SNAME(), "
                 + "(SELECT enum_log_action_id FROM enum_log_action WHERE netus2_code LIKE 'delete') "
                 + "FROM deleted d "
                 + "END";

@@ -1,7 +1,5 @@
-﻿using Netus2_DatabaseConnection.utilityTools;
-using System;
+﻿using System;
 using System.Data;
-using System.Data.Common;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
 
@@ -49,7 +47,7 @@ namespace Netus2_DatabaseConnection.dbAccess
             }
         }
 
-        public async Task<DataTable> ReadIntoDataTable(string sql, DataTable dt)
+        public DataTable ReadIntoDataTable(string sql, DataTable dt)
         {
 
             if ((sql == null) || (sql == "") || !(sql.ToUpper().Substring(0, 6).Contains("SELECT")))
@@ -61,7 +59,7 @@ namespace Netus2_DatabaseConnection.dbAccess
             {
                 using (var command = new SqlCommand(sql, connection, transaction))
                 {
-                    using (var reader = await command.ExecuteReaderAsync())
+                    using (var reader = command.ExecuteReaderAsync().Result)
                     {
                         dt.Load(reader);
                     }
@@ -71,7 +69,7 @@ namespace Netus2_DatabaseConnection.dbAccess
             {
                 using (var command = new SqlCommand(sql, connection))
                 {
-                    using (var reader = await command.ExecuteReaderAsync())
+                    using (var reader = command.ExecuteReaderAsync().Result)
                     {
                         dt.Load(reader);
                     }
@@ -81,8 +79,9 @@ namespace Netus2_DatabaseConnection.dbAccess
             return dt;
         }
 
-        public async Task<int> ExecuteNonQuery(string sql)
+        public int ExecuteNonQuery(string sql)
         {
+            
             if ((sql == null) || (sql == "") || (sql.ToUpper().Substring(0, 6).Contains("SELECT")))
             {
                 throw new Exception("SQL Cannot be empty, null, or a query.");
@@ -94,18 +93,18 @@ namespace Netus2_DatabaseConnection.dbAccess
             {
                 using (var command = new SqlCommand(sql, connection, transaction))
                 {
-                    returnValue = await command.ExecuteNonQueryAsync();
+                    returnValue = command.ExecuteNonQueryAsync().Result;
                 }
             }
             else
             {
                 using (var command = new SqlCommand(sql, connection))
                 {
-                    returnValue = await command.ExecuteNonQueryAsync();
+                    returnValue = command.ExecuteNonQueryAsync().Result;
                 }
             }
 
-            if(returnValue == 0)
+            if (returnValue == 0)
             {
                 throw new Exception("SQL Non-Query did not affect any rows:\n" + sql);
             }
@@ -121,7 +120,7 @@ namespace Netus2_DatabaseConnection.dbAccess
             }
 
             int idOfInsertedRecord = -1;
-            int numberOfInsertedRecords = ExecuteNonQuery(sql).Result;
+            int numberOfInsertedRecords = ExecuteNonQuery(sql);
 
             if (numberOfInsertedRecords != 1)
             {

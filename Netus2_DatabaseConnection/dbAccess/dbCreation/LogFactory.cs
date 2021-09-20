@@ -30,6 +30,7 @@
             BuildLogEnumCategory(connection);
             BuildLogEnumEthnic(connection);
             BuildLogEnumIdentifier(connection);
+            BuildLogEnumSyncStatus(connection);
         }
 
         private static void BuildLogDataTables(IConnectable connection)
@@ -411,6 +412,24 @@
                 + "sis_code varchar(20),"
                 + "hr_code varchar(20),"
                 + "descript varchar(150),"
+                + "log_date datetime,"
+                + "log_user varchar(150),"
+                + "enum_log_action_id int,"
+                + "FOREIGN KEY (enum_log_action_id) REFERENCES enum_log_action(enum_log_action_id))";
+
+            connection.ExecuteNonQuery(sql);
+        }
+
+        private static void BuildLogEnumSyncStatus(IConnectable connection)
+        {
+            string sql =
+                "CREATE TABLE log_enum_sync_status("
+                + "log_enum_sync_status_id int IDENTITY(1,1) PRIMARY KEY,"
+                + "enum_sync_status_id int,"
+                + "netus2_code varchar(20),"
+                + "sis_code varchar(20),"
+                + "hr_code varchar(20),"
+                + "descript varchar(1150),"
                 + "log_date datetime,"
                 + "log_user varchar(150),"
                 + "enum_log_action_id int,"

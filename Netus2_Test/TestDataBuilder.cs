@@ -78,7 +78,7 @@ namespace Netus2_Test
             if (connection != null)
             {
                 organizationDaoImpl.Update(school, district.Id, connection);
-                school = organizationDaoImpl.Read(school, connection)[0];
+                district = organizationDaoImpl.Read_WithOrganizationId(district.Id, connection);
             }
 
             schoolYear = new AcademicSession("2021", Enum_Session.values["school year"], school, "T1");
