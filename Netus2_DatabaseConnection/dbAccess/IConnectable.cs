@@ -37,14 +37,14 @@ namespace Netus2_DatabaseConnection.dbAccess
         /// </summary>
         /// <param name="sql"></param>
         /// <param name="dt"></param>
-        Task<DataTable> ReadIntoDataTable(string sql, DataTable dt);
+        DataTable ReadIntoDataTable(string sql, DataTable dt);
 
         /// <summary>
         /// Use this to pass in a SQL statement which is neither a Query or an Insert statement.
         /// </summary>
         /// <param name="sql"></param>
         /// <returns>The number of recoreds affected.</returns>
-        Task<int> ExecuteNonQuery(string sql);
+        int ExecuteNonQuery(string sql);
 
         /// <summary>
         /// Use this to pass in a SQL statement for the insertion of a single record into a database table.

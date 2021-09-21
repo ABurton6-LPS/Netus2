@@ -778,7 +778,7 @@
             string sql =
                 "CREATE TABLE sync_job( "
                 + "sync_job_id int IDENTITY(1,1) PRIMARY KEY, "
-                + "[name] text NOT NULL, "
+                + "[name] varchar(500) NOT NULL, "
                 + "[timestamp] datetime)";
             connection.ExecuteNonQuery(sql);
         }
@@ -789,7 +789,7 @@
                 "CREATE TABLE sync_task( "
                 + "sync_task_id int IDENTITY(1,1) PRIMARY KEY, "
                 + "sync_job_id int, "
-                + "[name] text NOT NULL, "
+                + "[name] varchar(500) NOT NULL, "
                 + "[timestamp] datetime, "
                 + "FOREIGN KEY(sync_job_id) REFERENCES sync_job(sync_job_id))";
             connection.ExecuteNonQuery(sql);
@@ -829,7 +829,7 @@
                 + "sync_job_id int, "
                 + "sync_task_id int, "
                 + "[message] text, "
-                + "stack_trace text NOT NULL, "
+                + "stack_trace text, "
                 + "[timestamp] datetime, "
                 + "FOREIGN KEY(sync_job_id) REFERENCES sync_job(sync_job_id), "
                 + "FOREIGN KEY(sync_task_id) REFERENCES sync_task(sync_task_id))";

@@ -9,11 +9,14 @@ namespace Netus2SisSync.SyncProcesses
         public int Id { get; set; }
         public string Name { get; set; }
         public List<SyncTask> Tasks { get; }
+        public int _maxThreadsPerBatch { get; }
 
         public SyncJob(string name)
         {
             Name = name;
             Tasks = new List<SyncTask>();
+
+            _maxThreadsPerBatch = 25;
         }
     }
 }

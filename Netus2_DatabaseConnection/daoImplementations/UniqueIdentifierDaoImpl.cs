@@ -59,7 +59,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         private List<UniqueIdentifier> Read(string sql, IConnectable connection)
         {
             DataTable dtUniqueIdentifier = new DataTableFactory().Dt_Netus2_UniqueIdentifier;
-            dtUniqueIdentifier = connection.ReadIntoDataTable(sql, dtUniqueIdentifier).Result;
+            dtUniqueIdentifier = connection.ReadIntoDataTable(sql, dtUniqueIdentifier);
 
             List<UniqueIdentifier> results = new List<UniqueIdentifier>();
             foreach (DataRow row in dtUniqueIdentifier.Rows)

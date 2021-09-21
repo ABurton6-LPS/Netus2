@@ -151,7 +151,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "SELECT organization_id FROM organization WHERE building_code LIKE '" +
                 tdBuilder.school.SisBuildingCode + "')";
 
-            academicSessionDaoImpl.Read_UsingBuildingCode_TermCode_Schoolyear(
+            academicSessionDaoImpl.Read_UsingSisBuildingCode_TermCode_Schoolyear(
                 tdBuilder.school.SisBuildingCode, 
                 tdBuilder.schoolYear.TermCode, 
                 tdBuilder.schoolYear.SchoolYear,

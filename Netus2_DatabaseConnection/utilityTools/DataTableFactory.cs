@@ -282,11 +282,6 @@ namespace Netus2_DatabaseConnection.utilityTools
             DataColumn dtColumn;
 
             dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(int);
-            dtColumn.ColumnName = "enum_id";
-            dtPerson.Columns.Add(dtColumn);
-
-            dtColumn = new DataColumn();
             dtColumn.DataType = typeof(string);
             dtColumn.ColumnName = "netus2_code";
             dtPerson.Columns.Add(dtColumn);

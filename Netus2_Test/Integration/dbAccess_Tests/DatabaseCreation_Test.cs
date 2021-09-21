@@ -1,6 +1,7 @@
 using Netus2_DatabaseConnection.dbAccess;
 using Netus2_DatabaseConnection.dbAccess.dbCreation;
 using NUnit.Framework;
+using System;
 using System.Data.SqlClient;
 
 namespace Netus2_Test.Integration
@@ -23,7 +24,7 @@ namespace Netus2_Test.Integration
             {
                 SchemaFactory.BuildSchema(connection);
             }
-            catch (SqlException sqlE)
+            catch (Exception sqlE)
             {
                 if (sqlE.Message.Contains("There is already an object named"))
                     Assert.Pass();
@@ -39,7 +40,7 @@ namespace Netus2_Test.Integration
             {
                 LogFactory.BuildLogs(connection);
             }
-            catch (SqlException sqlE)
+            catch (Exception sqlE)
             {
                 if (sqlE.Message.Contains("There is already an object named"))
                     Assert.Pass();
@@ -55,7 +56,7 @@ namespace Netus2_Test.Integration
             {
                 TriggerFactory.BuildTriggers(connection);
             }
-            catch (SqlException sqlE)
+            catch (Exception sqlE)
             {
                 if (sqlE.Message.Contains("There is already an object named"))
                     Assert.Pass();
@@ -71,7 +72,7 @@ namespace Netus2_Test.Integration
             {
                 ViewsFactory.BuildOneRosterViews(connection);
             }
-            catch (SqlException sqlE)
+            catch (Exception sqlE)
             {
                 if (sqlE.Message.Contains("There is already an object named"))
                     Assert.Pass();

@@ -89,7 +89,7 @@ namespace Netus2_DatabaseConnection.dbAccess
             //Do Nothing
         }
 
-        public Task<DataTable> ReadIntoDataTable(string sql, DataTable dt)
+        public DataTable ReadIntoDataTable(string sql, DataTable dt)
         {
             if (sql.Contains("SELECT * FROM enum_"))
             {
@@ -164,88 +164,13 @@ namespace Netus2_DatabaseConnection.dbAccess
             return GetTaskDataTableFromReader(mockReader.Object, dt);
         }
 
-        private Task<DataTable> GetTaskDataTableFromReader(IDataReader reader, DataTable dt)
+        private DataTable GetTaskDataTableFromReader(IDataReader reader, DataTable dt)
         {
             dt.Load(reader);
-            return Task.FromResult(dt);
+            return dt;
         }
 
-        public IDataReader GetReader(string sql)
-        {
-            if (sql.Contains("SELECT * FROM enum_"))
-            {
-                int count = -1;
-                var enumReader = new Mock<IDataReader>();
-
-                enumReader.Setup(x => x.Read())
-                    .Returns(() => count < testEnums.Count - 1)
-                    .Callback(() => count++);
-
-                enumReader.Setup(x => x.FieldCount)
-                    .Returns(() => 5);
-
-                enumReader.Setup(x => x.GetValues(It.IsAny<object[]>()))
-                .Callback<object[]>(
-                    (values) =>
-                    {
-                        values[0] = testEnums[count]["enum_id"];
-                        values[1] = testEnums[count]["netus2_code"];
-                        values[2] = testEnums[count]["sis_code"];
-                        values[3] = testEnums[count]["hr_code"];
-                        values[4] = testEnums[count]["descript"];
-                    }
-                ).Returns(count);
-
-                enumReader.Setup(x => x.GetName(0))
-                .Returns(() => "enum_id");
-                enumReader.Setup(x => x.GetOrdinal("enum_id"))
-                    .Returns(() => 0);
-                enumReader.Setup(x => x.GetFieldType(0))
-                    .Returns(() => typeof(int));
-
-                enumReader.Setup(x => x.GetName(1))
-                .Returns(() => "netus2_code");
-                enumReader.Setup(x => x.GetOrdinal("netus2_code"))
-                    .Returns(() => 1);
-                enumReader.Setup(x => x.GetFieldType(1))
-                    .Returns(() => typeof(string));
-
-                enumReader.Setup(x => x.GetName(2))
-                .Returns(() => "sis_code");
-                enumReader.Setup(x => x.GetOrdinal("sis_code"))
-                    .Returns(() => 2);
-                enumReader.Setup(x => x.GetFieldType(2))
-                    .Returns(() => typeof(string));
-
-                enumReader.Setup(x => x.GetName(3))
-                .Returns(() => "hr_code");
-                enumReader.Setup(x => x.GetOrdinal("hr_code"))
-                    .Returns(() => 3);
-                enumReader.Setup(x => x.GetFieldType(3))
-                    .Returns(() => typeof(string));
-
-                enumReader.Setup(x => x.GetName(4))
-                .Returns(() => "descript");
-                enumReader.Setup(x => x.GetOrdinal("descript"))
-                    .Returns(() => 4);
-                enumReader.Setup(x => x.GetFieldType(4))
-                    .Returns(() => typeof(string));
-
-                return enumReader.Object;
-            }
-            else if (expectedReaderSql != null)
-            {
-                Assert.AreEqual(expectedReaderSql, sql);
-                Assert.IsNull(expectedNewRecordSql);
-                Assert.IsNull(expectedNonQuerySql);
-
-                expectedReaderSql = null;
-            }
-
-            return mockReader.Object;
-        }
-
-        public Task<int> ExecuteNonQuery(string sql)
+        public int ExecuteNonQuery(string sql)
         {
             if (expectedNonQuerySql != null)
             {
@@ -255,7 +180,7 @@ namespace Netus2_DatabaseConnection.dbAccess
                 expectedNonQuerySql = null;
             }
 
-            return Task.FromResult(1);
+            return 1;
         }
 
         public int InsertNewRecord(string sql)

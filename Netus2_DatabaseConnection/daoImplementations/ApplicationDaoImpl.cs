@@ -78,7 +78,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         private List<Application> Read(string sql, IConnectable connection)
         {
             DataTable dtApplication = new DataTableFactory().Dt_Netus2_Application;
-            dtApplication = connection.ReadIntoDataTable(sql, dtApplication).Result;
+            dtApplication = connection.ReadIntoDataTable(sql, dtApplication);
 
             List<Application> results = new List<Application>();
             foreach (DataRow row in dtApplication.Rows)

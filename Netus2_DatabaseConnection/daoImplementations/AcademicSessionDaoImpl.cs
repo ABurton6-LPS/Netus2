@@ -97,20 +97,20 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 return null;
         }
 
-        public AcademicSession Read_UsingBuildingCode_TermCode_Schoolyear(string buildingCode, string termCode, int schoolYear, IConnectable connection)
+        public AcademicSession Read_UsingSisBuildingCode_TermCode_Schoolyear(string sisBuildingCode, string termCode, int schoolYear, IConnectable connection)
         {
             string sql = "SELECT * FROM academic_session WHERE 1=1 " + 
                 "AND term_code = '" + termCode + "' " + 
                 "AND school_year = " + schoolYear + " " +
                 "AND organization_id in (" +
-                "SELECT organization_id FROM organization WHERE building_code LIKE '" + buildingCode + "')";
+                "SELECT organization_id FROM organization WHERE sis_building_code LIKE '" + sisBuildingCode + "')";
 
             List<AcademicSession> resutls = Read(sql, connection);
             if (resutls.Count == 1)
                 return resutls[0];
             else if (resutls.Count > 1)
                 throw new Exception("Multiple academic_session records found linked to " +
-                    "buildingCode: " + buildingCode + 
+                    "sisBuildingCode: " + sisBuildingCode + 
                     ", termCode: " + termCode + 
                     ", schoolYear: " + schoolYear);
             else
@@ -155,7 +155,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         private List<AcademicSession> Read(string sql, IConnectable connection)
         {
             DataTable dtAcademicSession = new DataTableFactory().Dt_Netus2_AcademicSession;
-            dtAcademicSession = connection.ReadIntoDataTable(sql, dtAcademicSession).Result;
+            dtAcademicSession = connection.ReadIntoDataTable(sql, dtAcademicSession);
 
             List<AcademicSession> results = new List<AcademicSession>();
             foreach (DataRow row in dtAcademicSession.Rows)

@@ -20,7 +20,7 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.PersonTasks
             : base(name, job)
         {
             _netus2Connection = DbConnectionFactory.GetNetus2Connection();
-            SyncLogger.LogNewTask(this, _netus2Connection);
+            SyncLogger.LogNewTask(this);
         }
 
         public override void Execute(DataRow row, CountDownLatch latch)
@@ -57,10 +57,9 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.PersonTasks
                 List<UniqueIdentifier> foundUniqueIdentifiers = uniqueIdentifierDaoImpl.Read(uniqueId, -1, _netus2Connection);
 
                 IPersonDao personDaoImpl = DaoImplFactory.GetPersonDaoImpl();
-                Person person = person = new Person(sisFirstName, sisLastName, sisBirthDate, sisGender, sisEthnic);
-
                 if (foundUniqueIdentifiers.Count == 0)
                 {
+                    Person person = new Person(sisFirstName, sisLastName, sisBirthDate, sisGender, sisEthnic);
                     person.Roles.Add(sisPersonType);
                     person.MiddleName = sisMiddleName;
                     person.ResidenceStatus = sisResidenceStatus;
@@ -71,37 +70,37 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.PersonTasks
                 }
                 else if (foundUniqueIdentifiers.Count == 1)
                 {
-                    person.UniqueIdentifiers.Add(foundUniqueIdentifiers[0]);
-                    List<Person> foundPersons = personDaoImpl.Read(person, _netus2Connection);
+                    Person person = personDaoImpl.Read_UsingUniqueId(foundUniqueIdentifiers[0].Id, _netus2Connection);
 
-                    if (foundPersons.Count == 1)
+                    bool needsToBeUpdated = false;
+                    if (person.Roles.Contains(sisPersonType) == false)
                     {
-                        person = foundPersons[0];
-
-                        bool needsToBeUpdated = false;
-                        if (person.Roles.Contains(sisPersonType) == false)
-                        {
-                            person.Roles.Add(sisPersonType);
-                            needsToBeUpdated = true;
-                        }
-                        if ((person.MiddleName != sisMiddleName) ||
-                            (person.ResidenceStatus != sisResidenceStatus) ||
-                            (person.LoginName != sisLoginName) ||
-                            (person.LoginPw != sisLoginPw))
-                        {
-                            person.MiddleName = sisMiddleName;
-                            person.ResidenceStatus = sisResidenceStatus;
-                            person.LoginName = sisLoginName;
-                            person.LoginPw = sisLoginPw;
-                            needsToBeUpdated = true;
-                        }
-                        if (needsToBeUpdated)
-                            personDaoImpl.Update(person, _netus2Connection);
+                        person.Roles.Add(sisPersonType);
+                        needsToBeUpdated = true;
                     }
-                    else
+                    if ((person.FirstName != sisFirstName) ||
+                        (person.MiddleName != sisMiddleName) ||
+                        (person.LastName != sisLastName) ||
+                        (person.BirthDate != sisBirthDate) ||
+                        (person.Gender != sisGender) ||
+                        (person.Ethnic != sisEthnic) ||
+                        (person.ResidenceStatus != sisResidenceStatus) ||
+                        (person.LoginName != sisLoginName) ||
+                        (person.LoginPw != sisLoginPw))
                     {
-                        throw new Exception(foundPersons.Count + " record(s) found matching Person:\n" + person.ToString());
+                        person.FirstName = sisFirstName;
+                        person.MiddleName = sisMiddleName;
+                        person.LastName = sisLastName;
+                        person.BirthDate = sisBirthDate;
+                        person.Gender = sisGender;
+                        person.Ethnic = sisEthnic;
+                        person.ResidenceStatus = sisResidenceStatus;
+                        person.LoginName = sisLoginName;
+                        person.LoginPw = sisLoginPw;
+                        needsToBeUpdated = true;
                     }
+                    if (needsToBeUpdated)
+                        personDaoImpl.Update(person, _netus2Connection);
                 }
                 else
                 {
@@ -111,11 +110,11 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.PersonTasks
             catch (Exception e)
             {
                 Debug.WriteLine(e.Message + "\n" + e.StackTrace);
-                SyncLogger.LogError(e, this, row, _netus2Connection);
+                SyncLogger.LogError(e, this, row);
             }
             finally
             {
-                SyncLogger.LogStatus(this, Enum_Sync_Status.values["end"], _netus2Connection);
+                SyncLogger.LogStatus(this, Enum_Sync_Status.values["end"]);
                 _netus2Connection.CloseConnection();
                 latch.Signal();
             }

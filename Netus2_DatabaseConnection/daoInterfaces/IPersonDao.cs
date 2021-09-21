@@ -20,6 +20,18 @@ namespace Netus2_DatabaseConnection.daoInterfaces
 
         /// <summary>
         /// <para>
+        /// Returns the specific Person object from the database which is indicated by the associated UniqueIdentifier
+        /// primary key, passed in.
+        /// </para>
+        /// Also populates the returned objects with any associated Application, Role, child Person, Address,
+        /// PhoneNumber, UniqueIdentifier, EmploymentSession, Enrollment, and Mark objects.
+        /// </summary>
+        /// <param name="uniqueId"></param>
+        /// <param name="connection"></param>
+        Person Read_UsingUniqueId(int uniqueId, IConnectable connection);
+
+        /// <summary>
+        /// <para>
         /// Returns a list of Person objects, read from the database, which match the parameters provided in the
         /// Person object passed in. Null values provided within the Person object will be ignored.
         /// </para>

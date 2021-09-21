@@ -4,7 +4,6 @@ using Netus2_DatabaseConnection.daoInterfaces;
 using Netus2_DatabaseConnection.dataObjects;
 using Netus2_DatabaseConnection.dbAccess;
 using Netus2_DatabaseConnection.enumerations;
-using Netus2_DatabaseConnection.utilityTools;
 using Netus2SisSync.UtilityTools;
 using System;
 using System.Collections.Generic;
@@ -15,17 +14,15 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.OrganizationTasks
 {
     public class SyncTask_OrganizationParentRecords : SyncTask
     {
-        IConnectable _netus2Connection;
-
         public SyncTask_OrganizationParentRecords(string name, SyncJob job)
             : base(name, job)
         {
-            _netus2Connection = DbConnectionFactory.GetNetus2Connection();
-            SyncLogger.LogNewTask(this, _netus2Connection);
+            SyncLogger.LogNewTask(this);
         }
 
         public override void Execute(DataRow row, CountDownLatch latch)
         {
+            IConnectable netus2Connection = DbConnectionFactory.GetNetus2Connection();
             try
             {
                 string sisName = row["name"].ToString() == "" ? null : row["name"].ToString();
@@ -36,7 +33,7 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.OrganizationTasks
                 Organization org = new Organization(sisName, sisEnumOrganization, sisIdentifier, sisBuildingCode);
 
                 IOrganizationDao orgDaoImpl = DaoImplFactory.GetOrganizationDaoImpl();
-                List<Organization> foundOrgs = orgDaoImpl.Read(org, _netus2Connection);
+                List<Organization> foundOrgs = orgDaoImpl.Read(org, netus2Connection);
 
                 if (foundOrgs.Count == 1)
                 {
@@ -51,7 +48,7 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.OrganizationTasks
                 Organization parentOrg = null;
                 if (sisParentBuildingcode != null && sisParentBuildingcode != "")
                 {
-                    parentOrg = orgDaoImpl.Read_WithSisBuildingCode(sisParentBuildingcode, _netus2Connection);
+                    parentOrg = orgDaoImpl.Read_WithSisBuildingCode(sisParentBuildingcode, netus2Connection);
                     if (parentOrg != null)
                     {
                         List<int> childIds = new List<int>();
@@ -62,7 +59,7 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.OrganizationTasks
 
                         if (childIds.Contains(org.Id) == false)
                         {
-                            orgDaoImpl.Update(org, parentOrg.Id, _netus2Connection);
+                            orgDaoImpl.Update(org, parentOrg.Id, netus2Connection);
                         }
                     }
                 }
@@ -70,12 +67,12 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.OrganizationTasks
             catch (Exception e)
             {
                 Debug.WriteLine(e.Message + "\n" + e.StackTrace);
-                SyncLogger.LogError(e, this, _netus2Connection);
+                SyncLogger.LogError(e, this, row);
             }
             finally
             {
-                SyncLogger.LogStatus(this, Enum_Sync_Status.values["end"], _netus2Connection);
-                _netus2Connection.CloseConnection();
+                SyncLogger.LogStatus(this, Enum_Sync_Status.values["end"]);
+                netus2Connection.CloseConnection();
                 latch.Signal();
             }
         }

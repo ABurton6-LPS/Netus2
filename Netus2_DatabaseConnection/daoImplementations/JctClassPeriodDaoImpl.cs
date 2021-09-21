@@ -46,7 +46,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         private List<DataRow> Read(string sql, IConnectable connection)
         {
             DataTable dtJctClassPeriod = new DataTableFactory().Dt_Netus2_JctClassPeriod;
-            dtJctClassPeriod = connection.ReadIntoDataTable(sql, dtJctClassPeriod).Result;
+            dtJctClassPeriod = connection.ReadIntoDataTable(sql, dtJctClassPeriod);
 
             List<DataRow> foundDataRows = new List<DataRow>();
             foreach (DataRow row in dtJctClassPeriod.Rows)

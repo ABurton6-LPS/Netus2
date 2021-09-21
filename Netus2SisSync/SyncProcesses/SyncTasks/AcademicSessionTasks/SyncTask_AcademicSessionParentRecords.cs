@@ -20,7 +20,7 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AcademicSessionTasks
             : base(name, job)
         {
             _netus2Connection = DbConnectionFactory.GetNetus2Connection();
-            SyncLogger.LogNewTask(this, _netus2Connection);
+            SyncLogger.LogNewTask(this);
         }
 
         public override void Execute(DataRow row, CountDownLatch latch)
@@ -68,7 +68,7 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AcademicSessionTasks
                     string sisParentTermCode = sisParentSessionCode.Substring(sisParentSessionCode.IndexOf('-') + skipThisCharacterAndStartOnNextOne,
                         (sisParentSessionCode.Length - sisParentSchoolCode.Length) - sisParentSchoolYear.ToString().Length - numberOfDashesInSessionCode);
 
-                    parentAcademicSession = academicSessionDaoImpl.Read_UsingBuildingCode_TermCode_Schoolyear(sisParentSchoolCode, sisParentTermCode, sisParentSchoolYear, _netus2Connection);
+                    parentAcademicSession = academicSessionDaoImpl.Read_UsingSisBuildingCode_TermCode_Schoolyear(sisParentSchoolCode, sisParentTermCode, sisParentSchoolYear, _netus2Connection);
                     if (parentAcademicSession != null)
                     {
                         List<int> childIds = new List<int>();
@@ -87,11 +87,11 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AcademicSessionTasks
             catch (Exception e)
             {
                 Debug.WriteLine(e.Message + "\n" + e.StackTrace);
-                SyncLogger.LogError(e, this, _netus2Connection);
+                SyncLogger.LogError(e, this, row);
             }
             finally
             {
-                SyncLogger.LogStatus(this, Enum_Sync_Status.values["end"], _netus2Connection);
+                SyncLogger.LogStatus(this, Enum_Sync_Status.values["end"]);
                 _netus2Connection.CloseConnection();
                 latch.Signal();
             }

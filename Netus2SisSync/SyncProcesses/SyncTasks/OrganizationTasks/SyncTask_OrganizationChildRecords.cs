@@ -14,17 +14,15 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.OrganizationTasks
 {
     public class SyncTask_OrganizationChildRecords : SyncTask
     {
-        IConnectable _netus2Connection;
-
         public SyncTask_OrganizationChildRecords(string name, SyncJob job)
             : base(name, job)
         {
-            _netus2Connection = DbConnectionFactory.GetNetus2Connection();
-            SyncLogger.LogNewTask(this, _netus2Connection);
+            SyncLogger.LogNewTask(this);
         }
 
         public override void Execute(DataRow row, CountDownLatch latch)
         {
+            IConnectable netus2Connection = DbConnectionFactory.GetNetus2Connection();
             try
             {
                 string sisName = row["name"].ToString() == "" ? null : row["name"].ToString();
@@ -35,11 +33,11 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.OrganizationTasks
                 Organization org = new Organization(sisName, sisEnumOrganization, sisIdentifier, sisBuildingCode);
 
                 IOrganizationDao orgDaoImpl = DaoImplFactory.GetOrganizationDaoImpl();
-                List<Organization> foundOrgs = orgDaoImpl.Read(org, _netus2Connection);
+                List<Organization> foundOrgs = orgDaoImpl.Read(org, netus2Connection);
 
                 if (foundOrgs.Count == 0)
                 {
-                    org = orgDaoImpl.Write(org, _netus2Connection);
+                    org = orgDaoImpl.Write(org, netus2Connection);
                 }
                 else if (foundOrgs.Count == 1)
                 {
@@ -50,7 +48,7 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.OrganizationTasks
                         (org.Identifier != foundOrgs[0].Identifier) ||
                         (org.SisBuildingCode != foundOrgs[0].SisBuildingCode))
                     {
-                        orgDaoImpl.Update(org, _netus2Connection);
+                        orgDaoImpl.Update(org, netus2Connection);
                     }
                 }
                 else
@@ -61,12 +59,12 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.OrganizationTasks
             catch (Exception e)
             {
                 Debug.WriteLine(e.Message + "\n" + e.StackTrace);
-                SyncLogger.LogError(e, this, _netus2Connection);
+                SyncLogger.LogError(e, this, row);
             }
             finally
             {
-                SyncLogger.LogStatus(this, Enum_Sync_Status.values["end"], _netus2Connection);
-                _netus2Connection.CloseConnection();
+                SyncLogger.LogStatus(this, Enum_Sync_Status.values["end"]);
+                netus2Connection.CloseConnection();
                 latch.Signal();
             }
         }

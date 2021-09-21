@@ -2,28 +2,20 @@
 using Netus2_DatabaseConnection.dbAccess;
 using Netus2_DatabaseConnection.enumerations;
 using Netus2_DatabaseConnection.utilityTools;
-using Netus2SisSync.SyncProcesses.SyncTasks.AcademicSessionTasks;
 using Netus2SisSync.UtilityTools;
 using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Diagnostics;
 using System.Threading;
 
 namespace Netus2SisSync.SyncProcesses.SyncJobs
 {
     public class SyncJob_AcademicSession : SyncJob
     {
-        IConnectable _sisConnection;
-        IConnectable _netus2Connection;
         public DataTable _dtAcademicSession;
 
-        public SyncJob_AcademicSession(string name, IConnectable sisConnection, IConnectable netus2Connection) 
-            : base(name)
+        public SyncJob_AcademicSession() : base("SyncJob_AcademicSession")
         {
-            _sisConnection = sisConnection;
-            _netus2Connection = netus2Connection;
-            SyncLogger.LogNewJob(this, _netus2Connection);
+            SyncLogger.LogNewJob(this);
         }
 
         public void Start()
@@ -35,34 +27,81 @@ namespace Netus2SisSync.SyncProcesses.SyncJobs
             }
             finally
             {
-                SyncLogger.LogStatus(this, Enum_Sync_Status.values["end"], _netus2Connection);
+                SyncLogger.LogStatus(this, Enum_Sync_Status.values["end"]);
             }
         }
 
         public void ReadFromSis()
         {
-            _dtAcademicSession = new DataTableFactory().Dt_Sis_AcademicSession;
-            _dtAcademicSession = _sisConnection.ReadIntoDataTable(SyncScripts.ReadSiS_AcademicSession_SQL, _dtAcademicSession).Result;
+            IConnectable sisConnection = DbConnectionFactory.GetSisConnection();
+            try
+            {
+                SyncLogger.LogStatus(this, Enum_Sync_Status.values["sisread_start"]);
+                _dtAcademicSession = new DataTableFactory().Dt_Sis_AcademicSession;
+                _dtAcademicSession = sisConnection.ReadIntoDataTable(SyncScripts.ReadSiS_AcademicSession_SQL, _dtAcademicSession);
+            }
+            catch (Exception e)
+            {
+                SyncLogger.LogStatus(this, Enum_Sync_Status.values["sisread_error"]);
+                SyncLogger.LogError(e, this);
+            }
+            finally
+            {
+                SyncLogger.LogStatus(this, Enum_Sync_Status.values["sisread_end"]);
+                sisConnection.CloseConnection();
+            }
         }
 
         private void RunJobTasks()
         {
-            CountDownLatch childLatch = new CountDownLatch(_dtAcademicSession.Rows.Count);
-            foreach (DataRow row in _dtAcademicSession.Rows)
+            SyncLogger.LogStatus(this, Enum_Sync_Status.values["tasks_started"]);
+
+            int numberOfThreadsProcessed = 0;
+            while (numberOfThreadsProcessed < _dtAcademicSession.Rows.Count)
             {
-                new Thread(syncThread => SyncTask.Execute_AcademicSession_ChildRecordSync(this, row, childLatch))
-                    .Start();
+                CountDownLatch latch = new CountDownLatch(_maxThreadsPerBatch);
+                for (int i = 0; i < _maxThreadsPerBatch; i++)
+                {
+                    if (numberOfThreadsProcessed < _dtAcademicSession.Rows.Count)
+                    {
+                        DataRow row = _dtAcademicSession.Rows[numberOfThreadsProcessed];
+
+                        new Thread(syncThread => SyncTask.Execute_AcademicSession_ChildRecordSync(
+                            this, row, latch)).Start();
+
+                        numberOfThreadsProcessed++;
+                    }
+                    else
+                    {
+                        latch.Signal();
+                    }
+                }
+                latch.Wait();
             }
-            childLatch.Wait();
 
 
-            CountDownLatch parentLatch = new CountDownLatch(_dtAcademicSession.Rows.Count);
-            foreach (DataRow row in _dtAcademicSession.Rows)
+            numberOfThreadsProcessed = 0;
+            while (numberOfThreadsProcessed < _dtAcademicSession.Rows.Count)
             {
-                new Thread(syncThread => SyncTask.Execute_AcademicSession_ParentRecordSync(this, row, parentLatch))
-                    .Start();
+                CountDownLatch latch = new CountDownLatch(_maxThreadsPerBatch);
+                for (int i = 0; i < _maxThreadsPerBatch; i++)
+                {
+                    if (numberOfThreadsProcessed < _dtAcademicSession.Rows.Count)
+                    {
+                        DataRow row = _dtAcademicSession.Rows[numberOfThreadsProcessed];
+
+                        new Thread(syncThread => SyncTask.Execute_AcademicSession_ParentRecordSync(
+                            this, row, latch)).Start();
+
+                        numberOfThreadsProcessed++;
+                    }
+                    else
+                    {
+                        latch.Signal();
+                    }
+                }
+                latch.Wait();
             }
-            parentLatch.Wait();
         }
     }
 }
