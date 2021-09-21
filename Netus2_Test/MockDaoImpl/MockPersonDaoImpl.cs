@@ -11,6 +11,7 @@ namespace Netus2_Test.MockDaoImpl
         public bool WasCalled_Delete = false;
         public bool WasCalled_Read = false;
         public bool WasCalled_ReadUsingPersonId = false;
+        public bool WasCalled_ReadUsingUniqueId = false;
         public bool WasCalled_Update = false;
         public bool WasCalled_Write = false;
         public bool _shouldReadReturnData = false;
@@ -40,6 +41,16 @@ namespace Netus2_Test.MockDaoImpl
         public Person Read_UsingPersonId(int personId, IConnectable connection)
         {
             WasCalled_ReadUsingPersonId = true;
+
+            if (_shouldReadReturnData)
+                return tdBuilder.student;
+            else
+                return null;
+        }
+
+        public Person Read_UsingUniqueId(int uniqueId, IConnectable connection)
+        {
+            WasCalled_ReadUsingUniqueId = true;
 
             if (_shouldReadReturnData)
                 return tdBuilder.student;

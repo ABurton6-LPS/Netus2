@@ -10,26 +10,11 @@ namespace Netus2SisSync.SyncProcesses
         [FunctionName("Netus2SisSync")]
         public static void Run([TimerTrigger("0 */5 * * * *")]TimerInfo myTimer)
         {
-            IConnectable netus2Connection = DbConnectionFactory.GetNetus2Connection();
-            IConnectable sisConnection = DbConnectionFactory.GetSisConnection();
-            try
-            {
-                new SyncJob_Organization("SyncJob_Organization").Start();
+            new SyncJob_Organization().Start();
 
-                new SyncJob_AcademicSession("SyncJob_AcademicSession", sisConnection)
-                    .Start();
+            new SyncJob_AcademicSession().Start();
 
-                new SyncJob_Person("SyncJob_Person", sisConnection)
-                    .Start();
-
-                //new SyncJob_Address("SyncJob_Address", sisConnection, netus2Connection)
-                //    .Start();
-            }
-            finally
-            {
-                sisConnection.CloseConnection();
-                netus2Connection.CloseConnection();
-            }
+            new SyncJob_Person().Start();
         }        
     }
 }

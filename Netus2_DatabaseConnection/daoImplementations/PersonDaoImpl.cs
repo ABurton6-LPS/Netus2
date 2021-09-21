@@ -152,6 +152,18 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 return results[0];
         }
 
+        public Person Read_UsingUniqueId(int uniqueId, IConnectable connection)
+        {
+            string sql = "SELECT * FROM person WHERE person_id in (" +
+                "SELECT person_id FROM unique_identifier WHERE unique_identifier_id = " + uniqueId + ")";
+
+            List<Person> results = Read(sql, connection);
+            if (results.Count == 0)
+                return null;
+            else
+                return results[0];
+        }
+
         public List<Person> Read(Person person, IConnectable connection)
         {
             DataRow row = daoObjectMapper.MapPerson(person);
@@ -171,7 +183,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
                     sql.Append("AND datediff(day, birth_date, '" + row["birth_date"].ToString() + "') = 0 ");
                 if (row["enum_gender_id"] != DBNull.Value)
                     sql.Append("AND enum_gender_id = " + row["enum_gender_id"] + " ");
-                if (row["enum_ethnic_id"] != DBNull.Value)
+                if (row["enum_ethnic_id"] != DBNull.Value) 
                     sql.Append("AND enum_ethnic_id = " + row["enum_ethnic_id"] + " ");
                 if (row["enum_residence_status_id"] != DBNull.Value)
                     sql.Append("AND enum_residence_status_id = " + row["enum_residence_status_id"] + " ");

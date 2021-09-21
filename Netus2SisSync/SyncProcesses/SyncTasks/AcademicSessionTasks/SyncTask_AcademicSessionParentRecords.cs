@@ -68,7 +68,7 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AcademicSessionTasks
                     string sisParentTermCode = sisParentSessionCode.Substring(sisParentSessionCode.IndexOf('-') + skipThisCharacterAndStartOnNextOne,
                         (sisParentSessionCode.Length - sisParentSchoolCode.Length) - sisParentSchoolYear.ToString().Length - numberOfDashesInSessionCode);
 
-                    parentAcademicSession = academicSessionDaoImpl.Read_UsingBuildingCode_TermCode_Schoolyear(sisParentSchoolCode, sisParentTermCode, sisParentSchoolYear, _netus2Connection);
+                    parentAcademicSession = academicSessionDaoImpl.Read_UsingSisBuildingCode_TermCode_Schoolyear(sisParentSchoolCode, sisParentTermCode, sisParentSchoolYear, _netus2Connection);
                     if (parentAcademicSession != null)
                     {
                         List<int> childIds = new List<int>();
