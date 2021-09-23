@@ -123,7 +123,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "'" + tdBuilder.phoneNumber_Teacher.PhoneNumberValue + "', " +
                 tdBuilder.phoneNumber_Teacher.IsPrimary.Id + ", " +
                 tdBuilder.phoneNumber_Teacher.PhoneType.Id + ", " +
-                "GETDATE(), " +
+                "dbo.CURRENT_DATETIME(), " +
                 "'Netus2')";
 
             phoneNumberDaoImpl.Update(tdBuilder.phoneNumber_Teacher, _netus2DbConnection);
@@ -142,7 +142,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "phone_number = '" + tdBuilder.phoneNumber_Teacher.PhoneNumberValue + "', " +
                 "is_primary_id = " + tdBuilder.phoneNumber_Teacher.IsPrimary.Id + ", " +
                 "enum_phone_id = " + tdBuilder.phoneNumber_Teacher.PhoneType.Id + ", " +
-                "changed = GETDATE(), " +
+                "changed = dbo.CURRENT_DATETIME(), " +
                 "changed_by = 'Netus2' " +
                 "WHERE phone_number_id = " + tdBuilder.phoneNumber_Teacher.Id;
 
@@ -165,7 +165,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "'" + tdBuilder.phoneNumber_Teacher.PhoneNumberValue + "', " +
                 tdBuilder.phoneNumber_Teacher.IsPrimary.Id + ", " +
                 tdBuilder.phoneNumber_Teacher.PhoneType.Id + ", " +
-                "GETDATE(), " +
+                "dbo.CURRENT_DATETIME(), " +
                 "'Netus2')";
 
             phoneNumberDaoImpl.Update(tdBuilder.phoneNumber_Teacher, tdBuilder.teacher.Id, _netus2DbConnection);
@@ -184,7 +184,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "phone_number = '" + tdBuilder.phoneNumber_Teacher.PhoneNumberValue + "', " +
                 "is_primary_id = " + tdBuilder.phoneNumber_Teacher.IsPrimary.Id + ", " +
                 "enum_phone_id = " + tdBuilder.phoneNumber_Teacher.PhoneType.Id + ", " +
-                "changed = GETDATE(), " +
+                "changed = dbo.CURRENT_DATETIME(), " +
                 "changed_by = 'Netus2' " +
                 "WHERE phone_number_id = " + tdBuilder.phoneNumber_Teacher.Id;
 
@@ -208,7 +208,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "'" + tdBuilder.phoneNumber_Teacher.PhoneNumberValue + "', " +
                 tdBuilder.phoneNumber_Teacher.IsPrimary.Id + ", " +
                 tdBuilder.phoneNumber_Teacher.PhoneType.Id + ", " +
-                "GETDATE(), " +
+                "dbo.CURRENT_DATETIME(), " +
                 "'Netus2')";
 
             phoneNumberDaoImpl.Write(tdBuilder.phoneNumber_Teacher, _netus2DbConnection);
@@ -230,7 +230,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "'" + tdBuilder.phoneNumber_Teacher.PhoneNumberValue + "', " +
                 tdBuilder.phoneNumber_Teacher.IsPrimary.Id + ", " +
                 tdBuilder.phoneNumber_Teacher.PhoneType.Id + ", " +
-                "GETDATE(), " +
+                "dbo.CURRENT_DATETIME(), " +
                 "'Netus2')";
 
             phoneNumberDaoImpl.Write(tdBuilder.phoneNumber_Teacher, tdBuilder.teacher.Id, _netus2DbConnection);

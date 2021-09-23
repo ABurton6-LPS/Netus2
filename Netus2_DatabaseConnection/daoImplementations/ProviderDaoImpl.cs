@@ -12,6 +12,17 @@ namespace Netus2_DatabaseConnection.daoImplementations
     public class ProviderDaoImpl : IProviderDao
     {
         DaoObjectMapper daoObjectMapper = new DaoObjectMapper();
+        public int? _taskId = null;
+
+        public void SetTaskId(int taskId)
+        {
+            _taskId = taskId;
+        }
+
+        public int? GetTaskId()
+        {
+            return _taskId;
+        }
 
         public void Delete(Provider provider, IConnectable connection)
         {
@@ -170,8 +181,8 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 sql.Append("url_admin_access = " + (row["url_admin_access"] != DBNull.Value ? "'" + row["url_admin_access"] + "', " : "NULL, "));
                 sql.Append("populated_by = " + (row["populated_by"] != DBNull.Value ? "'" + row["populated_by"] + "', " : "NULL, "));
                 sql.Append("parent_provider_id = " + (row["parent_provider_id"] != DBNull.Value ? row["parent_provider_id"] + ", " : "NULL, "));
-                sql.Append("changed = GETDATE(), ");
-                sql.Append("changed_by = 'Netus2' ");
+                sql.Append("changed = dbo.CURRENT_DATETIME(), ");
+                sql.Append("changed_by = " + (_taskId != null ? _taskId.ToString() : "'Netus2'") + " ");
                 sql.Append("WHERE provider_id = " + row["provider_id"]);
 
                 connection.ExecuteNonQuery(sql.ToString());
@@ -199,8 +210,8 @@ namespace Netus2_DatabaseConnection.daoImplementations
             sqlValues.Append(row["url_admin_access"] != DBNull.Value ? "'" + row["url_admin_access"] + "', " : "NULL, ");
             sqlValues.Append(row["populated_by"] != DBNull.Value ? "'" + row["populated_by"] + "', " : "NULL, ");
             sqlValues.Append(row["parent_provider_id"] != DBNull.Value ? row["parent_provider_id"] + ", " : "NULL, ");
-            sqlValues.Append("GETDATE(), ");
-            sqlValues.Append("'Netus2'");
+            sqlValues.Append("dbo.CURRENT_DATETIME(), ");
+            sqlValues.Append(_taskId != null ? _taskId.ToString() : "'Netus2'");
 
             StringBuilder sql = new StringBuilder("INSERT INTO provider (");
             sql.Append("name, url_standard_access, url_admin_access, populated_by, parent_provider_id, created, created_by");

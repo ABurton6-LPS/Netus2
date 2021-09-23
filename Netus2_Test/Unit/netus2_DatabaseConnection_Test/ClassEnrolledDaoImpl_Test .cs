@@ -320,8 +320,8 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "'" + tdBuilder.classEnrolled.Room + "', " +
                 tdBuilder.classEnrolled.Course.Id + ", " +
                 tdBuilder.classEnrolled.AcademicSession.Id + ", " +
-                "GETDATE(), " +
-                "'Netus2')";
+                "dbo.CURRENT_DATETIME(), " +
+                "'Netus2' )";
 
             classEnrolledDaoImpl.Update(tdBuilder.classEnrolled, _netus2DbConnection);
         }
@@ -349,7 +349,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "room = '" + tdBuilder.classEnrolled.Room + "', " +
                 "course_id = " + tdBuilder.classEnrolled.Course.Id + ", " +
                 "academic_session_id = " + tdBuilder.classEnrolled.AcademicSession.Id + ", " +
-                "changed = GETDATE(), " +
+                "changed = dbo.CURRENT_DATETIME(), " +
                 "changed_by = 'Netus2' " +
                 "WHERE class_id = " + tdBuilder.classEnrolled.Id;
 
@@ -384,8 +384,8 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "'" + tdBuilder.classEnrolled.Room + "', " +
                 tdBuilder.classEnrolled.Course.Id + ", " +
                 tdBuilder.classEnrolled.AcademicSession.Id + ", " +
-                "GETDATE(), " +
-                "'Netus2')";
+                "dbo.CURRENT_DATETIME(), " +
+                "'Netus2' )";
 
             classEnrolledDaoImpl.Write(tdBuilder.classEnrolled, _netus2DbConnection);
         }

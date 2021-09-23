@@ -16,6 +16,16 @@ namespace Netus2_Test.MockDaoImpl
         public bool WasCalled_Write = false;
         public bool _shouldReadReturnData = false;
 
+        public void SetTaskId(int taskId)
+        {
+            //Do Nothing
+        }
+
+        public int? GetTaskId()
+        {
+            return null;
+        }
+
         public MockEmploymentSessionDaoImpl(TestDataBuilder tdBuilder)
         {
             this.tdBuilder = tdBuilder;

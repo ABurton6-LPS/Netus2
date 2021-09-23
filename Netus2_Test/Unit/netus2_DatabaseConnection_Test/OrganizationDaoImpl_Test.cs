@@ -61,7 +61,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "sis_building_code = '" + tdBuilder.school.SisBuildingCode + "', " +
                 "hr_building_code = '" + tdBuilder.school.HrBuildingCode + "', " +
                 "organization_parent_id = NULL, " +
-                "changed = GETDATE(), " +
+                "changed = dbo.CURRENT_DATETIME(), " +
                 "changed_by = 'Netus2' " +
                 "WHERE organization_id = " + tdBuilder.school.Id;
 
@@ -184,7 +184,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "'" + tdBuilder.school.SisBuildingCode + "', " +
                 "'" + tdBuilder.school.HrBuildingCode + "', " +
                 "NULL, " +
-                "GETDATE(), " +
+                "dbo.CURRENT_DATETIME(), " +
                 "'Netus2')";
 
             organizationDaoImpl.Update(tdBuilder.school, _netus2DbConnection);
@@ -205,7 +205,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "sis_building_code = '" + tdBuilder.school.SisBuildingCode + "', " +
                 "hr_building_code = '" + tdBuilder.school.HrBuildingCode + "', " +
                 "organization_parent_id = NULL, " +
-                "changed = GETDATE(), " +
+                "changed = dbo.CURRENT_DATETIME(), " +
                 "changed_by = 'Netus2' " +
                 "WHERE organization_id = " + tdBuilder.school.Id;
 
@@ -232,7 +232,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "'" + tdBuilder.school.SisBuildingCode + "', " +
                 "'" + tdBuilder.school.HrBuildingCode + "', " +
                 tdBuilder.district.Id + ", " +
-                "GETDATE(), " +
+                "dbo.CURRENT_DATETIME(), " +
                 "'Netus2')";
 
             organizationDaoImpl.Update(tdBuilder.school, tdBuilder.district.Id, _netus2DbConnection);
@@ -253,7 +253,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "sis_building_code = '" + tdBuilder.school.SisBuildingCode + "', " +
                 "hr_building_code = '" + tdBuilder.school.HrBuildingCode + "', " +
                 "organization_parent_id = " + tdBuilder.district.Id + ", " +
-                "changed = GETDATE(), " +
+                "changed = dbo.CURRENT_DATETIME(), " +
                 "changed_by = 'Netus2' " +
                 "WHERE organization_id = " + tdBuilder.school.Id;
 
@@ -280,7 +280,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "'" + tdBuilder.school.SisBuildingCode + "', " +
                 "'" + tdBuilder.school.HrBuildingCode + "', " +
                 "NULL, " +
-                "GETDATE(), " +
+                "dbo.CURRENT_DATETIME(), " +
                 "'Netus2')";
 
             organizationDaoImpl.Write(tdBuilder.school, _netus2DbConnection);
@@ -306,7 +306,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "'" + tdBuilder.school.SisBuildingCode + "', " +
                 "'" + tdBuilder.school.HrBuildingCode + "', " +
                 tdBuilder.district.Id + ", " +
-                "GETDATE(), " +
+                "dbo.CURRENT_DATETIME(), " +
                 "'Netus2')";
 
             organizationDaoImpl.Write(tdBuilder.school, tdBuilder.district.Id, _netus2DbConnection);

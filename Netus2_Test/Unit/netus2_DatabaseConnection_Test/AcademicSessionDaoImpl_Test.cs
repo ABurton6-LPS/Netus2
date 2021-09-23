@@ -105,7 +105,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "enum_session_id = " + tdBuilder.semester1.SessionType.Id + ", " +
                 "parent_session_id = NULL, " +
                 "organization_id = " + tdBuilder.school.Id + ", " +
-                "changed = GETDATE(), " +
+                "changed = dbo.CURRENT_DATETIME(), " +
                 "changed_by = 'Netus2' " +
                 "WHERE academic_session_id = " + tdBuilder.semester1.Id;
 
@@ -148,7 +148,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "AND term_code = '" + tdBuilder.schoolYear.TermCode + "' " +
                 "AND school_year = " + tdBuilder.schoolYear.SchoolYear + " " +
                 "AND organization_id in (" +
-                "SELECT organization_id FROM organization WHERE building_code LIKE '" +
+                "SELECT organization_id FROM organization WHERE sis_building_code LIKE '" +
                 tdBuilder.school.SisBuildingCode + "')";
 
             academicSessionDaoImpl.Read_UsingSisBuildingCode_TermCode_Schoolyear(
@@ -258,7 +258,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "enum_session_id = " + tdBuilder.schoolYear.SessionType.Id + ", " +
                 "parent_session_id = NULL, " +
                 "organization_id = " + tdBuilder.school.Id + ", " +
-                "changed = GETDATE(), " +
+                "changed = dbo.CURRENT_DATETIME(), " +
                 "changed_by = 'Netus2' " +
                 "WHERE academic_session_id = " + tdBuilder.schoolYear.Id + "";
 
@@ -282,7 +282,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "enum_session_id = " + tdBuilder.semester1.SessionType.Id + ", " +
                 "parent_session_id = " + tdBuilder.schoolYear.Id + ", " +
                 "organization_id = " + tdBuilder.school.Id + ", " +
-                "changed = GETDATE(), " +
+                "changed = dbo.CURRENT_DATETIME(), " +
                 "changed_by = 'Netus2' " +
                 "WHERE academic_session_id = " + tdBuilder.semester1.Id + "";
 
@@ -305,7 +305,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 tdBuilder.schoolYear.SessionType.Id + ", " +
                 "NULL, " +
                 tdBuilder.school.Id + ", " +
-                "GETDATE(), 'Netus2')";
+                "dbo.CURRENT_DATETIME(), 'Netus2')";
 
             academicSessionDaoImpl.Update(tdBuilder.schoolYear, _netus2DbConnection);
         }
@@ -326,7 +326,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 tdBuilder.semester1.SessionType.Id + ", " +
                 tdBuilder.schoolYear.Id + ", " +
                 tdBuilder.school.Id + ", " +
-                "GETDATE(), 'Netus2')";
+                "dbo.CURRENT_DATETIME(), 'Netus2')";
 
             academicSessionDaoImpl.Update(tdBuilder.semester1, tdBuilder.schoolYear.Id, _netus2DbConnection);
         }
@@ -347,7 +347,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 tdBuilder.schoolYear.SessionType.Id + ", " +
                 "NULL, " +
                 tdBuilder.school.Id + ", " +
-                "GETDATE(), 'Netus2')";
+                "dbo.CURRENT_DATETIME(), 'Netus2')";
 
             academicSessionDaoImpl.Write(tdBuilder.schoolYear, _netus2DbConnection);
         }
@@ -368,7 +368,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 tdBuilder.semester1.SessionType.Id + ", " +
                 tdBuilder.schoolYear.Id + ", " +
                 tdBuilder.school.Id + ", " +
-                "GETDATE(), 'Netus2')";
+                "dbo.CURRENT_DATETIME(), 'Netus2')";
 
             academicSessionDaoImpl.Write(tdBuilder.semester1, tdBuilder.schoolYear.Id, _netus2DbConnection);
         }

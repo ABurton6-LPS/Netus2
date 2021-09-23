@@ -114,7 +114,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "'" + tdBuilder.resource.VendorResourceId + "', " +
                 "'" + tdBuilder.resource.VendorId + "', " +
                 "'" + tdBuilder.resource.ApplicationId + "', " +
-                "GETDATE(), " +
+                "dbo.CURRENT_DATETIME(), " +
                 "'Netus2')";
 
             resourceDaoImpl.Update(tdBuilder.resource, _netus2DbConnection);
@@ -134,7 +134,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "vendor_resource_identification = '" + tdBuilder.resource.VendorResourceId + "', " +
                 "vendor_identification = '" + tdBuilder.resource.VendorId + "', " +
                 "application_identification = '" + tdBuilder.resource.ApplicationId + "', " +
-                "changed = GETDATE(), " +
+                "changed = dbo.CURRENT_DATETIME(), " +
                 "changed_by = 'Netus2' " +
                 "WHERE resource_id = " + tdBuilder.resource.Id;
 
@@ -159,7 +159,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "'" + tdBuilder.resource.VendorResourceId + "', " +
                 "'" + tdBuilder.resource.VendorId + "', " +
                 "'" + tdBuilder.resource.ApplicationId + "', " +
-                "GETDATE(), " +
+                "dbo.CURRENT_DATETIME(), " +
                 "'Netus2')";
 
             resourceDaoImpl.Write(tdBuilder.resource, _netus2DbConnection);

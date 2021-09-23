@@ -49,7 +49,7 @@ namespace Netus2_Test.Unit.SyncProcess
 
             SetMockReaderWithTestData(tstDataSet);
 
-            SyncJob_Organization syncJob_Organization = new SyncJob_Organization("TestJob");
+            SyncJob_Organization syncJob_Organization = new SyncJob_Organization();
             syncJob_Organization.ReadFromSis();
             DataTable results = syncJob_Organization._dtOrganization;
 
@@ -86,7 +86,7 @@ namespace Netus2_Test.Unit.SyncProcess
 
             SetMockReaderWithTestData(tstDataSet);
 
-            SyncJob_Organization syncJob_Organization = new SyncJob_Organization("TestJob");
+            SyncJob_Organization syncJob_Organization = new SyncJob_Organization();
             syncJob_Organization.ReadFromSis();
             DataTable results = syncJob_Organization._dtOrganization;
 
@@ -121,7 +121,7 @@ namespace Netus2_Test.Unit.SyncProcess
             DataRow row = BuildTestDataTable(tstDataSet).Rows[0];
 
             new SyncTask_OrganizationChildRecords("TestTask", 
-                new SyncJob_Organization("TestJob"))
+                new SyncJob_Organization())
                 .Execute(row, new CountDownLatch(0));
 
             Assert.IsTrue(mockOrganizationDaoImpl.WasCalled_ReadWithoutParentId);
@@ -145,7 +145,7 @@ namespace Netus2_Test.Unit.SyncProcess
             DataRow row = BuildTestDataTable(tstDataSet).Rows[0];
 
             new SyncTask_OrganizationChildRecords("TestTask",
-                new SyncJob_Organization("TestJob"))
+                new SyncJob_Organization())
                 .Execute(row, new CountDownLatch(0));
 
             Assert.IsTrue(mockOrganizationDaoImpl.WasCalled_ReadWithoutParentId);
@@ -170,7 +170,7 @@ namespace Netus2_Test.Unit.SyncProcess
             DataRow row = BuildTestDataTable(tstDataSet).Rows[0];
 
             new SyncTask_OrganizationChildRecords("TestTask",
-                new SyncJob_Organization("TestJob"))
+                new SyncJob_Organization())
                 .Execute(row, new CountDownLatch(0));
 
             Assert.IsTrue(mockOrganizationDaoImpl.WasCalled_ReadWithoutParentId);
@@ -196,7 +196,7 @@ namespace Netus2_Test.Unit.SyncProcess
             SetMockForNetus2Objects(tstDataSet);
 
             SyncJob_Organization syncJob_Organization =
-                new SyncJob_Organization("TestJob");
+                new SyncJob_Organization();
             SyncTask_OrganizationParentRecords syncTask_OrganizationParentRecords =
                 new SyncTask_OrganizationParentRecords("TestTask", syncJob_Organization);
 

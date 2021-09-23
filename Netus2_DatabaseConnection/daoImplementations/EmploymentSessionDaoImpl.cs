@@ -12,6 +12,17 @@ namespace Netus2_DatabaseConnection.daoImplementations
     public class EmploymentSessionDaoImpl : IEmploymentSessionDao
     {
         DaoObjectMapper daoObjectMapper = new DaoObjectMapper();
+        public int? _taskId = null;
+
+        public void SetTaskId(int taskId)
+        {
+            _taskId = taskId;
+        }
+
+        public int? GetTaskId()
+        {
+            return _taskId;
+        }
 
         public void Delete_WithPersonId(EmploymentSession employmentSession, int personId, IConnectable connection)
         {
@@ -166,8 +177,8 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 sql.Append("is_primary_id = " + (row["is_primary_id"] != DBNull.Value ? row["is_primary_id"] + ", " : "NULL, "));
                 sql.Append("enum_session_id = " + (row["enum_session_id"] != DBNull.Value ? row["enum_session_id"] + ", " : "NULL, "));
                 sql.Append("organization_id = " + (row["organization_id"] != DBNull.Value ? row["organization_id"] + ", " : "NULL, "));
-                sql.Append("changed = GETDATE(), ");
-                sql.Append("changed_by = 'Netus2' ");
+                sql.Append("changed = dbo.CURRENT_DATETIME(), ");
+                sql.Append("changed_by = " + (_taskId != null ? _taskId.ToString() : "'Netus2'") + " ");
                 sql.Append("WHERE employment_session_id = " + row["employment_session_id"]);
 
                 connection.ExecuteNonQuery(sql.ToString());
@@ -192,8 +203,8 @@ namespace Netus2_DatabaseConnection.daoImplementations
             sql.Append(row["is_primary_id"] != DBNull.Value ? row["is_primary_id"] + ", " : "NULL, ");
             sql.Append(row["enum_session_id"] != DBNull.Value ? row["enum_session_id"] + ", " : "NULL, ");
             sql.Append(row["organization_id"] != DBNull.Value ? row["organization_id"] + ", " : "NULL, ");
-            sql.Append("GETDATE(), ");
-            sql.Append("'Netus2')");
+            sql.Append("dbo.CURRENT_DATETIME(), ");
+            sql.Append((_taskId != null ? _taskId.ToString() : "'Netus2'") + ")");
 
             row["employment_session_id"] = connection.InsertNewRecord(sql.ToString());
 

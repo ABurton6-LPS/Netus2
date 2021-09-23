@@ -12,6 +12,17 @@ namespace Netus2_DatabaseConnection.daoImplementations
     public class UniqueIdentifierDaoImpl : IUniqueIdentifierDao
     {
         DaoObjectMapper daoObjectMapper = new DaoObjectMapper();
+        public int? _taskId = null;
+
+        public void SetTaskId(int taskId)
+        {
+            _taskId = taskId;
+        }
+
+        public int? GetTaskId()
+        {
+            return _taskId;
+        }
 
         public void Delete(UniqueIdentifier uniqueId, int personId, IConnectable connection)
         {
@@ -96,8 +107,8 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 sql.Append("unique_identifier = " + (row["unique_identifier"] != DBNull.Value ? "'" + row["unique_identifier"] + "', " : "NULL, "));
                 sql.Append("enum_identifier_id = " + (row["enum_identifier_id"] != DBNull.Value ? row["enum_identifier_id"] + ", " : "NULL, "));
                 sql.Append("is_active_id = " + (row["is_active_id"] != DBNull.Value ? row["is_active_id"] + ", " : "NULL, "));
-                sql.Append("changed = GETDATE(), ");
-                sql.Append("changed_by = 'Netus2' ");
+                sql.Append("changed = dbo.CURRENT_DATETIME(), ");
+                sql.Append("changed_by = " + (_taskId != null ? _taskId.ToString() : "'Netus2'") + " ");
                 sql.Append("WHERE unique_identifier_id = " + row["unique_identifier_id"]);
 
                 connection.ExecuteNonQuery(sql.ToString());
@@ -119,8 +130,8 @@ namespace Netus2_DatabaseConnection.daoImplementations
             sql.Append(row["unique_identifier"] != DBNull.Value ? "'" + row["unique_identifier"] + "', " : "NULL, ");
             sql.Append(row["enum_identifier_id"] != DBNull.Value ? row["enum_identifier_id"] + ", " : "NULL, ");
             sql.Append(row["is_active_id"] != DBNull.Value ? row["is_active_id"] + ", " : "NULL, ");
-            sql.Append("GETDATE(), ");
-            sql.Append("'Netus2'");
+            sql.Append("dbo.CURRENT_DATETIME(), ");
+            sql.Append(_taskId != null ? _taskId.ToString() : "'Netus2'");
             sql.Append(")");
 
             row["unique_identifier_id"] = connection.InsertNewRecord(sql.ToString());

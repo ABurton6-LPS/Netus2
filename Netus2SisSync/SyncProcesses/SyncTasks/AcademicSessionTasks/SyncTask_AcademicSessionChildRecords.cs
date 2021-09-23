@@ -37,6 +37,7 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AcademicSessionTasks
                 DateTime sisEndDate = DateTime.Parse(row["end_date"].ToString());
 
                 IOrganizationDao orgDaoImpl = DaoImplFactory.GetOrganizationDaoImpl();
+                orgDaoImpl.SetTaskId(this.Id);
                 Organization org = orgDaoImpl.Read_WithSisBuildingCode(sisSchoolCode, _netus2Connection);
 
                 AcademicSession academicSession = new AcademicSession(sisName, sisEnumSession, org, sisTermCode);
@@ -45,6 +46,7 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AcademicSessionTasks
                 academicSession.EndDate = sisEndDate;
 
                 IAcademicSessionDao academicSessionDaoImpl = DaoImplFactory.GetAcademicSessionDaoImpl();
+                academicSessionDaoImpl.SetTaskId(this.Id);
                 List<AcademicSession> foundAcademicSessions = academicSessionDaoImpl.Read(academicSession, _netus2Connection);
 
                 if (foundAcademicSessions.Count == 0)

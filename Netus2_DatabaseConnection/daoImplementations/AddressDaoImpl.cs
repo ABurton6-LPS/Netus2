@@ -12,6 +12,17 @@ namespace Netus2_DatabaseConnection.daoImplementations
     public class AddressDaoImpl : IAddressDao
     {
         DaoObjectMapper daoObjectMapper = new DaoObjectMapper();
+        public int? _taskId = null;
+
+        public void SetTaskId(int taskId)
+        {
+            _taskId = taskId;
+        }
+
+        public int? GetTaskId()
+        {
+            return _taskId;
+        }
 
         public void Delete(Address address, IConnectable connection)
         {
@@ -145,8 +156,8 @@ namespace Netus2_DatabaseConnection.daoImplementations
             sql.Append("enum_country_id = " + (row["enum_country_id"] != DBNull.Value ? row["enum_country_id"] + ", " : "NULL, "));
             sql.Append("is_current_id = " + (row["is_current_id"] != DBNull.Value ? row["is_current_id"] + ", " : "NULL, "));
             sql.Append("enum_address_id = " + (row["enum_address_id"] != DBNull.Value ? row["enum_address_id"] + ", " : "NULL, "));
-            sql.Append("changed = GETDATE(), ");
-            sql.Append("changed_by = 'Netus2' ");
+            sql.Append("changed = dbo.CURRENT_DATETIME(), ");
+            sql.Append("changed_by = " + (_taskId != null ? _taskId.ToString() : "'Netus2'") + " ");
             sql.Append("WHERE address_id = " + row["address_id"]);
 
             connection.ExecuteNonQuery(sql.ToString());
@@ -168,8 +179,8 @@ namespace Netus2_DatabaseConnection.daoImplementations
             sqlValues.Append(row["enum_country_id"] != DBNull.Value ? row["enum_country_id"] + ", " : "NULL, ");
             sqlValues.Append(row["is_current_id"] != DBNull.Value ? row["is_current_id"] + ", " : "NULL, ");
             sqlValues.Append(row["enum_address_id"] != DBNull.Value ? row["enum_address_id"] + ", " : "NULL, ");
-            sqlValues.Append("GETDATE(), ");
-            sqlValues.Append("'Netus2'");
+            sqlValues.Append("dbo.CURRENT_DATETIME(), ");
+            sqlValues.Append(_taskId != null ? _taskId.ToString() : "'Netus2'");
 
             StringBuilder sql = new StringBuilder("INSERT INTO address " +
                 "(address_line_1, address_line_2, address_line_3, address_line_4, apartment, " +

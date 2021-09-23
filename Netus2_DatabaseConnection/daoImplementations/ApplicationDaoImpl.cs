@@ -12,6 +12,17 @@ namespace Netus2_DatabaseConnection.daoImplementations
     public class ApplicationDaoImpl : IApplicationDao
     {
         DaoObjectMapper daoObjectMapper = new DaoObjectMapper();
+        public int? _taskId = null;
+
+        public void SetTaskId(int taskId)
+        {
+            _taskId = taskId;
+        }
+
+        public int? GetTaskId()
+        {
+            return _taskId;
+        }
 
         public void Delete(Application appliction, IConnectable connection)
         {
@@ -118,8 +129,8 @@ namespace Netus2_DatabaseConnection.daoImplementations
             StringBuilder sql = new StringBuilder("UPDATE app SET ");
             sql.Append("name = " + (row["name"] != DBNull.Value ? "'" + row["name"] + "', " : "NULL, "));
             sql.Append("provider_id = " + (row["provider_id"] != DBNull.Value ? row["provider_id"] + ", " : "NULL, "));
-            sql.Append("changed = GETDATE(), ");
-            sql.Append("changed_by = 'Netus2' ");
+            sql.Append("changed = dbo.CURRENT_DATETIME(), ");
+            sql.Append("changed_by = " + (_taskId != null ? _taskId.ToString() : "'Netus2'") + " ");
             sql.Append("WHERE app_id = " + row["app_id"]);
 
             connection.ExecuteNonQuery(sql.ToString());
@@ -132,8 +143,8 @@ namespace Netus2_DatabaseConnection.daoImplementations
             StringBuilder sql = new StringBuilder("INSERT INTO app (name, provider_id, created, created_by) VALUES (");
             sql.Append(row["name"] != DBNull.Value ? "'" + row["name"] + "', " : "NULL, ");
             sql.Append(row["provider_id"] != DBNull.Value ? row["provider_id"] + ", " : "NULL, ");
-            sql.Append("GETDATE(), ");
-            sql.Append("'Netus2')");
+            sql.Append("dbo.CURRENT_DATETIME(), ");
+            sql.Append((_taskId != null ? _taskId.ToString() : "'Netus2'") + ")");
 
             row["app_id"] = connection.InsertNewRecord(sql.ToString());
 

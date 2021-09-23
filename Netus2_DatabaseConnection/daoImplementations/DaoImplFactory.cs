@@ -32,10 +32,36 @@ namespace Netus2_DatabaseConnection.daoImplementations
         public static IResourceDao MockResourceDaoImpl = null;
         public static IUniqueIdentifierDao MockUniqueIdentifierDaoImpl = null;
 
+        public static IAcademicSessionDao AcademicSessionDaoImpl = new AcademicSessionDaoImpl();
+        public static IAddressDao AddressDaoImpl = new AddressDaoImpl();
+        public static IApplicationDao ApplicationDaoImpl = new ApplicationDaoImpl();
+        public static IClassEnrolledDao ClassEnrolledDaoImpl = new ClassEnrolledDaoImpl();
+        public static ICourseDao CourseDaoImpl = new CourseDaoImpl();
+        public static IEmploymentSessionDao EmploymentSessionDaoImpl = new EmploymentSessionDaoImpl();
+        public static IEnrollmentDao EnrollmentDaoImpl = new EnrollmentDaoImpl();
+        public static IJctClassPeriodDao JctClassPeriodDaoImpl = new JctClassPeriodDaoImpl();
+        public static IJctClassPersonDao JctClassPersonDaoImpl = new JctClassPersonDaoImpl();
+        public static IJctClassResourceDao JctClassResourceDaoImpl = new JctClassResourceDaoImpl();
+        public static IJctCourseGradeDao JctCourseGradeDaoImpl = new JctCourseGradeDaoImpl();
+        public static IJctCourseSubjectDao JctCourseSubjectDaoImpl = new JctCourseSubjectDaoImpl();
+        public static IJctEnrollmentAcademicSessionDao JctEnrollmentAcademicSessionDaoImpl = new JctEnrollmentAcademicSessionDaoImpl();
+        public static IJctPersonAddressDao JctPersonAddressDaoImpl = new JctPersonAddressDaoImpl();
+        public static IJctPersonAppDao JctPersonAppDaoImpl = new JctPersonAppDaoImpl();
+        public static IJctPersonPersonDao JctPersonPersonDaoImpl = new JctPersonPersonDaoImpl();
+        public static IJctPersonRoleDao JctPersonRoleDaoImpl = new JctPersonRoleDaoImpl();
+        public static ILineItemDao LineItemDaoImpl = new LineItemDaoImpl();
+        public static IMarkDao MarkDaoImpl = new MarkDaoImpl();
+        public static IOrganizationDao OrganizationDaoImpl = new OrganizationDaoImpl();
+        public static IPersonDao PersonDaoImpl = new PersonDaoImpl();
+        public static IPhoneNumberDao PhoneNumberDaoImpl = new PhoneNumberDaoImpl();
+        public static IProviderDao ProviderDaoImpl = new ProviderDaoImpl();
+        public static IResourceDao ResourceDaoImpl = new ResourceDaoImpl();
+        public static IUniqueIdentifierDao UniqueIdentifierDaoImpl = new UniqueIdentifierDaoImpl();
+
         public static IAcademicSessionDao GetAcademicSessionDaoImpl()
         {
             if (MockAcademicSessionDaoImpl == null && MockAll == false)
-                return new AcademicSessionDaoImpl();
+                return AcademicSessionDaoImpl;
             else
                 return MockAcademicSessionDaoImpl;
         }
@@ -43,7 +69,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         public static IAddressDao GetAddressDaoImpl()
         {
             if (MockAddressDaoImpl == null && MockAll == false)
-                return new AddressDaoImpl();
+                return AddressDaoImpl;
             else
                 return MockAddressDaoImpl;
         }
@@ -51,7 +77,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         public static IApplicationDao GetApplicationDaoImpl()
         {
             if (MockApplicationDaoImpl == null && MockAll == false)
-                return new ApplicationDaoImpl();
+                return ApplicationDaoImpl;
             else
                 return MockApplicationDaoImpl;
         }
@@ -59,7 +85,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         public static IClassEnrolledDao GetClassEnrolledDaoImpl()
         {
             if (MockClassEnrolledDaoImpl == null && MockAll == false)
-                return new ClassEnrolledDaoImpl();
+                return ClassEnrolledDaoImpl;
             else
                 return MockClassEnrolledDaoImpl;
         }
@@ -67,7 +93,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         public static ICourseDao GetCourseDaoImpl()
         {
             if (MockCourseDaoImpl == null && MockAll == false)
-                return new CourseDaoImpl();
+                return CourseDaoImpl;
             else
                 return MockCourseDaoImpl;
         }
@@ -75,7 +101,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         public static IEmploymentSessionDao GetEmploymentSessionDaoImpl()
         {
             if (MockEmploymentSessionDaoImpl == null && MockAll == false)
-                return new EmploymentSessionDaoImpl();
+                return EmploymentSessionDaoImpl;
             else
                 return MockEmploymentSessionDaoImpl;
         }
@@ -83,7 +109,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         public static IEnrollmentDao GetEnrollmentDaoImpl()
         {
             if (MockEnrollmentDaoImpl == null && MockAll == false)
-                return new EnrollmentDaoImpl();
+                return EnrollmentDaoImpl;
             else
                 return MockEnrollmentDaoImpl;
         }
@@ -91,7 +117,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         public static IJctClassPeriodDao GetJctClassPeriodDaoImpl()
         {
             if (MockJctClassPeriodDaoImpl == null && MockAll == false)
-                return new JctClassPeriodDaoImpl();
+                return JctClassPeriodDaoImpl;
             else
                 return MockJctClassPeriodDaoImpl;
         }
@@ -99,7 +125,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         public static IJctClassPersonDao GetJctClassPersonDaoImpl()
         {
             if (MockJctClassPersonDaoImpl == null && MockAll == false)
-                return new JctClassPersonDaoImpl();
+                return JctClassPersonDaoImpl;
             else
                 return MockJctClassPersonDaoImpl;
         }
@@ -107,7 +133,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         public static IJctClassResourceDao GetJctClassResourceDaoImpl()
         {
             if (MockJctClassResourceDaoImpl == null && MockAll == false)
-                return new JctClassResourceDaoImpl();
+                return JctClassResourceDaoImpl;
             else
                 return MockJctClassResourceDaoImpl;
         }
@@ -115,7 +141,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         public static IJctCourseGradeDao GetJctCourseGradeDaoImpl()
         {
             if (MockJctCourseGradeDaoImpl == null && MockAll == false)
-                return new JctCourseGradeDaoImpl();
+                return JctCourseGradeDaoImpl;
             else
                 return MockJctCourseGradeDaoImpl;
         }
@@ -123,7 +149,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         public static IJctCourseSubjectDao GetJctCourseSubjectDaoImpl()
         {
             if (MockJctCourseSubjectDaoImpl == null && MockAll == false)
-                return new JctCourseSubjectDaoImpl();
+                return JctCourseSubjectDaoImpl;
             else
                 return MockJctCourseSubjectDaoImpl;
         }
@@ -131,7 +157,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         public static IJctEnrollmentAcademicSessionDao GetJctEnrollmentAcademicSessionDaoImpl()
         {
             if (MockJctEnrollmentAcademicSessionDaoImpl == null && MockAll == false)
-                return new JctEnrollmentAcademicSessionDaoImpl();
+                return JctEnrollmentAcademicSessionDaoImpl;
             else
                 return MockJctEnrollmentAcademicSessionDaoImpl;
         }
@@ -139,7 +165,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         public static IJctPersonAddressDao GetJctPersonAddressDaoImpl()
         {
             if (MockJctPersonAddressDaoImpl == null && MockAll == false)
-                return new JctPersonAddressDaoImpl();
+                return JctPersonAddressDaoImpl;
             else
                 return MockJctPersonAddressDaoImpl;
         }
@@ -147,7 +173,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         public static IJctPersonAppDao GetJctPersonAppDaoImpl()
         {
             if (MockJctPersonAppDaoImpl == null && MockAll == false)
-                return new JctPersonAppDaoImpl();
+                return JctPersonAppDaoImpl;
             else
                 return MockJctPersonAppDaoImpl;
         }
@@ -155,7 +181,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         public static IJctPersonPersonDao GetJctPersonPersonDaoImpl()
         {
             if (MockJctPersonPersonDaoImpl == null && MockAll == false)
-                return new JctPersonPersonDaoImpl();
+                return JctPersonPersonDaoImpl;
             else
                 return MockJctPersonPersonDaoImpl;
         }
@@ -163,7 +189,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         public static IJctPersonRoleDao GetJctPersonRoleDaoImpl()
         {
             if (MockJctPersonRoleDaoImpl == null && MockAll == false)
-                return new JctPersonRoleDaoImpl();
+                return JctPersonRoleDaoImpl;
             else
                 return MockJctPersonRoleDaoImpl;
         }
@@ -171,7 +197,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         public static ILineItemDao GetLineItemDaoImpl()
         {
             if (MockLineItemDaoImpl == null && MockAll == false)
-                return new LineItemDaoImpl();
+                return LineItemDaoImpl;
             else
                 return MockLineItemDaoImpl;
         }
@@ -179,7 +205,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         public static IMarkDao GetMarkDaoImpl()
         {
             if (MockMarkDaoImpl == null && MockAll == false)
-                return new MarkDaoImpl();
+                return MarkDaoImpl;
             else
                 return MockMarkDaoImpl;
         }
@@ -187,7 +213,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         public static IOrganizationDao GetOrganizationDaoImpl()
         {
             if (MockOrganizationDaoImpl == null && MockAll == false)
-                return new OrganizationDaoImpl();
+                return OrganizationDaoImpl;
             else
             {
                 return MockOrganizationDaoImpl;
@@ -197,7 +223,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         public static IPersonDao GetPersonDaoImpl()
         {
             if (MockPersonDaoImpl == null && MockAll == false)
-                return new PersonDaoImpl();
+                return PersonDaoImpl;
             else
                 return MockPersonDaoImpl;
         }
@@ -205,7 +231,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         public static IPhoneNumberDao GetPhoneNumberDaoImpl()
         {
             if (MockPhoneNumberDaoImpl == null && MockAll == false)
-                return new PhoneNumberDaoImpl();
+                return PhoneNumberDaoImpl;
             else
                 return MockPhoneNumberDaoImpl;
         }
@@ -213,7 +239,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         public static IProviderDao GetProviderDaoImpl()
         {
             if (MockProviderDaoImpl == null && MockAll == false)
-                return new ProviderDaoImpl();
+                return ProviderDaoImpl;
             else
                 return MockProviderDaoImpl;
         }
@@ -221,7 +247,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         public static IResourceDao GetResourceDaoImpl()
         {
             if (MockResourceDaoImpl == null && MockAll == false)
-                return new ResourceDaoImpl();
+                return ResourceDaoImpl;
             else
                 return MockResourceDaoImpl;
         }
@@ -229,7 +255,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         public static IUniqueIdentifierDao GetUniqueIdentifierDaoImpl()
         {
             if (MockUniqueIdentifierDaoImpl == null && MockAll == false)
-                return new UniqueIdentifierDaoImpl();
+                return UniqueIdentifierDaoImpl;
             else
                 return MockUniqueIdentifierDaoImpl;
         }

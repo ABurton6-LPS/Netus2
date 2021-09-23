@@ -94,7 +94,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "'" + tdBuilder.uniqueId_Student.Identifier + "', " +
                 tdBuilder.uniqueId_Student.IdentifierType.Id + ", " +
                 tdBuilder.uniqueId_Student.IsActive.Id + ", " +
-                "GETDATE(), " +
+                "dbo.CURRENT_DATETIME(), " +
                 "'Netus2')";
 
             uniqueIdentifierDaoImpl.Update(tdBuilder.uniqueId_Student, tdBuilder.student.Id, _netus2DbConnection);
@@ -113,7 +113,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "unique_identifier = '" + tdBuilder.uniqueId_Student.Identifier + "', " +
                 "enum_identifier_id = " + tdBuilder.uniqueId_Student.IdentifierType.Id + ", " +
                 "is_active_id = " + tdBuilder.uniqueId_Student.IsActive.Id + ", " +
-                "changed = GETDATE(), " +
+                "changed = dbo.CURRENT_DATETIME(), " +
                 "changed_by = 'Netus2' " +
                 "WHERE unique_identifier_id = " + tdBuilder.uniqueId_Student.Id;
 
@@ -135,7 +135,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "'" + tdBuilder.uniqueId_Student.Identifier + "', " +
                 tdBuilder.uniqueId_Student.IdentifierType.Id + ", " +
                 tdBuilder.uniqueId_Student.IsActive.Id + ", " +
-                "GETDATE(), " +
+                "dbo.CURRENT_DATETIME(), " +
                 "'Netus2')";
 
             uniqueIdentifierDaoImpl.Write(tdBuilder.uniqueId_Student, tdBuilder.student.Id, _netus2DbConnection);
