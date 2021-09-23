@@ -12,6 +12,17 @@ namespace Netus2_DatabaseConnection.daoImplementations
     public class ResourceDaoImpl : IResourceDao
     {
         DaoObjectMapper daoObjectMapper = new DaoObjectMapper();
+        public int? _taskId = null;
+
+        public void SetTaskId(int taskId)
+        {
+            _taskId = taskId;
+        }
+
+        public int? GetTaskId()
+        {
+            return _taskId;
+        }
 
         public void Delete(Resource resource, IConnectable connection)
         {
@@ -120,8 +131,8 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 sql.Append("vendor_resource_identification = " + (row["vendor_resource_identification"] != DBNull.Value ? "'" + row["vendor_resource_identification"] + "', " : "NULL, "));
                 sql.Append("vendor_identification = " + (row["vendor_identification"] != DBNull.Value ? "'" + row["vendor_identification"] + "', " : "NULL, ")); ;
                 sql.Append("application_identification = " + (row["application_identification"] != DBNull.Value ? "'" + row["application_identification"] + "', " : "NULL, "));
-                sql.Append("changed = GETDATE(), ");
-                sql.Append("changed_by = 'Netus2' ");
+                sql.Append("changed = dbo.CURRENT_DATETIME(), ");
+                sql.Append("changed_by = " + (_taskId != null ? _taskId.ToString() : "'Netus2'") + " ");
                 sql.Append("WHERE resource_id = " + row["resource_id"]);
 
                 connection.ExecuteNonQuery(sql.ToString());
@@ -140,8 +151,8 @@ namespace Netus2_DatabaseConnection.daoImplementations
             sqlValues.Append(row["vendor_resource_identification"] != DBNull.Value ? "'" + row["vendor_resource_identification"] + "', " : "NULL, ");
             sqlValues.Append(row["vendor_identification"] != DBNull.Value ? "'" + row["vendor_identification"] + "', " : "NULL, ");
             sqlValues.Append(row["application_identification"] != DBNull.Value ? "'" + row["application_identification"] + "', " : "NULL, ");
-            sqlValues.Append("GETDATE(), ");
-            sqlValues.Append("'Netus2'");
+            sqlValues.Append("dbo.CURRENT_DATETIME(), ");
+            sqlValues.Append(_taskId != null ? _taskId.ToString() : "'Netus2'");
 
             string sql =
                 "INSERT INTO resource " +

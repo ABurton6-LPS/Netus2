@@ -12,6 +12,17 @@ namespace Netus2_DatabaseConnection.daoImplementations
     public class AcademicSessionDaoImpl : IAcademicSessionDao
     {
         DaoObjectMapper daoObjectMapper = new DaoObjectMapper();
+        public int? _taskId = null;
+
+        public void SetTaskId(int taskId)
+        {
+            _taskId = taskId;
+        }
+
+        public int? GetTaskId()
+        {
+            return _taskId;
+        }
 
         public void Delete(AcademicSession academicSession, IConnectable connection)
         {
@@ -218,8 +229,8 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 sql.Append("enum_session_id = " + (row["enum_session_id"] != DBNull.Value ? row["enum_session_id"] + ", " : "NULL, "));
                 sql.Append("parent_session_id = " + (row["parent_session_id"] != DBNull.Value ? row["parent_session_id"] + ", " : "NULL, "));
                 sql.Append("organization_id = " + (row["organization_id"] != DBNull.Value ? row["organization_id"] + ", " : "NULL, "));
-                sql.Append("changed = GETDATE(), ");
-                sql.Append("changed_by = 'Netus2' ");
+                sql.Append("changed = dbo.CURRENT_DATETIME(), ");
+                sql.Append("changed_by = " + (_taskId != null ? _taskId.ToString() : "'Netus2'") + " ");
                 sql.Append("WHERE academic_session_id = " + row["academic_session_id"]);
 
                 connection.ExecuteNonQuery(sql.ToString());
@@ -250,8 +261,8 @@ namespace Netus2_DatabaseConnection.daoImplementations
             sql.Append(row["enum_session_id"] != DBNull.Value ? row["enum_session_id"] + ", " : "NULL, ");
             sql.Append(row["parent_session_id"] != DBNull.Value ? row["parent_session_id"] + ", " : "NULL, ");
             sql.Append(row["organization_id"] != DBNull.Value ? row["organization_id"] + ", " : "NULL, ");
-            sql.Append("GETDATE(), ");
-            sql.Append("'Netus2')");
+            sql.Append("dbo.CURRENT_DATETIME(), ");
+            sql.Append((_taskId != null ? _taskId.ToString() : "'Netus2'") + ")");
 
             row["academic_session_id"] = connection.InsertNewRecord(sql.ToString());
 

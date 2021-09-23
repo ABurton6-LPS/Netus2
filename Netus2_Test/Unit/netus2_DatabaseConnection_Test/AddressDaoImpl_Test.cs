@@ -134,7 +134,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 tdBuilder.address_Teacher.Country.Id + ", " +
                 tdBuilder.address_Teacher.IsCurrent.Id + ", " +
                 tdBuilder.address_Teacher.AddressType.Id + ", " +
-                "GETDATE(), " +
+                "dbo.CURRENT_DATETIME(), " +
                 "'Netus2')";
 
             addressDaoImpl.Update(tdBuilder.address_Teacher, _netus2DbConnection);
@@ -160,7 +160,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "enum_country_id = " + tdBuilder.address_Teacher.Country.Id + ", " +
                 "is_current_id = " + tdBuilder.address_Teacher.IsCurrent.Id + ", " +
                 "enum_address_id = " + tdBuilder.address_Teacher.AddressType.Id + ", " +
-                "changed = GETDATE(), " +
+                "changed = dbo.CURRENT_DATETIME(), " +
                 "changed_by = 'Netus2' " +
                 "WHERE address_id = " + tdBuilder.address_Teacher.Id;
 
@@ -197,7 +197,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 tdBuilder.address_Teacher.Country.Id + ", " +
                 tdBuilder.address_Teacher.IsCurrent.Id + ", " +
                 tdBuilder.address_Teacher.AddressType.Id + ", " +
-                "GETDATE(), " +
+                "dbo.CURRENT_DATETIME(), " +
                 "'Netus2')";
 
             addressDaoImpl.Write(tdBuilder.address_Teacher, _netus2DbConnection);

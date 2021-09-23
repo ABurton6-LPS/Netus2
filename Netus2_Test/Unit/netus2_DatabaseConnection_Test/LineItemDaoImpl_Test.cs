@@ -152,7 +152,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 tdBuilder.lineItem.Category.Id + ", " +
                 tdBuilder.lineItem.MarkValueMin + ", " +
                 tdBuilder.lineItem.MarkValueMax + ", " +
-                "GETDATE(), " +
+                "dbo.CURRENT_DATETIME(), " +
                 "'Netus2')";
 
             lineItemDaoImpl.Update(tdBuilder.lineItem, _netus2DbConnection);
@@ -175,7 +175,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "enum_category_id = " + tdBuilder.lineItem.Category.Id + ", " +
                 "markValueMin = " + tdBuilder.lineItem.MarkValueMin + ", " +
                 "markValueMax = " + tdBuilder.lineItem.MarkValueMax + ", " +
-                "changed = GETDATE(), " +
+                "changed = dbo.CURRENT_DATETIME(), " +
                 "changed_by = 'Netus2' " +
                 "WHERE lineItem_id = " + tdBuilder.lineItem.Id;
 
@@ -206,7 +206,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 tdBuilder.lineItem.Category.Id + ", " +
                 tdBuilder.lineItem.MarkValueMin + ", " +
                 tdBuilder.lineItem.MarkValueMax + ", " +
-                "GETDATE(), " +
+                "dbo.CURRENT_DATETIME(), " +
                 "'Netus2')";
 
             lineItemDaoImpl.Write(tdBuilder.lineItem, _netus2DbConnection);

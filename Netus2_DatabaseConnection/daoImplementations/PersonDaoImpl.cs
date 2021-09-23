@@ -13,6 +13,17 @@ namespace Netus2_DatabaseConnection.daoImplementations
     public class PersonDaoImpl : IPersonDao
     {
         DaoObjectMapper daoObjectMapper = new DaoObjectMapper();
+        public int? _taskId = null;
+
+        public void SetTaskId(int taskId)
+        {
+            _taskId = taskId;
+        }
+
+        public int? GetTaskId()
+        {
+            return _taskId;
+        }
 
         public void Delete(Person person, IConnectable connection)
         {
@@ -324,8 +335,8 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 sql.Append("enum_residence_status_id = " + (row["enum_residence_status_id"] != DBNull.Value ? "'" + row["enum_residence_status_id"] + "', " : "NULL, "));
                 sql.Append("login_name = " + (row["login_name"] != DBNull.Value ? "'" + row["login_name"] + "', " : "NULL, "));
                 sql.Append("login_pw = " + (row["login_pw"] != DBNull.Value ? "'" + row["login_pw"] + "', " : "NULL, "));
-                sql.Append("changed = GETDATE(), ");
-                sql.Append("changed_by = 'Netus2' ");
+                sql.Append("changed = dbo.CURRENT_DATETIME(), ");
+                sql.Append("changed_by = " + (_taskId != null ? _taskId.ToString() : "'Netus2'") + " ");
                 sql.Append("WHERE person_id = " + row["person_id"]);
 
                 connection.ExecuteNonQuery(sql.ToString());
@@ -358,8 +369,8 @@ namespace Netus2_DatabaseConnection.daoImplementations
             sqlValues.Append(row["enum_residence_status_id"] != DBNull.Value ? row["enum_residence_status_id"] + ", " : "NULL, ");
             sqlValues.Append(row["login_name"] != DBNull.Value ? "'" + row["login_name"] + "', " : "NULL, ");
             sqlValues.Append(row["login_pw"] != DBNull.Value ? "'" + row["login_pw"] + "', " : "NULL, ");
-            sqlValues.Append("GETDATE(), ");
-            sqlValues.Append("'Netus2'");
+            sqlValues.Append("dbo.CURRENT_DATETIME(), ");
+            sqlValues.Append(_taskId != null ? _taskId.ToString() : "'Netus2'");
 
             string sql =
                 "INSERT INTO person " +

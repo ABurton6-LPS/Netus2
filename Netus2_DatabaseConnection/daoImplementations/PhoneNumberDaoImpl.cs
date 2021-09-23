@@ -12,6 +12,17 @@ namespace Netus2_DatabaseConnection.daoImplementations
     public class PhoneNumberDaoImpl : IPhoneNumberDao
     {
         DaoObjectMapper daoObjectMapper = new DaoObjectMapper();
+        public int? _taskId = null;
+
+        public void SetTaskId(int taskId)
+        {
+            _taskId = taskId;
+        }
+
+        public int? GetTaskId()
+        {
+            return _taskId;
+        }
 
         public void Delete(PhoneNumber phoneNumber, IConnectable connection)
         {
@@ -111,8 +122,8 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 sql.Append("phone_number = " + (row["phone_number"] != DBNull.Value ? "'" + row["phone_number"] + "', " : "NULL, "));
                 sql.Append("is_primary_id = " + (row["is_primary_id"] != DBNull.Value ? row["is_primary_id"] + ", " : "NULL, "));
                 sql.Append("enum_phone_id = " + (row["enum_phone_id"] != DBNull.Value ? row["enum_phone_id"] + ", " : "NULL, "));
-                sql.Append("changed = GETDATE(), ");
-                sql.Append("changed_by = 'Netus2' ");
+                sql.Append("changed = dbo.CURRENT_DATETIME(), ");
+                sql.Append("changed_by = " + (_taskId != null ? _taskId.ToString() : "'Netus2'") + " ");
                 sql.Append("WHERE phone_number_id = " + row["phone_number_id"]);
 
                 connection.ExecuteNonQuery(sql.ToString());
@@ -137,8 +148,8 @@ namespace Netus2_DatabaseConnection.daoImplementations
             sqlValues.Append(row["phone_number"] != DBNull.Value ? "'" + row["phone_number"] + "', " : "NULL, ");
             sqlValues.Append(row["is_primary_id"] != DBNull.Value ? row["is_primary_id"] + ", " : "NULL, ");
             sqlValues.Append(row["enum_phone_id"] != DBNull.Value ? row["enum_phone_id"] + ", " : "NULL, ");
-            sqlValues.Append("GETDATE(), ");
-            sqlValues.Append("'Netus2'");
+            sqlValues.Append("dbo.CURRENT_DATETIME(), ");
+            sqlValues.Append(_taskId != null ? _taskId.ToString() : "'Netus2'");
 
             string sql = "INSERT INTO phone_number " +
                 "(person_id, phone_number, is_primary_id, enum_phone_id, created, created_by) " +

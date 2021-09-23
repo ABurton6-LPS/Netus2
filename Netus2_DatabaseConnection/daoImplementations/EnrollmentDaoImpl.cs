@@ -12,6 +12,17 @@ namespace Netus2_DatabaseConnection.daoImplementations
     public class EnrollmentDaoImpl : IEnrollmentDao
     {
         DaoObjectMapper daoObjectMapper = new DaoObjectMapper();
+        public int? _taskId = null;
+
+        public void SetTaskId(int taskId)
+        {
+            _taskId = taskId;
+        }
+
+        public int? GetTaskId()
+        {
+            return _taskId;
+        }
 
         public void Delete(Enrollment enrollment, IConnectable connection)
         {
@@ -153,8 +164,8 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 sql.Append("start_date = " + (row["start_date"] != DBNull.Value ? "'" + row["start_date"] + "', " : "NULL, "));
                 sql.Append("end_date = " + (row["end_date"] != DBNull.Value ? "'" + row["end_date"] + "', " : "NULL, "));
                 sql.Append("is_primary_id = " + (row["is_primary_id"] != DBNull.Value ? row["is_primary_id"] + ", " : "NULL, "));
-                sql.Append("changed = GETDATE(), ");
-                sql.Append("changed_by = 'Netus2' ");
+                sql.Append("changed = dbo.CURRENT_DATETIME(), ");
+                sql.Append("changed_by = " + (_taskId != null ? _taskId.ToString() : "'Netus2'") + " ");
                 sql.Append("WHERE enrollment_id = " + row["enrollment_id"]);
 
                 connection.ExecuteNonQuery(sql.ToString());
@@ -180,8 +191,8 @@ namespace Netus2_DatabaseConnection.daoImplementations
             sql.Append(row["start_date"] != DBNull.Value ? "'" + row["start_date"] + "', " : "NULL, ");
             sql.Append(row["end_date"] != DBNull.Value ? "'" + row["end_date"] + "', " : "NULL, ");
             sql.Append(row["is_primary_id"] != DBNull.Value ? row["is_primary_id"] + ", " : "NULL, ");
-            sql.Append("GETDATE(), ");
-            sql.Append("'Netus2')");
+            sql.Append("dbo.CURRENT_DATETIME(), ");
+            sql.Append((_taskId != null ? _taskId.ToString() : "'Netus2'") + ")");
 
             row["enrollment_id"] = connection.InsertNewRecord(sql.ToString());
 

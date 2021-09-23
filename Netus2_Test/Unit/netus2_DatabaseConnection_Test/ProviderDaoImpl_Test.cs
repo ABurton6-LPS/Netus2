@@ -74,7 +74,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "url_admin_access = '" + tdBuilder.provider.UrlAdminAccess + "', " +
                 "populated_by = '" + tdBuilder.provider.PopulatedBy + "', " +
                 "parent_provider_id = NULL, " +
-                "changed = GETDATE(), " +
+                "changed = dbo.CURRENT_DATETIME(), " +
                 "changed_by = 'Netus2' " +
                 "WHERE provider_id = " + tdBuilder.provider.Id;
 
@@ -168,7 +168,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "'" + tdBuilder.provider.UrlAdminAccess + "', " +
                 "'" + tdBuilder.provider.PopulatedBy + "', " +
                 "NULL, " +
-                "GETDATE(), " +
+                "dbo.CURRENT_DATETIME(), " +
                 "'Netus2')";
 
             providerDaoImpl.Update(tdBuilder.provider, _netus2DbConnection);
@@ -188,7 +188,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "url_admin_access = '" + tdBuilder.provider.UrlAdminAccess + "', " +
                 "populated_by = '" + tdBuilder.provider.PopulatedBy + "', " +
                 "parent_provider_id = NULL, " +
-                "changed = GETDATE(), " +
+                "changed = dbo.CURRENT_DATETIME(), " +
                 "changed_by = 'Netus2' " +
                 "WHERE provider_id = " + tdBuilder.provider.Id;
 
@@ -213,7 +213,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "'" + tdBuilder.provider.UrlAdminAccess + "', " +
                 "'" + tdBuilder.provider.PopulatedBy + "', " +
                 "NULL, " +
-                "GETDATE(), " +
+                "dbo.CURRENT_DATETIME(), " +
                 "'Netus2')";
 
             providerDaoImpl.Write(tdBuilder.provider, _netus2DbConnection);

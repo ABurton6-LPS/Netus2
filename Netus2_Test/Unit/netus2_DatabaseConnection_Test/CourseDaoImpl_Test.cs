@@ -163,7 +163,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 ") VALUES (" +
                 "'" + tdBuilder.spanishCourse.Name + "', " +
                 "'" + tdBuilder.spanishCourse.CourseCode + "', " +
-                "GETDATE(), " +
+                "dbo.CURRENT_DATETIME(), " +
                 "'Netus2')";
 
             courseDaoImpl.Update(tdBuilder.spanishCourse, _netus2DbConnection);
@@ -180,7 +180,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "UPDATE course SET " +
                 "name = '" + tdBuilder.spanishCourse.Name + "', " +
                 "course_code = '" + tdBuilder.spanishCourse.CourseCode + "', " +
-                "changed = GETDATE(), " +
+                "changed = dbo.CURRENT_DATETIME(), " +
                 "changed_by = 'Netus2' " +
                 "WHERE course_id = " + tdBuilder.spanishCourse.Id;
 
@@ -217,7 +217,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 ") VALUES (" +
                 "'" + tdBuilder.spanishCourse.Name + "', " +
                 "'" + tdBuilder.spanishCourse.CourseCode + "', " +
-                "GETDATE(), " +
+                "dbo.CURRENT_DATETIME(), " +
                 "'Netus2')";
 
             courseDaoImpl.Write(tdBuilder.spanishCourse, _netus2DbConnection);

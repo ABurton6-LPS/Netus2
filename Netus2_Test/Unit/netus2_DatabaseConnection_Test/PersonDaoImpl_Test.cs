@@ -335,7 +335,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "NULL, " +
                 "'" + tdBuilder.teacher.LoginName + "', " +
                 "'" + tdBuilder.teacher.LoginPw + "', " +
-                "GETDATE(), " +
+                "dbo.CURRENT_DATETIME(), " +
                 "'Netus2')";
 
             personDaoImpl.Update(tdBuilder.teacher, _netus2DbConnection);
@@ -355,7 +355,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "enum_residence_status_id = NULL, " +
                 "login_name = '" + tdBuilder.teacher.LoginName + "', " +
                 "login_pw = '" + tdBuilder.teacher.LoginPw + "', " +
-                "changed = GETDATE(), " +
+                "changed = dbo.CURRENT_DATETIME(), " +
                 "changed_by = 'Netus2' " +
                 "WHERE person_id = 1";
 
@@ -464,7 +464,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 tdBuilder.student.ResidenceStatus.Id + ", " +
                 "'" + tdBuilder.student.LoginName + "', " +
                 "'" + tdBuilder.student.LoginPw + "', " +
-                "GETDATE(), " +
+                "dbo.CURRENT_DATETIME(), " +
                 "'Netus2')";
 
             personDaoImpl.Write(tdBuilder.student, _netus2DbConnection);

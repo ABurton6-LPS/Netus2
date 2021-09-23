@@ -33,6 +33,7 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.OrganizationTasks
                 Organization org = new Organization(sisName, sisEnumOrganization, sisIdentifier, sisBuildingCode);
 
                 IOrganizationDao orgDaoImpl = DaoImplFactory.GetOrganizationDaoImpl();
+                orgDaoImpl.SetTaskId(this.Id);
                 List<Organization> foundOrgs = orgDaoImpl.Read(org, netus2Connection);
 
                 if (foundOrgs.Count == 1)

@@ -12,6 +12,17 @@ namespace Netus2_DatabaseConnection.daoImplementations
     public class LineItemDaoImpl : ILineItemDao
     {
         DaoObjectMapper daoObjectMapper = new DaoObjectMapper();
+        public int? _taskId = null;
+
+        public void SetTaskId(int taskId)
+        {
+            _taskId = taskId;
+        }
+
+        public int? GetTaskId()
+        {
+            return _taskId;
+        }
 
         public void Delete(LineItem lineItem, IConnectable connection)
         {
@@ -141,8 +152,8 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 sql.Append("enum_category_id = " + (row["enum_category_id"] != DBNull.Value ? row["enum_category_id"] + ", " : "NULL, "));
                 sql.Append("markValueMin = " + (row["markValueMin"] != DBNull.Value ? row["markValueMin"] + ", " : "NULL, "));
                 sql.Append("markValueMax = " + (row["markValueMax"] != DBNull.Value ? row["markValueMax"] + ", " : "NULL, "));
-                sql.Append("changed = GETDATE(), ");
-                sql.Append("changed_by = 'Netus2' ");
+                sql.Append("changed = dbo.CURRENT_DATETIME(), ");
+                sql.Append("changed_by = " + (_taskId != null ? _taskId.ToString() : "'Netus2'") + " ");
                 sql.Append("WHERE lineItem_id = " + row["lineitem_id"]);
 
                 connection.ExecuteNonQuery(sql.ToString());
@@ -166,8 +177,8 @@ namespace Netus2_DatabaseConnection.daoImplementations
             sqlValues.Append(row["enum_category_id"] != DBNull.Value ? row["enum_category_id"] + ", " : "NULL, ");
             sqlValues.Append(row["markValueMin"] != DBNull.Value ? row["markValueMin"] + ", " : "NULL, ");
             sqlValues.Append(row["markValueMax"] != DBNull.Value ? row["markValueMax"] + ", " : "NULL, ");
-            sqlValues.Append("GETDATE(), ");
-            sqlValues.Append("'Netus2'");
+            sqlValues.Append("dbo.CURRENT_DATETIME(), ");
+            sqlValues.Append(_taskId != null ? _taskId.ToString() : "'Netus2'");
 
             string sql =
                 "INSERT INTO lineItem " +

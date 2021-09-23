@@ -7,6 +7,19 @@ namespace Netus2_DatabaseConnection.daoInterfaces
     public interface IResourceDao
     {
         /// <summary>
+        /// Sets the taskId value to be used in "write" and "update" statements to indicate which process made the
+        /// modification to the database.
+        /// </summary>
+        /// <param name="taskId"></param>
+        void SetTaskId(int taskId);
+
+        /// <summary>
+        /// Returns the taskId value that was set with the SetTaskId method. If the value has not been set, will
+        /// retun null;
+        /// </summary>
+        int? GetTaskId();
+
+        /// <summary>
         /// Returns a list of Resource objects, read from the database, which match the parameters provided
         /// in the Resource object passed in. Null values provided within the Resource will be ignored.
         /// </summary>

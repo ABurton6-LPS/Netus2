@@ -52,6 +52,10 @@ namespace Netus2_DatabaseConnection.dbAccess
             testEnumKeys.Add("staff");
             testEnumKeys.Add("01656");
             testEnumKeys.Add("primary");
+            testEnumKeys.Add("enum_id");
+            testEnumKeys.Add("sisread_end");
+            testEnumKeys.Add("sisread_error");
+            testEnumKeys.Add("sisread_start");
 
             DataTable mockEnumDataTable = new DataTableFactory().Dt_Netus2_Enumeration;
 
@@ -59,6 +63,8 @@ namespace Netus2_DatabaseConnection.dbAccess
             {
                 DataRow newRow = mockEnumDataTable.NewRow();
                 newRow["netus2_code"] = testEnumKey;
+                newRow["sis_code"] = null;
+                newRow["hr_code"] = null;
                 newRow["descript"] = "Test Enum";
                 testEnums.Add(newRow);
             }            
@@ -107,7 +113,6 @@ namespace Netus2_DatabaseConnection.dbAccess
                 .Callback<object[]>(
                     (values) =>
                     {
-                        values[0] = testEnums[count]["enum_id"];
                         values[1] = testEnums[count]["netus2_code"];
                         values[2] = testEnums[count]["sis_code"];
                         values[3] = testEnums[count]["hr_code"];

@@ -13,6 +13,17 @@ namespace Netus2_DatabaseConnection.daoImplementations
     public class CourseDaoImpl : ICourseDao
     {
         DaoObjectMapper daoObjectMapper = new DaoObjectMapper();
+        public int? _taskId = null;
+
+        public void SetTaskId(int taskId)
+        {
+            _taskId = taskId;
+        }
+
+        public int? GetTaskId()
+        {
+            return _taskId;
+        }
 
         public void Delete(Course course, IConnectable connection)
         {
@@ -172,8 +183,8 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 StringBuilder sql = new StringBuilder("UPDATE course SET ");
                 sql.Append("name = " + (row["name"] != DBNull.Value ? "'" + row["name"] + "', " : "NULL, "));
                 sql.Append("course_code = " + (row["course_code"] != DBNull.Value ? "'" + row["course_code"] + "', " : "NULL, "));
-                sql.Append("changed = GETDATE(), ");
-                sql.Append("changed_by = 'Netus2' ");
+                sql.Append("changed = dbo.CURRENT_DATETIME(), ");
+                sql.Append("changed_by = " + (_taskId != null ? _taskId.ToString() : "'Netus2'") + " ");
                 sql.Append("WHERE course_id = " + row["course_id"]);
 
                 connection.ExecuteNonQuery(sql.ToString());
@@ -196,8 +207,8 @@ namespace Netus2_DatabaseConnection.daoImplementations
             sql.Append(") VALUES (");
             sql.Append(row["name"] != DBNull.Value ? "'" + row["name"] + "', " : "NULL, ");
             sql.Append(row["course_code"] != DBNull.Value ? "'" + row["course_code"] + "', " : "NULL, ");
-            sql.Append("GETDATE(), ");
-            sql.Append("'Netus2')");
+            sql.Append("dbo.CURRENT_DATETIME(), ");
+            sql.Append((_taskId != null ? _taskId.ToString() : "'Netus2'") + ")");
 
             row["course_id"] = connection.InsertNewRecord(sql.ToString());
 

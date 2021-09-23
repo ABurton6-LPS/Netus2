@@ -13,6 +13,17 @@ namespace Netus2_DatabaseConnection.daoImplementations
     public class ClassEnrolledDaoImpl : IClassEnrolledDao
     {
         DaoObjectMapper daoObjectMapper = new DaoObjectMapper();
+        public int? _taskId = null;
+
+        public void SetTaskId(int taskId)
+        {
+            _taskId = taskId;
+        }
+
+        public int? GetTaskId()
+        {
+            return _taskId;
+        }
 
         public void Delete(ClassEnrolled classEnrolled, IConnectable connection)
         {
@@ -270,8 +281,8 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 sql.Append("room = " + (row["room"] != DBNull.Value ? "'" + row["room"] + "', " : "NULL, "));
                 sql.Append("course_id = " + (row["course_id"] != DBNull.Value ? row["course_id"] + ", " : "NULL, "));
                 sql.Append("academic_session_id = " + (row["academic_session_id"] != DBNull.Value ? row["academic_session_id"] + ", " : "NULL, "));
-                sql.Append("changed = GETDATE(), ");
-                sql.Append("changed_by = 'Netus2' ");
+                sql.Append("changed = dbo.CURRENT_DATETIME(), ");
+                sql.Append("changed_by = " + (_taskId != null ? _taskId.ToString() : "'Netus2'") + " ");
                 sql.Append("WHERE class_id = " + row["class_id"]);
 
                 connection.ExecuteNonQuery(sql.ToString());
@@ -299,8 +310,8 @@ namespace Netus2_DatabaseConnection.daoImplementations
             sql.Append(row["room"] != DBNull.Value ? "'" + row["room"] + "', " : "NULL, ");
             sql.Append(row["course_id"] != DBNull.Value ? row["course_id"] + ", " : "NULL, ");
             sql.Append(row["academic_session_id"] != DBNull.Value ? row["academic_session_id"] + ", " : "NULL, ");
-            sql.Append("GETDATE(), ");
-            sql.Append("'Netus2')");
+            sql.Append("dbo.CURRENT_DATETIME(), ");
+            sql.Append((_taskId != null ? _taskId.ToString() : "'Netus2'") + " )");
 
             row["class_id"] = connection.InsertNewRecord(sql.ToString());
 

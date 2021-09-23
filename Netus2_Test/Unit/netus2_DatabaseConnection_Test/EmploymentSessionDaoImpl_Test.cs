@@ -175,7 +175,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 tdBuilder.employmentSession.IsPrimary.Id + ", " +
                 tdBuilder.employmentSession.SessionType.Id + ", " +
                 tdBuilder.employmentSession.Organization.Id + ", " +
-                "GETDATE(), " +
+                "dbo.CURRENT_DATETIME(), " +
                 "'Netus2')";
 
             employmentSessionDaoImpl.Update(tdBuilder.employmentSession, tdBuilder.teacher.Id, _netus2DbConnection);
@@ -197,7 +197,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "is_primary_id = " + tdBuilder.employmentSession.IsPrimary.Id + ", " +
                 "enum_session_id = " + tdBuilder.employmentSession.SessionType.Id + ", " +
                 "organization_id = " + tdBuilder.employmentSession.Organization.Id + ", " +
-                "changed = GETDATE(), " +
+                "changed = dbo.CURRENT_DATETIME(), " +
                 "changed_by = 'Netus2' " +
                 "WHERE employment_session_id = " + tdBuilder.employmentSession.Id;
 
@@ -226,7 +226,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 tdBuilder.employmentSession.IsPrimary.Id + ", " +
                 tdBuilder.employmentSession.SessionType.Id + ", " +
                 tdBuilder.employmentSession.Organization.Id + ", " +
-                "GETDATE(), " +
+                "dbo.CURRENT_DATETIME(), " +
                 "'Netus2')";
 
             employmentSessionDaoImpl.Write(tdBuilder.employmentSession, tdBuilder.teacher.Id, _netus2DbConnection);

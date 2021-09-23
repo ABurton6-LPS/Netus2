@@ -18,6 +18,16 @@ namespace Netus2_Test.MockDaoImpl
         public bool WasCalled_WriteWithoutParentId = false;
         public bool _shouldReadReturnData = false;
 
+        public void SetTaskId(int taskId)
+        {
+            //Do Nothing
+        }
+
+        public int? GetTaskId()
+        {
+            return null;
+        }
+
         public MockProviderDaoImpl(TestDataBuilder tdBuilder)
         {
             this.tdBuilder = tdBuilder;

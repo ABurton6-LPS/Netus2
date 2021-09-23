@@ -12,6 +12,17 @@ namespace Netus2_DatabaseConnection.daoImplementations
     public class OrganizationDaoImpl : IOrganizationDao
     {
         DaoObjectMapper daoObjectMapper = new DaoObjectMapper();
+        public int? _taskId = null;
+
+        public void SetTaskId(int taskId)
+        {
+            _taskId = taskId;
+        }
+
+        public int? GetTaskId()
+        {
+            return _taskId;
+        }
 
         public void Delete(Organization organization, IConnectable connection)
         {
@@ -193,8 +204,8 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 sql.Append("sis_building_code = " + (row["sis_building_code"] != DBNull.Value ? "'" + row["sis_building_code"] + "', " : "NULL, "));
                 sql.Append("hr_building_code = " + (row["hr_building_code"] != DBNull.Value ? "'" + row["hr_building_code"] + "', " : "NULL, "));
                 sql.Append("organization_parent_id = " + (row["organization_parent_id"] != DBNull.Value ? row["organization_parent_id"] + ", " : "NULL, "));
-                sql.Append("changed = GETDATE(), ");
-                sql.Append("changed_by = 'Netus2' ");
+                sql.Append("changed = dbo.CURRENT_DATETIME(), ");
+                sql.Append("changed_by = " + (_taskId != null ? _taskId.ToString() : "'Netus2'") + " ");
                 sql.Append("WHERE organization_id = " + row["organization_id"]);
 
                 connection.ExecuteNonQuery(sql.ToString());
@@ -221,8 +232,8 @@ namespace Netus2_DatabaseConnection.daoImplementations
             sqlValues.Append(row["sis_building_code"] != DBNull.Value ? "'" + row["sis_building_code"] + "', " : "NULL, ");
             sqlValues.Append(row["hr_building_code"] != DBNull.Value ? "'" + row["hr_building_code"] + "', " : "NULL, ");
             sqlValues.Append(row["organization_parent_id"] != DBNull.Value ? row["organization_parent_id"] + ", " : "NULL, ");
-            sqlValues.Append("GETDATE(), ");
-            sqlValues.Append("'Netus2'");
+            sqlValues.Append("dbo.CURRENT_DATETIME(), ");
+            sqlValues.Append(_taskId != null ? _taskId.ToString() : "'Netus2'");
 
             StringBuilder sql = new StringBuilder("INSERT INTO organization (");
             sql.Append("name, enum_organization_id, identifier, sis_building_code, hr_building_code, organization_parent_id, created, created_by");

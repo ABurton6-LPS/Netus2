@@ -164,7 +164,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "'" + tdBuilder.enrollment.StartDate + "', " +
                 "'" + tdBuilder.enrollment.EndDate + "', " +
                 tdBuilder.enrollment.IsPrimary.Id + ", " +
-                "GETDATE(), " +
+                "dbo.CURRENT_DATETIME(), " +
                 "'Netus2')";
 
             enrollmentDaoImpl.Update(tdBuilder.enrollment, tdBuilder.student.Id, _netus2DbConnection);
@@ -185,7 +185,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "start_date = '" + tdBuilder.enrollment.StartDate + "', " +
                 "end_date = '" + tdBuilder.enrollment.EndDate + "', " +
                 "is_primary_id = " + tdBuilder.enrollment.IsPrimary.Id + ", " +
-                "changed = GETDATE(), " +
+                "changed = dbo.CURRENT_DATETIME(), " +
                 "changed_by = 'Netus2' " +
                 "WHERE enrollment_id = " + tdBuilder.enrollment.Id;
 
@@ -230,7 +230,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "'" + tdBuilder.enrollment.StartDate + "', " +
                 "'" + tdBuilder.enrollment.EndDate + "', " +
                 tdBuilder.enrollment.IsPrimary.Id + ", " +
-                "GETDATE(), " +
+                "dbo.CURRENT_DATETIME(), " +
                 "'Netus2')";
 
             enrollmentDaoImpl.Write(tdBuilder.enrollment, tdBuilder.student.Id, _netus2DbConnection);

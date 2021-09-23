@@ -1,5 +1,4 @@
-﻿using Netus2_DatabaseConnection.dbAccess;
-using Netus2SisSync.SyncProcesses.SyncJobs;
+﻿using Netus2SisSync.SyncProcesses.SyncJobs;
 using NUnit.Framework;
 
 namespace Netus2_Test.Integration
@@ -15,7 +14,7 @@ namespace Netus2_Test.Integration
 
             new SyncJob_Person().Start();
 
-            new SyncJob_Address().Start();
+            //new SyncJob_Address().Start();
         }
     }
 }

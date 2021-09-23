@@ -146,7 +146,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "score = " + tdBuilder.mark.Score + ", " +
                 "score_date = '" + tdBuilder.mark.ScoreDate + "', " +
                 "comment = '" + tdBuilder.mark.Comment + "', " +
-                "changed = GETDATE(), " +
+                "changed = dbo.CURRENT_DATETIME(), " +
                 "changed_by = 'Netus2' " +
                 "WHERE mark_id = " + tdBuilder.mark.Id;
 
@@ -173,7 +173,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 tdBuilder.mark.Score + ", " +
                 "'" + tdBuilder.mark.ScoreDate + "', " +
                 "'" + tdBuilder.mark.Comment + "', " +
-                "GETDATE(), " +
+                "dbo.CURRENT_DATETIME(), " +
                 "'Netus2')";
 
             markDaoImpl.Write(tdBuilder.mark, tdBuilder.student.Id, _netus2DbConnection);

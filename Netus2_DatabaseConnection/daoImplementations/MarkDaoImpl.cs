@@ -12,6 +12,17 @@ namespace Netus2_DatabaseConnection.daoImplementations
     public class MarkDaoImpl : IMarkDao
     {
         DaoObjectMapper daoObjectMapper = new DaoObjectMapper();
+        public int? _taskId = null;
+
+        public void SetTaskId(int taskId)
+        {
+            _taskId = taskId;
+        }
+
+        public int? GetTaskId()
+        {
+            return _taskId;
+        }
 
         public void Delete(Mark mark, IConnectable connection)
         {
@@ -126,8 +137,8 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 sql.Append("score = " + (row["score"] != DBNull.Value ? row["score"] + ", " : "NULL, "));
                 sql.Append("score_date = " + (row["score_date"] != DBNull.Value ? "'" + row["score_date"] + "', " : "NULL, "));
                 sql.Append("comment = " + (row["comment"] != DBNull.Value ? "'" + row["comment"] + "', " : "NULL, "));
-                sql.Append("changed = GETDATE(), ");
-                sql.Append("changed_by = 'Netus2' ");
+                sql.Append("changed = dbo.CURRENT_DATETIME(), ");
+                sql.Append("changed_by = " + (_taskId != null ? _taskId.ToString() : "'Netus2'") + " ");
                 sql.Append("WHERE mark_id = " + row["mark_id"]);
 
                 connection.ExecuteNonQuery(sql.ToString());
@@ -147,8 +158,8 @@ namespace Netus2_DatabaseConnection.daoImplementations
             sqlValues.Append(row["score"] != DBNull.Value ? row["score"] + ", " : "NULL, ");
             sqlValues.Append(row["score_date"] != DBNull.Value ? "'" + row["score_date"].ToString() + "', " : "NULL, ");
             sqlValues.Append(row["comment"] != DBNull.Value ? "'" + row["comment"] + "', " : "NULL, ");
-            sqlValues.Append("GETDATE(), ");
-            sqlValues.Append("'Netus2'");
+            sqlValues.Append("dbo.CURRENT_DATETIME(), ");
+            sqlValues.Append(_taskId != null ? _taskId.ToString() : "'Netus2'");
 
             string sql =
                 "INSERT INTO mark " +

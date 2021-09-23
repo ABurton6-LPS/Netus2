@@ -131,7 +131,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 ") VALUES (" +
                 "'" + tdBuilder.application.Name + "', " +
                 tdBuilder.application.Provider.Id + ", " +
-                "GETDATE(), " +
+                "dbo.CURRENT_DATETIME(), " +
                 "'Netus2')";
 
             applicationDaoImpl.Update(tdBuilder.application, _netus2DbConnection);
@@ -148,7 +148,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "UPDATE app " +
                 "SET name = '" + tdBuilder.application.Name + "', " +
                 "provider_id = " + tdBuilder.application.Provider.Id + ", " +
-                "changed = GETDATE(), " +
+                "changed = dbo.CURRENT_DATETIME(), " +
                 "changed_by = 'Netus2' " +
                 "WHERE app_id = " + tdBuilder.application.Id;
 
@@ -167,7 +167,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 ") VALUES (" +
                 "'" + tdBuilder.application.Name + "', " +
                 tdBuilder.application.Provider.Id + ", " +
-                "GETDATE(), " +
+                "dbo.CURRENT_DATETIME(), " +
                 "'Netus2')";
 
             applicationDaoImpl.Write(tdBuilder.application, _netus2DbConnection);
