@@ -91,7 +91,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         public List<Resource> Read(string sql, IConnectable connection)
         {
-            DataTable dtResource = new DataTableFactory().Dt_Netus2_Resource;
+            DataTable dtResource = DataTableFactory.Dt_Netus2_Resource;
             dtResource = connection.ReadIntoDataTable(sql, dtResource);
 
             List<Resource> results = new List<Resource>();

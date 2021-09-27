@@ -15,7 +15,7 @@ namespace Netus2_Test.MockDaoImpl
         public bool WasCalled_ReadWithEnrollmentId = false;
         public bool WasCalled_Write = false;
 
-        private DataRow row = new DataTableFactory().Dt_Netus2_JctEnrollmentAcademicSession.NewRow();
+        private DataRow row = DataTableFactory.Dt_Netus2_JctEnrollmentAcademicSession.NewRow();
 
         public MockJctEnrollmentAcademicSessionDaoImpl(TestDataBuilder tdBuilder)
         {

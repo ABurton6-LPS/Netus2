@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Netus2_DatabaseConnection.dataObjects;
+using Netus2_DatabaseConnection.enumerations;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Netus2SisSync.SyncProcesses
 {
@@ -16,7 +16,13 @@ namespace Netus2SisSync.SyncProcesses
             Name = name;
             Tasks = new List<SyncTask>();
 
-            _maxThreadsPerBatch = 25;
+            Config config = 
+                Netus2_DatabaseConnection.utilityTools.UtilityTools.ReadConfig(
+                Enum_Config.values["max_threads"], 
+                Enum_True_False.values["true"], 
+                Enum_True_False.values["false"]);
+
+            _maxThreadsPerBatch = int.Parse(config.ConfigValue);
         }
     }
 }

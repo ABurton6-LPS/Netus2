@@ -11,7 +11,7 @@ namespace Netus2_DatabaseConnection
     {
         public DataRow MapPerson(Person person)
         {
-            DataRow row = new DataTableFactory().Dt_Netus2_Person.NewRow();
+            DataRow row = DataTableFactory.Dt_Netus2_Person.NewRow();
 
             if (person.Id != -1)
                 row["person_id"] = person.Id;
@@ -120,7 +120,7 @@ namespace Netus2_DatabaseConnection
 
         public DataRow MapPhoneNumber(PhoneNumber phoneNumber, int personId)
         {
-            DataRow row = new DataTableFactory().Dt_Netus2_PhoneNumber.NewRow();
+            DataRow row = DataTableFactory.Dt_Netus2_PhoneNumber.NewRow();
 
             if (phoneNumber.Id != -1)
                 row["phone_number_id"] = phoneNumber.Id;
@@ -176,7 +176,7 @@ namespace Netus2_DatabaseConnection
 
         public DataRow MapProvider(Provider provider, int parentId)
         {
-            DataRow row = new DataTableFactory().Dt_Netus2_Provider.NewRow();
+            DataRow row = DataTableFactory.Dt_Netus2_Provider.NewRow();
 
             if (provider.Id != -1)
                 row["provider_id"] = provider.Id;
@@ -244,7 +244,7 @@ namespace Netus2_DatabaseConnection
 
         public DataRow MapApp(Application application)
         {
-            DataRow row = new DataTableFactory().Dt_Netus2_Application.NewRow();
+            DataRow row = DataTableFactory.Dt_Netus2_Application.NewRow();
 
             if (application.Id != -1)
                 row["app_id"] = application.Id;
@@ -282,7 +282,7 @@ namespace Netus2_DatabaseConnection
 
         public DataRow MapAddress(Address address)
         {
-            DataRow row = new DataTableFactory().Dt_Netus2_Address.NewRow();
+            DataRow row = DataTableFactory.Dt_Netus2_Address.NewRow();
 
             if (address.Id != -1)
                 row["address_id"] = address.Id;
@@ -410,7 +410,7 @@ namespace Netus2_DatabaseConnection
 
         public DataRow MapUniqueIdentifier(UniqueIdentifier uniqueId, int personId)
         {
-            DataRow row = new DataTableFactory().Dt_Netus2_UniqueIdentifier.NewRow();
+            DataRow row = DataTableFactory.Dt_Netus2_UniqueIdentifier.NewRow();
 
             if (uniqueId.Id != -1)
                 row["unique_identifier_id"] = uniqueId.Id;
@@ -466,7 +466,7 @@ namespace Netus2_DatabaseConnection
 
         public DataRow MapOrganization(Organization organization, int parentOrganizationId)
         {
-            DataRow row = new DataTableFactory().Dt_Netus2_Organization.NewRow();
+            DataRow row = DataTableFactory.Dt_Netus2_Organization.NewRow();
 
             if (organization.Id != -1)
                 row["organization_id"] = organization.Id;
@@ -541,7 +541,7 @@ namespace Netus2_DatabaseConnection
 
         public DataRow MapEmploymentSession_WithPersonId(EmploymentSession employmentSession, int personId)
         {
-            DataRow row = new DataTableFactory().Dt_Netus2_EmploymentSession.NewRow();
+            DataRow row = DataTableFactory.Dt_Netus2_EmploymentSession.NewRow();
 
             if (employmentSession.Id != -1)
                 row["employment_session_id"] = employmentSession.Id;
@@ -588,7 +588,7 @@ namespace Netus2_DatabaseConnection
 
         public DataRow MapEmploymentSession_WithOrganizationId(EmploymentSession employmentSession, int organizationId)
         {
-            DataRow row = new DataTableFactory().Dt_Netus2_EmploymentSession.NewRow();
+            DataRow row = DataTableFactory.Dt_Netus2_EmploymentSession.NewRow();
 
             if (employmentSession.Id != -1)
                 row["employment_session_id"] = employmentSession.Id;
@@ -669,7 +669,7 @@ namespace Netus2_DatabaseConnection
 
         public DataRow MapEnrollment(Enrollment enrollment, int personId)
         {
-            DataRow row = new DataTableFactory().Dt_Netus2_Enrollment.NewRow();
+            DataRow row = DataTableFactory.Dt_Netus2_Enrollment.NewRow();
 
             if (enrollment.Id != -1)
                 row["enrollment_id"] = enrollment.Id;
@@ -739,7 +739,7 @@ namespace Netus2_DatabaseConnection
 
         public DataRow MapClassEnrolled(ClassEnrolled classEnrolled)
         {
-            DataRow row = new DataTableFactory().Dt_Netus2_ClassEnrolled.NewRow();
+            DataRow row = DataTableFactory.Dt_Netus2_ClassEnrolled.NewRow();
 
             if (classEnrolled.Id != -1)
                 row["class_id"] = classEnrolled.Id;
@@ -809,7 +809,7 @@ namespace Netus2_DatabaseConnection
 
         public DataRow MapCourse(Course course)
         {
-            DataRow row = new DataTableFactory().Dt_Netus2_Course.NewRow();
+            DataRow row = DataTableFactory.Dt_Netus2_Course.NewRow();
 
             if (course.Id != -1)
                 row["course_id"] = course.Id;
@@ -851,7 +851,7 @@ namespace Netus2_DatabaseConnection
 
         public DataRow MapAcademicSession(AcademicSession academicSession, int parentId)
         {
-            DataRow row = new DataTableFactory().Dt_Netus2_AcademicSession.NewRow();
+            DataRow row = DataTableFactory.Dt_Netus2_AcademicSession.NewRow();
 
             if (academicSession.Id != -1)
                 row["academic_session_id"] = academicSession.Id;
@@ -942,7 +942,7 @@ namespace Netus2_DatabaseConnection
 
         public DataRow MapResource(Resource resource)
         {
-            DataRow row = new DataTableFactory().Dt_Netus2_Resource.NewRow();
+            DataRow row = DataTableFactory.Dt_Netus2_Resource.NewRow();
 
             if (resource.Id != -1)
                 row["resource_id"] = resource.Id;
@@ -1014,7 +1014,7 @@ namespace Netus2_DatabaseConnection
 
         public DataRow MapMark(Mark mark, int personId)
         {
-            DataRow row = new DataTableFactory().Dt_Netus2_Mark.NewRow();
+            DataRow row = DataTableFactory.Dt_Netus2_Mark.NewRow();
 
             if (mark.Id != -1)
                 row["mark_id"] = mark.Id;
@@ -1080,7 +1080,7 @@ namespace Netus2_DatabaseConnection
 
         public DataRow MapLineItem(LineItem lineItem)
         {
-            DataRow row = new DataTableFactory().Dt_Netus2_LineItem.NewRow();
+            DataRow row = DataTableFactory.Dt_Netus2_LineItem.NewRow();
 
             if (lineItem.Id != -1)
                 row["lineitem_id"] = lineItem.Id;

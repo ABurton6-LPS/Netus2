@@ -42,7 +42,7 @@ namespace Netus2SisSync.SyncProcesses.SyncJobs
             try
             {
                 SyncLogger.LogStatus(this, Enum_Sync_Status.values["sisread_start"]);
-                _dtOrganization = new DataTableFactory().Dt_Sis_Organization;
+                _dtOrganization = DataTableFactory.Dt_Sis_Organization;
                 _dtOrganization = sisConnection.ReadIntoDataTable(SyncScripts.ReadSis_Organization_SQL, _dtOrganization);
             }
             catch (Exception e)

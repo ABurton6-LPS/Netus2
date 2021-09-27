@@ -35,7 +35,7 @@ namespace Netus2_Test.MockDaoImpl
 
             if (_shouldReadReturnData)
             {
-                DataTable dataTable = new DataTableFactory().Dt_Netus2_JctCourseSubject;
+                DataTable dataTable = DataTableFactory.Dt_Netus2_JctCourseSubject;
                 for (int i = 0; i < tdBuilder.spanishCourse.Subjects.Count; i++)
                 {
                     DataRow row = dataTable.NewRow();
@@ -52,7 +52,7 @@ namespace Netus2_Test.MockDaoImpl
         {
             WasCalled_Read = true;
 
-            DataRow row = new DataTableFactory().Dt_Netus2_JctCourseSubject.NewRow();
+            DataRow row = DataTableFactory.Dt_Netus2_JctCourseSubject.NewRow();
             row["course_id"] = courseId;
             row["enum_subject_id"] = subjectId;
 
@@ -66,7 +66,7 @@ namespace Netus2_Test.MockDaoImpl
         {
             WasCalled_Write = true;
 
-            DataRow row = new DataTableFactory().Dt_Netus2_JctCourseSubject.NewRow();
+            DataRow row = DataTableFactory.Dt_Netus2_JctCourseSubject.NewRow();
             row["course_id"] = courseId;
             row["enum_subject_id"] = subjectId;
 

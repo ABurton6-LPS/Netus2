@@ -144,7 +144,7 @@
                 + "INSERT INTO log_enum_log_action "
                 + "(enum_log_action_id, netus2_code, sis_code, hr_code, descript, log_date, log_user) "
                 + "SELECT d.enum_log_action_id, d.netus2_code, d.sis_code, d.hr_code, d.descript, dbo.CURRENT_DATETIME(), SUSER_SNAME() "
-                + "FROM inserted d "
+                + "FROM deleted d "
                 + "END";
 
             connection.ExecuteNonQuery(sql);
@@ -161,7 +161,7 @@
                 + "(enum_true_false_id, netus2_code, sis_code, hr_code, descript, log_date, log_user, enum_log_action_id) "
                 + "SELECT d.enum_true_false_id, d.netus2_code, d.sis_code, d.hr_code, d.descript, dbo.CURRENT_DATETIME(), SUSER_SNAME(), "
                 + "(SELECT enum_log_action_id FROM enum_log_action WHERE netus2_code LIKE 'update') "
-                + "FROM inserted d "
+                + "FROM deleted d "
                 + "END";
 
             connection.ExecuteNonQuery(sql);
@@ -178,7 +178,7 @@
                 + "(enum_phone_id, netus2_code, sis_code, hr_code, descript, log_date, log_user, enum_log_action_id) "
                 + "SELECT d.enum_phone_id, d.netus2_code, d.sis_code, d.hr_code, d.descript, dbo.CURRENT_DATETIME(), SUSER_SNAME(), "
                 + "(SELECT enum_log_action_id FROM enum_log_action WHERE netus2_code LIKE 'update') "
-                + "FROM inserted d "
+                + "FROM deleted d "
                 + "END";
 
             connection.ExecuteNonQuery(sql);
@@ -195,7 +195,7 @@
                 + "(enum_address_id, netus2_code, sis_code, hr_code, descript, log_date, log_user, enum_log_action_id) "
                 + "SELECT d.enum_address_id, d.netus2_code, d.sis_code, d.hr_code, d.descript, dbo.CURRENT_DATETIME(), SUSER_SNAME(), "
                 + "(SELECT enum_log_action_id FROM enum_log_action WHERE netus2_code LIKE 'update') "
-                + "FROM inserted d "
+                + "FROM deleted d "
                 + "END";
 
             connection.ExecuteNonQuery(sql);
@@ -212,7 +212,7 @@
                 + "(enum_class_id, netus2_code, sis_code, hr_code, descript, log_date, log_user, enum_log_action_id) "
                 + "SELECT d.enum_class_id, d.netus2_code, d.sis_code, d.hr_code, d.descript, dbo.CURRENT_DATETIME(), SUSER_SNAME(), "
                 + "(SELECT enum_log_action_id FROM enum_log_action WHERE netus2_code LIKE 'update') "
-                + "FROM inserted d "
+                + "FROM deleted d "
                 + "END";
 
             connection.ExecuteNonQuery(sql);
@@ -229,7 +229,7 @@
                 + "(enum_gender_id, netus2_code, sis_code, hr_code, descript, log_date, log_user, enum_log_action_id) "
                 + "SELECT d.enum_gender_id, d.netus2_code, d.sis_code, d.hr_code, d.descript, dbo.CURRENT_DATETIME(), SUSER_SNAME(), "
                 + "(SELECT enum_log_action_id FROM enum_log_action WHERE netus2_code LIKE 'update') "
-                + "FROM inserted d "
+                + "FROM deleted d "
                 + "END";
 
             connection.ExecuteNonQuery(sql);
@@ -246,7 +246,7 @@
                 + "(enum_importance_id, netus2_code, sis_code, hr_code, descript, log_date, log_user, enum_log_action_id) "
                 + "SELECT d.enum_importance_id, d.netus2_code, d.sis_code, d.hr_code, d.descript, dbo.CURRENT_DATETIME(), SUSER_SNAME(), "
                 + "(SELECT enum_log_action_id FROM enum_log_action WHERE netus2_code LIKE 'update') "
-                + "FROM inserted d "
+                + "FROM deleted d "
                 + "END";
 
             connection.ExecuteNonQuery(sql);
@@ -262,7 +262,7 @@
                 + "(enum_organization_id, netus2_code, sis_code, hr_code, descript, log_date, log_user, enum_log_action_id) "
                 + "SELECT d.enum_organization_id, d.netus2_code, d.sis_code, d.hr_code, d.descript, dbo.CURRENT_DATETIME(), SUSER_SNAME(), "
                 + "(SELECT enum_log_action_id FROM enum_log_action WHERE netus2_code LIKE 'update') "
-                + "FROM inserted d "
+                + "FROM deleted d "
                 + "END";
 
             connection.ExecuteNonQuery(sql);
@@ -279,7 +279,7 @@
                 + "(enum_role_id, netus2_code, sis_code, hr_code, descript, log_date, log_user, enum_log_action_id)"
                 + "SELECT d.enum_role_id, d.netus2_code, d.sis_code, d.hr_code, d.descript, dbo.CURRENT_DATETIME(), SUSER_SNAME(), "
                 + "(SELECT enum_log_action_id FROM enum_log_action WHERE netus2_code LIKE 'update') "
-                + "FROM inserted d "
+                + "FROM deleted d "
                 + "END";
 
             connection.ExecuteNonQuery(sql);
@@ -296,7 +296,7 @@
                 + "(enum_score_status_id, netus2_code, sis_code, hr_code, descript, log_date, log_user, enum_log_action_id) "
                 + "SELECT d.enum_score_status_id, d.netus2_code, d.sis_code, d.hr_code, d.descript, dbo.CURRENT_DATETIME(), SUSER_SNAME(), "
                 + "(SELECT enum_log_action_id FROM enum_log_action WHERE netus2_code LIKE 'update') "
-                + "FROM inserted d "
+                + "FROM deleted d "
                 + "END";
 
             connection.ExecuteNonQuery(sql);
@@ -313,7 +313,7 @@
                 + "(enum_session_id, netus2_code, sis_code, hr_code, descript, log_date, log_user, enum_log_action_id) "
                 + "SELECT d.enum_session_id, d.netus2_code, d.sis_code, d.hr_code, d.descript, dbo.CURRENT_DATETIME(), SUSER_SNAME(), "
                 + "(SELECT enum_log_action_id FROM enum_log_action WHERE netus2_code LIKE 'update') "
-                + "FROM inserted d "
+                + "FROM deleted d "
                 + "END";
 
             connection.ExecuteNonQuery(sql);
@@ -330,7 +330,7 @@
                 + "(enum_residence_status_id, netus2_code, sis_code, hr_code, descript, log_date, log_user, enum_log_action_id) "
                 + "SELECT d.enum_residence_status_id, d.netus2_code, d.sis_code, d.hr_code, d.descript, dbo.CURRENT_DATETIME(), SUSER_SNAME(), "
                 + "(SELECT enum_log_action_id FROM enum_log_action WHERE netus2_code LIKE 'update') "
-                + "FROM inserted d "
+                + "FROM deleted d "
                 + "END";
 
             connection.ExecuteNonQuery(sql);
@@ -347,7 +347,7 @@
                 + "(enum_country_id, netus2_code, sis_code, hr_code, descript, log_date, log_user, enum_log_action_id) "
                 + "SELECT d.enum_country_id, d.netus2_code, d.sis_code, d.hr_code, d.descript, dbo.CURRENT_DATETIME(), SUSER_SNAME(), "
                 + "(SELECT enum_log_action_id FROM enum_log_action WHERE netus2_code LIKE 'update') "
-                + "FROM inserted d "
+                + "FROM deleted d "
                 + "END";
 
             connection.ExecuteNonQuery(sql);
@@ -364,7 +364,7 @@
                 + "(enum_state_province_id, netus2_code, sis_code, hr_code, descript, log_date, log_user, enum_log_action_id) "
                 + "SELECT d.enum_state_province_id, d.netus2_code, d.sis_code, d.hr_code, d.descript, dbo.CURRENT_DATETIME(), SUSER_SNAME(), "
                 + "(SELECT enum_log_action_id FROM enum_log_action WHERE netus2_code LIKE 'update') "
-                + "FROM inserted d "
+                + "FROM deleted d "
                 + "END";
 
             connection.ExecuteNonQuery(sql);
@@ -381,7 +381,7 @@
                 + "(enum_grade_id, netus2_code, sis_code, hr_code, descript, log_date, log_user, enum_log_action_id) "
                 + "SELECT d.enum_grade_id, d.netus2_code, d.sis_code, d.hr_code, d.descript, dbo.CURRENT_DATETIME(), SUSER_SNAME(), "
                 + "(SELECT enum_log_action_id FROM enum_log_action WHERE netus2_code LIKE 'update') "
-                + "FROM inserted d "
+                + "FROM deleted d "
                 + "END";
 
             connection.ExecuteNonQuery(sql);
@@ -398,7 +398,7 @@
                 + "(enum_subject_id, netus2_code, sis_code, hr_code, descript, log_date, log_user, enum_log_action_id) "
                 + "SELECT d.enum_subject_id, d.netus2_code, d.sis_code, d.hr_code, d.descript, dbo.CURRENT_DATETIME(), SUSER_SNAME(), "
                 + "(SELECT enum_log_action_id FROM enum_log_action WHERE netus2_code LIKE 'update') "
-                + "FROM inserted d "
+                + "FROM deleted d "
                 + "END";
 
             connection.ExecuteNonQuery(sql);
@@ -415,7 +415,7 @@
                 + "(enum_period_id, netus2_code, sis_code, hr_code, descript, log_date, log_user, enum_log_action_id) "
                 + "SELECT d.enum_period_id, d.netus2_code, d.sis_code, d.hr_code, d.descript, dbo.CURRENT_DATETIME(), SUSER_SNAME(), "
                 + "(SELECT enum_log_action_id FROM enum_log_action WHERE netus2_code LIKE 'update') "
-                + "FROM inserted d "
+                + "FROM deleted d "
                 + "END";
 
             connection.ExecuteNonQuery(sql);
@@ -432,7 +432,7 @@
                 + "(enum_category_id, netus2_code, sis_code, hr_code, descript, log_date, log_user, enum_log_action_id) "
                 + "SELECT d.enum_category_id, d.netus2_code, d.sis_code, d.hr_code, d.descript, dbo.CURRENT_DATETIME(), SUSER_SNAME(), "
                 + "(SELECT enum_log_action_id FROM enum_log_action WHERE netus2_code LIKE 'update') "
-                + "FROM inserted d "
+                + "FROM deleted d "
                 + "END";
 
             connection.ExecuteNonQuery(sql);
@@ -449,7 +449,7 @@
                 + "(enum_ethnic_id, netus2_code, sis_code, hr_code, descript, log_date, log_user, enum_log_action_id) "
                 + "SELECT d.enum_ethnic_id, d.netus2_code, d.sis_code, d.hr_code, d.descript, dbo.CURRENT_DATETIME(), SUSER_SNAME(), "
                 + "(SELECT enum_log_action_id FROM enum_log_action WHERE netus2_code LIKE 'update') "
-                + "FROM inserted d "
+                + "FROM deleted d "
                 + "END";
 
             connection.ExecuteNonQuery(sql);
@@ -466,7 +466,7 @@
                 + "(enum_identifier_id, netus2_code, sis_code, hr_code, descript, log_date, log_user, enum_log_action_id) "
                 + "SELECT d.enum_identifier_id, d.netus2_code, d.sis_code, d.hr_code, d.descript, dbo.CURRENT_DATETIME(), SUSER_SNAME(), "
                 + "(SELECT enum_log_action_id FROM enum_log_action WHERE netus2_code LIKE 'update') "
-                + "FROM inserted d "
+                + "FROM deleted d "
                 + "END";
 
             connection.ExecuteNonQuery(sql);
@@ -483,7 +483,7 @@
                 + "(enum_sync_status_id, netus2_code, sis_code, hr_code, descript, log_date, log_user, enum_log_action_id) "
                 + "SELECT d.enum_sync_status_id, d.netus2_code, d.sis_code, d.hr_code, d.descript, dbo.CURRENT_DATETIME(), SUSER_SNAME(), "
                 + "(SELECT enum_log_action_id FROM enum_log_action WHERE netus2_code LIKE 'update') "
-                + "FROM inserted d "
+                + "FROM deleted d "
                 + "END";
 
             connection.ExecuteNonQuery(sql);
@@ -859,7 +859,7 @@
             + "d.enum_ethnic_id, d.enum_residence_status_id, d.login_name, d.login_pw, d.created, "
             + "d.created_by, d.changed, d.changed_by, "
             + "dbo.CURRENT_DATETIME(), SUSER_SNAME(), (SELECT enum_log_action_id FROM enum_log_action WHERE netus2_code LIKE 'update') "
-            + "FROM inserted d "
+            + "FROM deleted d "
             + "END";
 
             connection.ExecuteNonQuery(sql);
@@ -876,7 +876,7 @@
                 + "(person_id, enum_role_id, log_date, log_user, enum_log_action_id)"
                 + "SELECT d.person_id, d.enum_role_id, "
                 + "dbo.CURRENT_DATETIME(), SUSER_SNAME(), (SELECT enum_log_action_id FROM enum_log_action WHERE netus2_code LIKE 'update') "
-                + "FROM inserted d "
+                + "FROM deleted d "
                 + "END";
 
             connection.ExecuteNonQuery(sql);
@@ -893,7 +893,7 @@
             + "(person_one_id, person_two_id, log_date, log_user, enum_log_action_id) "
             + "SELECT d.person_one_id, d.person_two_id, "
             + "dbo.CURRENT_DATETIME(), SUSER_SNAME(), (SELECT enum_log_action_id FROM enum_log_action WHERE netus2_code LIKE 'update') "
-            + "FROM inserted d "
+            + "FROM deleted d "
             + "END";
 
             connection.ExecuteNonQuery(sql);
@@ -909,7 +909,7 @@
             + "INSERT INTO jct_person_person "
             + "(person_one_id, person_two_id) "
             + "SELECT d.person_two_id, d.person_one_id "
-            + "FROM inserted d "
+            + "FROM deleted d "
             + "END";
 
             connection.ExecuteNonQuery(sql);
@@ -929,7 +929,7 @@
             + "SELECT d.unique_identifier_id, d.person_id, d.unique_identifier, d.enum_identifier_id, d.is_active_id, "
             + "d.created, d.created_by, d.changed, d.changed_by, "
             + "dbo.CURRENT_DATETIME(), SUSER_SNAME(), (SELECT enum_log_action_id FROM enum_log_action WHERE netus2_code LIKE 'update') "
-            + "FROM inserted d "
+            + "FROM deleted d "
             + "END";
 
             connection.ExecuteNonQuery(sql);
@@ -949,7 +949,7 @@
             + "SELECT d.provider_id, d.name, d.url_standard_access, d.url_admin_access, "
             + "d.parent_provider_id, d.created, d.created_by, d.changed, d.changed_by, "
             + "dbo.CURRENT_DATETIME(), SUSER_SNAME(), (SELECT enum_log_action_id FROM enum_log_action WHERE netus2_code LIKE 'update') "
-            + "FROM inserted d "
+            + "FROM deleted d "
             + "END";
 
             connection.ExecuteNonQuery(sql);
@@ -967,7 +967,7 @@
             + "log_date, log_user, enum_log_action_id) "
             + "SELECT d.app_id, d.name, d.provider_id, d.created, d.created_by, d.changed, d.changed_by, "
             + "dbo.CURRENT_DATETIME(), SUSER_SNAME(), (SELECT enum_log_action_id FROM enum_log_action WHERE netus2_code LIKE 'update') "
-            + "FROM inserted d "
+            + "FROM deleted d "
             + "END";
 
             connection.ExecuteNonQuery(sql);
@@ -984,7 +984,7 @@
             + "(person_id, app_id, log_date, log_user, enum_log_action_id) "
             + "SELECT d.person_id, d.app_id, "
             + "dbo.CURRENT_DATETIME(), SUSER_SNAME(), (SELECT enum_log_action_id FROM enum_log_action WHERE netus2_code LIKE 'update') "
-            + "FROM inserted d "
+            + "FROM deleted d "
             + "END";
 
             connection.ExecuteNonQuery(sql);
@@ -1004,7 +1004,7 @@
             + "SELECT d.phone_number_id, d.person_id, d.phone_number, d.is_primary_id, d.enum_phone_id, "
             + "d.created, d.created_by, d.changed, d.changed_by, "
             + "dbo.CURRENT_DATETIME(), SUSER_SNAME(), (SELECT enum_log_action_id FROM enum_log_action WHERE netus2_code LIKE 'update') "
-            + "FROM inserted d "
+            + "FROM deleted d "
             + "END";
 
             connection.ExecuteNonQuery(sql);
@@ -1026,7 +1026,7 @@
             + "d.apartment, d.city, d.enum_state_province_id, d.postal_code, d.enum_country_id, d.is_current_id, d.enum_address_id, "
             + "d.created, d.created_by, d.changed, d.changed_by, "
             + "dbo.CURRENT_DATETIME(), SUSER_SNAME(), (SELECT enum_log_action_id FROM enum_log_action WHERE netus2_code LIKE 'update') "
-            + "FROM inserted d "
+            + "FROM deleted d "
             + "END";
 
             connection.ExecuteNonQuery(sql);
@@ -1043,7 +1043,7 @@
             + "(person_id, address_id, log_date, log_user, enum_log_action_id) "
             + "SELECT d.person_id, d.address_id, "
             + "dbo.CURRENT_DATETIME(), SUSER_SNAME(), (SELECT enum_log_action_id FROM enum_log_action WHERE netus2_code LIKE 'update') "
-            + "FROM inserted d "
+            + "FROM deleted d "
             + "END";
 
             connection.ExecuteNonQuery(sql);
@@ -1063,7 +1063,7 @@
             + "SELECT d.employment_session_id, d.name, d.person_id, d.start_date, d.end_date, d.is_primary_id, d.enum_session_id, d.organization_id, "
             + "d.created, d.created_by, d.changed, d.changed_by, "
             + "dbo.CURRENT_DATETIME(), SUSER_SNAME(), (SELECT enum_log_action_id FROM enum_log_action WHERE netus2_code LIKE 'update') "
-            + "FROM inserted d "
+            + "FROM deleted d "
             + "END";
 
             connection.ExecuteNonQuery(sql);
@@ -1082,7 +1082,7 @@
             + "SELECT d.academic_session_id,d.term_code,d.school_year,d.name,d.start_date,d.end_date,d.enum_session_id,d.parent_session_id,d.organization_id, "
             + "d.created, d.created_by, d.changed, d.changed_by,"
             + "dbo.CURRENT_DATETIME(), SUSER_SNAME(), (SELECT enum_log_action_id FROM enum_log_action WHERE netus2_code LIKE 'update') "
-            + "FROM inserted d "
+            + "FROM deleted d "
             + "END";
 
             connection.ExecuteNonQuery(sql);
@@ -1102,7 +1102,7 @@
             + "SELECT d.organization_id, d.name, d.enum_organization_id, d.identifier, d.sis_building_code, d.hr_building_code, d.organization_parent_id, "
             + "d.created, d.created_by, d.changed, d.changed_by, "
             + "dbo.CURRENT_DATETIME(), SUSER_SNAME(), (SELECT enum_log_action_id FROM enum_log_action WHERE netus2_code LIKE 'update') "
-            + "FROM inserted d "
+            + "FROM deleted d "
             + "END";
 
             connection.ExecuteNonQuery(sql);
@@ -1124,7 +1124,7 @@
             + "d.vendor_identification, d.application_identification, "
             + "d.created, d.created_by, d.changed, d.changed_by, "
             + "dbo.CURRENT_DATETIME(), SUSER_SNAME(), (SELECT enum_log_action_id FROM enum_log_action WHERE netus2_code LIKE 'update') "
-            + "FROM inserted d "
+            + "FROM deleted d "
             + "END";
 
             connection.ExecuteNonQuery(sql);
@@ -1143,7 +1143,7 @@
             + "SELECT d.course_id, d.name, d.course_code, d.created, d.created_by, "
             + "d.changed, d.changed_by, dbo.CURRENT_DATETIME(), SUSER_SNAME(), "
             + "(SELECT enum_log_action_id FROM enum_log_action WHERE netus2_code LIKE 'update') "
-            + "FROM inserted d "
+            + "FROM deleted d "
             + "END";
 
             connection.ExecuteNonQuery(sql);
@@ -1160,7 +1160,7 @@
             + "(course_id, enum_subject_id, log_date, log_user, enum_log_action_id) "
             + "SELECT d.course_id, d.enum_subject_id, dbo.CURRENT_DATETIME(), SUSER_SNAME(), "
             + "(SELECT enum_log_action_id FROM enum_log_action WHERE netus2_code LIKE 'update') "
-            + "FROM inserted d "
+            + "FROM deleted d "
             + "END";
 
             connection.ExecuteNonQuery(sql);
@@ -1177,7 +1177,7 @@
             + "(course_id, enum_grade_id, log_date, log_user, enum_log_action_id) "
             + "SELECT d.course_id, d.enum_grade_id, "
             + "dbo.CURRENT_DATETIME(), SUSER_SNAME(), (SELECT enum_log_action_id FROM enum_log_action WHERE netus2_code LIKE 'update') "
-            + "FROM inserted d "
+            + "FROM deleted d "
             + "END";
 
             connection.ExecuteNonQuery(sql);
@@ -1196,7 +1196,7 @@
             + "SELECT d.class_id, d.name, d.class_code, d.enum_class_id, d.room, d.course_id, "
             + "d.academic_session_id, d.created, d.created_by, d.changed, d.changed_by, "
             + "dbo.CURRENT_DATETIME(), SUSER_SNAME(), (SELECT enum_log_action_id FROM enum_log_action WHERE netus2_code LIKE 'update') "
-            + "FROM inserted d "
+            + "FROM deleted d "
             + "END";
 
             connection.ExecuteNonQuery(sql);
@@ -1213,7 +1213,7 @@
             + "(class_id, person_id, enum_role_id, log_date, log_user, enum_log_action_id) "
             + "SELECT d.class_id, d.person_id, d.enum_role_id, "
             + "dbo.CURRENT_DATETIME(), SUSER_SNAME(), (SELECT enum_log_action_id FROM enum_log_action WHERE netus2_code LIKE 'update') "
-            + "FROM inserted d "
+            + "FROM deleted d "
             + "END";
 
             connection.ExecuteNonQuery(sql);
@@ -1230,7 +1230,7 @@
             + "(class_id, enum_period_id, log_date, log_user, enum_log_action_id) "
             + "SELECT d.class_id, d.enum_period_id, "
             + "dbo.CURRENT_DATETIME(), SUSER_SNAME(), (SELECT enum_log_action_id FROM enum_log_action WHERE netus2_code LIKE 'update') "
-            + "FROM inserted d "
+            + "FROM deleted d "
             + "END";
 
             connection.ExecuteNonQuery(sql);
@@ -1248,7 +1248,7 @@
             + "log_date, log_user, enum_log_action_id) "
             + "SELECT d.class_id, d.resource_id, "
             + "dbo.CURRENT_DATETIME(), SUSER_SNAME(), (SELECT enum_log_action_id FROM enum_log_action WHERE netus2_code LIKE 'update') "
-            + "FROM inserted d "
+            + "FROM deleted d "
             + "END";
 
             connection.ExecuteNonQuery(sql);
@@ -1270,7 +1270,7 @@
             + "d.markValueMin, d.markValueMax, "
             + "d.created, d.created_by, d.changed, d.changed_by, "
             + "dbo.CURRENT_DATETIME(), SUSER_SNAME(), (SELECT enum_log_action_id FROM enum_log_action WHERE netus2_code LIKE 'update') "
-            + "FROM inserted d "
+            + "FROM deleted d "
             + "END";
 
             connection.ExecuteNonQuery(sql);
@@ -1289,7 +1289,7 @@
             + "SELECT d.enrollment_id, d.person_id, d.class_id, d.enum_grade_id, "
             + "d.is_primary_id, d.start_date, d.end_date, d.created, d.created_by, d.changed, d.changed_by, "
             + "dbo.CURRENT_DATETIME(), SUSER_SNAME(), (SELECT enum_log_action_id FROM enum_log_action WHERE netus2_code LIKE 'update') "
-            + "FROM inserted d "
+            + "FROM deleted d "
             + "END";
 
             connection.ExecuteNonQuery(sql);
@@ -1306,7 +1306,7 @@
             + "(enrollment_id, academic_session_id, log_date, log_user, enum_log_action_id) "
             + "SELECT d.enrollment_id, d.academic_session_id, "
             + "dbo.CURRENT_DATETIME(), SUSER_SNAME(), (SELECT enum_log_action_id FROM enum_log_action WHERE netus2_code LIKE 'delete') "
-            + "FROM inserted d "
+            + "FROM deleted d "
             + "END";
 
             connection.ExecuteNonQuery(sql);
@@ -1326,7 +1326,7 @@
             + "SELECT d.mark_id, d.lineitem_id, d.person_id, d.enum_score_status_id, d.score, d.score_date, d.comment, "
             + "d.created, d.created_by, d.changed, d.changed_by, "
             + "dbo.CURRENT_DATETIME(), SUSER_SNAME(), (SELECT enum_log_action_id FROM enum_log_action WHERE netus2_code LIKE 'update') "
-            + "FROM inserted d "
+            + "FROM deleted d "
             + "END";
 
             connection.ExecuteNonQuery(sql);

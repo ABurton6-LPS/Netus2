@@ -101,7 +101,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private List<Course> Read(string sql, IConnectable connection)
         {
-            DataTable dtCourse = new DataTableFactory().Dt_Netus2_Course;
+            DataTable dtCourse = DataTableFactory.Dt_Netus2_Course;
             dtCourse = connection.ReadIntoDataTable(sql, dtCourse);
 
             List<Course> results = new List<Course>();

@@ -49,6 +49,7 @@ namespace Netus2_DatabaseConnection.dbAccess
 
         public DataTable ReadIntoDataTable(string sql, DataTable dt)
         {
+            DataTable emptyDataTable = dt.Clone();
 
             if ((sql == null) || (sql == "") || !(sql.ToUpper().Substring(0, 6).Contains("SELECT")))
             {
@@ -61,7 +62,7 @@ namespace Netus2_DatabaseConnection.dbAccess
                 {
                     using (var reader = command.ExecuteReaderAsync().Result)
                     {
-                        dt.Load(reader);
+                        emptyDataTable.Load(reader);
                     }
                 }
             }
@@ -71,12 +72,12 @@ namespace Netus2_DatabaseConnection.dbAccess
                 {
                     using (var reader = command.ExecuteReaderAsync().Result)
                     {
-                        dt.Load(reader);
+                        emptyDataTable.Load(reader);
                     }
                 }
             }
 
-            return dt;
+            return emptyDataTable;
         }
 
         public int ExecuteNonQuery(string sql)

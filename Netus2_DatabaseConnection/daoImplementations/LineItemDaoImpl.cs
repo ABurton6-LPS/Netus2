@@ -103,7 +103,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private List<LineItem> Read(string sql, IConnectable connection)
         {
-            DataTable dtLineItem = new DataTableFactory().Dt_Netus2_LineItem;
+            DataTable dtLineItem = DataTableFactory.Dt_Netus2_LineItem;
             dtLineItem = connection.ReadIntoDataTable(sql, dtLineItem);
 
             List<LineItem> results = new List<LineItem>();

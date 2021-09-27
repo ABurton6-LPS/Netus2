@@ -33,7 +33,7 @@ namespace Netus2_Test.MockDaoImpl
 
             if (_shouldReadReturnData)
             {
-                DataRow row = new DataTableFactory().Dt_Netus2_JctPersonRole.NewRow();
+                DataRow row = DataTableFactory.Dt_Netus2_JctPersonRole.NewRow();
                 row["person_id"] = personId;
 
                 if (personId == tdBuilder.teacher.Id)
@@ -53,7 +53,7 @@ namespace Netus2_Test.MockDaoImpl
 
             if (_shouldReadReturnData)
             {
-                DataRow row = new DataTableFactory().Dt_Netus2_JctPersonRole.NewRow();
+                DataRow row = DataTableFactory.Dt_Netus2_JctPersonRole.NewRow();
                 row["person_id"] = personId;
                 row["enum_role_id"] = roleId;
                 return row;
@@ -66,7 +66,7 @@ namespace Netus2_Test.MockDaoImpl
         {
             WasCalled_Write = true;
 
-            DataRow row = new DataTableFactory().Dt_Netus2_JctPersonRole.NewRow();
+            DataRow row = DataTableFactory.Dt_Netus2_JctPersonRole.NewRow();
             row["person_id"] = personId;
             row["enum_role_id"] = roleId;
             return row;

@@ -23,7 +23,7 @@ namespace Netus2_Test.Unit.SyncProcess
         [SetUp]
         public void SetUp()
         {
-            DbConnectionFactory.TestMode = true;
+            DbConnectionFactory.ShouldUseMockDb = true;
             _sisConnection = (MockDatabaseConnection)DbConnectionFactory.GetSisConnection();
 
             tdBuilder = new TestDataBuilder();
@@ -244,12 +244,12 @@ namespace Netus2_Test.Unit.SyncProcess
         [TearDown]
         public void TearDown()
         {
-            DbConnectionFactory.MockDatabaseConnection = null;
+            DataTableFactory.Dt_Sis_AcademicSession = DataTableFactory.CreateDataTable_Sis_AcademicSession();
         }
 
         private DataTable BuildTestDataTable(List<SisAcademicSessionTestData> tstDataSet)
         {
-            DataTable dtAcademicSession = new DataTableFactory().Dt_Sis_AcademicSession;
+            DataTable dtAcademicSession = DataTableFactory.Dt_Sis_AcademicSession;
             foreach(SisAcademicSessionTestData tstData in tstDataSet)
             {
                 DataRow row = dtAcademicSession.NewRow();

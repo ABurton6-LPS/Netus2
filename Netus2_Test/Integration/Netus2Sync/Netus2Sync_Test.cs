@@ -8,11 +8,11 @@ namespace Netus2_Test.Integration
         [TestCase]
         public void TestRun()
         {
-            new SyncJob_Organization().Start();
+            //new SyncJob_Organization().Start();
 
-            new SyncJob_AcademicSession().Start();
+            //new SyncJob_AcademicSession().Start();
 
-            new SyncJob_Person().Start();
+            //new SyncJob_Person().Start();
 
             //new SyncJob_Address().Start();
         }

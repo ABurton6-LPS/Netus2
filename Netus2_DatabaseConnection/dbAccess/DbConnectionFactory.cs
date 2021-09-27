@@ -1,63 +1,78 @@
-﻿namespace Netus2_DatabaseConnection.dbAccess
+﻿using Netus2_DatabaseConnection.enumerations;
+using Netus2_DatabaseConnection.utilityTools;
+
+namespace Netus2_DatabaseConnection.dbAccess
 {
     public static class DbConnectionFactory
     {
-        public static bool TestMode = false;
-        public static IConnectable MockDatabaseConnection = null;
+        public static bool ShouldUseLocalDb = false;
+        public static bool ShouldUseMockDb = false;
 
-        private static string LocalDatabaseConnectionString = @"Data Source=ITDSL0995104653;Initial Catalog=Netus2;Integrated Security=SSPI;MultipleActiveResultSets=True";
-        private static string SisDatabaseConnectionString = @"Data Source=tcp:lvboe-zangle.resa.net,1433;Initial Catalog=lvboe;Uid=lvnetus;Pwd=V67A#O9miN#TzQ5x2gzS;MultipleActiveResultSets=True";
-        private static string MockDatabaseConnectionString = @"MockDatabaseConnectionString";
-        private static string Netus2DatabaseConnectionString = @"Data Source=tcp:janusdb.database.windows.net,1433;Initial Catalog=Netus2;Uid=janus;Pwd=AqIiA59@$J0K;MultipleActiveResultSets=True";
-        //private static string Netus2DatabaseConnectionString = "off";
-
+        public static MockDatabaseConnection _mockDbConnection = null;
+        
         public static IConnectable GetLocalConnection()
         {
-            if (TestMode)
+            if (ShouldUseMockDb)
             {
-                if(MockDatabaseConnection == null)
-                    MockDatabaseConnection = new MockDatabaseConnection(MockDatabaseConnectionString);
-                return MockDatabaseConnection;
+                if(_mockDbConnection == null)
+                    return new MockDatabaseConnection();
+                return _mockDbConnection;
             }
             else
             {
-                return new AsyncDatabaseConnection(LocalDatabaseConnectionString);
+                return new AsyncDatabaseConnection(GetLocalDatabaseConnectionString());
             }
         }
 
         public static IConnectable GetSisConnection()
         {
-            if (TestMode)
+            if (ShouldUseMockDb)
             {
-                if (MockDatabaseConnection == null)
-                    MockDatabaseConnection = new MockDatabaseConnection(MockDatabaseConnectionString);
-                return MockDatabaseConnection;
+                if (_mockDbConnection == null)
+                    _mockDbConnection =  new MockDatabaseConnection();
+                return _mockDbConnection;
             }
             else
             {
-                return new AsyncDatabaseConnection(SisDatabaseConnectionString);
+                return new AsyncDatabaseConnection(
+                        UtilityTools.ReadConfig(
+                            Enum_Config.values["sis_Db_String"], 
+                            Enum_True_False.values["true"], 
+                            Enum_True_False.values["false"])
+                        .ConfigValue);
             }
         }
 
         public static IConnectable GetNetus2Connection()
         {
-            if (TestMode)
+            if (ShouldUseLocalDb || ShouldUseMockDb)
             {
-                if (MockDatabaseConnection == null)
-                    MockDatabaseConnection = new MockDatabaseConnection(MockDatabaseConnectionString);
-                return MockDatabaseConnection;
+                return GetLocalConnection();
             }
             else
             {
-                if(Netus2DatabaseConnectionString != "off")
-                {
-                    return new AsyncDatabaseConnection(Netus2DatabaseConnectionString);
-                }
-                else
-                {
-                    return new AsyncDatabaseConnection(LocalDatabaseConnectionString);
-                }
+                return new AsyncDatabaseConnection(GetNetus2ConnectionString());
             }
+        }
+
+        private static string GetNetus2ConnectionString()
+        {
+            string connectionString = System.Environment.GetEnvironmentVariable("Netus2DbConnectionString_Cloud", System.EnvironmentVariableTarget.User);
+
+            if (connectionString == null)
+                throw new System.Exception("The Netus2DbConnectionString_Cloud Environment Variable is not set at the User level.");
+
+            return connectionString;
+        }
+
+        private static string GetLocalDatabaseConnectionString()
+        {
+            string connectionString = System.Environment.GetEnvironmentVariable("Netus2DbConnectionString_Local", System.EnvironmentVariableTarget.User);
+
+            if (connectionString == null)
+                throw new System.Exception("The Netus2DbConnectionString_Local Environment Variable is not set at the User level.");
+
+            return connectionString;
         }
     }
 }

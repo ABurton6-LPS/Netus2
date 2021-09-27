@@ -165,7 +165,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private List<AcademicSession> Read(string sql, IConnectable connection)
         {
-            DataTable dtAcademicSession = new DataTableFactory().Dt_Netus2_AcademicSession;
+            DataTable dtAcademicSession = DataTableFactory.Dt_Netus2_AcademicSession;
             dtAcademicSession = connection.ReadIntoDataTable(sql, dtAcademicSession);
 
             List<AcademicSession> results = new List<AcademicSession>();

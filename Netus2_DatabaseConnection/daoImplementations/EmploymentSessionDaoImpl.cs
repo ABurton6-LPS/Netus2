@@ -129,7 +129,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private List<EmploymentSession> Read(string sql, IConnectable connection)
         {
-            DataTable dtEmploymentSession = new DataTableFactory().Dt_Netus2_EmploymentSession;
+            DataTable dtEmploymentSession = DataTableFactory.Dt_Netus2_EmploymentSession;
             dtEmploymentSession = connection.ReadIntoDataTable(sql, dtEmploymentSession);
 
             List<EmploymentSession> results = new List<EmploymentSession>();
