@@ -1,4 +1,6 @@
 ﻿using Moq;
+using Netus2_DatabaseConnection.dataObjects;
+using Netus2_DatabaseConnection.enumerations;
 using Netus2_DatabaseConnection.utilityTools;
 using NUnit.Framework;
 using System.Collections.Generic;
@@ -17,7 +19,7 @@ namespace Netus2_DatabaseConnection.dbAccess
 
         private List<DataRow> testEnums = new List<DataRow>();               
 
-        public MockDatabaseConnection(string connectionString)
+        public MockDatabaseConnection()
         {
             List<string> testEnumKeys = new List<string>();
 
@@ -56,8 +58,10 @@ namespace Netus2_DatabaseConnection.dbAccess
             testEnumKeys.Add("sisread_end");
             testEnumKeys.Add("sisread_error");
             testEnumKeys.Add("sisread_start");
+            testEnumKeys.Add("max_threads");
+            testEnumKeys.Add("false");
 
-            DataTable mockEnumDataTable = new DataTableFactory().Dt_Netus2_Enumeration;
+            DataTable mockEnumDataTable = DataTableFactory.Dt_Netus2_Enumeration;
 
             foreach(string testEnumKey in testEnumKeys)
             {
@@ -155,7 +159,26 @@ namespace Netus2_DatabaseConnection.dbAccess
                 enumReader.Setup(x => x.GetFieldType(4))
                     .Returns(() => typeof(string));
 
-                return GetTaskDataTableFromReader(enumReader.Object, dt);
+                if(dt.Rows.Count == 0)
+                    dt = GetTaskDataTableFromReader(enumReader.Object, dt);
+
+                return dt;
+            }
+            if (sql.Contains("config"))
+            {
+                DataTable dtConfig = DataTableFactory.Dt_Netus2_Config;
+                if(dtConfig.Rows.Count == 0)
+                {
+                    DataRow row = dtConfig.NewRow();
+                    row["config_id"] = -1;
+                    row["enum_config_id"] = -1;
+                    row["config_value"] = "-1";
+                    row["is_for_student_id"] = -1;
+                    row["is_for_staff_id"] = -1;
+                    dtConfig.Rows.Add(row);
+                }
+
+                return dtConfig;
             }
             else if (expectedReaderSql != null)
             {
@@ -171,8 +194,9 @@ namespace Netus2_DatabaseConnection.dbAccess
 
         private DataTable GetTaskDataTableFromReader(IDataReader reader, DataTable dt)
         {
-            dt.Load(reader);
-            return dt;
+            DataTable cloanedDataTable = dt.Clone();
+            cloanedDataTable.Load(reader);
+            return cloanedDataTable;
         }
 
         public int ExecuteNonQuery(string sql)

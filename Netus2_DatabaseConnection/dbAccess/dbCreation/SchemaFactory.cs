@@ -10,6 +10,7 @@
 
         private static void BuildEnums(IConnectable connection)
         {
+            BuildEnumConfig(connection);
             BuildEnumLogAction(connection);
             BuildEnumSyncStatus(connection);
             BuildEnumTrueFalse(connection);
@@ -35,6 +36,7 @@
 
         private static void BuildTables(IConnectable connection)
         {
+            BuildConfig(connection);
             BuildPerson(connection);
             BuildJctPersonRole(connection);
             BuildJctPersonPerson(connection);
@@ -65,6 +67,19 @@
             BuildSyncJobStatus(connection);
             BuildSyncTaskStatus(connection);
             BuildSyncError(connection);
+        }
+
+        private static void BuildEnumConfig(IConnectable connection)
+        {
+            string sql =
+                "CREATE TABLE enum_config (" +
+                "enum_config_id int IDENTITY(1,1) PRIMARY KEY," +
+                "netus2_code varchar(20) NOT NULL UNIQUE," +
+                "sis_code varchar(20)," +
+                "hr_code varchar(20)," +
+                "descript varchar(150) NOT NULL)";
+
+            connection.ExecuteNonQuery(sql);
         }
 
         private static void BuildEnumLogAction(IConnectable connection)
@@ -335,6 +350,22 @@
                     + "sis_code varchar(20),"
                     + "hr_code varchar(20),"
                     + "descript varchar(150) NOT NULL)";
+
+            connection.ExecuteNonQuery(sql);
+        }
+
+        private static void BuildConfig(IConnectable connection)
+        {
+            string sql =
+                "CREATE TABLE config (" +
+                "config_id int IDENTITY(1,1) PRIMARY KEY," +
+                "enum_config_id int," +
+                "config_value text," +
+                "is_for_student_id int," +
+                "is_for_staff_id int," +
+                "FOREIGN KEY(enum_config_id) REFERENCES enum_config(enum_config_id)," +
+                "FOREIGN KEY(is_for_student_id) REFERENCES enum_true_false(enum_true_false_id)," +
+                "FOREIGN KEY(is_for_staff_id) REFERENCES enum_true_false(enum_true_false_id))";
 
             connection.ExecuteNonQuery(sql);
         }

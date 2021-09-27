@@ -3,130 +3,69 @@ using System.Data;
 
 namespace Netus2_DatabaseConnection.utilityTools
 {
-    public class DataTableFactory
+    public static class DataTableFactory
     {
-        public DataTable Dt_Sis_AcademicSession = null;
-        public DataTable Dt_Sis_Address = null;
-        public DataTable Dt_Sis_Organization = null;
-        public DataTable Dt_Sis_Person = null;
+        public static DataTable Dt_Sis_AcademicSession = CreateDataTable_Sis_AcademicSession();
+        public static DataTable Dt_Sis_Address = CreateDataTable_Sis_Address();
+        public static DataTable Dt_Sis_Organization = CreateDataTable_Sis_Organization();
+        public static DataTable Dt_Sis_Person = CreateDataTable_Sis_Person();
 
-        public DataTable Dt_Netus2_Enumeration = null;
+        public static DataTable Dt_Netus2_Enumeration = CreateDataTable_Netus2_Enumeration();
 
-        public DataTable Dt_Netus2_AcademicSession = null;
-        public DataTable Dt_Netus2_Address = null;
-        public DataTable Dt_Netus2_Application = null;
-        public DataTable Dt_Netus2_ClassEnrolled = null;
-        public DataTable Dt_Netus2_Course = null;
-        public DataTable Dt_Netus2_EmploymentSession = null;
-        public DataTable Dt_Netus2_Enrollment = null;
-        public DataTable Dt_Netus2_LineItem = null;
-        public DataTable Dt_Netus2_Mark = null;
-        public DataTable Dt_Netus2_Organization = null;
-        public DataTable Dt_Netus2_Person = null;
-        public DataTable Dt_Netus2_PhoneNumber = null;
-        public DataTable Dt_Netus2_Provider = null;
-        public DataTable Dt_Netus2_Resource = null;
-        public DataTable Dt_Netus2_UniqueIdentifier = null;
-        public DataTable Dt_Netus2_JctClassPeriod = null;
-        public DataTable Dt_Netus2_JctClassPerson = null;
-        public DataTable Dt_Netus2_JctClassResource = null;
-        public DataTable Dt_Netus2_JctCourseGrade = null;
-        public DataTable Dt_Netus2_JctCourseSubject = null;
-        public DataTable Dt_Netus2_JctEnrollmentAcademicSession = null;
-        public DataTable Dt_Netus2_JctPersonAddress = null;
-        public DataTable Dt_Netus2_JctPersonApp = null;
-        public DataTable Dt_Netus2_JctPersonPerson = null;
-        public DataTable Dt_Netus2_JctPersonRole = null;
+        public static DataTable Dt_Netus2_Config = CreateDataTable_Netus2_Config();
+        public static DataTable Dt_Netus2_AcademicSession = CreateDataTable_Netus2_AcademicSession();
+        public static DataTable Dt_Netus2_Address = CreateDataTable_Netus2_Address();
+        public static DataTable Dt_Netus2_Application = CreateDataTable_Netus2_Application();
+        public static DataTable Dt_Netus2_ClassEnrolled = CreateDataTable_Netus2_ClassEnrolled();
+        public static DataTable Dt_Netus2_Course = CreateDataTable_Netus2_Course();
+        public static DataTable Dt_Netus2_EmploymentSession = CreateDataTable_Netus2_EmploymentSession();
+        public static DataTable Dt_Netus2_Enrollment = CreateDataTable_Netus2_Enrollment();
+        public static DataTable Dt_Netus2_LineItem = CreateDataTable_Netus2_LineItem();
+        public static DataTable Dt_Netus2_Mark = CreateDataTable_Netus2_Mark();
+        public static DataTable Dt_Netus2_Organization = CreateDataTable_Netus2_Organization();
+        public static DataTable Dt_Netus2_Person = CreateDataTable_Netus2_Person();
+        public static DataTable Dt_Netus2_PhoneNumber = CreateDataTable_Netus2_PhoneNumber();
+        public static DataTable Dt_Netus2_Provider = CreateDataTable_Netus2_Provider();
+        public static DataTable Dt_Netus2_Resource = CreateDataTable_Netus2_Resource();
+        public static DataTable Dt_Netus2_UniqueIdentifier = CreateDataTable_Netus2_UniqueIdentifier();
+        public static DataTable Dt_Netus2_JctClassPeriod = CreateDataTable_Netus2_JctClassPeriod();
+        public static DataTable Dt_Netus2_JctClassPerson = CreateDataTable_Netus2_JctClassPerson();
+        public static DataTable Dt_Netus2_JctClassResource = CreateDataTable_Netus2_JctClassResource();
+        public static DataTable Dt_Netus2_JctCourseGrade = CreateDataTable_Netus2_JctCourseGrade();
+        public static DataTable Dt_Netus2_JctCourseSubject = CreateDataTable_Netus2_JctCourseSubject();
+        public static DataTable Dt_Netus2_JctEnrollmentAcademicSession = CreateDataTable_Netus2_JctEnrollmentAcademicSession();
+        public static DataTable Dt_Netus2_JctPersonAddress = CreateDataTable_Netus2_JctPersonAddress();
+        public static DataTable Dt_Netus2_JctPersonApp = CreateDataTable_Netus2_JctPersonApp();
+        public static DataTable Dt_Netus2_JctPersonPerson = CreateDataTable_Netus2_JctPersonPerson();
+        public static DataTable Dt_Netus2_JctPersonRole = CreateDataTable_Netus2_JctPersonRole();
 
-        public DataTable Dt_Netus2_Log_AcademicSession = null;
-        public DataTable Dt_Netus2_Log_Address = null;
-        public DataTable Dt_Netus2_Log_Application = null;
-        public DataTable Dt_Netus2_Log_ClassEnrolled = null;
-        public DataTable Dt_Netus2_Log_Course = null;
-        public DataTable Dt_Netus2_Log_EmploymentSession = null;
-        public DataTable Dt_Netus2_Log_Enrollment = null;
-        public DataTable Dt_Netus2_Log_LineItem = null;
-        public DataTable Dt_Netus2_Log_Mark = null;
-        public DataTable Dt_Netus2_Log_Organization = null;
-        public DataTable Dt_Netus2_Log_Person = null;
-        public DataTable Dt_Netus2_Log_PhoneNumber = null;
-        public DataTable Dt_Netus2_Log_Provider = null;
-        public DataTable Dt_Netus2_Log_Resource = null;
-        public DataTable Dt_Netus2_Log_UniqueIdentifier = null;
-        public DataTable Dt_Netus2_Log_JctClassPeriod = null;
-        public DataTable Dt_Netus2_Log_JctClassPerson = null;
-        public DataTable Dt_Netus2_Log_JctClassResource = null;
-        public DataTable Dt_Netus2_Log_JctCourseGrade = null;
-        public DataTable Dt_Netus2_Log_JctCourseSubject = null;
-        public DataTable Dt_Netus2_Log_JctEnrollmentAcademicSession = null;
-        public DataTable Dt_Netus2_Log_JctPersonAddress = null;
-        public DataTable Dt_Netus2_Log_JctPersonApp = null;
-        public DataTable Dt_Netus2_Log_JctPersonPerson = null;
-        public DataTable Dt_Netus2_Log_JctPersonRole = null;
+        public static DataTable Dt_Netus2_Log_AcademicSession = CreateDataTable_Netus2_Log_AcademicSession();
+        public static DataTable Dt_Netus2_Log_Address = CreateDataTable_Netus2_Log_Address();
+        public static DataTable Dt_Netus2_Log_Application = CreateDataTable_Netus2_Log_Application();
+        public static DataTable Dt_Netus2_Log_ClassEnrolled = CreateDataTable_Netus2_Log_ClassEnrolled();
+        public static DataTable Dt_Netus2_Log_Course = CreateDataTable_Netus2_Log_Course();
+        public static DataTable Dt_Netus2_Log_EmploymentSession = CreateDataTable_Netus2_Log_EmploymentSession();
+        public static DataTable Dt_Netus2_Log_Enrollment = CreateDataTable_Netus2_Log_Enrollment();
+        public static DataTable Dt_Netus2_Log_LineItem = CreateDataTable_Netus2_Log_LineItem();
+        public static DataTable Dt_Netus2_Log_Mark = CreateDataTable_Netus2_Log_Mark();
+        public static DataTable Dt_Netus2_Log_Organization = CreateDataTable_Netus2_Log_Organization();
+        public static DataTable Dt_Netus2_Log_Person = CreateDataTable_Netus2_Log_Person();
+        public static DataTable Dt_Netus2_Log_PhoneNumber = CreateDataTable_Netus2_Log_PhoneNumber();
+        public static DataTable Dt_Netus2_Log_Provider = CreateDataTable_Netus2_Log_Provider();
+        public static DataTable Dt_Netus2_Log_Resource = CreateDataTable_Netus2_Log_Resource();
+        public static DataTable Dt_Netus2_Log_UniqueIdentifier = CreateDataTable_Netus2_Log_UniqueIdentifier();
+        public static DataTable Dt_Netus2_Log_JctClassPeriod = CreateDataTable_Netus2_Log_JctClassPeriod();
+        public static DataTable Dt_Netus2_Log_JctClassPerson = CreateDataTable_Netus2_Log_JctClassPerson();
+        public static DataTable Dt_Netus2_Log_JctClassResource = CreateDataTable_Netus2_Log_JctClassResource();
+        public static DataTable Dt_Netus2_Log_JctCourseGrade = CreateDataTable_Netus2_Log_JctCourseGrade();
+        public static DataTable Dt_Netus2_Log_JctCourseSubject = CreateDataTable_Netus2_Log_JctCourseSubject();
+        public static DataTable Dt_Netus2_Log_JctEnrollmentAcademicSession = CreateDataTable_Netus2_Log_JctEnrollmentAcademicSession();
+        public static DataTable Dt_Netus2_Log_JctPersonAddress = CreateDataTable_Netus2_Log_JctPersonAddress();
+        public static DataTable Dt_Netus2_Log_JctPersonApp = CreateDataTable_Netus2_Log_JctPersonApp();
+        public static DataTable Dt_Netus2_Log_JctPersonPerson = CreateDataTable_Netus2_Log_JctPersonPerson();
+        public static DataTable Dt_Netus2_Log_JctPersonRole = CreateDataTable_Netus2_Log_JctPersonRole();
 
-        public DataTableFactory()
-        {
-            Dt_Sis_AcademicSession = CreateDataTable_Sis_AcademicSession();
-            Dt_Sis_Address = CreateDataTable_Sis_Address();
-            Dt_Sis_Organization = CreateDataTable_Sis_Organization();
-            Dt_Sis_Person = CreateDataTable_Sis_Person();
-
-            Dt_Netus2_Enumeration = CreateDataTable_Netus2_Enumeration();
-
-            Dt_Netus2_AcademicSession = CreateDataTable_Netus2_AcademicSession();
-            Dt_Netus2_Address = CreateDataTable_Netus2_Address();
-            Dt_Netus2_Application = CreateDataTable_Netus2_Application();
-            Dt_Netus2_ClassEnrolled = CreateDataTable_Netus2_ClassEnrolled();
-            Dt_Netus2_Course = CreateDataTable_Netus2_Course();
-            Dt_Netus2_EmploymentSession = CreateDataTable_Netus2_EmploymentSession();
-            Dt_Netus2_Enrollment = CreateDataTable_Netus2_Enrollment();
-            Dt_Netus2_LineItem = CreateDataTable_Netus2_LineItem();
-            Dt_Netus2_Mark = CreateDataTable_Netus2_Mark();
-            Dt_Netus2_Organization = CreateDataTable_Netus2_Organization();
-            Dt_Netus2_Person = CreateDataTable_Netus2_Person();
-            Dt_Netus2_PhoneNumber = CreateDataTable_Netus2_PhoneNumber();
-            Dt_Netus2_Provider = CreateDataTable_Netus2_Provider();
-            Dt_Netus2_Resource = CreateDataTable_Netus2_Resource();
-            Dt_Netus2_UniqueIdentifier = CreateDataTable_Netus2_UniqueIdentifier();
-            Dt_Netus2_JctClassPeriod = CreateDataTable_Netus2_JctClassPeriod();
-            Dt_Netus2_JctClassPerson = CreateDataTable_Netus2_JctClassPerson();
-            Dt_Netus2_JctClassResource = CreateDataTable_Netus2_JctClassResource();
-            Dt_Netus2_JctCourseGrade = CreateDataTable_Netus2_JctCourseGrade();
-            Dt_Netus2_JctCourseSubject = CreateDataTable_Netus2_JctCourseSubject();
-            Dt_Netus2_JctEnrollmentAcademicSession = CreateDataTable_Netus2_JctEnrollmentAcademicSession();
-            Dt_Netus2_JctPersonAddress = CreateDataTable_Netus2_JctPersonAddress();
-            Dt_Netus2_JctPersonApp = CreateDataTable_Netus2_JctPersonApp();
-            Dt_Netus2_JctPersonPerson = CreateDataTable_Netus2_JctPersonPerson();
-            Dt_Netus2_JctPersonRole = CreateDataTable_Netus2_JctPersonRole();
-
-            Dt_Netus2_Log_AcademicSession = CreateDataTable_Netus2_Log_AcademicSession();
-            Dt_Netus2_Log_Address = CreateDataTable_Netus2_Log_Address();
-            Dt_Netus2_Log_Application = CreateDataTable_Netus2_Log_Application();
-            Dt_Netus2_Log_ClassEnrolled = CreateDataTable_Netus2_Log_ClassEnrolled();
-            Dt_Netus2_Log_Course = CreateDataTable_Netus2_Log_Course();
-            Dt_Netus2_Log_EmploymentSession = CreateDataTable_Netus2_Log_EmploymentSession();
-            Dt_Netus2_Log_Enrollment = CreateDataTable_Netus2_Log_Enrollment();
-            Dt_Netus2_Log_LineItem = CreateDataTable_Netus2_Log_LineItem();
-            Dt_Netus2_Log_Mark = CreateDataTable_Netus2_Log_Mark();
-            Dt_Netus2_Log_Organization = CreateDataTable_Netus2_Log_Organization();
-            Dt_Netus2_Log_Person = CreateDataTable_Netus2_Log_Person();
-            Dt_Netus2_Log_PhoneNumber = CreateDataTable_Netus2_Log_PhoneNumber();
-            Dt_Netus2_Log_Provider = CreateDataTable_Netus2_Log_Provider();
-            Dt_Netus2_Log_Resource = CreateDataTable_Netus2_Log_Resource();
-            Dt_Netus2_Log_UniqueIdentifier = CreateDataTable_Netus2_Log_UniqueIdentifier();
-            Dt_Netus2_Log_JctClassPeriod = CreateDataTable_Netus2_Log_JctClassPeriod();
-            Dt_Netus2_Log_JctClassPerson = CreateDataTable_Netus2_Log_JctClassPerson();
-            Dt_Netus2_Log_JctClassResource = CreateDataTable_Netus2_Log_JctClassResource();
-            Dt_Netus2_Log_JctCourseGrade = CreateDataTable_Netus2_Log_JctCourseGrade();
-            Dt_Netus2_Log_JctCourseSubject = CreateDataTable_Netus2_Log_JctCourseSubject();
-            Dt_Netus2_Log_JctEnrollmentAcademicSession = CreateDataTable_Netus2_Log_JctEnrollmentAcademicSession();
-            Dt_Netus2_Log_JctPersonAddress = CreateDataTable_Netus2_Log_JctPersonAddress();
-            Dt_Netus2_Log_JctPersonApp = CreateDataTable_Netus2_Log_JctPersonApp();
-            Dt_Netus2_Log_JctPersonPerson = CreateDataTable_Netus2_Log_JctPersonPerson();
-            Dt_Netus2_Log_JctPersonRole = CreateDataTable_Netus2_Log_JctPersonRole();
-        }
-
-        private DataTable CreateDataTable_Sis_AcademicSession()
+        public static DataTable CreateDataTable_Sis_AcademicSession()
         {
             DataTable dtAcademicSession = new DataTable("AcademicSession");
             DataColumn dtColumn;
@@ -174,13 +113,13 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtAcademicSession;
         }
 
-        private DataTable CreateDataTable_Sis_Address()
+        public static DataTable CreateDataTable_Sis_Address()
         {
             //Do Nothing
             return null;
         }
 
-        private DataTable CreateDataTable_Sis_Organization()
+        public static DataTable CreateDataTable_Sis_Organization()
         {
             DataTable dtOrganization = new DataTable("Organization");
             DataColumn dtColumn;
@@ -213,7 +152,7 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtOrganization;
         }
 
-        private DataTable CreateDataTable_Sis_Person()
+        public static DataTable CreateDataTable_Sis_Person()
         {
             DataTable dtPerson = new DataTable("Person");
             DataColumn dtColumn;
@@ -276,7 +215,43 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtPerson;
         }
 
-        private DataTable CreateDataTable_Netus2_Enumeration()
+        public static DataTable CreateDataTable_Netus2_Config()
+        {
+            DataTable dtConfig = new DataTable("Config");
+            DataColumn[] PrimaryKeycolumns = new DataColumn[1];
+            DataColumn dtColumn;
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(int);
+            dtColumn.ColumnName = "config_id";
+            PrimaryKeycolumns[0] = dtColumn;
+            dtConfig.Columns.Add(dtColumn);
+            dtConfig.PrimaryKey = PrimaryKeycolumns;
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(int);
+            dtColumn.ColumnName = "enum_config_id";
+            dtConfig.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "config_value";
+            dtConfig.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(int);
+            dtColumn.ColumnName = "is_for_student_id";
+            dtConfig.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(int);
+            dtColumn.ColumnName = "is_for_staff_id";
+            dtConfig.Columns.Add(dtColumn);
+
+            return dtConfig;
+        }
+
+        public static DataTable CreateDataTable_Netus2_Enumeration()
         {
             DataTable dtPerson = new DataTable("Enumeration");
             DataColumn dtColumn;
@@ -304,7 +279,7 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtPerson;
         }
 
-        private DataTable CreateDataTable_Netus2_AcademicSession()
+        public static DataTable CreateDataTable_Netus2_AcademicSession()
         {
             DataTable dtAcademicSession = new DataTable("AcademicSession");
             //DataColumn[] PrimaryKeycolumns = new DataColumn[1];
@@ -380,7 +355,7 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtAcademicSession;
         }
 
-        private DataTable CreateDataTable_Netus2_Address()
+        public static DataTable CreateDataTable_Netus2_Address()
         {
             DataTable dtAddress = new DataTable("Address");
             DataColumn[] PrimaryKeycolumns = new DataColumn[1];
@@ -471,7 +446,7 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtAddress;
         }
 
-        private DataTable CreateDataTable_Netus2_Application()
+        public static DataTable CreateDataTable_Netus2_Application()
         {
             DataTable dtApplication = new DataTable("Application");
             DataColumn[] PrimaryKeycolumns = new DataColumn[1];
@@ -517,7 +492,7 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtApplication;
         }
 
-        private DataTable CreateDataTable_Netus2_ClassEnrolled()
+        public static DataTable CreateDataTable_Netus2_ClassEnrolled()
         {
             DataTable dtClassEnrolled = new DataTable("ClassEnrolled");
             DataColumn[] PrimaryKeycolumns = new DataColumn[1];
@@ -583,7 +558,7 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtClassEnrolled;
         }
 
-        private DataTable CreateDataTable_Netus2_Course()
+        public static DataTable CreateDataTable_Netus2_Course()
         {
             DataTable dtCourse = new DataTable("Course");
             DataColumn[] PrimaryKeycolumns = new DataColumn[1];
@@ -629,7 +604,7 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtCourse;
         }
 
-        private DataTable CreateDataTable_Netus2_EmploymentSession()
+        public static DataTable CreateDataTable_Netus2_EmploymentSession()
         {
             DataTable dtEmploymentSession = new DataTable("EmploymentSession");
             DataColumn[] PrimaryKeycolumns = new DataColumn[1];
@@ -700,7 +675,7 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtEmploymentSession;
         }
 
-        private DataTable CreateDataTable_Netus2_Enrollment()
+        public static DataTable CreateDataTable_Netus2_Enrollment()
         {
             DataTable dtEnrollment = new DataTable("Enrollment");
             DataColumn[] PrimaryKeycolumns = new DataColumn[1];
@@ -766,7 +741,7 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtEnrollment;
         }
 
-        private DataTable CreateDataTable_Netus2_LineItem()
+        public static DataTable CreateDataTable_Netus2_LineItem()
         {
             DataTable dtLineItem = new DataTable("LineItem");
             DataColumn[] PrimaryKeycolumns = new DataColumn[1];
@@ -842,7 +817,7 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtLineItem;
         }
 
-        private DataTable CreateDataTable_Netus2_Mark()
+        public static DataTable CreateDataTable_Netus2_Mark()
         {
             DataTable dtAcademicSession = new DataTable("Mark");
             DataColumn[] PrimaryKeycolumns = new DataColumn[1];
@@ -908,7 +883,7 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtAcademicSession;
         }
 
-        private DataTable CreateDataTable_Netus2_Organization()
+        public static DataTable CreateDataTable_Netus2_Organization()
         {
             DataTable dtOrganization = new DataTable("Organization");
             DataColumn[] PrimaryKeycolumns = new DataColumn[1];
@@ -974,7 +949,7 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtOrganization;
         }
 
-        private DataTable CreateDataTable_Netus2_Person()
+        public static DataTable CreateDataTable_Netus2_Person()
         {
             DataTable dtPerson = new DataTable("Person");
             DataColumn[] PrimaryKeycolumns = new DataColumn[1];
@@ -1055,7 +1030,7 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtPerson;
         }
 
-        private DataTable CreateDataTable_Netus2_PhoneNumber()
+        public static DataTable CreateDataTable_Netus2_PhoneNumber()
         {
             DataTable dtPhoneNumber = new DataTable("PhoneNumber");
             DataColumn[] PrimaryKeycolumns = new DataColumn[1];
@@ -1111,7 +1086,7 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtPhoneNumber;
         }
 
-        private DataTable CreateDataTable_Netus2_Provider()
+        public static DataTable CreateDataTable_Netus2_Provider()
         {
             DataTable dtProvider = new DataTable("Provider");
             DataColumn[] PrimaryKeycolumns = new DataColumn[1];
@@ -1172,7 +1147,7 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtProvider;
         }
 
-        private DataTable CreateDataTable_Netus2_Resource()
+        public static DataTable CreateDataTable_Netus2_Resource()
         {
             DataTable dtResource = new DataTable("Resource");
             DataColumn[] PrimaryKeycolumns = new DataColumn[1];
@@ -1233,7 +1208,7 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtResource;
         }
 
-        private DataTable CreateDataTable_Netus2_UniqueIdentifier()
+        public static DataTable CreateDataTable_Netus2_UniqueIdentifier()
         {
             DataTable dtUniqueIdentifier = new DataTable("UniqueIdentifier");
             DataColumn[] PrimaryKeycolumns = new DataColumn[1];
@@ -1289,7 +1264,7 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtUniqueIdentifier;
         }
 
-        private DataTable CreateDataTable_Netus2_JctClassPeriod()
+        public static DataTable CreateDataTable_Netus2_JctClassPeriod()
         {
             DataTable dtJctClassPeriod = new DataTable("JctClassPeriod");
             DataColumn[] PrimaryKeycolumns = new DataColumn[2];
@@ -1312,7 +1287,7 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtJctClassPeriod;
         }
 
-        private DataTable CreateDataTable_Netus2_JctClassPerson()
+        public static DataTable CreateDataTable_Netus2_JctClassPerson()
         {
             DataTable dtJctClassPerson = new DataTable("JctClassPerson");
             DataColumn[] PrimaryKeycolumns = new DataColumn[2];
@@ -1340,7 +1315,7 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtJctClassPerson;
         }
 
-        private DataTable CreateDataTable_Netus2_JctClassResource()
+        public static DataTable CreateDataTable_Netus2_JctClassResource()
         {
             DataTable dtJctClassResource = new DataTable("JctClassResource");
             DataColumn[] PrimaryKeycolumns = new DataColumn[2];
@@ -1363,7 +1338,7 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtJctClassResource;
         }
 
-        private DataTable CreateDataTable_Netus2_JctCourseGrade()
+        public static DataTable CreateDataTable_Netus2_JctCourseGrade()
         {
             DataTable dtJctCourseGrade = new DataTable("JctCourseGrade");
             DataColumn[] PrimaryKeycolumns = new DataColumn[2];
@@ -1386,7 +1361,7 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtJctCourseGrade;
         }
 
-        private DataTable CreateDataTable_Netus2_JctCourseSubject()
+        public static DataTable CreateDataTable_Netus2_JctCourseSubject()
         {
             DataTable dtJctCourseSubject = new DataTable("JctCourseSubject");
             DataColumn[] PrimaryKeycolumns = new DataColumn[2];
@@ -1409,7 +1384,7 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtJctCourseSubject;
         }
 
-        private DataTable CreateDataTable_Netus2_JctEnrollmentAcademicSession()
+        public static DataTable CreateDataTable_Netus2_JctEnrollmentAcademicSession()
         {
             DataTable dtJctEnrollmentAcademicSession = new DataTable("JctEnrollmentAcademicSession");
             DataColumn[] PrimaryKeycolumns = new DataColumn[2];
@@ -1432,7 +1407,7 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtJctEnrollmentAcademicSession;
         }
 
-        private DataTable CreateDataTable_Netus2_JctPersonAddress()
+        public static DataTable CreateDataTable_Netus2_JctPersonAddress()
         {
             DataTable dtJctPersonAddress = new DataTable("JctPersonAddress");
             DataColumn[] PrimaryKeycolumns = new DataColumn[2];
@@ -1455,7 +1430,7 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtJctPersonAddress;
         }
 
-        private DataTable CreateDataTable_Netus2_JctPersonApp()
+        public static DataTable CreateDataTable_Netus2_JctPersonApp()
         {
             DataTable dtJctPersonApp = new DataTable("JctPersonApp");
             DataColumn[] PrimaryKeycolumns = new DataColumn[2];
@@ -1478,7 +1453,7 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtJctPersonApp;
         }
 
-        private DataTable CreateDataTable_Netus2_JctPersonPerson()
+        public static DataTable CreateDataTable_Netus2_JctPersonPerson()
         {
             DataTable dtJctPersonPerson = new DataTable("JctPersonPerson");
             DataColumn[] PrimaryKeycolumns = new DataColumn[2];
@@ -1501,7 +1476,7 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtJctPersonPerson;
         }
 
-        private DataTable CreateDataTable_Netus2_JctPersonRole()
+        public static DataTable CreateDataTable_Netus2_JctPersonRole()
         {
             DataTable dtJctPersonRole = new DataTable("JctPersonRole");
             DataColumn[] PrimaryKeycolumns = new DataColumn[2];
@@ -1524,7 +1499,7 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtJctPersonRole;
         }
 
-        private DataTable CreateDataTable_Netus2_Log_AcademicSession()
+        public static DataTable CreateDataTable_Netus2_Log_AcademicSession()
         {
             DataTable dtLogAcademicSession = new DataTable("Log_AcademicSession");
             DataColumn[] PrimaryKeycolumns = new DataColumn[1];
@@ -1620,7 +1595,7 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtLogAcademicSession;
         }
 
-        private DataTable CreateDataTable_Netus2_Log_Address()
+        public static DataTable CreateDataTable_Netus2_Log_Address()
         {
             DataTable dtLogAddress = new DataTable("Log_Address");
             DataColumn[] PrimaryKeycolumns = new DataColumn[1];
@@ -1731,7 +1706,7 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtLogAddress;
         }
 
-        private DataTable CreateDataTable_Netus2_Log_Application()
+        public static DataTable CreateDataTable_Netus2_Log_Application()
         {
             DataTable dtLogApplication = new DataTable("Log_Application");
             DataColumn[] PrimaryKeycolumns = new DataColumn[1];
@@ -1797,7 +1772,7 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtLogApplication;
         }
 
-        private DataTable CreateDataTable_Netus2_Log_ClassEnrolled()
+        public static DataTable CreateDataTable_Netus2_Log_ClassEnrolled()
         {
             DataTable dtLogClassEnrolled = new DataTable("Log_ClassEnrolled");
             DataColumn[] PrimaryKeycolumns = new DataColumn[1];
@@ -1883,7 +1858,7 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtLogClassEnrolled;
         }
 
-        private DataTable CreateDataTable_Netus2_Log_Course()
+        public static DataTable CreateDataTable_Netus2_Log_Course()
         {
             DataTable dtLogCourse = new DataTable("Log_Course");
             DataColumn[] PrimaryKeycolumns = new DataColumn[1];
@@ -1949,7 +1924,7 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtLogCourse;
         }
 
-        private DataTable CreateDataTable_Netus2_Log_EmploymentSession()
+        public static DataTable CreateDataTable_Netus2_Log_EmploymentSession()
         {
             DataTable dtLogEmploymentSession = new DataTable("Log_EmploymentSession");
             DataColumn[] PrimaryKeycolumns = new DataColumn[1];
@@ -2040,7 +2015,7 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtLogEmploymentSession;
         }
 
-        private DataTable CreateDataTable_Netus2_Log_Enrollment()
+        public static DataTable CreateDataTable_Netus2_Log_Enrollment()
         {
             DataTable dtLogEnrollment = new DataTable("Log_Enrollment");
             DataColumn[] PrimaryKeycolumns = new DataColumn[1];
@@ -2126,7 +2101,7 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtLogEnrollment;
         }
 
-        private DataTable CreateDataTable_Netus2_Log_LineItem()
+        public static DataTable CreateDataTable_Netus2_Log_LineItem()
         {
             DataTable dtLogLineItem = new DataTable("Log_LineItem");
             DataColumn[] PrimaryKeycolumns = new DataColumn[1];
@@ -2222,7 +2197,7 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtLogLineItem;
         }
 
-        private DataTable CreateDataTable_Netus2_Log_Mark()
+        public static DataTable CreateDataTable_Netus2_Log_Mark()
         {
             DataTable dtLogMark = new DataTable("Log_Mark");
             DataColumn[] PrimaryKeycolumns = new DataColumn[1];
@@ -2308,7 +2283,7 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtLogMark;
         }
 
-        private DataTable CreateDataTable_Netus2_Log_Organization()
+        public static DataTable CreateDataTable_Netus2_Log_Organization()
         {
             DataTable dtLogOrganization = new DataTable("Log_Organization");
             DataColumn[] PrimaryKeycolumns = new DataColumn[1];
@@ -2394,7 +2369,7 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtLogOrganization;
         }
 
-        private DataTable CreateDataTable_Netus2_Log_Person()
+        public static DataTable CreateDataTable_Netus2_Log_Person()
         {
             DataTable dtLogPerson = new DataTable("Log_Person");
             DataColumn[] PrimaryKeycolumns = new DataColumn[1];
@@ -2495,7 +2470,7 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtLogPerson;
         }
 
-        private DataTable CreateDataTable_Netus2_Log_PhoneNumber()
+        public static DataTable CreateDataTable_Netus2_Log_PhoneNumber()
         {
             DataTable dtLogPhoneNumber = new DataTable("Log_PhoneNumber");
             DataColumn[] PrimaryKeycolumns = new DataColumn[1];
@@ -2571,7 +2546,7 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtLogPhoneNumber;
         }
 
-        private DataTable CreateDataTable_Netus2_Log_Provider()
+        public static DataTable CreateDataTable_Netus2_Log_Provider()
         {
             DataTable dtLogProvider = new DataTable("Log_Provider");
             DataColumn[] PrimaryKeycolumns = new DataColumn[1];
@@ -2647,7 +2622,7 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtLogProvider;
         }
 
-        private DataTable CreateDataTable_Netus2_Log_Resource()
+        public static DataTable CreateDataTable_Netus2_Log_Resource()
         {
             DataTable dtLogResource = new DataTable("Log_Resource");
             DataColumn[] PrimaryKeycolumns = new DataColumn[1];
@@ -2728,7 +2703,7 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtLogResource;
         }
 
-        private DataTable CreateDataTable_Netus2_Log_UniqueIdentifier()
+        public static DataTable CreateDataTable_Netus2_Log_UniqueIdentifier()
         {
             DataTable dtLogUniqueIdentifier = new DataTable("Log_UniqueIdentifier");
             DataColumn[] PrimaryKeycolumns = new DataColumn[1];
@@ -2804,7 +2779,7 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtLogUniqueIdentifier;
         }
 
-        private DataTable CreateDataTable_Netus2_Log_JctClassPeriod()
+        public static DataTable CreateDataTable_Netus2_Log_JctClassPeriod()
         {
             DataTable dtLogJctClassPeriod = new DataTable("Log_JctClassPeriod");
             DataColumn[] PrimaryKeycolumns = new DataColumn[1];
@@ -2845,7 +2820,7 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtLogJctClassPeriod;
         }
 
-        private DataTable CreateDataTable_Netus2_Log_JctClassPerson()
+        public static DataTable CreateDataTable_Netus2_Log_JctClassPerson()
         {
             DataTable dtLogJctClassPerson = new DataTable("Log_JctClassPerson");
             DataColumn[] PrimaryKeycolumns = new DataColumn[1];
@@ -2891,7 +2866,7 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtLogJctClassPerson;
         }
 
-        private DataTable CreateDataTable_Netus2_Log_JctClassResource()
+        public static DataTable CreateDataTable_Netus2_Log_JctClassResource()
         {
             DataTable dtLogJctClassResource = new DataTable("Log_JctClassResource");
             DataColumn[] PrimaryKeycolumns = new DataColumn[1];
@@ -2932,7 +2907,7 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtLogJctClassResource;
         }
 
-        private DataTable CreateDataTable_Netus2_Log_JctCourseGrade()
+        public static DataTable CreateDataTable_Netus2_Log_JctCourseGrade()
         {
             DataTable dtLogJctCourseGrade = new DataTable("Log_JctCourseGrade");
             DataColumn[] PrimaryKeycolumns = new DataColumn[1];
@@ -2973,7 +2948,7 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtLogJctCourseGrade;
         }
 
-        private DataTable CreateDataTable_Netus2_Log_JctCourseSubject()
+        public static DataTable CreateDataTable_Netus2_Log_JctCourseSubject()
         {
             DataTable dtLogJctCourseSubject = new DataTable("Log_JctCourseSubject");
             DataColumn[] PrimaryKeycolumns = new DataColumn[1];
@@ -3014,7 +2989,7 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtLogJctCourseSubject;
         }
 
-        private DataTable CreateDataTable_Netus2_Log_JctEnrollmentAcademicSession()
+        public static DataTable CreateDataTable_Netus2_Log_JctEnrollmentAcademicSession()
         {
             DataTable dtLogJctEnrollmentAcademicSession = new DataTable("Log_JctEnrollmentAcademicSession");
             DataColumn[] PrimaryKeycolumns = new DataColumn[1];
@@ -3055,7 +3030,7 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtLogJctEnrollmentAcademicSession;
         }
 
-        private DataTable CreateDataTable_Netus2_Log_JctPersonAddress()
+        public static DataTable CreateDataTable_Netus2_Log_JctPersonAddress()
         {
             DataTable dtLogJctPersonAddress = new DataTable("Log_JctPersonAddress");
             DataColumn[] PrimaryKeycolumns = new DataColumn[1];
@@ -3096,7 +3071,7 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtLogJctPersonAddress;
         }
 
-        private DataTable CreateDataTable_Netus2_Log_JctPersonApp()
+        public static DataTable CreateDataTable_Netus2_Log_JctPersonApp()
         {
             DataTable dtLogJctPersonApp = new DataTable("Log_JctPersonApp");
             DataColumn[] PrimaryKeycolumns = new DataColumn[1];
@@ -3137,7 +3112,7 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtLogJctPersonApp;
         }
 
-        private DataTable CreateDataTable_Netus2_Log_JctPersonPerson()
+        public static DataTable CreateDataTable_Netus2_Log_JctPersonPerson()
         {
             DataTable dtLogJctPersonPerson = new DataTable("Log_JctPersonPerson");
             DataColumn[] PrimaryKeycolumns = new DataColumn[1];
@@ -3178,7 +3153,7 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtLogJctPersonPerson;
         }
 
-        private DataTable CreateDataTable_Netus2_Log_JctPersonRole()
+        public static DataTable CreateDataTable_Netus2_Log_JctPersonRole()
         {
             DataTable dtLogJctPersonRole = new DataTable("Log_JctPersonRole");
             DataColumn[] PrimaryKeycolumns = new DataColumn[1];

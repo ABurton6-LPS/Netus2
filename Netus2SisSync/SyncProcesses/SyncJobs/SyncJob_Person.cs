@@ -40,7 +40,7 @@ namespace Netus2SisSync.SyncProcesses.SyncJobs
             try
             {
                 SyncLogger.LogStatus(this, Enum_Sync_Status.values["sisread_start"]);
-                _dtPerson = new DataTableFactory().Dt_Sis_Person;
+                _dtPerson = DataTableFactory.Dt_Sis_Person;
                 _dtPerson = sisConnection.ReadIntoDataTable(SyncScripts.ReadSis_Person_SQL, _dtPerson);
             }
             catch (Exception e)

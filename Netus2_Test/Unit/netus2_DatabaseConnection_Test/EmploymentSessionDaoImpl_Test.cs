@@ -20,7 +20,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
         [SetUp]
         public void SetUp()
         {
-            DbConnectionFactory.TestMode = true;
+            DbConnectionFactory.ShouldUseMockDb = true;
 
             tdBuilder = new TestDataBuilder();
             _netus2DbConnection = (MockDatabaseConnection)DbConnectionFactory.GetNetus2Connection();
@@ -241,12 +241,6 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
             employmentSessionDaoImpl.Write(tdBuilder.employmentSession, tdBuilder.teacher.Id, _netus2DbConnection);
 
             Assert.IsTrue(mockOrganizationDaoImpl.WasCalled_ReadWithOrganizationId);
-        }
-
-        [TearDown]
-        public void TearDown()
-        {
-            DbConnectionFactory.MockDatabaseConnection = null;
         }
 
         private void SetMockReaderWithTestData(List<DataRow> tstDataSet)

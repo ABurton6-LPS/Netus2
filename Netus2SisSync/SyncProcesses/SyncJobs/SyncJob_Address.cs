@@ -37,7 +37,7 @@ namespace Netus2SisSync.SyncProcesses.SyncJobs
             try
             {
                 SyncLogger.LogStatus(this, Enum_Sync_Status.values["sisread_start"]);
-                _dtAddress = new DataTableFactory().Dt_Sis_Address;
+                _dtAddress = DataTableFactory.Dt_Sis_Address;
                 _dtAddress = sisConnection.ReadIntoDataTable(SyncScripts.ReadSis_Address_SQL, _dtAddress);
             }
             catch (Exception e)

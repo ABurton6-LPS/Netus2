@@ -21,7 +21,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
         [SetUp]
         public void SetUp()
         {
-            DbConnectionFactory.TestMode = true;
+            DbConnectionFactory.ShouldUseMockDb = true;
 
             tdBuilder = new TestDataBuilder();
             _netus2DbConnection = (MockDatabaseConnection)DbConnectionFactory.GetNetus2Connection();
@@ -371,12 +371,6 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "dbo.CURRENT_DATETIME(), 'Netus2')";
 
             academicSessionDaoImpl.Write(tdBuilder.semester1, tdBuilder.schoolYear.Id, _netus2DbConnection);
-        }
-
-        [TearDown]
-        public void TearDown()
-        {
-            DbConnectionFactory.MockDatabaseConnection = null;
         }
 
         private AcademicSession RemoveAllButFirstChild(AcademicSession parent)

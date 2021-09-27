@@ -45,7 +45,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private List<DataRow> Read(string sql, IConnectable connection)
         {
-            DataTable dtJctClassPeriod = new DataTableFactory().Dt_Netus2_JctClassPeriod;
+            DataTable dtJctClassPeriod = DataTableFactory.Dt_Netus2_JctClassPeriod;
             dtJctClassPeriod = connection.ReadIntoDataTable(sql, dtJctClassPeriod);
 
             List<DataRow> foundDataRows = new List<DataRow>();
@@ -65,7 +65,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
             connection.ExecuteNonQuery(sql.ToString());
 
-            DataRow jctClassPeriodDao = new DataTableFactory().Dt_Netus2_JctClassPeriod.NewRow();
+            DataRow jctClassPeriodDao = DataTableFactory.Dt_Netus2_JctClassPeriod.NewRow();
             jctClassPeriodDao["class_id"] = classId;
             jctClassPeriodDao["enum_period_id"] = periodId;
 

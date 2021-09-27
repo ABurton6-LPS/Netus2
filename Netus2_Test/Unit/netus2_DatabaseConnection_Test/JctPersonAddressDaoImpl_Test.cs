@@ -13,7 +13,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
         [SetUp]
         public void SetUp()
         {
-            DbConnectionFactory.TestMode = true;
+            DbConnectionFactory.ShouldUseMockDb = true;
 
             tdBuilder = new TestDataBuilder();
             _netus2DbConnection = (MockDatabaseConnection)DbConnectionFactory.GetNetus2Connection();
@@ -77,12 +77,6 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 tdBuilder.teacher.Addresses[0].Id + ")";
 
             jctPersonAddressDaoImpl.Write(tdBuilder.teacher.Id, tdBuilder.teacher.Addresses[0].Id, _netus2DbConnection);
-        }
-
-        [TearDown]
-        public void TearDown()
-        {
-            DbConnectionFactory.MockDatabaseConnection = null;
         }
     }
 }

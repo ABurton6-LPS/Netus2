@@ -72,7 +72,7 @@ namespace Netus2_Test.Integration
             Assert.IsNotEmpty(logPeople);
             Assert.AreEqual(preTestLogCount + 1, logPeople.Count);
 
-            Assert_LogTable(testDataBuilder.teacher.Id, thisPersonsLogs.Count, "log_person", new DataTableFactory().Dt_Netus2_Log_Person, connection);
+            Assert_LogTable(testDataBuilder.teacher.Id, thisPersonsLogs.Count, "log_person", DataTableFactory.Dt_Netus2_Log_Person, connection);
             Assert.AreEqual(Enum_Log_Action.values["update"], thisPersonsLogs[thisPersonsLogs.Count - 1].LogAction);
         }
 
@@ -96,7 +96,7 @@ namespace Netus2_Test.Integration
             Assert.IsNotEmpty(logPeople);
             Assert.AreEqual(preTestLogCount + 1, logPeople.Count);
 
-            Assert_LogTable(testDataBuilder.teacher.Id, thisPersonsLogs.Count, "log_person", new DataTableFactory().Dt_Netus2_Log_Person, connection);
+            Assert_LogTable(testDataBuilder.teacher.Id, thisPersonsLogs.Count, "log_person", DataTableFactory.Dt_Netus2_Log_Person, connection);
             Assert.AreEqual(Enum_Log_Action.values["delete"], thisPersonsLogs[thisPersonsLogs.Count - 1].LogAction);
         }
 
@@ -114,7 +114,7 @@ namespace Netus2_Test.Integration
             Assert.IsNotEmpty(logJctPersonRoles);
             Assert.AreEqual(preTestLogCount + 1, logJctPersonRoles.Count);
 
-            Assert_LogTable(logJctPersonRoles[preTestLogCount].log_jct_person_role_id, 1, "log_jct_person_role", new DataTableFactory().Dt_Netus2_Log_JctPersonRole, connection);
+            Assert_LogTable(logJctPersonRoles[preTestLogCount].log_jct_person_role_id, 1, "log_jct_person_role", DataTableFactory.Dt_Netus2_Log_JctPersonRole, connection);
             Assert.AreEqual(Enum_Log_Action.values["delete"], logJctPersonRoles[preTestLogCount].LogAction);
 
             Assert.AreEqual(testDataBuilder.teacher.Id, logJctPersonRoles[preTestLogCount].person_id);
@@ -135,8 +135,8 @@ namespace Netus2_Test.Integration
             Assert.IsNotEmpty(logJctPersonPersons);
             Assert.AreEqual(preTestLogCount + 2, logJctPersonPersons.Count);
 
-            Assert_LogTable(logJctPersonPersons[preTestLogCount].log_jct_person_person_id, 1, "log_jct_person_person", new DataTableFactory().Dt_Netus2_Log_JctPersonPerson, connection);
-            Assert_LogTable(logJctPersonPersons[preTestLogCount + 1].log_jct_person_person_id, 1, "log_jct_person_person", new DataTableFactory().Dt_Netus2_Log_JctPersonPerson, connection);
+            Assert_LogTable(logJctPersonPersons[preTestLogCount].log_jct_person_person_id, 1, "log_jct_person_person", DataTableFactory.Dt_Netus2_Log_JctPersonPerson, connection);
+            Assert_LogTable(logJctPersonPersons[preTestLogCount + 1].log_jct_person_person_id, 1, "log_jct_person_person", DataTableFactory.Dt_Netus2_Log_JctPersonPerson, connection);
             Assert.AreEqual(Enum_Log_Action.values["delete"], logJctPersonPersons[preTestLogCount].LogAction);
             Assert.AreEqual(Enum_Log_Action.values["delete"], logJctPersonPersons[preTestLogCount + 1].LogAction);
 
@@ -166,7 +166,7 @@ namespace Netus2_Test.Integration
             Assert.IsNotEmpty(logUniqueIdentifiers);
             Assert.AreEqual(preTestLogCount + 1, logUniqueIdentifiers.Count);
 
-            Assert_LogTable(testDataBuilder.uniqueId_Teacher.Id, thisUniqueIdsLogs.Count, "log_unique_identifier", new DataTableFactory().Dt_Netus2_Log_UniqueIdentifier, connection);
+            Assert_LogTable(testDataBuilder.uniqueId_Teacher.Id, thisUniqueIdsLogs.Count, "log_unique_identifier", DataTableFactory.Dt_Netus2_Log_UniqueIdentifier, connection);
             Assert.AreEqual(Enum_Log_Action.values["update"], thisUniqueIdsLogs[thisUniqueIdsLogs.Count - 1].LogAction);
 
             Assert.AreEqual(testDataBuilder.teacher.Id, thisUniqueIdsLogs[thisUniqueIdsLogs.Count - 1].person_id);
@@ -192,7 +192,7 @@ namespace Netus2_Test.Integration
             Assert.IsNotEmpty(logUniqueIdentifiers);
             Assert.AreEqual(preTestLogCount + 1, logUniqueIdentifiers.Count);
 
-            Assert_LogTable(testDataBuilder.uniqueId_Teacher.Id, thisUniqueIdsLogs.Count, "log_unique_identifier", new DataTableFactory().Dt_Netus2_Log_UniqueIdentifier, connection);
+            Assert_LogTable(testDataBuilder.uniqueId_Teacher.Id, thisUniqueIdsLogs.Count, "log_unique_identifier", DataTableFactory.Dt_Netus2_Log_UniqueIdentifier, connection);
             Assert.AreEqual(Enum_Log_Action.values["delete"], thisUniqueIdsLogs[thisUniqueIdsLogs.Count - 1].LogAction);
 
             Assert.AreEqual(testDataBuilder.teacher.Id, thisUniqueIdsLogs[thisUniqueIdsLogs.Count - 1].person_id);
@@ -212,7 +212,7 @@ namespace Netus2_Test.Integration
             Assert.IsNotEmpty(logProviders);
             Assert.AreEqual(preTestLogCount + 1, logProviders.Count);
 
-            Assert_LogTable((int)logProviders[preTestLogCount].provider_id, preTestLogCount + 1, "log_provider", new DataTableFactory().Dt_Netus2_Log_Provider, connection);
+            Assert_LogTable((int)logProviders[preTestLogCount].provider_id, preTestLogCount + 1, "log_provider", DataTableFactory.Dt_Netus2_Log_Provider, connection);
             Assert.AreEqual(Enum_Log_Action.values["update"], logProviders[preTestLogCount].LogAction);
 
             Assert_LogProvider(testDataBuilder.provider, logProviders[preTestLogCount]);
@@ -232,7 +232,7 @@ namespace Netus2_Test.Integration
             Assert.IsNotEmpty(logProviders);
             Assert.AreEqual(preTestLogCount + 1, logProviders.Count);
 
-            Assert_LogTable((int)logProviders[preTestLogCount].provider_id, preTestLogCount + 1, "log_provider", new DataTableFactory().Dt_Netus2_Log_Provider, connection);
+            Assert_LogTable((int)logProviders[preTestLogCount].provider_id, preTestLogCount + 1, "log_provider", DataTableFactory.Dt_Netus2_Log_Provider, connection);
             Assert.AreEqual(Enum_Log_Action.values["delete"], logProviders[preTestLogCount].LogAction);
 
             Assert_LogProvider(oldProvider, logProviders[preTestLogCount]);
@@ -253,7 +253,7 @@ namespace Netus2_Test.Integration
             Assert.IsNotEmpty(logApps);
             Assert.AreEqual(preTestLogCount + 1, logApps.Count);
 
-            Assert_LogTable((int)logApps[preTestLogCount].app_id, logApps.Count, "log_app", new DataTableFactory().Dt_Netus2_Log_Application, connection);
+            Assert_LogTable((int)logApps[preTestLogCount].app_id, logApps.Count, "log_app", DataTableFactory.Dt_Netus2_Log_Application, connection);
             Assert.AreEqual(Enum_Log_Action.values["update"], logApps[preTestLogCount].LogAction);
 
             Assert_LogApp(app, logApps[preTestLogCount]);
@@ -273,7 +273,7 @@ namespace Netus2_Test.Integration
             Assert.IsNotEmpty(logJctClassPersons);
             Assert.AreEqual(preTestLogCount + 1, logJctClassPersons.Count);
 
-            Assert_LogTable(logJctClassPersons[preTestLogCount].log_jct_class_person_id, 1, "log_jct_class_person", new DataTableFactory().Dt_Netus2_Log_JctClassPerson, connection);
+            Assert_LogTable(logJctClassPersons[preTestLogCount].log_jct_class_person_id, 1, "log_jct_class_person", DataTableFactory.Dt_Netus2_Log_JctClassPerson, connection);
             Assert.AreEqual(Enum_Log_Action.values["delete"], logJctClassPersons[preTestLogCount].LogAction);
 
             Assert.AreEqual(testDataBuilder.teacher.Id, logJctClassPersons[preTestLogCount].person_id);
@@ -294,7 +294,7 @@ namespace Netus2_Test.Integration
             Assert.IsNotEmpty(logApps);
             Assert.AreEqual(preTestLogcount + 1, logApps.Count);
 
-            Assert_LogTable((int)logApps[preTestLogcount].app_id, logApps.Count, "log_app", new DataTableFactory().Dt_Netus2_Log_Application, connection);
+            Assert_LogTable((int)logApps[preTestLogcount].app_id, logApps.Count, "log_app", DataTableFactory.Dt_Netus2_Log_Application, connection);
             Assert.AreEqual(Enum_Log_Action.values["delete"], logApps[preTestLogcount].LogAction);
 
             Assert_LogApp(app, logApps[preTestLogcount]);
@@ -316,7 +316,7 @@ namespace Netus2_Test.Integration
             Assert.IsNotEmpty(logJctPersonApps);
             Assert.AreEqual(preTestLogCount + 1, logJctPersonApps.Count);
 
-            Assert_LogTable(logJctPersonApps[preTestLogCount].log_jct_person_app_id, 1, "log_jct_person_app", new DataTableFactory().Dt_Netus2_Log_JctPersonApp, connection);
+            Assert_LogTable(logJctPersonApps[preTestLogCount].log_jct_person_app_id, 1, "log_jct_person_app", DataTableFactory.Dt_Netus2_Log_JctPersonApp, connection);
             Assert.AreEqual(Enum_Log_Action.values["delete"], logJctPersonApps[preTestLogCount].LogAction);
 
             Assert.AreEqual(testDataBuilder.teacher.Id, logJctPersonApps[preTestLogCount].person_id);
@@ -344,7 +344,7 @@ namespace Netus2_Test.Integration
             Assert.IsNotEmpty(logPhoneNumbers);
             Assert.AreEqual(preTestLogCount + 1, logPhoneNumbers.Count);
 
-            Assert_LogTable(testDataBuilder.phoneNumber_Teacher.Id, thisPhoneNumbersLogs.Count, "log_phone_number", new DataTableFactory().Dt_Netus2_Log_PhoneNumber, connection);
+            Assert_LogTable(testDataBuilder.phoneNumber_Teacher.Id, thisPhoneNumbersLogs.Count, "log_phone_number", DataTableFactory.Dt_Netus2_Log_PhoneNumber, connection);
             Assert.AreEqual(Enum_Log_Action.values["update"], thisPhoneNumbersLogs[thisPhoneNumbersLogs.Count - 1].LogAction);
 
             Assert.AreEqual(testDataBuilder.teacher.Id, thisPhoneNumbersLogs[thisPhoneNumbersLogs.Count - 1].person_id);
@@ -371,7 +371,7 @@ namespace Netus2_Test.Integration
             Assert.IsNotEmpty(logPhoneNumbers);
             Assert.AreEqual(preTestLogCount + 1, logPhoneNumbers.Count);
 
-            Assert_LogTable(testDataBuilder.phoneNumber_Teacher.Id, thisPhoneNumbersLogs.Count, "log_phone_number", new DataTableFactory().Dt_Netus2_Log_PhoneNumber, connection);
+            Assert_LogTable(testDataBuilder.phoneNumber_Teacher.Id, thisPhoneNumbersLogs.Count, "log_phone_number", DataTableFactory.Dt_Netus2_Log_PhoneNumber, connection);
             Assert.AreEqual(Enum_Log_Action.values["delete"], thisPhoneNumbersLogs[thisPhoneNumbersLogs.Count - 1].LogAction);
 
             Assert.AreEqual(testDataBuilder.teacher.Id, thisPhoneNumbersLogs[thisPhoneNumbersLogs.Count - 1].person_id);
@@ -392,7 +392,7 @@ namespace Netus2_Test.Integration
             Assert.IsNotEmpty(logAddresses);
             Assert.AreEqual(preTestLogCount + 1, logAddresses.Count);
 
-            Assert_LogTable((int)logAddresses[preTestLogCount].address_id, 1, "log_address", new DataTableFactory().Dt_Netus2_Log_Address, connection);
+            Assert_LogTable((int)logAddresses[preTestLogCount].address_id, 1, "log_address", DataTableFactory.Dt_Netus2_Log_Address, connection);
             Assert.AreEqual(Enum_Log_Action.values["update"], logAddresses[preTestLogCount].LogAction);
             Assert_LogAddress(oldAddress, logAddresses[preTestLogCount]);
         }
@@ -411,7 +411,7 @@ namespace Netus2_Test.Integration
             Assert.IsNotEmpty(logAddresses);
             Assert.AreEqual(preTestLogCount + 1, logAddresses.Count);
 
-            Assert_LogTable((int)logAddresses[preTestLogCount].address_id, 1, "log_address", new DataTableFactory().Dt_Netus2_Log_Address, connection);
+            Assert_LogTable((int)logAddresses[preTestLogCount].address_id, 1, "log_address", DataTableFactory.Dt_Netus2_Log_Address, connection);
             Assert.AreEqual(Enum_Log_Action.values["delete"], logAddresses[preTestLogCount].LogAction);
             Assert_LogAddress(oldAddress, logAddresses[preTestLogCount]);
         }
@@ -432,7 +432,7 @@ namespace Netus2_Test.Integration
             Assert.IsNotEmpty(logJctPersonAddresss);
             Assert.AreEqual(preTestLogCount + 1, logJctPersonAddresss.Count);
 
-            Assert_LogTable(logJctPersonAddresss[preTestLogCount].log_jct_person_address_id, 1, "log_jct_person_address", new DataTableFactory().Dt_Netus2_Log_JctPersonAddress, connection);
+            Assert_LogTable(logJctPersonAddresss[preTestLogCount].log_jct_person_address_id, 1, "log_jct_person_address", DataTableFactory.Dt_Netus2_Log_JctPersonAddress, connection);
             Assert.AreEqual(Enum_Log_Action.values["delete"], logJctPersonAddresss[preTestLogCount].LogAction);
 
             Assert.AreEqual(person.Id, logJctPersonAddresss[preTestLogCount].person_id);
@@ -455,7 +455,7 @@ namespace Netus2_Test.Integration
             Assert.IsNotEmpty(logEmploymentSessions);
             Assert.AreEqual(preTestLogCount + 1, logEmploymentSessions.Count);
 
-            Assert_LogTable((int)logEmploymentSessions[preTestLogCount].employment_session_id, logEmploymentSessions.Count, "log_employment_session", new DataTableFactory().Dt_Netus2_Log_EmploymentSession, connection);
+            Assert_LogTable((int)logEmploymentSessions[preTestLogCount].employment_session_id, logEmploymentSessions.Count, "log_employment_session", DataTableFactory.Dt_Netus2_Log_EmploymentSession, connection);
             Assert.AreEqual(Enum_Log_Action.values["update"], logEmploymentSessions[preTestLogCount].LogAction);
 
             Assert.AreEqual(teacher.Id, logEmploymentSessions[preTestLogCount].person_id);
@@ -478,7 +478,7 @@ namespace Netus2_Test.Integration
             Assert.IsNotEmpty(logEmploymentSessions);
             Assert.AreEqual(preTestLogCount + 1, logEmploymentSessions.Count);
 
-            Assert_LogTable((int)logEmploymentSessions[preTestLogCount].employment_session_id, logEmploymentSessions.Count, "log_employment_session", new DataTableFactory().Dt_Netus2_Log_EmploymentSession, connection);
+            Assert_LogTable((int)logEmploymentSessions[preTestLogCount].employment_session_id, logEmploymentSessions.Count, "log_employment_session", DataTableFactory.Dt_Netus2_Log_EmploymentSession, connection);
             Assert.AreEqual(Enum_Log_Action.values["delete"], logEmploymentSessions[preTestLogCount].LogAction);
 
             Assert.AreEqual(teacher.Id, logEmploymentSessions[preTestLogCount].person_id);
@@ -501,7 +501,7 @@ namespace Netus2_Test.Integration
             Assert.IsNotEmpty(logAcademicSessions);
             Assert.AreEqual(preTestLogCount + 1, logAcademicSessions.Count);
 
-            Assert_LogTable((int)logAcademicSessions[preTestLogCount].academic_session_id, 1, "log_academic_session", new DataTableFactory().Dt_Netus2_Log_AcademicSession, connection);
+            Assert_LogTable((int)logAcademicSessions[preTestLogCount].academic_session_id, 1, "log_academic_session", DataTableFactory.Dt_Netus2_Log_AcademicSession, connection);
             Assert.AreEqual(Enum_Log_Action.values["update"], logAcademicSessions[preTestLogCount].LogAction);
 
             Assert_LogAcademicSession(oldAcademicSession, logAcademicSessions[preTestLogCount]);
@@ -526,7 +526,7 @@ namespace Netus2_Test.Integration
             Assert.IsNotEmpty(logAcademicSessions);
             Assert.AreEqual(expectedTestLogCount, logAcademicSessions.Count);
 
-            Assert_LogTable((int)logAcademicSessions[preTestLogCount].academic_session_id, 1, "log_academic_session", new DataTableFactory().Dt_Netus2_Log_AcademicSession, connection);
+            Assert_LogTable((int)logAcademicSessions[preTestLogCount].academic_session_id, 1, "log_academic_session", DataTableFactory.Dt_Netus2_Log_AcademicSession, connection);
             Assert.AreEqual(Enum_Log_Action.values["delete"], logAcademicSessions[expectedTestLogCount - 1].LogAction);
 
             Assert_LogAcademicSession(academicSession, logAcademicSessions[expectedTestLogCount - 1]);
@@ -547,7 +547,7 @@ namespace Netus2_Test.Integration
             Assert.IsNotEmpty(logOrganizations);
             Assert.AreEqual(preTestLogCount + 1, logOrganizations.Count);
 
-            Assert_LogTable((int)logOrganizations[preTestLogCount].organization_id, 2, "log_organization", new DataTableFactory().Dt_Netus2_Log_Organization, connection);
+            Assert_LogTable((int)logOrganizations[preTestLogCount].organization_id, 2, "log_organization", DataTableFactory.Dt_Netus2_Log_Organization, connection);
             Assert.AreEqual(Enum_Log_Action.values["update"], logOrganizations[preTestLogCount].LogAction);
 
             Assert_LogOrganization(org, logOrganizations[preTestLogCount]);
@@ -567,7 +567,7 @@ namespace Netus2_Test.Integration
             Assert.IsNotEmpty(logOrganizations);
             Assert.AreEqual(preTestLogCount + 1, logOrganizations.Count);
 
-            Assert_LogTable((int)logOrganizations[preTestLogCount].organization_id, 2, "log_organization", new DataTableFactory().Dt_Netus2_Log_Organization, connection);
+            Assert_LogTable((int)logOrganizations[preTestLogCount].organization_id, 2, "log_organization", DataTableFactory.Dt_Netus2_Log_Organization, connection);
             Assert.AreEqual(Enum_Log_Action.values["delete"], logOrganizations[preTestLogCount].LogAction);
 
             Assert_LogOrganization(org, logOrganizations[preTestLogCount]);
@@ -589,7 +589,7 @@ namespace Netus2_Test.Integration
             Assert.IsNotEmpty(logResources);
             Assert.AreEqual(1, logResources.Count);
 
-            Assert_LogTable((int)logResources[0].resource_id, 1, "log_resource", new DataTableFactory().Dt_Netus2_Log_Resource, connection);
+            Assert_LogTable((int)logResources[0].resource_id, 1, "log_resource", DataTableFactory.Dt_Netus2_Log_Resource, connection);
             Assert.AreEqual(Enum_Log_Action.values["update"], logResources[0].LogAction);
 
             Assert_LogResource(oldResource, logResources[0]);
@@ -609,7 +609,7 @@ namespace Netus2_Test.Integration
             Assert.IsNotEmpty(logResources);
             Assert.AreEqual(preTestLogCount + 1, logResources.Count);
 
-            Assert_LogTable((int)logResources[preTestLogCount].resource_id, 1, "log_resource", new DataTableFactory().Dt_Netus2_Log_Resource, connection);
+            Assert_LogTable((int)logResources[preTestLogCount].resource_id, 1, "log_resource", DataTableFactory.Dt_Netus2_Log_Resource, connection);
             Assert.AreEqual(Enum_Log_Action.values["delete"], logResources[preTestLogCount].LogAction);
 
             Assert_LogResource(resource, logResources[preTestLogCount]);
@@ -630,7 +630,7 @@ namespace Netus2_Test.Integration
             Assert.IsNotEmpty(logCourses);
             Assert.AreEqual(preTestLogCount + 1, logCourses.Count);
 
-            Assert_LogTable((int)logCourses[preTestLogCount].course_id, logCourses.Count, "log_course", new DataTableFactory().Dt_Netus2_Log_Course, connection);
+            Assert_LogTable((int)logCourses[preTestLogCount].course_id, logCourses.Count, "log_course", DataTableFactory.Dt_Netus2_Log_Course, connection);
             Assert.AreEqual(Enum_Log_Action.values["update"], logCourses[preTestLogCount].LogAction);
 
             Assert_LogCourse(course, logCourses[preTestLogCount]);
@@ -650,7 +650,7 @@ namespace Netus2_Test.Integration
             Assert.IsNotEmpty(logCourses);
             Assert.AreEqual(preTestLogCount + 1, logCourses.Count);
 
-            Assert_LogTable((int)logCourses[preTestLogCount].course_id, logCourses.Count, "log_course", new DataTableFactory().Dt_Netus2_Log_Course, connection);
+            Assert_LogTable((int)logCourses[preTestLogCount].course_id, logCourses.Count, "log_course", DataTableFactory.Dt_Netus2_Log_Course, connection);
             Assert.AreEqual(Enum_Log_Action.values["delete"], logCourses[preTestLogCount].LogAction);
 
             Assert_LogCourse(course, logCourses[preTestLogCount]);
@@ -671,7 +671,7 @@ namespace Netus2_Test.Integration
             Assert.IsNotEmpty(logJctCourseSubjects);
             Assert.AreEqual(preTestLogCount + 1, logJctCourseSubjects.Count);
 
-            Assert_LogTable(logJctCourseSubjects[preTestLogCount].log_jct_course_subject_id, 1, "log_jct_course_subject", new DataTableFactory().Dt_Netus2_Log_JctCourseSubject, connection);
+            Assert_LogTable(logJctCourseSubjects[preTestLogCount].log_jct_course_subject_id, 1, "log_jct_course_subject", DataTableFactory.Dt_Netus2_Log_JctCourseSubject, connection);
             Assert.AreEqual(Enum_Log_Action.values["delete"], logJctCourseSubjects[preTestLogCount].LogAction);
 
             Assert.AreEqual(student.Enrollments[0].ClassEnrolled.Course.Id, logJctCourseSubjects[preTestLogCount].course_id);
@@ -693,7 +693,7 @@ namespace Netus2_Test.Integration
             Assert.IsNotEmpty(logJctCourseGrades);
             Assert.AreEqual(preTestLogCount + 1, logJctCourseGrades.Count);
 
-            Assert_LogTable(logJctCourseGrades[preTestLogCount].log_jct_course_grade_id, 1, "log_jct_course_grade", new DataTableFactory().Dt_Netus2_Log_JctCourseGrade, connection);
+            Assert_LogTable(logJctCourseGrades[preTestLogCount].log_jct_course_grade_id, 1, "log_jct_course_grade", DataTableFactory.Dt_Netus2_Log_JctCourseGrade, connection);
             Assert.AreEqual(Enum_Log_Action.values["delete"], logJctCourseGrades[preTestLogCount].LogAction);
 
             Assert.AreEqual(student.Enrollments[0].ClassEnrolled.Course.Id, logJctCourseGrades[preTestLogCount].course_id);
@@ -716,7 +716,7 @@ namespace Netus2_Test.Integration
             Assert.IsNotEmpty(logClasses);
             Assert.AreEqual(preTestLogCount + 1, logClasses.Count);
 
-            Assert_LogTable((int)logClasses[preTestLogCount].class_id, logClasses.Count, "log_class", new DataTableFactory().Dt_Netus2_Log_ClassEnrolled, connection);
+            Assert_LogTable((int)logClasses[preTestLogCount].class_id, logClasses.Count, "log_class", DataTableFactory.Dt_Netus2_Log_ClassEnrolled, connection);
             Assert.AreEqual(Enum_Log_Action.values["update"], logClasses[preTestLogCount].LogAction);
 
             Assert_LogClass(oldClass, logClasses[preTestLogCount]);
@@ -736,7 +736,7 @@ namespace Netus2_Test.Integration
             Assert.IsNotEmpty(logClasses);
             Assert.AreEqual(preTestLogCount + 1, logClasses.Count);
 
-            Assert_LogTable((int)logClasses[preTestLogCount].class_id, logClasses.Count, "log_class", new DataTableFactory().Dt_Netus2_Log_ClassEnrolled, connection);
+            Assert_LogTable((int)logClasses[preTestLogCount].class_id, logClasses.Count, "log_class", DataTableFactory.Dt_Netus2_Log_ClassEnrolled, connection);
             Assert.AreEqual(Enum_Log_Action.values["delete"], logClasses[preTestLogCount].LogAction);
 
             Assert_LogClass(oldClass, logClasses[preTestLogCount]);
@@ -757,7 +757,7 @@ namespace Netus2_Test.Integration
             Assert.IsNotEmpty(logJctClassPeriods);
             Assert.AreEqual(preTestLogCount + 1, logJctClassPeriods.Count);
 
-            Assert_LogTable(logJctClassPeriods[preTestLogCount].log_jct_class_period_id, 1, "log_jct_class_period", new DataTableFactory().Dt_Netus2_Log_JctClassPeriod, connection);
+            Assert_LogTable(logJctClassPeriods[preTestLogCount].log_jct_class_period_id, 1, "log_jct_class_period", DataTableFactory.Dt_Netus2_Log_JctClassPeriod, connection);
             Assert.AreEqual(Enum_Log_Action.values["delete"], logJctClassPeriods[preTestLogCount].LogAction);
 
             Assert.AreEqual(student.Enrollments[0].ClassEnrolled.Id, logJctClassPeriods[preTestLogCount].class_id);
@@ -780,7 +780,7 @@ namespace Netus2_Test.Integration
             Assert.IsNotEmpty(logJctClassResources);
             Assert.AreEqual(preTestLogCount + 1, logJctClassResources.Count);
 
-            Assert_LogTable(logJctClassResources[preTestLogCount].log_jct_class_resource_id, 1, "log_jct_class_resource", new DataTableFactory().Dt_Netus2_Log_JctClassResource, connection);
+            Assert_LogTable(logJctClassResources[preTestLogCount].log_jct_class_resource_id, 1, "log_jct_class_resource", DataTableFactory.Dt_Netus2_Log_JctClassResource, connection);
             Assert.AreEqual(Enum_Log_Action.values["delete"], logJctClassResources[preTestLogCount].LogAction);
 
             Assert.AreEqual(student.Enrollments[0].ClassEnrolled.Id, logJctClassResources[preTestLogCount].class_id);
@@ -802,7 +802,7 @@ namespace Netus2_Test.Integration
             Assert.IsNotEmpty(logLineItems);
             Assert.AreEqual(preTestLogCount + 1, logLineItems.Count);
 
-            Assert_LogTable((int)logLineItems[preTestLogCount].lineitem_id, 1, "log_lineitem", new DataTableFactory().Dt_Netus2_Log_LineItem, connection);
+            Assert_LogTable((int)logLineItems[preTestLogCount].lineitem_id, 1, "log_lineitem", DataTableFactory.Dt_Netus2_Log_LineItem, connection);
             Assert.AreEqual(Enum_Log_Action.values["update"], logLineItems[preTestLogCount].LogAction);
 
             Assert_LogLineitem(oldLineItem, logLineItems[preTestLogCount]);
@@ -822,7 +822,7 @@ namespace Netus2_Test.Integration
             Assert.IsNotEmpty(logLineItems);
             Assert.AreEqual(preTestLogCount + 1, logLineItems.Count);
 
-            Assert_LogTable((int)logLineItems[preTestLogCount].lineitem_id, 1, "log_lineitem", new DataTableFactory().Dt_Netus2_Log_LineItem, connection);
+            Assert_LogTable((int)logLineItems[preTestLogCount].lineitem_id, 1, "log_lineitem", DataTableFactory.Dt_Netus2_Log_LineItem, connection);
             Assert.AreEqual(Enum_Log_Action.values["delete"], logLineItems[preTestLogCount].LogAction);
 
             Assert_LogLineitem(oldLineItem, logLineItems[preTestLogCount]);
@@ -844,7 +844,7 @@ namespace Netus2_Test.Integration
             Assert.IsNotEmpty(logEnrollments);
             Assert.AreEqual(preTestLogCount + 1, logEnrollments.Count);
 
-            Assert_LogTable((int)logEnrollments[preTestLogCount].enrollment_id, logEnrollments.Count, "log_enrollment", new DataTableFactory().Dt_Netus2_Log_Enrollment, connection);
+            Assert_LogTable((int)logEnrollments[preTestLogCount].enrollment_id, logEnrollments.Count, "log_enrollment", DataTableFactory.Dt_Netus2_Log_Enrollment, connection);
             Assert.AreEqual(Enum_Log_Action.values["update"], logEnrollments[preTestLogCount].LogAction);
 
             Assert.AreEqual(student.Id, logEnrollments[preTestLogCount].person_id);
@@ -867,7 +867,7 @@ namespace Netus2_Test.Integration
             Assert.IsNotEmpty(logEnrollments);
             Assert.AreEqual(preTestLogCount + 1, logEnrollments.Count);
 
-            Assert_LogTable((int)logEnrollments[preTestLogCount].enrollment_id, logEnrollments.Count, "log_enrollment", new DataTableFactory().Dt_Netus2_Log_Enrollment, connection);
+            Assert_LogTable((int)logEnrollments[preTestLogCount].enrollment_id, logEnrollments.Count, "log_enrollment", DataTableFactory.Dt_Netus2_Log_Enrollment, connection);
             Assert.AreEqual(Enum_Log_Action.values["delete"], logEnrollments[preTestLogCount].LogAction);
 
             Assert.AreEqual(student.Id, logEnrollments[preTestLogCount].person_id);
@@ -890,7 +890,7 @@ namespace Netus2_Test.Integration
             Assert.IsNotEmpty(logMarks);
             Assert.AreEqual(preTestLogCount + 1, logMarks.Count);
 
-            Assert_LogTable((int)logMarks[preTestLogCount].mark_id, 2, "log_mark", new DataTableFactory().Dt_Netus2_Log_Mark, connection);
+            Assert_LogTable((int)logMarks[preTestLogCount].mark_id, 2, "log_mark", DataTableFactory.Dt_Netus2_Log_Mark, connection);
             Assert.AreEqual(Enum_Log_Action.values["update"], logMarks[preTestLogCount].LogAction);
 
             Assert.AreEqual(student.Id, logMarks[preTestLogCount].person_id);
@@ -912,7 +912,7 @@ namespace Netus2_Test.Integration
             Assert.IsNotEmpty(logMarks);
             Assert.AreEqual(preTestLogCount + 1, logMarks.Count);
 
-            Assert_LogTable((int)logMarks[preTestLogCount].mark_id, 2, "log_mark", new DataTableFactory().Dt_Netus2_Log_Mark, connection);
+            Assert_LogTable((int)logMarks[preTestLogCount].mark_id, 2, "log_mark", DataTableFactory.Dt_Netus2_Log_Mark, connection);
             Assert.AreEqual(Enum_Log_Action.values["delete"], logMarks[preTestLogCount].LogAction);
 
             Assert.AreEqual(student.Id, logMarks[preTestLogCount].person_id);
@@ -940,7 +940,7 @@ namespace Netus2_Test.Integration
             Assert.IsNotEmpty(logJctEnrollmentAcademicSessions);
             Assert.AreEqual(preTestLogCount + 1, logJctEnrollmentAcademicSessions.Count);
 
-            Assert_LogTable((int)logJctEnrollmentAcademicSessions[preTestLogCount].log_jct_enrollment_academic_session_id, 1, "log_jct_enrollment_academic_session", new DataTableFactory().Dt_Netus2_Log_JctEnrollmentAcademicSession, connection);
+            Assert_LogTable((int)logJctEnrollmentAcademicSessions[preTestLogCount].log_jct_enrollment_academic_session_id, 1, "log_jct_enrollment_academic_session", DataTableFactory.Dt_Netus2_Log_JctEnrollmentAcademicSession, connection);
             Assert.AreEqual(Enum_Log_Action.values["delete"], logJctEnrollmentAcademicSessions[preTestLogCount].LogAction);
 
             Assert.AreEqual(enrollment.Id, logJctEnrollmentAcademicSessions[preTestLogCount].enrollment_id);
