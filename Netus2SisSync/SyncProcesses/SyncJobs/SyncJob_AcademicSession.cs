@@ -37,8 +37,11 @@ namespace Netus2SisSync.SyncProcesses.SyncJobs
             try
             {
                 SyncLogger.LogStatus(this, Enum_Sync_Status.values["sisread_start"]);
+                
                 _dtAcademicSession = DataTableFactory.Dt_Sis_AcademicSession;
                 _dtAcademicSession = sisConnection.ReadIntoDataTable(SyncScripts.ReadSiS_AcademicSession_SQL, _dtAcademicSession);
+
+                SyncLogger.LogStatus(this, Enum_Sync_Status.values["sisread_end"]);
             }
             catch (Exception e)
             {
@@ -47,7 +50,6 @@ namespace Netus2SisSync.SyncProcesses.SyncJobs
             }
             finally
             {
-                SyncLogger.LogStatus(this, Enum_Sync_Status.values["sisread_end"]);
                 sisConnection.CloseConnection();
             }
         }

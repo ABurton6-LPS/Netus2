@@ -20,7 +20,7 @@ namespace Netus2SisSync.UtilityTools
                 sql.Append("[name], [timestamp]");
                 sql.Append(") VALUES (");
                 sql.Append("'" + job.Name + "', ");
-                sql.Append("'" + DateTime.Now + "')");
+                sql.Append("dbo.CURRENT_DATETIME())");
 
                 job.Id = connection.InsertNewRecord(sql.ToString());
 
@@ -46,7 +46,7 @@ namespace Netus2SisSync.UtilityTools
                 sql.Append(") VALUES (");
                 sql.Append(task.Job.Id + ", ");
                 sql.Append("'" + task.Name + "', ");
-                sql.Append("'" + DateTime.Now + "')");
+                sql.Append("dbo.CURRENT_DATETIME())");
 
                 task.Id = connection.InsertNewRecord(sql.ToString());
 
@@ -72,7 +72,7 @@ namespace Netus2SisSync.UtilityTools
                 sql.Append(") VALUES (");
                 sql.Append(job.Id + ", ");
                 sql.Append(enumStatus.Id + ", ");
-                sql.Append("'" + DateTime.Now + "')");
+                sql.Append("dbo.CURRENT_DATETIME())");
 
                 connection.InsertNewRecord(sql.ToString());
             }
@@ -96,7 +96,7 @@ namespace Netus2SisSync.UtilityTools
                 sql.Append(") VALUES (");
                 sql.Append(task.Id + ", ");
                 sql.Append(enumStatus.Id + ", ");
-                sql.Append("'" + DateTime.Now + "')");
+                sql.Append("dbo.CURRENT_DATETIME())");
 
                 connection.InsertNewRecord(sql.ToString());
             }
@@ -118,16 +118,10 @@ namespace Netus2SisSync.UtilityTools
             try
             {
                 string errorMessage = e.Message;
-                while (e.Message.IndexOf('\'') > 0)
-                {
-                    errorMessage = e.Message.Insert(e.Message.IndexOf('\''), "\'");
-                }
+                errorMessage = e.Message.Replace("'", "''");
 
                 string errorStackTrace = e.StackTrace;
-                while (e.StackTrace.IndexOf('\'') > 0)
-                {
-                    errorStackTrace = e.StackTrace.Insert(e.StackTrace.IndexOf('\''), "\'");
-                }
+                errorStackTrace = e.StackTrace.Replace("'", "''");
 
                 StringBuilder sql = new StringBuilder("INSERT INTO sync_error(");
                 sql.Append("sync_job_id, [message], stack_trace, [timestamp]");
@@ -135,7 +129,7 @@ namespace Netus2SisSync.UtilityTools
                 sql.Append(job.Id + ", ");
                 sql.Append("'" + errorMessage + "', ");
                 sql.Append("'" + errorStackTrace + "', ");
-                sql.Append("'" + DateTime.Now + "')");
+                sql.Append("dbo.CURRENT_DATETIME())");
 
                 connection.InsertNewRecord(sql.ToString());
             }
@@ -182,7 +176,7 @@ namespace Netus2SisSync.UtilityTools
                 sql.Append(task.Id + ", ");
                 sql.Append("'" + errorMessage + "', ");
                 sql.Append("'" + errorStackTrace + "', ");
-                sql.Append("'" + DateTime.Now + "')");
+                sql.Append("dbo.CURRENT_DATETIME())");
 
                 connection.InsertNewRecord(sql.ToString());
             }
