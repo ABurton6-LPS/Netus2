@@ -78,9 +78,9 @@ namespace Netus2_DatabaseConnection.utilityTools
         {
             IConnectable connection = DbConnectionFactory.GetNetus2Connection();
 
-            string sql = "SELECT * FROM config WEHRE 1=1 " +
+            string sql = "SELECT * FROM config WHERE 1=1 " +
                 "AND enum_config_id = " + enumConfig.Id + " " +
-                "AND is_for_students_id = " + enumIsForStudents.Id + " " +
+                "AND is_for_student_id = " + enumIsForStudents.Id + " " +
                 "AND is_for_staff_id = " + enumIsForStaff.Id;
 
             DataTable dtConfig = DataTableFactory.Dt_Netus2_Config;

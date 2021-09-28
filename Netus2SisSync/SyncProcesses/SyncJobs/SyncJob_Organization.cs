@@ -42,8 +42,11 @@ namespace Netus2SisSync.SyncProcesses.SyncJobs
             try
             {
                 SyncLogger.LogStatus(this, Enum_Sync_Status.values["sisread_start"]);
+
                 _dtOrganization = DataTableFactory.Dt_Sis_Organization;
                 _dtOrganization = sisConnection.ReadIntoDataTable(SyncScripts.ReadSis_Organization_SQL, _dtOrganization);
+
+                SyncLogger.LogStatus(this, Enum_Sync_Status.values["sisread_end"]);
             }
             catch (Exception e)
             {
@@ -52,7 +55,6 @@ namespace Netus2SisSync.SyncProcesses.SyncJobs
             }
             finally
             {
-                SyncLogger.LogStatus(this, Enum_Sync_Status.values["sisread_end"]);
                 sisConnection.CloseConnection();
             }
         }

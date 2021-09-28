@@ -13,7 +13,7 @@ namespace Netus2_Test.Integration
         [Test]
         public void Test_0_OpenConnection()
         {
-            connection = DbConnectionFactory.GetLocalConnection();
+            connection = DbConnectionFactory.GetNetus2Connection();
             connection.BeginTransaction();
         }
 

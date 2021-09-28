@@ -5,72 +5,66 @@ namespace Netus2_DatabaseConnection.dbAccess
 {
     public static class DbConnectionFactory
     {
-        public static bool ShouldUseLocalDb = false;
         public static bool ShouldUseMockDb = false;
-
         public static MockDatabaseConnection _mockDbConnection = null;
         
-        public static IConnectable GetLocalConnection()
-        {
-            if (ShouldUseMockDb)
-            {
-                if(_mockDbConnection == null)
-                    return new MockDatabaseConnection();
-                return _mockDbConnection;
-            }
-            else
-            {
-                return new AsyncDatabaseConnection(GetLocalDatabaseConnectionString());
-            }
-        }
-
         public static IConnectable GetSisConnection()
         {
             if (ShouldUseMockDb)
-            {
-                if (_mockDbConnection == null)
-                    _mockDbConnection =  new MockDatabaseConnection();
-                return _mockDbConnection;
-            }
+                return GetMockConnection();
             else
-            {
-                return new AsyncDatabaseConnection(
-                        UtilityTools.ReadConfig(
-                            Enum_Config.values["sis_Db_String"], 
-                            Enum_True_False.values["true"], 
-                            Enum_True_False.values["false"])
-                        .ConfigValue);
-            }
+                return new AsyncDatabaseConnection(GetSisConnectionString());
         }
 
         public static IConnectable GetNetus2Connection()
         {
-            if (ShouldUseLocalDb || ShouldUseMockDb)
+            if (ShouldUseMockDb)
+                return GetMockConnection();
+
+            switch (System.Environment.GetEnvironmentVariable("CURRENT_ENVIRONMENT"))
             {
-                return GetLocalConnection();
-            }
-            else
-            {
-                return new AsyncDatabaseConnection(GetNetus2ConnectionString());
+                case "local":
+                    return new AsyncDatabaseConnection(GetDatabaseConnectionString_Netus2_Local());
+                case "tst":
+                    return new AsyncDatabaseConnection(GetDatabaseConnectionString_Netus2_Tst());
+                default:
+                    return GetMockConnection();
             }
         }
 
-        private static string GetNetus2ConnectionString()
+        private static IConnectable GetMockConnection()
         {
-            string connectionString = System.Environment.GetEnvironmentVariable("Netus2DbConnectionString_Cloud", System.EnvironmentVariableTarget.User);
+            if (_mockDbConnection == null)
+                _mockDbConnection =  new MockDatabaseConnection();
+
+            return _mockDbConnection;
+        }
+
+        private static string GetSisConnectionString()
+        {
+            return UtilityTools.ReadConfig(
+                            Enum_Config.values["sis_db_string"],
+                            Enum_True_False.values["true"],
+                            Enum_True_False.values["false"])
+                        .ConfigValue;
+        }
+
+        private static string GetDatabaseConnectionString_Netus2_Tst()
+        {
+            string connectionString = System.Environment.GetEnvironmentVariable("Netus2DbConnectionString_Tst");
 
             if (connectionString == null)
-                throw new System.Exception("The Netus2DbConnectionString_Cloud Environment Variable is not set at the User level.");
+                throw new System.Exception("The Netus2DbConnectionString_Test Environment Variable is not set.");
 
             return connectionString;
         }
 
-        private static string GetLocalDatabaseConnectionString()
+        private static string GetDatabaseConnectionString_Netus2_Local()
         {
-            string connectionString = System.Environment.GetEnvironmentVariable("Netus2DbConnectionString_Local", System.EnvironmentVariableTarget.User);
+            string connectionString = System.Environment.GetEnvironmentVariable("Netus2DbConnectionString_Local");
 
             if (connectionString == null)
-                throw new System.Exception("The Netus2DbConnectionString_Local Environment Variable is not set at the User level.");
+                throw new System.Exception("The Netus2DbConnectionString_Local Environment Variable is not set.");
 
             return connectionString;
         }

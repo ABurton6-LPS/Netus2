@@ -14,7 +14,7 @@ namespace Netus2_Test.Integration
         [SetUp]
         public void Setup()
         {
-            connection = DbConnectionFactory.GetLocalConnection();
+            connection = DbConnectionFactory.GetNetus2Connection();
             connection.BeginTransaction();
         }
 
