@@ -478,6 +478,12 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
             Assert.IsTrue(mockPersonDaoImpl.WasCalled_ReadUsingPersonId);
         }
 
+        [TearDown]
+        public void TearDown()
+        {
+            _netus2DbConnection.mockReader = new Mock<IDataReader>();
+        }
+
         private void SetMockReaderWithTestData(List<DataRow> tstDataSet)
         {
             int count = -1;

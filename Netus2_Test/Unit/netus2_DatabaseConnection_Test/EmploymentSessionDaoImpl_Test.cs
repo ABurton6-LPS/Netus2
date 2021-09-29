@@ -243,6 +243,12 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
             Assert.IsTrue(mockOrganizationDaoImpl.WasCalled_ReadWithOrganizationId);
         }
 
+        [TearDown]
+        public void TearDown()
+        {
+            _netus2DbConnection.mockReader = new Mock<IDataReader>();
+        }
+
         private void SetMockReaderWithTestData(List<DataRow> tstDataSet)
         {
             int count = -1;

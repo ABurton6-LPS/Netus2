@@ -195,7 +195,9 @@ namespace Netus2_DatabaseConnection.dbAccess
         private DataTable GetTaskDataTableFromReader(IDataReader reader, DataTable dt)
         {
             DataTable cloanedDataTable = dt.Clone();
-            cloanedDataTable.Load(reader);
+            cloanedDataTable.Clear();
+            if(reader != null)
+                cloanedDataTable.Load(reader);
             return cloanedDataTable;
         }
 

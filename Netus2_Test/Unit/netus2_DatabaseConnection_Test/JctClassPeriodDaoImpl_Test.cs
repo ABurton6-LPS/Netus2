@@ -1,5 +1,4 @@
-﻿using Netus2_DatabaseConnection;
-using Netus2_DatabaseConnection.daoImplementations;
+﻿using Netus2_DatabaseConnection.daoImplementations;
 using Netus2_DatabaseConnection.dbAccess;
 using NUnit.Framework;
 

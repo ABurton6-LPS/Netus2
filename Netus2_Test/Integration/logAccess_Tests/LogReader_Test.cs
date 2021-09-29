@@ -6,6 +6,7 @@ using Netus2_DatabaseConnection.dbAccess;
 using Netus2_DatabaseConnection.enumerations;
 using Netus2_DatabaseConnection.logObjects;
 using Netus2_DatabaseConnection.utilityTools;
+using Netus2_Test.utiltiyTools;
 using NUnit.Framework;
 using System.Collections.Generic;
 using static Netus2_Test.Integration.LogTestValidator;
@@ -33,6 +34,12 @@ namespace Netus2_Test.Integration
         [SetUp]
         public void Setup()
         {
+            MockEnvironment mockEnvironment = new MockEnvironment();
+            mockEnvironment.SetVariable("CURRENT_ENVIRONMENT", "local");
+            mockEnvironment.SetVariable("Netus2DbConnectionString_Local", "Data Source=ITDSL0995104653;Initial Catalog=Netus2;Integrated Security=SSPI;MultipleActiveResultSets=True");
+
+            DbConnectionFactory.environment = mockEnvironment;
+
             connection = DbConnectionFactory.GetNetus2Connection();
             connection.BeginTransaction();
             testDataBuilder = new TestDataBuilder(connection);

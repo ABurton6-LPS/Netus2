@@ -2,10 +2,8 @@
 using Netus2_DatabaseConnection.dbAccess;
 using Netus2_DatabaseConnection.enumerations;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Data;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Netus2_DatabaseConnection.utilityTools
 {
@@ -13,7 +11,7 @@ namespace Netus2_DatabaseConnection.utilityTools
     {
         static void Main(string[] args)
         {
-            // Do Nothing
+            // Do Nothing, this needs to be here because without it, Visual Studio refuses to run the test cases for some reason.
         }
 
         public static Dictionary<string, Enumeration> PopulateEnumValues(string tableName)

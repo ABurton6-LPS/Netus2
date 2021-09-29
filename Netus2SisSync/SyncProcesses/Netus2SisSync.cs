@@ -1,6 +1,5 @@
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
-using Netus2_DatabaseConnection.dbAccess;
 using Netus2SisSync.SyncProcesses.SyncJobs;
 using System;
 
