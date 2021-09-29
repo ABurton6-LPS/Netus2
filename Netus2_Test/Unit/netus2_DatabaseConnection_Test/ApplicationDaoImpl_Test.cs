@@ -40,7 +40,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "DELETE FROM app " +
                 "WHERE 1=1 " +
                 "AND app_id = " + tdBuilder.application.Id + " " +
-                "AND name LIKE '" + tdBuilder.application.Name + "' " +
+                "AND name = '" + tdBuilder.application.Name + "' " +
                 "AND provider_id = " + tdBuilder.application.Provider.Id + " ";
 
             applicationDaoImpl.Delete(tdBuilder.application, _netus2DbConnection);
@@ -98,7 +98,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
             _netus2DbConnection.expectedReaderSql =
                 "SELECT * FROM app " +
                 "WHERE 1=1 " +
-                "AND name LIKE '" + tdBuilder.application.Name + "' " +
+                "AND name = '" + tdBuilder.application.Name + "' " +
                 "AND provider_id = " + tdBuilder.provider.Id + " ";
 
             applicationDaoImpl.Read(tdBuilder.application, _netus2DbConnection);

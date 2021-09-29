@@ -202,15 +202,9 @@ namespace Netus2_Test.Unit.SyncProcess
             Assert.IsTrue(mockPersonDaoImpl.WasCalled_Update);
         }
 
-        [TearDown]
-        public void TearDown()
-        {
-            DataTableFactory.Dt_Sis_Person = DataTableFactory.CreateDataTable_Sis_Person();
-        }
-
         private DataTable BuildTestDataTable(List<SisPersonTestData> tstDataSet)
         {
-            DataTable dtPerson = DataTableFactory.Dt_Sis_Person;
+            DataTable dtPerson = DataTableFactory.CreateDataTable_Sis_Person();
             foreach(SisPersonTestData tstData in tstDataSet)
             {
                 DataRow row = dtPerson.NewRow();

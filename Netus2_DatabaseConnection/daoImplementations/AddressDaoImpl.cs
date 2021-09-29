@@ -73,21 +73,21 @@ namespace Netus2_DatabaseConnection.daoImplementations
             else
             {
                 if (row["address_line_1"] != DBNull.Value)
-                    sql.Append("AND address_line_1 LIKE '" + row["address_line_1"] + "' ");
+                    sql.Append("AND address_line_1 = '" + row["address_line_1"] + "' ");
                 if (row["address_line_2"] != DBNull.Value)
-                    sql.Append("AND address_line_2 LIKE '" + row["address_line_2"] + "' ");
+                    sql.Append("AND address_line_2 = '" + row["address_line_2"] + "' ");
                 if (row["address_line_3"] != DBNull.Value)
-                    sql.Append("AND address_line_3 LIKE '" + row["address_line_3"] + "' ");
+                    sql.Append("AND address_line_3 = '" + row["address_line_3"] + "' ");
                 if (row["address_line_4"] != DBNull.Value)
-                    sql.Append("AND address_line_4 LIKE '" + row["address_line_4"] + "' ");
+                    sql.Append("AND address_line_4 = '" + row["address_line_4"] + "' ");
                 if (row["apartment"] != DBNull.Value)
-                    sql.Append("AND apartment LIKE '" + row["apartment"] + "'");
+                    sql.Append("AND apartment = '" + row["apartment"] + "'");
                 if (row["city"] != DBNull.Value)
-                    sql.Append("AND city LIKE '" + row["city"] + "'");
+                    sql.Append("AND city = '" + row["city"] + "'");
                 if (row["enum_state_province_id"] != DBNull.Value)
                     sql.Append("AND enum_state_province_id = " + row["enum_state_province_id"] + " ");
                 if (row["postal_code"] != DBNull.Value)
-                    sql.Append("AND postal_code LIKE '" + row["postal_code"] + "'");
+                    sql.Append("AND postal_code = '" + row["postal_code"] + "'");
                 if (row["enum_country_id"] != DBNull.Value)
                     sql.Append("AND enum_country_id = " + row["enum_country_id"] + " ");
                 if (row["is_current_id"] != DBNull.Value)
@@ -113,7 +113,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private List<Address> Read(string sql, IConnectable connection)
         {
-            DataTable dtAddress = DataTableFactory.Dt_Netus2_Address;
+            DataTable dtAddress = DataTableFactory.CreateDataTable_Netus2_Address();
             dtAddress = connection.ReadIntoDataTable(sql, dtAddress);
 
             List<Address> results = new List<Address>();

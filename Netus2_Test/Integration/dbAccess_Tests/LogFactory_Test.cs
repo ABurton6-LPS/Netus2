@@ -15,11 +15,7 @@ namespace Netus2_Test.Integration
         [SetUp]
         public void Setup()
         {
-            MockEnvironment mockEnvironment = new MockEnvironment();
-            mockEnvironment.SetVariable("CURRENT_ENVIRONMENT", "local");
-            mockEnvironment.SetVariable("Netus2DbConnectionString_Local", "Data Source=ITDSL0995104653;Initial Catalog=Netus2;Integrated Security=SSPI;MultipleActiveResultSets=True");
-
-            DbConnectionFactory.environment = mockEnvironment;
+            DbConnectionFactory.environment = new MockEnvironment();
 
             connection = DbConnectionFactory.GetNetus2Connection();
             connection.BeginTransaction();
@@ -112,7 +108,7 @@ namespace Netus2_Test.Integration
         private List<String> GetColumnsInTable(string tableName)
         {
             List<String> foundColumns = new List<String>();
-            string sql = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = N'" + tableName + "' AND COLUMN_NAME NOT LIKE 'populated_by'";
+            string sql = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = N'" + tableName + "' AND COLUMN_NAME NOT = 'populated_by'";
 
             DataTable schemaResultTable = new DataTable();
 

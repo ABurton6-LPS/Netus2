@@ -35,7 +35,7 @@ namespace Netus2_Test.Integration
             mockEnvironment.SetVariable("CURRENT_ENVIRONMENT", "local");
             mockEnvironment.SetVariable("Netus2DbConnectionString_Local", "Data Source=ITDSL0995104653;Initial Catalog=Netus2;Integrated Security=SSPI;MultipleActiveResultSets=True");
 
-            DbConnectionFactory.environment = mockEnvironment;
+            DbConnectionFactory.environment = new MockEnvironment();
 
             connection = DbConnectionFactory.GetNetus2Connection();
             connection.BeginTransaction();

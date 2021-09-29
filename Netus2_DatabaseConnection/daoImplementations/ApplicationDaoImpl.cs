@@ -78,7 +78,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
             else
             {
                 if (row["name"] != DBNull.Value)
-                    sql.Append("AND name LIKE '" + row["name"] + "' ");
+                    sql.Append("AND name = '" + row["name"] + "' ");
                 if (row["provider_id"] != DBNull.Value)
                     sql.Append("AND provider_id = " + row["provider_id"] + " ");
             }
@@ -88,7 +88,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private List<Application> Read(string sql, IConnectable connection)
         {
-            DataTable dtApplication = DataTableFactory.Dt_Netus2_Application;
+            DataTable dtApplication = DataTableFactory.CreateDataTable_Netus2_Application();
             dtApplication = connection.ReadIntoDataTable(sql, dtApplication);
 
             List<Application> results = new List<Application>();

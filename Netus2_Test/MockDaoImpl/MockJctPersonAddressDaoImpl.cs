@@ -30,7 +30,7 @@ namespace Netus2_Test.MockDaoImpl
         {
             WasCalled_Read = true;
 
-            DataRow row = DataTableFactory.Dt_Netus2_JctPersonAddress.NewRow();
+            DataRow row = DataTableFactory.CreateDataTable_Netus2_JctPersonAddress().NewRow();
             row["person_id"] = tdBuilder.student.Id;
             row["address_id"] = tdBuilder.student.Addresses[0].Id;
 
@@ -45,7 +45,7 @@ namespace Netus2_Test.MockDaoImpl
             WasCalled_ReadWithAddressId = true;
 
             List<DataRow> list = new List<DataRow>();
-            DataRow row = DataTableFactory.Dt_Netus2_JctPersonAddress.NewRow();
+            DataRow row = DataTableFactory.CreateDataTable_Netus2_JctPersonAddress().NewRow();
             row["person_id"] = tdBuilder.student.Id;
             row["address_id"] = addressId;
 
@@ -60,7 +60,7 @@ namespace Netus2_Test.MockDaoImpl
             WasCalled_ReadWithPersonId = true;
 
             List<DataRow> list = new List<DataRow>();
-            DataRow row = DataTableFactory.Dt_Netus2_JctPersonAddress.NewRow();
+            DataRow row = DataTableFactory.CreateDataTable_Netus2_JctPersonAddress().NewRow();
             row["person_id"] = personId;
             row["address_id"] = tdBuilder.student.Addresses[0].Id;
 
@@ -74,7 +74,7 @@ namespace Netus2_Test.MockDaoImpl
         {
             WasCalled_Write = true;
 
-            DataRow row = DataTableFactory.Dt_Netus2_JctPersonAddress.NewRow();
+            DataRow row = DataTableFactory.CreateDataTable_Netus2_JctPersonAddress().NewRow();
             row["person_id"] = personId;
             row["address_id"] = addressId;
 

@@ -185,11 +185,11 @@ namespace Netus2_DatabaseConnection.daoImplementations
             else
             {
                 if (row["first_name"] != DBNull.Value)
-                    sql.Append("AND first_name LIKE '" + row["first_name"] + "' ");
+                    sql.Append("AND first_name = '" + row["first_name"] + "' ");
                 if (row["middle_name"] != DBNull.Value)
-                    sql.Append("AND middle_name LIKE '" + row["middle_name"] + "' ");
+                    sql.Append("AND middle_name = '" + row["middle_name"] + "' ");
                 if (row["last_name"] != DBNull.Value)
-                    sql.Append("AND last_name LIKE '" + row["last_name"] + "' ");
+                    sql.Append("AND last_name = '" + row["last_name"] + "' ");
                 if (row["birth_date"] != DBNull.Value)
                     sql.Append("AND datediff(day, birth_date, '" + row["birth_date"].ToString() + "') = 0 ");
                 if (row["enum_gender_id"] != DBNull.Value)
@@ -199,9 +199,9 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 if (row["enum_residence_status_id"] != DBNull.Value)
                     sql.Append("AND enum_residence_status_id = " + row["enum_residence_status_id"] + " ");
                 if (row["login_name"] != DBNull.Value)
-                    sql.Append("AND login_name LIKE '" + row["login_name"] + "' ");
+                    sql.Append("AND login_name = '" + row["login_name"] + "' ");
                 if (row["login_pw"] != DBNull.Value)
-                    sql.Append("AND login_pw LIKE '" + row["login_pw"] + "' ");
+                    sql.Append("AND login_pw = '" + row["login_pw"] + "' ");
             }
 
 
@@ -210,7 +210,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private List<Person> Read(string sql, IConnectable connection)
         {
-            DataTable dtPerson = DataTableFactory.Dt_Netus2_Person;
+            DataTable dtPerson = DataTableFactory.CreateDataTable_Netus2_Person();
             dtPerson = connection.ReadIntoDataTable(sql, dtPerson);
 
             List<Person> results = new List<Person>();

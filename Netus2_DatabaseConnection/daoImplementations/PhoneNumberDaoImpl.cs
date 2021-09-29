@@ -66,7 +66,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
                     if (row["person_id"] != DBNull.Value)
                         sql.Append("AND person_id = " + row["person_id"] + " ");
                     if (row["phone_number"] != DBNull.Value)
-                        sql.Append("AND phone_number LIKE '" + row["phone_number"] + "' ");
+                        sql.Append("AND phone_number = '" + row["phone_number"] + "' ");
                     if (row["is_primary_id"] != DBNull.Value)
                         sql.Append("AND is_primary_id = " + row["is_primary_id"] + " ");
                     if (row["enum_phone_id"] != DBNull.Value)
@@ -79,7 +79,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private List<PhoneNumber> Read(string sql, IConnectable connection)
         {
-            DataTable dtPhoneNumber = DataTableFactory.Dt_Netus2_PhoneNumber;
+            DataTable dtPhoneNumber = DataTableFactory.CreateDataTable_Netus2_PhoneNumber();
             dtPhoneNumber = connection.ReadIntoDataTable(sql, dtPhoneNumber);
 
             List<PhoneNumber> results = new List<PhoneNumber>();

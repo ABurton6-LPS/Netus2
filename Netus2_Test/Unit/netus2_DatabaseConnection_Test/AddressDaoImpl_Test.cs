@@ -39,12 +39,12 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "DELETE FROM address " +
                 "WHERE 1=1 " +
                 "AND address_id = " + tdBuilder.address_Teacher.Id + " " +
-                "AND address_line_1 LIKE '" + tdBuilder.address_Teacher.Line1 + "' " +
+                "AND address_line_1 = '" + tdBuilder.address_Teacher.Line1 + "' " +
                 "AND address_line_2 IS NULL " +
                 "AND address_line_3 IS NULL " +
                 "AND address_line_4 IS NULL " +
                 "AND apartment IS NULL " +
-                "AND city LIKE '" + tdBuilder.address_Teacher.City + "'" +
+                "AND city = '" + tdBuilder.address_Teacher.City + "'" +
                 "AND enum_state_province_id = " + tdBuilder.address_Teacher.StateProvince.Id + " " +
                 "AND postal_code IS NULL " +
                 "AND enum_country_id = " + tdBuilder.address_Teacher.Country.Id + " " +
@@ -75,8 +75,8 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
             _netus2DbConnection.expectedReaderSql =
                 "SELECT * FROM address " +
                 "WHERE 1=1 " +
-                "AND address_line_1 LIKE '" + tdBuilder.address_Teacher.Line1 + "' " +
-                "AND city LIKE '" + tdBuilder.address_Teacher.City + "'" +
+                "AND address_line_1 = '" + tdBuilder.address_Teacher.Line1 + "' " +
+                "AND city = '" + tdBuilder.address_Teacher.City + "'" +
                 "AND enum_state_province_id = " + tdBuilder.address_Teacher.StateProvince.Id + " " +
                 "AND enum_country_id = " + tdBuilder.address_Teacher.Country.Id + " " +
                 "AND is_current_id = " + tdBuilder.address_Teacher.IsCurrent.Id + " " +

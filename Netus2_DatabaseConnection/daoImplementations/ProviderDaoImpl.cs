@@ -115,13 +115,13 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 else
                 {
                     if (row["name"] != DBNull.Value)
-                        sql.Append("AND name LIKE '" + row["name"] + "' ");
+                        sql.Append("AND name = '" + row["name"] + "' ");
                     if (row["url_standard_access"] != DBNull.Value)
-                        sql.Append("AND url_standard_access LIKE '" + row["url_standard_access"] + "' ");
+                        sql.Append("AND url_standard_access = '" + row["url_standard_access"] + "' ");
                     if (row["url_admin_access"] != DBNull.Value)
-                        sql.Append("AND url_admin_access LIKE '" + row["url_admin_access"] + "' ");
+                        sql.Append("AND url_admin_access = '" + row["url_admin_access"] + "' ");
                     if (row["populated_by"] != DBNull.Value)
-                        sql.Append("AND populated_by LIKE '" + row["populated_by"] + "' ");
+                        sql.Append("AND populated_by = '" + row["populated_by"] + "' ");
                     if (row["parent_provider_id"] != DBNull.Value)
                         sql.Append("AND parent_provider_id = " + row["parent_provider_id"]);
                 }
@@ -132,7 +132,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private List<Provider> Read(string sql, IConnectable connection)
         {
-            DataTable dtProvider = DataTableFactory.Dt_Netus2_Provider;
+            DataTable dtProvider = DataTableFactory.CreateDataTable_Netus2_Provider();
             dtProvider = connection.ReadIntoDataTable(sql, dtProvider);
 
             List<Provider> results = new List<Provider>();

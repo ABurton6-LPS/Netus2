@@ -56,25 +56,32 @@ namespace Netus2_DatabaseConnection.dbAccess
                 throw new Exception("SQL must begin with 'SELECT'.");
             }
 
-            if (transaction != null)
+            try
             {
-                using (var command = new SqlCommand(sql, connection, transaction))
+                if (transaction != null)
                 {
-                    using (var reader = command.ExecuteReaderAsync().Result)
+                    using (var command = new SqlCommand(sql, connection, transaction))
                     {
-                        emptyDataTable.Load(reader);
+                        using (var reader = command.ExecuteReaderAsync().Result)
+                        {
+                            emptyDataTable.Load(reader);
+                        }
+                    }
+                }
+                else
+                {
+                    using (var command = new SqlCommand(sql, connection))
+                    {
+                        using (var reader = command.ExecuteReaderAsync().Result)
+                        {
+                            emptyDataTable.Load(reader);
+                        }
                     }
                 }
             }
-            else
+            catch (Exception e)
             {
-                using (var command = new SqlCommand(sql, connection))
-                {
-                    using (var reader = command.ExecuteReaderAsync().Result)
-                    {
-                        emptyDataTable.Load(reader);
-                    }
-                }
+                throw new Exception(e.Message + "\nSQL when error occured:\n" + sql, e);
             }
 
             return emptyDataTable;
@@ -90,19 +97,26 @@ namespace Netus2_DatabaseConnection.dbAccess
 
             int returnValue = 0;
 
-            if (transaction != null)
+            try
             {
-                using (var command = new SqlCommand(sql, connection, transaction))
+                if (transaction != null)
                 {
-                    returnValue = command.ExecuteNonQueryAsync().Result;
+                    using (var command = new SqlCommand(sql, connection, transaction))
+                    {
+                        returnValue = command.ExecuteNonQueryAsync().Result;
+                    }
+                }
+                else
+                {
+                    using (var command = new SqlCommand(sql, connection))
+                    {
+                        returnValue = command.ExecuteNonQueryAsync().Result;
+                    }
                 }
             }
-            else
+            catch (Exception e)
             {
-                using (var command = new SqlCommand(sql, connection))
-                {
-                    returnValue = command.ExecuteNonQueryAsync().Result;
-                }
+                throw new Exception(e.Message + "\nSQL when error occured:\n" + sql, e);
             }
 
             if (returnValue == 0)
@@ -133,7 +147,7 @@ namespace Netus2_DatabaseConnection.dbAccess
             IDataReader reader = null;
             try
             {
-                if(transaction != null)
+                if (transaction != null)
                     reader = new SqlCommand(sql, connection, transaction).ExecuteReader();
                 else
                     reader = new SqlCommand(sql, connection).ExecuteReader();

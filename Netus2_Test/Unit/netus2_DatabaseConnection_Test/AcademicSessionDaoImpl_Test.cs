@@ -44,9 +44,9 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "DELETE FROM academic_session " +
                 "WHERE 1=1 " +
                 "AND academic_session_id = " + tdBuilder.schoolYear.Id + " " +
-                "AND term_code LIKE '" + tdBuilder.schoolYear.TermCode + "' " +
+                "AND term_code = '" + tdBuilder.schoolYear.TermCode + "' " +
                 "AND school_year = " + tdBuilder.schoolYear.SchoolYear + " " +
-                "AND name LIKE '" + tdBuilder.schoolYear.Name + "' " +
+                "AND name = '" + tdBuilder.schoolYear.Name + "' " +
                 "AND start_date = '" + tdBuilder.schoolYear.StartDate + "' " +
                 "AND end_date = '" + tdBuilder.schoolYear.EndDate + "' " +
                 "AND enum_session_id = " + tdBuilder.schoolYear.SessionType.Id + " " +
@@ -148,7 +148,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "AND term_code = '" + tdBuilder.schoolYear.TermCode + "' " +
                 "AND school_year = " + tdBuilder.schoolYear.SchoolYear + " " +
                 "AND organization_id in (" +
-                "SELECT organization_id FROM organization WHERE sis_building_code LIKE '" +
+                "SELECT organization_id FROM organization WHERE sis_building_code = '" +
                 tdBuilder.school.SisBuildingCode + "')";
 
             academicSessionDaoImpl.Read_UsingSisBuildingCode_TermCode_Schoolyear(

@@ -50,7 +50,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private List<DataRow> Read(string sql, IConnectable connection)
         {
-            DataTable dtJctEnrollmentAcademicSession = DataTableFactory.Dt_Netus2_JctEnrollmentAcademicSession;
+            DataTable dtJctEnrollmentAcademicSession = DataTableFactory.CreateDataTable_Netus2_JctEnrollmentAcademicSession();
             dtJctEnrollmentAcademicSession = connection.ReadIntoDataTable(sql, dtJctEnrollmentAcademicSession);
 
             List<DataRow> jctEnrollmentAcademicSessionDaos = new List<DataRow>();
@@ -70,7 +70,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
             connection.ExecuteNonQuery(sql.ToString());
 
-            DataRow jctEnrollmentAcademicSessionDao = DataTableFactory.Dt_Netus2_JctEnrollmentAcademicSession.NewRow();
+            DataRow jctEnrollmentAcademicSessionDao = DataTableFactory.CreateDataTable_Netus2_JctEnrollmentAcademicSession().NewRow();
             jctEnrollmentAcademicSessionDao["enrollment_id"] = enrollmentId;
             jctEnrollmentAcademicSessionDao["academic_session_id"] = academicSessionId;
 

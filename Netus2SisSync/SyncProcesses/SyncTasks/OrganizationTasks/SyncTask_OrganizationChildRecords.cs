@@ -22,7 +22,7 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.OrganizationTasks
 
         public override void Execute(DataRow row, CountDownLatch latch)
         {
-            IConnectable netus2Connection = DbConnectionFactory.GetNetus2Connection();
+            IConnectable netus2Connection = null;
             try
             {
                 string sisName = row["name"].ToString() == "" ? null : row["name"].ToString();
@@ -34,27 +34,25 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.OrganizationTasks
 
                 IOrganizationDao orgDaoImpl = DaoImplFactory.GetOrganizationDaoImpl();
                 orgDaoImpl.SetTaskId(this.Id);
-                List<Organization> foundOrgs = orgDaoImpl.Read(org, netus2Connection);
 
-                if (foundOrgs.Count == 0)
+                netus2Connection = DbConnectionFactory.GetNetus2Connection();
+                Organization foundOrg = orgDaoImpl.Read_WithSisBuildingCode(sisBuildingCode, netus2Connection);
+
+                if (foundOrg == null)
                 {
                     org = orgDaoImpl.Write(org, netus2Connection);
                 }
-                else if (foundOrgs.Count == 1)
+                else
                 {
-                    org.Id = foundOrgs[0].Id;
+                    org.Id = foundOrg.Id;
 
-                    if ((org.Name != foundOrgs[0].Name) ||
-                        (org.OrganizationType != foundOrgs[0].OrganizationType) ||
-                        (org.Identifier != foundOrgs[0].Identifier) ||
-                        (org.SisBuildingCode != foundOrgs[0].SisBuildingCode))
+                    if ((org.Name != foundOrg.Name) ||
+                        (org.OrganizationType != foundOrg.OrganizationType) ||
+                        (org.Identifier != foundOrg.Identifier) ||
+                        (org.SisBuildingCode != foundOrg.SisBuildingCode))
                     {
                         orgDaoImpl.Update(org, netus2Connection);
                     }
-                }
-                else
-                {
-                    throw new Exception(foundOrgs.Count + " record(s) found matching Organization:\n" + org.ToString());
                 }
             }
             catch (Exception e)

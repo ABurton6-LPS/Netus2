@@ -38,7 +38,7 @@ namespace Netus2SisSync.SyncProcesses.SyncJobs
             {
                 SyncLogger.LogStatus(this, Enum_Sync_Status.values["sisread_start"]);
                 
-                _dtAcademicSession = DataTableFactory.Dt_Sis_AcademicSession;
+                _dtAcademicSession = DataTableFactory.CreateDataTable_Sis_AcademicSession();
                 _dtAcademicSession = sisConnection.ReadIntoDataTable(SyncScripts.ReadSiS_AcademicSession_SQL, _dtAcademicSession);
 
                 SyncLogger.LogStatus(this, Enum_Sync_Status.values["sisread_end"]);

@@ -41,10 +41,10 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "DELETE FROM provider " +
                 "WHERE 1=1 " +
                 "AND provider_id = " + tdBuilder.provider.Id + " " +
-                "AND name LIKE '" + tdBuilder.provider.Name + "' " +
-                "AND url_standard_access LIKE '" + tdBuilder.provider.UrlStandardAccess + "' " +
-                "AND url_admin_access LIKE '" + tdBuilder.provider.UrlAdminAccess + "' " +
-                "AND populated_by LIKE '" + tdBuilder.provider.PopulatedBy + "' ";
+                "AND name = '" + tdBuilder.provider.Name + "' " +
+                "AND url_standard_access = '" + tdBuilder.provider.UrlStandardAccess + "' " +
+                "AND url_admin_access = '" + tdBuilder.provider.UrlAdminAccess + "' " +
+                "AND populated_by = '" + tdBuilder.provider.PopulatedBy + "' ";
 
             providerDaoImpl.Delete(tdBuilder.provider, _netus2DbConnection);
         }
@@ -141,10 +141,10 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
             _netus2DbConnection.expectedReaderSql =
                 "SELECT * FROM provider " +
                 "WHERE 1=1 " +
-                "AND name LIKE '" + tdBuilder.provider.Name + "' " +
-                "AND url_standard_access LIKE '" + tdBuilder.provider.UrlStandardAccess + "' " +
-                "AND url_admin_access LIKE '" + tdBuilder.provider.UrlAdminAccess + "' " +
-                "AND populated_by LIKE '" + tdBuilder.provider.PopulatedBy + "' " +
+                "AND name = '" + tdBuilder.provider.Name + "' " +
+                "AND url_standard_access = '" + tdBuilder.provider.UrlStandardAccess + "' " +
+                "AND url_admin_access = '" + tdBuilder.provider.UrlAdminAccess + "' " +
+                "AND populated_by = '" + tdBuilder.provider.PopulatedBy + "' " +
                 "AND parent_provider_id = " + tdBuilder.provider_parent.Id;
 
             providerDaoImpl.Read(tdBuilder.provider, tdBuilder.provider_parent.Id, _netus2DbConnection);

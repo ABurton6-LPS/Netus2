@@ -10,6 +10,9 @@ namespace Netus2_Test.utiltiyTools
         public MockEnvironment()
         {
             _mockEnvironment = new Dictionary<string, string>();
+
+            SetVariable("CURRENT_ENVIRONMENT", "local");
+            SetVariable("Netus2DbConnectionString_Local", "Data Source=ITDSL0995104653;Initial Catalog=Netus2;Integrated Security=SSPI;MultipleActiveResultSets=True");
         }
 
         public override string GetVariable(string variableName)

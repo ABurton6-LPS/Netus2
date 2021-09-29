@@ -89,7 +89,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private List<Mark> Read(string sql, IConnectable connection)
         {
-            DataTable dtMark = DataTableFactory.Dt_Netus2_Mark;
+            DataTable dtMark = DataTableFactory.CreateDataTable_Netus2_Mark();
             dtMark = connection.ReadIntoDataTable(sql, dtMark);
 
             List<Mark> results = new List<Mark>();

@@ -79,15 +79,15 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "DELETE FROM person " +
                 "WHERE 1=1 " +
                 "AND person_id = " + tdBuilder.teacher.Id + " " +
-                "AND first_name LIKE '" + tdBuilder.teacher.FirstName + "' " +
-                "AND middle_name LIKE '" + tdBuilder.teacher.MiddleName + "' " +
-                "AND last_name LIKE '" + tdBuilder.teacher.LastName + "' " +
+                "AND first_name = '" + tdBuilder.teacher.FirstName + "' " +
+                "AND middle_name = '" + tdBuilder.teacher.MiddleName + "' " +
+                "AND last_name = '" + tdBuilder.teacher.LastName + "' " +
                 "AND birth_date = '" + tdBuilder.teacher.BirthDate + "' " +
                 "AND enum_gender_id = " + tdBuilder.teacher.Gender.Id + " " +
                 "AND enum_ethnic_id = " + tdBuilder.teacher.Ethnic.Id + " " +
                 "AND enum_residence_status_id IS NULL " +
-                "AND login_name LIKE '" + tdBuilder.teacher.LoginName + "' " +
-                "AND login_pw LIKE '" + tdBuilder.teacher.LoginPw + "' ";
+                "AND login_name = '" + tdBuilder.teacher.LoginName + "' " +
+                "AND login_pw = '" + tdBuilder.teacher.LoginPw + "' ";
 
             personDaoImpl.Delete(tdBuilder.teacher, _netus2DbConnection);
         }
@@ -217,14 +217,14 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
             _netus2DbConnection.expectedReaderSql =
                 "SELECT * FROM person " +
                 "WHERE 1=1 " +
-                "AND first_name LIKE '" + tdBuilder.teacher.FirstName + "' " +
-                "AND middle_name LIKE '" + tdBuilder.teacher.MiddleName + "' " +
-                "AND last_name LIKE '" + tdBuilder.teacher.LastName + "' " +
+                "AND first_name = '" + tdBuilder.teacher.FirstName + "' " +
+                "AND middle_name = '" + tdBuilder.teacher.MiddleName + "' " +
+                "AND last_name = '" + tdBuilder.teacher.LastName + "' " +
                 "AND datediff(day, birth_date, '" + tdBuilder.teacher.BirthDate + "') = 0 " +
                 "AND enum_gender_id = " + tdBuilder.teacher.Gender.Id + " " +
                 "AND enum_ethnic_id = " + tdBuilder.teacher.Ethnic.Id + " " +
-                "AND login_name LIKE '" + tdBuilder.teacher.LoginName + "' " +
-                "AND login_pw LIKE '" + tdBuilder.teacher.LoginPw + "' ";
+                "AND login_name = '" + tdBuilder.teacher.LoginName + "' " +
+                "AND login_pw = '" + tdBuilder.teacher.LoginPw + "' ";
 
             personDaoImpl.Read(tdBuilder.teacher, _netus2DbConnection);
         }
