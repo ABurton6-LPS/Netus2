@@ -30,7 +30,7 @@ namespace Netus2_Test.MockDaoImpl
         {
             WasCalled_ReadWithClassIdAndPersonId = true;
 
-            DataRow row = DataTableFactory.Dt_Netus2_JctClassPerson.NewRow();
+            DataRow row = DataTableFactory.CreateDataTable_Netus2_JctClassPerson().NewRow();
             row["class_id"] = classId;
             row["person_id"] = personId;
             row["enum_role_id"] = tdBuilder.student.Roles[0].Id;
@@ -48,7 +48,7 @@ namespace Netus2_Test.MockDaoImpl
                 {
                     for(int x = 0; x < tdBuilder.classEnrolled.GetStaff()[i].Roles.Count; x++)
                     {
-                        DataRow row = DataTableFactory.Dt_Netus2_JctClassPerson.NewRow();
+                        DataRow row = DataTableFactory.CreateDataTable_Netus2_JctClassPerson().NewRow();
                         row["class_id"] = classId;
                         row["person_id"] = tdBuilder.classEnrolled.GetStaff()[i].Id;
                         row["enum_role_id"] = tdBuilder.classEnrolled.GetStaff()[i].Roles[x].Id;
@@ -73,7 +73,7 @@ namespace Netus2_Test.MockDaoImpl
                     {
                         if(tdBuilder.classEnrolled.GetStaff()[i].Id == personId)
                         {
-                            DataRow row = DataTableFactory.Dt_Netus2_JctClassPerson.NewRow();
+                            DataRow row = DataTableFactory.CreateDataTable_Netus2_JctClassPerson().NewRow();
                             row["class_id"] = tdBuilder.classEnrolled.Id;
                             row["person_id"] = tdBuilder.classEnrolled.GetStaff()[i].Id;
                             row["enum_role_id"] = tdBuilder.classEnrolled.GetStaff()[i].Roles[x].Id;
@@ -90,7 +90,7 @@ namespace Netus2_Test.MockDaoImpl
         {
             WasCalled_Write = true;
 
-            DataRow row = DataTableFactory.Dt_Netus2_JctClassPerson.NewRow();
+            DataRow row = DataTableFactory.CreateDataTable_Netus2_JctClassPerson().NewRow();
             row["class_id"] = classId;
             row["person_id"] = personId;
             row["enum_role_id"] = roleId;

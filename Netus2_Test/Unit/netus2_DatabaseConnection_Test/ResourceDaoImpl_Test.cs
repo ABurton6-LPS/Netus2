@@ -87,11 +87,11 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
             _netus2DbConnection.expectedReaderSql =
                 "SELECT * FROM resource " +
                 "WHERE 1=1 " +
-                "AND name LIKE '" + tdBuilder.resource.Name + "' " +
+                "AND name = '" + tdBuilder.resource.Name + "' " +
                 "AND enum_importance_id = " + tdBuilder.resource.Importance.Id + " " +
-                "AND vendor_resource_identification LIKE '" + tdBuilder.resource.VendorResourceId + "' " +
-                "AND vendor_identification LIKE '" + tdBuilder.resource.VendorId + "' " +
-                "AND application_identification LIKE '" + tdBuilder.resource.ApplicationId + "' ";
+                "AND vendor_resource_identification = '" + tdBuilder.resource.VendorResourceId + "' " +
+                "AND vendor_identification = '" + tdBuilder.resource.VendorId + "' " +
+                "AND application_identification = '" + tdBuilder.resource.ApplicationId + "' ";
 
             resourceDaoImpl.Read(tdBuilder.resource, _netus2DbConnection);
         }

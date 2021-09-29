@@ -241,15 +241,9 @@ namespace Netus2_Test.Unit.SyncProcess
             Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_UpdateWithParentId);
         }
 
-        [TearDown]
-        public void TearDown()
-        {
-            DataTableFactory.Dt_Sis_AcademicSession = DataTableFactory.CreateDataTable_Sis_AcademicSession();
-        }
-
         private DataTable BuildTestDataTable(List<SisAcademicSessionTestData> tstDataSet)
         {
-            DataTable dtAcademicSession = DataTableFactory.Dt_Sis_AcademicSession;
+            DataTable dtAcademicSession = DataTableFactory.CreateDataTable_Sis_AcademicSession();
             foreach(SisAcademicSessionTestData tstData in tstDataSet)
             {
                 DataRow row = dtAcademicSession.NewRow();

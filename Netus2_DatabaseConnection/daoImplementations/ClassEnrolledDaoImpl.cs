@@ -148,7 +148,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private List<ClassEnrolled> Read(string sql, IConnectable connection)
         {
-            DataTable dtClassEnrolled = DataTableFactory.Dt_Netus2_ClassEnrolled;
+            DataTable dtClassEnrolled = DataTableFactory.CreateDataTable_Netus2_ClassEnrolled();
             dtClassEnrolled = connection.ReadIntoDataTable(sql, dtClassEnrolled);
 
             List<ClassEnrolled> results = new List<ClassEnrolled>();

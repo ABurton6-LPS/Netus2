@@ -61,7 +61,7 @@ namespace Netus2_DatabaseConnection.dbAccess
             testEnumKeys.Add("max_threads");
             testEnumKeys.Add("false");
 
-            DataTable mockEnumDataTable = DataTableFactory.Dt_Netus2_Enumeration;
+            DataTable mockEnumDataTable = DataTableFactory.CreateDataTable_Netus2_Enumeration();
 
             foreach(string testEnumKey in testEnumKeys)
             {
@@ -166,7 +166,7 @@ namespace Netus2_DatabaseConnection.dbAccess
             }
             if (sql.Contains("config"))
             {
-                DataTable dtConfig = DataTableFactory.Dt_Netus2_Config;
+                DataTable dtConfig = DataTableFactory.CreateDataTable_Netus2_Config();
                 if(dtConfig.Rows.Count == 0)
                 {
                     DataRow row = dtConfig.NewRow();

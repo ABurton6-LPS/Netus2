@@ -114,7 +114,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 "AND term_code = '" + termCode + "' " + 
                 "AND school_year = " + schoolYear + " " +
                 "AND organization_id in (" +
-                "SELECT organization_id FROM organization WHERE sis_building_code LIKE '" + sisBuildingCode + "')";
+                "SELECT organization_id FROM organization WHERE sis_building_code = '" + sisBuildingCode + "')";
 
             List<AcademicSession> resutls = Read(sql, connection);
             if (resutls.Count == 1)
@@ -165,7 +165,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private List<AcademicSession> Read(string sql, IConnectable connection)
         {
-            DataTable dtAcademicSession = DataTableFactory.Dt_Netus2_AcademicSession;
+            DataTable dtAcademicSession = DataTableFactory.CreateDataTable_Netus2_AcademicSession();
             dtAcademicSession = connection.ReadIntoDataTable(sql, dtAcademicSession);
 
             List<AcademicSession> results = new List<AcademicSession>();

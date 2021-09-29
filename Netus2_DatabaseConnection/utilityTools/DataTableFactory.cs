@@ -5,66 +5,6 @@ namespace Netus2_DatabaseConnection.utilityTools
 {
     public static class DataTableFactory
     {
-        public static DataTable Dt_Sis_AcademicSession = CreateDataTable_Sis_AcademicSession();
-        public static DataTable Dt_Sis_Address = CreateDataTable_Sis_Address();
-        public static DataTable Dt_Sis_Organization = CreateDataTable_Sis_Organization();
-        public static DataTable Dt_Sis_Person = CreateDataTable_Sis_Person();
-
-        public static DataTable Dt_Netus2_Enumeration = CreateDataTable_Netus2_Enumeration();
-
-        public static DataTable Dt_Netus2_Config = CreateDataTable_Netus2_Config();
-        public static DataTable Dt_Netus2_AcademicSession = CreateDataTable_Netus2_AcademicSession();
-        public static DataTable Dt_Netus2_Address = CreateDataTable_Netus2_Address();
-        public static DataTable Dt_Netus2_Application = CreateDataTable_Netus2_Application();
-        public static DataTable Dt_Netus2_ClassEnrolled = CreateDataTable_Netus2_ClassEnrolled();
-        public static DataTable Dt_Netus2_Course = CreateDataTable_Netus2_Course();
-        public static DataTable Dt_Netus2_EmploymentSession = CreateDataTable_Netus2_EmploymentSession();
-        public static DataTable Dt_Netus2_Enrollment = CreateDataTable_Netus2_Enrollment();
-        public static DataTable Dt_Netus2_LineItem = CreateDataTable_Netus2_LineItem();
-        public static DataTable Dt_Netus2_Mark = CreateDataTable_Netus2_Mark();
-        public static DataTable Dt_Netus2_Organization = CreateDataTable_Netus2_Organization();
-        public static DataTable Dt_Netus2_Person = CreateDataTable_Netus2_Person();
-        public static DataTable Dt_Netus2_PhoneNumber = CreateDataTable_Netus2_PhoneNumber();
-        public static DataTable Dt_Netus2_Provider = CreateDataTable_Netus2_Provider();
-        public static DataTable Dt_Netus2_Resource = CreateDataTable_Netus2_Resource();
-        public static DataTable Dt_Netus2_UniqueIdentifier = CreateDataTable_Netus2_UniqueIdentifier();
-        public static DataTable Dt_Netus2_JctClassPeriod = CreateDataTable_Netus2_JctClassPeriod();
-        public static DataTable Dt_Netus2_JctClassPerson = CreateDataTable_Netus2_JctClassPerson();
-        public static DataTable Dt_Netus2_JctClassResource = CreateDataTable_Netus2_JctClassResource();
-        public static DataTable Dt_Netus2_JctCourseGrade = CreateDataTable_Netus2_JctCourseGrade();
-        public static DataTable Dt_Netus2_JctCourseSubject = CreateDataTable_Netus2_JctCourseSubject();
-        public static DataTable Dt_Netus2_JctEnrollmentAcademicSession = CreateDataTable_Netus2_JctEnrollmentAcademicSession();
-        public static DataTable Dt_Netus2_JctPersonAddress = CreateDataTable_Netus2_JctPersonAddress();
-        public static DataTable Dt_Netus2_JctPersonApp = CreateDataTable_Netus2_JctPersonApp();
-        public static DataTable Dt_Netus2_JctPersonPerson = CreateDataTable_Netus2_JctPersonPerson();
-        public static DataTable Dt_Netus2_JctPersonRole = CreateDataTable_Netus2_JctPersonRole();
-
-        public static DataTable Dt_Netus2_Log_AcademicSession = CreateDataTable_Netus2_Log_AcademicSession();
-        public static DataTable Dt_Netus2_Log_Address = CreateDataTable_Netus2_Log_Address();
-        public static DataTable Dt_Netus2_Log_Application = CreateDataTable_Netus2_Log_Application();
-        public static DataTable Dt_Netus2_Log_ClassEnrolled = CreateDataTable_Netus2_Log_ClassEnrolled();
-        public static DataTable Dt_Netus2_Log_Course = CreateDataTable_Netus2_Log_Course();
-        public static DataTable Dt_Netus2_Log_EmploymentSession = CreateDataTable_Netus2_Log_EmploymentSession();
-        public static DataTable Dt_Netus2_Log_Enrollment = CreateDataTable_Netus2_Log_Enrollment();
-        public static DataTable Dt_Netus2_Log_LineItem = CreateDataTable_Netus2_Log_LineItem();
-        public static DataTable Dt_Netus2_Log_Mark = CreateDataTable_Netus2_Log_Mark();
-        public static DataTable Dt_Netus2_Log_Organization = CreateDataTable_Netus2_Log_Organization();
-        public static DataTable Dt_Netus2_Log_Person = CreateDataTable_Netus2_Log_Person();
-        public static DataTable Dt_Netus2_Log_PhoneNumber = CreateDataTable_Netus2_Log_PhoneNumber();
-        public static DataTable Dt_Netus2_Log_Provider = CreateDataTable_Netus2_Log_Provider();
-        public static DataTable Dt_Netus2_Log_Resource = CreateDataTable_Netus2_Log_Resource();
-        public static DataTable Dt_Netus2_Log_UniqueIdentifier = CreateDataTable_Netus2_Log_UniqueIdentifier();
-        public static DataTable Dt_Netus2_Log_JctClassPeriod = CreateDataTable_Netus2_Log_JctClassPeriod();
-        public static DataTable Dt_Netus2_Log_JctClassPerson = CreateDataTable_Netus2_Log_JctClassPerson();
-        public static DataTable Dt_Netus2_Log_JctClassResource = CreateDataTable_Netus2_Log_JctClassResource();
-        public static DataTable Dt_Netus2_Log_JctCourseGrade = CreateDataTable_Netus2_Log_JctCourseGrade();
-        public static DataTable Dt_Netus2_Log_JctCourseSubject = CreateDataTable_Netus2_Log_JctCourseSubject();
-        public static DataTable Dt_Netus2_Log_JctEnrollmentAcademicSession = CreateDataTable_Netus2_Log_JctEnrollmentAcademicSession();
-        public static DataTable Dt_Netus2_Log_JctPersonAddress = CreateDataTable_Netus2_Log_JctPersonAddress();
-        public static DataTable Dt_Netus2_Log_JctPersonApp = CreateDataTable_Netus2_Log_JctPersonApp();
-        public static DataTable Dt_Netus2_Log_JctPersonPerson = CreateDataTable_Netus2_Log_JctPersonPerson();
-        public static DataTable Dt_Netus2_Log_JctPersonRole = CreateDataTable_Netus2_Log_JctPersonRole();
-
         public static DataTable CreateDataTable_Sis_AcademicSession()
         {
             DataTable dtAcademicSession = new DataTable("AcademicSession");

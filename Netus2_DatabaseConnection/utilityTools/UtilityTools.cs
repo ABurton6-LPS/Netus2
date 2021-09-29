@@ -20,7 +20,7 @@ namespace Netus2_DatabaseConnection.utilityTools
 
             string sql = "SELECT * FROM " + tableName;
 
-            DataTable dtEnumeration = DataTableFactory.Dt_Netus2_Enumeration;
+            DataTable dtEnumeration = DataTableFactory.CreateDataTable_Netus2_Enumeration();
             dtEnumeration = connection.ReadIntoDataTable(sql, dtEnumeration);
 
             Dictionary<string, Enumeration> enumerations = new Dictionary<string, Enumeration>();
@@ -81,7 +81,7 @@ namespace Netus2_DatabaseConnection.utilityTools
                 "AND is_for_student_id = " + enumIsForStudents.Id + " " +
                 "AND is_for_staff_id = " + enumIsForStaff.Id;
 
-            DataTable dtConfig = DataTableFactory.Dt_Netus2_Config;
+            DataTable dtConfig = DataTableFactory.CreateDataTable_Netus2_Config();
             dtConfig = connection.ReadIntoDataTable(sql, dtConfig);
 
             List<Config> configs = new List<Config>();

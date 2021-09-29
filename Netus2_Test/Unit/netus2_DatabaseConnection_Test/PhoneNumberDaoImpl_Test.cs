@@ -37,7 +37,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "WHERE 1=1 " +
                 "AND phone_number_id = " + tdBuilder.phoneNumber_Teacher.Id + " " +
                 "AND person_id IS NULL " +
-                "AND phone_number LIKE '" + tdBuilder.phoneNumber_Teacher.PhoneNumberValue + "' " +
+                "AND phone_number = '" + tdBuilder.phoneNumber_Teacher.PhoneNumberValue + "' " +
                 "AND is_primary_id = " + tdBuilder.phoneNumber_Teacher.IsPrimary.Id + " " +
                 "AND enum_phone_id = " + tdBuilder.phoneNumber_Teacher.PhoneType.Id + " ";
 
@@ -52,7 +52,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "WHERE 1=1 " +
                 "AND phone_number_id = " + tdBuilder.phoneNumber_Teacher.Id + " " +
                 "AND person_id = " + tdBuilder.teacher.Id + " " +
-                "AND phone_number LIKE '" + tdBuilder.phoneNumber_Teacher.PhoneNumberValue + "' " +
+                "AND phone_number = '" + tdBuilder.phoneNumber_Teacher.PhoneNumberValue + "' " +
                 "AND is_primary_id = " + tdBuilder.phoneNumber_Teacher.IsPrimary.Id + " " +
                 "AND enum_phone_id = " + tdBuilder.phoneNumber_Teacher.PhoneType.Id + " ";
 
@@ -100,7 +100,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "SELECT * FROM phone_number " +
                 "WHERE 1=1 " +
                 "AND person_id = " + tdBuilder.teacher.Id + " " +
-                "AND phone_number LIKE '" + tdBuilder.phoneNumber_Teacher.PhoneNumberValue + "' " +
+                "AND phone_number = '" + tdBuilder.phoneNumber_Teacher.PhoneNumberValue + "' " +
                 "AND is_primary_id = " + tdBuilder.phoneNumber_Teacher.IsPrimary.Id + " " +
                 "AND enum_phone_id = " + tdBuilder.phoneNumber_Teacher.PhoneType.Id + " ";
 

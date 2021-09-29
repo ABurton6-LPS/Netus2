@@ -79,13 +79,15 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         public Organization Read_WithSisBuildingCode(string sisBuildingCode, IConnectable connection)
         {
-            string sql = "SELECT * FROM organization WHERE sis_building_code LIKE ('" + sisBuildingCode + "')";
+            string sql = "SELECT * FROM organization WHERE sis_building_code = '" + sisBuildingCode + "'";
 
             List<Organization> results = Read(sql, connection);
-            if (results.Count > 0)
+            if (results.Count == 1)
                 return results[0];
-            else
+            else if (results.Count == 0)
                 return null;
+            else
+                throw new Exception(results.Count + "Organization records linked to sisBuildingCode: " + sisBuildingCode);
         }
 
         public Organization Read_WithOrganizationId(int orgId, IConnectable connection)
@@ -135,15 +137,15 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 else
                 {
                     if (row["name"] != DBNull.Value)
-                        sql.Append("AND name LIKE '" + row["name"] + "' ");
+                        sql.Append("AND name = '" + row["name"] + "' ");
                     if (row["enum_organization_id"] != DBNull.Value)
                         sql.Append("AND enum_organization_id = " + row["enum_organization_id"] + " ");
                     if (row["identifier"] != DBNull.Value)
-                        sql.Append("AND identifier LIKE '" + row["identifier"] + "' ");
+                        sql.Append("AND identifier = '" + row["identifier"] + "' ");
                     if (row["sis_building_code"] != DBNull.Value)
-                        sql.Append("AND sis_building_code LIKE '" + row["sis_building_code"] + "' ");
+                        sql.Append("AND sis_building_code = '" + row["sis_building_code"] + "' ");
                     if (row["hr_building_code"] != DBNull.Value)
-                        sql.Append("AND hr_building_code LIKE '" + row["hr_building_code"] + "' ");
+                        sql.Append("AND hr_building_code = '" + row["hr_building_code"] + "' ");
                     if (row["organization_parent_id"] != DBNull.Value)
                         sql.Append("AND organization_parent_id = " + row["organization_parent_id"]);
                 }
@@ -154,7 +156,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private List<Organization> Read(string sql, IConnectable connection)
         {
-            DataTable dtOrganization = DataTableFactory.Dt_Netus2_Organization;
+            DataTable dtOrganization = DataTableFactory.CreateDataTable_Netus2_Organization();
             dtOrganization = connection.ReadIntoDataTable(sql, dtOrganization);
 
             List<Organization> results = new List<Organization>();

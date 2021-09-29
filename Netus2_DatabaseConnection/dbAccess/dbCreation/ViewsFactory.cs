@@ -201,15 +201,15 @@
                 "THEN 'true'  " +
                 "ELSE 'false'  " +
                 "END) hispanicOrLatinoEthnicity " +
-                ",(CASE WHEN ea.netus2_code LIKE 'birth'	THEN ec.netus2_code ELSE NULL END) countryOfBirthCode " +
-                ",(CASE WHEN ea.netus2_code LIKE 'birth'	THEN esp.netus2_code ELSE NULL END) stateOfBirthAbbreviation " +
-                ",(CASE WHEN ea.netus2_code LIKE 'birth' 	THEN a.city ELSE NULL END) cityOfBirth " +
+                ",(CASE WHEN ea.netus2_code = 'birth'	THEN ec.netus2_code ELSE NULL END) countryOfBirthCode " +
+                ",(CASE WHEN ea.netus2_code = 'birth'	THEN esp.netus2_code ELSE NULL END) stateOfBirthAbbreviation " +
+                ",(CASE WHEN ea.netus2_code = 'birth' 	THEN a.city ELSE NULL END) cityOfBirth " +
                 ",ers.netus2_code publicSchoolResidenceStatus " +
                 "FROM person p " +
                 "JOIN enum_gender eg ON eg.enum_gender_id = p.enum_gender_id " +
                 "JOIN enum_ethnic ee ON ee.enum_ethnic_id = p.enum_ethnic_id " +
                 "LEFT OUTER JOIN jct_person_address jpa ON jpa.person_id = p.person_id " +
-                "LEFT OUTER JOIN [address] a ON a.address_id = jpa.address_id	AND (a.enum_address_id = (SELECT enum_address_id FROM enum_address WHERE netus2_code LIKE 'birth')) " +
+                "LEFT OUTER JOIN [address] a ON a.address_id = jpa.address_id	AND (a.enum_address_id = (SELECT enum_address_id FROM enum_address WHERE netus2_code = 'birth')) " +
                 "LEFT OUTER JOIN enum_address ea ON ea.enum_address_id = a.enum_address_id " +
                 "LEFT OUTER JOIN enum_country ec ON ec.enum_country_id = a.enum_country_id " +
                 "LEFT OUTER JOIN enum_state_province esp ON esp.enum_state_province_id = a.enum_state_province_id " +
@@ -377,7 +377,7 @@
                 "THEN CONCAT(p.login_name, (CASE  " +
                 "WHEN jpr.enum_role_id = (SELECT enum_role_id  " +
                 "FROM enum_role  " +
-                "WHERE netus2_code LIKE 'student')  " +
+                "WHERE netus2_code = 'student')  " +
                 "THEN '@student.livoniapublicschools.org'  " +
                 "ELSE '@livoniapublicschools.org' " +
                 "END)) " +
@@ -393,7 +393,7 @@
                 "FROM phone_number pn " +
                 "JOIN enum_phone ep ON ep.enum_phone_id = pn.enum_phone_id " +
                 "WHERE pn.person_id = p.person_id " +
-                "AND pn.is_primary_id = (SELECT enum_true_false_id FROM enum_true_false WHERE netus2_code LIKE 'true') " +
+                "AND pn.is_primary_id = (SELECT enum_true_false_id FROM enum_true_false WHERE netus2_code = 'true') " +
                 "FOR XML PATH('')), 1, 2, '') phone, " +
                 "STUFF((SELECT CONCAT(', ', jpp.person_two_id) " +
                 "FROM jct_person_person jpp " +

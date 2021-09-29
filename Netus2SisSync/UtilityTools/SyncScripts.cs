@@ -55,19 +55,19 @@
                 "CONVERT(date, tt.termbegindate) start_date,  " +
                 "DATEADD(day, 1, CONVERT(date, tt.termenddate)) end_date, " +
                 "CASE  " +
-                "WHEN tt.termc LIKE 'T%' AND tt.termc NOT LIKE '%Y%' THEN t.schoolc + '-' + pY.termc + '-' + CONVERT(VARCHAR(4),t.schyear) " +
-                "WHEN tt.termc LIKE 'P%' THEN t.schoolc + '-' + pQ.termc + '-' + CONVERT(VARCHAR(4),t.schyear) " +
-                "WHEN tt.termc LIKE 'Q%' THEN t.schoolc + '-' + pS.termc + '-' + CONVERT(VARCHAR(4),t.schyear) " +
-                "WHEN tt.termc LIKE 'S%' THEN t.schoolc + '-' + pY.termc + '-' + CONVERT(VARCHAR(4),t.schyear) " +
+                "WHEN tt.termc = 'T%' AND tt.termc NOT = '%Y%' THEN t.schoolc + '-' + pY.termc + '-' + CONVERT(VARCHAR(4),t.schyear) " +
+                "WHEN tt.termc = 'P%' THEN t.schoolc + '-' + pQ.termc + '-' + CONVERT(VARCHAR(4),t.schyear) " +
+                "WHEN tt.termc = 'Q%' THEN t.schoolc + '-' + pS.termc + '-' + CONVERT(VARCHAR(4),t.schyear) " +
+                "WHEN tt.termc = 'S%' THEN t.schoolc + '-' + pY.termc + '-' + CONVERT(VARCHAR(4),t.schyear) " +
                 "ELSE NULL " +
                 "END parent_session_code " +
                 "FROM TrackTerms tt " +
                 "JOIN track t ON tt.trkuniq=t.trkuniq " +
                 "JOIN zterm z ON z.termc=tt.termc " +
                 "JOIN school s ON s.schoolc=t.schoolc " +
-                "LEFT JOIN TrackTerms pQ ON pQ.trkuniq=tt.trkuniq AND pQ.termc LIKE 'Q%' AND tt.termbegindate BETWEEN pQ.termbegindate AND pQ.termenddate AND tt.termenddate BETWEEN pQ.termbegindate AND pQ.termenddate " +
-                "LEFT JOIN TrackTerms pS ON pS.trkuniq=tt.trkuniq AND pS.termc LIKE 'S%' AND tt.termbegindate BETWEEN pS.termbegindate AND pS.termenddate AND tt.termenddate BETWEEN pS.termbegindate AND pS.termenddate " +
-                "LEFT JOIN TrackTerms pY ON pY.trkuniq=tt.trkuniq AND pY.termc LIKE '%Y%' AND tt.termbegindate BETWEEN pY.termbegindate AND pY.termenddate AND tt.termenddate BETWEEN pY.termbegindate AND pY.termenddate " +
+                "LEFT JOIN TrackTerms pQ ON pQ.trkuniq=tt.trkuniq AND pQ.termc = 'Q%' AND tt.termbegindate BETWEEN pQ.termbegindate AND pQ.termenddate AND tt.termenddate BETWEEN pQ.termbegindate AND pQ.termenddate " +
+                "LEFT JOIN TrackTerms pS ON pS.trkuniq=tt.trkuniq AND pS.termc = 'S%' AND tt.termbegindate BETWEEN pS.termbegindate AND pS.termenddate AND tt.termenddate BETWEEN pS.termbegindate AND pS.termenddate " +
+                "LEFT JOIN TrackTerms pY ON pY.trkuniq=tt.trkuniq AND pY.termc = '%Y%' AND tt.termbegindate BETWEEN pY.termbegindate AND pY.termenddate AND tt.termenddate BETWEEN pY.termbegindate AND pY.termenddate " +
                 "WHERE 1=1 " +
                 "AND NOT tt.termbegindate IS NULL " +
                 "AND NOT tt.termenddate IS NULL " +
@@ -129,7 +129,7 @@
                 "WHERE 1=1 " +
                 "AND fd.funiq != 0 " +
                 "AND fd.firstname NOT IN ('', ' ,', ',', '1', '2', '3', '4') " +
-                "AND NOT (fd.emailaddr = '' OR fd.emailaddr IS NULL OR REPLACE(fd.emailaddr,'@livoniapublicschools.org','') LIKE '%@%') " +
+                "AND NOT (fd.emailaddr = '' OR fd.emailaddr IS NULL OR REPLACE(fd.emailaddr,'@livoniapublicschools.org','') = '%@%') " +
                 "ORDER BY last_name, first_name";
         }
 

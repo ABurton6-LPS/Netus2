@@ -75,15 +75,15 @@ namespace Netus2_DatabaseConnection.daoImplementations
             else
             {
                 if (row["name"] != DBNull.Value)
-                    sql.Append("AND name LIKE '" + row["name"] + "' ");
+                    sql.Append("AND name = '" + row["name"] + "' ");
                 if (row["enum_importance_id"] != DBNull.Value)
                     sql.Append("AND enum_importance_id = " + row["enum_importance_id"] + " ");
                 if (row["vendor_resource_identification"] != DBNull.Value)
-                    sql.Append("AND vendor_resource_identification LIKE '" + row["vendor_resource_identification"] + "' ");
+                    sql.Append("AND vendor_resource_identification = '" + row["vendor_resource_identification"] + "' ");
                 if (row["vendor_identification"] != DBNull.Value)
-                    sql.Append("AND vendor_identification LIKE '" + row["vendor_identification"] + "' ");
+                    sql.Append("AND vendor_identification = '" + row["vendor_identification"] + "' ");
                 if (row["application_identification"] != DBNull.Value)
-                    sql.Append("AND application_identification LIKE '" + row["application_identification"] + "' ");
+                    sql.Append("AND application_identification = '" + row["application_identification"] + "' ");
             }
 
             return Read(sql.ToString(), connection);
@@ -91,7 +91,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         public List<Resource> Read(string sql, IConnectable connection)
         {
-            DataTable dtResource = DataTableFactory.Dt_Netus2_Resource;
+            DataTable dtResource = DataTableFactory.CreateDataTable_Netus2_Resource();
             dtResource = connection.ReadIntoDataTable(sql, dtResource);
 
             List<Resource> results = new List<Resource>();

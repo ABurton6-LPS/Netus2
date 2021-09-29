@@ -45,7 +45,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private List<DataRow> Read(string sql, IConnectable connection)
         {
-            DataTable dtJctCourseGrade = DataTableFactory.Dt_Netus2_JctCourseGrade;
+            DataTable dtJctCourseGrade = DataTableFactory.CreateDataTable_Netus2_JctCourseGrade();
             dtJctCourseGrade = connection.ReadIntoDataTable(sql, dtJctCourseGrade);
 
             List<DataRow> jctCourseGradeDaos = new List<DataRow>();
@@ -65,7 +65,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
             connection.ExecuteNonQuery(sql.ToString());
 
-            DataRow jctCourseGradeDao = DataTableFactory.Dt_Netus2_JctCourseGrade.NewRow();
+            DataRow jctCourseGradeDao = DataTableFactory.CreateDataTable_Netus2_JctCourseGrade().NewRow();
             jctCourseGradeDao["course_id"] = courseId;
             jctCourseGradeDao["enum_grade_id"] = gradeId;
 
