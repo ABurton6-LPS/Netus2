@@ -373,6 +373,12 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
             academicSessionDaoImpl.Write(tdBuilder.semester1, tdBuilder.schoolYear.Id, _netus2DbConnection);
         }
 
+        [TearDown]
+        public void TearDown()
+        {
+            _netus2DbConnection.mockReader = new Mock<IDataReader>();
+        }
+
         private AcademicSession RemoveAllButFirstChild(AcademicSession parent)
         {
             for (int i = 1; i < parent.Children.Count; i++)
