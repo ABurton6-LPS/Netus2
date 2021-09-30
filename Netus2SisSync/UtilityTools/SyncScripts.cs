@@ -55,7 +55,7 @@
                 "CONVERT(date, tt.termbegindate) start_date,  " +
                 "DATEADD(day, 1, CONVERT(date, tt.termenddate)) end_date, " +
                 "CASE  " +
-                "WHEN tt.termc = 'T%' AND tt.termc NOT = '%Y%' THEN t.schoolc + '-' + pY.termc + '-' + CONVERT(VARCHAR(4),t.schyear) " +
+                "WHEN tt.termc = 'T%' AND tt.termc NOT LIKE '%Y%' THEN t.schoolc + '-' + pY.termc + '-' + CONVERT(VARCHAR(4),t.schyear) " +
                 "WHEN tt.termc = 'P%' THEN t.schoolc + '-' + pQ.termc + '-' + CONVERT(VARCHAR(4),t.schyear) " +
                 "WHEN tt.termc = 'Q%' THEN t.schoolc + '-' + pS.termc + '-' + CONVERT(VARCHAR(4),t.schyear) " +
                 "WHEN tt.termc = 'S%' THEN t.schoolc + '-' + pY.termc + '-' + CONVERT(VARCHAR(4),t.schyear) " +
