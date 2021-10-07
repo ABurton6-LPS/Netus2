@@ -40,7 +40,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "DELETE FROM app " +
                 "WHERE 1=1 " +
                 "AND app_id = " + tdBuilder.application.Id + " " +
-                "AND name = '" + tdBuilder.application.Name + "' " +
+                "AND name LIKE '" + tdBuilder.application.Name + "' " +
                 "AND provider_id = " + tdBuilder.application.Provider.Id + " ";
 
             applicationDaoImpl.Delete(tdBuilder.application, _netus2DbConnection);
@@ -188,6 +188,9 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
         public void TearDown()
         {
             _netus2DbConnection.mockReader = new Mock<IDataReader>();
+            _netus2DbConnection.expectedNewRecordSql = null;
+            _netus2DbConnection.expectedNonQuerySql = null;
+            _netus2DbConnection.expectedReaderSql = null;
         }
 
         private void SetMockReaderWithTestData(List<DataRow> tstDataSet)

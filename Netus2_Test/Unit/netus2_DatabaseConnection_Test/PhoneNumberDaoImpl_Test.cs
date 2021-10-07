@@ -37,7 +37,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "WHERE 1=1 " +
                 "AND phone_number_id = " + tdBuilder.phoneNumber_Teacher.Id + " " +
                 "AND person_id IS NULL " +
-                "AND phone_number = '" + tdBuilder.phoneNumber_Teacher.PhoneNumberValue + "' " +
+                "AND phone_number LIKE '" + tdBuilder.phoneNumber_Teacher.PhoneNumberValue + "' " +
                 "AND is_primary_id = " + tdBuilder.phoneNumber_Teacher.IsPrimary.Id + " " +
                 "AND enum_phone_id = " + tdBuilder.phoneNumber_Teacher.PhoneType.Id + " ";
 
@@ -52,7 +52,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "WHERE 1=1 " +
                 "AND phone_number_id = " + tdBuilder.phoneNumber_Teacher.Id + " " +
                 "AND person_id = " + tdBuilder.teacher.Id + " " +
-                "AND phone_number = '" + tdBuilder.phoneNumber_Teacher.PhoneNumberValue + "' " +
+                "AND phone_number LIKE '" + tdBuilder.phoneNumber_Teacher.PhoneNumberValue + "' " +
                 "AND is_primary_id = " + tdBuilder.phoneNumber_Teacher.IsPrimary.Id + " " +
                 "AND enum_phone_id = " + tdBuilder.phoneNumber_Teacher.PhoneType.Id + " ";
 
@@ -240,6 +240,9 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
         public void TearDown()
         {
             _netus2DbConnection.mockReader = new Mock<IDataReader>();
+            _netus2DbConnection.expectedNewRecordSql = null;
+            _netus2DbConnection.expectedNonQuerySql = null;
+            _netus2DbConnection.expectedReaderSql = null;
         }
 
         private void SetMockReaderWithTestData(List<DataRow> tstDataSet)

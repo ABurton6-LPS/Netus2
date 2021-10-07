@@ -33,7 +33,7 @@ namespace Netus2_Test.MockDaoImpl
 
             if (_shouldReadReturnData)
             {
-                DataRow row = DataTableFactory.Dt_Netus2_JctPersonPerson.NewRow();
+                DataRow row = DataTableFactory.CreateDataTable_Netus2_JctPersonPerson().NewRow();
                 row["person_one_id"] = personOneId;
 
                 if (personOneId == tdBuilder.teacher.Id)
@@ -54,7 +54,7 @@ namespace Netus2_Test.MockDaoImpl
 
             if (_shouldReadReturnData)
             {
-                DataRow returnData = DataTableFactory.Dt_Netus2_JctPersonPerson.NewRow();
+                DataRow returnData = DataTableFactory.CreateDataTable_Netus2_JctPersonPerson().NewRow();
                 returnData["person_one_id"] = personOneId;
                 returnData["person_two_id"] = personTwoId;
                 return returnData;
@@ -67,7 +67,7 @@ namespace Netus2_Test.MockDaoImpl
         {
             WasCalled_Write = true;
 
-            DataRow returnData = DataTableFactory.Dt_Netus2_JctPersonPerson.NewRow();
+            DataRow returnData = DataTableFactory.CreateDataTable_Netus2_JctPersonPerson().NewRow();
             returnData["person_one_id"] = personOneId;
             returnData["person_two_id"] = personTwoId;
             return returnData;

@@ -108,7 +108,7 @@ namespace Netus2_Test.Integration
         private List<String> GetColumnsInTable(string tableName)
         {
             List<String> foundColumns = new List<String>();
-            string sql = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = N'" + tableName + "' AND COLUMN_NAME NOT = 'populated_by'";
+            string sql = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = N'" + tableName + "' AND COLUMN_NAME NOT LIKE 'populated_by'";
 
             DataTable schemaResultTable = new DataTable();
 
