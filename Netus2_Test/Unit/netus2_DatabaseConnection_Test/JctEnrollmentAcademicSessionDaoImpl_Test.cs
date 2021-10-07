@@ -78,5 +78,13 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
 
             jctEnrollmentAcademicSessionDaoImpl.Write(tdBuilder.enrollment.Id, tdBuilder.semester1.Id, _netus2DbConnection);
         }
+
+        [TearDown]
+        public void TearDown()
+        {
+            _netus2DbConnection.expectedNewRecordSql = null;
+            _netus2DbConnection.expectedNonQuerySql = null;
+            _netus2DbConnection.expectedReaderSql = null;
+        }
     }
 }

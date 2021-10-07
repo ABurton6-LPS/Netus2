@@ -124,7 +124,7 @@ namespace Netus2_Test.Unit.SyncProcess
                 new SyncJob_Organization())
                 .Execute(row, new CountDownLatch(0));
 
-            Assert.IsTrue(mockOrganizationDaoImpl.WasCalled_ReadWithoutParentId);
+            Assert.IsTrue(mockOrganizationDaoImpl.WasCalled_ReadWithSisBuildingCode);
             Assert.IsTrue(mockOrganizationDaoImpl.WasCalled_WriteWithoutParentId);
         }
 
@@ -148,7 +148,7 @@ namespace Netus2_Test.Unit.SyncProcess
                 new SyncJob_Organization())
                 .Execute(row, new CountDownLatch(0));
 
-            Assert.IsTrue(mockOrganizationDaoImpl.WasCalled_ReadWithoutParentId);
+            Assert.IsTrue(mockOrganizationDaoImpl.WasCalled_ReadWithSisBuildingCode);
             Assert.IsFalse(mockOrganizationDaoImpl.WasCalled_WriteWithoutParentId);
             Assert.IsFalse(mockOrganizationDaoImpl.WasCalled_UpdateWithoutParentId);
         }
@@ -173,7 +173,7 @@ namespace Netus2_Test.Unit.SyncProcess
                 new SyncJob_Organization())
                 .Execute(row, new CountDownLatch(0));
 
-            Assert.IsTrue(mockOrganizationDaoImpl.WasCalled_ReadWithoutParentId);
+            Assert.IsTrue(mockOrganizationDaoImpl.WasCalled_ReadWithSisBuildingCode);
             Assert.IsTrue(mockOrganizationDaoImpl.WasCalled_UpdateWithoutParentId);
         }
 
@@ -203,19 +203,13 @@ namespace Netus2_Test.Unit.SyncProcess
             syncTask_OrganizationParentRecords.Execute(row, new CountDownLatch(0));
 
             Assert.IsTrue(mockOrganizationDaoImpl.WasCalled_ReadWithoutParentId);
-            Assert.IsTrue(mockOrganizationDaoImpl.WasCalled_ReadWithBuildingCode);
+            Assert.IsTrue(mockOrganizationDaoImpl.WasCalled_ReadWithSisBuildingCode);
             Assert.IsTrue(mockOrganizationDaoImpl.WasCalled_UpdateWithParentId);
-        }
-
-        [TearDown]
-        public void TearDown()
-        {
-            DataTableFactory.Dt_Sis_Organization = DataTableFactory.CreateDataTable_Sis_Organization();
         }
 
         private DataTable BuildTestDataTable(List<SisOrganizationTestData> tstDataSet)
         {
-            DataTable dtOrganization = DataTableFactory.Dt_Sis_Organization;
+            DataTable dtOrganization = DataTableFactory.CreateDataTable_Sis_Organization();
             foreach (SisOrganizationTestData tstData in tstDataSet)
             {
                 DataRow row = dtOrganization.NewRow();

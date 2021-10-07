@@ -79,15 +79,15 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "DELETE FROM person " +
                 "WHERE 1=1 " +
                 "AND person_id = " + tdBuilder.teacher.Id + " " +
-                "AND first_name = '" + tdBuilder.teacher.FirstName + "' " +
-                "AND middle_name = '" + tdBuilder.teacher.MiddleName + "' " +
-                "AND last_name = '" + tdBuilder.teacher.LastName + "' " +
+                "AND first_name LIKE '" + tdBuilder.teacher.FirstName + "' " +
+                "AND middle_name LIKE '" + tdBuilder.teacher.MiddleName + "' " +
+                "AND last_name LIKE '" + tdBuilder.teacher.LastName + "' " +
                 "AND birth_date = '" + tdBuilder.teacher.BirthDate + "' " +
                 "AND enum_gender_id = " + tdBuilder.teacher.Gender.Id + " " +
                 "AND enum_ethnic_id = " + tdBuilder.teacher.Ethnic.Id + " " +
                 "AND enum_residence_status_id IS NULL " +
-                "AND login_name = '" + tdBuilder.teacher.LoginName + "' " +
-                "AND login_pw = '" + tdBuilder.teacher.LoginPw + "' ";
+                "AND login_name LIKE '" + tdBuilder.teacher.LoginName + "' " +
+                "AND login_pw LIKE '" + tdBuilder.teacher.LoginPw + "' ";
 
             personDaoImpl.Delete(tdBuilder.teacher, _netus2DbConnection);
         }
@@ -548,6 +548,9 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
         public void TearDown()
         {
             _netus2DbConnection.mockReader = new Mock<IDataReader>();
+            _netus2DbConnection.expectedNewRecordSql = null;
+            _netus2DbConnection.expectedNonQuerySql = null;
+            _netus2DbConnection.expectedReaderSql = null;
         }
 
         private void SetMockReaderWithTestData(List<DataRow> tstDataSet)

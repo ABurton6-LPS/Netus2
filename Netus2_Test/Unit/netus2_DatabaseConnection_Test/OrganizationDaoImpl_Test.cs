@@ -37,11 +37,11 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "DELETE FROM organization " +
                 "WHERE 1=1 " +
                 "AND organization_id = " + tdBuilder.school.Id + " " +
-                "AND name = '" + tdBuilder.school.Name + "' " +
+                "AND name LIKE '" + tdBuilder.school.Name + "' " +
                 "AND enum_organization_id = " + tdBuilder.school.OrganizationType.Id + " " +
-                "AND identifier = '" + tdBuilder.school.Identifier + "' " +
-                "AND sis_building_code = '" + tdBuilder.school.SisBuildingCode + "' " +
-                "AND hr_building_code = '" + tdBuilder.school.HrBuildingCode + "' ";
+                "AND identifier LIKE '" + tdBuilder.school.Identifier + "' " +
+                "AND sis_building_code LIKE '" + tdBuilder.school.SisBuildingCode + "' " +
+                "AND hr_building_code LIKE '" + tdBuilder.school.HrBuildingCode + "' ";
 
             organizationDaoImpl.Delete(tdBuilder.school, _netus2DbConnection);
         }
@@ -90,7 +90,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
         public void ReadWithSisBuildingCode_ShouldUseExpectedSql()
         {
             _netus2DbConnection.expectedReaderSql =
-                "SELECT * FROM organization WHERE sis_building_code = ('" + tdBuilder.school.SisBuildingCode + "')";
+                "SELECT * FROM organization WHERE sis_building_code = '" + tdBuilder.school.SisBuildingCode + "'";
 
             organizationDaoImpl.Read_WithSisBuildingCode(tdBuilder.school.SisBuildingCode, _netus2DbConnection);
         }
@@ -316,6 +316,9 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
         public void TearDown()
         {
             _netus2DbConnection.mockReader = new Mock<IDataReader>();
+            _netus2DbConnection.expectedNewRecordSql = null;
+            _netus2DbConnection.expectedNonQuerySql = null;
+            _netus2DbConnection.expectedReaderSql = null;
         }
 
         private void SetMockReaderWithTestData(List<DataRow> tstDataSet)

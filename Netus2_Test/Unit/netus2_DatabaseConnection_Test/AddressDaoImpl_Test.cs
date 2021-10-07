@@ -39,12 +39,12 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "DELETE FROM address " +
                 "WHERE 1=1 " +
                 "AND address_id = " + tdBuilder.address_Teacher.Id + " " +
-                "AND address_line_1 = '" + tdBuilder.address_Teacher.Line1 + "' " +
+                "AND address_line_1 LIKE '" + tdBuilder.address_Teacher.Line1 + "' " +
                 "AND address_line_2 IS NULL " +
                 "AND address_line_3 IS NULL " +
                 "AND address_line_4 IS NULL " +
                 "AND apartment IS NULL " +
-                "AND city = '" + tdBuilder.address_Teacher.City + "'" +
+                "AND city LIKE '" + tdBuilder.address_Teacher.City + "'" +
                 "AND enum_state_province_id = " + tdBuilder.address_Teacher.StateProvince.Id + " " +
                 "AND postal_code IS NULL " +
                 "AND enum_country_id = " + tdBuilder.address_Teacher.Country.Id + " " +
@@ -207,6 +207,9 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
         public void TearDown()
         {
             _netus2DbConnection.mockReader = new Mock<IDataReader>();
+            _netus2DbConnection.expectedNewRecordSql = null;
+            _netus2DbConnection.expectedNonQuerySql = null;
+            _netus2DbConnection.expectedReaderSql = null;
         }
 
         private void SetMockReaderWithTestData(List<DataRow> tstDataSet)

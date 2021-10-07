@@ -74,5 +74,13 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
 
             jctClassResourceDaoImpl.Write(tdBuilder.classEnrolled.Id, tdBuilder.resource.Id, _netus2DbConnection);
         }
+
+        [TearDown]
+        public void TearDown()
+        {
+            _netus2DbConnection.expectedNewRecordSql = null;
+            _netus2DbConnection.expectedNonQuerySql = null;
+            _netus2DbConnection.expectedReaderSql = null;
+        }
     }
 }

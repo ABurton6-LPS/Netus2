@@ -66,5 +66,13 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
 
             jctClassPeriodDaoImpl.Write(tdBuilder.classEnrolled.Id, tdBuilder.classEnrolled.Periods[0].Id, _netus2DbConnection);
         }
+
+        [TearDown]
+        public void TearDown()
+        {
+            _netus2DbConnection.expectedNewRecordSql = null;
+            _netus2DbConnection.expectedNonQuerySql = null;
+            _netus2DbConnection.expectedReaderSql = null;
+        }
     }
 }

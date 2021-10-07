@@ -78,5 +78,13 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
 
             jctPersonAppDaoImpl.Write(tdBuilder.teacher.Id, tdBuilder.teacher.Applications[0].Id, _netus2DbConnection);
         }
+
+        [TearDown]
+        public void TearDown()
+        {
+            _netus2DbConnection.expectedNewRecordSql = null;
+            _netus2DbConnection.expectedNonQuerySql = null;
+            _netus2DbConnection.expectedReaderSql = null;
+        }
     }
 }

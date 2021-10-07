@@ -44,9 +44,9 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "DELETE FROM academic_session " +
                 "WHERE 1=1 " +
                 "AND academic_session_id = " + tdBuilder.schoolYear.Id + " " +
-                "AND term_code = '" + tdBuilder.schoolYear.TermCode + "' " +
+                "AND term_code LIKE '" + tdBuilder.schoolYear.TermCode + "' " +
                 "AND school_year = " + tdBuilder.schoolYear.SchoolYear + " " +
-                "AND name = '" + tdBuilder.schoolYear.Name + "' " +
+                "AND name LIKE '" + tdBuilder.schoolYear.Name + "' " +
                 "AND start_date = '" + tdBuilder.schoolYear.StartDate + "' " +
                 "AND end_date = '" + tdBuilder.schoolYear.EndDate + "' " +
                 "AND enum_session_id = " + tdBuilder.schoolYear.SessionType.Id + " " +
@@ -377,6 +377,9 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
         public void TearDown()
         {
             _netus2DbConnection.mockReader = new Mock<IDataReader>();
+            _netus2DbConnection.expectedNewRecordSql = null;
+            _netus2DbConnection.expectedNonQuerySql = null;
+            _netus2DbConnection.expectedReaderSql = null;
         }
 
         private AcademicSession RemoveAllButFirstChild(AcademicSession parent)

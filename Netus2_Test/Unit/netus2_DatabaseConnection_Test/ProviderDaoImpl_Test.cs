@@ -41,10 +41,10 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 "DELETE FROM provider " +
                 "WHERE 1=1 " +
                 "AND provider_id = " + tdBuilder.provider.Id + " " +
-                "AND name = '" + tdBuilder.provider.Name + "' " +
-                "AND url_standard_access = '" + tdBuilder.provider.UrlStandardAccess + "' " +
-                "AND url_admin_access = '" + tdBuilder.provider.UrlAdminAccess + "' " +
-                "AND populated_by = '" + tdBuilder.provider.PopulatedBy + "' ";
+                "AND name LIKE '" + tdBuilder.provider.Name + "' " +
+                "AND url_standard_access LIKE '" + tdBuilder.provider.UrlStandardAccess + "' " +
+                "AND url_admin_access LIKE '" + tdBuilder.provider.UrlAdminAccess + "' " +
+                "AND populated_by LIKE '" + tdBuilder.provider.PopulatedBy + "' ";
 
             providerDaoImpl.Delete(tdBuilder.provider, _netus2DbConnection);
         }
@@ -223,6 +223,9 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
         public void TearDown()
         {
             _netus2DbConnection.mockReader = new Mock<IDataReader>();
+            _netus2DbConnection.expectedNewRecordSql = null;
+            _netus2DbConnection.expectedNonQuerySql = null;
+            _netus2DbConnection.expectedReaderSql = null;
         }
 
         private void SetMockReaderWithTestData(List<DataRow> tstDataSet)
