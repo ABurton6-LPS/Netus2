@@ -1,8 +1,14 @@
 ﻿using Netus2_DatabaseConnection;
 using Netus2SisSync.SyncProcesses.SyncTasks.AcademicSessionTasks;
 using Netus2SisSync.SyncProcesses.SyncTasks.AddressTasks;
+using Netus2SisSync.SyncProcesses.SyncTasks.ClassTasks;
+using Netus2SisSync.SyncProcesses.SyncTasks.CourseTasks;
+using Netus2SisSync.SyncProcesses.SyncTasks.EnrollmentTasks;
+using Netus2SisSync.SyncProcesses.SyncTasks.LineItemTasks;
+using Netus2SisSync.SyncProcesses.SyncTasks.MarkTasks;
 using Netus2SisSync.SyncProcesses.SyncTasks.OrganizationTasks;
 using Netus2SisSync.SyncProcesses.SyncTasks.PersonTasks;
+using Netus2SisSync.SyncProcesses.SyncTasks.PhoneNumberTasks;
 using System.Data;
 
 namespace Netus2SisSync.SyncProcesses
@@ -67,6 +73,41 @@ namespace Netus2SisSync.SyncProcesses
         {
             SyncTask syncTask = new SyncTask_PhoneNumber(
                 "SyncTask_PhoneNumber", job);
+            syncTask.Execute(row, latch);
+        }
+
+        public static void Execute_Course_RecordSync(SyncJob job, DataRow row, CountDownLatch latch)
+        {
+            SyncTask syncTask = new SyncTask_Course(
+                "SyncTask_Course", job);
+            syncTask.Execute(row, latch);
+        }
+
+        public static void Execute_Class_RecordSync(SyncJob job, DataRow row, CountDownLatch latch)
+        {
+            SyncTask syncTask = new SyncTask_Class(
+                "SyncTask_Class", job);
+            syncTask.Execute(row, latch);
+        }
+
+        public static void Execute_Enrollment_RecordSync(SyncJob job, DataRow row, CountDownLatch latch)
+        {
+            SyncTask syncTask = new SyncTask_Enrollment(
+                "SyncTask_Enrollment", job);
+            syncTask.Execute(row, latch);
+        }
+
+        public static void Execute_LineItem_RecordSync(SyncJob job, DataRow row, CountDownLatch latch)
+        {
+            SyncTask syncTask = new SyncTask_LineItem(
+                "SyncTask_LineItem", job);
+            syncTask.Execute(row, latch);
+        }
+
+        public static void Execute_Mark_RecordSync(SyncJob job, DataRow row, CountDownLatch latch)
+        {
+            SyncTask syncTask = new SyncTask_Mark(
+                "SyncTask_Mark", job);
             syncTask.Execute(row, latch);
         }
     }

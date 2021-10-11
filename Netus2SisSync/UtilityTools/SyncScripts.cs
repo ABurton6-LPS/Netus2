@@ -3,14 +3,15 @@
     class SyncScripts
     {
         public static string ReadSis_Organization_SQL = BuildScript_Sis_Organization();
-
         public static string ReadSiS_AcademicSession_SQL = BuildScript_Sis_AcademicSession();
-
         public static string ReadSis_Person_SQL = BuildScript_Sis_Person();
-
         public static string ReadSis_Address_SQL = BuildScript_Sis_Address();
-
         public static string ReadSis_PhoneNumber_SQL = BuildScript_Sis_PhoneNumber();
+        public static string ReadSis_Course_SQL = BuildScript_Sis_Course();
+        public static string ReadSis_Class_SQL = BuildScript_Sis_Class();
+        public static string ReadSis_Enrollment_SQL = BuildScript_Sis_Enrollment();
+        public static string ReadSis_LineItem_SQL = BuildScript_Sis_LineItem();
+        public static string ReadSis_Mark_SQL = BuildScript_Sis_Mark();
 
         private static string BuildScript_Sis_Organization()
         {
@@ -141,6 +142,44 @@
         }
 
         private static string BuildScript_Sis_PhoneNumber()
+        {
+            return "";
+        }
+
+        private static string BuildScript_Sis_Course()
+        {
+            return "SELECT DISTINCT " +
+                "ch.descript name, " +
+                "c.coursec course_code, " +
+                "null subject, " +
+                "null grade " +
+                "FROM course c " +
+                "JOIN crshist ch ON ch.crsuniq=c.crsuniq " +
+                "JOIN trkcrs tc ON tc.crsuniq=c.crsuniq " +
+                "JOIN track t ON t.trkuniq=tc.trkuniq AND t.schyear >= " +
+                "(SELECT schyear FROM school WHERE isdo=1) " +
+                "JOIN mstsched ms ON ms.trkcrsuniq=tc.trkcrsuniq " +
+                "WHERE 1=1 " +
+                "AND (ch.todate IS NULL OR ch.todate >= GETDATE()) " +
+                "AND c.crsstatc = 'A' ORDER BY name";
+        }
+
+        private static string BuildScript_Sis_Class()
+        {
+            return "";
+        }
+
+        private static string BuildScript_Sis_Enrollment()
+        {
+            return "";
+        }
+
+        private static string BuildScript_Sis_LineItem()
+        {
+            return "";
+        }
+
+        private static string BuildScript_Sis_Mark()
         {
             return "";
         }

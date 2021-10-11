@@ -28,6 +28,21 @@ namespace Netus2SisSync.SyncProcesses
 
                 if (ShouldRunSync("PhoneNumber"))
                     new SyncJob_PhoneNumber().Start();
+
+                if (ShouldRunSync("Course"))
+                    new SyncJob_Course().Start();
+
+                if (ShouldRunSync("Class"))
+                    new SyncJob_Class().Start();
+
+                if (ShouldRunSync("Enrollment"))
+                    new SyncJob_Enrollment().Start();
+
+                if (ShouldRunSync("LineItem"))
+                    new SyncJob_LineItem().Start();
+
+                if (ShouldRunSync("Mark"))
+                    new SyncJob_Mark().Start();
             }
 
             log.LogInformation($"Netus2SisSync Timer trigger function finished at: {DateTime.Now}");
