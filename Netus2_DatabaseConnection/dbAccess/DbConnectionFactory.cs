@@ -25,7 +25,7 @@ namespace Netus2_DatabaseConnection.dbAccess
             string currentEnvironment = environment.GetVariable("CURRENT_ENVIRONMENT");
             switch (currentEnvironment)
             {
-                case "local":
+                case "loc":
                     return new AsyncDatabaseConnection(GetDatabaseConnectionString_Netus2_Local());
                 case "tst":
                     return new AsyncDatabaseConnection(GetDatabaseConnectionString_Netus2_Tst());
@@ -53,20 +53,22 @@ namespace Netus2_DatabaseConnection.dbAccess
 
         private static string GetDatabaseConnectionString_Netus2_Tst()
         {
-            string connectionString = environment.GetVariable("Netus2DbConnectionString_Tst");
+            string nameOfEnvironmentVariable = "Netus2DbConnectionString_Tst";
+            string connectionString = environment.GetVariable(nameOfEnvironmentVariable);
 
             if (connectionString == null)
-                throw new System.Exception("The Netus2DbConnectionString_Test Environment Variable is not set.");
+                throw new System.Exception("The " + nameOfEnvironmentVariable + " Environment Variable is not set.");
 
             return connectionString;
         }
 
         private static string GetDatabaseConnectionString_Netus2_Local()
         {
-            string connectionString = environment.GetVariable("Netus2DbConnectionString_Local");
+            string nameOfEnvironmentVariable = "Netus2DbConnectionString_Loc";
+            string connectionString = environment.GetVariable(nameOfEnvironmentVariable);
 
             if (connectionString == null)
-                throw new System.Exception("The Netus2DbConnectionString_Local Environment Variable is not set.");
+                throw new System.Exception("The " + nameOfEnvironmentVariable + " Environment Variable is not set.");
 
             return connectionString;
         }
