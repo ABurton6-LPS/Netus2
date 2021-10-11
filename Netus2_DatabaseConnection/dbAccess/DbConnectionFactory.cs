@@ -47,7 +47,7 @@ namespace Netus2_DatabaseConnection.dbAccess
             return UtilityTools.ReadConfig(
                             Enum_Config.values["sis_db_string"],
                             Enum_True_False.values["true"],
-                            Enum_True_False.values["false"])
+                            Enum_True_False.values["true"])
                         .ConfigValue;
         }
 

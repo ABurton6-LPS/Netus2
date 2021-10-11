@@ -64,6 +64,8 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.OrganizationTasks
                         }
                     }
                 }
+
+                SyncLogger.LogStatus(this, Enum_Sync_Status.values["end"]);
             }
             catch (Exception e)
             {
@@ -72,7 +74,6 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.OrganizationTasks
             }
             finally
             {
-                SyncLogger.LogStatus(this, Enum_Sync_Status.values["end"]);
                 netus2Connection.CloseConnection();
                 latch.Signal();
             }

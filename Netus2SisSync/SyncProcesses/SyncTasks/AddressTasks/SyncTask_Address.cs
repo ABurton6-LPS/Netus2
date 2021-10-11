@@ -27,7 +27,9 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AddressTasks
         {
             try
             {
-                
+
+
+                SyncLogger.LogStatus(this, Enum_Sync_Status.values["end"]);
             }
             catch (Exception e)
             {
@@ -36,7 +38,6 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AddressTasks
             }
             finally
             {
-                SyncLogger.LogStatus(this, Enum_Sync_Status.values["end"]);
                 _netus2Connection.CloseConnection();
                 latch.Signal();
             }
