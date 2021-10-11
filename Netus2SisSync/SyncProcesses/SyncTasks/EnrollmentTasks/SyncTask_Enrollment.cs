@@ -10,13 +10,13 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 
-namespace Netus2SisSync.SyncProcesses.SyncTasks.PhoneNumberTasks
+namespace Netus2SisSync.SyncProcesses.SyncTasks.EnrollmentTasks
 {
-    public class SyncTask_PhoneNumber : SyncTask
+    public class SyncTask_Enrollment : SyncTask
     {
         IConnectable _netus2Connection;
 
-        public SyncTask_PhoneNumber(string name, SyncJob job)
+        public SyncTask_Enrollment(string name, SyncJob job)
             : base(name, job)
         {
             _netus2Connection = DbConnectionFactory.GetNetus2Connection();

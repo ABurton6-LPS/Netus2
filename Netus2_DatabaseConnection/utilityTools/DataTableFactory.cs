@@ -53,18 +53,6 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtAcademicSession;
         }
 
-        public static DataTable CreateDataTable_Sis_Address()
-        {
-            //Do Nothing
-            return null;
-        }
-
-        public static DataTable CreateDataTable_Sis_PhoneNumber()
-        {
-            //Do Nothing
-            return null;
-        }
-
         public static DataTable CreateDataTable_Sis_Organization()
         {
             DataTable dtOrganization = new DataTable("Organization");
@@ -159,6 +147,70 @@ namespace Netus2_DatabaseConnection.utilityTools
             dtPerson.Columns.Add(dtColumn);
 
             return dtPerson;
+        }
+
+        public static DataTable CreateDataTable_Sis_Address()
+        {
+            //Do Nothing
+            return null;
+        }
+
+        public static DataTable CreateDataTable_Sis_PhoneNumber()
+        {
+            //Do Nothing
+            return null;
+        }
+
+        public static DataTable CreateDataTable_Sis_Course()
+        {
+            DataTable dtCourse = new DataTable("Course");
+            DataColumn dtColumn;
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "name";
+            dtCourse.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "course_code";
+            dtCourse.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "subject";
+            dtCourse.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "grade";
+            dtCourse.Columns.Add(dtColumn);
+
+            return dtCourse;
+        }
+
+        public static DataTable CreateDataTable_Sis_Class()
+        {
+            //Do Nothing
+            return null;
+        }
+
+        public static DataTable CreateDataTable_Sis_Enrollment()
+        {
+            //Do Nothing
+            return null;
+        }
+
+        public static DataTable CreateDataTable_Sis_LineItem()
+        {
+            //Do Nothing
+            return null;
+        }
+
+        public static DataTable CreateDataTable_Sis_Mark()
+        {
+            //Do Nothing
+            return null;
         }
 
         public static DataTable CreateDataTable_Netus2_Config()
