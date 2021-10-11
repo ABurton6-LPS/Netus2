@@ -59,6 +59,12 @@ namespace Netus2_DatabaseConnection.utilityTools
             return null;
         }
 
+        public static DataTable CreateDataTable_Sis_PhoneNumber()
+        {
+            //Do Nothing
+            return null;
+        }
+
         public static DataTable CreateDataTable_Sis_Organization()
         {
             DataTable dtOrganization = new DataTable("Organization");

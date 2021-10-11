@@ -10,6 +10,8 @@
 
         public static string ReadSis_Address_SQL = BuildScript_Sis_Address();
 
+        public static string ReadSis_PhoneNumber_SQL = BuildScript_Sis_PhoneNumber();
+
         private static string BuildScript_Sis_Organization()
         {
             return "SELECT " +
@@ -134,6 +136,11 @@
         }
 
         private static string BuildScript_Sis_Address()
+        {
+            return "";
+        }
+
+        private static string BuildScript_Sis_PhoneNumber()
         {
             return "";
         }

@@ -25,6 +25,9 @@ namespace Netus2SisSync.SyncProcesses
 
                 if (ShouldRunSync("Address"))
                     new SyncJob_Address().Start();
+
+                if (ShouldRunSync("PhoneNumber"))
+                    new SyncJob_PhoneNumber().Start();
             }
 
             log.LogInformation($"Netus2SisSync Timer trigger function finished at: {DateTime.Now}");

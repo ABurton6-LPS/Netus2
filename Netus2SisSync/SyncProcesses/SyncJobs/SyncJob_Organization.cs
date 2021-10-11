@@ -24,15 +24,12 @@ namespace Netus2SisSync.SyncProcesses.SyncJobs
             {
                 ReadFromSis();
                 RunJobTasks();
+                SyncLogger.LogStatus(this, Enum_Sync_Status.values["end"]);
             }
             catch (Exception e)
             {
                 SyncLogger.LogStatus(this, Enum_Sync_Status.values["error"]);
                 SyncLogger.LogError(e, this);
-            }
-            finally
-            {
-                SyncLogger.LogStatus(this, Enum_Sync_Status.values["end"]);
             }
         }
 
