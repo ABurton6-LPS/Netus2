@@ -72,6 +72,8 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AcademicSessionTasks
                 {
                     throw new Exception(foundAcademicSessions.Count + " record(s) found matching Academic Session:\n" + academicSession.ToString());
                 }
+
+                SyncLogger.LogStatus(this, Enum_Sync_Status.values["end"]);
             }
             catch (Exception e)
             {
@@ -80,7 +82,6 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AcademicSessionTasks
             }
             finally
             {
-                SyncLogger.LogStatus(this, Enum_Sync_Status.values["end"]);
                 _netus2Connection.CloseConnection();
                 latch.Signal();
             }

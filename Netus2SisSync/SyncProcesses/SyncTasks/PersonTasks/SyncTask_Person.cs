@@ -108,6 +108,8 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.PersonTasks
                 {
                     throw new Exception(foundUniqueIdentifiers.Count + " record(s) found matching UniqueIdentifier:\n" + uniqueId.ToString());
                 }
+
+                SyncLogger.LogStatus(this, Enum_Sync_Status.values["end"]);
             }
             catch (Exception e)
             {
@@ -116,7 +118,6 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.PersonTasks
             }
             finally
             {
-                SyncLogger.LogStatus(this, Enum_Sync_Status.values["end"]);
                 _netus2Connection.CloseConnection();
                 latch.Signal();
             }
