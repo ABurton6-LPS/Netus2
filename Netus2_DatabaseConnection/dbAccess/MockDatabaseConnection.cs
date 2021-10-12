@@ -42,7 +42,7 @@ namespace Netus2_DatabaseConnection.dbAccess
             testEnumKeys.Add("state id");
             testEnumKeys.Add("employment");
             testEnumKeys.Add("1");
-            testEnumKeys.Add("spn");
+            testEnumKeys.Add("fl");
             testEnumKeys.Add("scheduled");
             testEnumKeys.Add("test");
             testEnumKeys.Add("student");

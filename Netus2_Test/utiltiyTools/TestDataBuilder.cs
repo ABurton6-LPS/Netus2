@@ -157,7 +157,7 @@ namespace Netus2_Test
             else
                 spanishCourse.Id = 1;
             spanishCourse.Grades.Add(Enum_Grade.values["1"]);
-            spanishCourse.Subjects.Add(Enum_Subject.values["spn"]);
+            spanishCourse.Subjects.Add(Enum_Subject.values["fl"]);
             if (connection != null)
             {
                 courseDaoImpl.Update(spanishCourse, connection);
