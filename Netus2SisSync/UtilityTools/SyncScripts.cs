@@ -149,19 +149,33 @@
         private static string BuildScript_Sis_Course()
         {
             return "SELECT DISTINCT " +
-                "ch.descript name, " +
+                "REPLACE(ch.descript,'''','''''') name, " +
                 "c.coursec course_code, " +
-                "null subject, " +
-                "null grade " +
+                "ch.subjectc [subject], " +
+                "substring((SELECT ',' + CONVERT(VARCHAR(2),gr.graden) AS [text()] " +
+                "FROM zgrade gr " +
+                "WHERE CASE  " +
+                "WHEN gr.graden = 65  " +
+                "THEN -0.5  " +
+                "ELSE gr.graden  " +
+                "END  " +
+                "BETWEEN ISNULL(MIN(CASE WHEN ms.lograden = 65 THEN -0.5 ELSE ms.lograden END), " +
+                "ISNULL(MAX(ms.higraden),0))  " +
+                "AND ISNULL(MAX(CASE WHEN ms.higraden = 65 THEN -0.5 ELSE ms.higraden END), " +
+                "ISNULL(MIN(ms.lograden),12)) " +
+                "ORDER BY gr.graden " +
+                "FOR XML PATH ('')),2,1000) grade " +
                 "FROM course c " +
                 "JOIN crshist ch ON ch.crsuniq=c.crsuniq " +
                 "JOIN trkcrs tc ON tc.crsuniq=c.crsuniq " +
-                "JOIN track t ON t.trkuniq=tc.trkuniq AND t.schyear >= " +
-                "(SELECT schyear FROM school WHERE isdo=1) " +
+                "JOIN track t ON t.trkuniq=tc.trkuniq  " +
+                "AND t.schyear >= (SELECT schyear FROM school WHERE isdo=1) " +
                 "JOIN mstsched ms ON ms.trkcrsuniq=tc.trkcrsuniq " +
                 "WHERE 1=1 " +
                 "AND (ch.todate IS NULL OR ch.todate >= GETDATE()) " +
-                "AND c.crsstatc = 'A' ORDER BY name";
+                "AND c.crsstatc = 'A' " +
+                "GROUP BY ch.descript, c.coursec, ch.subjectc " +
+                "ORDER BY name";
         }
 
         private static string BuildScript_Sis_Class()
