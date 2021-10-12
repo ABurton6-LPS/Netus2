@@ -30,8 +30,8 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.CourseTasks
             {
                 string sisCourseName = row["name"].ToString() == "" ? null : row["name"].ToString();
                 string sisCourseCode = row["course_code"].ToString() == "" ? null : row["course_code"].ToString();
-                string[] sisSubjectArray = row["subject"].ToString() == "" ? new string[0] : row["subject"].ToString().Split(',');
-                string[] sisGradeArray = row["grade"].ToString() == "" ? new string[0] : row["grade"].ToString().Trim().Split(',');
+                string[] sisSubjectArray = row["subject"].ToString() == "" ? new string[0] : row["subject"].ToString().ToLower().Split(',');
+                string[] sisGradeArray = row["grade"].ToString() == "" ? new string[0] : row["grade"].ToString().ToLower().Split(',');
 
                 List<Enumeration> sisSubjectList = new List<Enumeration>();
                 foreach(string subject in sisSubjectArray)
