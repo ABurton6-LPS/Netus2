@@ -122,7 +122,7 @@ namespace Netus2_Test.Integration
             Course spanishCourse = new Course("Spanish", "spn");
             spanishCourse = courseDaoImpl.Write(spanishCourse, connection);
             spanishCourse.Grades.Add(Enum_Grade.values["1"]);
-            spanishCourse.Subjects.Add(Enum_Subject.values["spn"]);
+            spanishCourse.Subjects.Add(Enum_Subject.values["fl"]);
             courseDaoImpl.Update(spanishCourse, connection);
             spanishCourse = courseDaoImpl.Read(spanishCourse, connection)[0];
             Assert.IsTrue(spanishCourse.Id > 0);

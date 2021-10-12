@@ -678,7 +678,7 @@ namespace Netus2_Test.Integration
             Assert.AreEqual(Enum_Log_Action.values["delete"], logJctCourseSubjects[preTestLogCount].LogAction);
 
             Assert.AreEqual(student.Enrollments[0].ClassEnrolled.Course.Id, logJctCourseSubjects[preTestLogCount].course_id);
-            Assert.AreEqual(Enum_Subject.values["spn"], logJctCourseSubjects[preTestLogCount].Subject);
+            Assert.AreEqual(Enum_Subject.values["fl"], logJctCourseSubjects[preTestLogCount].Subject);
         }
 
         [Test]
