@@ -28,7 +28,7 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AcademicSessionTasks
         {
             try
             {
-                string sisSchoolCode = row["school_code"].ToString() == "" ? null : row["school_code"].ToString();
+                string sisBuildingCode = row["building_code"].ToString() == "" ? null : row["building_code"].ToString();
                 string sisTermCode = row["term_code"].ToString() == "" ? null : row["term_code"].ToString();
                 int sisSchoolYear = Int32.Parse(row["school_year"].ToString() == "" ? "-1" : row["school_year"].ToString());
                 string sisName = row["name"].ToString() == "" ? null : row["name"].ToString();
@@ -38,7 +38,7 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AcademicSessionTasks
 
                 IOrganizationDao orgDaoImpl = DaoImplFactory.GetOrganizationDaoImpl();
                 orgDaoImpl.SetTaskId(this.Id);
-                Organization org = orgDaoImpl.Read_WithSisBuildingCode(sisSchoolCode, _netus2Connection);
+                Organization org = orgDaoImpl.Read_WithSisBuildingCode(sisBuildingCode, _netus2Connection);
 
                 AcademicSession academicSession = new AcademicSession(sisName, sisEnumSession, org, sisTermCode);
                 academicSession.SchoolYear = sisSchoolYear;
@@ -60,9 +60,9 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AcademicSessionTasks
                     if ((academicSession.TermCode != foundAcademicSessions[0].TermCode) ||
                         (academicSession.SchoolYear != foundAcademicSessions[0].SchoolYear) ||
                         (academicSession.Name != foundAcademicSessions[0].Name) ||
+                        (academicSession.SessionType != foundAcademicSessions[0].SessionType) ||
                         (academicSession.StartDate != foundAcademicSessions[0].StartDate) ||
                         (academicSession.EndDate != foundAcademicSessions[0].EndDate) ||
-                        (academicSession.SessionType != foundAcademicSessions[0].SessionType) ||
                         (academicSession.Organization.Id != foundAcademicSessions[0].Organization.Id))
                     {
                         academicSessionDaoImpl.Update(academicSession, _netus2Connection);

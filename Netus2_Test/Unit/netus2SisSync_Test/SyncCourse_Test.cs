@@ -134,13 +134,179 @@ namespace Netus2_Test.Unit.SyncProcess
         }
 
         [TestCase]
-        public void SyncChild_Course_ShouldUpdateRecord()
+        public void SyncChild_Course_ShouldUpdateRecord_DifferentCourseCode()
+        {
+            mockCourseDaoImpl._shouldReadReturnData = true;
+
+            SisCourseTestData tstData = new SisCourseTestData();
+            tstData.Name = tdBuilder.spanishCourse.Name;
+            tstData.CourseCode = "NewCourseCode";
+            foreach (Enumeration enumSubject in tdBuilder.spanishCourse.Subjects)
+            {
+                tstData.Subject += enumSubject.Netus2Code + ',';
+            }
+            tstData.Subject = tstData.Subject.Remove(tstData.Subject.Length - 1, 1);
+
+            foreach (Enumeration enumGrade in tdBuilder.spanishCourse.Grades)
+            {
+                tstData.Grade += enumGrade.Netus2Code + ',';
+            }
+            tstData.Grade = tstData.Grade.Remove(tstData.Grade.Length - 1, 1);
+
+            List<SisCourseTestData> tstDataSet = new List<SisCourseTestData>();
+            tstDataSet.Add(tstData);
+            DataRow row = BuildTestDataTable(tstDataSet).Rows[0];
+
+            new SyncTask_Course("TestTask",
+                new SyncJob_Course())
+                .Execute(row, new CountDownLatch(0));
+
+            Assert.IsTrue(mockCourseDaoImpl.WasCalled_Read);
+            Assert.IsTrue(mockCourseDaoImpl.WasCalled_Update);
+        }
+
+        [TestCase]
+        public void SyncChild_Course_ShouldUpdateRecord_DifferentName()
         {
             mockCourseDaoImpl._shouldReadReturnData = true;
 
             SisCourseTestData tstData = new SisCourseTestData();
             tstData.Name = "NewCourseName";
             tstData.CourseCode = tdBuilder.spanishCourse.CourseCode;
+            foreach (Enumeration enumSubject in tdBuilder.spanishCourse.Subjects)
+            {
+                tstData.Subject += enumSubject.Netus2Code + ',';
+            }
+            tstData.Subject = tstData.Subject.Remove(tstData.Subject.Length - 1, 1);
+
+            foreach (Enumeration enumGrade in tdBuilder.spanishCourse.Grades)
+            {
+                tstData.Grade += enumGrade.Netus2Code + ',';
+            }
+            tstData.Grade = tstData.Grade.Remove(tstData.Grade.Length - 1, 1);
+
+            List<SisCourseTestData> tstDataSet = new List<SisCourseTestData>();
+            tstDataSet.Add(tstData);
+            DataRow row = BuildTestDataTable(tstDataSet).Rows[0];
+
+            new SyncTask_Course("TestTask",
+                new SyncJob_Course())
+                .Execute(row, new CountDownLatch(0));
+
+            Assert.IsTrue(mockCourseDaoImpl.WasCalled_Read);
+            Assert.IsTrue(mockCourseDaoImpl.WasCalled_Update);
+        }
+
+        [TestCase]
+        public void SyncChild_Course_ShouldUpdateRecord_ClearSubjects()
+        {
+            mockCourseDaoImpl._shouldReadReturnData = true;
+
+            SisCourseTestData tstData = new SisCourseTestData();
+            tstData.Name = tdBuilder.spanishCourse.Name;
+            tstData.CourseCode = tdBuilder.spanishCourse.CourseCode;
+            tstData.Subject = null;
+
+            foreach (Enumeration enumGrade in tdBuilder.spanishCourse.Grades)
+            {
+                tstData.Grade += enumGrade.Netus2Code + ',';
+            }
+            tstData.Grade = tstData.Grade.Remove(tstData.Grade.Length - 1, 1);
+
+            List<SisCourseTestData> tstDataSet = new List<SisCourseTestData>();
+            tstDataSet.Add(tstData);
+            DataRow row = BuildTestDataTable(tstDataSet).Rows[0];
+
+            new SyncTask_Course("TestTask",
+                new SyncJob_Course())
+                .Execute(row, new CountDownLatch(0));
+
+            Assert.IsTrue(mockCourseDaoImpl.WasCalled_Read);
+            Assert.IsTrue(mockCourseDaoImpl.WasCalled_Update);
+        }
+
+        [TestCase]
+        public void SyncChild_Course_ShouldUpdateRecord_AddSubject()
+        {
+            mockCourseDaoImpl._shouldReadReturnData = true;
+
+            SisCourseTestData tstData = new SisCourseTestData();
+            tstData.Name = tdBuilder.spanishCourse.Name;
+            tstData.CourseCode = tdBuilder.spanishCourse.CourseCode;
+
+            foreach (Enumeration enumSubject in tdBuilder.spanishCourse.Subjects)
+            {
+                tstData.Subject += enumSubject.Netus2Code + ',';
+            }
+            tstData.Subject = tstData.Subject.Remove(tstData.Subject.Length - 1, 1);
+            tstData.Subject += ("," + Enum_Subject.values["be"].SisCode);
+
+            foreach (Enumeration enumGrade in tdBuilder.spanishCourse.Grades)
+            {
+                tstData.Grade += enumGrade.Netus2Code + ',';
+            }
+            tstData.Grade = tstData.Grade.Remove(tstData.Grade.Length - 1, 1);
+
+            List<SisCourseTestData> tstDataSet = new List<SisCourseTestData>();
+            tstDataSet.Add(tstData);
+            DataRow row = BuildTestDataTable(tstDataSet).Rows[0];
+
+            new SyncTask_Course("TestTask",
+                new SyncJob_Course())
+                .Execute(row, new CountDownLatch(0));
+
+            Assert.IsTrue(mockCourseDaoImpl.WasCalled_Read);
+            Assert.IsTrue(mockCourseDaoImpl.WasCalled_Update);
+        }
+
+        [TestCase]
+        public void SyncChild_Course_ShouldUpdateRecord_ClearGrades()
+        {
+            mockCourseDaoImpl._shouldReadReturnData = true;
+
+            SisCourseTestData tstData = new SisCourseTestData();
+            tstData.Name = tdBuilder.spanishCourse.Name;
+            tstData.CourseCode = tdBuilder.spanishCourse.CourseCode;
+            foreach (Enumeration enumSubject in tdBuilder.spanishCourse.Subjects)
+            {
+                tstData.Subject += enumSubject.Netus2Code + ',';
+            }
+            tstData.Subject = tstData.Subject.Remove(tstData.Subject.Length - 1, 1);
+
+            foreach (Enumeration enumGrade in tdBuilder.spanishCourse.Grades)
+            {
+                tstData.Grade += enumGrade.Netus2Code + ',';
+            }
+            tstData.Grade = tstData.Grade.Remove(tstData.Grade.Length - 1, 1);
+            tstData.Grade += "," + Enum_Grade.values["14"].SisCode;
+
+            List<SisCourseTestData> tstDataSet = new List<SisCourseTestData>();
+            tstDataSet.Add(tstData);
+            DataRow row = BuildTestDataTable(tstDataSet).Rows[0];
+
+            new SyncTask_Course("TestTask",
+                new SyncJob_Course())
+                .Execute(row, new CountDownLatch(0));
+
+            Assert.IsTrue(mockCourseDaoImpl.WasCalled_Read);
+            Assert.IsTrue(mockCourseDaoImpl.WasCalled_Update);
+        }
+
+        [TestCase]
+        public void SyncChild_Course_ShouldUpdateRecord_AddGrade()
+        {
+            mockCourseDaoImpl._shouldReadReturnData = true;
+
+            SisCourseTestData tstData = new SisCourseTestData();
+            tstData.Name = tdBuilder.spanishCourse.Name;
+            tstData.CourseCode = tdBuilder.spanishCourse.CourseCode;
+            foreach (Enumeration enumSubject in tdBuilder.spanishCourse.Subjects)
+            {
+                tstData.Subject += enumSubject.Netus2Code + ',';
+            }
+            tstData.Subject = tstData.Subject.Remove(tstData.Subject.Length - 1, 1);
+
+            tstData.Grade = null;
 
             List<SisCourseTestData> tstDataSet = new List<SisCourseTestData>();
             tstDataSet.Add(tstData);

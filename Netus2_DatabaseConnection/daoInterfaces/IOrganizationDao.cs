@@ -49,6 +49,14 @@ namespace Netus2_DatabaseConnection.daoInterfaces
         Organization Read_WithSisBuildingCode(string sisBuildingCode, IConnectable connection);
 
         /// <summary>
+        /// Returns the parent Organization object of the provided Organization object, if one exists in the database.
+        /// Otherwise, returns null.
+        /// </summary>
+        /// <param name="organization"></param>
+        /// <param name="connection"></param>
+        Organization Read_Parent(Organization organization, IConnectable connection);
+
+        /// <summary>
         /// Returns a list of Organization objects, read from the database, which match the parameters provided in the 
         /// Organization object passed in, and linked to the primary key of the parent Organization object, parentId. 
         /// Null values provided within the Organization will be ignored.

@@ -96,6 +96,14 @@ namespace Netus2_DatabaseConnection.daoInterfaces
         List<AcademicSession> Read_Children(AcademicSession parent, IConnectable connection);
 
         /// <summary>
+        /// Returns the parent AcademicSession object, if one exists in the database, to the AcademicSession object passed in.
+        /// Otherwise, returns null.
+        /// </summary>
+        /// <param name="child"></param>
+        /// <param name="connection"></param>
+        AcademicSession Read_Parent(AcademicSession child, IConnectable connection);
+
+        /// <summary>
         /// <para>
         /// Writes the provided AcademicSession object to the database, then returns with that same object, 
         /// but with the auto-generated Id field populated using the primary key from the database.

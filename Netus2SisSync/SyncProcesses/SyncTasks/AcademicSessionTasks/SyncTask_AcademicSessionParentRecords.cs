@@ -27,7 +27,7 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AcademicSessionTasks
         {
             try
             {
-                string sisSchoolCode = row["school_code"].ToString() == "" ? null : row["school_code"].ToString();
+                string sisBuildingCode = row["building_code"].ToString() == "" ? null : row["building_code"].ToString();
                 string sisTermCode = row["term_code"].ToString() == "" ? null : row["term_code"].ToString();
                 int sisSchoolYear = Int32.Parse(row["school_year"].ToString() == "" ? "-1" : row["school_year"].ToString());
                 string sisName = row["name"].ToString() == "" ? null : row["name"].ToString();
@@ -37,7 +37,7 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AcademicSessionTasks
 
                 IOrganizationDao orgDaoImpl = DaoImplFactory.GetOrganizationDaoImpl();
                 orgDaoImpl.SetTaskId(this.Id);
-                Organization org = orgDaoImpl.Read_WithSisBuildingCode(sisSchoolCode, _netus2Connection);
+                Organization org = orgDaoImpl.Read_WithSisBuildingCode(sisBuildingCode, _netus2Connection);
 
                 AcademicSession academicSession = new AcademicSession(sisName, sisEnumSession, org, sisTermCode);
                 academicSession.SchoolYear = sisSchoolYear;
@@ -65,12 +65,12 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AcademicSessionTasks
                     int numberOfDashesInSessionCode = 2;
                     int skipThisCharacterAndStartOnNextOne = 1;
 
-                    string sisParentSchoolCode = sisParentSessionCode.Substring(0, (sisParentSessionCode.IndexOf('-')));
+                    string sisParentBuildingCode = sisParentSessionCode.Substring(0, (sisParentSessionCode.IndexOf('-')));
                     int sisParentSchoolYear = Int32.Parse(sisParentSessionCode.Substring(sisParentSessionCode.LastIndexOf('-') + skipThisCharacterAndStartOnNextOne));
                     string sisParentTermCode = sisParentSessionCode.Substring(sisParentSessionCode.IndexOf('-') + skipThisCharacterAndStartOnNextOne,
-                        (sisParentSessionCode.Length - sisParentSchoolCode.Length) - sisParentSchoolYear.ToString().Length - numberOfDashesInSessionCode);
+                        (sisParentSessionCode.Length - sisParentBuildingCode.Length) - sisParentSchoolYear.ToString().Length - numberOfDashesInSessionCode);
 
-                    parentAcademicSession = academicSessionDaoImpl.Read_UsingSisBuildingCode_TermCode_Schoolyear(sisParentSchoolCode, sisParentTermCode, sisParentSchoolYear, _netus2Connection);
+                    parentAcademicSession = academicSessionDaoImpl.Read_UsingSisBuildingCode_TermCode_Schoolyear(sisParentBuildingCode, sisParentTermCode, sisParentSchoolYear, _netus2Connection);
                     if (parentAcademicSession != null)
                     {
                         List<int> childIds = new List<int>();
@@ -84,6 +84,13 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AcademicSessionTasks
                             academicSessionDaoImpl.Update(academicSession, parentAcademicSession.Id, _netus2Connection);
                         }
                     }
+                }
+                else
+                {
+                    parentAcademicSession = academicSessionDaoImpl.Read_Parent(academicSession, _netus2Connection);
+
+                    if (parentAcademicSession != null)
+                        academicSessionDaoImpl.Update(academicSession, _netus2Connection);
                 }
 
                 SyncLogger.LogStatus(this, Enum_Sync_Status.values["end"]);

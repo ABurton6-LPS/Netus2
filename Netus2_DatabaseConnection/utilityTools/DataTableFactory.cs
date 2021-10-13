@@ -12,7 +12,7 @@ namespace Netus2_DatabaseConnection.utilityTools
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(string);
-            dtColumn.ColumnName = "school_code";
+            dtColumn.ColumnName = "building_code";
             dtAcademicSession.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();

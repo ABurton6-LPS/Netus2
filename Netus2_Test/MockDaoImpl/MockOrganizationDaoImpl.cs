@@ -14,6 +14,7 @@ namespace Netus2_Test.MockDaoImpl
         public bool WasCalled_ReadWithAcademicSessionId = false;
         public bool WasCalled_ReadWithSisBuildingCode = false;
         public bool WasCalled_ReadWithOrganizationId = false;
+        public bool WasCalled_ReadParent = false;
         public bool WasCalled_UpdateWithoutParentId = false;
         public bool WasCalled_UpdateWithParentId = false;
         public bool WasCalled_WriteWithoutParentId = false;
@@ -78,9 +79,12 @@ namespace Netus2_Test.MockDaoImpl
         {
             WasCalled_ReadWithSisBuildingCode = true;
 
-            if (_shouldReadReturnData)
-                return tdBuilder.school;
-            else 
+            if (_shouldReadReturnData && sisBuildingCode != "")
+                if (sisBuildingCode == tdBuilder.district.SisBuildingCode)
+                    return tdBuilder.district;
+                else
+                    return tdBuilder.school;
+            else
                 return null;
         }
 
@@ -90,6 +94,16 @@ namespace Netus2_Test.MockDaoImpl
 
             if (_shouldReadReturnData)
                 return tdBuilder.school;
+            else
+                return null;
+        }
+
+        public Organization Read_Parent(Organization org, IConnectable connection)
+        {
+            WasCalled_ReadParent = true;
+
+            if (_shouldReadReturnData)
+                return tdBuilder.district;
             else
                 return null;
         }
