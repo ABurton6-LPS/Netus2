@@ -10,6 +10,7 @@ using Netus2_DatabaseConnection.daoImplementations;
 using Netus2SisSync.SyncProcesses.SyncTasks.PersonTasks;
 using Netus2_DatabaseConnection.utilityTools;
 using Netus2_DatabaseConnection;
+using Netus2_DatabaseConnection.enumerations;
 
 namespace Netus2_Test.Unit.SyncProcess
 {
@@ -171,7 +172,231 @@ namespace Netus2_Test.Unit.SyncProcess
         }
 
         [TestCase]
-        public void Sync_Person_ShouldUpdateRecord()
+        public void Sync_Person_ChangePersonType_ShouldUpdateRecord()
+        {
+            mockUniqueIdentifierDaoImpl._shouldReadReturnData = true;
+            mockPersonDaoImpl._shouldReadReturnData = true;
+
+            SisPersonTestData tstData = new SisPersonTestData();
+            tstData.PersonType = Enum_Role.values["aide"].Netus2Code;
+            tstData.SisId = tdBuilder.uniqueId_Student.Identifier;
+            tstData.FirstName = tdBuilder.student.FirstName;
+            tstData.MiddleName = tdBuilder.student.MiddleName;
+            tstData.LastName = tdBuilder.student.LastName;
+            tstData.BirthDate = tdBuilder.student.BirthDate;
+            tstData.Gender = tdBuilder.student.Gender.Netus2Code;
+            tstData.Ethnic = tdBuilder.student.Ethnic.Netus2Code;
+            tstData.ResStatus = tdBuilder.student.ResidenceStatus.Netus2Code;
+            tstData.LoginName = tdBuilder.student.LoginName;
+            tstData.LoginPw = tdBuilder.student.LoginPw;
+
+            List<SisPersonTestData> tstDataSet = new List<SisPersonTestData>();
+            tstDataSet.Add(tstData);
+            DataRow row = BuildTestDataTable(tstDataSet).Rows[0];
+
+            new SyncTask_Person("TestTask",
+                new SyncJob_Person())
+                .Execute(row, new CountDownLatch(0));
+
+            Assert.IsTrue(mockUniqueIdentifierDaoImpl.WasCalled_Read);
+            Assert.IsTrue(mockPersonDaoImpl.WasCalled_ReadUsingUniqueId);
+            Assert.IsTrue(mockPersonDaoImpl.WasCalled_Update);
+        }
+
+        [TestCase]
+        public void Sync_Person_ChangeFirstName_ShouldUpdateRecord()
+        {
+            mockUniqueIdentifierDaoImpl._shouldReadReturnData = true;
+            mockPersonDaoImpl._shouldReadReturnData = true;
+
+            SisPersonTestData tstData = new SisPersonTestData();
+            tstData.PersonType = tdBuilder.student.Roles[0].Netus2Code;
+            tstData.SisId = tdBuilder.uniqueId_Student.Identifier;
+            tstData.FirstName = "NewFirstName";
+            tstData.MiddleName = tdBuilder.student.MiddleName;
+            tstData.LastName = tdBuilder.student.LastName;
+            tstData.BirthDate = tdBuilder.student.BirthDate;
+            tstData.Gender = tdBuilder.student.Gender.Netus2Code;
+            tstData.Ethnic = tdBuilder.student.Ethnic.Netus2Code;
+            tstData.ResStatus = tdBuilder.student.ResidenceStatus.Netus2Code;
+            tstData.LoginName = tdBuilder.student.LoginName;
+            tstData.LoginPw = tdBuilder.student.LoginPw;
+
+            List<SisPersonTestData> tstDataSet = new List<SisPersonTestData>();
+            tstDataSet.Add(tstData);
+            DataRow row = BuildTestDataTable(tstDataSet).Rows[0];
+
+            new SyncTask_Person("TestTask",
+                new SyncJob_Person())
+                .Execute(row, new CountDownLatch(0));
+
+            Assert.IsTrue(mockUniqueIdentifierDaoImpl.WasCalled_Read);
+            Assert.IsTrue(mockPersonDaoImpl.WasCalled_ReadUsingUniqueId);
+            Assert.IsTrue(mockPersonDaoImpl.WasCalled_Update);
+        }
+
+        [TestCase]
+        public void Sync_Person_ChangeMiddleName_ShouldUpdateRecord()
+        {
+            mockUniqueIdentifierDaoImpl._shouldReadReturnData = true;
+            mockPersonDaoImpl._shouldReadReturnData = true;
+
+            SisPersonTestData tstData = new SisPersonTestData();
+            tstData.PersonType = tdBuilder.student.Roles[0].Netus2Code;
+            tstData.SisId = tdBuilder.uniqueId_Student.Identifier;
+            tstData.FirstName = tdBuilder.student.FirstName;
+            tstData.MiddleName = "NewMiddleName";
+            tstData.LastName = tdBuilder.student.LastName;
+            tstData.BirthDate = tdBuilder.student.BirthDate;
+            tstData.Gender = tdBuilder.student.Gender.Netus2Code;
+            tstData.Ethnic = tdBuilder.student.Ethnic.Netus2Code;
+            tstData.ResStatus = tdBuilder.student.ResidenceStatus.Netus2Code;
+            tstData.LoginName = tdBuilder.student.LoginName;
+            tstData.LoginPw = tdBuilder.student.LoginPw;
+
+            List<SisPersonTestData> tstDataSet = new List<SisPersonTestData>();
+            tstDataSet.Add(tstData);
+            DataRow row = BuildTestDataTable(tstDataSet).Rows[0];
+
+            new SyncTask_Person("TestTask",
+                new SyncJob_Person())
+                .Execute(row, new CountDownLatch(0));
+
+            Assert.IsTrue(mockUniqueIdentifierDaoImpl.WasCalled_Read);
+            Assert.IsTrue(mockPersonDaoImpl.WasCalled_ReadUsingUniqueId);
+            Assert.IsTrue(mockPersonDaoImpl.WasCalled_Update);
+        }
+
+        [TestCase]
+        public void Sync_Person_ChangeLastName_ShouldUpdateRecord()
+        {
+            mockUniqueIdentifierDaoImpl._shouldReadReturnData = true;
+            mockPersonDaoImpl._shouldReadReturnData = true;
+
+            SisPersonTestData tstData = new SisPersonTestData();
+            tstData.PersonType = tdBuilder.student.Roles[0].Netus2Code;
+            tstData.SisId = tdBuilder.uniqueId_Student.Identifier;
+            tstData.FirstName = tdBuilder.student.FirstName;
+            tstData.MiddleName = tdBuilder.student.MiddleName;
+            tstData.LastName = "NewLastName";
+            tstData.BirthDate = tdBuilder.student.BirthDate;
+            tstData.Gender = tdBuilder.student.Gender.Netus2Code;
+            tstData.Ethnic = tdBuilder.student.Ethnic.Netus2Code;
+            tstData.ResStatus = tdBuilder.student.ResidenceStatus.Netus2Code;
+            tstData.LoginName = tdBuilder.student.LoginName;
+            tstData.LoginPw = tdBuilder.student.LoginPw;
+
+            List<SisPersonTestData> tstDataSet = new List<SisPersonTestData>();
+            tstDataSet.Add(tstData);
+            DataRow row = BuildTestDataTable(tstDataSet).Rows[0];
+
+            new SyncTask_Person("TestTask",
+                new SyncJob_Person())
+                .Execute(row, new CountDownLatch(0));
+
+            Assert.IsTrue(mockUniqueIdentifierDaoImpl.WasCalled_Read);
+            Assert.IsTrue(mockPersonDaoImpl.WasCalled_ReadUsingUniqueId);
+            Assert.IsTrue(mockPersonDaoImpl.WasCalled_Update);
+        }
+
+        [TestCase]
+        public void Sync_Person_ChangeBirthDate_ShouldUpdateRecord()
+        {
+            mockUniqueIdentifierDaoImpl._shouldReadReturnData = true;
+            mockPersonDaoImpl._shouldReadReturnData = true;
+
+            SisPersonTestData tstData = new SisPersonTestData();
+            tstData.PersonType = tdBuilder.student.Roles[0].Netus2Code;
+            tstData.SisId = tdBuilder.uniqueId_Student.Identifier;
+            tstData.FirstName = tdBuilder.student.FirstName;
+            tstData.MiddleName = tdBuilder.student.MiddleName;
+            tstData.LastName = tdBuilder.student.LastName;
+            tstData.BirthDate = DateTime.Now;
+            tstData.Gender = tdBuilder.student.Gender.Netus2Code;
+            tstData.Ethnic = tdBuilder.student.Ethnic.Netus2Code;
+            tstData.ResStatus = tdBuilder.student.ResidenceStatus.Netus2Code;
+            tstData.LoginName = tdBuilder.student.LoginName;
+            tstData.LoginPw = tdBuilder.student.LoginPw;
+
+            List<SisPersonTestData> tstDataSet = new List<SisPersonTestData>();
+            tstDataSet.Add(tstData);
+            DataRow row = BuildTestDataTable(tstDataSet).Rows[0];
+
+            new SyncTask_Person("TestTask",
+                new SyncJob_Person())
+                .Execute(row, new CountDownLatch(0));
+
+            Assert.IsTrue(mockUniqueIdentifierDaoImpl.WasCalled_Read);
+            Assert.IsTrue(mockPersonDaoImpl.WasCalled_ReadUsingUniqueId);
+            Assert.IsTrue(mockPersonDaoImpl.WasCalled_Update);
+        }
+
+        [TestCase]
+        public void Sync_Person_ChangeGender_ShouldUpdateRecord()
+        {
+            mockUniqueIdentifierDaoImpl._shouldReadReturnData = true;
+            mockPersonDaoImpl._shouldReadReturnData = true;
+
+            SisPersonTestData tstData = new SisPersonTestData();
+            tstData.PersonType = tdBuilder.student.Roles[0].Netus2Code;
+            tstData.SisId = tdBuilder.uniqueId_Student.Identifier;
+            tstData.FirstName = tdBuilder.student.FirstName;
+            tstData.MiddleName = tdBuilder.student.MiddleName;
+            tstData.LastName = tdBuilder.student.LastName;
+            tstData.BirthDate = tdBuilder.student.BirthDate;
+            tstData.Gender = Enum_Gender.values["unset"].Netus2Code;
+            tstData.Ethnic = tdBuilder.student.Ethnic.Netus2Code;
+            tstData.ResStatus = tdBuilder.student.ResidenceStatus.Netus2Code;
+            tstData.LoginName = tdBuilder.student.LoginName;
+            tstData.LoginPw = tdBuilder.student.LoginPw;
+
+            List<SisPersonTestData> tstDataSet = new List<SisPersonTestData>();
+            tstDataSet.Add(tstData);
+            DataRow row = BuildTestDataTable(tstDataSet).Rows[0];
+
+            new SyncTask_Person("TestTask",
+                new SyncJob_Person())
+                .Execute(row, new CountDownLatch(0));
+
+            Assert.IsTrue(mockUniqueIdentifierDaoImpl.WasCalled_Read);
+            Assert.IsTrue(mockPersonDaoImpl.WasCalled_ReadUsingUniqueId);
+            Assert.IsTrue(mockPersonDaoImpl.WasCalled_Update);
+        }
+
+        [TestCase]
+        public void Sync_Person_ChangeEthnic_ShouldUpdateRecord()
+        {
+            mockUniqueIdentifierDaoImpl._shouldReadReturnData = true;
+            mockPersonDaoImpl._shouldReadReturnData = true;
+
+            SisPersonTestData tstData = new SisPersonTestData();
+            tstData.PersonType = tdBuilder.student.Roles[0].Netus2Code;
+            tstData.SisId = tdBuilder.uniqueId_Student.Identifier;
+            tstData.FirstName = tdBuilder.student.FirstName;
+            tstData.MiddleName = tdBuilder.student.MiddleName;
+            tstData.LastName = tdBuilder.student.LastName;
+            tstData.BirthDate = tdBuilder.student.BirthDate;
+            tstData.Gender = tdBuilder.student.Gender.Netus2Code;
+            tstData.Ethnic = Enum_Ethnic.values["unset"].Netus2Code;
+            tstData.ResStatus = tdBuilder.student.ResidenceStatus.Netus2Code;
+            tstData.LoginName = tdBuilder.student.LoginName;
+            tstData.LoginPw = tdBuilder.student.LoginPw;
+
+            List<SisPersonTestData> tstDataSet = new List<SisPersonTestData>();
+            tstDataSet.Add(tstData);
+            DataRow row = BuildTestDataTable(tstDataSet).Rows[0];
+
+            new SyncTask_Person("TestTask",
+                new SyncJob_Person())
+                .Execute(row, new CountDownLatch(0));
+
+            Assert.IsTrue(mockUniqueIdentifierDaoImpl.WasCalled_Read);
+            Assert.IsTrue(mockPersonDaoImpl.WasCalled_ReadUsingUniqueId);
+            Assert.IsTrue(mockPersonDaoImpl.WasCalled_Update);
+        }
+
+        [TestCase]
+        public void Sync_Person_ChangeResidenceStatus_ShouldUpdateRecord()
         {
             mockUniqueIdentifierDaoImpl._shouldReadReturnData = true;
             mockPersonDaoImpl._shouldReadReturnData = true;
@@ -188,6 +413,70 @@ namespace Netus2_Test.Unit.SyncProcess
             tstData.ResStatus = "01656";
             tstData.LoginName = tdBuilder.student.LoginName;
             tstData.LoginPw = tdBuilder.student.LoginPw;
+
+            List<SisPersonTestData> tstDataSet = new List<SisPersonTestData>();
+            tstDataSet.Add(tstData);
+            DataRow row = BuildTestDataTable(tstDataSet).Rows[0];
+
+            new SyncTask_Person("TestTask",
+                new SyncJob_Person())
+                .Execute(row, new CountDownLatch(0));
+
+            Assert.IsTrue(mockUniqueIdentifierDaoImpl.WasCalled_Read);
+            Assert.IsTrue(mockPersonDaoImpl.WasCalled_ReadUsingUniqueId);
+            Assert.IsTrue(mockPersonDaoImpl.WasCalled_Update);
+        }
+
+        [TestCase]
+        public void Sync_Person_ChangeLoginName_ShouldUpdateRecord()
+        {
+            mockUniqueIdentifierDaoImpl._shouldReadReturnData = true;
+            mockPersonDaoImpl._shouldReadReturnData = true;
+
+            SisPersonTestData tstData = new SisPersonTestData();
+            tstData.PersonType = tdBuilder.student.Roles[0].Netus2Code;
+            tstData.SisId = tdBuilder.uniqueId_Student.Identifier;
+            tstData.FirstName = tdBuilder.student.FirstName;
+            tstData.MiddleName = tdBuilder.student.MiddleName;
+            tstData.LastName = tdBuilder.student.LastName;
+            tstData.BirthDate = tdBuilder.student.BirthDate;
+            tstData.Gender = tdBuilder.student.Gender.Netus2Code;
+            tstData.Ethnic = tdBuilder.student.Ethnic.Netus2Code;
+            tstData.ResStatus = tdBuilder.student.ResidenceStatus.Netus2Code;
+            tstData.LoginName = "NewLoginName";
+            tstData.LoginPw = tdBuilder.student.LoginPw;
+
+            List<SisPersonTestData> tstDataSet = new List<SisPersonTestData>();
+            tstDataSet.Add(tstData);
+            DataRow row = BuildTestDataTable(tstDataSet).Rows[0];
+
+            new SyncTask_Person("TestTask",
+                new SyncJob_Person())
+                .Execute(row, new CountDownLatch(0));
+
+            Assert.IsTrue(mockUniqueIdentifierDaoImpl.WasCalled_Read);
+            Assert.IsTrue(mockPersonDaoImpl.WasCalled_ReadUsingUniqueId);
+            Assert.IsTrue(mockPersonDaoImpl.WasCalled_Update);
+        }
+
+        [TestCase]
+        public void Sync_Person_ChangeLoginPw_ShouldUpdateRecord()
+        {
+            mockUniqueIdentifierDaoImpl._shouldReadReturnData = true;
+            mockPersonDaoImpl._shouldReadReturnData = true;
+
+            SisPersonTestData tstData = new SisPersonTestData();
+            tstData.PersonType = tdBuilder.student.Roles[0].Netus2Code;
+            tstData.SisId = tdBuilder.uniqueId_Student.Identifier;
+            tstData.FirstName = tdBuilder.student.FirstName;
+            tstData.MiddleName = tdBuilder.student.MiddleName;
+            tstData.LastName = tdBuilder.student.LastName;
+            tstData.BirthDate = tdBuilder.student.BirthDate;
+            tstData.Gender = tdBuilder.student.Gender.Netus2Code;
+            tstData.Ethnic = tdBuilder.student.Ethnic.Netus2Code;
+            tstData.ResStatus = tdBuilder.student.ResidenceStatus.Netus2Code;
+            tstData.LoginName = tdBuilder.student.LoginName;
+            tstData.LoginPw = "NewLoginPw";
 
             List<SisPersonTestData> tstDataSet = new List<SisPersonTestData>();
             tstDataSet.Add(tstData);

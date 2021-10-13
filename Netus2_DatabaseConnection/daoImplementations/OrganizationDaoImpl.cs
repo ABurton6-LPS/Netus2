@@ -114,6 +114,18 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 return null;
         }
 
+        public Organization Read_Parent(Organization organization, IConnectable connection)
+        {
+            string sql = "SELECT * FROM organization WHERE organization_id in ( " +
+                "SELECT organization_parent_id FROM organization WHERE organization_id = " + organization.Id + ")";
+
+            List<Organization> results = Read(sql, connection);
+            if (results.Count > 0)
+                return results[0];
+            else
+                return null;
+        }
+
         public List<Organization> Read(Organization organization, IConnectable connection)
         {
             return Read(organization, -1, connection);

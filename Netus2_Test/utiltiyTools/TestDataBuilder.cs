@@ -73,7 +73,7 @@ namespace Netus2_Test
             if (connection != null)
                 school = organizationDaoImpl.Write(school, connection);
             else
-                school.Id = 1;
+                school.Id = 2;
             district.Children.Add(school);
             if (connection != null)
             {

@@ -62,8 +62,10 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.CourseTasks
                     if((course.Name != foundCourses[0].Name) ||
                        (course.CourseCode != foundCourses[0].CourseCode) ||
                        (sisSubjectList.Except(foundCourses[0].Subjects).ToList().Count > 0) ||
-                       (foundCourses[0].Subjects.Except(sisSubjectList).ToList().Count > 0))
-                        courseDaoImpl.Update(course, _netus2Connection);                        
+                       (foundCourses[0].Subjects.Except(sisSubjectList).ToList().Count > 0) ||
+                       (sisGradeList.Except(foundCourses[0].Grades).ToList().Count > 0) ||
+                       (foundCourses[0].Grades.Except(sisGradeList).ToList().Count > 0))
+                        courseDaoImpl.Update(course, _netus2Connection);
                 }
                 else
                 {

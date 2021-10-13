@@ -11,6 +11,7 @@ using Netus2_DatabaseConnection.daoImplementations;
 using Netus2_Test.MockDaoImpl;
 using Netus2_DatabaseConnection.utilityTools;
 using Netus2_DatabaseConnection;
+using Netus2_DatabaseConnection.enumerations;
 
 namespace Netus2_Test.Unit.SyncProcess
 {
@@ -42,7 +43,7 @@ namespace Netus2_Test.Unit.SyncProcess
             tstData.OrgId = null;
             tstData.Ident = null;
             tstData.BldgCode = null;
-            tstData.ParOrgId = null;
+            tstData.ParentOrgId = null;
 
             List<SisOrganizationTestData> tstDataSet = new List<SisOrganizationTestData>();
             tstDataSet.Add(tstData);
@@ -71,14 +72,14 @@ namespace Netus2_Test.Unit.SyncProcess
             tstData.OrgId = tdBuilder.district.OrganizationType.Netus2Code;
             tstData.Ident = tdBuilder.district.Identifier;
             tstData.BldgCode = tdBuilder.district.SisBuildingCode;
-            tstData.ParOrgId = null;
+            tstData.ParentOrgId = null;
 
             SisOrganizationTestData tstData2 = new SisOrganizationTestData();
             tstData2.Name = tdBuilder.school.Name;
             tstData2.OrgId = tdBuilder.school.OrganizationType.Netus2Code;
             tstData2.Ident = tdBuilder.school.Identifier;
             tstData2.BldgCode = tdBuilder.school.SisBuildingCode;
-            tstData2.ParOrgId = tdBuilder.district.SisBuildingCode;
+            tstData2.ParentOrgId = tdBuilder.district.SisBuildingCode;
 
             List<SisOrganizationTestData> tstDataSet = new List<SisOrganizationTestData>();
             tstDataSet.Add(tstData);
@@ -103,7 +104,7 @@ namespace Netus2_Test.Unit.SyncProcess
             Assert.AreEqual(tstDataSet[1].OrgId, results.Rows[1]["enum_organization_id"]);
             Assert.AreEqual(tstDataSet[1].Ident, results.Rows[1]["identifier"]);
             Assert.AreEqual(tstDataSet[1].BldgCode, results.Rows[1]["building_code"]);
-            Assert.AreEqual(tstDataSet[1].ParOrgId, results.Rows[1]["organization_parent_id"]);
+            Assert.AreEqual(tstDataSet[1].ParentOrgId, results.Rows[1]["organization_parent_id"]);
         }
 
         [TestCase]
@@ -114,7 +115,7 @@ namespace Netus2_Test.Unit.SyncProcess
             tstData.OrgId = tdBuilder.school.OrganizationType.Netus2Code;
             tstData.Ident = tdBuilder.school.Identifier;
             tstData.BldgCode = tdBuilder.school.SisBuildingCode;
-            tstData.ParOrgId = tdBuilder.district.SisBuildingCode;
+            tstData.ParentOrgId = tdBuilder.district.SisBuildingCode;
 
             List<SisOrganizationTestData> tstDataSet = new List<SisOrganizationTestData>();
             tstDataSet.Add(tstData);
@@ -138,7 +139,7 @@ namespace Netus2_Test.Unit.SyncProcess
             tstData.OrgId = tdBuilder.school.OrganizationType.Netus2Code;
             tstData.Ident = tdBuilder.school.Identifier;
             tstData.BldgCode = tdBuilder.school.SisBuildingCode;
-            tstData.ParOrgId = tdBuilder.district.SisBuildingCode;
+            tstData.ParentOrgId = tdBuilder.district.SisBuildingCode;
 
             List<SisOrganizationTestData> tstDataSet = new List<SisOrganizationTestData>();
             tstDataSet.Add(tstData);
@@ -154,7 +155,7 @@ namespace Netus2_Test.Unit.SyncProcess
         }
 
         [TestCase]
-        public void SyncChild_Organization_ShouldUpdateRecord()
+        public void SyncChild_Organization_ShouldUpdateRecord_ChangeName()
         {
             mockOrganizationDaoImpl._shouldReadReturnData = true;
 
@@ -163,7 +164,7 @@ namespace Netus2_Test.Unit.SyncProcess
             tstData.OrgId = tdBuilder.school.OrganizationType.Netus2Code;
             tstData.Ident = tdBuilder.school.Identifier;
             tstData.BldgCode = tdBuilder.school.SisBuildingCode;
-            tstData.ParOrgId = tdBuilder.district.SisBuildingCode;
+            tstData.ParentOrgId = tdBuilder.district.SisBuildingCode;
 
             List<SisOrganizationTestData> tstDataSet = new List<SisOrganizationTestData>();
             tstDataSet.Add(tstData);
@@ -178,7 +179,79 @@ namespace Netus2_Test.Unit.SyncProcess
         }
 
         [TestCase]
-        public void SyncParent_Organization()
+        public void SyncChild_Organization_ShouldUpdateRecord_ChangeOrgType()
+        {
+            mockOrganizationDaoImpl._shouldReadReturnData = true;
+
+            SisOrganizationTestData tstData = new SisOrganizationTestData();
+            tstData.Name = tdBuilder.school.Name;
+            tstData.OrgId = Enum_Organization.values["unset"].Netus2Code;
+            tstData.Ident = tdBuilder.school.Identifier;
+            tstData.BldgCode = tdBuilder.school.SisBuildingCode;
+            tstData.ParentOrgId = tdBuilder.district.SisBuildingCode;
+
+            List<SisOrganizationTestData> tstDataSet = new List<SisOrganizationTestData>();
+            tstDataSet.Add(tstData);
+            DataRow row = BuildTestDataTable(tstDataSet).Rows[0];
+
+            new SyncTask_OrganizationChildRecords("TestTask",
+                new SyncJob_Organization())
+                .Execute(row, new CountDownLatch(0));
+
+            Assert.IsTrue(mockOrganizationDaoImpl.WasCalled_ReadWithSisBuildingCode);
+            Assert.IsTrue(mockOrganizationDaoImpl.WasCalled_UpdateWithoutParentId);
+        }
+
+        [TestCase]
+        public void SyncChild_Organization_ShouldUpdateRecord_ChangeIdentifier()
+        {
+            mockOrganizationDaoImpl._shouldReadReturnData = true;
+
+            SisOrganizationTestData tstData = new SisOrganizationTestData();
+            tstData.Name = tdBuilder.school.Name;
+            tstData.OrgId = tdBuilder.school.OrganizationType.Netus2Code;
+            tstData.Ident = "NewIdentifier";
+            tstData.BldgCode = tdBuilder.school.SisBuildingCode;
+            tstData.ParentOrgId = tdBuilder.district.SisBuildingCode;
+
+            List<SisOrganizationTestData> tstDataSet = new List<SisOrganizationTestData>();
+            tstDataSet.Add(tstData);
+            DataRow row = BuildTestDataTable(tstDataSet).Rows[0];
+
+            new SyncTask_OrganizationChildRecords("TestTask",
+                new SyncJob_Organization())
+                .Execute(row, new CountDownLatch(0));
+
+            Assert.IsTrue(mockOrganizationDaoImpl.WasCalled_ReadWithSisBuildingCode);
+            Assert.IsTrue(mockOrganizationDaoImpl.WasCalled_UpdateWithoutParentId);
+        }
+
+        [TestCase]
+        public void SyncChild_Organization_ShouldUpdateRecord_ChangeBuildingCode()
+        {
+            mockOrganizationDaoImpl._shouldReadReturnData = true;
+
+            SisOrganizationTestData tstData = new SisOrganizationTestData();
+            tstData.Name = tdBuilder.school.Name;
+            tstData.OrgId = tdBuilder.school.OrganizationType.Netus2Code;
+            tstData.Ident = tdBuilder.school.Identifier;
+            tstData.BldgCode = "NewBuildingCode";
+            tstData.ParentOrgId = tdBuilder.district.SisBuildingCode;
+
+            List<SisOrganizationTestData> tstDataSet = new List<SisOrganizationTestData>();
+            tstDataSet.Add(tstData);
+            DataRow row = BuildTestDataTable(tstDataSet).Rows[0];
+
+            new SyncTask_OrganizationChildRecords("TestTask",
+                new SyncJob_Organization())
+                .Execute(row, new CountDownLatch(0));
+
+            Assert.IsTrue(mockOrganizationDaoImpl.WasCalled_ReadWithSisBuildingCode);
+            Assert.IsTrue(mockOrganizationDaoImpl.WasCalled_UpdateWithoutParentId);
+        }
+
+        [TestCase]
+        public void SyncParent_Organization_ChangeParent_ShouldCallExpectedMethods()
         {
             mockOrganizationDaoImpl._shouldReadReturnData = true;
 
@@ -187,7 +260,7 @@ namespace Netus2_Test.Unit.SyncProcess
             tstData.OrgId = tdBuilder.school.OrganizationType.Netus2Code;
             tstData.Ident = tdBuilder.school.Identifier;
             tstData.BldgCode = tdBuilder.school.SisBuildingCode;
-            tstData.ParOrgId = tdBuilder.district.SisBuildingCode;
+            tstData.ParentOrgId = "NewParentOrg";
 
             List<SisOrganizationTestData> tstDataSet = new List<SisOrganizationTestData>();
             tstDataSet.Add(tstData);
@@ -207,6 +280,36 @@ namespace Netus2_Test.Unit.SyncProcess
             Assert.IsTrue(mockOrganizationDaoImpl.WasCalled_UpdateWithParentId);
         }
 
+        [TestCase]
+        public void SyncParent_Organization_RemoveParent_ShouldCallExpectedMethods()
+        {
+            mockOrganizationDaoImpl._shouldReadReturnData = true;
+
+            SisOrganizationTestData tstData = new SisOrganizationTestData();
+            tstData.Name = tdBuilder.school.Name;
+            tstData.OrgId = tdBuilder.school.OrganizationType.Netus2Code;
+            tstData.Ident = tdBuilder.school.Identifier;
+            tstData.BldgCode = tdBuilder.school.SisBuildingCode;
+            tstData.ParentOrgId = null;
+
+            List<SisOrganizationTestData> tstDataSet = new List<SisOrganizationTestData>();
+            tstDataSet.Add(tstData);
+            DataRow row = BuildTestDataTable(tstDataSet).Rows[0];
+
+            SetMockForNetus2Objects(tstDataSet);
+
+            SyncJob_Organization syncJob_Organization =
+                new SyncJob_Organization();
+            SyncTask_OrganizationParentRecords syncTask_OrganizationParentRecords =
+                new SyncTask_OrganizationParentRecords("TestTask", syncJob_Organization);
+
+            syncTask_OrganizationParentRecords.Execute(row, new CountDownLatch(0));
+
+            Assert.IsTrue(mockOrganizationDaoImpl.WasCalled_ReadWithoutParentId);
+            Assert.IsTrue(mockOrganizationDaoImpl.WasCalled_ReadParent);
+            Assert.IsTrue(mockOrganizationDaoImpl.WasCalled_UpdateWithoutParentId);
+        }
+
         private DataTable BuildTestDataTable(List<SisOrganizationTestData> tstDataSet)
         {
             DataTable dtOrganization = DataTableFactory.CreateDataTable_Sis_Organization();
@@ -217,7 +320,7 @@ namespace Netus2_Test.Unit.SyncProcess
                 row["enum_organization_id"] = tstData.OrgId;
                 row["identifier"] = tstData.Ident;
                 row["building_code"] = tstData.BldgCode;
-                row["organization_parent_id"] = tstData.ParOrgId;
+                row["organization_parent_id"] = tstData.ParentOrgId;
                 dtOrganization.Rows.Add(row);
             }
 
@@ -332,7 +435,7 @@ namespace Netus2_Test.Unit.SyncProcess
                         values[1] = tstDataSet[count].OrgId;
                         values[2] = tstDataSet[count].Ident;
                         values[3] = tstDataSet[count].BldgCode;
-                        values[4] = tstDataSet[count].ParOrgId;
+                        values[4] = tstDataSet[count].ParentOrgId;
                     }
                 ).Returns(count);
 
@@ -381,6 +484,6 @@ namespace Netus2_Test.Unit.SyncProcess
         public string OrgId { get; set; }
         public string Ident { get; set; }
         public string BldgCode { get; set; }
-        public string ParOrgId { get; set; }
+        public string ParentOrgId { get; set; }
     }
 }

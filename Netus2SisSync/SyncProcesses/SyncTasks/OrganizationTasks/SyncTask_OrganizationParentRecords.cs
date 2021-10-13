@@ -64,6 +64,13 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.OrganizationTasks
                         }
                     }
                 }
+                else
+                {
+                    parentOrg = orgDaoImpl.Read_Parent(org, netus2Connection);
+
+                    if (parentOrg != null)
+                        orgDaoImpl.Update(org, netus2Connection);
+                }
 
                 SyncLogger.LogStatus(this, Enum_Sync_Status.values["end"]);
             }

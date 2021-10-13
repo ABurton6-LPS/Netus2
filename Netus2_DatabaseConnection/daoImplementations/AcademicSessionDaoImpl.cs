@@ -128,6 +128,18 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 return null;
         }
 
+        public AcademicSession Read_Parent(AcademicSession child, IConnectable connection)
+        {
+            string sql = "SELECT * FROM academic_session WHERE academic_session_id in (" +
+                "SELECT parent_session_id FROM academic_session WEHRE academic_session_id = " + child.Id + ")";
+
+            List<AcademicSession> results = new List<AcademicSession>();
+            if (results.Count > 0)
+                return results[0];
+            else
+                return null;
+        }
+
         public List<AcademicSession> Read(AcademicSession academicSession, IConnectable connection)
         {
             return Read(academicSession, -1, connection);

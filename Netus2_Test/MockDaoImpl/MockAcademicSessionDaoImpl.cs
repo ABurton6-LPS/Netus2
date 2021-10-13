@@ -14,8 +14,9 @@ namespace Netus2_Test.MockDaoImpl
         public bool WasCalled_ReadUsingAcademicSessionId = false;
         public bool WasCalled_ReadUsingClassEnrolledId = false;
         public bool WasCalled_ReadUsingOrganizationId = false;
-        public bool WasCalled_ReadUsingSchoolCodeTermCodeSchoolYear = false;
+        public bool WasCalled_ReadUsingBuildingCodeTermCodeSchoolYear = false;
         public bool WasCalled_ReadChildren = false;
+        public bool WasCalled_ReadParent = false;
         public bool WasCalled_UpdateWithoutParentId = false;
         public bool WasCalled_UpdateWithParentId = false;
         public bool WasCalled_WriteWithoutParentId = false;
@@ -48,8 +49,13 @@ namespace Netus2_Test.MockDaoImpl
 
             List<AcademicSession> academicSessions = new List<AcademicSession>();
 
-            if(_shouldReadReturnData)
-                academicSessions.Add(tdBuilder.schoolYear);
+            if (_shouldReadReturnData)
+                if (academicSession.Name == tdBuilder.semester1.Name)
+                    academicSessions.Add(tdBuilder.semester1);
+                else if (academicSession.Name == tdBuilder.semester2.Name)
+                    academicSessions.Add(tdBuilder.semester2);
+                else
+                    academicSessions.Add(tdBuilder.schoolYear);
 
             return academicSessions;
         }
@@ -115,10 +121,15 @@ namespace Netus2_Test.MockDaoImpl
 
         public AcademicSession Read_UsingSisBuildingCode_TermCode_Schoolyear(string schoolCode, string termCode, int schoolYear, IConnectable connection)
         {
-            WasCalled_ReadUsingSchoolCodeTermCodeSchoolYear = true;
+            WasCalled_ReadUsingBuildingCodeTermCodeSchoolYear = true;
 
             if (_shouldReadReturnData)
-                return tdBuilder.schoolYear;
+                if (termCode == tdBuilder.semester1.TermCode)
+                    return tdBuilder.semester1;
+                else if (termCode == tdBuilder.semester2.TermCode)
+                    return tdBuilder.semester2;
+                else
+                    return tdBuilder.schoolYear;
             else
                 return null;
         }
@@ -131,6 +142,16 @@ namespace Netus2_Test.MockDaoImpl
                 return parent.Children;
             else
                 return new List<AcademicSession>();
+        }
+
+        public AcademicSession Read_Parent(AcademicSession child, IConnectable connection)
+        {
+            WasCalled_ReadParent = true;
+
+            if (_shouldReadReturnData)
+                return tdBuilder.schoolYear;
+            else
+                return null;
         }
 
         public void Update(AcademicSession academicSession, IConnectable connection)

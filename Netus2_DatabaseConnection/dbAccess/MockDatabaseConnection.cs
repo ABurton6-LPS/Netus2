@@ -60,6 +60,10 @@ namespace Netus2_DatabaseConnection.dbAccess
             testEnumKeys.Add("sisread_start");
             testEnumKeys.Add("max_threads");
             testEnumKeys.Add("false");
+            testEnumKeys.Add("unset");
+            testEnumKeys.Add("be");
+            testEnumKeys.Add("14");
+            testEnumKeys.Add("aide");
 
             DataTable mockEnumDataTable = DataTableFactory.CreateDataTable_Netus2_Enumeration();
 
@@ -67,7 +71,7 @@ namespace Netus2_DatabaseConnection.dbAccess
             {
                 DataRow newRow = mockEnumDataTable.NewRow();
                 newRow["netus2_code"] = testEnumKey;
-                newRow["sis_code"] = null;
+                newRow["sis_code"] = testEnumKey;
                 newRow["hr_code"] = null;
                 newRow["descript"] = "Test Enum";
                 testEnums.Add(newRow);

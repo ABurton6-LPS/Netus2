@@ -37,7 +37,7 @@
         private static string BuildScript_Sis_AcademicSession()
         {
             return "SELECT DISTINCT " +
-                "t.schoolc school_code, " +
+                "t.schoolc building_code, " +
                 "tt.termc term_code, " +
                 "t.schyear school_year, " +
                 "CASE CHARINDEX('Y',tt.termc,1) " +
@@ -75,7 +75,7 @@
                 "AND NOT tt.termbegindate IS NULL " +
                 "AND NOT tt.termenddate IS NULL " +
                 "AND t.schyear >= (SELECT schyear FROM school WHERE schoolc='82095') " +
-                "ORDER BY school_code, term_code DESC, school_year";
+                "ORDER BY building_code, term_code DESC, school_year";
         }
 
         private static string BuildScript_Sis_Person()
