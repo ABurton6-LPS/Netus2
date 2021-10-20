@@ -58,19 +58,19 @@
                 "CONVERT(date, tt.termbegindate) start_date,  " +
                 "DATEADD(day, 1, CONVERT(date, tt.termenddate)) end_date, " +
                 "CASE  " +
-                "WHEN tt.termc = 'T%' AND tt.termc NOT LIKE '%Y%' THEN t.schoolc + '-' + pY.termc + '-' + CONVERT(VARCHAR(4),t.schyear) " +
-                "WHEN tt.termc = 'P%' THEN t.schoolc + '-' + pQ.termc + '-' + CONVERT(VARCHAR(4),t.schyear) " +
-                "WHEN tt.termc = 'Q%' THEN t.schoolc + '-' + pS.termc + '-' + CONVERT(VARCHAR(4),t.schyear) " +
-                "WHEN tt.termc = 'S%' THEN t.schoolc + '-' + pY.termc + '-' + CONVERT(VARCHAR(4),t.schyear) " +
+                "WHEN tt.termc LIKE 'T%' AND tt.termc NOT LIKE '%Y%' THEN t.schoolc + '-' + pY.termc + '-' + CONVERT(VARCHAR(4),t.schyear) " +
+                "WHEN tt.termc LIKE 'P%' THEN t.schoolc + '-' + pQ.termc + '-' + CONVERT(VARCHAR(4),t.schyear) " +
+                "WHEN tt.termc LIKE 'Q%' THEN t.schoolc + '-' + pS.termc + '-' + CONVERT(VARCHAR(4),t.schyear) " +
+                "WHEN tt.termc LIKE 'S%' THEN t.schoolc + '-' + pY.termc + '-' + CONVERT(VARCHAR(4),t.schyear) " +
                 "ELSE NULL " +
                 "END parent_session_code " +
                 "FROM TrackTerms tt " +
                 "JOIN track t ON tt.trkuniq=t.trkuniq " +
                 "JOIN zterm z ON z.termc=tt.termc " +
                 "JOIN school s ON s.schoolc=t.schoolc " +
-                "LEFT JOIN TrackTerms pQ ON pQ.trkuniq=tt.trkuniq AND pQ.termc = 'Q%' AND tt.termbegindate BETWEEN pQ.termbegindate AND pQ.termenddate AND tt.termenddate BETWEEN pQ.termbegindate AND pQ.termenddate " +
-                "LEFT JOIN TrackTerms pS ON pS.trkuniq=tt.trkuniq AND pS.termc = 'S%' AND tt.termbegindate BETWEEN pS.termbegindate AND pS.termenddate AND tt.termenddate BETWEEN pS.termbegindate AND pS.termenddate " +
-                "LEFT JOIN TrackTerms pY ON pY.trkuniq=tt.trkuniq AND pY.termc = '%Y%' AND tt.termbegindate BETWEEN pY.termbegindate AND pY.termenddate AND tt.termenddate BETWEEN pY.termbegindate AND pY.termenddate " +
+                "LEFT JOIN TrackTerms pQ ON pQ.trkuniq=tt.trkuniq AND pQ.termc LIKE 'Q%' AND tt.termbegindate BETWEEN pQ.termbegindate AND pQ.termenddate AND tt.termenddate BETWEEN pQ.termbegindate AND pQ.termenddate " +
+                "LEFT JOIN TrackTerms pS ON pS.trkuniq=tt.trkuniq AND pS.termc LIKE 'S%' AND tt.termbegindate BETWEEN pS.termbegindate AND pS.termenddate AND tt.termenddate BETWEEN pS.termbegindate AND pS.termenddate " +
+                "LEFT JOIN TrackTerms pY ON pY.trkuniq=tt.trkuniq AND pY.termc LIKE '%Y%' AND tt.termbegindate BETWEEN pY.termbegindate AND pY.termenddate AND tt.termenddate BETWEEN pY.termbegindate AND pY.termenddate " +
                 "WHERE 1=1 " +
                 "AND NOT tt.termbegindate IS NULL " +
                 "AND NOT tt.termenddate IS NULL " +
@@ -138,7 +138,26 @@
 
         private static string BuildScript_Sis_Address()
         {
-            return "";
+            return "SELECT DISTINCT " +
+                "sd.homeaddr1 address_line_1, " +
+                "sd.homeaddr2 address_line_2, " +
+                "NULL address_line_3, " +
+                "NULL address_line_4, " +
+                "NULL apartment, " +
+                "sd.homecity city, " +
+                "sd.homestate enum_state_province_id, " +
+                "sd.homezip postal_code, " +
+                "'us' enum_country_id, " +
+                "'true' is_current_id, " +
+                "'home' enum_address_id, " +
+                "sd.suniq " +
+                "FROM studemo sd " +
+                "JOIN stustat ss ON ss.suniq=sd.suniq " +
+                "JOIN track t ON t.trkuniq=ss.trkuniq " +
+                "JOIN hshlds hh ON hh.hlduniq=sd.hlduniq " +
+                "WHERE 1=1 " +
+                "AND t.schyear >= (SELECT schyear-1 FROM school WHERE isdo=1) " +
+                "AND (ISNULL(sd.hlduniq,0) != 0)";
         }
 
         private static string BuildScript_Sis_PhoneNumber()

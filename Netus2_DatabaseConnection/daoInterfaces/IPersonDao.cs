@@ -41,7 +41,7 @@ namespace Netus2_DatabaseConnection.daoInterfaces
         /// </summary>
         /// <param name="uniqueId"></param>
         /// <param name="connection"></param>
-        Person Read_UsingUniqueId(int uniqueId, IConnectable connection);
+        Person Read_UsingUniqueIdentifier(string uniqueId, IConnectable connection);
 
         /// <summary>
         /// <para>

@@ -14,6 +14,8 @@ namespace Netus2_Test.MockDaoImpl
         public bool WasCalled_ReadWithAddressId = false;
         public bool WasCalled_ReadWithPersonId = false;
         public bool WasCalled_Write = false;
+        public bool WasCalled_ReadAddressIsNotImTempTable = false;
+        public bool WasCalled_WriteTempTable = false;
         public bool _shouldReadReturnData = false;
 
         public MockJctPersonAddressDaoImpl (TestDataBuilder tdBuilder)
@@ -37,6 +39,23 @@ namespace Netus2_Test.MockDaoImpl
             if (_shouldReadReturnData)
                 return row;
             else 
+                return null;
+        }
+
+        public List<DataRow> Read_AddressIsNotInTempTable(IConnectable connection)
+        {
+            WasCalled_ReadAddressIsNotImTempTable = true;
+
+            DataRow row = DataTableFactory.CreateDataTable_Netus2_JctPersonAddress().NewRow();
+            row["person_id"] = tdBuilder.student.Id;
+            row["address_id"] = tdBuilder.student.Addresses[0].Id;
+
+            List<DataRow> results = new List<DataRow>();
+            results.Add(row);
+
+            if (_shouldReadReturnData)
+                return results;
+            else
                 return null;
         }
 
@@ -79,6 +98,11 @@ namespace Netus2_Test.MockDaoImpl
             row["address_id"] = addressId;
 
             return row;
+        }
+
+        public void Write_TempTable(int personId, int addressId, IConnectable connection)
+        {
+            WasCalled_WriteTempTable = true;
         }
     }
 }

@@ -1,8 +1,7 @@
 ﻿using Moq;
-using Netus2_DatabaseConnection;
 using Netus2_DatabaseConnection.daoImplementations;
-using Netus2_DatabaseConnection.dataObjects;
 using Netus2_DatabaseConnection.dbAccess;
+using Netus2_DatabaseConnection.utilityTools;
 using Netus2_Test.MockDaoImpl;
 using NUnit.Framework;
 using System;

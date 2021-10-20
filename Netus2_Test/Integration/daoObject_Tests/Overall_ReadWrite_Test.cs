@@ -6,6 +6,7 @@ using Netus2_DatabaseConnection.enumerations;
 using Netus2_Test.utiltiyTools;
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 
 namespace Netus2_Test.Integration
 {
@@ -184,7 +185,7 @@ namespace Netus2_Test.Integration
             //Create Enrollment
             //You must create the Enrollment with the ClassEnrolled, so no need to update ClassEnrolled
             //You must write the Enrollment with the Student Id, so no need to update Student
-            Enrollment enrollment = new Enrollment(Enum_Grade.values["6"], new DateTime(2020, 9, 6), new DateTime(2021, 6, 1), Enum_True_False.values["true"], classEnrolled, null);
+            Enrollment enrollment = new Enrollment(Enum_Grade.values["6"], new DateTime(2020, 9, 6), new DateTime(2021, 6, 1), Enum_True_False.values["true"], classEnrolled, new List<AcademicSession>());
             enrollment = enrollmentDaoImpl.Write(enrollment, student.Id, connection);
             Assert.IsTrue(enrollment.Id > 0);
             Assert.AreEqual(classEnrolled.Id, enrollment.ClassEnrolled.Id);

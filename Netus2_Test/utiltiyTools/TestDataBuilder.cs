@@ -4,6 +4,7 @@ using Netus2_DatabaseConnection.dataObjects;
 using Netus2_DatabaseConnection.dbAccess;
 using Netus2_DatabaseConnection.enumerations;
 using System;
+using System.Collections.Generic;
 
 namespace Netus2_Test
 {
@@ -108,7 +109,7 @@ namespace Netus2_Test
             teacher.Roles.Add(Enum_Role.values["primary teacher"]);
             teacher.MiddleName = "Andrew";
             teacher.LoginName = "JSmith";
-            teacher.LoginPw = "Login123@Home";
+            teacher.LoginPw = "Login123Home";
             if (connection != null)
                 teacher = personDaoImpl.Write(teacher, connection);
             else
@@ -222,7 +223,7 @@ namespace Netus2_Test
                 student = personDaoImpl.Read(student, connection)[0];
             }
 
-            enrollment = new Enrollment(Enum_Grade.values["6"], new DateTime(2020, 9, 6), new DateTime(2021, 6, 1), Enum_True_False.values["true"], classEnrolled, null);
+            enrollment = new Enrollment(Enum_Grade.values["6"], new DateTime(2020, 9, 6), new DateTime(2021, 6, 1), Enum_True_False.values["true"], classEnrolled, new List<AcademicSession>());
             enrollment.AcademicSessions.Add(schoolYear);
             if (connection != null)
                 enrollment = enrollmentDaoImpl.Write(enrollment, student.Id, connection);
