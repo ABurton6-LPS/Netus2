@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
@@ -49,6 +50,13 @@ namespace Netus2_DatabaseConnection.dbAccess
 
         public DataTable ReadIntoDataTable(string sql, DataTable dt)
         {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+
+            return ReadIntoDataTable(sql, dt, parameters);
+        }
+
+        public DataTable ReadIntoDataTable(string sql, DataTable dt, List<SqlParameter> parameters)
+        {
             DataTable emptyDataTable = dt.Clone();
 
             if ((sql == null) || (sql == "") || !(sql.ToUpper().Substring(0, 6).Contains("SELECT")))
@@ -62,6 +70,8 @@ namespace Netus2_DatabaseConnection.dbAccess
                 {
                     using (var command = new SqlCommand(sql, connection, transaction))
                     {
+                        if (parameters.Count > 0)
+                            command.Parameters.AddRange(parameters.ToArray());
                         using (var reader = command.ExecuteReaderAsync().Result)
                         {
                             emptyDataTable.Load(reader);
@@ -72,6 +82,8 @@ namespace Netus2_DatabaseConnection.dbAccess
                 {
                     using (var command = new SqlCommand(sql, connection))
                     {
+                        if (parameters.Count > 0)
+                            command.Parameters.AddRange(parameters.ToArray());
                         using (var reader = command.ExecuteReaderAsync().Result)
                         {
                             emptyDataTable.Load(reader);
@@ -89,6 +101,13 @@ namespace Netus2_DatabaseConnection.dbAccess
 
         public int ExecuteNonQuery(string sql)
         {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+
+            return ExecuteNonQuery(sql, parameters);
+        }
+
+        public int ExecuteNonQuery(string sql, List<SqlParameter> parameters)
+        {
             
             if ((sql == null) || (sql == "") || (sql.ToUpper().Substring(0, 6).Contains("SELECT")))
             {
@@ -103,6 +122,9 @@ namespace Netus2_DatabaseConnection.dbAccess
                 {
                     using (var command = new SqlCommand(sql, connection, transaction))
                     {
+                        if (parameters.Count > 0)
+                            command.Parameters.AddRange(parameters.ToArray());
+
                         returnValue = command.ExecuteNonQueryAsync().Result;
                     }
                 }
@@ -110,6 +132,9 @@ namespace Netus2_DatabaseConnection.dbAccess
                 {
                     using (var command = new SqlCommand(sql, connection))
                     {
+                        if (parameters.Count > 0)
+                            command.Parameters.AddRange(parameters.ToArray());
+
                         returnValue = command.ExecuteNonQueryAsync().Result;
                     }
                 }
@@ -121,6 +146,11 @@ namespace Netus2_DatabaseConnection.dbAccess
 
             if (returnValue == 0)
             {
+                foreach(SqlParameter parameter in parameters)
+                {
+                    sql = sql.Replace(parameter.ParameterName, "'" + parameter.Value.ToString() + "'");
+                }
+
                 throw new Exception("SQL Non-Query did not affect any rows:\n" + sql);
             }
 
@@ -129,38 +159,40 @@ namespace Netus2_DatabaseConnection.dbAccess
 
         public int InsertNewRecord(string sql)
         {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+
+            return InsertNewRecord(sql, parameters);
+        }
+
+        public int InsertNewRecord(string sql, List<SqlParameter> parameters)
+        {
             if ((sql == null) || (sql == "") || !(sql.ToUpper().Substring(0, 6).Contains("INSERT")))
             {
                 throw new Exception("SQL must be an INSERT statement");
             }
 
             int idOfInsertedRecord = -1;
-            int numberOfInsertedRecords = ExecuteNonQuery(sql);
+            sql += "; SELECT SCOPE_IDENTITY()";
 
-            if (numberOfInsertedRecords != 1)
+            if (transaction != null)
             {
-                throw new Exception("You can only insert one record at a time. You tried to insert " +
-                    numberOfInsertedRecords + ".\n" + sql);
-            }
-
-            sql = "SELECT SCOPE_IDENTITY()";
-            IDataReader reader = null;
-            try
-            {
-                if (transaction != null)
-                    reader = new SqlCommand(sql, connection, transaction).ExecuteReader();
-                else
-                    reader = new SqlCommand(sql, connection).ExecuteReader();
-
-                while (reader.Read())
+                using (var command = new SqlCommand(sql, connection, transaction))
                 {
-                    idOfInsertedRecord = (int)reader.GetDecimal(0);
+                    if (parameters.Count > 0)
+                        command.Parameters.AddRange(parameters.ToArray());
+
+                    idOfInsertedRecord = Convert.ToInt32(command.ExecuteScalarAsync().Result);
                 }
             }
-            finally
+            else
             {
-                if (reader != null)
-                    reader.Close();
+                using (var command = new SqlCommand(sql, connection))
+                {
+                    if (parameters.Count > 0)
+                        command.Parameters.AddRange(parameters.ToArray());
+
+                    idOfInsertedRecord = Convert.ToInt32(command.ExecuteScalarAsync().Result);
+                }
             }
 
             return idOfInsertedRecord;

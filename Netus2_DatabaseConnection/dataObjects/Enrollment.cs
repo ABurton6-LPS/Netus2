@@ -15,6 +15,20 @@ namespace Netus2_DatabaseConnection.dataObjects
         public DateTime EndDate { get; set; }
         public Enumeration IsPrimary { get; set; }
 
+        public Enrollment(Enumeration gradeLevel, DateTime startDate, DateTime endDate, Enumeration isPrimary, ClassEnrolled classEnrolled, AcademicSession academicSession)
+        {
+            Id = -1;
+            GradeLevel = gradeLevel;
+            StartDate = startDate;
+            EndDate = endDate;
+            IsPrimary = isPrimary;
+            ClassEnrolled = classEnrolled;
+            AcademicSessions = new List<AcademicSession>();
+
+            if (academicSession != null)
+                AcademicSessions.Add(academicSession);
+        }
+
         public Enrollment(Enumeration gradeLevel, DateTime startDate, DateTime endDate, Enumeration isPrimary, ClassEnrolled classEnrolled, List<AcademicSession> academicSessions)
         {
             Id = -1;

@@ -8,8 +8,8 @@ using Netus2_DatabaseConnection.logObjects;
 using Netus2_DatabaseConnection.utilityTools;
 using Netus2_Test.utiltiyTools;
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
-using static Netus2_Test.Integration.LogTestValidator;
 
 namespace Netus2_Test.Integration
 {
@@ -17,7 +17,6 @@ namespace Netus2_Test.Integration
     {
         IConnectable connection;
         LogReader logReader;
-        TestDataBuilder testDataBuilder;
         IPersonDao personDaoImpl;
         IProviderDao providerDaoImpl;
         IApplicationDao applicationDaoImpl;
@@ -30,6 +29,9 @@ namespace Netus2_Test.Integration
         IOrganizationDao organizationDaoImpl;
         IAcademicSessionDao academicSessionDaoImpl;
         IAddressDao addressDaoImpl;
+        IEmploymentSessionDao employmentSessionDaoImpl;
+        IUniqueIdentifierDao uniqueIdentifierDaoImpl;
+        IPhoneNumberDao phoneNumberDaoImpl;
 
         [SetUp]
         public void Setup()
@@ -38,7 +40,6 @@ namespace Netus2_Test.Integration
 
             connection = DbConnectionFactory.GetNetus2Connection();
             connection.BeginTransaction();
-            testDataBuilder = new TestDataBuilder(connection);
             logReader = new LogReader();
             organizationDaoImpl = DaoImplFactory.GetOrganizationDaoImpl();
             academicSessionDaoImpl = DaoImplFactory.GetAcademicSessionDaoImpl();
@@ -52,902 +53,1416 @@ namespace Netus2_Test.Integration
             addressDaoImpl = DaoImplFactory.GetAddressDaoImpl();
             providerDaoImpl = DaoImplFactory.GetProviderDaoImpl();
             applicationDaoImpl = DaoImplFactory.GetApplicationDaoImpl();
+            employmentSessionDaoImpl = DaoImplFactory.GetEmploymentSessionDaoImpl();
+            uniqueIdentifierDaoImpl = DaoImplFactory.GetUniqueIdentifierDaoImpl();
+            phoneNumberDaoImpl = DaoImplFactory.GetPhoneNumberDaoImpl();
         }
 
         [Test]
-        public void LogPerson_Update()
+        public void LogPerson_ShouldLog_WriteUpdateDelete()
         {
-            int preTestLogCount = logReader.Read_LogPerson(connection).Count;
+            //Write
+            Person person = personDaoImpl.Write(new Person("ftest", "ltest", new DateTime(1985, 9, 6), Enum_Gender.values["unset"], Enum_Ethnic.values["unset"]), connection);
 
-            testDataBuilder.teacher.FirstName = "John";
-            personDaoImpl.Update(testDataBuilder.teacher, connection);
+            //Read logs after write
+            List<LogPerson> logs = new List<LogPerson>();
+            foreach (LogPerson log in logReader.Read_LogPerson(connection))
+                if (log.person_id == person.Id)
+                    logs.Add(log);
 
-            List<LogPerson> logPeople = logReader.Read_LogPerson(connection);
-            List<LogPerson> thisPersonsLogs = new List<LogPerson>();
+            //Assert on log after write
+            Assert.AreEqual(1, logs.Count);
+            Assert.AreEqual(Enum_Log_Action.values["insert"], logs[0].LogAction);
 
-            foreach (LogPerson logPerson in logPeople)
-            {
-                if (logPerson.person_id == testDataBuilder.teacher.Id)
-                    thisPersonsLogs.Add(logPerson);
-            }
+            //Update
+            person.FirstName = "new";
+            personDaoImpl.Update(person, connection);
+            person = personDaoImpl.Read_UsingPersonId(person.Id, connection);
 
-            Assert.IsNotNull(logPeople);
-            Assert.IsNotEmpty(logPeople);
-            Assert.AreEqual(preTestLogCount + 1, logPeople.Count);
+            //Read logs after update
+            logs.Clear();
+            foreach (LogPerson log in logReader.Read_LogPerson(connection))
+                if (log.person_id == person.Id)
+                    logs.Add(log);
 
-            Assert_LogTable(testDataBuilder.teacher.Id, thisPersonsLogs.Count, "log_person", DataTableFactory.CreateDataTable_Netus2_Log_Person(), connection);
-            Assert.AreEqual(Enum_Log_Action.values["update"], thisPersonsLogs[thisPersonsLogs.Count - 1].LogAction);
+            //Assert on number of logs after update
+            Assert.AreEqual(2, logs.Count);
+
+            //Get update log from logs
+            LogPerson updateLog = null;
+            foreach (LogPerson log in logs)
+                if (log.LogAction == Enum_Log_Action.values["update"])
+                    updateLog = log;
+
+            //Assert on update log
+            Assert.IsNotNull(updateLog);
+
+            //Delete
+            personDaoImpl.Delete(person, connection);
+
+            //Read logs after delete
+            logs.Clear();
+            foreach (LogPerson log in logReader.Read_LogPerson(connection))
+                if (log.person_id == person.Id)
+                    logs.Add(log);
+
+            //Assert on number of logs after delete
+            Assert.AreEqual(3, logs.Count);
+
+            //Get delete log from logs
+            LogPerson deleteLog = null;
+            foreach (LogPerson log in logs)
+                if (log.LogAction == Enum_Log_Action.values["delete"])
+                    deleteLog = log;
+
+            //Assert on delete log
+            Assert.IsNotNull(deleteLog);
         }
 
         [Test]
-        public void LogPerson_Delete()
+        public void LogJctPersonRole_ShouldLog_WriteUpdateDelete()
         {
-            int preTestLogCount = logReader.Read_LogPerson(connection).Count;
+            //Prerequisite
+            Person person = new Person("ftest", "ltest", new DateTime(1985, 9, 6), Enum_Gender.values["unset"], Enum_Ethnic.values["unset"]);
+            Enumeration role = Enum_Role.values["unset"];
 
-            personDaoImpl.Delete(testDataBuilder.teacher, connection);
+            //Write
+            person.Roles.Add(role);
+            person = personDaoImpl.Write(person, connection);
 
-            List<LogPerson> logPeople = logReader.Read_LogPerson(connection);
-            List<LogPerson> thisPersonsLogs = new List<LogPerson>();
+            //Read logs after write
+            List<LogJctPersonRole> logs = new List<LogJctPersonRole>();
+            foreach (LogJctPersonRole log in logReader.Read_LogJctPersonRole(connection))
+                if (log.person_id == person.Id && log.Role.Id == role.Id)
+                    logs.Add(log);
 
-            foreach (LogPerson logPerson in logPeople)
-            {
-                if (logPerson.person_id == testDataBuilder.teacher.Id)
-                    thisPersonsLogs.Add(logPerson);
-            }
+            //Assert on log after write
+            Assert.AreEqual(1, logs.Count);
+            Assert.AreEqual(Enum_Log_Action.values["insert"], logs[0].LogAction);
 
-            Assert.IsNotNull(logPeople);
-            Assert.IsNotEmpty(logPeople);
-            Assert.AreEqual(preTestLogCount + 1, logPeople.Count);
+            //Delete
+            person.Roles[0] = Enum_Role.values["student"];
+            personDaoImpl.Update(person, connection);
 
-            Assert_LogTable(testDataBuilder.teacher.Id, thisPersonsLogs.Count, "log_person", DataTableFactory.CreateDataTable_Netus2_Log_Person(), connection);
-            Assert.AreEqual(Enum_Log_Action.values["delete"], thisPersonsLogs[thisPersonsLogs.Count - 1].LogAction);
+            //Read logs after delete
+            logs.Clear();
+            foreach (LogJctPersonRole log in logReader.Read_LogJctPersonRole(connection))
+                if (log.person_id == person.Id && log.Role.Id == role.Id)
+                    logs.Add(log);
+
+            //Assert on number of logs after delete
+            Assert.AreEqual(2, logs.Count);
+
+            //Get delete log from logs
+            LogJctPersonRole deleteLog = null;
+            foreach (LogJctPersonRole log in logs)
+                if (log.LogAction == Enum_Log_Action.values["delete"])
+                    deleteLog = log;
+
+            //Assert on delete log
+            Assert.IsNotNull(deleteLog);
         }
 
         [Test]
-        public void LogJctPersonRole_Delete()
+        public void LogJctPersonPerson_ShouldLog_WriteUpdateDelete()
         {
-            int preTestLogCount = logReader.Read_LogJctPersonRole(connection).Count;
+            //Prerequisite
+            Person person1 = personDaoImpl.Write(new Person("ftest", "ltest", new DateTime(1985, 9, 6), Enum_Gender.values["unset"], Enum_Ethnic.values["unset"]), connection);
+            Person person2 = personDaoImpl.Write(new Person("ftest", "ltest", new DateTime(1985, 9, 6), Enum_Gender.values["unset"], Enum_Ethnic.values["unset"]), connection);
 
-            testDataBuilder.teacher.Roles[0] = Enum_Role.values["administrator"];
-            personDaoImpl.Update(testDataBuilder.teacher, connection);
+            //Write
+            person1.Relations.Add(person2.Id);
+            personDaoImpl.Update(person1, connection);
 
-            List<LogJctPersonRole> logJctPersonRoles = logReader.Read_LogJctPersonRole(connection);
+            //Read logs after write
+            List<LogJctPersonPerson> logs = new List<LogJctPersonPerson>();
+            foreach (LogJctPersonPerson log in logReader.Read_LogJctPersonPerson(connection))
+                if ((log.person_one_id == person1.Id && log.person_two_id == person2.Id) || (log.person_one_id == person2.Id && log.person_two_id == person1.Id))
+                    logs.Add(log);
 
-            Assert.IsNotNull(logJctPersonRoles);
-            Assert.IsNotEmpty(logJctPersonRoles);
-            Assert.AreEqual(preTestLogCount + 1, logJctPersonRoles.Count);
+            //Assert on log after write
+            Assert.AreEqual(2, logs.Count);
+            Assert.AreEqual(Enum_Log_Action.values["insert"], logs[0].LogAction);
+            Assert.AreEqual(Enum_Log_Action.values["insert"], logs[1].LogAction);
 
-            Assert_LogTable(logJctPersonRoles[preTestLogCount].log_jct_person_role_id, 1, "log_jct_person_role", DataTableFactory.CreateDataTable_Netus2_Log_JctPersonRole(), connection);
-            Assert.AreEqual(Enum_Log_Action.values["delete"], logJctPersonRoles[preTestLogCount].LogAction);
+            //Delete
+            person1.Relations.Clear();
+            personDaoImpl.Update(person1, connection);
 
-            Assert.AreEqual(testDataBuilder.teacher.Id, logJctPersonRoles[preTestLogCount].person_id);
-            Assert.AreEqual(Enum_Role.values["primary teacher"], logJctPersonRoles[preTestLogCount].Role);
+            //Read logs after delete
+            logs.Clear();
+            foreach (LogJctPersonPerson log in logReader.Read_LogJctPersonPerson(connection))
+                if ((log.person_one_id == person1.Id && log.person_two_id == person2.Id) || (log.person_one_id == person2.Id && log.person_two_id == person1.Id))
+                    logs.Add(log);
+
+            //Assert on number of logs after delete
+            Assert.AreEqual(4, logs.Count);
+
+            //Get delete logs from logs
+            List<LogJctPersonPerson> deleteLogs = new List<LogJctPersonPerson>();
+            foreach (LogJctPersonPerson log in logs)
+                if (log.LogAction == Enum_Log_Action.values["delete"])
+                    deleteLogs.Add(log);
+
+            //Assert on delete logs
+            Assert.AreEqual(2, deleteLogs.Count);
         }
 
         [Test]
-        public void LogJctPersonPersonn_Delete()
+        public void LogUniqueIdentifier_ShouldLog_WriteUpdateDelete()
         {
-            int preTestLogCount = logReader.Read_LogJctPersonPerson(connection).Count;
+            //Prerequisite
+            Person person = personDaoImpl.Write(new Person("ftest", "ltest", new DateTime(1985, 9, 6), Enum_Gender.values["unset"], Enum_Ethnic.values["unset"]), connection);
 
-            testDataBuilder.teacher.Relations.Clear();
-            personDaoImpl.Update(testDataBuilder.teacher, connection);
+            //Write
+            UniqueIdentifier uniqueIdentifier = uniqueIdentifierDaoImpl.Write(new UniqueIdentifier("test", Enum_Identifier.values["unset"], Enum_True_False.values["true"]), person.Id, connection);
 
-            List<LogJctPersonPerson> logJctPersonPersons = logReader.Read_LogJctPersonPerson(connection);
+            //Read logs after write
+            List<LogUniqueIdentifier> logs = new List<LogUniqueIdentifier>();
+            foreach (LogUniqueIdentifier log in logReader.Read_LogUniqueIdentifier(connection))
+                if (log.unique_identifier_id == uniqueIdentifier.Id)
+                    logs.Add(log);
 
-            Assert.IsNotNull(logJctPersonPersons);
-            Assert.IsNotEmpty(logJctPersonPersons);
-            Assert.AreEqual(preTestLogCount + 2, logJctPersonPersons.Count);
+            //Assert on log after write
+            Assert.AreEqual(1, logs.Count);
+            Assert.AreEqual(Enum_Log_Action.values["insert"], logs[0].LogAction);
 
-            Assert_LogTable(logJctPersonPersons[preTestLogCount].log_jct_person_person_id, 1, "log_jct_person_person", DataTableFactory.CreateDataTable_Netus2_Log_JctPersonPerson(), connection);
-            Assert_LogTable(logJctPersonPersons[preTestLogCount + 1].log_jct_person_person_id, 1, "log_jct_person_person", DataTableFactory.CreateDataTable_Netus2_Log_JctPersonPerson(), connection);
-            Assert.AreEqual(Enum_Log_Action.values["delete"], logJctPersonPersons[preTestLogCount].LogAction);
-            Assert.AreEqual(Enum_Log_Action.values["delete"], logJctPersonPersons[preTestLogCount + 1].LogAction);
+            //Update
+            uniqueIdentifier.Identifier = "new";
+            uniqueIdentifierDaoImpl.Update(uniqueIdentifier, person.Id, connection);
+            uniqueIdentifier = uniqueIdentifierDaoImpl.Read(uniqueIdentifier, person.Id, connection)[0];
 
-            Assert.AreEqual(testDataBuilder.teacher.Id, logJctPersonPersons[preTestLogCount].person_one_id);
-            Assert.AreEqual(testDataBuilder.student.Id, logJctPersonPersons[preTestLogCount].person_two_id);
-            Assert.AreEqual(testDataBuilder.teacher.Id, logJctPersonPersons[preTestLogCount + 1].person_two_id);
-            Assert.AreEqual(testDataBuilder.student.Id, logJctPersonPersons[preTestLogCount + 1].person_one_id);
+            //Read logs after update
+            logs.Clear();
+            foreach (LogUniqueIdentifier log in logReader.Read_LogUniqueIdentifier(connection))
+                if (log.unique_identifier_id == uniqueIdentifier.Id)
+                    logs.Add(log);
+
+            //Assert on number of logs after update
+            Assert.AreEqual(2, logs.Count);
+
+            //Get update log from logs
+            LogUniqueIdentifier updateLog = null;
+            foreach (LogUniqueIdentifier log in logs)
+                if (log.LogAction == Enum_Log_Action.values["update"])
+                    updateLog = log;
+
+            //Assert on update log
+            Assert.IsNotNull(updateLog);
+
+            //Delete
+            uniqueIdentifierDaoImpl.Delete(uniqueIdentifier, person.Id, connection);
+
+            //Read logs after delete
+            logs.Clear();
+            foreach (LogUniqueIdentifier log in logReader.Read_LogUniqueIdentifier(connection))
+                if (log.unique_identifier_id == uniqueIdentifier.Id)
+                    logs.Add(log);
+
+            //Assert on number of logs after delete
+            Assert.AreEqual(3, logs.Count);
+
+            //Get delete log from logs
+            LogUniqueIdentifier deleteLog = null;
+            foreach (LogUniqueIdentifier log in logs)
+                if (log.LogAction == Enum_Log_Action.values["delete"])
+                    deleteLog = log;
+
+            //Assert on delete log
+            Assert.IsNotNull(deleteLog);
         }
 
         [Test]
-        public void LogUniqueIdentifier_Update()
+        public void LogProvider_ShouldLog_WriteUpdateDelete()
         {
-            int preTestLogCount = logReader.Read_LogUniqueIdentifier(connection).Count;
+            //Write
+            Provider provider = providerDaoImpl.Write(new Provider("testName"), connection);
 
-            testDataBuilder.teacher.UniqueIdentifiers[0].Identifier = "NewIdentifier";
-            personDaoImpl.Update(testDataBuilder.teacher, connection);
+            //Read logs after write
+            List<LogProvider> logs = new List<LogProvider>();
+            foreach (LogProvider log in logReader.Read_LogProvider(connection))
+                if (log.provider_id == provider.Id)
+                    logs.Add(log);
 
-            List<LogUniqueIdentifier> logUniqueIdentifiers = logReader.Read_LogUniqueIdentifier(connection);
-            List<LogUniqueIdentifier> thisUniqueIdsLogs = new List<LogUniqueIdentifier>();
-            foreach (LogUniqueIdentifier logUniqueIdentifier in logUniqueIdentifiers)
-            {
-                if (logUniqueIdentifier.unique_identifier_id == testDataBuilder.uniqueId_Teacher.Id)
-                    thisUniqueIdsLogs.Add(logUniqueIdentifier);
-            }
+            //Assert on log after write
+            Assert.AreEqual(1, logs.Count);
+            Assert.AreEqual(Enum_Log_Action.values["insert"], logs[0].LogAction);
 
-            Assert.IsNotNull(logUniqueIdentifiers);
-            Assert.IsNotEmpty(logUniqueIdentifiers);
-            Assert.AreEqual(preTestLogCount + 1, logUniqueIdentifiers.Count);
+            //Update
+            provider.Name = "new";
+            providerDaoImpl.Update(provider, connection);
+            provider = providerDaoImpl.Read_WithProviderId(provider.Id, connection);
 
-            Assert_LogTable(testDataBuilder.uniqueId_Teacher.Id, thisUniqueIdsLogs.Count, "log_unique_identifier", DataTableFactory.CreateDataTable_Netus2_Log_UniqueIdentifier(), connection);
-            Assert.AreEqual(Enum_Log_Action.values["update"], thisUniqueIdsLogs[thisUniqueIdsLogs.Count - 1].LogAction);
+            //Read logs after update
+            logs.Clear();
+            foreach (LogProvider log in logReader.Read_LogProvider(connection))
+                if (log.provider_id == provider.Id)
+                    logs.Add(log);
 
-            Assert.AreEqual(testDataBuilder.teacher.Id, thisUniqueIdsLogs[thisUniqueIdsLogs.Count - 1].person_id);
+            //Assert on number of logs after update
+            Assert.AreEqual(2, logs.Count);
+
+            //Get update log from logs
+            LogProvider updateLog = null;
+            foreach (LogProvider log in logs)
+                if (log.LogAction == Enum_Log_Action.values["update"])
+                    updateLog = log;
+
+            //Assert on update log
+            Assert.IsNotNull(updateLog);
+
+            //Delete
+            providerDaoImpl.Delete(provider, connection);
+
+            //Read logs after delete
+            logs.Clear();
+            foreach (LogProvider log in logReader.Read_LogProvider(connection))
+                if (log.provider_id == provider.Id)
+                    logs.Add(log);
+
+            //Assert on number of logs after delete
+            Assert.AreEqual(3, logs.Count);
+
+            //Get delete log from logs
+            LogProvider deleteLog = null;
+            foreach (LogProvider log in logs)
+                if (log.LogAction == Enum_Log_Action.values["delete"])
+                    deleteLog = log;
+
+            //Assert on delete log
+            Assert.IsNotNull(deleteLog);
         }
 
         [Test]
-        public void LogUniqueIdentifier_Delete()
+        public void LogJctClassPerson_ShouldLog_WriteUpdateDelete()
         {
-            int preTestLogCount = logReader.Read_LogUniqueIdentifier(connection).Count;
+            //Prerequisite
+            Person person = personDaoImpl.Write(new Person("fname", "lname", new DateTime(1985, 9, 6), Enum_Gender.values["unset"], Enum_Ethnic.values["unset"]), connection);
+            Course course = courseDaoImpl.Write(new Course("testName", "testCode"), connection);
+            Organization organization = organizationDaoImpl.Write(new Organization("testName", Enum_Organization.values["unset"], "testId", "tstBldg"), connection);
+            AcademicSession academicSession = academicSessionDaoImpl.Write(new AcademicSession("testName", Enum_Session.values["unset"], organization, "tst"), connection);
+            ClassEnrolled classEnrolled = new ClassEnrolled("testName", "tstClassCode", Enum_Class.values["unset"], "tstRoom", course, academicSession);
 
-            testDataBuilder.teacher.UniqueIdentifiers.Clear();
-            personDaoImpl.Update(testDataBuilder.teacher, connection);
+            //Write
+            Enumeration role = Enum_Role.values["unset"];
+            classEnrolled.AddStaff(person, role);
+            classEnrolled = classEnrolledDaoImpl.Write(classEnrolled, connection);
 
-            List<LogUniqueIdentifier> logUniqueIdentifiers = logReader.Read_LogUniqueIdentifier(connection);
-            List<LogUniqueIdentifier> thisUniqueIdsLogs = new List<LogUniqueIdentifier>();
-            foreach (LogUniqueIdentifier logUniqueIdentifier in logUniqueIdentifiers)
-            {
-                if (logUniqueIdentifier.unique_identifier_id == testDataBuilder.uniqueId_Teacher.Id)
-                    thisUniqueIdsLogs.Add(logUniqueIdentifier);
-            }
+            //Read logs after write
+            List<LogJctClassPerson> logs = new List<LogJctClassPerson>();
+            foreach (LogJctClassPerson log in logReader.Read_LogJctClassPerson(connection))
+                if (log.class_id == classEnrolled.Id && log.person_id == person.Id && log.Role == role)
+                    logs.Add(log);
 
-            Assert.IsNotNull(logUniqueIdentifiers);
-            Assert.IsNotEmpty(logUniqueIdentifiers);
-            Assert.AreEqual(preTestLogCount + 1, logUniqueIdentifiers.Count);
+            //Assert on log after write
+            Assert.AreEqual(1, logs.Count);
+            Assert.AreEqual(Enum_Log_Action.values["insert"], logs[0].LogAction);
 
-            Assert_LogTable(testDataBuilder.uniqueId_Teacher.Id, thisUniqueIdsLogs.Count, "log_unique_identifier", DataTableFactory.CreateDataTable_Netus2_Log_UniqueIdentifier(), connection);
-            Assert.AreEqual(Enum_Log_Action.values["delete"], thisUniqueIdsLogs[thisUniqueIdsLogs.Count - 1].LogAction);
+            //Delete
+            classEnrolled.RemoveStaff(person, role);
+            classEnrolledDaoImpl.Update(classEnrolled, connection);
 
-            Assert.AreEqual(testDataBuilder.teacher.Id, thisUniqueIdsLogs[thisUniqueIdsLogs.Count - 1].person_id);
+            //Read logs after delete
+            logs.Clear();
+            foreach (LogJctClassPerson log in logReader.Read_LogJctClassPerson(connection))
+                if (log.class_id == classEnrolled.Id && log.person_id == person.Id && log.Role == role)
+                    logs.Add(log);
+
+            //Assert on number of logs after delete
+            Assert.AreEqual(2, logs.Count);
+
+            //Get delete log from logs
+            LogJctClassPerson deleteLog = null;
+            foreach (LogJctClassPerson log in logs)
+                if (log.LogAction == Enum_Log_Action.values["delete"])
+                    deleteLog = log;
+
+            //Assert on delete log
+            Assert.IsNotNull(deleteLog);
         }
 
         [Test]
-        public void LogProvider_Update()
+        public void LogApp_ShouldLog_WriteUpdateDelete()
         {
-            int preTestLogCount = logReader.Read_LogProvider(connection).Count;
+            //Prerequisite
+            Provider provider = providerDaoImpl.Write(new Provider("testName"), connection);
 
-            testDataBuilder.provider.Name = "New Provider Name";
-            providerDaoImpl.Update(testDataBuilder.provider, connection);
+            //Write
+            Application application = applicationDaoImpl.Write(new Application("testName", provider), connection);
 
-            List<LogProvider> logProviders = logReader.Read_LogProvider(connection);
+            //Read logs after write
+            List<LogApp> logs = new List<LogApp>();
+            foreach (LogApp log in logReader.Read_LogApp(connection))
+                if (log.app_id == application.Id)
+                    logs.Add(log);
 
-            Assert.IsNotNull(logProviders);
-            Assert.IsNotEmpty(logProviders);
-            Assert.AreEqual(preTestLogCount + 1, logProviders.Count);
+            //Assert on log after write
+            Assert.AreEqual(1, logs.Count);
+            Assert.AreEqual(Enum_Log_Action.values["insert"], logs[0].LogAction);
 
-            Assert_LogTable((int)logProviders[preTestLogCount].provider_id, preTestLogCount + 1, "log_provider", DataTableFactory.CreateDataTable_Netus2_Log_Provider(), connection);
-            Assert.AreEqual(Enum_Log_Action.values["update"], logProviders[preTestLogCount].LogAction);
+            //Update
+            application.Name = "newTestName";
+            applicationDaoImpl.Update(application, connection);
+            application = applicationDaoImpl.Read_UsingAppId(application.Id, connection);
 
-            Assert_LogProvider(testDataBuilder.provider, logProviders[preTestLogCount]);
+            //Read logs after update
+            logs.Clear();
+            foreach (LogApp log in logReader.Read_LogApp(connection))
+                if (log.app_id == application.Id)
+                    logs.Add(log);
+
+            //Assert on number of logs after update
+            Assert.AreEqual(2, logs.Count);
+
+            //Get update log from logs
+            LogApp updateLog = null;
+            foreach (LogApp log in logs)
+                if (log.LogAction == Enum_Log_Action.values["update"])
+                    updateLog = log;
+
+            //Assert on update log
+            Assert.IsNotNull(updateLog);
+
+            //Delete
+            applicationDaoImpl.Delete(application, connection);
+
+            //Read logs after delete
+            logs.Clear();
+            foreach (LogApp log in logReader.Read_LogApp(connection))
+                if (log.app_id == application.Id)
+                    logs.Add(log);
+
+            //Assert on number of logs after delete
+            Assert.AreEqual(3, logs.Count);
+
+            //Get delete log from logs
+            LogApp deleteLog = null;
+            foreach (LogApp log in logs)
+                if (log.LogAction == Enum_Log_Action.values["delete"])
+                    deleteLog = log;
+
+            //Assert on delete log
+            Assert.IsNotNull(deleteLog);
         }
 
         [Test]
-        public void LogProvider_Delete()
+        public void LogJctPersonApp_ShouldLog_WriteUpdateDelete()
         {
-            int preTestLogCount = logReader.Read_LogProvider(connection).Count;
+            //Prerequisite
+            Provider provider = providerDaoImpl.Write(new Provider("testName"), connection);
+            Application application = applicationDaoImpl.Write(new Application("testName", provider), connection);
+            Person person = new Person("fname", "lname", new DateTime(), Enum_Gender.values["unset"], Enum_Ethnic.values["unset"]);            
 
-            Provider oldProvider = testDataBuilder.provider;
-            providerDaoImpl.Delete(testDataBuilder.provider, connection);
+            //Write
+            person.Applications.Add(application);
+            person = personDaoImpl.Write(person, connection);
 
-            List<LogProvider> logProviders = logReader.Read_LogProvider(connection);
+            //Read logs after write
+            List<LogJctPersonApp> logs = new List<LogJctPersonApp>();
+            foreach (LogJctPersonApp log in logReader.Read_LogJctPersonApp(connection))
+                if (log.person_id == person.Id && log.app_id == application.Id)
+                    logs.Add(log);
 
-            Assert.IsNotNull(logProviders);
-            Assert.IsNotEmpty(logProviders);
-            Assert.AreEqual(preTestLogCount + 1, logProviders.Count);
+            //Assert on log after write
+            Assert.AreEqual(1, logs.Count);
+            Assert.AreEqual(Enum_Log_Action.values["insert"], logs[0].LogAction);
 
-            Assert_LogTable((int)logProviders[preTestLogCount].provider_id, preTestLogCount + 1, "log_provider", DataTableFactory.CreateDataTable_Netus2_Log_Provider(), connection);
-            Assert.AreEqual(Enum_Log_Action.values["delete"], logProviders[preTestLogCount].LogAction);
+            //Delete
+            person.Applications.Clear();
+            personDaoImpl.Update(person, connection);
 
-            Assert_LogProvider(oldProvider, logProviders[preTestLogCount]);
+            //Read logs after delete
+            logs.Clear();
+            foreach (LogJctPersonApp log in logReader.Read_LogJctPersonApp(connection))
+                if (log.person_id == person.Id && log.app_id == application.Id)
+                    logs.Add(log);
+
+            //Assert on number of logs after delete
+            Assert.AreEqual(2, logs.Count);
+
+            //Get delete log from logs
+            LogJctPersonApp deleteLog = null;
+            foreach (LogJctPersonApp log in logs)
+                if (log.LogAction == Enum_Log_Action.values["delete"])
+                    deleteLog = log;
+
+            //Assert on delete log
+            Assert.IsNotNull(deleteLog);
         }
 
         [Test]
-        public void LogApp_Update()
+        public void LogPhoneNumber_ShouldLog_WriteUpdateDelete()
         {
-            int preTestLogCount = logReader.Read_LogApp(connection).Count;
+            //Write
+            PhoneNumber phoneNumber = phoneNumberDaoImpl.Write(new PhoneNumber("2134567890", Enum_True_False.values["true"], Enum_Phone.values["unset"]), connection);
 
-            Application app = testDataBuilder.application;
-            app.Name = "New Application";
-            applicationDaoImpl.Update(app, connection);
+            //Read logs after write
+            List<LogPhoneNumber> logs = new List<LogPhoneNumber>();
+            foreach (LogPhoneNumber log in logReader.Read_LogPhoneNumber(connection))
+                if (log.phone_number_id == phoneNumber.Id)
+                    logs.Add(log);
 
-            List<LogApp> logApps = logReader.Read_LogApp(connection);
+            //Assert on log after write
+            Assert.AreEqual(1, logs.Count);
+            Assert.AreEqual(Enum_Log_Action.values["insert"], logs[0].LogAction);
 
-            Assert.IsNotNull(logApps);
-            Assert.IsNotEmpty(logApps);
-            Assert.AreEqual(preTestLogCount + 1, logApps.Count);
+            //Update
+            phoneNumber.PhoneNumberValue = "0123456789";
+            phoneNumberDaoImpl.Update(phoneNumber, connection);
+            phoneNumber = phoneNumberDaoImpl.Read(phoneNumber, connection)[0];
 
-            Assert_LogTable((int)logApps[preTestLogCount].app_id, logApps.Count, "log_app", DataTableFactory.CreateDataTable_Netus2_Log_Application(), connection);
-            Assert.AreEqual(Enum_Log_Action.values["update"], logApps[preTestLogCount].LogAction);
+            //Read logs after update
+            logs.Clear();
+            foreach (LogPhoneNumber log in logReader.Read_LogPhoneNumber(connection))
+                if (log.phone_number_id == phoneNumber.Id)
+                    logs.Add(log);
 
-            Assert_LogApp(app, logApps[preTestLogCount]);
+            //Assert on number of logs after update
+            Assert.AreEqual(2, logs.Count);
+
+            //Get update log from logs
+            LogPhoneNumber updateLog = null;
+            foreach (LogPhoneNumber log in logs)
+                if (log.LogAction == Enum_Log_Action.values["update"])
+                    updateLog = log;
+
+            //Assert on update log
+            Assert.IsNotNull(updateLog);
+
+            //Delete
+            phoneNumberDaoImpl.Delete(phoneNumber, connection);
+
+            //Read logs after delete
+            logs.Clear();
+            foreach (LogPhoneNumber log in logReader.Read_LogPhoneNumber(connection))
+                if (log.phone_number_id == phoneNumber.Id)
+                    logs.Add(log);
+
+            //Assert on number of logs after delete
+            Assert.AreEqual(3, logs.Count);
+
+            //Get delete log from logs
+            LogPhoneNumber deleteLog = null;
+            foreach (LogPhoneNumber log in logs)
+                if (log.LogAction == Enum_Log_Action.values["delete"])
+                    deleteLog = log;
+
+            //Assert on delete log
+            Assert.IsNotNull(deleteLog);
         }
 
         [Test]
-        public void LogJctClassPerson_Delete()
+        public void LogAddress_ShouldLog_WriteUpdateDelete()
         {
-            int preTestLogCount = logReader.Read_LogJctClassPerson(connection).Count;
+            //Write
+            Address address = addressDaoImpl.Write(new Address("tst1", "tstCity", Enum_State_Province.values["mi"], Enum_Country.values["us"], Enum_True_False.values["true"], Enum_Address.values["home"]), connection);
 
-            testDataBuilder.classEnrolled.RemoveStaff(testDataBuilder.teacher, Enum_Role.values["primary teacher"]);
-            classEnrolledDaoImpl.Update(testDataBuilder.classEnrolled, connection);
+            //Read logs after write
+            List<LogAddress> logs = new List<LogAddress>();
+            foreach (LogAddress log in logReader.Read_LogAddress(connection))
+                if (log.address_id == address.Id)
+                    logs.Add(log);
 
-            List<LogJctClassPerson> logJctClassPersons = logReader.Read_LogJctClassPerson(connection);
+            //Assert on log after write
+            Assert.AreEqual(1, logs.Count);
+            Assert.AreEqual(Enum_Log_Action.values["insert"], logs[0].LogAction);
 
-            Assert.IsNotNull(logJctClassPersons);
-            Assert.IsNotEmpty(logJctClassPersons);
-            Assert.AreEqual(preTestLogCount + 1, logJctClassPersons.Count);
+            //Update
+            address.Line2 = "tst2";
+            addressDaoImpl.Update(address, connection);
+            address = addressDaoImpl.Read_UsingAdddressId(address.Id, connection);
 
-            Assert_LogTable(logJctClassPersons[preTestLogCount].log_jct_class_person_id, 1, "log_jct_class_person", DataTableFactory.CreateDataTable_Netus2_Log_JctClassPerson(), connection);
-            Assert.AreEqual(Enum_Log_Action.values["delete"], logJctClassPersons[preTestLogCount].LogAction);
+            //Read logs after update
+            logs.Clear();
+            foreach (LogAddress log in logReader.Read_LogAddress(connection))
+                if (log.address_id == address.Id)
+                    logs.Add(log);
 
-            Assert.AreEqual(testDataBuilder.teacher.Id, logJctClassPersons[preTestLogCount].person_id);
-            Assert.AreEqual(Enum_Role.values["primary teacher"], logJctClassPersons[preTestLogCount].Role);
+            //Assert on number of logs after update
+            Assert.AreEqual(2, logs.Count);
+
+            //Get update log from logs
+            LogAddress updateLog = null;
+            foreach (LogAddress log in logs)
+                if (log.LogAction == Enum_Log_Action.values["update"])
+                    updateLog = log;
+
+            //Assert on update log
+            Assert.IsNotNull(updateLog);
+
+            //Delete
+            addressDaoImpl.Delete(address, connection);
+
+            //Read logs after delete
+            logs.Clear();
+            foreach (LogAddress log in logReader.Read_LogAddress(connection))
+                if (log.address_id == address.Id)
+                    logs.Add(log);
+
+            //Assert on number of logs after delete
+            Assert.AreEqual(3, logs.Count);
+
+            //Get delete log from logs
+            LogAddress deleteLog = null;
+            foreach (LogAddress log in logs)
+                if (log.LogAction == Enum_Log_Action.values["delete"])
+                    deleteLog = log;
+
+            //Assert on delete log
+            Assert.IsNotNull(deleteLog);
         }
 
         [Test]
-        public void LogApp_Delete()
+        public void LogJctPersonAddress_ShouldLog_WriteUpdateDelete()
         {
-            int preTestLogcount = logReader.Read_LogApp(connection).Count;
+            //Prerequisite
+            Address address = addressDaoImpl.Write(new Address("tst1", "tstCity", Enum_State_Province.values["mi"], Enum_Country.values["us"], Enum_True_False.values["true"], Enum_Address.values["home"]), connection);
+            Person person = new Person("fname", "lname", new DateTime(), Enum_Gender.values["unset"], Enum_Ethnic.values["unset"]);
 
-            Application app = testDataBuilder.application;
-            applicationDaoImpl.Delete(app, connection);
+            //Write
+            person.Addresses.Add(address);
+            person = personDaoImpl.Write(person, connection);
 
-            List<LogApp> logApps = logReader.Read_LogApp(connection);
+            List<LogJctPersonAddress> logs = new List<LogJctPersonAddress>();
+            foreach (LogJctPersonAddress log in logReader.Read_LogJctPersonAddress(connection))
+                if (log.person_id == person.Id && log.address_id == address.Id)
+                    logs.Add(log);
 
-            Assert.IsNotNull(logApps);
-            Assert.IsNotEmpty(logApps);
-            Assert.AreEqual(preTestLogcount + 1, logApps.Count);
+            //Assert on log after write
+            Assert.AreEqual(1, logs.Count);
+            Assert.AreEqual(Enum_Log_Action.values["insert"], logs[0].LogAction);
 
-            Assert_LogTable((int)logApps[preTestLogcount].app_id, logApps.Count, "log_app", DataTableFactory.CreateDataTable_Netus2_Log_Application(), connection);
-            Assert.AreEqual(Enum_Log_Action.values["delete"], logApps[preTestLogcount].LogAction);
-
-            Assert_LogApp(app, logApps[preTestLogcount]);
-        }
-
-        [Test]
-        public void LogJctPersonApp_Delete()
-        {
-            int preTestLogCount = logReader.Read_LogJctPersonApp(connection).Count;
-
-            Application oldApplication = testDataBuilder.teacher.Applications[0];
-            testDataBuilder.teacher.Applications[0] =
-                new Application("old application", testDataBuilder.teacher.Applications[0].Provider);
-            personDaoImpl.Update(testDataBuilder.teacher, connection);
-
-            List<LogJctPersonApp> logJctPersonApps = logReader.Read_LogJctPersonApp(connection);
-
-            Assert.IsNotNull(logJctPersonApps);
-            Assert.IsNotEmpty(logJctPersonApps);
-            Assert.AreEqual(preTestLogCount + 1, logJctPersonApps.Count);
-
-            Assert_LogTable(logJctPersonApps[preTestLogCount].log_jct_person_app_id, 1, "log_jct_person_app", DataTableFactory.CreateDataTable_Netus2_Log_JctPersonApp(), connection);
-            Assert.AreEqual(Enum_Log_Action.values["delete"], logJctPersonApps[preTestLogCount].LogAction);
-
-            Assert.AreEqual(testDataBuilder.teacher.Id, logJctPersonApps[preTestLogCount].person_id);
-            Assert.AreEqual(oldApplication.Id, logJctPersonApps[preTestLogCount].app_id);
-        }
-
-        [Test]
-        public void LogPhoneNumber_Update()
-        {
-            int preTestLogCount = logReader.Read_LogPhoneNumber(connection).Count;
-
-            testDataBuilder.teacher.PhoneNumbers[0].PhoneNumberValue = "8006532816";
-            personDaoImpl.Update(testDataBuilder.teacher, connection);
-
-            List<LogPhoneNumber> logPhoneNumbers = logReader.Read_LogPhoneNumber(connection);
-            List<LogPhoneNumber> thisPhoneNumbersLogs = new List<LogPhoneNumber>();
-
-            foreach (LogPhoneNumber logPhoneNumber in logPhoneNumbers)
-            {
-                if (logPhoneNumber.phone_number_id == testDataBuilder.phoneNumber_Teacher.Id)
-                    thisPhoneNumbersLogs.Add(logPhoneNumber);
-            }
-
-            Assert.IsNotNull(logPhoneNumbers);
-            Assert.IsNotEmpty(logPhoneNumbers);
-            Assert.AreEqual(preTestLogCount + 1, logPhoneNumbers.Count);
-
-            Assert_LogTable(testDataBuilder.phoneNumber_Teacher.Id, thisPhoneNumbersLogs.Count, "log_phone_number", DataTableFactory.CreateDataTable_Netus2_Log_PhoneNumber(), connection);
-            Assert.AreEqual(Enum_Log_Action.values["update"], thisPhoneNumbersLogs[thisPhoneNumbersLogs.Count - 1].LogAction);
-
-            Assert.AreEqual(testDataBuilder.teacher.Id, thisPhoneNumbersLogs[thisPhoneNumbersLogs.Count - 1].person_id);
-        }
-
-        [Test]
-        public void LogPhoneNumber_Delete()
-        {
-            int preTestLogCount = logReader.Read_LogPhoneNumber(connection).Count;
-
-            testDataBuilder.teacher.PhoneNumbers.Clear();
-            personDaoImpl.Update(testDataBuilder.teacher, connection);
-
-            List<LogPhoneNumber> logPhoneNumbers = logReader.Read_LogPhoneNumber(connection);
-            List<LogPhoneNumber> thisPhoneNumbersLogs = new List<LogPhoneNumber>();
-
-            foreach (LogPhoneNumber logPhoneNumber in logPhoneNumbers)
-            {
-                if (logPhoneNumber.phone_number_id == testDataBuilder.phoneNumber_Teacher.Id)
-                    thisPhoneNumbersLogs.Add(logPhoneNumber);
-            }
-
-            Assert.IsNotNull(logPhoneNumbers);
-            Assert.IsNotEmpty(logPhoneNumbers);
-            Assert.AreEqual(preTestLogCount + 1, logPhoneNumbers.Count);
-
-            Assert_LogTable(testDataBuilder.phoneNumber_Teacher.Id, thisPhoneNumbersLogs.Count, "log_phone_number", DataTableFactory.CreateDataTable_Netus2_Log_PhoneNumber(), connection);
-            Assert.AreEqual(Enum_Log_Action.values["delete"], thisPhoneNumbersLogs[thisPhoneNumbersLogs.Count - 1].LogAction);
-
-            Assert.AreEqual(testDataBuilder.teacher.Id, thisPhoneNumbersLogs[thisPhoneNumbersLogs.Count - 1].person_id);
-        }
-
-        [Test]
-        public void LogAddress_Update()
-        {
-            int preTestLogCount = logReader.Read_LogAddress(connection).Count;
-
-            Address oldAddress = testDataBuilder.address_Teacher;
-            oldAddress.Line1 = "New Address Line 1";
-            addressDaoImpl.Update(oldAddress, connection);
-
-            List<LogAddress> logAddresses = logReader.Read_LogAddress(connection);
-
-            Assert.IsNotNull(logAddresses);
-            Assert.IsNotEmpty(logAddresses);
-            Assert.AreEqual(preTestLogCount + 1, logAddresses.Count);
-
-            Assert_LogTable((int)logAddresses[preTestLogCount].address_id, 1, "log_address", DataTableFactory.CreateDataTable_Netus2_Log_Address(), connection);
-            Assert.AreEqual(Enum_Log_Action.values["update"], logAddresses[preTestLogCount].LogAction);
-            Assert_LogAddress(oldAddress, logAddresses[preTestLogCount]);
-        }
-
-        [Test]
-        public void LogAddress_Delete()
-        {
-            int preTestLogCount = logReader.Read_LogAddress(connection).Count;
-
-            Address oldAddress = testDataBuilder.address_Teacher;
-            addressDaoImpl.Delete(oldAddress, connection);
-
-            List<LogAddress> logAddresses = logReader.Read_LogAddress(connection);
-
-            Assert.IsNotNull(logAddresses);
-            Assert.IsNotEmpty(logAddresses);
-            Assert.AreEqual(preTestLogCount + 1, logAddresses.Count);
-
-            Assert_LogTable((int)logAddresses[preTestLogCount].address_id, 1, "log_address", DataTableFactory.CreateDataTable_Netus2_Log_Address(), connection);
-            Assert.AreEqual(Enum_Log_Action.values["delete"], logAddresses[preTestLogCount].LogAction);
-            Assert_LogAddress(oldAddress, logAddresses[preTestLogCount]);
-        }
-
-        [Test]
-        public void LogJctPersonAddress_Delete()
-        {
-            int preTestLogCount = logReader.Read_LogJctPersonAddress(connection).Count;
-
-            Person person = testDataBuilder.student;
-            Address oldAddress = testDataBuilder.address_Student;
+            //Delete
             person.Addresses.Clear();
             personDaoImpl.Update(person, connection);
 
-            List<LogJctPersonAddress> logJctPersonAddresss = logReader.Read_LogJctPersonAddress(connection);
+            //Read logs after delete
+            logs.Clear();
+            foreach (LogJctPersonAddress log in logReader.Read_LogJctPersonAddress(connection))
+                if (log.person_id == person.Id && log.address_id == address.Id)
+                    logs.Add(log);
 
-            Assert.IsNotNull(logJctPersonAddresss);
-            Assert.IsNotEmpty(logJctPersonAddresss);
-            Assert.AreEqual(preTestLogCount + 1, logJctPersonAddresss.Count);
+            //Assert on number of logs after delete
+            Assert.AreEqual(2, logs.Count);
 
-            Assert_LogTable(logJctPersonAddresss[preTestLogCount].log_jct_person_address_id, 1, "log_jct_person_address", DataTableFactory.CreateDataTable_Netus2_Log_JctPersonAddress(), connection);
-            Assert.AreEqual(Enum_Log_Action.values["delete"], logJctPersonAddresss[preTestLogCount].LogAction);
+            //Get delete log from logs
+            LogJctPersonAddress deleteLog = null;
+            foreach (LogJctPersonAddress log in logs)
+                if (log.LogAction == Enum_Log_Action.values["delete"])
+                    deleteLog = log;
 
-            Assert.AreEqual(person.Id, logJctPersonAddresss[preTestLogCount].person_id);
-            Assert.AreEqual(oldAddress.Id, logJctPersonAddresss[preTestLogCount].address_id);
+            //Assert on delete log
+            Assert.IsNotNull(deleteLog);
         }
 
         [Test]
-        public void LogEmploymentSession_Update()
+        public void LogEmploymentSession_ShouldLog_WriteUpdateDelete()
         {
-            int preTestLogCount = logReader.Read_LogEmploymentSession(connection).Count;
+            //Prerequisite
+            Organization org = organizationDaoImpl.Write(new Organization("testName", Enum_Organization.values["unset"], "testIdentifier", "testSisBuildingCode"), connection);
+            Person person = personDaoImpl.Write(new Person("ftest", "ltest", new DateTime(1985, 9, 6), Enum_Gender.values["unset"], Enum_Ethnic.values["unset"]), connection);
 
-            Person teacher = testDataBuilder.teacher;
-            EmploymentSession oldEmploymentSession = teacher.EmploymentSessions[0];
-            teacher.EmploymentSessions[0].Name = "New Employment Session Name";
-            personDaoImpl.Update(teacher, connection);
+            //Write
+            EmploymentSession employmentSession = employmentSessionDaoImpl.Write(new EmploymentSession("testName", Enum_True_False.values["true"], org), person.Id, connection);
 
-            List<LogEmploymentSession> logEmploymentSessions = logReader.Read_LogEmploymentSession(connection);
+            //Read logs after write
+            List<LogEmploymentSession> logs = new List<LogEmploymentSession>();
+            foreach (LogEmploymentSession log in logReader.Read_LogEmploymentSession(connection))
+                if (log.employment_session_id == employmentSession.Id)
+                    logs.Add(log);
 
-            Assert.IsNotNull(logEmploymentSessions);
-            Assert.IsNotEmpty(logEmploymentSessions);
-            Assert.AreEqual(preTestLogCount + 1, logEmploymentSessions.Count);
+            //Assert on log after write
+            Assert.AreEqual(1, logs.Count);
+            Assert.AreEqual(Enum_Log_Action.values["insert"], logs[0].LogAction);
 
-            Assert_LogTable((int)logEmploymentSessions[preTestLogCount].employment_session_id, logEmploymentSessions.Count, "log_employment_session", DataTableFactory.CreateDataTable_Netus2_Log_EmploymentSession(), connection);
-            Assert.AreEqual(Enum_Log_Action.values["update"], logEmploymentSessions[preTestLogCount].LogAction);
+            //Update
+            employmentSession.Name = "new";
+            employmentSessionDaoImpl.Update(employmentSession, person.Id, connection);
+            employmentSession = employmentSessionDaoImpl.Read_WithPersonId(employmentSession, person.Id, connection)[0];
 
-            Assert.AreEqual(teacher.Id, logEmploymentSessions[preTestLogCount].person_id);
-            Assert_LogEmploymentSession(oldEmploymentSession, logEmploymentSessions[preTestLogCount]);
+            //Read logs after update
+            logs.Clear();
+            foreach (LogEmploymentSession log in logReader.Read_LogEmploymentSession(connection))
+                if (log.employment_session_id == employmentSession.Id)
+                    logs.Add(log);
+
+            //Assert on number of logs after update
+            Assert.AreEqual(2, logs.Count);
+
+            //Get update log from logs
+            LogEmploymentSession updateLog = null;
+            foreach (LogEmploymentSession log in logs)
+                if (log.LogAction == Enum_Log_Action.values["update"])
+                    updateLog = log;
+
+            //Assert on update log
+            Assert.IsNotNull(updateLog);
+
+            //Delete
+            employmentSessionDaoImpl.Delete_WithPersonId(employmentSession, person.Id, connection);
+
+            //Read logs after delete
+            logs.Clear();
+            foreach (LogEmploymentSession log in logReader.Read_LogEmploymentSession(connection))
+                if (log.employment_session_id == employmentSession.Id)
+                    logs.Add(log);
+
+            //Assert on number of logs after delete
+            Assert.AreEqual(3, logs.Count);
+
+            //Get delete log from logs
+            LogEmploymentSession deleteLog = null;
+            foreach (LogEmploymentSession log in logs)
+                if (log.LogAction == Enum_Log_Action.values["delete"])
+                    deleteLog = log;
+
+            //Assert on delete log
+            Assert.IsNotNull(deleteLog);
         }
 
         [Test]
-        public void LogEmploymentSession_Delete()
+        public void LogAcademicSession_ShouldLog_WriteUpdateDelete()
         {
-            int preTestLogCount = logReader.Read_LogEmploymentSession(connection).Count;
+            //Prerequisite
+            Organization org = organizationDaoImpl.Write(new Organization("testName", Enum_Organization.values["unset"], "testIdentifier", "testSisBuildingCode"), connection);
 
-            Person teacher = testDataBuilder.teacher;
-            EmploymentSession oldEmploymentSession = teacher.EmploymentSessions[0];
-            teacher.EmploymentSessions.Clear();
-            personDaoImpl.Update(teacher, connection);
+            //Write
+            AcademicSession academicSession = academicSessionDaoImpl.Write(new AcademicSession("testName", Enum_Session.values["unset"], org, "tst"), connection);
 
-            List<LogEmploymentSession> logEmploymentSessions = logReader.Read_LogEmploymentSession(connection);
+            //Read logs after write
+            List<LogAcademicSession> logs = new List<LogAcademicSession>();
+            foreach (LogAcademicSession log in logReader.Read_LogAcademicSession(connection))
+                if (log.academic_session_id == academicSession.Id)
+                    logs.Add(log);
 
-            Assert.IsNotNull(logEmploymentSessions);
-            Assert.IsNotEmpty(logEmploymentSessions);
-            Assert.AreEqual(preTestLogCount + 1, logEmploymentSessions.Count);
+            //Assert on log after write
+            Assert.AreEqual(1, logs.Count);
+            Assert.AreEqual(Enum_Log_Action.values["insert"], logs[0].LogAction);
 
-            Assert_LogTable((int)logEmploymentSessions[preTestLogCount].employment_session_id, logEmploymentSessions.Count, "log_employment_session", DataTableFactory.CreateDataTable_Netus2_Log_EmploymentSession(), connection);
-            Assert.AreEqual(Enum_Log_Action.values["delete"], logEmploymentSessions[preTestLogCount].LogAction);
+            //Update
+            academicSession.TermCode = "new";
+            academicSessionDaoImpl.Update(academicSession, connection);
+            academicSession = academicSessionDaoImpl.Read_UsingAcademicSessionId(academicSession.Id, connection);
 
-            Assert.AreEqual(teacher.Id, logEmploymentSessions[preTestLogCount].person_id);
-            Assert_LogEmploymentSession(oldEmploymentSession, logEmploymentSessions[preTestLogCount]);
-        }
+            //Read logs after update
+            logs.Clear();
+            foreach (LogAcademicSession log in logReader.Read_LogAcademicSession(connection))
+                if (log.academic_session_id == academicSession.Id)
+                    logs.Add(log);
 
-        [Test]
-        public void LogAcademicSession_Update()
-        {
-            int preTestLogCount = logReader.Read_LogAcademicSession(connection).Count;
+            //Assert on number of logs after update
+            Assert.AreEqual(2, logs.Count);
 
-            Person student = testDataBuilder.student;
-            AcademicSession oldAcademicSession = student.Enrollments[0].ClassEnrolled.AcademicSession;
-            student.Enrollments[0].ClassEnrolled.AcademicSession.Name = "New Academic Session Name";
-            academicSessionDaoImpl.Update(student.Enrollments[0].ClassEnrolled.AcademicSession, connection);
+            //Get update log from logs
+            LogAcademicSession updateLog = null;
+            foreach (LogAcademicSession log in logs)
+                if (log.LogAction == Enum_Log_Action.values["update"])
+                    updateLog = log;
 
-            List<LogAcademicSession> logAcademicSessions = logReader.Read_LogAcademicSession(connection);
+            //Assert on update log
+            Assert.IsNotNull(updateLog);
 
-            Assert.IsNotNull(logAcademicSessions);
-            Assert.IsNotEmpty(logAcademicSessions);
-            Assert.AreEqual(preTestLogCount + 1, logAcademicSessions.Count);
-
-            Assert_LogTable((int)logAcademicSessions[preTestLogCount].academic_session_id, 1, "log_academic_session", DataTableFactory.CreateDataTable_Netus2_Log_AcademicSession(), connection);
-            Assert.AreEqual(Enum_Log_Action.values["update"], logAcademicSessions[preTestLogCount].LogAction);
-
-            Assert_LogAcademicSession(oldAcademicSession, logAcademicSessions[preTestLogCount]);
-        }
-
-        [Test]
-        public void LogAcademicSession_Delete()
-        {
-            int preTestLogCount = logReader.Read_LogAcademicSession(connection).Count;
-
-            AcademicSession academicSession = testDataBuilder.schoolYear;
-
-            var expectOneNewRecordForThisDeletion = 1;
-            var eachChildNeedsToBeUpdatedAlso = academicSession.Children.Count;
-
+            //Delete
             academicSessionDaoImpl.Delete(academicSession, connection);
 
-            List<LogAcademicSession> logAcademicSessions = logReader.Read_LogAcademicSession(connection);
+            //Read logs after delete
+            logs.Clear();
+            foreach (LogAcademicSession log in logReader.Read_LogAcademicSession(connection))
+                if (log.academic_session_id == academicSession.Id)
+                    logs.Add(log);
 
-            var expectedTestLogCount = preTestLogCount + expectOneNewRecordForThisDeletion + eachChildNeedsToBeUpdatedAlso;
-            Assert.IsNotNull(logAcademicSessions);
-            Assert.IsNotEmpty(logAcademicSessions);
-            Assert.AreEqual(expectedTestLogCount, logAcademicSessions.Count);
+            //Assert on number of logs after delete
+            Assert.AreEqual(3, logs.Count);
 
-            Assert_LogTable((int)logAcademicSessions[preTestLogCount].academic_session_id, 1, "log_academic_session", DataTableFactory.CreateDataTable_Netus2_Log_AcademicSession(), connection);
-            Assert.AreEqual(Enum_Log_Action.values["delete"], logAcademicSessions[expectedTestLogCount - 1].LogAction);
+            //Get delete log from logs
+            LogAcademicSession deleteLog = null;
+            foreach (LogAcademicSession log in logs)
+                if (log.LogAction == Enum_Log_Action.values["delete"])
+                    deleteLog = log;
 
-            Assert_LogAcademicSession(academicSession, logAcademicSessions[expectedTestLogCount - 1]);
+            //Assert on delete log
+            Assert.IsNotNull(deleteLog);
         }
 
         [Test]
-        public void LogOrganization_Update()
+        public void LogOrganization_ShouldLog_WriteUpdateDelete()
         {
-            int preTestLogCount = logReader.Read_LogOrganization(connection).Count;
+            //Write
+            Organization org = organizationDaoImpl.Write(new Organization("testName", Enum_Organization.values["unset"], "test", "tstBldg"), connection);
 
-            Organization org = testDataBuilder.school;
-            org.Name = "New Organization Name";
+            //Read logs after write
+            List<LogOrganization> logs = new List<LogOrganization>();
+            foreach (LogOrganization log in logReader.Read_LogOrganization(connection))
+                if (log.organization_id == org.Id)
+                    logs.Add(log);
+
+            //Assert on log after write
+            Assert.AreEqual(1, logs.Count);
+            Assert.AreEqual(Enum_Log_Action.values["insert"], logs[0].LogAction);
+
+            //Update
+            org.Name = "new";
             organizationDaoImpl.Update(org, connection);
+            org = organizationDaoImpl.Read_WithOrganizationId(org.Id, connection);
 
-            List<LogOrganization> logOrganizations = logReader.Read_LogOrganization(connection);
+            //Read logs after update
+            logs.Clear();
+            foreach (LogOrganization log in logReader.Read_LogOrganization(connection))
+                if (log.organization_id == org.Id)
+                    logs.Add(log);
 
-            Assert.IsNotNull(logOrganizations);
-            Assert.IsNotEmpty(logOrganizations);
-            Assert.AreEqual(preTestLogCount + 1, logOrganizations.Count);
+            //Assert on number of logs after update
+            Assert.AreEqual(2, logs.Count);
 
-            Assert_LogTable((int)logOrganizations[preTestLogCount].organization_id, 2, "log_organization", DataTableFactory.CreateDataTable_Netus2_Log_Organization(), connection);
-            Assert.AreEqual(Enum_Log_Action.values["update"], logOrganizations[preTestLogCount].LogAction);
+            //Get update log from logs
+            LogOrganization updateLog = null;
+            foreach (LogOrganization log in logs)
+                if (log.LogAction == Enum_Log_Action.values["update"])
+                    updateLog = log;
 
-            Assert_LogOrganization(org, logOrganizations[preTestLogCount]);
-        }
+            //Assert on update log
+            Assert.IsNotNull(updateLog);
 
-        [Test]
-        public void LogOrganization_Delete()
-        {
-            int preTestLogCount = logReader.Read_LogOrganization(connection).Count;
-
-            Organization org = testDataBuilder.school;
+            //Delete
             organizationDaoImpl.Delete(org, connection);
 
-            List<LogOrganization> logOrganizations = logReader.Read_LogOrganization(connection);
+            //Read logs after delete
+            logs.Clear();
+            foreach (LogOrganization log in logReader.Read_LogOrganization(connection))
+                if (log.organization_id == org.Id)
+                    logs.Add(log);
 
-            Assert.IsNotNull(logOrganizations);
-            Assert.IsNotEmpty(logOrganizations);
-            Assert.AreEqual(preTestLogCount + 1, logOrganizations.Count);
+            //Assert on number of logs after delete
+            Assert.AreEqual(3, logs.Count);
 
-            Assert_LogTable((int)logOrganizations[preTestLogCount].organization_id, 2, "log_organization", DataTableFactory.CreateDataTable_Netus2_Log_Organization(), connection);
-            Assert.AreEqual(Enum_Log_Action.values["delete"], logOrganizations[preTestLogCount].LogAction);
+            //Get delete log from logs
+            LogOrganization deleteLog = null;
+            foreach (LogOrganization log in logs)
+                if (log.LogAction == Enum_Log_Action.values["delete"])
+                    deleteLog = log;
 
-            Assert_LogOrganization(org, logOrganizations[preTestLogCount]);
+            //Assert on delete log
+            Assert.IsNotNull(deleteLog);
         }
 
         [Test]
-        public void LogResource_Update()
+        public void LogResource_ShouldLog_WriteUpdateDelete()
         {
-            int preTestLogCount = logReader.Read_LogResource(connection).Count;
+            //Write
+            Resource resource = resourceDaoImpl.Write(new Resource("testName", "test"), connection);
 
-            Resource oldResource = testDataBuilder.resource;
-            Resource newResource = oldResource;
-            newResource.Name = "different name";
-            resourceDaoImpl.Update(newResource, connection); ;
+            //Read logs after write
+            List<LogResource> logs = new List<LogResource>();
+            foreach (LogResource log in logReader.Read_LogResource(connection))
+                if (log.resource_id == resource.Id)
+                    logs.Add(log);
 
-            List<LogResource> logResources = logReader.Read_LogResource(connection);
+            //Assert on log after write
+            Assert.AreEqual(1, logs.Count);
+            Assert.AreEqual(Enum_Log_Action.values["insert"], logs[0].LogAction);
 
-            Assert.IsNotNull(logResources);
-            Assert.IsNotEmpty(logResources);
-            Assert.AreEqual(1, logResources.Count);
+            //Update
+            resource.Name = "new";
+            resourceDaoImpl.Update(resource, connection);
+            resource = resourceDaoImpl.Read_UsingResourceId(resource.Id, connection);
 
-            Assert_LogTable((int)logResources[0].resource_id, 1, "log_resource", DataTableFactory.CreateDataTable_Netus2_Log_Resource(), connection);
-            Assert.AreEqual(Enum_Log_Action.values["update"], logResources[0].LogAction);
+            //Read logs after update
+            logs.Clear();
+            foreach (LogResource log in logReader.Read_LogResource(connection))
+                if (log.resource_id == resource.Id)
+                    logs.Add(log);
 
-            Assert_LogResource(oldResource, logResources[0]);
+            //Assert on number of logs after update
+            Assert.AreEqual(2, logs.Count);
+
+            //Get update log from logs
+            LogResource updateLog = null;
+            foreach (LogResource log in logs)
+                if (log.LogAction == Enum_Log_Action.values["update"])
+                    updateLog = log;
+
+            //Assert on update log
+            Assert.IsNotNull(updateLog);
+
+            //Delete
+            resourceDaoImpl.Delete(resource, connection);
+
+            //Read logs after delete
+            logs.Clear();
+            foreach (LogResource log in logReader.Read_LogResource(connection))
+                if (log.resource_id == resource.Id)
+                    logs.Add(log);
+
+            //Assert on number of logs after delete
+            Assert.AreEqual(3, logs.Count);
+
+            //Get delete log from logs
+            LogResource deleteLog = null;
+            foreach (LogResource log in logs)
+                if (log.LogAction == Enum_Log_Action.values["delete"])
+                    deleteLog = log;
+
+            //Assert on delete log
+            Assert.IsNotNull(deleteLog);
         }
 
         [Test]
-        public void LogResource_Delete()
+        public void LogCourse_ShouldLog_WriteUpdateDelete()
         {
-            int preTestLogCount = logReader.Read_LogResource(connection).Count;
+            //Write
+            Course course = courseDaoImpl.Write(new Course("testName", "testCourseCode"), connection);
 
-            Resource resource = testDataBuilder.resource;
-            resourceDaoImpl.Delete(resource, connection); ;
+            //Read logs after write
+            List<LogCourse> logs = new List<LogCourse>();
+            foreach (LogCourse log in logReader.Read_LogCourse(connection))
+                if (log.course_id == course.Id)
+                    logs.Add(log);
 
-            List<LogResource> logResources = logReader.Read_LogResource(connection);
+            //Assert on log after write
+            Assert.AreEqual(1, logs.Count);
+            Assert.AreEqual(Enum_Log_Action.values["insert"], logs[0].LogAction);
 
-            Assert.IsNotNull(logResources);
-            Assert.IsNotEmpty(logResources);
-            Assert.AreEqual(preTestLogCount + 1, logResources.Count);
-
-            Assert_LogTable((int)logResources[preTestLogCount].resource_id, 1, "log_resource", DataTableFactory.CreateDataTable_Netus2_Log_Resource(), connection);
-            Assert.AreEqual(Enum_Log_Action.values["delete"], logResources[preTestLogCount].LogAction);
-
-            Assert_LogResource(resource, logResources[preTestLogCount]);
-        }
-
-        [Test]
-        public void LogCourse_Update()
-        {
-            int preTestLogCount = logReader.Read_LogCourse(connection).Count;
-
-            Course course = testDataBuilder.spanishCourse;
-            course.Name = "New Course name";
+            //Update
+            course.Name = "new";
             courseDaoImpl.Update(course, connection);
+            course = courseDaoImpl.Read(course, connection)[0];
 
-            List<LogCourse> logCourses = logReader.Read_LogCourse(connection);
+            //Read logs after update
+            logs.Clear();
+            foreach (LogCourse log in logReader.Read_LogCourse(connection))
+                if (log.course_id == course.Id)
+                    logs.Add(log);
 
-            Assert.IsNotNull(logCourses);
-            Assert.IsNotEmpty(logCourses);
-            Assert.AreEqual(preTestLogCount + 1, logCourses.Count);
+            //Assert on number of logs after update
+            Assert.AreEqual(2, logs.Count);
 
-            Assert_LogTable((int)logCourses[preTestLogCount].course_id, logCourses.Count, "log_course", DataTableFactory.CreateDataTable_Netus2_Log_Course(), connection);
-            Assert.AreEqual(Enum_Log_Action.values["update"], logCourses[preTestLogCount].LogAction);
+            //Get update log from logs
+            LogCourse updateLog = null;
+            foreach (LogCourse log in logs)
+                if (log.LogAction == Enum_Log_Action.values["update"])
+                    updateLog = log;
 
-            Assert_LogCourse(course, logCourses[preTestLogCount]);
-        }
+            //Assert on update log
+            Assert.IsNotNull(updateLog);
 
-        [Test]
-        public void LogCourse_Delete()
-        {
-            int preTestLogCount = logReader.Read_LogCourse(connection).Count;
-
-            Course course = testDataBuilder.spanishCourse;
+            //Delete
             courseDaoImpl.Delete(course, connection);
 
-            List<LogCourse> logCourses = logReader.Read_LogCourse(connection);
+            //Read logs after delete
+            logs.Clear();
+            foreach (LogCourse log in logReader.Read_LogCourse(connection))
+                if (log.course_id == course.Id)
+                    logs.Add(log);
 
-            Assert.IsNotNull(logCourses);
-            Assert.IsNotEmpty(logCourses);
-            Assert.AreEqual(preTestLogCount + 1, logCourses.Count);
+            //Assert on number of logs after delete
+            Assert.AreEqual(3, logs.Count);
 
-            Assert_LogTable((int)logCourses[preTestLogCount].course_id, logCourses.Count, "log_course", DataTableFactory.CreateDataTable_Netus2_Log_Course(), connection);
-            Assert.AreEqual(Enum_Log_Action.values["delete"], logCourses[preTestLogCount].LogAction);
+            //Get delete log from logs
+            LogCourse deleteLog = null;
+            foreach (LogCourse log in logs)
+                if (log.LogAction == Enum_Log_Action.values["delete"])
+                    deleteLog = log;
 
-            Assert_LogCourse(course, logCourses[preTestLogCount]);
+            //Assert on delete log
+            Assert.IsNotNull(deleteLog);
         }
 
         [Test]
-        public void LogJctCourseSubject_Delete()
+        public void LogJctCourseSubject_ShouldLog_WriteUpdateDelete()
         {
-            int preTestLogCount = logReader.Read_LogJctCourseSubject(connection).Count;
+            //Prerequisite
+            Course course = new Course("testName", "tstCode");
+            Enumeration subject = Enum_Subject.values["unset"];
 
-            Person student = testDataBuilder.student;
-            student.Enrollments[0].ClassEnrolled.Course.Subjects[0] = Enum_Subject.values["sci"];
-            courseDaoImpl.Update(student.Enrollments[0].ClassEnrolled.Course, connection);
+            //Write
+            course.Subjects.Add(subject);
+            course = courseDaoImpl.Write(course, connection);
 
-            List<LogJctCourseSubject> logJctCourseSubjects = logReader.Read_LogJctCourseSubject(connection);
+            //Read logs after write
+            List<LogJctCourseSubject> logs = new List<LogJctCourseSubject>();
+            foreach (LogJctCourseSubject log in logReader.Read_LogJctCourseSubject(connection))
+                if (log.course_id == course.Id && log.Subject.Id == subject.Id)
+                    logs.Add(log);
 
-            Assert.IsNotNull(logJctCourseSubjects);
-            Assert.IsNotEmpty(logJctCourseSubjects);
-            Assert.AreEqual(preTestLogCount + 1, logJctCourseSubjects.Count);
+            //Assert on log after write
+            Assert.AreEqual(1, logs.Count);
+            Assert.AreEqual(Enum_Log_Action.values["insert"], logs[0].LogAction);
 
-            Assert_LogTable(logJctCourseSubjects[preTestLogCount].log_jct_course_subject_id, 1, "log_jct_course_subject", DataTableFactory.CreateDataTable_Netus2_Log_JctCourseSubject(), connection);
-            Assert.AreEqual(Enum_Log_Action.values["delete"], logJctCourseSubjects[preTestLogCount].LogAction);
+            //Delete
+            course.Subjects.Clear();
+            courseDaoImpl.Update(course, connection);
 
-            Assert.AreEqual(student.Enrollments[0].ClassEnrolled.Course.Id, logJctCourseSubjects[preTestLogCount].course_id);
-            Assert.AreEqual(Enum_Subject.values["fl"], logJctCourseSubjects[preTestLogCount].Subject);
+            //Read logs after delete
+            logs.Clear();
+            foreach (LogJctCourseSubject log in logReader.Read_LogJctCourseSubject(connection))
+                if (log.course_id == course.Id && log.Subject.Id == subject.Id)
+                    logs.Add(log);
+
+            //Assert on number of logs after delete
+            Assert.AreEqual(2, logs.Count);
+
+            LogJctCourseSubject deleteLog = null;
+            foreach (LogJctCourseSubject log in logs)
+                if (log.LogAction == Enum_Log_Action.values["delete"])
+                    deleteLog = log;
+
+            //Assert on delete log
+            Assert.IsNotNull(deleteLog);
         }
 
         [Test]
-        public void LogJctCourseGrade_Delete()
+        public void LogJctCourseGrade_ShouldLog_WriteUpdateDelete()
         {
-            int preTestLogCount = logReader.Read_LogJctCourseGrade(connection).Count;
+            //Prerequisite
+            Course course = new Course("testName", "testCode");
+            Enumeration grade = Enum_Grade.values["unset"];
 
-            Person student = testDataBuilder.student;
-            student.Enrollments[0].ClassEnrolled.Course.Grades[0] = Enum_Grade.values["3"];
-            courseDaoImpl.Update(student.Enrollments[0].ClassEnrolled.Course, connection);
+            //Write
+            course.Grades.Add(grade);
+            course = courseDaoImpl.Write(course, connection);
 
-            List<LogJctCourseGrade> logJctCourseGrades = logReader.Read_LogJctCourseGrade(connection);
+            //Read logs after write
+            List<LogJctCourseGrade> logs = new List<LogJctCourseGrade>();
+            foreach (LogJctCourseGrade log in logReader.Read_LogJctCourseGrade(connection))
+                if (log.course_id == course.Id && log.Grade.Id == grade.Id)
+                    logs.Add(log);
 
-            Assert.IsNotNull(logJctCourseGrades);
-            Assert.IsNotEmpty(logJctCourseGrades);
-            Assert.AreEqual(preTestLogCount + 1, logJctCourseGrades.Count);
+            //Assert on log after write
+            Assert.AreEqual(1, logs.Count);
+            Assert.AreEqual(Enum_Log_Action.values["insert"], logs[0].LogAction);
 
-            Assert_LogTable(logJctCourseGrades[preTestLogCount].log_jct_course_grade_id, 1, "log_jct_course_grade", DataTableFactory.CreateDataTable_Netus2_Log_JctCourseGrade(), connection);
-            Assert.AreEqual(Enum_Log_Action.values["delete"], logJctCourseGrades[preTestLogCount].LogAction);
+            //Delete
+            course.Grades.Clear();
+            courseDaoImpl.Update(course, connection);
 
-            Assert.AreEqual(student.Enrollments[0].ClassEnrolled.Course.Id, logJctCourseGrades[preTestLogCount].course_id);
-            Assert.AreEqual(Enum_Grade.values["1"], logJctCourseGrades[preTestLogCount].Grade);
+            //Read logs after delete
+            logs.Clear();
+            foreach (LogJctCourseGrade log in logReader.Read_LogJctCourseGrade(connection))
+                if (log.course_id == course.Id && log.Grade.Id == grade.Id)
+                    logs.Add(log);
+
+            //Assert on number of logs after delete
+            Assert.AreEqual(2, logs.Count);
+
+            //Get delete log from logs
+            LogJctCourseGrade deleteLog = null;
+            foreach (LogJctCourseGrade log in logs)
+                if (log.LogAction == Enum_Log_Action.values["delete"])
+                    deleteLog = log;
+
+            //Assert on delete log
+            Assert.IsNotNull(deleteLog);
         }
 
         [Test]
-        public void LogClass_Update()
+        public void LogClass_ShouldLog_WriteUpdateDelete()
         {
-            int preTestLogCount = logReader.Read_LogClassEnrolled(connection).Count;
+            //Prerequisite
+            Course course = courseDaoImpl.Write(new Course("testName", "testCourseCode"), connection);
+            Organization org = organizationDaoImpl.Write(new Organization("testName", Enum_Organization.values["unset"], "testIdentifier", "testSisBuildingCode"), connection);
+            AcademicSession academicSession = academicSessionDaoImpl.Write(new AcademicSession("testName", Enum_Session.values["unset"], org, "tst"), connection);
 
-            ClassEnrolled oldClass = testDataBuilder.classEnrolled;
-            ClassEnrolled newClass = oldClass;
-            newClass.Name = "New Class Name";
-            classEnrolledDaoImpl.Update(newClass, connection);
+            //Write
+            ClassEnrolled classEnrolled = classEnrolledDaoImpl.Write(new ClassEnrolled("testName", "tstClassCode", Enum_Class.values["unset"], "testRoom", course, academicSession), connection);
 
-            List<LogClass> logClasses = logReader.Read_LogClassEnrolled(connection);
+            //Read logs after write
+            List<LogClass> logs = new List<LogClass>();
+            foreach (LogClass log in logReader.Read_LogClassEnrolled(connection))
+                if (log.class_id == classEnrolled.Id)
+                    logs.Add(log);
 
-            Assert.IsNotNull(logClasses);
-            Assert.IsNotEmpty(logClasses);
-            Assert.AreEqual(preTestLogCount + 1, logClasses.Count);
+            //Assert on log after write
+            Assert.AreEqual(1, logs.Count);
+            Assert.AreEqual(Enum_Log_Action.values["insert"], logs[0].LogAction);
 
-            Assert_LogTable((int)logClasses[preTestLogCount].class_id, logClasses.Count, "log_class", DataTableFactory.CreateDataTable_Netus2_Log_ClassEnrolled(), connection);
-            Assert.AreEqual(Enum_Log_Action.values["update"], logClasses[preTestLogCount].LogAction);
+            //Update
+            classEnrolled.Name = "new";
+            classEnrolledDaoImpl.Update(classEnrolled, connection);
+            classEnrolled = classEnrolledDaoImpl.Read(classEnrolled, connection)[0];
 
-            Assert_LogClass(oldClass, logClasses[preTestLogCount]);
+            //Read logs after update
+            logs.Clear();
+            foreach (LogClass log in logReader.Read_LogClassEnrolled(connection))
+                if (log.class_id == classEnrolled.Id)
+                    logs.Add(log);
+
+            //Assert on number of logs after update
+            Assert.AreEqual(2, logs.Count);
+
+            //Get update log from logs
+            LogClass updateLog = null;
+            foreach (LogClass log in logs)
+                if (log.LogAction == Enum_Log_Action.values["update"])
+                    updateLog = log;
+
+            //Assert on update log
+            Assert.IsNotNull(updateLog);
+
+            //Delete
+            classEnrolledDaoImpl.Delete(classEnrolled, connection);
+
+            //Read logs after delete
+            logs.Clear();
+            foreach (LogClass log in logReader.Read_LogClassEnrolled(connection))
+                if (log.class_id == classEnrolled.Id)
+                    logs.Add(log);
+
+
+            //Assert on number of logs after delete
+            Assert.AreEqual(3, logs.Count);
+
+            //Get delete log from logs
+            LogClass deleteLog = null;
+            foreach (LogClass log in logs)
+                if (log.LogAction == Enum_Log_Action.values["delete"])
+                    deleteLog = log;
+
+            //Assert on delete log
+            Assert.IsNotNull(deleteLog);
         }
 
         [Test]
-        public void LogClass_Delete()
+        public void LogJctClassPeriod_ShouldLog_WriteUpdateDelete()
         {
-            int preTestLogCount = logReader.Read_LogClassEnrolled(connection).Count;
+            //Prerequisite
+            Course course = courseDaoImpl.Write(new Course("testName", "tstCourseCode"), connection);
+            Organization org = organizationDaoImpl.Write(new Organization("testName", Enum_Organization.values["unset"], "test", "tstBldg"), connection);
+            AcademicSession academicSession = academicSessionDaoImpl.Write(new AcademicSession("testName", Enum_Session.values["unset"], org, "tst"), connection);
+            ClassEnrolled classEnrolled = new ClassEnrolled("testName", "testClassCode", Enum_Class.values["unset"], "testRoom", course, academicSession);
+            Enumeration period = Enum_Period.values["unset"];
 
-            ClassEnrolled oldClass = testDataBuilder.classEnrolled;
-            classEnrolledDaoImpl.Delete(oldClass, connection);
+            //Write
+            classEnrolled.Periods.Add(period);
+            classEnrolled = classEnrolledDaoImpl.Write(classEnrolled, connection);
 
-            List<LogClass> logClasses = logReader.Read_LogClassEnrolled(connection);
+            //Read logs after write
+            List<LogJctClassPeriod> logs = new List<LogJctClassPeriod>();
+            foreach (LogJctClassPeriod log in logReader.Read_LogJctClassPeriod(connection))
+                if (log.class_id == classEnrolled.Id)
+                    logs.Add(log);
 
-            Assert.IsNotNull(logClasses);
-            Assert.IsNotEmpty(logClasses);
-            Assert.AreEqual(preTestLogCount + 1, logClasses.Count);
+            //Assert on log after write
+            Assert.AreEqual(1, logs.Count);
+            Assert.AreEqual(Enum_Log_Action.values["insert"], logs[0].LogAction);
 
-            Assert_LogTable((int)logClasses[preTestLogCount].class_id, logClasses.Count, "log_class", DataTableFactory.CreateDataTable_Netus2_Log_ClassEnrolled(), connection);
-            Assert.AreEqual(Enum_Log_Action.values["delete"], logClasses[preTestLogCount].LogAction);
+            //Delete
+            classEnrolled.Periods.Clear();
+            classEnrolledDaoImpl.Update(classEnrolled, connection);
 
-            Assert_LogClass(oldClass, logClasses[preTestLogCount]);
+            //Read logs after delete
+            logs.Clear();
+            foreach (LogJctClassPeriod log in logReader.Read_LogJctClassPeriod(connection))
+                if (log.class_id == classEnrolled.Id)
+                    logs.Add(log);
+
+            //Assert on number of logs after delete
+            Assert.AreEqual(2, logs.Count);
+
+            //Get delete log from logs
+            LogJctClassPeriod deleteLog = null;
+            foreach (LogJctClassPeriod log in logs)
+                if (log.LogAction == Enum_Log_Action.values["delete"])
+                    deleteLog = log;
+
+            //Assert on delete log
+            Assert.IsNotNull(deleteLog);
         }
 
         [Test]
-        public void LogJctClassPeriod_Delete()
+        public void LogJctClassResource_ShouldLog_WriteUpdateDelete()
         {
-            int preTestLogCount = logReader.Read_LogJctClassPeriod(connection).Count;
+            //Prerequisite
+            Resource resource = resourceDaoImpl.Write(new Resource("tstName", "tstVenName"), connection);
+            Course course = courseDaoImpl.Write(new Course("testName", "tstCourseCode"), connection);
+            Organization org = organizationDaoImpl.Write(new Organization("testName", Enum_Organization.values["unset"], "test", "tstBldg"), connection);
+            AcademicSession academicSession = academicSessionDaoImpl.Write(new AcademicSession("testName", Enum_Session.values["unset"], org, "tst"), connection);
+            ClassEnrolled classEnrolled = new ClassEnrolled("testName", "testClassCode", Enum_Class.values["unset"], "testRoom", course, academicSession);
 
-            Person student = testDataBuilder.student;
-            student.Enrollments[0].ClassEnrolled.Periods[0] = Enum_Period.values["2"];
-            classEnrolledDaoImpl.Update(student.Enrollments[0].ClassEnrolled, connection);
+            //Write
+            classEnrolled.Resources.Add(resource);
+            classEnrolled = classEnrolledDaoImpl.Write(classEnrolled, connection);
 
-            List<LogJctClassPeriod> logJctClassPeriods = logReader.Read_LogJctClassPeriod(connection);
+            //Read logs after write
+            List<LogJctClassResource> logs = new List<LogJctClassResource>();
+            foreach (LogJctClassResource log in logReader.Read_LogJctClassResource(connection))
+                if (log.class_id == classEnrolled.Id)
+                    logs.Add(log);
 
-            Assert.IsNotNull(logJctClassPeriods);
-            Assert.IsNotEmpty(logJctClassPeriods);
-            Assert.AreEqual(preTestLogCount + 1, logJctClassPeriods.Count);
+            //Assert on log after write
+            Assert.AreEqual(1, logs.Count);
+            Assert.AreEqual(Enum_Log_Action.values["insert"], logs[0].LogAction);
 
-            Assert_LogTable(logJctClassPeriods[preTestLogCount].log_jct_class_period_id, 1, "log_jct_class_period", DataTableFactory.CreateDataTable_Netus2_Log_JctClassPeriod(), connection);
-            Assert.AreEqual(Enum_Log_Action.values["delete"], logJctClassPeriods[preTestLogCount].LogAction);
+            //Delete
+            classEnrolled.Resources.Clear();
+            classEnrolledDaoImpl.Update(classEnrolled, connection);
 
-            Assert.AreEqual(student.Enrollments[0].ClassEnrolled.Id, logJctClassPeriods[preTestLogCount].class_id);
-            Assert.AreEqual(Enum_Period.values["1"], logJctClassPeriods[preTestLogCount].Period);
+            //Read logs after delete
+            logs.Clear();
+            foreach (LogJctClassResource log in logReader.Read_LogJctClassResource(connection))
+                if (log.class_id == classEnrolled.Id)
+                    logs.Add(log);
+
+            //Assert on number of logs after delete
+            Assert.AreEqual(2, logs.Count);
+
+            //Get delete log from logs
+            LogJctClassResource deleteLog = null;
+            foreach (LogJctClassResource log in logs)
+                if (log.LogAction == Enum_Log_Action.values["delete"])
+                    deleteLog = log;
+
+            //Assert on delete log
+            Assert.IsNotNull(deleteLog);
         }
 
         [Test]
-        public void LogJctClassResource_Delete()
+        public void LogLineitem_ShouldLog_WriteUpdateDelete()
         {
-            int preTestLogCount = logReader.Read_LogJctClassResource(connection).Count;
+            //Prerequisite
+            Course course = courseDaoImpl.Write(new Course("testName", "tstCourseCode"), connection);
+            Organization org = organizationDaoImpl.Write(new Organization("testName", Enum_Organization.values["unset"], "test", "tstBldg"), connection);
+            AcademicSession academicSession = academicSessionDaoImpl.Write(new AcademicSession("testName", Enum_Session.values["unset"], org, "tst"), connection);
+            ClassEnrolled classEnrolled = classEnrolledDaoImpl.Write(new ClassEnrolled("testName", "testClassCode", Enum_Class.values["unset"], "testRoom", course, academicSession), connection);
 
-            Person student = testDataBuilder.student;
-            Resource oldresource = student.Enrollments[0].ClassEnrolled.Resources[0];
-            student.Enrollments[0].ClassEnrolled.Resources[0] = resourceDaoImpl.Write(new Resource("new resource", "2"), connection);
-            classEnrolledDaoImpl.Update(student.Enrollments[0].ClassEnrolled, connection);
+            //Write
+            LineItem lineItem = lineItemDaoImpl.Write(new LineItem("testName", new DateTime(), new DateTime(), classEnrolled, Enum_Category.values["unset"], 0, 100), connection);
 
-            List<LogJctClassResource> logJctClassResources = logReader.Read_LogJctClassResource(connection);
+            //Read logs after write
+            List<LogLineItem> logs = new List<LogLineItem>();
+            foreach (LogLineItem log in logReader.Read_LogLineItem(connection))
+                if (log.lineitem_id == lineItem.Id)
+                    logs.Add(log);
 
-            Assert.IsNotNull(logJctClassResources);
-            Assert.IsNotEmpty(logJctClassResources);
-            Assert.AreEqual(preTestLogCount + 1, logJctClassResources.Count);
+            //Assert on log after write
+            Assert.AreEqual(1, logs.Count);
+            Assert.AreEqual(Enum_Log_Action.values["insert"], logs[0].LogAction);
 
-            Assert_LogTable(logJctClassResources[preTestLogCount].log_jct_class_resource_id, 1, "log_jct_class_resource", DataTableFactory.CreateDataTable_Netus2_Log_JctClassResource(), connection);
-            Assert.AreEqual(Enum_Log_Action.values["delete"], logJctClassResources[preTestLogCount].LogAction);
+            //Update
+            lineItem.Descript = "newDescript";
+            lineItemDaoImpl.Update(lineItem, connection);
+            lineItem = lineItemDaoImpl.Read(lineItem.Id, connection);
 
-            Assert.AreEqual(student.Enrollments[0].ClassEnrolled.Id, logJctClassResources[preTestLogCount].class_id);
-            Assert.AreEqual(oldresource.Id, logJctClassResources[preTestLogCount].resource_id);
+            //Read logs after update
+            logs.Clear();
+            foreach (LogLineItem log in logReader.Read_LogLineItem(connection))
+                if (log.lineitem_id == lineItem.Id)
+                    logs.Add(log);
+
+            //Assert on number of logs after update
+            Assert.AreEqual(2, logs.Count);
+
+            //Get update log from logs
+            LogLineItem updateLog = null;
+            foreach (LogLineItem log in logs)
+                if (log.LogAction == Enum_Log_Action.values["update"])
+                    updateLog = log;
+
+            //Assert on update log
+            Assert.IsNotNull(updateLog);
+
+            //Delete
+            lineItemDaoImpl.Delete(lineItem, connection);
+
+            //Read logs after delete
+            logs.Clear();
+            foreach (LogLineItem log in logReader.Read_LogLineItem(connection))
+                if (log.lineitem_id == lineItem.Id)
+                    logs.Add(log);
+
+            //Assert on number of logs after delete
+            Assert.AreEqual(3, logs.Count);
+
+            //Get delete log from logs
+            LogLineItem deleteLog = null;
+            foreach (LogLineItem log in logs)
+                if (log.LogAction == Enum_Log_Action.values["delete"])
+                    deleteLog = log;
+
+            //Assert on delete log
+            Assert.IsNotNull(deleteLog);
         }
 
         [Test]
-        public void LogLineitem_Update()
+        public void LogEnrollment_ShouldLog_WriteUpdateDelete()
         {
-            int preTestLogCount = logReader.Read_LogLineItem(connection).Count;
+            //Prerequisite
+            Person person = personDaoImpl.Write(new Person("fname", "lname", new DateTime(1985, 9, 6), Enum_Gender.values["unset"], Enum_Ethnic.values["unset"]), connection);
+            Course course = courseDaoImpl.Write(new Course("testName", "tstCourseCode"), connection);
+            Organization organization = organizationDaoImpl.Write(new Organization("testName", Enum_Organization.values["unset"], "tstId", "tstBldg"), connection);
+            AcademicSession academicSession = academicSessionDaoImpl.Write(new AcademicSession("testName", Enum_Session.values["unset"], organization, "tst"), connection);
+            ClassEnrolled classEnrolled = classEnrolledDaoImpl.Write(new ClassEnrolled("testName", "testClassCode", Enum_Class.values["unset"], "testRoom", course, academicSession), connection);
 
-            LineItem oldLineItem = testDataBuilder.lineItem;
-            oldLineItem.Descript = "new Lineitem description";
-            lineItemDaoImpl.Update(oldLineItem, connection);
+            //Write
+            Enrollment enrollment = enrollmentDaoImpl.Write(new Enrollment(Enum_Grade.values["unset"], new DateTime(), new DateTime(), Enum_True_False.values["true"], classEnrolled, academicSession), person.Id, connection);
 
-            List<LogLineItem> logLineItems = logReader.Read_LogLineItem(connection);
+            //Read logs after write
+            List<LogEnrollment> logs = new List<LogEnrollment>();
+            foreach (LogEnrollment log in logReader.Read_LogEnrollment(connection))
+                if (log.enrollment_id == enrollment.Id)
+                    logs.Add(log);
 
-            Assert.IsNotNull(logLineItems);
-            Assert.IsNotEmpty(logLineItems);
-            Assert.AreEqual(preTestLogCount + 1, logLineItems.Count);
+            //Assert on log after write
+            Assert.AreEqual(1, logs.Count);
+            Assert.AreEqual(Enum_Log_Action.values["insert"], logs[0].LogAction);
 
-            Assert_LogTable((int)logLineItems[preTestLogCount].lineitem_id, 1, "log_lineitem", DataTableFactory.CreateDataTable_Netus2_Log_LineItem(), connection);
-            Assert.AreEqual(Enum_Log_Action.values["update"], logLineItems[preTestLogCount].LogAction);
+            //Update
+            enrollment.EndDate = new DateTime(2021, 1, 1);
+            enrollmentDaoImpl.Update(enrollment, person.Id, connection);
+            enrollment = enrollmentDaoImpl.Read(enrollment, person.Id, connection)[0];
 
-            Assert_LogLineitem(oldLineItem, logLineItems[preTestLogCount]);
+            //Read logs after update
+            logs.Clear();
+            foreach (LogEnrollment log in logReader.Read_LogEnrollment(connection))
+                if (log.enrollment_id == enrollment.Id)
+                    logs.Add(log);
+
+            //Assert on number of logs after update
+            Assert.AreEqual(2, logs.Count);
+
+            //Get update log from logs
+            LogEnrollment updateLog = null;
+            foreach (LogEnrollment log in logs)
+                if (log.LogAction == Enum_Log_Action.values["update"])
+                    updateLog = log;
+
+            //Assert on update log
+            Assert.IsNotNull(updateLog);
+
+            //Delete
+            enrollmentDaoImpl.Delete(enrollment, connection);
+
+            //Read logs after delete
+            logs.Clear();
+            foreach (LogEnrollment log in logReader.Read_LogEnrollment(connection))
+                if (log.enrollment_id == enrollment.Id)
+                    logs.Add(log);
+
+            //Assert on number of logs after delete
+            Assert.AreEqual(3, logs.Count);
+
+            //Get delete log from logs
+            LogEnrollment deleteLog = null;
+            foreach (LogEnrollment log in logs)
+                if (log.LogAction == Enum_Log_Action.values["delete"])
+                    deleteLog = log;
+
+            //Assert on delete log
+            Assert.IsNotNull(deleteLog);
         }
 
         [Test]
-        public void LogLineitem_Delete()
+        public void LogMark_ShouldLog_WriteUpdateDelete()
         {
-            int preTestLogCount = logReader.Read_LogLineItem(connection).Count;
+            //Prerequisite
+            Person person = personDaoImpl.Write(new Person("ftest", "ltest", new DateTime(1985, 9, 6), Enum_Gender.values["unset"], Enum_Ethnic.values["unset"]), connection);
+            Course course = courseDaoImpl.Write(new Course("testName", "tstCourseCode"), connection);
+            Organization org = organizationDaoImpl.Write(new Organization("testName", Enum_Organization.values["unset"], "test", "tstBldg"), connection);
+            AcademicSession academicSession = academicSessionDaoImpl.Write(new AcademicSession("testName", Enum_Session.values["unset"], org, "tst"), connection);
+            ClassEnrolled classEnrolled = classEnrolledDaoImpl.Write(new ClassEnrolled("testName", "testClassCode", Enum_Class.values["unset"], "testRoom", course, academicSession), connection);
+            LineItem lineItem = lineItemDaoImpl.Write(new LineItem("testName", new DateTime(), new DateTime(), classEnrolled, Enum_Category.values["unset"], 0, 100), connection);
 
-            LineItem oldLineItem = testDataBuilder.lineItem;
-            lineItemDaoImpl.Delete(oldLineItem, connection);
+            //Write
+            Mark mark = markDaoImpl.Write(new Mark(lineItem, Enum_Score_Status.values["unset"], 95, new DateTime()), person.Id, connection);
 
-            List<LogLineItem> logLineItems = logReader.Read_LogLineItem(connection);
+            //Read logs after write
+            List<LogMark> logs = new List<LogMark>();
+            foreach (LogMark log in logReader.Read_LogMark(connection))
+                if (log.mark_id == mark.Id)
+                    logs.Add(log);
 
-            Assert.IsNotNull(logLineItems);
-            Assert.IsNotEmpty(logLineItems);
-            Assert.AreEqual(preTestLogCount + 1, logLineItems.Count);
+            //Assert on log after write
+            Assert.AreEqual(1, logs.Count);
+            Assert.AreEqual(Enum_Log_Action.values["insert"], logs[0].LogAction);
 
-            Assert_LogTable((int)logLineItems[preTestLogCount].lineitem_id, 1, "log_lineitem", DataTableFactory.CreateDataTable_Netus2_Log_LineItem(), connection);
-            Assert.AreEqual(Enum_Log_Action.values["delete"], logLineItems[preTestLogCount].LogAction);
+            //Update
+            mark.Score = 97;
+            markDaoImpl.Update(mark, person.Id, connection);
+            mark = markDaoImpl.Read(mark, person.Id, connection)[0];
 
-            Assert_LogLineitem(oldLineItem, logLineItems[preTestLogCount]);
+            //Read logs after update
+            logs.Clear();
+            foreach (LogMark log in logReader.Read_LogMark(connection))
+                if (log.mark_id == mark.Id)
+                    logs.Add(log);
+
+            //Assert on number of logs after update
+            Assert.AreEqual(2, logs.Count);
+
+            //Get update log from logs
+            LogMark updateLog = null;
+            foreach (LogMark log in logs)
+                if (log.LogAction == Enum_Log_Action.values["update"])
+                    updateLog = log;
+
+            //Assert on update log
+            Assert.IsNotNull(updateLog);
+
+            //Delete
+            markDaoImpl.Delete(mark, connection);
+
+            //Read logs after delete
+            logs.Clear();
+            foreach (LogMark log in logReader.Read_LogMark(connection))
+                if (log.mark_id == mark.Id)
+                    logs.Add(log);
+
+            //Assert on number of logs after delete
+            Assert.AreEqual(3, logs.Count);
+
+            //Get delete log from logs
+            LogMark deleteLog = null;
+            foreach (LogMark log in logs)
+                if (log.LogAction == Enum_Log_Action.values["delete"])
+                    deleteLog = log;
+
+            //Assert on delete log
+            Assert.IsNotNull(deleteLog);
         }
 
         [Test]
-        public void LogEnrollment_Update()
+        public void LogJctEnrollmentAcademicSession_ShouldLog_WriteUpdateDelete()
         {
-            int preTestLogCount = logReader.Read_LogEnrollment(connection).Count;
+            //Prerequisite
+            Person person = personDaoImpl.Write(new Person("fname", "lname", new DateTime(1985, 9, 6), Enum_Gender.values["unset"], Enum_Ethnic.values["unset"]), connection);
+            Course course = courseDaoImpl.Write(new Course("testName", "tstCourseCode"), connection);
+            Organization organization = organizationDaoImpl.Write(new Organization("testName", Enum_Organization.values["unset"], "tstId", "tstBldg"), connection);
+            AcademicSession academicSession = academicSessionDaoImpl.Write(new AcademicSession("testName", Enum_Session.values["unset"], organization, "tst"), connection);
+            ClassEnrolled classEnrolled = classEnrolledDaoImpl.Write(new ClassEnrolled("testName", "testClassCode", Enum_Class.values["unset"], "testRoom", course, academicSession), connection);
 
-            Person student = testDataBuilder.student;
-            Enrollment oldEnrollment = student.Enrollments[0];
-            student.Enrollments[0].GradeLevel = Enum_Grade.values["1"];
-            personDaoImpl.Update(student, connection);
+            //Write
+            Enrollment enrollment = enrollmentDaoImpl.Write(new Enrollment(Enum_Grade.values["unset"], new DateTime(), new DateTime(), Enum_True_False.values["true"], classEnrolled, academicSession), person.Id, connection);
 
-            List<LogEnrollment> logEnrollments = logReader.Read_LogEnrollment(connection);
+            //Read logs after write
+            List<LogJctEnrollmentAcademicSession> logs = new List<LogJctEnrollmentAcademicSession>();
+            foreach (LogJctEnrollmentAcademicSession log in logReader.Read_JctEnrollmentAcademicSession(connection))
+                if (log.enrollment_id == enrollment.Id && log.academic_session_id == academicSession.Id)
+                    logs.Add(log);
 
-            Assert.IsNotNull(logEnrollments);
-            Assert.IsNotEmpty(logEnrollments);
-            Assert.AreEqual(preTestLogCount + 1, logEnrollments.Count);
+            //Assert on log after write
+            Assert.AreEqual(1, logs.Count);
+            Assert.AreEqual(Enum_Log_Action.values["insert"], logs[0].LogAction);
 
-            Assert_LogTable((int)logEnrollments[preTestLogCount].enrollment_id, logEnrollments.Count, "log_enrollment", DataTableFactory.CreateDataTable_Netus2_Log_Enrollment(), connection);
-            Assert.AreEqual(Enum_Log_Action.values["update"], logEnrollments[preTestLogCount].LogAction);
+            //Delete
+            enrollment.AcademicSessions.Clear();
+            enrollmentDaoImpl.Update(enrollment, person.Id, connection);
 
-            Assert.AreEqual(student.Id, logEnrollments[preTestLogCount].person_id);
-            Assert_LogEnrollment(oldEnrollment, logEnrollments[preTestLogCount]);
-        }
+            //Read logs after delete
+            logs.Clear();
+            foreach (LogJctEnrollmentAcademicSession log in logReader.Read_JctEnrollmentAcademicSession(connection))
+                if (log.enrollment_id == enrollment.Id && log.academic_session_id == academicSession.Id)
+                    logs.Add(log);
 
-        [Test]
-        public void LogEnrollment_Delete()
-        {
-            int preTestLogCount = logReader.Read_LogEnrollment(connection).Count;
+            //Assert on number of logs after delete
+            Assert.AreEqual(2, logs.Count);
 
-            Person student = testDataBuilder.student;
-            Enrollment oldEnrollment = student.Enrollments[0];
-            student.Enrollments.Clear();
-            personDaoImpl.Update(student, connection);
+            //Get delete log from logs
+            LogJctEnrollmentAcademicSession deleteLog = null;
+            foreach (LogJctEnrollmentAcademicSession log in logs)
+                if (log.LogAction == Enum_Log_Action.values["delete"])
+                    deleteLog = log;
 
-            List<LogEnrollment> logEnrollments = logReader.Read_LogEnrollment(connection);
-
-            Assert.IsNotNull(logEnrollments);
-            Assert.IsNotEmpty(logEnrollments);
-            Assert.AreEqual(preTestLogCount + 1, logEnrollments.Count);
-
-            Assert_LogTable((int)logEnrollments[preTestLogCount].enrollment_id, logEnrollments.Count, "log_enrollment", DataTableFactory.CreateDataTable_Netus2_Log_Enrollment(), connection);
-            Assert.AreEqual(Enum_Log_Action.values["delete"], logEnrollments[preTestLogCount].LogAction);
-
-            Assert.AreEqual(student.Id, logEnrollments[preTestLogCount].person_id);
-            Assert_LogEnrollment(oldEnrollment, logEnrollments[preTestLogCount]);
-        }
-
-        [Test]
-        public void LogMark_Update()
-        {
-            int preTestLogCount = logReader.Read_LogMark(connection).Count;
-
-            Person student = testDataBuilder.student;
-            Mark oldMark = student.Marks[0];
-            oldMark.Comment = "New comment for old mark";
-            markDaoImpl.Update(oldMark, student.Id, connection);
-
-            List<LogMark> logMarks = logReader.Read_LogMark(connection);
-
-            Assert.IsNotNull(logMarks);
-            Assert.IsNotEmpty(logMarks);
-            Assert.AreEqual(preTestLogCount + 1, logMarks.Count);
-
-            Assert_LogTable((int)logMarks[preTestLogCount].mark_id, 2, "log_mark", DataTableFactory.CreateDataTable_Netus2_Log_Mark(), connection);
-            Assert.AreEqual(Enum_Log_Action.values["update"], logMarks[preTestLogCount].LogAction);
-
-            Assert.AreEqual(student.Id, logMarks[preTestLogCount].person_id);
-            Assert_LogMark(oldMark, logMarks[preTestLogCount]);
-        }
-
-        [Test]
-        public void LogMark_Delete()
-        {
-            int preTestLogCount = logReader.Read_LogMark(connection).Count;
-
-            Person student = testDataBuilder.student;
-            Mark oldMark = student.Marks[0];
-            markDaoImpl.Delete(oldMark, student.Id, connection);
-
-            List<LogMark> logMarks = logReader.Read_LogMark(connection);
-
-            Assert.IsNotNull(logMarks);
-            Assert.IsNotEmpty(logMarks);
-            Assert.AreEqual(preTestLogCount + 1, logMarks.Count);
-
-            Assert_LogTable((int)logMarks[preTestLogCount].mark_id, 2, "log_mark", DataTableFactory.CreateDataTable_Netus2_Log_Mark(), connection);
-            Assert.AreEqual(Enum_Log_Action.values["delete"], logMarks[preTestLogCount].LogAction);
-
-            Assert.AreEqual(student.Id, logMarks[preTestLogCount].person_id);
-            Assert_LogMark(oldMark, logMarks[preTestLogCount]);
-        }
-
-        [Test]
-        public void LogJctEnrollmentAcademicSession_Delete()
-        {
-            int preTestLogCount = logReader.Read_JctEnrollmentAcademicSession(connection).Count;
-
-            Organization org = testDataBuilder.school;
-            AcademicSession academicSession = testDataBuilder.schoolYear;
-            Person student = testDataBuilder.student;
-            Enrollment enrollment = testDataBuilder.enrollment;
-
-            AcademicSession newAcademicSession = new AcademicSession("New Academic Session Name", Enum_Session.values["grading period"], org, "T1");
-            newAcademicSession = academicSessionDaoImpl.Write(newAcademicSession, connection);
-            enrollment.AcademicSessions[0] = newAcademicSession;
-            enrollmentDaoImpl.Update(enrollment, student.Id, connection);
-
-            List<LogJctEnrollmentAcademicSession> logJctEnrollmentAcademicSessions = logReader.Read_JctEnrollmentAcademicSession(connection);
-
-            Assert.IsNotNull(logJctEnrollmentAcademicSessions);
-            Assert.IsNotEmpty(logJctEnrollmentAcademicSessions);
-            Assert.AreEqual(preTestLogCount + 1, logJctEnrollmentAcademicSessions.Count);
-
-            Assert_LogTable((int)logJctEnrollmentAcademicSessions[preTestLogCount].log_jct_enrollment_academic_session_id, 1, "log_jct_enrollment_academic_session", DataTableFactory.CreateDataTable_Netus2_Log_JctEnrollmentAcademicSession(), connection);
-            Assert.AreEqual(Enum_Log_Action.values["delete"], logJctEnrollmentAcademicSessions[preTestLogCount].LogAction);
-
-            Assert.AreEqual(enrollment.Id, logJctEnrollmentAcademicSessions[preTestLogCount].enrollment_id);
-            Assert.AreEqual(academicSession.Id, logJctEnrollmentAcademicSessions[preTestLogCount].academic_session_id);
+            //Assert on delete log
+            Assert.IsNotNull(deleteLog);
         }
 
         [TearDown]

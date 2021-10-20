@@ -72,7 +72,7 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.PersonTasks
                 }
                 else if (foundUniqueIdentifiers.Count == 1)
                 {
-                    Person person = personDaoImpl.Read_UsingUniqueId(foundUniqueIdentifiers[0].Id, _netus2Connection);
+                    Person person = personDaoImpl.Read_UsingUniqueIdentifier(foundUniqueIdentifiers[0].Identifier, _netus2Connection);
 
                     bool needsToBeUpdated = false;
                     if (person.Roles.Contains(sisPersonType) == false)

@@ -5,6 +5,7 @@ using Netus2_DatabaseConnection.utilityTools;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Threading.Tasks;
 
 namespace Netus2_DatabaseConnection.dbAccess
@@ -103,7 +104,7 @@ namespace Netus2_DatabaseConnection.dbAccess
             //Do Nothing
         }
 
-        public DataTable ReadIntoDataTable(string sql, DataTable dt)
+        public DataTable ReadIntoDataTable(string sql, DataTable dt, List<SqlParameter> parameters)
         {
             if (sql.Contains("SELECT * FROM enum_"))
             {
@@ -205,7 +206,7 @@ namespace Netus2_DatabaseConnection.dbAccess
             return cloanedDataTable;
         }
 
-        public int ExecuteNonQuery(string sql)
+        public int ExecuteNonQuery(string sql, List<SqlParameter> parameters)
         {
             if (expectedNonQuerySql != null)
             {
@@ -218,7 +219,7 @@ namespace Netus2_DatabaseConnection.dbAccess
             return 1;
         }
 
-        public int InsertNewRecord(string sql)
+        public int InsertNewRecord(string sql, List<SqlParameter> parameters)
         {
             if (expectedNewRecordSql != null)
             {
@@ -248,6 +249,27 @@ namespace Netus2_DatabaseConnection.dbAccess
             }
 
             return 1;
+        }
+
+        public DataTable ReadIntoDataTable(string sql, DataTable dt)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+
+            return ReadIntoDataTable(sql, dt, parameters);
+        }
+
+        public int ExecuteNonQuery(string sql)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+
+            return ExecuteNonQuery(sql, parameters);
+        }
+
+        public int InsertNewRecord(string sql)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+
+            return InsertNewRecord(sql, parameters);
         }
     }
 }

@@ -6,6 +6,7 @@ using Netus2_DatabaseConnection.utilityTools;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Text;
 
 namespace Netus2_DatabaseConnection.daoImplementations
@@ -27,6 +28,9 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         public void Delete(Person person, IConnectable connection)
         {
+            if(person.Id <= 0)
+                throw new Exception("Cannot delete a person who doesn't have a database-assigned ID.\n" + person.ToString());
+
             Delete_JctPersonPerson(person, connection);
             Delete_JctPersonRole(person, connection);
             Delete_JctPersonApp(person, connection);
@@ -39,20 +43,14 @@ namespace Netus2_DatabaseConnection.daoImplementations
             Delete_JctClassPerson(person, connection);
 
             DataRow row = daoObjectMapper.MapPerson(person);
-
+            
             StringBuilder sql = new StringBuilder("DELETE FROM person WHERE 1=1 ");
-            sql.Append("AND person_id " + (row["person_id"] != DBNull.Value ? "= " + row["person_id"] + " " : "IS NULL "));
-            sql.Append("AND first_name " + (row["first_name"] != DBNull.Value ? "LIKE '" + row["first_name"] + "' " : "IS NULL "));
-            sql.Append("AND middle_name " + (row["middle_name"] != DBNull.Value ? "LIKE '" + row["middle_name"] + "' " : "IS NULL "));
-            sql.Append("AND last_name " + (row["last_name"] != DBNull.Value ? "LIKE '" + row["last_name"] + "' " : "IS NULL "));
-            sql.Append("AND birth_date " + (row["birth_date"] != DBNull.Value ? "= '" + row["birth_date"] + "' " : "IS NULL "));
-            sql.Append("AND enum_gender_id " + (row["enum_gender_id"] != DBNull.Value ? "= " + row["enum_gender_id"] + " " : "IS NULL "));
-            sql.Append("AND enum_ethnic_id " + (row["enum_ethnic_id"] != DBNull.Value ? "= " + row["enum_ethnic_id"] + " " : "IS NULL "));
-            sql.Append("AND enum_residence_status_id " + (row["enum_residence_status_id"] != DBNull.Value ? "= " + row["enum_residence_status_id"] + " " : "IS NULL "));
-            sql.Append("AND login_name " + (row["login_name"] != DBNull.Value ? "LIKE '" + row["login_name"] + "' " : "IS NULL "));
-            sql.Append("AND login_pw " + (row["login_pw"] != DBNull.Value ? "LIKE '" + row["login_pw"] + "' " : "IS NULL"));
+            sql.Append("AND person_id = @person_id ");
 
-            connection.ExecuteNonQuery(sql.ToString());
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@person_id", row["person_id"]));
+
+            connection.ExecuteNonQuery(sql.ToString(), parameters);
         }
 
         private void Delete_JctClassPerson(Person person, IConnectable connection)
@@ -154,21 +152,30 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         public Person Read_UsingPersonId(int personId, IConnectable connection)
         {
-            string sql = "SELECT * FROM person WHERE person_id = " + personId;
+            if (personId <= 0)
+                throw new Exception("personId must be a database-assigned ID.\n" + personId);
 
-            List<Person> results = Read(sql, connection);
+            string sql = "SELECT * FROM person WHERE person_id = @person_id";
+            
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@person_id", personId));
+
+            List<Person> results = Read(sql, connection, parameters);
             if (results.Count == 0)
                 return null;
             else
                 return results[0];
         }
 
-        public Person Read_UsingUniqueId(int uniqueId, IConnectable connection)
+        public Person Read_UsingUniqueIdentifier(string identifier, IConnectable connection)
         {
             string sql = "SELECT * FROM person WHERE person_id in (" +
-                "SELECT person_id FROM unique_identifier WHERE unique_identifier_id = " + uniqueId + ")";
+                "SELECT person_id FROM unique_identifier WHERE unique_identifier = @unique_identifier)";
 
-            List<Person> results = Read(sql, connection);
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@unique_identifier", identifier));
+
+            List<Person> results = Read(sql, connection, parameters);
             if (results.Count == 0)
                 return null;
             else
@@ -179,39 +186,78 @@ namespace Netus2_DatabaseConnection.daoImplementations
         {
             DataRow row = daoObjectMapper.MapPerson(person);
 
+            List<SqlParameter> parameters = new List<SqlParameter>();
+
             StringBuilder sql = new StringBuilder("SELECT * FROM person WHERE 1=1 ");
             if (row["person_id"] != DBNull.Value)
-                sql.Append("AND person_id = " + row["person_id"] + " ");
+            {
+                sql.Append("AND person_id = @person_id ");
+                parameters.Add(new SqlParameter("@person_id", row["person_id"]));
+            }
             else
             {
                 if (row["first_name"] != DBNull.Value)
-                    sql.Append("AND first_name = '" + row["first_name"] + "' ");
+                {
+                    sql.Append("AND first_name = @first_name ");
+                    parameters.Add(new SqlParameter("@first_name", row["first_name"]));
+                }
+
                 if (row["middle_name"] != DBNull.Value)
-                    sql.Append("AND middle_name = '" + row["middle_name"] + "' ");
+                {
+                    sql.Append("AND middle_name = @middle_name ");
+                    parameters.Add(new SqlParameter("@middle_name", row["middle_name"]));
+                }
+
                 if (row["last_name"] != DBNull.Value)
-                    sql.Append("AND last_name = '" + row["last_name"] + "' ");
+                {
+                    sql.Append("AND last_name = @last_name ");
+                    parameters.Add(new SqlParameter("@last_name", row["last_name"]));
+                }
+
                 if (row["birth_date"] != DBNull.Value)
-                    sql.Append("AND datediff(day, birth_date, '" + row["birth_date"].ToString() + "') = 0 ");
+                {
+                    sql.Append("AND datediff(day, birth_date, @birth_date) = 0 ");
+                    parameters.Add(new SqlParameter("@birth_date", row["birth_date"]));
+                }
+
                 if (row["enum_gender_id"] != DBNull.Value)
-                    sql.Append("AND enum_gender_id = " + row["enum_gender_id"] + " ");
-                if (row["enum_ethnic_id"] != DBNull.Value) 
-                    sql.Append("AND enum_ethnic_id = " + row["enum_ethnic_id"] + " ");
+                {
+                    sql.Append("AND enum_gender_id = @enum_gender_id ");
+                    parameters.Add(new SqlParameter("@enum_gender_id", row["enum_gender_id"]));
+                }
+
+                if (row["enum_ethnic_id"] != DBNull.Value)
+                {
+                    sql.Append("AND enum_ethnic_id = @enum_ethnic_id ");
+                    parameters.Add(new SqlParameter("@enum_ethnic_id", row["enum_ethnic_id"]));
+                }
+
                 if (row["enum_residence_status_id"] != DBNull.Value)
-                    sql.Append("AND enum_residence_status_id = " + row["enum_residence_status_id"] + " ");
+                {
+                    sql.Append("AND enum_residence_status_id = @enum_residence_status_id ");
+                    parameters.Add(new SqlParameter("@enum_residence_status_id", row["enum_residence_status_id"]));
+                }
+
                 if (row["login_name"] != DBNull.Value)
-                    sql.Append("AND login_name = '" + row["login_name"] + "' ");
+                {
+                    sql.Append("AND login_name = @login_name ");
+                    parameters.Add(new SqlParameter("@login_name", row["login_name"]));
+                }
+
                 if (row["login_pw"] != DBNull.Value)
-                    sql.Append("AND login_pw = '" + row["login_pw"] + "' ");
+                {
+                    sql.Append("AND login_pw = @login_pw");
+                    parameters.Add(new SqlParameter("@login_pw", row["login_pw"]));
+                }
             }
 
-
-            return Read(sql.ToString(), connection);
+            return Read(sql.ToString(), connection, parameters);
         }
 
-        private List<Person> Read(string sql, IConnectable connection)
+        private List<Person> Read(string sql, IConnectable connection, List<SqlParameter> parameters)
         {
             DataTable dtPerson = DataTableFactory.CreateDataTable_Netus2_Person();
-            dtPerson = connection.ReadIntoDataTable(sql, dtPerson);
+            dtPerson = connection.ReadIntoDataTable(sql, dtPerson, parameters);
 
             List<Person> results = new List<Person>();
             foreach (DataRow row in dtPerson.Rows)
@@ -325,21 +371,87 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
             if (row["person_id"] != DBNull.Value)
             {
+                List<SqlParameter> parameters = new List<SqlParameter>();
+
                 StringBuilder sql = new StringBuilder("UPDATE person SET ");
-                sql.Append("first_name = " + (row["first_name"] != DBNull.Value ? "'" + row["first_name"] + "', " : "NULL, "));
-                sql.Append("middle_name = " + (row["middle_name"] != DBNull.Value ? "'" + row["middle_name"] + "', " : "NULL, "));
-                sql.Append("last_name = " + (row["last_name"] != DBNull.Value ? "'" + row["last_name"] + "', " : "NULL, "));
-                sql.Append("birth_date = " + (row["birth_date"] != DBNull.Value ? "'" + row["birth_date"] + "', " : "NULL, "));
-                sql.Append("enum_gender_id = " + (row["enum_gender_id"] != DBNull.Value ? "'" + row["enum_gender_id"] + "', " : "NULL, "));
-                sql.Append("enum_ethnic_id = " + (row["enum_ethnic_id"] != DBNull.Value ? "'" + row["enum_ethnic_id"] + "', " : "NULL, "));
-                sql.Append("enum_residence_status_id = " + (row["enum_residence_status_id"] != DBNull.Value ? "'" + row["enum_residence_status_id"] + "', " : "NULL, "));
-                sql.Append("login_name = " + (row["login_name"] != DBNull.Value ? "'" + row["login_name"] + "', " : "NULL, "));
-                sql.Append("login_pw = " + (row["login_pw"] != DBNull.Value ? "'" + row["login_pw"] + "', " : "NULL, "));
+                if (row["first_name"] != DBNull.Value)
+                {
+                    sql.Append("first_name = @first_name, ");
+                    parameters.Add(new SqlParameter("@first_name", row["first_name"]));
+                }
+                else
+                    sql.Append("first_name = NULL, ");
+
+                if (row["middle_name"] != DBNull.Value)
+                {
+                    sql.Append("middle_name = @middle_name, ");
+                    parameters.Add(new SqlParameter("@middle_name", row["middle_name"]));
+                }
+                else
+                    sql.Append("middle_name = NULL, ");
+
+                if (row["last_name"] != DBNull.Value)
+                {
+                    sql.Append("last_name = @last_name, ");
+                    parameters.Add(new SqlParameter("@last_name", row["last_name"]));
+                }
+                else
+                    sql.Append("last_name = NULL, ");
+
+                if (row["birth_date"] != DBNull.Value)
+                {
+                    sql.Append("birth_date = @birth_date, ");
+                    parameters.Add(new SqlParameter("@birth_date", row["birth_date"]));
+                }
+                else
+                    sql.Append("birth_date = NULL, ");
+
+                if (row["enum_gender_id"] != DBNull.Value)
+                {
+                    sql.Append("enum_gender_id = @enum_gender_id, ");
+                    parameters.Add(new SqlParameter("@enum_gender_id", row["enum_gender_id"]));
+                }
+                else
+                    sql.Append("enum_gender_id = NULL, ");
+
+                if (row["enum_ethnic_id"] != DBNull.Value)
+                {
+                    sql.Append("enum_ethnic_id = @enum_ethnic_id, ");
+                    parameters.Add(new SqlParameter("@enum_ethnic_id", row["enum_ethnic_id"]));
+                }
+                else
+                    sql.Append("enum_ethnic_id = NULL, ");
+
+                if (row["enum_residence_status_id"] != DBNull.Value)
+                {
+                    sql.Append("enum_residence_status_id = @enum_residence_status_id, ");
+                    parameters.Add(new SqlParameter("@enum_residence_status_id", row["enum_residence_status_id"]));
+                }
+                else
+                    sql.Append("enum_residence_status_id = NULL, ");
+
+                if (row["login_name"] != DBNull.Value)
+                {
+                    sql.Append("login_name = @login_name, ");
+                    parameters.Add(new SqlParameter("@login_name", row["login_name"]));
+                }
+                else
+                    sql.Append("login_name = NULL, ");
+
+                if (row["login_pw"] != DBNull.Value)
+                {
+                    sql.Append("login_pw = @login_pw, ");
+                    parameters.Add(new SqlParameter("@login_pw", row["login_pw"]));
+                }
+                else
+                    sql.Append("login_pw = NULL, ");
+
                 sql.Append("changed = dbo.CURRENT_DATETIME(), ");
                 sql.Append("changed_by = " + (_taskId != null ? _taskId.ToString() : "'Netus2'") + " ");
-                sql.Append("WHERE person_id = " + row["person_id"]);
+                sql.Append("WHERE person_id = @person_id");
+                parameters.Add(new SqlParameter("@person_id", row["person_id"]));
 
-                connection.ExecuteNonQuery(sql.ToString());
+                connection.ExecuteNonQuery(sql.ToString(), parameters);
 
                 UpdateEmploymentSessions(person.EmploymentSessions, person.Id, connection);
                 UpdateJctPersonRole(person.Roles, person.Id, connection);
@@ -359,16 +471,82 @@ namespace Netus2_DatabaseConnection.daoImplementations
         {
             DataRow row = daoObjectMapper.MapPerson(person);
 
+            List<SqlParameter> parameters = new List<SqlParameter>();
+
             StringBuilder sqlValues = new StringBuilder();
-            sqlValues.Append(row["first_name"] != DBNull.Value ? "'" + row["first_name"] + "', " : "NULL, ");
-            sqlValues.Append(row["middle_name"] != DBNull.Value ? "'" + row["middle_name"] + "', " : "NULL, ");
-            sqlValues.Append(row["last_name"] != DBNull.Value ? "'" + row["last_name"] + "', " : "NULL, ");
-            sqlValues.Append(row["birth_date"] != DBNull.Value ? "'" + row["birth_date"] + "', " : "NULL, ");
-            sqlValues.Append(row["enum_gender_id"] != DBNull.Value ? row["enum_gender_id"] + ", " : "NULL, ");
-            sqlValues.Append(row["enum_ethnic_id"] != DBNull.Value ? row["enum_ethnic_id"] + ", " : "NULL, ");
-            sqlValues.Append(row["enum_residence_status_id"] != DBNull.Value ? row["enum_residence_status_id"] + ", " : "NULL, ");
-            sqlValues.Append(row["login_name"] != DBNull.Value ? "'" + row["login_name"] + "', " : "NULL, ");
-            sqlValues.Append(row["login_pw"] != DBNull.Value ? "'" + row["login_pw"] + "', " : "NULL, ");
+            if (row["first_name"] != DBNull.Value)
+            {
+                sqlValues.Append("@first_name, ");
+                parameters.Add(new SqlParameter("@first_name", row["first_name"]));
+            }
+            else
+                sqlValues.Append("NULL, ");
+
+            if (row["middle_name"] != DBNull.Value)
+            {
+                sqlValues.Append("@middle_name, ");
+                parameters.Add(new SqlParameter("@middle_name", row["middle_name"]));
+            }
+            else
+                sqlValues.Append("NULL, ");
+
+            if(row["last_name"] != DBNull.Value)
+            {
+                sqlValues.Append("@last_name, ");
+                parameters.Add(new SqlParameter("@last_name", row["last_name"]));
+            }
+            else
+                sqlValues.Append("NULL, ");
+
+            if (row["birth_date"] != DBNull.Value)
+            {
+                sqlValues.Append("@birth_date, ");
+                var birth_date = row["birth_date"];
+                parameters.Add(new SqlParameter("@birth_date", birth_date));
+            }
+            else
+                sqlValues.Append("NULL, ");
+
+            if (row["enum_gender_id"] != DBNull.Value)
+            {
+                sqlValues.Append("@enum_gender_id, ");
+                parameters.Add(new SqlParameter("@enum_gender_id", row["enum_gender_id"]));
+            }
+            else
+                sqlValues.Append("NULL, ");
+
+            if (row["enum_ethnic_id"] != DBNull.Value)
+            {
+                sqlValues.Append("@enum_ethnic_id, ");
+                parameters.Add(new SqlParameter("@enum_ethnic_id", row["enum_ethnic_id"]));
+            }
+            else
+                sqlValues.Append("NULL, ");
+
+            if (row["enum_residence_status_id"] != DBNull.Value)
+            {
+                sqlValues.Append("@enum_residence_status_id, ");
+                parameters.Add(new SqlParameter("@enum_residence_status_id", row["enum_residence_status_id"]));
+            }
+            else
+                sqlValues.Append("NULL, ");
+
+            if (row["login_name"] != DBNull.Value)
+            {
+                sqlValues.Append("@login_name, ");
+                parameters.Add(new SqlParameter("@login_name", row["login_name"]));
+            }
+            else
+                sqlValues.Append("NULL, ");
+
+            if (row["login_pw"] != DBNull.Value)
+            {
+                sqlValues.Append("@login_pw, ");
+                parameters.Add(new SqlParameter("@login_pw", row["login_pw"]));
+            }
+            else
+                sqlValues.Append("NULL, ");
+
             sqlValues.Append("dbo.CURRENT_DATETIME(), ");
             sqlValues.Append(_taskId != null ? _taskId.ToString() : "'Netus2'");
 
@@ -378,7 +556,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 "enum_residence_status_id, login_name, login_pw, created, created_by) " +
                 "VALUES (" + sqlValues.ToString() + ")";
 
-            row["person_id"] = connection.InsertNewRecord(sql);
+            row["person_id"] = connection.InsertNewRecord(sql, parameters);
 
             Person result = daoObjectMapper.MapPerson(row);
 

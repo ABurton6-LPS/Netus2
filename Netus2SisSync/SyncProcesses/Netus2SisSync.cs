@@ -12,6 +12,8 @@ namespace Netus2SisSync.SyncProcesses
         {
             log.LogInformation($"Netus2SisSync Timer trigger function started at: {DateTime.Now}");
 
+            //The order these jobs run in is important. Some depend on others to have been ran first to ensure that database relationships are properly maintained.
+
             if (ShouldRunSync("AllJobs"))
             {
                 if (ShouldRunSync("Organization"))

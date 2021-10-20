@@ -1,11 +1,10 @@
 ﻿using Netus2_DatabaseConnection.dataObjects;
 using Netus2_DatabaseConnection.enumerations;
-using Netus2_DatabaseConnection.utilityTools;
 using System;
 using System.Collections.Generic;
 using System.Data;
 
-namespace Netus2_DatabaseConnection
+namespace Netus2_DatabaseConnection.utilityTools
 {
     public class DaoObjectMapper
     {
@@ -36,7 +35,7 @@ namespace Netus2_DatabaseConnection
             if (person.BirthDate != new DateTime())
                 row["birth_date"] = person.BirthDate;
             else
-                row["birth_date"] = new DateTime();
+                row["birth_date"] = DBNull.Value;
 
             if (person.Gender != null)
                 row["enum_gender_id"] = person.Gender.Id;
@@ -85,7 +84,7 @@ namespace Netus2_DatabaseConnection
                 lastName = (string)row["last_name"];
 
             DateTime birthDate = new DateTime();
-            if ((DateTime)row["birth_date"] != new DateTime())
+            if (row["birth_date"] != DBNull.Value)
                 birthDate = (DateTime)row["birth_date"];
 
             Person person = new Person(firstName, lastName, birthDate, gender, ethnic);

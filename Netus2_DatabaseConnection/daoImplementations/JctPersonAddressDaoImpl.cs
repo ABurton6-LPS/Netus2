@@ -41,9 +41,24 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
             return Read(sql, connection);
         }
+
         public List<DataRow> Read_WithAddressId(int addressId, IConnectable connection)
         {
             string sql = "SELECT * FROM jct_person_address WHERE address_id = " + addressId;
+
+            return Read(sql, connection);
+        }
+
+        public List<DataRow> Read_AddressIsNotInTempTable(IConnectable connection)
+        {
+            string sql =
+                "SELECT jpa.person_id, jpa.address_id " +
+                "FROM jct_person_address jpa " +
+                "WHERE 1=1 " +
+                "AND jpa.address_id NOT IN ( " +
+                "SELECT tjpa.address_id " +
+                "FROM temp_jct_person_address tjpa " +
+                "WHERE tjpa.person_id = jpa.person_id )";
 
             return Read(sql, connection);
         }
@@ -75,6 +90,15 @@ namespace Netus2_DatabaseConnection.daoImplementations
             jctPersonAddressDao["address_id"] = addressId;
 
             return jctPersonAddressDao;
+        }
+
+        public void Write_TempTable(int personId, int addressId, IConnectable connection)
+        {
+            StringBuilder sql = new StringBuilder("INSERT INTO temp_jct_person_address (person_id, address_id) VALUES (");
+            sql.Append(personId + ", ");
+            sql.Append(addressId + ")");
+
+            connection.ExecuteNonQuery(sql.ToString());
         }
     }
 }

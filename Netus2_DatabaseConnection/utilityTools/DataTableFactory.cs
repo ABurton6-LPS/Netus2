@@ -151,8 +151,65 @@ namespace Netus2_DatabaseConnection.utilityTools
 
         public static DataTable CreateDataTable_Sis_Address()
         {
-            //Do Nothing
-            return null;
+            DataTable dtAddress = new DataTable("Address");
+            DataColumn dtColumn;
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "address_line_1";
+            dtAddress.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "address_line_2";
+            dtAddress.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "address_line_3";
+            dtAddress.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "address_line_4";
+            dtAddress.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "apartment";
+            dtAddress.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "city";
+            dtAddress.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "enum_state_province_id";
+            dtAddress.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "postal_code";
+            dtAddress.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "enum_country_id";
+            dtAddress.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "is_current_id";
+            dtAddress.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(int);
+            dtColumn.ColumnName = "suniq";
+            dtAddress.Columns.Add(dtColumn);
+
+            return dtAddress;
         }
 
         public static DataTable CreateDataTable_Sis_PhoneNumber()

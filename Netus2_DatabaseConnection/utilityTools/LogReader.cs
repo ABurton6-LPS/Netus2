@@ -1,12 +1,11 @@
 ﻿using Netus2_DatabaseConnection.dbAccess;
 using Netus2_DatabaseConnection.enumerations;
 using Netus2_DatabaseConnection.logObjects;
-using Netus2_DatabaseConnection.utilityTools;
 using System;
 using System.Collections.Generic;
 using System.Data;
 
-namespace Netus2_DatabaseConnection
+namespace Netus2_DatabaseConnection.utilityTools
 {
     public class LogReader
     {

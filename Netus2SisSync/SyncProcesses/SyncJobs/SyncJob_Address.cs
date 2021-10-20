@@ -1,10 +1,14 @@
 ﻿using Netus2_DatabaseConnection;
+using Netus2_DatabaseConnection.daoImplementations;
+using Netus2_DatabaseConnection.daoInterfaces;
 using Netus2_DatabaseConnection.dbAccess;
 using Netus2_DatabaseConnection.enumerations;
 using Netus2_DatabaseConnection.utilityTools;
 using Netus2SisSync.UtilityTools;
 using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Text;
 using System.Threading;
 
 namespace Netus2SisSync.SyncProcesses.SyncJobs
@@ -23,13 +27,19 @@ namespace Netus2SisSync.SyncProcesses.SyncJobs
             try
             {
                 ReadFromSis();
+                TempTableFactory.Create_JctPersonAddress();
                 RunJobTasks();
+                UnlinkDiscardedJctPersonAddressRecords();
                 SyncLogger.LogStatus(this, Enum_Sync_Status.values["end"]);
             }
             catch (Exception e)
             {
                 SyncLogger.LogStatus(this, Enum_Sync_Status.values["error"]);
                 SyncLogger.LogError(e, this);
+            }
+            finally
+            {
+                TempTableFactory.Drop_JctPersonAddress();
             }
         }
 
@@ -82,6 +92,16 @@ namespace Netus2SisSync.SyncProcesses.SyncJobs
                 }
                 latch.Wait();
             }
+        }
+
+        private void UnlinkDiscardedJctPersonAddressRecords()
+        {
+            IConnectable netus2Connection = DbConnectionFactory.GetNetus2Connection();
+            IJctPersonAddressDao jctPersonAddressDaoImpl = new JctPersonAddressDaoImpl();
+
+            List<DataRow> recordsToBeDeleted = jctPersonAddressDaoImpl.Read_AddressIsNotInTempTable(netus2Connection);
+            foreach (DataRow row in recordsToBeDeleted)
+                jctPersonAddressDaoImpl.Delete((int)row["person_id"], (int)row["address_id"], netus2Connection);
         }
     }
 }

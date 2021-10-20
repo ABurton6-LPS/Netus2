@@ -1,7 +1,7 @@
 ﻿using Moq;
-using Netus2_DatabaseConnection;
 using Netus2_DatabaseConnection.daoImplementations;
 using Netus2_DatabaseConnection.dbAccess;
+using Netus2_DatabaseConnection.utilityTools;
 using Netus2_Test.MockDaoImpl;
 using NUnit.Framework;
 using System;
@@ -70,26 +70,6 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
             List<DataRow> tstDataSet = new List<DataRow>();
             tstDataSet.Add(daoObjectMapper.MapPerson(tdBuilder.teacher));
             SetMockReaderWithTestData(tstDataSet);
-        }
-
-        [TestCase]
-        public void Delete_ShouldUseExpectedSql()
-        {
-            _netus2DbConnection.expectedNonQuerySql =
-                "DELETE FROM person " +
-                "WHERE 1=1 " +
-                "AND person_id = " + tdBuilder.teacher.Id + " " +
-                "AND first_name LIKE '" + tdBuilder.teacher.FirstName + "' " +
-                "AND middle_name LIKE '" + tdBuilder.teacher.MiddleName + "' " +
-                "AND last_name LIKE '" + tdBuilder.teacher.LastName + "' " +
-                "AND birth_date = '" + tdBuilder.teacher.BirthDate + "' " +
-                "AND enum_gender_id = " + tdBuilder.teacher.Gender.Id + " " +
-                "AND enum_ethnic_id = " + tdBuilder.teacher.Ethnic.Id + " " +
-                "AND enum_residence_status_id IS NULL " +
-                "AND login_name LIKE '" + tdBuilder.teacher.LoginName + "' " +
-                "AND login_pw LIKE '" + tdBuilder.teacher.LoginPw + "' ";
-
-            personDaoImpl.Delete(tdBuilder.teacher, _netus2DbConnection);
         }
 
         [TestCase]
@@ -188,48 +168,6 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
         }
 
         [TestCase]
-        public void ReadUsingPersonId_ShouldUseExpectedSql()
-        {
-
-            _netus2DbConnection.expectedReaderSql =
-                "SELECT * FROM " +
-                "person WHERE person_id = " + tdBuilder.teacher.Id;
-
-            personDaoImpl.Read_UsingPersonId(tdBuilder.teacher.Id, _netus2DbConnection);
-        }
-
-        [TestCase]
-        public void Read_WhileUsingPersonId_ShouldUseExpectedSql()
-        {
-            _netus2DbConnection.expectedReaderSql =
-                "SELECT * FROM " +
-                "person WHERE 1=1 " +
-                "AND person_id = " + tdBuilder.teacher.Id + " ";
-
-            personDaoImpl.Read(tdBuilder.teacher, _netus2DbConnection);
-        }
-
-        [TestCase]
-        public void Read_WhileNotUsingPersonId_ShouldUseExpectedSql()
-        {
-            tdBuilder.teacher.Id = -1;
-
-            _netus2DbConnection.expectedReaderSql =
-                "SELECT * FROM person " +
-                "WHERE 1=1 " +
-                "AND first_name = '" + tdBuilder.teacher.FirstName + "' " +
-                "AND middle_name = '" + tdBuilder.teacher.MiddleName + "' " +
-                "AND last_name = '" + tdBuilder.teacher.LastName + "' " +
-                "AND datediff(day, birth_date, '" + tdBuilder.teacher.BirthDate + "') = 0 " +
-                "AND enum_gender_id = " + tdBuilder.teacher.Gender.Id + " " +
-                "AND enum_ethnic_id = " + tdBuilder.teacher.Ethnic.Id + " " +
-                "AND login_name = '" + tdBuilder.teacher.LoginName + "' " +
-                "AND login_pw = '" + tdBuilder.teacher.LoginPw + "' ";
-
-            personDaoImpl.Read(tdBuilder.teacher, _netus2DbConnection);
-        }
-
-        [TestCase]
         public void ReadJctPersonApp_ShouldCallExpectedMethods()
         {
             mockJctPersonAppDaoImpl._shouldReadReturnData = true;
@@ -308,61 +246,6 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
         }
 
         [TestCase]
-        public void Update_WhileRecordIsNotFound_ShouldUseExpectedSql()
-        {
-            _netus2DbConnection.mockReader = new Mock<IDataReader>();
-
-            _netus2DbConnection.expectedNewRecordSql =
-                "INSERT INTO person (" +
-                "first_name, " +
-                "middle_name, " +
-                "last_name, " +
-                "birth_date, " +
-                "enum_gender_id, " +
-                "enum_ethnic_id, " +
-                "enum_residence_status_id, " +
-                "login_name, " +
-                "login_pw, " +
-                "created, " +
-                "created_by" +
-                ") VALUES (" +
-                "'" + tdBuilder.teacher.FirstName + "', " +
-                "'" + tdBuilder.teacher.MiddleName + "', " +
-                "'" + tdBuilder.teacher.LastName + "', " +
-                "'" + tdBuilder.teacher.BirthDate + "', " +
-                tdBuilder.teacher.Gender.Id + ", " +
-                tdBuilder.teacher.Ethnic.Id + ", " +
-                "NULL, " +
-                "'" + tdBuilder.teacher.LoginName + "', " +
-                "'" + tdBuilder.teacher.LoginPw + "', " +
-                "dbo.CURRENT_DATETIME(), " +
-                "'Netus2')";
-
-            personDaoImpl.Update(tdBuilder.teacher, _netus2DbConnection);
-        }
-
-        [TestCase]
-        public void Update_WhileRecordIsFound_ShouldUseExpectedSql()
-        {
-            _netus2DbConnection.expectedNonQuerySql =
-                "UPDATE person SET " +
-                "first_name = '" + tdBuilder.teacher.FirstName + "', " +
-                "middle_name = '" + tdBuilder.teacher.MiddleName + "', " +
-                "last_name = '" + tdBuilder.teacher.LastName + "', " +
-                "birth_date = '" + tdBuilder.teacher.BirthDate + "', " +
-                "enum_gender_id = '" + tdBuilder.teacher.Gender.Id + "', " +
-                "enum_ethnic_id = '" + tdBuilder.teacher.Ethnic.Id + "', " +
-                "enum_residence_status_id = NULL, " +
-                "login_name = '" + tdBuilder.teacher.LoginName + "', " +
-                "login_pw = '" + tdBuilder.teacher.LoginPw + "', " +
-                "changed = dbo.CURRENT_DATETIME(), " +
-                "changed_by = 'Netus2' " +
-                "WHERE person_id = 1";
-
-            personDaoImpl.Update(tdBuilder.teacher, _netus2DbConnection);
-        }
-
-        [TestCase]
         public void UpdateEmploymentSession_ShouldCallExpectedMethod()
         {
             personDaoImpl.Update(tdBuilder.teacher, _netus2DbConnection);
@@ -434,40 +317,6 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
             personDaoImpl.Update(tdBuilder.teacher, _netus2DbConnection);
 
             Assert.IsTrue(mockMarkDaoImpl.WasCalled_Read);
-        }
-
-        [TestCase]
-        public void Write_ShouldUseExpectedSql()
-        {
-            tdBuilder.student.Id = -1;
-
-            _netus2DbConnection.expectedNewRecordSql =
-                "INSERT INTO person (" +
-                "first_name, " +
-                "middle_name, " +
-                "last_name, " +
-                "birth_date, " +
-                "enum_gender_id, " +
-                "enum_ethnic_id, " +
-                "enum_residence_status_id, " +
-                "login_name, " +
-                "login_pw, " +
-                "created, " +
-                "created_by" +
-                ") VALUES (" +
-                "'" + tdBuilder.student.FirstName + "', " +
-                "'" + tdBuilder.student.MiddleName + "', " +
-                "'" + tdBuilder.student.LastName + "', " +
-                "'" + tdBuilder.student.BirthDate + "', " +
-                tdBuilder.student.Gender.Id + ", " +
-                tdBuilder.student.Ethnic.Id + ", " +
-                tdBuilder.student.ResidenceStatus.Id + ", " +
-                "'" + tdBuilder.student.LoginName + "', " +
-                "'" + tdBuilder.student.LoginPw + "', " +
-                "dbo.CURRENT_DATETIME(), " +
-                "'Netus2')";
-
-            personDaoImpl.Write(tdBuilder.student, _netus2DbConnection);
         }
 
         [TestCase]

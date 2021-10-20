@@ -58,7 +58,7 @@ namespace Netus2_Test.MockDaoImpl
                 return null;
         }
 
-        public Person Read_UsingUniqueId(int uniqueId, IConnectable connection)
+        public Person Read_UsingUniqueIdentifier(string uniqueId, IConnectable connection)
         {
             WasCalled_ReadUsingUniqueId = true;
 

@@ -355,7 +355,7 @@ namespace Netus2_Test.Integration
             Person student = testDataBuilder.student;
             int oldEnrollmentId = student.Enrollments[0].Id;
 
-            Enrollment newEnrollment = new Enrollment(Enum_Grade.values["7"], new DateTime(2022, 1, 1), new DateTime(2023, 1, 1), Enum_True_False.values["true"], testDataBuilder.classEnrolled, null);
+            Enrollment newEnrollment = new Enrollment(Enum_Grade.values["7"], new DateTime(2022, 1, 1), new DateTime(2023, 1, 1), Enum_True_False.values["true"], testDataBuilder.classEnrolled, new List<AcademicSession>());
             student.Enrollments[0] = newEnrollment;
 
             personDaoImpl.Update(student, connection);

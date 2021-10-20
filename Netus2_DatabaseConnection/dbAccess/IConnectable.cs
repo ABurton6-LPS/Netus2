@@ -1,5 +1,6 @@
-﻿using System.Data;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 
 namespace Netus2_DatabaseConnection.dbAccess
 {
@@ -37,6 +38,8 @@ namespace Netus2_DatabaseConnection.dbAccess
         /// </summary>
         /// <param name="sql"></param>
         /// <param name="dt"></param>
+        DataTable ReadIntoDataTable(string sql, DataTable dt, List<SqlParameter> parameters);
+
         DataTable ReadIntoDataTable(string sql, DataTable dt);
 
         /// <summary>
@@ -44,6 +47,8 @@ namespace Netus2_DatabaseConnection.dbAccess
         /// </summary>
         /// <param name="sql"></param>
         /// <returns>The number of recoreds affected.</returns>
+        int ExecuteNonQuery(string sql, List<SqlParameter> parameters);
+
         int ExecuteNonQuery(string sql);
 
         /// <summary>
@@ -53,6 +58,8 @@ namespace Netus2_DatabaseConnection.dbAccess
         /// <param name="tableBeingInsertedInto"></param>
         /// <returns>The largest primary key in the table after the insertion, which should be the
         /// primary key of the record just inserted.</returns>
+        int InsertNewRecord(string sql, List<SqlParameter> parameters);
+
         int InsertNewRecord(string sql);
     }
 }
