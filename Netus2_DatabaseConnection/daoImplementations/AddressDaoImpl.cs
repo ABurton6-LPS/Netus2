@@ -5,6 +5,7 @@ using Netus2_DatabaseConnection.utilityTools;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Text;
 
 namespace Netus2_DatabaseConnection.daoImplementations
@@ -26,26 +27,18 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         public void Delete(Address address, IConnectable connection)
         {
+            if(address.Id <= 0)
+                throw new Exception("Cannot delete an address which doesn't have a database-assigned ID.\n" + address.ToString());
+
             Delete_JctPersonAddress(address.Id, connection);
 
-            DataRow row = daoObjectMapper.MapAddress(address);
+            string sql = "DELETE FROM address WHERE " +
+                "address_id = @address_id";
 
-            StringBuilder sql = new StringBuilder("DELETE FROM address WHERE 1=1 ");
-            sql.Append("AND address_id " + (row["address_id"] != DBNull.Value ? "= " + row["address_id"] + " " : "IS NULL "));
-            sql.Append("AND address_line_1 " + (row["address_line_1"] != DBNull.Value ? "LIKE '" + row["address_line_1"] + "' " : "IS NULL "));
-            sql.Append("AND address_line_2 " + (row["address_line_2"] != DBNull.Value ? "LIKE '" + row["address_line_2"] + "' " : "IS NULL "));
-            sql.Append("AND address_line_3 " + (row["address_line_3"] != DBNull.Value ? "LIKE '" + row["address_line_3"] + "' " : "IS NULL "));
-            sql.Append("AND address_line_4 " + (row["address_line_4"] != DBNull.Value ? "LIKE '" + row["address_line_4"] + "' " : "IS NULL "));
-            sql.Append("AND apartment " + (row["apartment"] != DBNull.Value ? "LIKE '" + row["apartment"] + "'" : "IS NULL "));
-            sql.Append("AND city " + (row["city"] != DBNull.Value ? "LIKE '" + row["city"] + "'" : "IS NULL "));
-            sql.Append("AND enum_state_province_id " + (row["enum_state_province_id"] != DBNull.Value ? "= " + row["enum_state_province_id"] + " " : "IS NULL "));
-            sql.Append("AND postal_code " + (row["postal_code"] != DBNull.Value ? "LIKE '" + row["postal_code"] + "'" : "IS NULL "));
-            sql.Append("AND enum_country_id " + (row["enum_country_id"] != DBNull.Value ? "= " + row["enum_country_id"] + " " : "IS NULL "));
-            sql.Append("AND is_current_id " + (row["is_current_id"] != DBNull.Value ? "= " + row["is_current_id"] + " " : "IS NULL "));
-            sql.Append("AND enum_address_id " + (row["enum_address_id"] != DBNull.Value ? "= " + row["enum_address_id"] + " " : "IS NULL "));
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@address_id", address.Id));
 
-
-            connection.ExecuteNonQuery(sql.ToString());
+            connection.ExecuteNonQuery(sql, parameters);
         }
 
         private void Delete_JctPersonAddress(int addressId, IConnectable connection)
@@ -61,60 +54,108 @@ namespace Netus2_DatabaseConnection.daoImplementations
             }
         }
 
-        public List<Address> Read(Address address, IConnectable connection)
-        {
-            StringBuilder sql = new StringBuilder("");
-
-            DataRow row = daoObjectMapper.MapAddress(address);
-
-            sql.Append("SELECT * FROM address WHERE 1=1 ");
-            if (row["address_id"] != DBNull.Value)
-                sql.Append("AND address_id = " + row["address_id"] + " ");
-            else
-            {
-                if (row["address_line_1"] != DBNull.Value)
-                    sql.Append("AND address_line_1 = '" + row["address_line_1"] + "' ");
-                if (row["address_line_2"] != DBNull.Value)
-                    sql.Append("AND address_line_2 = '" + row["address_line_2"] + "' ");
-                if (row["address_line_3"] != DBNull.Value)
-                    sql.Append("AND address_line_3 = '" + row["address_line_3"] + "' ");
-                if (row["address_line_4"] != DBNull.Value)
-                    sql.Append("AND address_line_4 = '" + row["address_line_4"] + "' ");
-                if (row["apartment"] != DBNull.Value)
-                    sql.Append("AND apartment = '" + row["apartment"] + "'");
-                if (row["city"] != DBNull.Value)
-                    sql.Append("AND city = '" + row["city"] + "'");
-                if (row["enum_state_province_id"] != DBNull.Value)
-                    sql.Append("AND enum_state_province_id = " + row["enum_state_province_id"] + " ");
-                if (row["postal_code"] != DBNull.Value)
-                    sql.Append("AND postal_code = '" + row["postal_code"] + "'");
-                if (row["enum_country_id"] != DBNull.Value)
-                    sql.Append("AND enum_country_id = " + row["enum_country_id"] + " ");
-                if (row["is_current_id"] != DBNull.Value)
-                    sql.Append("AND is_current_id = " + row["is_current_id"] + " ");
-                if (row["enum_address_id"] != DBNull.Value)
-                    sql.Append("AND enum_address_id = " + row["enum_address_id"] + " ");
-            }
-
-            return Read(sql.ToString(), connection);
-        }
-
         public Address Read_UsingAdddressId(int addressId, IConnectable connection)
         {
-            string sql = "SELECT * FROM address WHERE address_id = " + addressId;
+            string sql = "SELECT * FROM address WHERE address_id = @address_id";
 
-            List<Address> results = Read(sql, connection);
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@address_id", addressId));
 
+            List<Address> results = Read(sql, connection, parameters);
             if (results.Count == 0)
                 return null;
             else
                 return results[0];
         }
 
-        private List<Address> Read(string sql, IConnectable connection)
+        public List<Address> Read(Address address, IConnectable connection)
+        {
+            DataRow row = daoObjectMapper.MapAddress(address);
+
+            List<SqlParameter> parameters = new List<SqlParameter>();
+
+            StringBuilder sql = new StringBuilder("SELECT * FROM address WHERE 1=1 ");
+            if (row["address_id"] != DBNull.Value)
+            {
+                sql.Append("AND address_id = @address_id");
+                parameters.Add(new SqlParameter("@address_id", row["address_id"]));
+            }                
+            else
+            {
+                if (row["address_line_1"] != DBNull.Value)
+                {
+                    sql.Append("AND address_line_1 = @address_line_1 ");
+                    parameters.Add(new SqlParameter("@address_line_1", row["address_line_1"]));
+                }
+
+                if (row["address_line_2"] != DBNull.Value)
+                {
+                    sql.Append("AND address_line_2 = @address_line_2 ");
+                    parameters.Add(new SqlParameter("@address_line_2", row["address_line_2"]));
+                }
+
+                if (row["address_line_3"] != DBNull.Value)
+                {
+                    sql.Append("AND address_line_3 = @address_line_3 ");
+                    parameters.Add(new SqlParameter("@address_line_3", row["address_line_3"]));
+                }
+
+                if (row["address_line_4"] != DBNull.Value)
+                {
+                    sql.Append("AND address_line_4 = @address_line_4 ");
+                    parameters.Add(new SqlParameter("@address_line_4", row["address_line_4"]));
+                }
+
+                if (row["apartment"] != DBNull.Value)
+                {
+                    sql.Append("AND apartment = @apartment ");
+                    parameters.Add(new SqlParameter("@apartment", row["apartment"]));
+                }
+
+                if (row["city"] != DBNull.Value)
+                {
+                    sql.Append("AND city = @city ");
+                    parameters.Add(new SqlParameter("@city", row["city"]));
+                }
+
+                if (row["enum_state_province_id"] != DBNull.Value)
+                {
+                    sql.Append("AND enum_state_province_id = @enum_state_province_id ");
+                    parameters.Add(new SqlParameter("@enum_state_province_id", row["enum_state_province_id"]));
+                }
+
+                if (row["postal_code"] != DBNull.Value)
+                {
+                    sql.Append("AND postal_code = @postal_code ");
+                    parameters.Add(new SqlParameter("@postal_code", row["postal_code"]));
+                }
+
+                if (row["enum_country_id"] != DBNull.Value)
+                {
+                    sql.Append("AND enum_country_id = @enum_country_id ");
+                    parameters.Add(new SqlParameter("@enum_country_id", row["enum_country_id"]));
+                }
+
+                if (row["is_current_id"] != DBNull.Value)
+                {
+                    sql.Append("AND is_current_id = @is_current_id ");
+                    parameters.Add(new SqlParameter("@is_current_id", row["is_current_id"]));
+                }
+
+                if (row["enum_address_id"] != DBNull.Value)
+                {
+                    sql.Append("AND enum_address_id = @enum_address_id");
+                    parameters.Add(new SqlParameter("@enum_address_id", row["enum_address_id"]));
+                }
+            }
+
+            return Read(sql.ToString(), connection, parameters);
+        }
+
+        private List<Address> Read(string sql, IConnectable connection, List<SqlParameter> parameters)
         {
             DataTable dtAddress = DataTableFactory.CreateDataTable_Netus2_Address();
-            dtAddress = connection.ReadIntoDataTable(sql, dtAddress);
+            dtAddress = connection.ReadIntoDataTable(sql, dtAddress, parameters);
 
             List<Address> results = new List<Address>();
             foreach (DataRow row in dtAddress.Rows)
@@ -144,52 +185,218 @@ namespace Netus2_DatabaseConnection.daoImplementations
         {
             DataRow row = daoObjectMapper.MapAddress(address);
 
-            StringBuilder sql = new StringBuilder("UPDATE address SET ");
-            sql.Append("address_line_1 = " + (row["address_line_1"] != DBNull.Value ? "'" + row["address_line_1"] + "', " : "NULL, "));
-            sql.Append("address_line_2 = " + (row["address_line_2"] != DBNull.Value ? "'" + row["address_line_2"] + "', " : "NULL, "));
-            sql.Append("address_line_3 = " + (row["address_line_3"] != DBNull.Value ? "'" + row["address_line_3"] + "', " : "NULL, "));
-            sql.Append("address_line_4 = " + (row["address_line_4"] != DBNull.Value ? "'" + row["address_line_4"] + "', " : "NULL, "));
-            sql.Append("apartment = " + (row["apartment"] != DBNull.Value ? "'" + row["apartment"] + "', " : "NULL, "));
-            sql.Append("city = " + (row["city"] != DBNull.Value ? "'" + row["city"] + "', " : "NULL, "));
-            sql.Append("enum_state_province_id = " + (row["enum_state_province_id"] != DBNull.Value ? row["enum_state_province_id"] + ", " : "NULL, "));
-            sql.Append("postal_code = " + (row["postal_code"] != DBNull.Value ? "'" + row["postal_code"] + "', " : "NULL, "));
-            sql.Append("enum_country_id = " + (row["enum_country_id"] != DBNull.Value ? row["enum_country_id"] + ", " : "NULL, "));
-            sql.Append("is_current_id = " + (row["is_current_id"] != DBNull.Value ? row["is_current_id"] + ", " : "NULL, "));
-            sql.Append("enum_address_id = " + (row["enum_address_id"] != DBNull.Value ? row["enum_address_id"] + ", " : "NULL, "));
-            sql.Append("changed = dbo.CURRENT_DATETIME(), ");
-            sql.Append("changed_by = " + (_taskId != null ? _taskId.ToString() : "'Netus2'") + " ");
-            sql.Append("WHERE address_id = " + row["address_id"]);
+            if(row["address_id"] != DBNull.Value)
+            {
+                List<SqlParameter> parameters = new List<SqlParameter>();
 
-            connection.ExecuteNonQuery(sql.ToString());
+                StringBuilder sql = new StringBuilder("UPDATE address SET ");
+                if (row["address_line_1"] != DBNull.Value)
+                {
+                    sql.Append("address_line_1 = @address_line_1, ");
+                    parameters.Add(new SqlParameter("@address_line_1", row["address_line_1"]));
+                }
+                else
+                    sql.Append("address_line_1 = NULL, ");
+
+                if (row["address_line_2"] != DBNull.Value)
+                {
+                    sql.Append("address_line_2 = @address_line_2, ");
+                    parameters.Add(new SqlParameter("@address_line_2", row["address_line_2"]));
+                }
+                else
+                    sql.Append("address_line_2 = NULL, ");
+
+                if (row["address_line_1"] != DBNull.Value)
+                {
+                    sql.Append("address_line_3 = @address_line_3, ");
+                    parameters.Add(new SqlParameter("@address_line_3", row["address_line_3"]));
+                }
+                else
+                    sql.Append("address_line_3 = NULL, ");
+
+                if (row["address_line_4"] != DBNull.Value)
+                {
+                    sql.Append("address_line_4 = @address_line_4, ");
+                    parameters.Add(new SqlParameter("@address_line_4", row["address_line_4"]));
+                }
+                else
+                    sql.Append("address_line_4 = NULL, ");
+
+                if (row["apartment"] != DBNull.Value)
+                {
+                    sql.Append("apartment = @apartment, ");
+                    parameters.Add(new SqlParameter("@apartment", row["apartment"]));
+                }
+                else
+                    sql.Append("apartment = NULL, ");
+
+                if (row["city"] != DBNull.Value)
+                {
+                    sql.Append("city = @city, ");
+                    parameters.Add(new SqlParameter("@city", row["city"]));
+                }
+                else
+                    sql.Append("city = NULL, ");
+
+                if (row["enum_state_province_id"] != DBNull.Value)
+                {
+                    sql.Append("enum_state_province_id = @enum_state_province_id, ");
+                    parameters.Add(new SqlParameter("@enum_state_province_id", row["enum_state_province_id"]));
+                }
+                else
+                    sql.Append("enum_state_province_id = NULL, ");
+
+                if (row["postal_code"] != DBNull.Value)
+                {
+                    sql.Append("postal_code = @postal_code, ");
+                    parameters.Add(new SqlParameter("@postal_code", row["postal_code"]));
+                }
+                else
+                    sql.Append("postal_code = NULL, ");
+
+                if (row["enum_country_id"] != DBNull.Value)
+                {
+                    sql.Append("enum_country_id = @enum_country_id, ");
+                    parameters.Add(new SqlParameter("@enum_country_id", row["enum_country_id"]));
+                }
+                else
+                    sql.Append("enum_country_id = NULL, ");
+
+                if (row["is_current_id"] != DBNull.Value)
+                {
+                    sql.Append("is_current_id = @is_current_id, ");
+                    parameters.Add(new SqlParameter("@is_current_id", row["is_current_id"]));
+                }
+                else
+                    sql.Append("is_current_id = NULL, ");
+
+                if (row["enum_address_id"] != DBNull.Value)
+                {
+                    sql.Append("enum_address_id = @enum_address_id, ");
+                    parameters.Add(new SqlParameter("@enum_address_id", row["enum_address_id"]));
+                }
+                else
+                    sql.Append("enum_address_id = NULL, ");
+
+                sql.Append("changed = dbo.CURRENT_DATETIME(), ");
+                sql.Append("changed_by = " + (_taskId != null ? _taskId.ToString() : "'Netus2'") + " ");
+                sql.Append("WHERE address_id = @address_id");
+                parameters.Add(new SqlParameter("@address_id", row["address_id"]));
+
+                connection.ExecuteNonQuery(sql.ToString(), parameters);
+            }
+            else
+                throw new Exception("The following Address needs to be inserted into the database, before it can be updated.\n" + address.ToString());
         }
 
         public Address Write(Address address, IConnectable connection)
         {
             DataRow row = daoObjectMapper.MapAddress(address);
 
+            List<SqlParameter> parameters = new List<SqlParameter>();
+
             StringBuilder sqlValues = new StringBuilder();
-            sqlValues.Append(row["address_line_1"] != DBNull.Value ? "'" + row["address_line_1"] + "', " : "NULL, ");
-            sqlValues.Append(row["address_line_2"] != DBNull.Value ? "'" + row["address_line_2"] + "', " : "NULL, ");
-            sqlValues.Append(row["address_line_3"] != DBNull.Value ? "'" + row["address_line_3"] + "', " : "NULL, ");
-            sqlValues.Append(row["address_line_4"] != DBNull.Value ? "'" + row["address_line_4"] + "', " : "NULL, ");
-            sqlValues.Append(row["apartment"] != DBNull.Value ? "'" + row["apartment"] + "', " : "NULL, ");
-            sqlValues.Append(row["city"] != DBNull.Value ? "'" + row["city"] + "', " : "NULL, ");
-            sqlValues.Append(row["enum_state_province_id"] != DBNull.Value ? row["enum_state_province_id"] + ", " : "NULL, ");
-            sqlValues.Append(row["postal_code"] != DBNull.Value ? "'" + row["postal_code"] + "', " : "NULL, ");
-            sqlValues.Append(row["enum_country_id"] != DBNull.Value ? row["enum_country_id"] + ", " : "NULL, ");
-            sqlValues.Append(row["is_current_id"] != DBNull.Value ? row["is_current_id"] + ", " : "NULL, ");
-            sqlValues.Append(row["enum_address_id"] != DBNull.Value ? row["enum_address_id"] + ", " : "NULL, ");
+            if (row["address_line_1"] != DBNull.Value)
+            {
+                sqlValues.Append("@address_line_1, ");
+                parameters.Add(new SqlParameter("@address_line_1", row["address_line_1"]));
+            }
+            else
+                sqlValues.Append("NULL, ");
+
+            if (row["address_line_2"] != DBNull.Value)
+            {
+                sqlValues.Append("@address_line_2, ");
+                parameters.Add(new SqlParameter("@address_line_2", row["address_line_2"]));
+            }
+            else
+                sqlValues.Append("NULL, ");
+
+            if (row["address_line_3"] != DBNull.Value)
+            {
+                sqlValues.Append("@address_line_3, ");
+                parameters.Add(new SqlParameter("@address_line_3", row["address_line_3"]));
+            }
+            else
+                sqlValues.Append("NULL, ");
+
+            if (row["address_line_4"] != DBNull.Value)
+            {
+                sqlValues.Append("@address_line_4, ");
+                parameters.Add(new SqlParameter("@address_line_4", row["address_line_4"]));
+            }
+            else
+                sqlValues.Append("NULL, ");
+
+            if (row["apartment"] != DBNull.Value)
+            {
+                sqlValues.Append("@apartment, ");
+                parameters.Add(new SqlParameter("@apartment", row["apartment"]));
+            }
+            else
+                sqlValues.Append("NULL, ");
+
+            if (row["city"] != DBNull.Value)
+            {
+                sqlValues.Append("@city, ");
+                parameters.Add(new SqlParameter("@city", row["city"]));
+            }
+            else
+                sqlValues.Append("NULL, ");
+
+            if (row["enum_state_province_id"] != DBNull.Value)
+            {
+                sqlValues.Append("@enum_state_province_id, ");
+                parameters.Add(new SqlParameter("@enum_state_province_id", row["enum_state_province_id"]));
+            }
+            else
+                sqlValues.Append("NULL, ");
+
+            if (row["postal_code"] != DBNull.Value)
+            {
+                sqlValues.Append("@postal_code, ");
+                parameters.Add(new SqlParameter("@postal_code", row["postal_code"]));
+            }
+            else
+                sqlValues.Append("NULL, ");
+
+            if (row["enum_country_id"] != DBNull.Value)
+            {
+                sqlValues.Append("@enum_country_id, ");
+                parameters.Add(new SqlParameter("@enum_country_id", row["enum_country_id"]));
+            }
+            else
+                sqlValues.Append("NULL, ");
+
+            if (row["is_current_id"] != DBNull.Value)
+            {
+                sqlValues.Append("@is_current_id, ");
+                parameters.Add(new SqlParameter("@is_current_id", row["is_current_id"]));
+            }
+            else
+                sqlValues.Append("NULL, ");
+
+            if (row["enum_address_id"] != DBNull.Value)
+            {
+                sqlValues.Append("@enum_address_id, ");
+                parameters.Add(new SqlParameter("@enum_address_id", row["enum_address_id"]));
+            }
+            else
+                sqlValues.Append("NULL, ");
+
             sqlValues.Append("dbo.CURRENT_DATETIME(), ");
             sqlValues.Append(_taskId != null ? _taskId.ToString() : "'Netus2'");
 
-            StringBuilder sql = new StringBuilder("INSERT INTO address " +
+            string sql = "INSERT INTO address " +
                 "(address_line_1, address_line_2, address_line_3, address_line_4, apartment, " +
                 "city, enum_state_province_id, postal_code, enum_country_id, is_current_id, enum_address_id, " +
-                "created, created_by) VALUES (" + sqlValues.ToString() + ")");
+                "created, created_by) VALUES (" + sqlValues.ToString() + ")";
 
-            address.Id = connection.InsertNewRecord(sql.ToString());
+            row["address_id"] = connection.InsertNewRecord(sql, parameters);
 
-            return address;
+            Address result = daoObjectMapper.MapAddress(row);
+
+            return result;
         }
     }
 }

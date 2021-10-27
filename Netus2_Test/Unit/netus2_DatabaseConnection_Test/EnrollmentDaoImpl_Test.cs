@@ -31,43 +31,6 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
         }
 
         [TestCase]
-        public void Delete_WhileWithoutPersonId_ShouldUseExpectedSql()
-        {
-            DaoImplFactory.MockJctEnrollmentAcademicSessionDaoImpl = new MockJctEnrollmentAcademicSessionDaoImpl(tdBuilder);
-
-            _netus2DbConnection.expectedNonQuerySql =
-                "DELETE FROM enrollment " +
-                "WHERE 1=1 " +
-                "AND enrollment_id = " + tdBuilder.enrollment.Id + " " +
-                "AND class_id = " + tdBuilder.enrollment.ClassEnrolled.Id + " " +
-                "AND enum_grade_id = " + tdBuilder.enrollment.GradeLevel.Id + " " +
-                "AND start_date = '" + tdBuilder.enrollment.StartDate + "' " +
-                "AND end_date = '" + tdBuilder.enrollment.EndDate + "' " +
-                "AND is_primary_id  = " + tdBuilder.enrollment.IsPrimary.Id + " ";
-
-            enrollmentDaoImpl.Delete(tdBuilder.enrollment, _netus2DbConnection);
-        }
-
-        [TestCase]
-        public void Delete_WhileWithPersonId_ShouldUseExpectedSql()
-        {
-            DaoImplFactory.MockJctEnrollmentAcademicSessionDaoImpl = new MockJctEnrollmentAcademicSessionDaoImpl(tdBuilder);
-
-            _netus2DbConnection.expectedNonQuerySql =
-                "DELETE FROM enrollment " +
-                "WHERE 1=1 " +
-                "AND enrollment_id = " + tdBuilder.enrollment.Id + " " +
-                "AND person_id = " + tdBuilder.student.Id + " " +
-                "AND class_id = " + tdBuilder.enrollment.ClassEnrolled.Id + " " +
-                "AND enum_grade_id = " + tdBuilder.enrollment.GradeLevel.Id + " " +
-                "AND start_date = '" + tdBuilder.enrollment.StartDate + "' " +
-                "AND end_date = '" + tdBuilder.enrollment.EndDate + "' " +
-                "AND is_primary_id  = " + tdBuilder.enrollment.IsPrimary.Id + " ";
-
-            enrollmentDaoImpl.Delete(tdBuilder.enrollment, tdBuilder.student.Id, _netus2DbConnection);
-        }
-
-        [TestCase]
         public void Delete_ShouldCallExpectedMethod()
         {
             MockJctEnrollmentAcademicSessionDaoImpl mockJctEnrollmentAcademicSessionDaoImpl = new MockJctEnrollmentAcademicSessionDaoImpl(tdBuilder);
@@ -76,51 +39,6 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
             enrollmentDaoImpl.Delete(tdBuilder.enrollment, _netus2DbConnection);
 
             Assert.IsTrue(mockJctEnrollmentAcademicSessionDaoImpl.WasCalled_Delete);
-        }
-
-        [TestCase]
-        public void ReadWithClassId_ShouldUseExpectedSql()
-        {
-            _netus2DbConnection.expectedReaderSql =
-                "SELECT * FROM enrollment WHERE class_id = " + tdBuilder.enrollment.ClassEnrolled.Id;
-
-            enrollmentDaoImpl.Read_WithClassId(tdBuilder.enrollment.ClassEnrolled.Id, _netus2DbConnection);
-        }
-
-        [TestCase]
-        public void Read_WhileEnrollmentIsNull_ShouldUseExpectedSql()
-        {
-            _netus2DbConnection.expectedReaderSql =
-                "SELECT * FROM enrollment WHERE person_id = " + tdBuilder.student.Id;
-
-            enrollmentDaoImpl.Read(null, tdBuilder.student.Id, _netus2DbConnection);
-        }
-
-        [TestCase]
-        public void Read_WhileEnrollmentIdIsUsed_ShouldUseExpectedSql()
-        {
-            _netus2DbConnection.expectedReaderSql =
-                "SELECT * FROM enrollment " +
-                "WHERE 1=1 " +
-                "AND enrollment_id = " + tdBuilder.enrollment.Id + " ";
-
-            enrollmentDaoImpl.Read(tdBuilder.enrollment, tdBuilder.student.Id, _netus2DbConnection);
-        }
-
-        [TestCase]
-        public void Read_WhileEnrollmentIdIsNotUsed_ShouldUseExpectedSql()
-        {
-            tdBuilder.enrollment.Id = -1;
-
-            _netus2DbConnection.expectedReaderSql =
-                "SELECT * FROM enrollment " +
-                "WHERE 1=1 " +
-                "AND person_id = " + tdBuilder.student.Id + " " +
-                "AND class_id = " + tdBuilder.enrollment.ClassEnrolled.Id + " " +
-                "AND enum_grade_id = " + tdBuilder.enrollment.GradeLevel.Id + " " +
-                "AND is_primary_id = " + tdBuilder.enrollment.IsPrimary.Id + " ";
-
-            enrollmentDaoImpl.Read(tdBuilder.enrollment, tdBuilder.student.Id, _netus2DbConnection);
         }
 
         [TestCase]
@@ -139,57 +57,9 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
 
             enrollmentDaoImpl.Read(tdBuilder.enrollment, tdBuilder.student.Id, _netus2DbConnection);
 
-            Assert.IsTrue(mockClassEnrolledDaoImpl.WasCalled_ReadWithClassId);
+            Assert.IsTrue(mockClassEnrolledDaoImpl.WasCalled_ReadUsingClassId);
             Assert.IsTrue(mockJctEnrollmentAcademicSessionId.WasCalled_ReadWithEnrollmentId);
             Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_ReadUsingAcademicSessionId);
-        }
-
-        [TestCase]
-        public void Upate_WhileRecordIsNotFound_ShouldUseExpectedSql()
-        {
-            _netus2DbConnection.expectedNewRecordSql =
-                "INSERT INTO enrollment (" +
-                "person_id, " +
-                "class_id, " +
-                "enum_grade_id, " +
-                "start_date, " +
-                "end_date, " +
-                "is_primary_id, " +
-                "created, " +
-                "created_by" +
-                ") VALUES (" +
-                tdBuilder.student.Id + ", " +
-                tdBuilder.enrollment.ClassEnrolled.Id + ", " +
-                tdBuilder.enrollment.GradeLevel.Id + ", " +
-                "'" + tdBuilder.enrollment.StartDate + "', " +
-                "'" + tdBuilder.enrollment.EndDate + "', " +
-                tdBuilder.enrollment.IsPrimary.Id + ", " +
-                "dbo.CURRENT_DATETIME(), " +
-                "'Netus2')";
-
-            enrollmentDaoImpl.Update(tdBuilder.enrollment, tdBuilder.student.Id, _netus2DbConnection);
-        }
-
-        [TestCase]
-        public void Update_WhileRecordIsFound_ShouldUseExpectedSql()
-        {
-            List<DataRow> tstDataSet = new List<DataRow>();
-            tstDataSet.Add(daoObjectMapper.MapEnrollment(tdBuilder.enrollment, tdBuilder.student.Id));
-            SetMockReaderWithTestData(tstDataSet);
-
-            _netus2DbConnection.expectedNonQuerySql =
-                "UPDATE enrollment SET " +
-                "person_id = " + tdBuilder.student.Id + ", " +
-                "class_id = " + tdBuilder.enrollment.ClassEnrolled.Id + ", " +
-                "enum_grade_id = " + tdBuilder.enrollment.GradeLevel.Id + ", " +
-                "start_date = '" + tdBuilder.enrollment.StartDate + "', " +
-                "end_date = '" + tdBuilder.enrollment.EndDate + "', " +
-                "is_primary_id = " + tdBuilder.enrollment.IsPrimary.Id + ", " +
-                "changed = dbo.CURRENT_DATETIME(), " +
-                "changed_by = 'Netus2' " +
-                "WHERE enrollment_id = " + tdBuilder.enrollment.Id;
-
-            enrollmentDaoImpl.Update(tdBuilder.enrollment, tdBuilder.student.Id, _netus2DbConnection);
         }
 
         [TestCase]
@@ -211,32 +81,6 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
         }
 
         [TestCase]
-        public void Write_ShouldUseExpectedSql()
-        {
-            _netus2DbConnection.expectedNewRecordSql =
-                "INSERT INTO enrollment (" +
-                "person_id, " +
-                "class_id, " +
-                "enum_grade_id, " +
-                "start_date, " +
-                "end_date, " +
-                "is_primary_id, " +
-                "created, " +
-                "created_by" +
-                ") VALUES (" +
-                tdBuilder.student.Id + ", " +
-                tdBuilder.enrollment.ClassEnrolled.Id + ", " +
-                tdBuilder.enrollment.GradeLevel.Id + ", " +
-                "'" + tdBuilder.enrollment.StartDate + "', " +
-                "'" + tdBuilder.enrollment.EndDate + "', " +
-                tdBuilder.enrollment.IsPrimary.Id + ", " +
-                "dbo.CURRENT_DATETIME(), " +
-                "'Netus2')";
-
-            enrollmentDaoImpl.Write(tdBuilder.enrollment, tdBuilder.student.Id, _netus2DbConnection);
-        }
-
-        [TestCase]
         public void Write_ShouldCallExpectedMethods()
         {
             List<DataRow> tstDataSet = new List<DataRow>();
@@ -252,7 +96,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
 
             enrollmentDaoImpl.Write(tdBuilder.enrollment, tdBuilder.student.Id, _netus2DbConnection);
 
-            Assert.IsTrue(mockClassEnrolledDaoImpl.WasCalled_ReadWithClassId);
+            Assert.IsTrue(mockClassEnrolledDaoImpl.WasCalled_ReadUsingClassId);
             Assert.IsTrue(mockJctEnrollmentAcademicSessionId.WasCalled_ReadWithEnrollmentId);
             Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_ReadUsingAcademicSessionId);
         }

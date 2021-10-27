@@ -199,7 +199,7 @@ namespace Netus2_Test.Unit.SyncProcess
                 .Execute(row, new CountDownLatch(0));
 
             Assert.IsTrue(mockUniqueIdentifierDaoImpl.WasCalled_Read);
-            Assert.IsTrue(mockPersonDaoImpl.WasCalled_ReadUsingUniqueId);
+            Assert.IsTrue(mockPersonDaoImpl.WasCalled_ReadUsingUniqueIdentifier);
             Assert.IsTrue(mockPersonDaoImpl.WasCalled_Update);
         }
 
@@ -231,7 +231,7 @@ namespace Netus2_Test.Unit.SyncProcess
                 .Execute(row, new CountDownLatch(0));
 
             Assert.IsTrue(mockUniqueIdentifierDaoImpl.WasCalled_Read);
-            Assert.IsTrue(mockPersonDaoImpl.WasCalled_ReadUsingUniqueId);
+            Assert.IsTrue(mockPersonDaoImpl.WasCalled_ReadUsingUniqueIdentifier);
             Assert.IsTrue(mockPersonDaoImpl.WasCalled_Update);
         }
 
@@ -263,7 +263,7 @@ namespace Netus2_Test.Unit.SyncProcess
                 .Execute(row, new CountDownLatch(0));
 
             Assert.IsTrue(mockUniqueIdentifierDaoImpl.WasCalled_Read);
-            Assert.IsTrue(mockPersonDaoImpl.WasCalled_ReadUsingUniqueId);
+            Assert.IsTrue(mockPersonDaoImpl.WasCalled_ReadUsingUniqueIdentifier);
             Assert.IsTrue(mockPersonDaoImpl.WasCalled_Update);
         }
 
@@ -295,7 +295,7 @@ namespace Netus2_Test.Unit.SyncProcess
                 .Execute(row, new CountDownLatch(0));
 
             Assert.IsTrue(mockUniqueIdentifierDaoImpl.WasCalled_Read);
-            Assert.IsTrue(mockPersonDaoImpl.WasCalled_ReadUsingUniqueId);
+            Assert.IsTrue(mockPersonDaoImpl.WasCalled_ReadUsingUniqueIdentifier);
             Assert.IsTrue(mockPersonDaoImpl.WasCalled_Update);
         }
 
@@ -327,7 +327,7 @@ namespace Netus2_Test.Unit.SyncProcess
                 .Execute(row, new CountDownLatch(0));
 
             Assert.IsTrue(mockUniqueIdentifierDaoImpl.WasCalled_Read);
-            Assert.IsTrue(mockPersonDaoImpl.WasCalled_ReadUsingUniqueId);
+            Assert.IsTrue(mockPersonDaoImpl.WasCalled_ReadUsingUniqueIdentifier);
             Assert.IsTrue(mockPersonDaoImpl.WasCalled_Update);
         }
 
@@ -359,7 +359,7 @@ namespace Netus2_Test.Unit.SyncProcess
                 .Execute(row, new CountDownLatch(0));
 
             Assert.IsTrue(mockUniqueIdentifierDaoImpl.WasCalled_Read);
-            Assert.IsTrue(mockPersonDaoImpl.WasCalled_ReadUsingUniqueId);
+            Assert.IsTrue(mockPersonDaoImpl.WasCalled_ReadUsingUniqueIdentifier);
             Assert.IsTrue(mockPersonDaoImpl.WasCalled_Update);
         }
 
@@ -391,7 +391,7 @@ namespace Netus2_Test.Unit.SyncProcess
                 .Execute(row, new CountDownLatch(0));
 
             Assert.IsTrue(mockUniqueIdentifierDaoImpl.WasCalled_Read);
-            Assert.IsTrue(mockPersonDaoImpl.WasCalled_ReadUsingUniqueId);
+            Assert.IsTrue(mockPersonDaoImpl.WasCalled_ReadUsingUniqueIdentifier);
             Assert.IsTrue(mockPersonDaoImpl.WasCalled_Update);
         }
 
@@ -423,7 +423,7 @@ namespace Netus2_Test.Unit.SyncProcess
                 .Execute(row, new CountDownLatch(0));
 
             Assert.IsTrue(mockUniqueIdentifierDaoImpl.WasCalled_Read);
-            Assert.IsTrue(mockPersonDaoImpl.WasCalled_ReadUsingUniqueId);
+            Assert.IsTrue(mockPersonDaoImpl.WasCalled_ReadUsingUniqueIdentifier);
             Assert.IsTrue(mockPersonDaoImpl.WasCalled_Update);
         }
 
@@ -455,7 +455,7 @@ namespace Netus2_Test.Unit.SyncProcess
                 .Execute(row, new CountDownLatch(0));
 
             Assert.IsTrue(mockUniqueIdentifierDaoImpl.WasCalled_Read);
-            Assert.IsTrue(mockPersonDaoImpl.WasCalled_ReadUsingUniqueId);
+            Assert.IsTrue(mockPersonDaoImpl.WasCalled_ReadUsingUniqueIdentifier);
             Assert.IsTrue(mockPersonDaoImpl.WasCalled_Update);
         }
 
@@ -487,7 +487,7 @@ namespace Netus2_Test.Unit.SyncProcess
                 .Execute(row, new CountDownLatch(0));
 
             Assert.IsTrue(mockUniqueIdentifierDaoImpl.WasCalled_Read);
-            Assert.IsTrue(mockPersonDaoImpl.WasCalled_ReadUsingUniqueId);
+            Assert.IsTrue(mockPersonDaoImpl.WasCalled_ReadUsingUniqueIdentifier);
             Assert.IsTrue(mockPersonDaoImpl.WasCalled_Update);
         }
 

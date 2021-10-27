@@ -48,7 +48,7 @@ namespace Netus2_Test.MockDaoImpl
             return returnData;
         }
 
-        public LineItem Read(int lineItemId, IConnectable connection)
+        public LineItem Read_UsingLineItemId(int lineItemId, IConnectable connection)
         {
             WasCalled_ReadWithLineItemId = true;
 
@@ -58,7 +58,7 @@ namespace Netus2_Test.MockDaoImpl
                 return null;
         }
 
-        public List<LineItem> Read_WithClassEnrolledId(int classEnrolledId, IConnectable connection)
+        public List<LineItem> Read_AllWithClassEnrolledId(int classEnrolledId, IConnectable connection)
         {
 
             WasCalled_ReadWithClassEnrolledId = true;

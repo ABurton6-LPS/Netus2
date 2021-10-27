@@ -11,10 +11,9 @@ namespace Netus2_DatabaseConnection.dataObjects
         public DateTime EndDate { get; set; }
         public Organization Organization { get; set; }
 
-        public Session(string name, Organization organization)
+        public Session(Organization organization)
         {
             Id = -1;
-            Name = name;
             StartDate = new DateTime();
             EndDate = new DateTime();
             Organization = organization;

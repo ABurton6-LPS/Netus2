@@ -295,7 +295,8 @@ namespace Netus2_Test.Integration
             string name = "New Academic Session";
             Enumeration sessionType = Enum_Session.values["school year"];
             string termCode = "T1";
-            AcademicSession newAcademicSession = new AcademicSession(name, sessionType, testDataBuilder.school, termCode);
+            AcademicSession newAcademicSession = new AcademicSession(sessionType, testDataBuilder.school, termCode);
+            newAcademicSession.Name = name;
             newAcademicSession = academicSessionDaoImpl.Write(newAcademicSession, connection);
             classEnrolled.AcademicSession = newAcademicSession;
             classEnrolledDaoImpl.Update(classEnrolled, connection);
@@ -318,7 +319,7 @@ namespace Netus2_Test.Integration
 
             Assert_Table(mark.Id, 1, "mark", DataTableFactory.CreateDataTable_Netus2_Mark(), connection);
 
-            markDaoImpl.Delete(mark, person.Id, connection);
+            markDaoImpl.Delete(mark, connection);
             person.Marks.Clear();
 
             Assert_Table(mark.Id, 0, "mark", DataTableFactory.CreateDataTable_Netus2_Mark(), connection);
@@ -334,7 +335,7 @@ namespace Netus2_Test.Integration
 
             Assert_Table(mark.Id, 1, "mark", DataTableFactory.CreateDataTable_Netus2_Mark(), connection);
 
-            Mark newMark = new Mark(testDataBuilder.lineItem, Enum_Score_Status.values["exempt"], 20.00, new DateTime());
+            Mark newMark = new Mark(testDataBuilder.lineItem, Enum_Score_Status.values["exempt"], 20.00, DateTime.Now);
             newMark.Score = 2.0;
             newMark = markDaoImpl.Write(newMark, person.Id, connection);
             person.Marks[0] = newMark;

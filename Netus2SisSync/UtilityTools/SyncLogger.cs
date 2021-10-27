@@ -2,7 +2,9 @@
 using Netus2_DatabaseConnection.enumerations;
 using Netus2SisSync.SyncProcesses;
 using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Text;
 
@@ -15,14 +17,12 @@ namespace Netus2SisSync.UtilityTools
             IConnectable connection = DbConnectionFactory.GetNetus2Connection();
             try
             {
+                string sql = "INSERT INTO sync_job([name], [timestamp]) VALUES (@name, dbo.CURRENT_DATETIME())";
 
-                StringBuilder sql = new StringBuilder("INSERT INTO sync_job(");
-                sql.Append("[name], [timestamp]");
-                sql.Append(") VALUES (");
-                sql.Append("'" + job.Name + "', ");
-                sql.Append("dbo.CURRENT_DATETIME())");
+                List<SqlParameter> parameters = new List<SqlParameter>();
+                parameters.Add(new SqlParameter("@name", job.Name));
 
-                job.Id = connection.InsertNewRecord(sql.ToString());
+                job.Id = connection.InsertNewRecord(sql, parameters);
 
                 LogStatus(job, Enum_Sync_Status.values["start"]);
             }
@@ -41,14 +41,16 @@ namespace Netus2SisSync.UtilityTools
             IConnectable connection = DbConnectionFactory.GetNetus2Connection();
             try
             {
-                StringBuilder sql = new StringBuilder("INSERT INTO sync_task(");
-                sql.Append("sync_job_id, [name], [timestamp]");
-                sql.Append(") VALUES (");
-                sql.Append(task.Job.Id + ", ");
-                sql.Append("'" + task.Name + "', ");
-                sql.Append("dbo.CURRENT_DATETIME())");
+                string sql = "INSERT INTO sync_task(" +
+                "sync_job_id, [name], [timestamp]" +
+                ") VALUES (" +
+                "@sync_job_id, @name, dbo.CURRENT_DATETIME())";
 
-                task.Id = connection.InsertNewRecord(sql.ToString());
+                List<SqlParameter> paramaters = new List<SqlParameter>();
+                paramaters.Add(new SqlParameter("@sync_job_id", task.Job.Id));
+                paramaters.Add(new SqlParameter("@name", task.Name));
+
+                task.Id = connection.InsertNewRecord(sql, paramaters);
 
                 LogStatus(task, Enum_Sync_Status.values["start"]);
             }
@@ -67,14 +69,16 @@ namespace Netus2SisSync.UtilityTools
             IConnectable connection = DbConnectionFactory.GetNetus2Connection();
             try
             {
-                StringBuilder sql = new StringBuilder("INSERT INTO sync_job_status (");
-                sql.Append("sync_job_id, enum_sync_status_id, [timestamp]");
-                sql.Append(") VALUES (");
-                sql.Append(job.Id + ", ");
-                sql.Append(enumStatus.Id + ", ");
-                sql.Append("dbo.CURRENT_DATETIME())");
+                string sql = "INSERT INTO sync_job_status (" +
+                "sync_job_id, enum_sync_status_id, [timestamp]" +
+                ") VALUES (@sync_job_id, @enum_sync_status_id, " +
+                "dbo.CURRENT_DATETIME())";
 
-                connection.InsertNewRecord(sql.ToString());
+                List<SqlParameter> parameters = new List<SqlParameter>();
+                parameters.Add(new SqlParameter("@sync_job_id", job.Id));
+                parameters.Add(new SqlParameter("@enum_sync_status_id", enumStatus.Id));
+
+                connection.InsertNewRecord(sql, parameters);
             }
             catch (Exception e)
             {
@@ -91,14 +95,17 @@ namespace Netus2SisSync.UtilityTools
             IConnectable connection = DbConnectionFactory.GetNetus2Connection();
             try
             {
-                StringBuilder sql = new StringBuilder("INSERT INTO sync_task_status (");
-                sql.Append("sync_task_id, enum_sync_status_id, [timestamp]");
-                sql.Append(") VALUES (");
-                sql.Append(task.Id + ", ");
-                sql.Append(enumStatus.Id + ", ");
-                sql.Append("dbo.CURRENT_DATETIME())");
+                string sql = "INSERT INTO sync_task_status (" +
+                "sync_task_id, enum_sync_status_id, [timestamp]" +
+                ") VALUES (" +
+                "@sync_task_id, @enum_sync_status_id, " +
+                "dbo.CURRENT_DATETIME())";
 
-                connection.InsertNewRecord(sql.ToString());
+                List<SqlParameter> paramaters = new List<SqlParameter>();
+                paramaters.Add(new SqlParameter("@sync_task_id", task.Id));
+                paramaters.Add(new SqlParameter("@enum_sync_status_id", enumStatus.Id));
+
+                connection.InsertNewRecord(sql, paramaters);
             }
             catch(Exception e)
             {
@@ -123,15 +130,18 @@ namespace Netus2SisSync.UtilityTools
                 string errorStackTrace = e.StackTrace;
                 errorStackTrace = e.StackTrace.Replace("'", "''");
 
-                StringBuilder sql = new StringBuilder("INSERT INTO sync_error(");
-                sql.Append("sync_job_id, [message], stack_trace, [timestamp]");
-                sql.Append(") VALUES (");
-                sql.Append(job.Id + ", ");
-                sql.Append("'" + errorMessage + "', ");
-                sql.Append("'" + errorStackTrace + "', ");
-                sql.Append("dbo.CURRENT_DATETIME())");
+                string sql = "INSERT INTO sync_error(" +
+                "sync_job_id, [message], stack_trace, [timestamp]" +
+                ") VALUES (" +
+                "@sync_job_id, @message, @stack_trace, dbo.CURRENT_DATETIME())";
 
-                connection.InsertNewRecord(sql.ToString());
+                List<SqlParameter> paramaters = new List<SqlParameter>();
+
+                paramaters.Add(new SqlParameter("@sync_job_id", job.Id));
+                paramaters.Add(new SqlParameter("@message", errorMessage));
+                paramaters.Add(new SqlParameter("@stack_trace", errorStackTrace));
+
+                connection.InsertNewRecord(sql, paramaters);
             }
             catch(Exception cantEvenLogError)
             {
@@ -170,15 +180,16 @@ namespace Netus2SisSync.UtilityTools
                     errorStackTrace += "\nData For Failed Task:\n" + dataThatCausedError.ToString() + ";";
                 }
 
-                StringBuilder sql = new StringBuilder("INSERT INTO sync_error(");
-                sql.Append("sync_task_id, [message], stack_trace, [timestamp]");
-                sql.Append(") VALUES (");
-                sql.Append(task.Id + ", ");
-                sql.Append("'" + errorMessage + "', ");
-                sql.Append("'" + errorStackTrace + "', ");
-                sql.Append("dbo.CURRENT_DATETIME())");
+                string sql = "INSERT INTO sync_error(" +
+                "sync_task_id, [message], stack_trace, [timestamp]" +
+                ") VALUES (@sync_task_id, @message, @stack_trace, dbo.CURRENT_DATETIME())";
 
-                connection.InsertNewRecord(sql.ToString());
+                List<SqlParameter> paramaters = new List<SqlParameter>();
+                paramaters.Add(new SqlParameter("@sync_task_id", task.Id));
+                paramaters.Add(new SqlParameter("@message", errorMessage));
+                paramaters.Add(new SqlParameter("@stack_trace", errorStackTrace));
+
+                connection.InsertNewRecord(sql, paramaters);
             }
             catch (Exception cantEvenLogError)
             {

@@ -66,7 +66,7 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AddressTasks
                     person.Addresses.Add(address);
                     personDaoImpl.Update(person, _netus2Connection);
 
-                    jctPersonAddressDaoImpl.Write_TempTable(person.Id, address.Id, _netus2Connection);
+                    jctPersonAddressDaoImpl.Write_ToTempTable(person.Id, address.Id, _netus2Connection);
                 }
                 else if(foundAddresses.Count == 1)
                 {
@@ -77,7 +77,7 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AddressTasks
                         person.Addresses.Add(address);
                         personDaoImpl.Update(person, _netus2Connection);
 
-                        jctPersonAddressDaoImpl.Write_TempTable(person.Id, address.Id, _netus2Connection);
+                        jctPersonAddressDaoImpl.Write_ToTempTable(person.Id, address.Id, _netus2Connection);
                     }
 
                     if ((address.Line1 != foundAddresses[0].Line1) || 

@@ -9,8 +9,8 @@ namespace Netus2_Test.MockDaoImpl
     {
         public TestDataBuilder tdBuilder;
         public bool WasCalled_Delete = false;
-        public bool WasCalled_Read = false;
         public bool WasCalled_ReadUsingAddressId = false;
+        public bool WasCalled_Read = false;
         public bool WasCalled_Update = false;
         public bool WasCalled_Write = false;
         public bool _shouldReadReturnData = false;
@@ -25,26 +25,9 @@ namespace Netus2_Test.MockDaoImpl
             return null;
         }
 
-        public MockAddressDaoImpl(TestDataBuilder tdBuilder)
-        {
-            this.tdBuilder = tdBuilder;
-        }
-
         public void Delete(Address address, IConnectable connection)
         {
             WasCalled_Delete = true;
-        }
-
-        public List<Address> Read(Address address, IConnectable connection)
-        {
-            WasCalled_Read = true;
-
-            List<Address> returnData = new List<Address>();
-
-            if (_shouldReadReturnData)
-                returnData.Add(tdBuilder.teacher.Addresses[0]);
-
-            return returnData;
         }
 
         public Address Read_UsingAdddressId(int addressId, IConnectable connection)
@@ -52,9 +35,29 @@ namespace Netus2_Test.MockDaoImpl
             WasCalled_ReadUsingAddressId = true;
 
             if (_shouldReadReturnData)
-                return tdBuilder.teacher.Addresses[0];
-            else
-                return null;
+            {
+                if (tdBuilder.address_Student.Id == addressId)
+                    return tdBuilder.address_Student;
+                if (tdBuilder.address_Teacher.Id == addressId)
+                    return tdBuilder.address_Teacher;
+            }
+
+            return null;
+        }
+
+        public List<Address> Read(Address address, IConnectable connection)
+        {
+            WasCalled_Read = true;
+
+            List<Address> results = new List<Address>();
+
+            if (_shouldReadReturnData)
+            {
+                address.Id = 100;
+                results.Add(address);
+            }
+
+            return results;
         }
 
         public void Update(Address address, IConnectable connection)
@@ -66,7 +69,14 @@ namespace Netus2_Test.MockDaoImpl
         {
             WasCalled_Write = true;
 
-            return tdBuilder.teacher.Addresses[0];
+            address.Id = 100;
+
+            return address;
+        }
+
+        public MockAddressDaoImpl(TestDataBuilder tdBuilder)
+        {
+            this.tdBuilder = tdBuilder;
         }
     }
 }

@@ -12,6 +12,7 @@ namespace Netus2_Test.MockDaoImpl
         public bool WasCalled_DeleteWithPersonId = false;
         public bool WasCalled_Read = false;
         public bool WasCalled_ReadWithLineItemId = false;
+        public bool WasCalled_ReadWithPersonId = false;
         public bool WasCalled_Update = false;
         public bool WasCalled_Write = false;
         public bool _shouldReadReturnData = false;
@@ -36,11 +37,6 @@ namespace Netus2_Test.MockDaoImpl
             WasCalled_Delete = true;
         }
 
-        public void Delete(Mark mark, int personId, IConnectable connection)
-        {
-            WasCalled_DeleteWithPersonId = true;
-        }
-
         public List<Mark> Read(Mark mark, int personId, IConnectable connection)
         {
             WasCalled_Read = true;
@@ -53,9 +49,21 @@ namespace Netus2_Test.MockDaoImpl
             return returnData;
         }
 
-        public List<Mark> Read_WithLineItemId(int lineItemId, IConnectable connection)
+        public List<Mark> Read_AllWithLineItemId(int lineItemId, IConnectable connection)
         {
             WasCalled_ReadWithLineItemId = true;
+
+            List<Mark> returnData = new List<Mark>();
+
+            if (_shouldReadReturnData)
+                returnData.Add(tdBuilder.mark);
+
+            return returnData;
+        }
+
+        public List<Mark> Read_AllWithPersonId(int personId, IConnectable connection)
+        {
+            WasCalled_ReadWithPersonId = true;
 
             List<Mark> returnData = new List<Mark>();
 

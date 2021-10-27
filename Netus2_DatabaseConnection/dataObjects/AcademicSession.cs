@@ -10,7 +10,7 @@ namespace Netus2_DatabaseConnection.dataObjects
         public int SchoolYear { get; set; }
         public Enumeration SessionType { get; set; }
         public List<AcademicSession> Children { get; set; }
-        public AcademicSession(string name, Enumeration sessionType, Organization organization, string termCode) : base(name, organization)
+        public AcademicSession(Enumeration sessionType, Organization organization, string termCode) : base(organization)
         {
             SessionType = sessionType;
             Children = new List<AcademicSession>();
@@ -24,6 +24,7 @@ namespace Netus2_DatabaseConnection.dataObjects
             strAcademicSession.Append("School Year: " + SchoolYear + "\n");
             strAcademicSession.Append("Session Type: " + SessionType + "\n");
             strAcademicSession.Append("Children: " + Children.Count + "\n");
+            strAcademicSession.Append(base.ToString());
 
             return strAcademicSession.ToString();
         }

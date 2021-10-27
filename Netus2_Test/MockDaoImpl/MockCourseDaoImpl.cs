@@ -47,7 +47,7 @@ namespace Netus2_Test.MockDaoImpl
             return returnData;
         }
 
-        public Course Read(int courseId, IConnectable connection)
+        public Course Read_UsingCourseId(int courseId, IConnectable connection)
         {
             WasCalled_ReadUsingCourseId = true;
 

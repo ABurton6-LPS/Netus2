@@ -1980,7 +1980,7 @@ namespace Netus2_DatabaseConnection.utilityTools
                             if (row[columnName] != DBNull.Value)
                                 logLineItem.due_date = (DateTime)row[columnName];
                             else
-                                logLineItem = null;
+                                logLineItem.due_date = new DateTime();
                             break;
                         case "class_id":
                             if (row[columnName] != DBNull.Value)

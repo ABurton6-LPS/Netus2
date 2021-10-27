@@ -8,10 +8,11 @@ namespace Netus2_Test.MockDaoImpl
     public class MockEnrollmentDaoImpl : IEnrollmentDao
     {
         public TestDataBuilder tdBuilder;
-        public bool WasCalled_DeleteWithoutPersonId = false;
+        public bool WasCalled_Delete = false;
         public bool WasCalled_DelteWithPersonId = false;
         public bool WasCalled_Read = false;
         public bool WasCalled_ReadWithClassId = false;
+        public bool WasCalled_ReadWithPersonId = false;
         public bool WasCalled_Update = false;
         public bool WasCalled_Write = false;
         public bool _shouldReadReturnData = false;
@@ -33,12 +34,7 @@ namespace Netus2_Test.MockDaoImpl
 
         public void Delete(Enrollment enrollment, IConnectable connection)
         {
-            WasCalled_DeleteWithoutPersonId = true;
-        }
-
-        public void Delete(Enrollment enrollment, int personId, IConnectable connection)
-        {
-            WasCalled_DelteWithPersonId = true;
+            WasCalled_Delete = true;
         }
 
         public List<Enrollment> Read(Enrollment enrollment, int personId, IConnectable connection)
@@ -53,9 +49,21 @@ namespace Netus2_Test.MockDaoImpl
             return returnData;
         }
 
-        public List<Enrollment> Read_WithClassId(int classId, IConnectable connection)
+        public List<Enrollment> Read_AllWithClassId(int classId, IConnectable connection)
         {
             WasCalled_ReadWithClassId = true;
+
+            List<Enrollment> returnData = new List<Enrollment>();
+
+            if (_shouldReadReturnData)
+                returnData.Add(tdBuilder.enrollment);
+
+            return returnData;
+        }
+
+        public List<Enrollment> Read_AllWithPersonId(int personId, IConnectable connection)
+        {
+            WasCalled_ReadWithPersonId = true;
 
             List<Enrollment> returnData = new List<Enrollment>();
 

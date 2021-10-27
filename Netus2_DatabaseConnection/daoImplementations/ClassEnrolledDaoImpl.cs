@@ -6,6 +6,7 @@ using Netus2_DatabaseConnection.utilityTools;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Text;
 
 namespace Netus2_DatabaseConnection.daoImplementations
@@ -27,30 +28,28 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         public void Delete(ClassEnrolled classEnrolled, IConnectable connection)
         {
+            if(classEnrolled.Id <= 0)
+                throw new Exception("Cannot delete a Class which doesn't have a database-assigned ID.\n" + classEnrolled.ToString());
+
             Delete_LineItem(classEnrolled, connection);
             Delete_JctClassPeriod(classEnrolled, connection);
             Delete_JctClassResource(classEnrolled, connection);
             Delete_JctClassPerson(classEnrolled, connection);
             Delete_Enrollment(classEnrolled, connection);
 
-            DataRow row = daoObjectMapper.MapClassEnrolled(classEnrolled);
+            string sql = "DELETE FROM class WHERE " +
+                "class_id = @class_id";
 
-            StringBuilder sql = new StringBuilder("DELETE FROM class WHERE 1=1 ");
-            sql.Append("AND class_id = " + row["class_id"] + " ");
-            sql.Append("AND name " + (row["name"] != DBNull.Value ? "= '" + row["name"] + "' " : "IS NULL "));
-            sql.Append("AND class_code " + (row["class_code"] != DBNull.Value ? "= '" + row["class_code"] + "' " : "IS NULL "));
-            sql.Append("AND enum_class_id " + (row["enum_class_id"] != DBNull.Value ? "= " + row["enum_class_id"] + " " : "IS NULL "));
-            sql.Append("AND room " + (row["room"] != DBNull.Value ? "= '" + row["room"] + "' " : "IS NULL "));
-            sql.Append("AND course_id " + (row["course_id"] != DBNull.Value ? "= " + row["course_id"] + " " : "IS NULL "));
-            sql.Append("AND academic_session_id " + (row["academic_session_id"] != DBNull.Value ? " = " + row["academic_session_id"] + " " : "IS NULL "));
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@class_id", classEnrolled.Id));
 
-            connection.ExecuteNonQuery(sql.ToString());
+            connection.ExecuteNonQuery(sql, parameters);
         }
 
         private void Delete_Enrollment(ClassEnrolled classEnrolled, IConnectable connection)
         {
             IEnrollmentDao enrollmentDaoImpl = DaoImplFactory.GetEnrollmentDaoImpl();
-            List<Enrollment> enrollmentsFound = enrollmentDaoImpl.Read_WithClassId(classEnrolled.Id, connection);
+            List<Enrollment> enrollmentsFound = enrollmentDaoImpl.Read_AllWithClassId(classEnrolled.Id, connection);
             foreach (Enrollment foundEnrollment in enrollmentsFound)
             {
                 enrollmentDaoImpl.Delete(foundEnrollment, connection);
@@ -87,7 +86,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         private void Delete_LineItem(ClassEnrolled classEnrolled, IConnectable connection)
         {
             ILineItemDao lineItemDaoImpl = DaoImplFactory.GetLineItemDaoImpl();
-            List<LineItem> foundLineItems = lineItemDaoImpl.Read_WithClassEnrolledId(classEnrolled.Id, connection);
+            List<LineItem> foundLineItems = lineItemDaoImpl.Read_AllWithClassEnrolledId(classEnrolled.Id, connection);
             foreach (LineItem foundLineItem in foundLineItems)
             {
                 lineItemDaoImpl.Delete(foundLineItem, connection);
@@ -96,60 +95,101 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         public List<ClassEnrolled> Read_UsingAcademicSessionId(int academicSessionId, IConnectable connection)
         {
-            string sql = "SELECT * FROM class WHERE academic_session_id = " + academicSessionId;
+            string sql = "SELECT * FROM class WHERE academic_session_id = @academic_session_id";
 
-            return Read(sql, connection);
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@academic_session_id", academicSessionId));
+
+            List<ClassEnrolled> results = Read(sql, connection, parameters);
+
+            return results;
         }
 
         public List<ClassEnrolled> Read_UsingCourseId(int courseId, IConnectable connection)
         {
-            string sql = "SELECT * FROM class WHERE course_id = " + courseId;
+            string sql = "SELECT * FROM class WHERE course_id = @course_id";
 
-            return Read(sql, connection);
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@course_id", courseId));
+
+            List<ClassEnrolled> results = Read(sql, connection, parameters);
+
+            return results;
         }
 
-        public List<ClassEnrolled> Read(ClassEnrolled classEnrolled, IConnectable connection)
+        public ClassEnrolled Read_UsingClassId(int classId, IConnectable connection)
         {
-            StringBuilder sql = new StringBuilder("");
+            string sql = "SELECT * FROM class WHERE class_id = @class_id";
 
-            DataRow row = daoObjectMapper.MapClassEnrolled(classEnrolled);
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@class_id", classId));
 
-            sql.Append("SELECT * FROM class WHERE 1=1 ");
-            if (row["class_id"] != DBNull.Value)
-                sql.Append("AND class_id = " + row["class_id"] + " ");
-            else
-            {
-                if (row["name"] != DBNull.Value)
-                    sql.Append("AND name = '" + row["name"] + "' ");
-                if (row["class_code"] != DBNull.Value)
-                    sql.Append("AND class_code = '" + row["class_code"] + "' ");
-                if (row["enum_class_id"] != DBNull.Value)
-                    sql.Append("AND enum_class_id = " + row["enum_class_id"] + " ");
-                if (row["room"] != DBNull.Value)
-                    sql.Append("AND room = '" + row["room"] + "' ");
-                if (row["course_id"] != DBNull.Value)
-                    sql.Append("AND course_id = " + row["course_id"] + " ");
-                if (row["academic_session_id"] != DBNull.Value)
-                    sql.Append("AND academic_session_id = " + row["academic_session_id"] + " ");
-            }
+            List<ClassEnrolled> results = Read(sql, connection, parameters);
 
-            return Read(sql.ToString(), connection);
-        }
-
-        public ClassEnrolled Read(int classId, IConnectable connection)
-        {
-            string sql = "SELECT * FROM class WHERE class_id = " + classId;
-            List<ClassEnrolled> results = Read(sql, connection);
             if (results.Count > 0)
                 return results[0];
             else
                 return null;
         }
 
-        private List<ClassEnrolled> Read(string sql, IConnectable connection)
+        public List<ClassEnrolled> Read(ClassEnrolled classEnrolled, IConnectable connection)
+        {
+            DataRow row = daoObjectMapper.MapClassEnrolled(classEnrolled);
+
+            List<SqlParameter> parameters = new List<SqlParameter>();
+
+            StringBuilder sql = new StringBuilder("SELECT * FROM class WHERE 1=1 ");
+            if (row["class_id"] != DBNull.Value)
+            {
+                sql.Append("AND class_id = @class_id ");
+                parameters.Add(new SqlParameter("@class_id", row["class_id"]));
+            }                
+            else
+            {
+                if (row["name"] != DBNull.Value)
+                {
+                    sql.Append("AND name = @name ");
+                    parameters.Add(new SqlParameter("@name", row["name"]));
+                }
+
+                if (row["class_code"] != DBNull.Value)
+                {
+                    sql.Append("AND class_code = @class_code ");
+                    parameters.Add(new SqlParameter("@class_code", row["class_code"]));
+                }
+
+                if (row["enum_class_id"] != DBNull.Value)
+                {
+                    sql.Append("AND enum_class_id = @enum_class_id ");
+                    parameters.Add(new SqlParameter("@enum_class_id", row["enum_class_id"]));
+                }
+
+                if (row["room"] != DBNull.Value)
+                {
+                    sql.Append("AND room = @room ");
+                    parameters.Add(new SqlParameter("@room", row["room"]));
+                }
+
+                if (row["course_id"] != DBNull.Value)
+                {
+                    sql.Append("AND course_id = @course_id ");
+                    parameters.Add(new SqlParameter("@course_id", row["course_id"]));
+                }
+
+                if (row["academic_session_id"] != DBNull.Value)
+                {
+                    sql.Append("AND academic_session_id = @academic_session_id ");
+                    parameters.Add(new SqlParameter("@academic_session_id", row["academic_session_id"]));
+                }
+            }
+
+            return Read(sql.ToString(), connection, parameters);
+        }
+
+        private List<ClassEnrolled> Read(string sql, IConnectable connection, List<SqlParameter> parameters)
         {
             DataTable dtClassEnrolled = DataTableFactory.CreateDataTable_Netus2_ClassEnrolled();
-            dtClassEnrolled = connection.ReadIntoDataTable(sql, dtClassEnrolled);
+            dtClassEnrolled = connection.ReadIntoDataTable(sql, dtClassEnrolled, parameters);
 
             List<ClassEnrolled> results = new List<ClassEnrolled>();
             foreach (DataRow row in dtClassEnrolled.Rows)
@@ -178,7 +218,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         private Course Read_Course(int courseId, IConnectable connection)
         {
             ICourseDao courseDaoImpl = DaoImplFactory.GetCourseDaoImpl();
-            return courseDaoImpl.Read(courseId, connection);
+            return courseDaoImpl.Read_UsingCourseId(courseId, connection);
         }
 
         private List<Enumeration> Read_JctClassPeriod(int classEnrolledId, IConnectable connection)
@@ -187,7 +227,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
             List<int> idsFound = new List<int>();
 
             IJctClassPeriodDao jctClassPeriodDaoImpl = DaoImplFactory.GetJctClassPeriodDaoImpl();
-            List<DataRow> foundDataRows = jctClassPeriodDaoImpl.Read(classEnrolledId, connection);
+            List<DataRow> foundDataRows = jctClassPeriodDaoImpl.Read_AllWithClassId(classEnrolledId, connection);
             foreach (DataRow foundDataRow in foundDataRows)
             {
                 idsFound.Add((int)foundDataRow["enum_period_id"]);
@@ -208,7 +248,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
             List<Person> foundPersons = new List<Person>();
             List<DataRow> foundDataRows =
-                jctClassPersonDaoImpl.Read_WithClassId(classEnrolledId, connection);
+                jctClassPersonDaoImpl.Read_AllWithClassId(classEnrolledId, connection);
 
             foreach (DataRow foundDataRow in foundDataRows)
             {
@@ -225,7 +265,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
             List<Enumeration> foundRoles = new List<Enumeration>();
             List<DataRow> foundDataRows =
-                jctClassPersonDaoImpl.Read_WithClassId(classEnrolledId, connection);
+                jctClassPersonDaoImpl.Read_AllWithClassId(classEnrolledId, connection);
 
             foreach (DataRow foundDataRow in foundDataRows)
             {
@@ -242,7 +282,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
             List<Resource> foundResources = new List<Resource>();
             List<DataRow> foundDataRows =
-                jctClassResourceDaoImpl.Read_WithClassId(classEnrolledId, connection);
+                jctClassResourceDaoImpl.Read_AllWithClassId(classEnrolledId, connection);
 
             foreach (DataRow foundDataRow in foundDataRows)
             {
@@ -274,46 +314,135 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
             if (row["class_id"] != DBNull.Value)
             {
+                List<SqlParameter> parameters = new List<SqlParameter>();
+
                 StringBuilder sql = new StringBuilder("UPDATE class SET ");
-                sql.Append("name = " + (row["name"] != DBNull.Value ? "'" + row["name"] + "', " : "NULL, "));
-                sql.Append("class_code = " + (row["class_code"] != DBNull.Value ? "'" + row["class_code"] + "', " : "NULL, "));
-                sql.Append("enum_class_id = " + (row["enum_class_id"] != DBNull.Value ? row["enum_class_id"] + ", " : "NULL, "));
-                sql.Append("room = " + (row["room"] != DBNull.Value ? "'" + row["room"] + "', " : "NULL, "));
-                sql.Append("course_id = " + (row["course_id"] != DBNull.Value ? row["course_id"] + ", " : "NULL, "));
-                sql.Append("academic_session_id = " + (row["academic_session_id"] != DBNull.Value ? row["academic_session_id"] + ", " : "NULL, "));
+                if (row["name"] != DBNull.Value)
+                {
+                    sql.Append("name = @name, ");
+                    parameters.Add(new SqlParameter("@name", row["name"]));
+                }
+                else
+                    sql.Append("name = NULL, ");
+
+                if (row["class_code"] != DBNull.Value)
+                {
+                    sql.Append("class_code = @class_code, ");
+                    parameters.Add(new SqlParameter("@class_code", row["class_code"]));
+                }
+                else
+                    sql.Append("class_code = NULL, ");
+
+                if (row["enum_class_id"] != DBNull.Value)
+                {
+                    sql.Append("enum_class_id = @enum_class_id, ");
+                    parameters.Add(new SqlParameter("@enum_class_id", row["enum_class_id"]));
+                }
+                else
+                    sql.Append("enum_class_id = NULL, ");
+
+                if (row["room"] != DBNull.Value)
+                {
+                    sql.Append("room = @room, ");
+                    parameters.Add(new SqlParameter("@room", row["room"]));
+                }
+                else
+                    sql.Append("room = NULL, ");
+
+                if (row["course_id"] != DBNull.Value)
+                {
+                    sql.Append("course_id = @course_id, ");
+                    parameters.Add(new SqlParameter("@course_id", row["course_id"]));
+                }
+                else
+                    sql.Append("course_id = NULL, ");
+
+                if (row["academic_session_id"] != DBNull.Value)
+                {
+                    sql.Append("academic_session_id = @academic_session_id, ");
+                    parameters.Add(new SqlParameter("@academic_session_id", row["academic_session_id"]));
+                }
+                else
+                    sql.Append("academic_session_id = NULL, ");
+
                 sql.Append("changed = dbo.CURRENT_DATETIME(), ");
                 sql.Append("changed_by = " + (_taskId != null ? _taskId.ToString() : "'Netus2'") + " ");
-                sql.Append("WHERE class_id = " + row["class_id"]);
+                sql.Append("WHERE class_id = @class_id");
+                parameters.Add(new SqlParameter("@class_id", row["class_id"]));
 
-                connection.ExecuteNonQuery(sql.ToString());
+                connection.ExecuteNonQuery(sql.ToString(), parameters);
 
                 UpdateJctClassPeriod(classEnrolled.Periods, classEnrolled.Id, connection);
                 UpdateResource(classEnrolled.Resources, classEnrolled.Id, connection);
                 UpdateStaff(classEnrolled.GetStaff(), classEnrolled.GetStaffRoles(), classEnrolled, connection);
             }
             else
-            {
                 throw new Exception("The following Class needs to be inserted into the database, before it can be updated.\n" + classEnrolled.ToString());
-            }
         }
 
         public ClassEnrolled Write(ClassEnrolled classEnrolled, IConnectable connection)
         {
             DataRow row = daoObjectMapper.MapClassEnrolled(classEnrolled);
 
-            StringBuilder sql = new StringBuilder("INSERT INTO class (");
-            sql.Append("name, class_code, enum_class_id, room, course_id, academic_session_id, created, created_by");
-            sql.Append(") VALUES (");
-            sql.Append(row["name"] != DBNull.Value ? "'" + row["name"] + "', " : "NULL, ");
-            sql.Append(row["class_code"] != DBNull.Value ? "'" + row["class_code"] + "', " : "NULL, ");
-            sql.Append(row["enum_class_id"] != DBNull.Value ? row["enum_class_id"] + ", " : "NULL, ");
-            sql.Append(row["room"] != DBNull.Value ? "'" + row["room"] + "', " : "NULL, ");
-            sql.Append(row["course_id"] != DBNull.Value ? row["course_id"] + ", " : "NULL, ");
-            sql.Append(row["academic_session_id"] != DBNull.Value ? row["academic_session_id"] + ", " : "NULL, ");
-            sql.Append("dbo.CURRENT_DATETIME(), ");
-            sql.Append((_taskId != null ? _taskId.ToString() : "'Netus2'") + " )");
+            List<SqlParameter> parameters = new List<SqlParameter>();
 
-            row["class_id"] = connection.InsertNewRecord(sql.ToString());
+            StringBuilder sqlValues = new StringBuilder();
+            if (row["name"] != DBNull.Value)
+            {
+                sqlValues.Append("@name, ");
+                parameters.Add(new SqlParameter("@name", row["name"]));
+            }
+            else
+                sqlValues.Append("NULL, ");
+
+            if (row["class_code"] != DBNull.Value)
+            {
+                sqlValues.Append("@class_code, ");
+                parameters.Add(new SqlParameter("@class_code", row["class_code"]));
+            }
+            else
+                sqlValues.Append("NULL, ");
+
+            if (row["enum_class_id"] != DBNull.Value)
+            {
+                sqlValues.Append("@enum_class_id, ");
+                parameters.Add(new SqlParameter("@enum_class_id", row["enum_class_id"]));
+            }
+            else
+                sqlValues.Append("NULL, ");
+
+            if (row["room"] != DBNull.Value)
+            {
+                sqlValues.Append("@room, ");
+                parameters.Add(new SqlParameter("@room", row["room"]));
+            }
+            else
+                sqlValues.Append("NULL, ");
+
+            if (row["course_id"] != DBNull.Value)
+            {
+                sqlValues.Append("@course_id, ");
+                parameters.Add(new SqlParameter("@course_id", row["course_id"]));
+            }
+            else
+                sqlValues.Append("NULL, ");
+
+            if (row["academic_session_id"] != DBNull.Value)
+            {
+                sqlValues.Append("@academic_session_id, ");
+                parameters.Add(new SqlParameter("@academic_session_id", row["academic_session_id"]));
+            }
+            else
+                sqlValues.Append("NULL, ");
+
+            sqlValues.Append("dbo.CURRENT_DATETIME(), ");
+            sqlValues.Append(_taskId != null ? _taskId.ToString() : "'Netus2'");
+
+            string sql = "INSERT INTO class " +
+                "(name, class_code, enum_class_id, room, course_id, academic_session_id, created, created_by) " +
+                "VALUES (" + sqlValues.ToString() + ")";
+
+            row["class_id"] = connection.InsertNewRecord(sql.ToString(), parameters);
 
             AcademicSession foundAcademicSession = Read_AcademicSession((int)row["academic_session_id"], connection);
             Course foundCourse = Read_Course((int)row["course_id"], connection);
@@ -351,7 +480,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
             IJctClassPersonDao jctClassPersonDaoImpl = DaoImplFactory.GetJctClassPersonDaoImpl();
             IPersonDao personDaoImpl = DaoImplFactory.GetPersonDaoImpl();
             List<DataRow> foundJctClassPersonDaos =
-                jctClassPersonDaoImpl.Read_WithClassId(classEnrolled.Id, connection);
+                jctClassPersonDaoImpl.Read_AllWithClassId(classEnrolled.Id, connection);
 
             List<int> foundStaffIds = new List<int>();
             List<int> foundRoleIds = new List<int>();
@@ -401,7 +530,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         {
             IJctClassResourceDao jctClassResourceDaoImpl = DaoImplFactory.GetJctClassResourceDaoImpl();
             List<DataRow> foundJctClassResourceDaos =
-                jctClassResourceDaoImpl.Read_WithClassId(classId, connection);
+                jctClassResourceDaoImpl.Read_AllWithClassId(classId, connection);
 
             List<int> foundResourceIds = new List<int>();
             List<int> resourceIds = new List<int>();
@@ -434,7 +563,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
             List<Enumeration> updatedPeriods = new List<Enumeration>();
             IJctClassPeriodDao jctClassPeriodDaoImpl = DaoImplFactory.GetJctClassPeriodDaoImpl();
             List<DataRow> foundJctClassPeriodDaos =
-                jctClassPeriodDaoImpl.Read(classId, connection);
+                jctClassPeriodDaoImpl.Read_AllWithClassId(classId, connection);
             List<int> periodIds = new List<int>();
             List<int> foundPeriodIds = new List<int>();
 

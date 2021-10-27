@@ -38,8 +38,8 @@
         {
             return "SELECT DISTINCT " +
                 "t.schoolc building_code, " +
-                "tt.termc term_code, " +
                 "t.schyear school_year, " +
+                "tt.termc term_code, " +
                 "CASE CHARINDEX('Y',tt.termc,1) " +
                 "WHEN 0 THEN LTRIM(RTRIM(REPLACE(REPLACE(REPLACE(REPLACE(s.schname,'School',''),'High',''),'Middle',''),'Elementary',''))) + ' ' + CONVERT(VARCHAR(4), t.schyear) + ' ' + z.descript  " +
                 "ELSE LTRIM(RTRIM(REPLACE(REPLACE(REPLACE(REPLACE(s.schname,'School',''),'High',''),'Middle',''),'Elementary',''))) + ' ' + CONVERT(VARCHAR(4),t.schyear) + ' School Year'  " +
@@ -53,7 +53,7 @@
                 "WHEN 'Q' THEN 'grading period' " +
                 "WHEN 'S' THEN 'semester' " +
                 "END " +
-                "ELSE 'school year' " +
+                "ELSE 'schoolYear' " +
                 "END enum_session_id, " +
                 "CONVERT(date, tt.termbegindate) start_date,  " +
                 "DATEADD(day, 1, CONVERT(date, tt.termenddate)) end_date, " +
@@ -65,7 +65,7 @@
                 "ELSE NULL " +
                 "END parent_session_code " +
                 "FROM TrackTerms tt " +
-                "JOIN track t ON tt.trkuniq=t.trkuniq " +
+                "JOIN track t ON tt.trkuniq=t.trkuniq  " +
                 "JOIN zterm z ON z.termc=tt.termc " +
                 "JOIN school s ON s.schoolc=t.schoolc " +
                 "LEFT JOIN TrackTerms pQ ON pQ.trkuniq=tt.trkuniq AND pQ.termc LIKE 'Q%' AND tt.termbegindate BETWEEN pQ.termbegindate AND pQ.termenddate AND tt.termenddate BETWEEN pQ.termbegindate AND pQ.termenddate " +
@@ -75,7 +75,7 @@
                 "AND NOT tt.termbegindate IS NULL " +
                 "AND NOT tt.termenddate IS NULL " +
                 "AND t.schyear >= (SELECT schyear FROM school WHERE schoolc='82095') " +
-                "ORDER BY building_code, term_code DESC, school_year";
+                "ORDER BY schyear, name";
         }
 
         private static string BuildScript_Sis_Person()

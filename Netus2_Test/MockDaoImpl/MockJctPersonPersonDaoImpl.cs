@@ -25,7 +25,7 @@ namespace Netus2_Test.MockDaoImpl
             WasCalled_Delete = true;
         }
 
-        public List<DataRow> Read(int personOneId, IConnectable connection)
+        public List<DataRow> Read_AllWithPersonOneId(int personOneId, IConnectable connection)
         {
             WasCalled_ReadWithOnePersonId = true;
 

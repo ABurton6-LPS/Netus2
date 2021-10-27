@@ -26,7 +26,7 @@ namespace Netus2_Test.MockDaoImpl
             WasCalled_Delete = true;
         }
 
-        public DataRow Read(int classId, int personId, IConnectable connection)
+        public DataRow Read(int classId, int personId, int roleId, IConnectable connection)
         {
             WasCalled_ReadWithClassIdAndPersonId = true;
 
@@ -37,7 +37,7 @@ namespace Netus2_Test.MockDaoImpl
             return row;
         }
 
-        public List<DataRow> Read_WithClassId(int classId, IConnectable connection)
+        public List<DataRow> Read_AllWithClassId(int classId, IConnectable connection)
         {
             WasCalled_ReadWithClassId = true;
 
@@ -60,7 +60,7 @@ namespace Netus2_Test.MockDaoImpl
             return returnData;
         }
 
-        public List<DataRow> Read_WithPersonId(int personId, IConnectable connection)
+        public List<DataRow> Read_AllWithPersonId(int personId, IConnectable connection)
         {
             WasCalled_ReadWithPersonId = true;
 
@@ -72,6 +72,32 @@ namespace Netus2_Test.MockDaoImpl
                     for (int x = 0; x < tdBuilder.classEnrolled.GetStaff()[i].Roles.Count; x++)
                     {
                         if(tdBuilder.classEnrolled.GetStaff()[i].Id == personId)
+                        {
+                            DataRow row = DataTableFactory.CreateDataTable_Netus2_JctClassPerson().NewRow();
+                            row["class_id"] = tdBuilder.classEnrolled.Id;
+                            row["person_id"] = tdBuilder.classEnrolled.GetStaff()[i].Id;
+                            row["enum_role_id"] = tdBuilder.classEnrolled.GetStaff()[i].Roles[x].Id;
+                            returnData.Add(row);
+                        }
+                    }
+                }
+            }
+
+            return returnData;
+        }
+
+        public List<DataRow> Read_AllWithRoleId(int roleId, IConnectable connection)
+        {
+            WasCalled_ReadWithPersonId = true;
+
+            List<DataRow> returnData = new List<DataRow>();
+            if (_shouldReadReturnData)
+            {
+                for (int i = 0; i < tdBuilder.classEnrolled.GetStaff().Count; i++)
+                {
+                    for (int x = 0; x < tdBuilder.classEnrolled.GetStaff()[i].Roles.Count; x++)
+                    {
+                        if (tdBuilder.classEnrolled.GetStaff()[i].Roles[x].Id == roleId)
                         {
                             DataRow row = DataTableFactory.CreateDataTable_Netus2_JctClassPerson().NewRow();
                             row["class_id"] = tdBuilder.classEnrolled.Id;

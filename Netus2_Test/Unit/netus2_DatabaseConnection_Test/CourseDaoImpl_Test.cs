@@ -31,23 +31,6 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
         }
 
         [TestCase]
-        public void Delete_ShouldUseExpectedSql()
-        {
-            DaoImplFactory.MockClassEnrolledDaoImpl = new MockClassEnrolledDaoImpl(tdBuilder);
-            DaoImplFactory.MockJctCourseSubjectDaoImpl = new MockJctCourseSubjectDaoImpl(tdBuilder);
-            DaoImplFactory.MockJctCourseGradeDaoImpl = new MockJctCourseGradeDaoImpl(tdBuilder);
-
-            _netus2DbConnection.expectedNonQuerySql =
-                "DELETE FROM course " +
-                "WHERE 1=1 " +
-                "AND course_id = " + tdBuilder.spanishCourse.Id + " " +
-                "AND name = '" + tdBuilder.spanishCourse.Name + "' " +
-                "AND course_code = '" + tdBuilder.spanishCourse.CourseCode + "' ";
-
-            courseDaoImpl.Delete(tdBuilder.spanishCourse, _netus2DbConnection);
-        }
-
-        [TestCase]
         public void DeleteClassEnrolled_ShouldCallExpectedMethod()
         {
             MockClassEnrolledDaoImpl mockClassEnrolledDaoImpl = new MockClassEnrolledDaoImpl(tdBuilder);
@@ -87,38 +70,6 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
         }
 
         [TestCase]
-        public void Read_ShouldUseExpectedSql()
-        {
-            _netus2DbConnection.expectedReaderSql =
-                "SELECT * FROM course WHERE course_id = " + tdBuilder.spanishCourse.Id;
-
-            courseDaoImpl.Read(tdBuilder.spanishCourse.Id, _netus2DbConnection);
-        }
-
-        [TestCase]
-        public void Read_WithIdPopulated_ShouldUseExpectedSql()
-        {
-            _netus2DbConnection.expectedReaderSql =
-                "SELECT * FROM course WHERE 1=1 AND course_id = " + tdBuilder.spanishCourse.Id + " ";
-
-            courseDaoImpl.Read(tdBuilder.spanishCourse, _netus2DbConnection);
-        }
-
-        [TestCase]
-        public void Read_WithoutIdPopulated_ShouldUseExpectedSql()
-        {
-            tdBuilder.spanishCourse.Id = -1;
-
-            _netus2DbConnection.expectedReaderSql =
-                "SELECT * FROM course " +
-                "WHERE 1=1 " +
-                "AND name = '" + tdBuilder.spanishCourse.Name + "' " +
-                "AND course_code = '" + tdBuilder.spanishCourse.CourseCode + "' ";
-
-            courseDaoImpl.Read(tdBuilder.spanishCourse, _netus2DbConnection);
-        }
-
-        [TestCase]
         public void ReadJctCourseSubject_ShouldCallExpectedMethod()
         {
             List<DataRow> tstDataSet = new List<DataRow>();
@@ -149,45 +100,6 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
         }
 
         [TestCase]
-        public void Update_WhenRecordIsNotFound_ShouldUseExpectedSql()
-        {
-            DaoImplFactory.MockJctCourseSubjectDaoImpl = new MockJctCourseSubjectDaoImpl(tdBuilder);
-            DaoImplFactory.MockJctCourseGradeDaoImpl = new MockJctCourseGradeDaoImpl(tdBuilder);
-
-            _netus2DbConnection.expectedNewRecordSql =
-                "INSERT INTO course (" +
-                "name, " +
-                "course_code, " +
-                "created, " +
-                "created_by" +
-                ") VALUES (" +
-                "'" + tdBuilder.spanishCourse.Name + "', " +
-                "'" + tdBuilder.spanishCourse.CourseCode + "', " +
-                "dbo.CURRENT_DATETIME(), " +
-                "'Netus2')";
-
-            courseDaoImpl.Update(tdBuilder.spanishCourse, _netus2DbConnection);
-        }
-
-        [TestCase]
-        public void Update_WhenRecordIsFound_ShouldUseExpectedSql()
-        {
-            List<DataRow> tstDataSet = new List<DataRow>();
-            tstDataSet.Add(daoObjectMapper.MapCourse(tdBuilder.spanishCourse));
-            SetMockReaderWithTestData(tstDataSet);
-
-            _netus2DbConnection.expectedNonQuerySql =
-                "UPDATE course SET " +
-                "name = '" + tdBuilder.spanishCourse.Name + "', " +
-                "course_code = '" + tdBuilder.spanishCourse.CourseCode + "', " +
-                "changed = dbo.CURRENT_DATETIME(), " +
-                "changed_by = 'Netus2' " +
-                "WHERE course_id = " + tdBuilder.spanishCourse.Id;
-
-            courseDaoImpl.Update(tdBuilder.spanishCourse, _netus2DbConnection);
-        }
-
-        [TestCase]
         public void Update_WhenRecordIsFound_ShouldCallExpectedMethods()
         {
             List<DataRow> tstDataSet = new List<DataRow>();
@@ -203,24 +115,6 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
 
             Assert.IsTrue(mockJctCourseSubjectDaoImpl.WasCalled_ReadWithCourseId);
             Assert.IsTrue(mockJctCourseGradeDaoImpl.WasCalled_ReadWithCourseId);
-        }
-
-        [TestCase]
-        public void Write_ShouldUseExpectedSql()
-        {
-            _netus2DbConnection.expectedNewRecordSql =
-                "INSERT INTO course (" +
-                "name, " +
-                "course_code, " +
-                "created, " +
-                "created_by" +
-                ") VALUES (" +
-                "'" + tdBuilder.spanishCourse.Name + "', " +
-                "'" + tdBuilder.spanishCourse.CourseCode + "', " +
-                "dbo.CURRENT_DATETIME(), " +
-                "'Netus2')";
-
-            courseDaoImpl.Write(tdBuilder.spanishCourse, _netus2DbConnection);
         }
 
         [TestCase]

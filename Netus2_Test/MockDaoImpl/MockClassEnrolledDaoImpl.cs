@@ -10,7 +10,7 @@ namespace Netus2_Test.MockDaoImpl
         public TestDataBuilder tdBuilder;
         public bool WasCalled_Delete = false;
         public bool WasCalled_Read = false;
-        public bool WasCalled_ReadWithClassId = false;
+        public bool WasCalled_ReadUsingClassId = false;
         public bool WasCalled_UsingAcademicSessionId = false;
         public bool WasCalled_UsingCourseId = false;
         public bool WasCalled_Update = false;
@@ -49,9 +49,9 @@ namespace Netus2_Test.MockDaoImpl
             return list;
         }
 
-        public ClassEnrolled Read(int classId, IConnectable connection)
+        public ClassEnrolled Read_UsingClassId(int classId, IConnectable connection)
         {
-            WasCalled_ReadWithClassId = true;
+            WasCalled_ReadUsingClassId = true;
 
             if (_shouldReadReturnData)
                 return tdBuilder.classEnrolled;

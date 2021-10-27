@@ -31,27 +31,6 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
         }
 
         [TestCase]
-        public void Delete_ShouldUseExpectedSql()
-        {
-            DaoImplFactory.MockMarkDaoImpl = new MockMarkDaoImpl(tdBuilder);
-
-            _netus2DbConnection.expectedNonQuerySql =
-                "DELETE FROM lineitem " +
-                "WHERE 1=1 " +
-                "AND lineitem_id = " + tdBuilder.lineItem.Id + " " +
-                "AND name = '" + tdBuilder.lineItem.Name + "' " +
-                "AND descript = '" + tdBuilder.lineItem.Descript + "' " +
-                "AND assign_date = '" + tdBuilder.lineItem.AssignDate + "' " +
-                "AND due_date = '" + tdBuilder.lineItem.DueDate + "' " +
-                "AND class_id = " + tdBuilder.lineItem.ClassAssigned.Id + " " +
-                "AND enum_category_id = " + tdBuilder.lineItem.Category.Id + " " +
-                "AND markValueMin = " + tdBuilder.lineItem.MarkValueMin + " " +
-                "AND markValueMax = " + tdBuilder.lineItem.MarkValueMax + " ";
-
-            lineItemDaoImpl.Delete(tdBuilder.lineItem, _netus2DbConnection);
-        }
-
-        [TestCase]
         public void Delete_ShouldCallExpectedMethods()
         {
             MockMarkDaoImpl mockMarkDaoImpl = new MockMarkDaoImpl(tdBuilder);
@@ -62,55 +41,6 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
 
             Assert.IsTrue(mockMarkDaoImpl.WasCalled_ReadWithLineItemId);
             Assert.IsTrue(mockMarkDaoImpl.WasCalled_Delete);
-        }
-
-        [TestCase]
-        public void Read_WhileUsingLineItemId_ShouldUseExpectedSql()
-        {
-            _netus2DbConnection.expectedReaderSql =
-                "SELECT * FROM lineItem " +
-                "WHERE 1=1 " +
-                "AND lineItem_id = " + tdBuilder.lineItem.Id + " ";
-
-            lineItemDaoImpl.Read(tdBuilder.lineItem, _netus2DbConnection);
-        }
-
-        [TestCase]
-        public void Read_WhileNotUsingLineItemId_ShouldUseExpectedSql()
-        {
-            tdBuilder.lineItem.Id = -1;
-
-            _netus2DbConnection.expectedReaderSql =
-                "SELECT * FROM lineItem " +
-                "WHERE 1=1 " +
-                "AND name = '" + tdBuilder.lineItem.Name + "' " +
-                "AND descript = '" + tdBuilder.lineItem.Descript + "' " +
-                "AND assign_date = '" + tdBuilder.lineItem.AssignDate + "' " +
-                "AND due_date = '" + tdBuilder.lineItem.DueDate + "' " +
-                "AND class_id = " + tdBuilder.lineItem.ClassAssigned.Id + " " +
-                "AND enum_category_id = " + tdBuilder.lineItem.Category.Id + " " +
-                "AND markValueMin = " + tdBuilder.lineItem.MarkValueMin + " " +
-                "AND markValueMax = " + tdBuilder.lineItem.MarkValueMax + " ";
-
-            lineItemDaoImpl.Read(tdBuilder.lineItem, _netus2DbConnection);
-        }
-
-        [TestCase]
-        public void Read_WhileOnlyUsingLineItemId_ShouldUseExpectedSql()
-        {
-            _netus2DbConnection.expectedReaderSql =
-                "SELECT * FROM lineItem WHERE lineItem_id = " + tdBuilder.lineItem.Id;
-
-            lineItemDaoImpl.Read(tdBuilder.lineItem.Id, _netus2DbConnection);
-        }
-
-        [TestCase]
-        public void ReadWithClassEnrolledId_ShouldUseExpectedSql()
-        {
-            _netus2DbConnection.expectedReaderSql =
-                "SELECT * FROM lineitem WHERE class_id = " + tdBuilder.lineItem.ClassAssigned.Id;
-
-            lineItemDaoImpl.Read_WithClassEnrolledId(tdBuilder.lineItem.ClassAssigned.Id, _netus2DbConnection);
         }
 
         [TestCase]
@@ -125,91 +55,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
 
             lineItemDaoImpl.Read(tdBuilder.lineItem, _netus2DbConnection);
 
-            Assert.IsTrue(mockClassEnrolledDaoImpl.WasCalled_ReadWithClassId);
-        }
-
-        [TestCase]
-        public void Update_WhileRecordIsNotFound_ShouldCallExpectedSql()
-        {
-            _netus2DbConnection.expectedNewRecordSql =
-                "INSERT INTO lineItem (" +
-                "name, " +
-                "descript, " +
-                "assign_date, " +
-                "due_date, " +
-                "class_id, " +
-                "enum_category_id, " +
-                "markValueMin, " +
-                "markValueMax, " +
-                "created, " +
-                "created_by" +
-                ") VALUES (" +
-                "'" + tdBuilder.lineItem.Name + "', " +
-                "'" + tdBuilder.lineItem.Descript + "', " +
-                "'" + tdBuilder.lineItem.AssignDate + "', " +
-                "'" + tdBuilder.lineItem.DueDate + "', " +
-                tdBuilder.lineItem.ClassAssigned.Id + ", " +
-                tdBuilder.lineItem.Category.Id + ", " +
-                tdBuilder.lineItem.MarkValueMin + ", " +
-                tdBuilder.lineItem.MarkValueMax + ", " +
-                "dbo.CURRENT_DATETIME(), " +
-                "'Netus2')";
-
-            lineItemDaoImpl.Update(tdBuilder.lineItem, _netus2DbConnection);
-        }
-
-        [TestCase]
-        public void Update_WhileRecordIsFound_ShouldUseExpectedSql()
-        {
-            List<DataRow> tstDataSet = new List<DataRow>();
-            tstDataSet.Add(daoObjectMapper.MapLineItem(tdBuilder.lineItem));
-            SetMockReaderWithTestData(tstDataSet);
-
-            _netus2DbConnection.expectedNonQuerySql =
-                "UPDATE lineItem SET " +
-                "name = '" + tdBuilder.lineItem.Name + "', " +
-                "descript = '" + tdBuilder.lineItem.Descript + "', " +
-                "assign_date = '" + tdBuilder.lineItem.AssignDate + "', " +
-                "due_date = '" + tdBuilder.lineItem.DueDate + "', " +
-                "class_id = " + tdBuilder.classEnrolled.Id + ", " +
-                "enum_category_id = " + tdBuilder.lineItem.Category.Id + ", " +
-                "markValueMin = " + tdBuilder.lineItem.MarkValueMin + ", " +
-                "markValueMax = " + tdBuilder.lineItem.MarkValueMax + ", " +
-                "changed = dbo.CURRENT_DATETIME(), " +
-                "changed_by = 'Netus2' " +
-                "WHERE lineItem_id = " + tdBuilder.lineItem.Id;
-
-            lineItemDaoImpl.Update(tdBuilder.lineItem, _netus2DbConnection);
-        }
-
-        [TestCase]
-        public void Write_ShouldUseExpectedSql()
-        {
-            _netus2DbConnection.expectedNewRecordSql =
-                "INSERT INTO lineItem (" +
-                "name, " +
-                "descript, " +
-                "assign_date, " +
-                "due_date, " +
-                "class_id, " +
-                "enum_category_id, " +
-                "markValueMin, " +
-                "markValueMax, " +
-                "created, " +
-                "created_by" +
-                ") VALUES (" +
-                "'" + tdBuilder.lineItem.Name + "', " +
-                "'" + tdBuilder.lineItem.Descript + "', " +
-                "'" + tdBuilder.lineItem.AssignDate + "', " +
-                "'" + tdBuilder.lineItem.DueDate + "', " +
-                tdBuilder.lineItem.ClassAssigned.Id + ", " +
-                tdBuilder.lineItem.Category.Id + ", " +
-                tdBuilder.lineItem.MarkValueMin + ", " +
-                tdBuilder.lineItem.MarkValueMax + ", " +
-                "dbo.CURRENT_DATETIME(), " +
-                "'Netus2')";
-
-            lineItemDaoImpl.Write(tdBuilder.lineItem, _netus2DbConnection);
+            Assert.IsTrue(mockClassEnrolledDaoImpl.WasCalled_ReadUsingClassId);
         }
 
         [TestCase]
@@ -220,7 +66,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
 
             lineItemDaoImpl.Write(tdBuilder.lineItem, _netus2DbConnection);
 
-            Assert.IsTrue(mockClassEnrolledDaoImpl.WasCalled_ReadWithClassId);
+            Assert.IsTrue(mockClassEnrolledDaoImpl.WasCalled_ReadUsingClassId);
         }
 
         [TearDown]

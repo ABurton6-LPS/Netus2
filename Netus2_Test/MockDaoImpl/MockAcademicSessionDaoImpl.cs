@@ -9,19 +9,24 @@ namespace Netus2_Test.MockDaoImpl
     {
         public TestDataBuilder tdBuilder;
         public bool WasCalled_Delete = false;
-        public bool WasCalled_ReadWithoutParentId = false;
-        public bool WasCalled_ReadWithParentId = false;
-        public bool WasCalled_ReadUsingAcademicSessionId = false;
+        public bool WasCalled_ReadAllWithOrganizationId = false;
         public bool WasCalled_ReadUsingClassEnrolledId = false;
-        public bool WasCalled_ReadUsingOrganizationId = false;
-        public bool WasCalled_ReadUsingBuildingCodeTermCodeSchoolYear = false;
-        public bool WasCalled_ReadChildren = false;
+        public bool WasCalled_ReadUsingAcademicSessionId = false;
+        public bool WasCalled_ReadUsingSisBuildingCodeTermCodeSchoolyear = false;
         public bool WasCalled_ReadParent = false;
-        public bool WasCalled_UpdateWithoutParentId = false;
+        public bool WasCalled_ReadChildren = false;
+        public bool WasCalled_Read = false;
+        public bool WasCalled_ReadWithParentId = false;
+        public bool WasCalled_Update = false;
         public bool WasCalled_UpdateWithParentId = false;
-        public bool WasCalled_WriteWithoutParentId = false;
+        public bool WasCalled_Write = false;
         public bool WasCalled_WriteWithParentId = false;
         public bool _shouldReadReturnData = false;
+
+        public MockAcademicSessionDaoImpl(TestDataBuilder builder)
+        {
+            tdBuilder = builder;
+        }
 
         public void SetTaskId(int taskId)
         {
@@ -33,43 +38,39 @@ namespace Netus2_Test.MockDaoImpl
             return null;
         }
 
-        public MockAcademicSessionDaoImpl (TestDataBuilder tdBuilder)
-        {
-            this.tdBuilder = tdBuilder;
-        }
-
         public void Delete(AcademicSession academicSession, IConnectable connection)
         {
             WasCalled_Delete = true;
         }
 
-        public List<AcademicSession> Read(AcademicSession academicSession, IConnectable connection)
+        public List<AcademicSession> Read_AllWithOrganizationId(int organizationId, IConnectable connection)
         {
-            WasCalled_ReadWithoutParentId = true;
+            WasCalled_ReadAllWithOrganizationId = true;
 
-            List<AcademicSession> academicSessions = new List<AcademicSession>();
+            List<AcademicSession> results = new List<AcademicSession>();
 
             if (_shouldReadReturnData)
-                if (academicSession.Name == tdBuilder.semester1.Name)
-                    academicSessions.Add(tdBuilder.semester1);
-                else if (academicSession.Name == tdBuilder.semester2.Name)
-                    academicSessions.Add(tdBuilder.semester2);
-                else
-                    academicSessions.Add(tdBuilder.schoolYear);
+            {
+                if (tdBuilder.schoolYear.Organization.Id == organizationId)
+                    results.Add(tdBuilder.schoolYear);
+                if (tdBuilder.semester1.Organization.Id == organizationId)
+                    results.Add(tdBuilder.semester1);
+                if (tdBuilder.semester2.Organization.Id == organizationId)
+                    results.Add(tdBuilder.semester2);
+            }
 
-            return academicSessions;
+            return results;
         }
 
-        public List<AcademicSession> Read(AcademicSession academicSession, int parentId, IConnectable connection)
+        public AcademicSession Read_UsingClassEnrolledId(int classEnrolledId, IConnectable connection)
         {
-            WasCalled_ReadWithParentId = true;
+            WasCalled_ReadUsingClassEnrolledId = true;
 
-            List<AcademicSession> academicSessions = new List<AcademicSession>();
+            if (_shouldReadReturnData)
+                if (tdBuilder.classEnrolled.Id == classEnrolledId)
+                    return tdBuilder.classEnrolled.AcademicSession;
 
-            if(_shouldReadReturnData)
-                academicSessions.Add(tdBuilder.schoolYear);
-
-            return academicSessions;
+            return null;
         }
 
         public AcademicSession Read_UsingAcademicSessionId(int academicSessionId, IConnectable connection)
@@ -78,70 +79,42 @@ namespace Netus2_Test.MockDaoImpl
 
             if (_shouldReadReturnData)
             {
-                switch (academicSessionId)
-                {
-                    case 1:
-                        return tdBuilder.schoolYear;
-                    case 2:
-                        return tdBuilder.semester1;
-                    case 3:
-                        return tdBuilder.semester2;
-                    default:
-                        return tdBuilder.schoolYear;
-                }
-            }
-            else
-                return null;
-        }
-
-        public AcademicSession Read_UsingClassEnrolledId(int classEnrolledId, IConnectable connection)
-        {
-            WasCalled_ReadUsingClassEnrolledId = true;
-
-            if (_shouldReadReturnData)
-                if (classEnrolledId == 1)
-                    return tdBuilder.semester1;
-                else
-                    return null;
-            else
-                return null;
-        }
-
-        public List<AcademicSession> Read_UsingOrganizationId(int organizationId, IConnectable connection)
-        {
-            WasCalled_ReadUsingOrganizationId = true;
-
-            List<AcademicSession> academicSessions = new List<AcademicSession>();
-
-            if(_shouldReadReturnData)
-                academicSessions.Add(tdBuilder.schoolYear);
-
-            return academicSessions;
-        }
-
-        public AcademicSession Read_UsingSisBuildingCode_TermCode_Schoolyear(string schoolCode, string termCode, int schoolYear, IConnectable connection)
-        {
-            WasCalled_ReadUsingBuildingCodeTermCodeSchoolYear = true;
-
-            if (_shouldReadReturnData)
-                if (termCode == tdBuilder.semester1.TermCode)
-                    return tdBuilder.semester1;
-                else if (termCode == tdBuilder.semester2.TermCode)
-                    return tdBuilder.semester2;
-                else
+                if (tdBuilder.schoolYear.Id == academicSessionId)
                     return tdBuilder.schoolYear;
-            else
-                return null;
+                if (tdBuilder.semester1.Id == academicSessionId)
+                    return tdBuilder.semester1;
+                if (tdBuilder.semester2.Id == academicSessionId)
+                    return tdBuilder.semester2;
+            }
+
+            return null;
         }
 
-        public List<AcademicSession> Read_Children(AcademicSession parent, IConnectable connection)
+        public AcademicSession Read_UsingSisBuildingCode_TermCode_Schoolyear(string sisBuildingCode, string termCode, int schoolYear, IConnectable connection)
         {
-            WasCalled_ReadChildren = true;
+            WasCalled_ReadUsingSisBuildingCodeTermCodeSchoolyear = true;
 
-            if (_shouldReadReturnData && parent.Children.Count > 0)
-                return parent.Children;
-            else
-                return new List<AcademicSession>();
+            if (_shouldReadReturnData)
+            {
+                AcademicSession schoolYearSession = tdBuilder.schoolYear;
+                AcademicSession semester1 = tdBuilder.semester1;
+                AcademicSession semester2 = tdBuilder.semester2;
+
+                if (schoolYearSession.Organization.SisBuildingCode == sisBuildingCode &&
+                    schoolYearSession.TermCode == termCode &&
+                    schoolYearSession.SchoolYear == schoolYear)
+                    return schoolYearSession;
+                if (semester1.Organization.SisBuildingCode == sisBuildingCode &&
+                    semester1.TermCode == termCode &&
+                    semester1.SchoolYear == schoolYear)
+                    return semester1;
+                if (semester2.Organization.SisBuildingCode == sisBuildingCode &&
+                    semester2.TermCode == termCode &&
+                    semester2.SchoolYear == schoolYear)
+                    return semester2;
+            }
+
+            return null;
         }
 
         public AcademicSession Read_Parent(AcademicSession child, IConnectable connection)
@@ -149,14 +122,96 @@ namespace Netus2_Test.MockDaoImpl
             WasCalled_ReadParent = true;
 
             if (_shouldReadReturnData)
-                return tdBuilder.schoolYear;
-            else
-                return null;
+            {
+                foreach(AcademicSession builderChild in tdBuilder.schoolYear.Children)
+                {
+                    if (builderChild.TermCode == child.TermCode &&
+                        builderChild.SchoolYear == child.SchoolYear)
+                        return tdBuilder.schoolYear;
+                }
+
+                foreach (AcademicSession builderChild in tdBuilder.semester1.Children)
+                {
+                    if (builderChild.TermCode == child.TermCode &&
+                        builderChild.SchoolYear == child.SchoolYear)
+                        return tdBuilder.semester1;
+                }
+
+                foreach (AcademicSession builderChild in tdBuilder.semester2.Children)
+                {
+                    if (builderChild.TermCode == child.TermCode &&
+                        builderChild.SchoolYear == child.SchoolYear)
+                        return tdBuilder.semester2;
+                }
+            }
+
+            return null;
+        }
+
+        public List<AcademicSession> Read_Children(AcademicSession parent, IConnectable connection)
+        {
+            WasCalled_ReadChildren = true;
+
+            if (_shouldReadReturnData)
+            {
+                if (tdBuilder.schoolYear.Id == parent.Id)
+                    return tdBuilder.schoolYear.Children;
+                if (tdBuilder.semester1.Id == parent.Id)
+                    return tdBuilder.semester1.Children;
+                if (tdBuilder.semester2.Id == parent.Id)
+                    return tdBuilder.semester2.Children;
+            }
+
+            return new List<AcademicSession>();
+        }
+
+        public List<AcademicSession> Read(AcademicSession academicSession, IConnectable connection)
+        {
+            WasCalled_Read = true;
+
+            List<AcademicSession> results = new List<AcademicSession>();
+
+            if (_shouldReadReturnData)
+            {
+                if (tdBuilder.schoolYear.Organization.Id == academicSession.Organization.Id &&
+                    tdBuilder.schoolYear.SchoolYear == academicSession.SchoolYear &&
+                    tdBuilder.schoolYear.TermCode == academicSession.TermCode)
+                    results.Add(tdBuilder.schoolYear);
+                if (tdBuilder.semester1.Organization.Id == academicSession.Organization.Id &&
+                    tdBuilder.semester1.SchoolYear == academicSession.SchoolYear &&
+                    tdBuilder.semester1.TermCode == academicSession.TermCode)
+                    results.Add(tdBuilder.semester1);
+                if (tdBuilder.semester2.Organization.Id == academicSession.Organization.Id &&
+                    tdBuilder.semester2.SchoolYear == academicSession.SchoolYear &&
+                    tdBuilder.semester2.TermCode == academicSession.TermCode)
+                    results.Add(tdBuilder.semester2);
+            }
+
+            return results;
+        }
+
+        public List<AcademicSession> Read(AcademicSession academicSession, int parentId, IConnectable connection)
+        {
+            WasCalled_ReadWithParentId = true;
+
+            List<AcademicSession> results = new List<AcademicSession>();
+
+            if (_shouldReadReturnData)
+            {
+                if (tdBuilder.schoolYear.Name == academicSession.Name)
+                    results.Add(tdBuilder.schoolYear);
+                if (tdBuilder.semester1.Name == academicSession.Name)
+                    results.Add(tdBuilder.semester1);
+                if (tdBuilder.semester2.Name == academicSession.Name)
+                    results.Add(tdBuilder.semester2);
+            }
+
+            return results;
         }
 
         public void Update(AcademicSession academicSession, IConnectable connection)
         {
-            WasCalled_UpdateWithoutParentId = true;
+            WasCalled_Update = true;
         }
 
         public void Update(AcademicSession academicSession, int parentId, IConnectable connection)
@@ -166,10 +221,9 @@ namespace Netus2_Test.MockDaoImpl
 
         public AcademicSession Write(AcademicSession academicSession, IConnectable connection)
         {
-            WasCalled_WriteWithoutParentId = true;
+            WasCalled_Write = true;
 
-            if (academicSession.Id == -1)
-                academicSession.Id = 1;
+            academicSession.Id = 100;
 
             return academicSession;
         }
@@ -178,8 +232,7 @@ namespace Netus2_Test.MockDaoImpl
         {
             WasCalled_WriteWithParentId = true;
 
-            if (academicSession.Id == -1)
-                academicSession.Id = 1;
+            academicSession.Id = 100;
 
             return academicSession;
         }

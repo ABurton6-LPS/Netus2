@@ -9,7 +9,7 @@ namespace Netus2_DatabaseConnection.dataObjects
 
         public Enumeration SessionType;
 
-        public EmploymentSession(string name, Enumeration isPrimary, Organization organization) : base(name, organization)
+        public EmploymentSession(Enumeration isPrimary, Organization organization) : base(organization)
         {
             IsPrimary = isPrimary;
             SessionType = Enum_Session.values["employment"];

@@ -146,8 +146,8 @@ namespace Netus2_Test.Unit.SyncProcess
                 new SyncJob_AcademicSession())
                 .Execute(row, new CountDownLatch(0));
 
-            Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_ReadWithoutParentId);
-            Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_WriteWithoutParentId);
+            Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_ReadUsingSisBuildingCodeTermCodeSchoolyear);
+            Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_Write);
         }
 
         [TestCase]
@@ -174,19 +174,19 @@ namespace Netus2_Test.Unit.SyncProcess
                 new SyncJob_AcademicSession())
                 .Execute(row, new CountDownLatch(0));
 
-            Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_ReadWithoutParentId);
-            Assert.IsFalse(mockAcademicSessionDaoImpl.WasCalled_WriteWithoutParentId);
-            Assert.IsFalse(mockAcademicSessionDaoImpl.WasCalled_UpdateWithoutParentId);
+            Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_ReadUsingSisBuildingCodeTermCodeSchoolyear);
+            Assert.IsFalse(mockAcademicSessionDaoImpl.WasCalled_Write);
+            Assert.IsFalse(mockAcademicSessionDaoImpl.WasCalled_UpdateWithParentId);
         }
 
         [TestCase]
-        public void SyncChild_AcademicSession_ShouldUpdateRecord_DifferentTermCode()
+        public void SyncChild_AcademicSession_ShouldWriteNewRecord_DifferentTermCode()
         {
             mockAcademicSessionDaoImpl._shouldReadReturnData = true;
             mockOrganizationDaoImpl._shouldReadReturnData = true;
 
             SisAcademicSessionTestData tstData = new SisAcademicSessionTestData();
-            tstData.BuildingCode = tdBuilder.district.SisBuildingCode;
+            tstData.BuildingCode = tdBuilder.school.SisBuildingCode;
             tstData.TermCode = "NewTermCode";
             tstData.SchoolYear = tdBuilder.schoolYear.SchoolYear;
             tstData.Name = tdBuilder.schoolYear.Name;
@@ -203,12 +203,12 @@ namespace Netus2_Test.Unit.SyncProcess
                 new SyncJob_AcademicSession())
                 .Execute(row, new CountDownLatch(0));
 
-            Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_ReadWithoutParentId);
-            Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_UpdateWithoutParentId);
+            Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_ReadUsingSisBuildingCodeTermCodeSchoolyear);
+            Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_Write);
         }
 
         [TestCase]
-        public void SyncChild_AcademicSession_ShouldUpdateRecord_DifferentSchoolYear()
+        public void SyncChild_AcademicSession_ShouldWriteNewRecord_DifferentSchoolYear()
         {
             mockAcademicSessionDaoImpl._shouldReadReturnData = true;
             mockOrganizationDaoImpl._shouldReadReturnData = true;
@@ -231,8 +231,8 @@ namespace Netus2_Test.Unit.SyncProcess
                 new SyncJob_AcademicSession())
                 .Execute(row, new CountDownLatch(0));
 
-            Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_ReadWithoutParentId);
-            Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_UpdateWithoutParentId);
+            Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_ReadUsingSisBuildingCodeTermCodeSchoolyear);
+            Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_Write);
         }
 
         [TestCase]
@@ -242,7 +242,7 @@ namespace Netus2_Test.Unit.SyncProcess
             mockOrganizationDaoImpl._shouldReadReturnData = true;
 
             SisAcademicSessionTestData tstData = new SisAcademicSessionTestData();
-            tstData.BuildingCode = tdBuilder.district.SisBuildingCode;
+            tstData.BuildingCode = tdBuilder.school.SisBuildingCode;
             tstData.TermCode = tdBuilder.schoolYear.TermCode;
             tstData.SchoolYear = tdBuilder.schoolYear.SchoolYear;
             tstData.Name = "NewTestName";
@@ -259,12 +259,12 @@ namespace Netus2_Test.Unit.SyncProcess
                 new SyncJob_AcademicSession())
                 .Execute(row, new CountDownLatch(0));
 
-            Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_ReadWithoutParentId);
-            Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_UpdateWithoutParentId);
+            Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_ReadUsingSisBuildingCodeTermCodeSchoolyear);
+            Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_Update);
         }
 
         [TestCase]
-        public void SyncChild_AcademicSession_ShouldUpdateRecord_DifferentSessionType()
+        public void SyncChild_AcademicSession_ShouldWriteNewRecord_DifferentSessionType()
         {
             mockAcademicSessionDaoImpl._shouldReadReturnData = true;
             mockOrganizationDaoImpl._shouldReadReturnData = true;
@@ -287,8 +287,8 @@ namespace Netus2_Test.Unit.SyncProcess
                 new SyncJob_AcademicSession())
                 .Execute(row, new CountDownLatch(0));
 
-            Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_ReadWithoutParentId);
-            Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_UpdateWithoutParentId);
+            Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_ReadUsingSisBuildingCodeTermCodeSchoolyear);
+            Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_Write);
         }
 
         [TestCase]
@@ -298,7 +298,7 @@ namespace Netus2_Test.Unit.SyncProcess
             mockOrganizationDaoImpl._shouldReadReturnData = true;
 
             SisAcademicSessionTestData tstData = new SisAcademicSessionTestData();
-            tstData.BuildingCode = tdBuilder.district.SisBuildingCode;
+            tstData.BuildingCode = tdBuilder.school.SisBuildingCode;
             tstData.TermCode = tdBuilder.schoolYear.TermCode;
             tstData.SchoolYear = tdBuilder.schoolYear.SchoolYear;
             tstData.Name = tdBuilder.schoolYear.Name;
@@ -315,8 +315,8 @@ namespace Netus2_Test.Unit.SyncProcess
                 new SyncJob_AcademicSession())
                 .Execute(row, new CountDownLatch(0));
 
-            Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_ReadWithoutParentId);
-            Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_UpdateWithoutParentId);
+            Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_ReadUsingSisBuildingCodeTermCodeSchoolyear);
+            Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_Update);
         }
 
         [TestCase]
@@ -326,7 +326,7 @@ namespace Netus2_Test.Unit.SyncProcess
             mockOrganizationDaoImpl._shouldReadReturnData = true;
 
             SisAcademicSessionTestData tstData = new SisAcademicSessionTestData();
-            tstData.BuildingCode = tdBuilder.district.SisBuildingCode;
+            tstData.BuildingCode = tdBuilder.school.SisBuildingCode;
             tstData.TermCode = tdBuilder.schoolYear.TermCode;
             tstData.SchoolYear = tdBuilder.schoolYear.SchoolYear;
             tstData.Name = tdBuilder.schoolYear.Name;
@@ -343,12 +343,12 @@ namespace Netus2_Test.Unit.SyncProcess
                 new SyncJob_AcademicSession())
                 .Execute(row, new CountDownLatch(0));
 
-            Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_ReadWithoutParentId);
-            Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_UpdateWithoutParentId);
+            Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_ReadUsingSisBuildingCodeTermCodeSchoolyear);
+            Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_Update);
         }
 
         [TestCase]
-        public void SyncChild_AcademicSession_ShouldUpdateRecord_DifferentOrganization()
+        public void SyncChild_AcademicSession_ShouldWriteNewRecord_DifferentOrganization()
         {
             mockAcademicSessionDaoImpl._shouldReadReturnData = true;
             mockOrganizationDaoImpl._shouldReadReturnData = true;
@@ -371,8 +371,8 @@ namespace Netus2_Test.Unit.SyncProcess
                 new SyncJob_AcademicSession())
                 .Execute(row, new CountDownLatch(0));
 
-            Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_ReadWithoutParentId);
-            Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_UpdateWithoutParentId);
+            Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_ReadUsingSisBuildingCodeTermCodeSchoolyear);
+            Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_Write);
         }
 
         [TestCase]
@@ -404,8 +404,7 @@ namespace Netus2_Test.Unit.SyncProcess
 
             syncTask_AcademicSessionParentRecords.Execute(row, new CountDownLatch(0));
 
-            Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_ReadWithoutParentId);
-            Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_ReadUsingBuildingCodeTermCodeSchoolYear);
+            Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_ReadUsingSisBuildingCodeTermCodeSchoolyear);
             Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_UpdateWithParentId);
         }
 
@@ -438,9 +437,9 @@ namespace Netus2_Test.Unit.SyncProcess
 
             syncTask_AcademicSessionParentRecords.Execute(row, new CountDownLatch(0));
 
-            Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_ReadWithoutParentId);
+            Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_ReadUsingSisBuildingCodeTermCodeSchoolyear);
             Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_ReadParent);
-            Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_UpdateWithoutParentId);
+            Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_Update);
         }
 
         private DataTable BuildTestDataTable(List<SisAcademicSessionTestData> tstDataSet)
