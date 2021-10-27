@@ -30,7 +30,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
             if(provider.Id <= 0)
                 throw new Exception("Cannot delete a provider which doesn't have a database-assigned ID.\n" + provider.ToString());
 
-            provider = UnlinkChildren(provider, connection);
+            UnlinkChildren(provider, connection);
             DeleteApplications(provider, connection);
 
             string sql = "DELETE FROM provider WHERE " +
@@ -53,7 +53,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
             }
         }
 
-        private Provider UnlinkChildren(Provider provider, IConnectable connection)
+        private void UnlinkChildren(Provider provider, IConnectable connection)
         {
             List<Provider> childrenToRemove = new List<Provider>();
             foreach (Provider child in provider.Children)
@@ -61,12 +61,6 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 Update(child, connection);
                 childrenToRemove.Add(child);
             }
-            foreach (Provider child in childrenToRemove)
-            {
-                provider.Children.Remove(child);
-            }
-
-            return provider;
         }
 
         public Provider Read_UsingProviderId(int providerId, IConnectable connection)
@@ -80,11 +74,13 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
             if (results.Count == 0)
                 return null;
-            else
+            else if (results.Count == 1)
                 return results[0];
+            else
+                throw new Exception(results.Count + " found matching providerId: " + providerId);
         }
 
-        public Provider Read_AllWithAppId(int appId, IConnectable connection)
+        public Provider Read_UsingAppId(int appId, IConnectable connection)
         {
             string sql = "SELECT * FROM provider WHERE provider_id IN (" +
             "SELECT provider_id FROM app WHERE app_id = @app_id)";
@@ -96,8 +92,10 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
             if (results.Count == 0)
                 return null;
-            else
+            else if (results.Count == 1)
                 return results[0];
+            else
+                throw new Exception(results.Count + " found matching appId: " + appId);
         }
 
         public List<Provider> Read_AllChildrenWithParentId(int parentId, IConnectable connection)
@@ -183,15 +181,15 @@ namespace Netus2_DatabaseConnection.daoImplementations
             Update(provider, -1, connection);
         }
 
-        private void Update(Provider provider, int parentProviderId, IConnectable connection)
+        public void Update(Provider provider, int parentId, IConnectable connection)
         {
             List<Provider> foundProviders = Read(provider, connection);
             if (foundProviders.Count == 0)
-                Write(provider, parentProviderId, connection);
+                Write(provider, parentId, connection);
             else if (foundProviders.Count == 1)
             {
                 provider.Id = foundProviders[0].Id;
-                UpdateInternals(provider, parentProviderId, connection);
+                UpdateInternals(provider, parentId, connection);
             }
             else if (foundProviders.Count > 1)
                 throw new Exception(foundProviders.Count + " Providers found matching the description of:\n" +
@@ -253,8 +251,6 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 parameters.Add(new SqlParameter("@provider_id", row["provider_id"]));
 
                 connection.ExecuteNonQuery(sql.ToString(), parameters);
-
-                UpdateChildren(provider.Children, provider.Id, connection);
             }
             else
                 throw new Exception("The following Provider needs to be inserted into the database, before it can be updated.\n" + provider.ToString());
@@ -325,29 +321,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
             Provider result = daoObjectMapper.MapProvider(row);
 
-            result.Children = UpdateChildren(provider.Children, result.Id, connection);
-
             return result;
-        }
-
-        private List<Provider> UpdateChildren(List<Provider> children, int parentId, IConnectable connection)
-        {
-            List<Provider> updatedChildren = new List<Provider>();
-            List<Provider> foundChildren = Read_AllChildrenWithParentId(parentId, connection);
-
-            foreach (Provider child in children)
-            {
-                Update(child, parentId, connection);
-                updatedChildren.AddRange(Read(child, parentId, connection));
-            }
-
-            foreach (Provider foundChild in foundChildren)
-            {
-                if (children.Find(x => (x.Id == foundChild.Id)) == null)
-                    Update(foundChild, connection);
-            }
-
-            return updatedChildren;
         }
     }
 }

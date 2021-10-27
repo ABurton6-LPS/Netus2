@@ -136,7 +136,7 @@ namespace Netus2_Test
                 teacher.PhoneNumbers.Add(phoneNumber_Teacher);
             }
 
-            address_Teacher = new Address("teacher addr", "somewhere", Enum_State_Province.values["mi"], Enum_Country.values["us"], Enum_True_False.values["true"], Enum_Address.values["home"]);
+            address_Teacher = new Address("teacher addr", "somewhere", Enum_State_Province.values["mi"], Enum_Country.values["us"]);
             if (connection != null)
                 address_Teacher = addressDaoImpl.Write(address_Teacher, connection);
             else
@@ -223,7 +223,7 @@ namespace Netus2_Test
             else
                 teacher.Relations.Add(student.Id);
 
-            address_Student = new Address("student addr", "somewhere", Enum_State_Province.values["mi"], Enum_Country.values["us"], Enum_True_False.values["true"], Enum_Address.values["home"]);
+            address_Student = new Address("student addr", "somewhere", Enum_State_Province.values["mi"], Enum_Country.values["us"]);
             if (connection != null)
                 address_Student = addressDaoImpl.Write(address_Student, connection);
             else

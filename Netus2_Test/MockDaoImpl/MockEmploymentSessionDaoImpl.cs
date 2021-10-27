@@ -13,7 +13,7 @@ namespace Netus2_Test.MockDaoImpl
         public bool WasCalled_ReadAllWithPersonId = false;
         public bool WasCalled_Update = false;
         public bool WasCalled_Write = false;
-        public bool WasCalled_ReadUsingPersonId = false;
+        public bool WasCalled_Read = false;
         public bool WasCalled_ReadUsingOrganizationId = false;
         public bool _shouldReadReturnData = false;
 
@@ -61,9 +61,9 @@ namespace Netus2_Test.MockDaoImpl
             return returnData;
         }
 
-        public List<EmploymentSession> Read_UsingPersonId(EmploymentSession employmentSession, int personId, IConnectable connection)
+        public List<EmploymentSession> Read(EmploymentSession employmentSession, int personId, IConnectable connection)
         {
-            WasCalled_ReadUsingPersonId = true;
+            WasCalled_Read = true;
 
             List<EmploymentSession> returnData = new List<EmploymentSession>();
 

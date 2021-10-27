@@ -47,7 +47,7 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AddressTasks
                 if (person == null)
                     throw new Exception("Person with unique id of: " + sisSuniq + " does not exist within the Netus2 Database.");
 
-                Address address = new Address(sisAddressLine1, sisCity, sisStateProvince, sisCountry, sisIsCurrent, sisAddressType);
+                Address address = new Address(sisAddressLine1, sisCity, sisStateProvince, sisCountry);
                 address.Line2 = sisAddressLine2;
                 address.Line3 = sisAddressLine3;
                 address.Line4 = sisAddressLine4;
@@ -58,29 +58,33 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AddressTasks
                 addressDaoImpl.SetTaskId(this.Id);
                 List<Address> foundAddresses = addressDaoImpl.Read(address, _netus2Connection);
 
+                address.IsCurrent = sisIsCurrent;
+                address.AddressType = sisAddressType;
+
                 IJctPersonAddressDao jctPersonAddressDaoImpl = new JctPersonAddressDaoImpl();
 
                 if (foundAddresses.Count == 0)
                 {
                     address = addressDaoImpl.Write(address, _netus2Connection);
-                    person.Addresses.Add(address);
-                    personDaoImpl.Update(person, _netus2Connection);
-
+                    jctPersonAddressDaoImpl.Write(person.Id, address.Id, _netus2Connection);
                     jctPersonAddressDaoImpl.Write_ToTempTable(person.Id, address.Id, _netus2Connection);
                 }
                 else if(foundAddresses.Count == 1)
                 {
                     address.Id = foundAddresses[0].Id;
 
-                    if (person.Addresses.Contains(address) == false)
-                    {
-                        person.Addresses.Add(address);
-                        personDaoImpl.Update(person, _netus2Connection);
+                    bool personHasAddress = false;
+                    foreach(Address addressLinkedToPerson in person.Addresses)
+                        if (addressLinkedToPerson.Id == address.Id)
+                            personHasAddress = true;
 
+                    if (personHasAddress == false)
+                    {
+                        jctPersonAddressDaoImpl.Write(person.Id, address.Id, _netus2Connection);
                         jctPersonAddressDaoImpl.Write_ToTempTable(person.Id, address.Id, _netus2Connection);
                     }
 
-                    if ((address.Line1 != foundAddresses[0].Line1) || 
+                    if ((address.Line1 != foundAddresses[0].Line1) ||
                         (address.Line2 != foundAddresses[0].Line2) ||
                         (address.Line3 != foundAddresses[0].Line3) ||
                         (address.Line4 != foundAddresses[0].Line4) ||
@@ -96,9 +100,7 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AddressTasks
                     }
                 }
                 else
-                {
                     throw new Exception(foundAddresses.Count + " record(s) found matching Address:\n" + address.ToString());
-                }
 
                 SyncLogger.LogStatus(this, Enum_Sync_Status.values["end"]);
             }

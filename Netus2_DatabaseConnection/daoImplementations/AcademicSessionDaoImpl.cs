@@ -99,8 +99,10 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
             if (results.Count == 0)
                 return null;
-            else
+            else if (results.Count == 1)
                 return results[0];
+            else
+                throw new Exception(results.Count + " found matching classEnrolledId: " + classEnrolledId);
         }
 
         public AcademicSession Read_UsingAcademicSessionId(int academicSessionId, IConnectable connection)
@@ -110,12 +112,14 @@ namespace Netus2_DatabaseConnection.daoImplementations
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("@academic_session_id", academicSessionId));
 
-            List<AcademicSession> resutls = Read(sql, connection, parameters);
+            List<AcademicSession> results = Read(sql, connection, parameters);
 
-            if (resutls.Count == 0)
+            if (results.Count == 0)
                 return null;
+            else if (results.Count == 1)
+                return results[0];
             else
-                return resutls[0];
+                throw new Exception(results.Count + " found matching academicSessionId: " + academicSessionId);
         }
 
         public AcademicSession Read_UsingSisBuildingCode_TermCode_Schoolyear(string sisBuildingCode, string termCode, int schoolYear, IConnectable connection)
@@ -135,8 +139,10 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
             if (results.Count == 0)
                 return null;
-            else
+            else if (results.Count == 1)
                 return results[0];
+            else
+                throw new Exception(results.Count + " found matching sisBuildingCode: " + sisBuildingCode + " and termCode: " + termCode + " and schoolYear: " + schoolYear);
         }
 
         public AcademicSession Read_Parent(AcademicSession child, IConnectable connection)
@@ -154,8 +160,10 @@ namespace Netus2_DatabaseConnection.daoImplementations
             List<AcademicSession> results = Read(sql, connection, parameters);
             if (results.Count == 0)
                 return null;
-            else
+            else if (results.Count == 1)
                 return results[0];
+            else
+                throw new Exception(results.Count + " parent records found matching child: " + child.ToString());
         }
 
         public List<AcademicSession> Read_Children(AcademicSession parent, IConnectable connection)
@@ -361,9 +369,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 connection.ExecuteNonQuery(sql.ToString(), parameters);
             }
             else
-            {
                 throw new Exception("The following Academic Session needs to be inserted into the database, before it can be updated.\n" + academicSession.ToString());
-            }
         }
 
         public AcademicSession Write(AcademicSession academicSession, IConnectable connection)

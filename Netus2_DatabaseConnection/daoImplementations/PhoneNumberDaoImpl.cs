@@ -179,9 +179,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 connection.ExecuteNonQuery(sql.ToString(), parameters);
             }
             else
-            {
                 throw new Exception("The following Phone Number needs to be inserted into the database, before it can be updated.\n" + phoneNumber.ToString());
-            }
         }
 
         public PhoneNumber Write(PhoneNumber phoneNumber, IConnectable connection)

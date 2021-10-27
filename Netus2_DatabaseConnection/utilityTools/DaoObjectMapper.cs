@@ -356,14 +356,6 @@ namespace Netus2_DatabaseConnection.utilityTools
             if(row["enum_country_id"] != DBNull.Value)
                 country = Enum_Country.GetEnumFromId((int)row["enum_country_id"]);
 
-            Enumeration isCurrent = null;
-            if (row["is_current_id"] != DBNull.Value)
-                isCurrent = Enum_True_False.GetEnumFromId((int)row["is_current_id"]);
-
-            Enumeration addressType = null;
-            if (row["enum_address_id"] != DBNull.Value)
-                addressType = Enum_Address.GetEnumFromId((int)row["enum_address_id"]);
-
             string line1 = null;
             if (row["address_line_1"] != DBNull.Value)
                 line1 = (string)row["address_line_1"];
@@ -372,7 +364,17 @@ namespace Netus2_DatabaseConnection.utilityTools
             if (row["city"] != DBNull.Value)
                 city = (string)row["city"];
 
-            Address address = new Address(line1, city, stateProvince, country, isCurrent, addressType);
+            Address address = new Address(line1, city, stateProvince, country);
+
+            if (row["is_current_id"] != DBNull.Value)
+                address.IsCurrent = Enum_True_False.GetEnumFromId((int)row["is_current_id"]);
+            else
+                address.IsCurrent = null;
+
+            if (row["enum_address_id"] != DBNull.Value)
+                address.AddressType = Enum_Address.GetEnumFromId((int)row["enum_address_id"]);
+            else
+                address.AddressType = null;
 
             if (row["address_id"] != DBNull.Value)
                 address.Id = (int)row["address_id"];

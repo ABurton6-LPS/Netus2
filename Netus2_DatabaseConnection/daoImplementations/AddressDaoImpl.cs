@@ -64,8 +64,10 @@ namespace Netus2_DatabaseConnection.daoImplementations
             List<Address> results = Read(sql, connection, parameters);
             if (results.Count == 0)
                 return null;
-            else
+            else if (results.Count == 1)
                 return results[0];
+            else
+                throw new Exception(results.Count + " found matching addressId: " + addressId);
         }
 
         public List<Address> Read(Address address, IConnectable connection)

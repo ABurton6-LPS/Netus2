@@ -18,15 +18,13 @@ namespace Netus2_DatabaseConnection.dataObjects
         public Enumeration IsCurrent { get; set; }
         public Enumeration AddressType { get; set; }
 
-        public Address(string line1, string city, Enumeration stateProvince, Enumeration country, Enumeration isCurrent, Enumeration addressType)
+        public Address(string line1, string city, Enumeration stateProvince, Enumeration country)
         {
             Id = -1;
             Line1 = line1;
             City = city;
             StateProvince = stateProvince;
             Country = country;
-            IsCurrent = isCurrent;
-            AddressType = addressType;
         }
 
         public override string ToString()

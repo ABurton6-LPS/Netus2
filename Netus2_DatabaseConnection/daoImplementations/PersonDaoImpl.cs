@@ -162,8 +162,10 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
             if (results.Count == 0)
                 return null;
-            else
+            else if (results.Count == 1)
                 return results[0];
+            else
+                throw new Exception(results.Count + " found matching personId: " + personId);
         }
 
         public Person Read_UsingUniqueIdentifier(string identifier, IConnectable connection)
@@ -178,8 +180,10 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
             if (results.Count == 0)
                 return null;
-            else
+            else if (results.Count == 1)
                 return results[0];
+            else
+                throw new Exception(results.Count + " found matching identifier: " + identifier);
         }
 
         public List<Person> Read(Person person, IConnectable connection)
