@@ -6,14 +6,46 @@ namespace Netus2_DatabaseConnection.daoInterfaces
 {
     public interface IJctCourseGradeDao
     {
+        /// <summary>
+        /// Deletes the link between the two values passed in.
+        /// </summary>
+        /// <param name="courseId"></param>
+        /// <param name="gradeId"></param>
+        /// <param name="connection"></param>
         public void Delete(int courseId, int gradeId, IConnectable connection);
 
+        /// <summary>
+        /// Queries the database for the link between the two values passed in.
+        /// </summary>
+        /// <param name="courseId"></param>
+        /// <param name="gradeId"></param>
+        /// <param name="connection"></param>
+        /// <returns>Null, if no record is found.</returns>
         public DataRow Read(int courseId, int gradeId, IConnectable connection);
 
+        /// <summary>
+        /// Queries the database for the records associated with the passed-in data.
+        /// </summary>
+        /// <param name="courseId"></param>
+        /// <param name="connection"></param>
+        /// <returns>Empty list, if no records are found.</returns>
         public List<DataRow> Read_AllWithCourseId(int courseId, IConnectable connection);
 
+        /// <summary>
+        /// Queries the database for the records associated with the passed-in data.
+        /// </summary>
+        /// <param name="gradeId"></param>
+        /// <param name="connection"></param>
+        /// <returns>Empty list, if no records are found.</returns>
         public List<DataRow> Read_AllWithGradeId(int gradeId, IConnectable connection);
 
+        /// <summary>
+        /// Writes a link between the provided data points to the database.
+        /// </summary>
+        /// <param name="courseId"></param>
+        /// <param name="gradeId"></param>
+        /// <param name="connection"></param>
+        /// <returns>A copy of the record that was written.</returns>
         public DataRow Write(int courseId, int gradeId, IConnectable connection);
     }
 }

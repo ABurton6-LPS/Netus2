@@ -44,8 +44,10 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
             if (results.Count == 0)
                 return null;
-            else
+            else if (results.Count == 1)
                 return results[0];
+            else
+                throw new Exception(results.Count + " found matching courseId: " + courseId + " and subjectId: " + subjectId);
         }
 
         public List<DataRow> Read_AllWithCourseId(int courseId, IConnectable connection)

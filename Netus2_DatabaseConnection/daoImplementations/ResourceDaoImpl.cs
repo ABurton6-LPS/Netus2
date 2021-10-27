@@ -67,8 +67,10 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
             if (results.Count == 0)
                 return null;
-            else
+            else if (results.Count == 1)
                 return results[0];
+            else
+                throw new Exception(results.Count + " found matching resourceId: " + resourceId);
         }
 
         public List<Resource> Read(Resource resource, IConnectable connection)

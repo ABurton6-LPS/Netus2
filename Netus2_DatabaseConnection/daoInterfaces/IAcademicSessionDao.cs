@@ -26,7 +26,7 @@ namespace Netus2_DatabaseConnection.daoInterfaces
         /// <para>
         /// Deletes the provided record from the database.
         /// </para>
-        /// Unlinks any child records and enrollment records.
+        /// Unlinks any child records and/or Enrollment records.
         /// Deletes any associated ClassEnrolled records.
         /// </summary>
         /// <param name="academicSession"></param>
@@ -34,7 +34,10 @@ namespace Netus2_DatabaseConnection.daoInterfaces
         public void Delete(AcademicSession academicSession, IConnectable connection);
 
         /// <summary>
+        /// <para>
         /// Queries the database for the records associated with the passed-in data.
+        /// </para>
+        /// Populates the returned records with any associated Organization and/or child records.
         /// </summary>
         /// <param name="organizationId"></param>
         /// <param name="connection"></param>
@@ -42,7 +45,10 @@ namespace Netus2_DatabaseConnection.daoInterfaces
         public List<AcademicSession> Read_AllWithOrganizationId(int organizationId, IConnectable connection);
 
         /// <summary>
+        /// <para>
         /// Queries the databse for the record associated with the passed-in data.
+        /// </para>
+        /// Populates the returned records with any associated Organization and/or child records.
         /// </summary>
         /// <param name="classEnrolledId"></param>
         /// <param name="connection"></param>
@@ -50,7 +56,10 @@ namespace Netus2_DatabaseConnection.daoInterfaces
         public AcademicSession Read_UsingClassEnrolledId(int classEnrolledId, IConnectable connection);
 
         /// <summary>
+        /// <para>
         /// Queries the database for a specific record, using the primary key value.
+        /// </para>
+        /// Populates the returned records with any associated Organization and/or child records.
         /// </summary>
         /// <param name="academicSessionId"></param>
         /// <param name="connection"></param>
@@ -58,7 +67,10 @@ namespace Netus2_DatabaseConnection.daoInterfaces
         public AcademicSession Read_UsingAcademicSessionId(int academicSessionId, IConnectable connection);
 
         /// <summary>
+        /// <para>
         /// Queries the database for the record associated with the passed-in data.
+        /// </para>
+        /// Populates the returned records with any associated Organization and/or child records.
         /// </summary>
         /// <param name="sisBuildingCode"></param>
         /// <param name="termCode"></param>
@@ -68,7 +80,10 @@ namespace Netus2_DatabaseConnection.daoInterfaces
         public AcademicSession Read_UsingSisBuildingCode_TermCode_Schoolyear(string sisBuildingCode, string termCode, int schoolYear, IConnectable connection);
 
         /// <summary>
+        /// <para>
         /// Queries the database for the parent of the record associated with the passed-in data.
+        /// </para>
+        /// Populates the returned records with any associated Organization and/or child records.
         /// </summary>
         /// <param name="child"></param>
         /// <param name="connection"></param>
@@ -76,7 +91,10 @@ namespace Netus2_DatabaseConnection.daoInterfaces
         public AcademicSession Read_Parent(AcademicSession child, IConnectable connection);
 
         /// <summary>
-        /// Quereis the database for the children of the record associated with the passed-in data.
+        /// <para>
+        /// Queries the database for the children of the record associated with the passed-in data.
+        /// </para>
+        /// Populates the returned records with any associated Organization and/or child records.
         /// </summary>
         /// <param name="parent"></param>
         /// <param name="connection"></param>
@@ -84,7 +102,10 @@ namespace Netus2_DatabaseConnection.daoInterfaces
         public List<AcademicSession> Read_Children(AcademicSession parent, IConnectable connection);
 
         /// <summary>
+        /// <para>
         /// Queries the database for any records that match what is provided. Null datapoints are ignored.
+        /// </para>
+        /// Populates the returned records with any associated Organization and/or child records.
         /// </summary>
         /// <param name="academicSession"></param>
         /// <param name="connection"></param>
@@ -96,6 +117,7 @@ namespace Netus2_DatabaseConnection.daoInterfaces
         /// Queries the database for any records that match what is provided, with the provided
         /// parent record. Null datapoints are ignored.
         /// </para>
+        /// Populates the returned records with any associated Organization and/or child records.
         /// </summary>
         /// <param name="academicSession"></param>
         /// <param name="parentId"></param>
@@ -130,7 +152,10 @@ namespace Netus2_DatabaseConnection.daoInterfaces
         public void Update(AcademicSession academicSession, int parentId, IConnectable connection);
 
         /// <summary>
+        /// <para>
         /// Writes the provided record to the database.
+        /// </para>
+        /// Populates the returned records with any associated Organization records.
         /// </summary>
         /// <param name="academicSession"></param>
         /// <param name="connection"></param>
@@ -138,7 +163,10 @@ namespace Netus2_DatabaseConnection.daoInterfaces
         public AcademicSession Write(AcademicSession academicSession, IConnectable connection);
 
         /// <summary>
+        /// <para>
         /// Writes the provided record to the database, linked to the provided parentId.
+        /// </para>
+        /// Populates the returned record with any associated Organization records.
         /// </summary>
         /// <param name="academicSession"></param>
         /// <param name="parentId"></param>

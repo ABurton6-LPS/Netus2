@@ -26,14 +26,17 @@ namespace Netus2_DatabaseConnection.daoInterfaces
         /// <para>
         /// Deletes the provided record from the database.
         /// </para>
-        /// Unlinks any associated person records.
+        /// Unlinks any associated Person records.
         /// </summary>
         /// <param name="appliction"></param>
         /// <param name="connection"></param>
         public void Delete(Application appliction, IConnectable connection);
 
         /// <summary>
+        /// <para>
         /// Queries the database for a specific record, using the primary key value.
+        /// </para>
+        /// Populates the returned records with any associated Provider records.
         /// </summary>
         /// <param name="appId"></param>
         /// <param name="connection"></param>
@@ -41,7 +44,10 @@ namespace Netus2_DatabaseConnection.daoInterfaces
         public Application Read_UsingAppId(int appId, IConnectable connection);
 
         /// <summary>
+        /// <para>
         /// Queries the database for the records associated with the passed-in data.
+        /// </para>
+        /// Populates the returned records with any associated Provider records.
         /// </summary>
         /// <param name="providerId"></param>
         /// <param name="connection"></param>
@@ -49,7 +55,10 @@ namespace Netus2_DatabaseConnection.daoInterfaces
         public List<Application> Read_UsingProviderId(int providerId, IConnectable connection);
 
         /// <summary>
+        /// <para>
         /// Queries the database for any records that match what is provided. Null datapoints are ignored.
+        /// </para>
+        /// Populates the returned records with any associated Provider records.
         /// </summary>
         /// <param name="application"></param>
         /// <param name="connection"></param>
@@ -66,7 +75,10 @@ namespace Netus2_DatabaseConnection.daoInterfaces
         public void Update(Application application, IConnectable connection);
 
         /// <summary>
+        /// <para>
         /// Writes the provided record to the database.
+        /// </para>
+        /// Populates the returned record with any associated Provider record.
         /// </summary>
         /// <param name="application"></param>
         /// <param name="connection"></param>

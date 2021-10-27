@@ -26,7 +26,7 @@ namespace Netus2_DatabaseConnection.daoInterfaces
         /// <para>
         /// Deletes the provided record from the database.
         /// </para>
-        /// Unlinks any associated person records.
+        /// Unlinks any associated Person records.
         /// </summary>
         /// <param name="address"></param>
         /// <param name="connection"></param>

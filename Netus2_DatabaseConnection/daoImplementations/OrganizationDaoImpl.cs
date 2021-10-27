@@ -90,8 +90,10 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
             if (results.Count == 0)
                 return null;
-            else
+            else if (results.Count == 1)
                 return results[0];
+            else
+                throw new Exception(results.Count + " found matching sisBuildingCode: " + sisBuildingCode);
         }
 
         public Organization Read_UsingOrganizationId(int orgId, IConnectable connection)
@@ -105,8 +107,10 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
             if (results.Count == 0)
                 return null;
-            else
+            else if (results.Count == 1)
                 return results[0];
+            else
+                throw new Exception(results.Count + " found matching orgId: " + orgId);
         }
 
         public Organization Read_UsingAcademicSessionId(int academicSessionId, IConnectable connection)
@@ -121,24 +125,28 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
             if (results.Count == 0)
                 return null;
-            else
+            else if (results.Count == 1)
                 return results[0];
+            else
+                throw new Exception(results.Count + " found matching academicSessionId: " + academicSessionId);
         }
 
-        public Organization Read_Parent(Organization organization, IConnectable connection)
+        public Organization Read_Parent(Organization child, IConnectable connection)
         {
             string sql = "SELECT * FROM organization WHERE organization_id in ( " +
                 "SELECT organization_parent_id FROM organization WHERE organization_id = @organization_id)";
 
             List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("@organization_id", organization.Id));
+            parameters.Add(new SqlParameter("@organization_id", child.Id));
 
             List<Organization> results = Read(sql, connection, parameters);
 
             if (results.Count == 0)
                 return null;
-            else
+            else if (results.Count == 1)
                 return results[0];
+            else
+                throw new Exception(results.Count + " parent records found associated to child: " + child.ToString());
         }
 
         public List<Organization> Read_AllChildrenWithParentId(int parentId, IConnectable connection)

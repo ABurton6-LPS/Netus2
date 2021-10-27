@@ -42,12 +42,14 @@ namespace Netus2_DatabaseConnection.daoImplementations
             parameters.Add(new SqlParameter("@person_id", personId));
             parameters.Add(new SqlParameter("@enum_role_id", roleId));
 
-            List<DataRow> result = Read(sql, connection, parameters);
+            List<DataRow> results = Read(sql, connection, parameters);
 
-            if (result.Count == 0)
+            if (results.Count == 0)
                 return null;
+            else if (results.Count == 1)
+                return results[0];
             else
-                return result[0];
+                throw new Exception(results.Count + " found matching classId: " + classId + " and personId: " + personId);
         }
 
         public List<DataRow> Read_AllWithClassId(int classId, IConnectable connection)

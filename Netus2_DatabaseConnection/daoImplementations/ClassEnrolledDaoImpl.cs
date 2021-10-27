@@ -128,8 +128,10 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
             if (results.Count > 0)
                 return results[0];
+            else if (results.Count == 1)
+                return results[0];
             else
-                return null;
+                throw new Exception(results.Count + " found matching classId: " + classId);
         }
 
         public List<ClassEnrolled> Read(ClassEnrolled classEnrolled, IConnectable connection)

@@ -49,7 +49,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
             return Read(sql, connection, parameters);
         }
 
-        public List<EmploymentSession> Read_UsingPersonId(EmploymentSession employmentSession, int personId, IConnectable connection)
+        public List<EmploymentSession> Read(EmploymentSession employmentSession, int personId, IConnectable connection)
         {
             DataRow row = daoObjectMapper.MapEmploymentSession_WithPersonId(employmentSession, personId);
             return Read(row, connection);
@@ -166,7 +166,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         public void Update(EmploymentSession employmentSession, int personId, IConnectable connection)
         {
-            List<EmploymentSession> foundEmploymentSessions = Read_UsingPersonId(employmentSession, personId, connection);
+            List<EmploymentSession> foundEmploymentSessions = Read(employmentSession, personId, connection);
             if (foundEmploymentSessions.Count == 0)
                 Write(employmentSession, personId, connection);
             else if (foundEmploymentSessions.Count == 1)

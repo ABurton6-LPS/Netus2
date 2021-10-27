@@ -15,6 +15,7 @@ namespace Netus2_Test.MockDaoImpl
         public bool WasCalled_ReadWithAppId = false;
         public bool WasCalled_ReadAllChildrenWithParentId = false;
         public bool WasCalled_Update = false;
+        public bool WasCalled_UpdateWithParentId = false;
         public bool WasCalled_WriteWithParentId = false;
         public bool WasCalled_WriteWithoutParentId = false;
         public bool _shouldReadReturnData = false;
@@ -69,7 +70,7 @@ namespace Netus2_Test.MockDaoImpl
                 return returnData;
         }
 
-        public Provider Read_AllWithAppId(int appId, IConnectable connection)
+        public Provider Read_UsingAppId(int appId, IConnectable connection)
         {
             WasCalled_ReadWithAppId = true;
 
@@ -107,6 +108,11 @@ namespace Netus2_Test.MockDaoImpl
         public void Update(Provider provider, IConnectable connection)
         {
             WasCalled_Update = true;
+        }
+
+        public void Update(Provider provider, int parentId, IConnectable connection)
+        {
+            WasCalled_UpdateWithParentId = true;
         }
 
         public Provider Write(Provider provider, IConnectable connection)

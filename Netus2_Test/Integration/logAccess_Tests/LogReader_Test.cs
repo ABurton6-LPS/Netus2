@@ -555,7 +555,7 @@ namespace Netus2_Test.Integration
         public void LogAddress_ShouldLog_WriteUpdateDelete()
         {
             //Write
-            Address address = addressDaoImpl.Write(new Address("tst1", "tstCity", Enum_State_Province.values["mi"], Enum_Country.values["us"], Enum_True_False.values["true"], Enum_Address.values["home"]), connection);
+            Address address = addressDaoImpl.Write(new Address("tst1", "tstCity", Enum_State_Province.values["mi"], Enum_Country.values["us"]), connection);
 
             //Read logs after write
             List<LogAddress> logs = new List<LogAddress>();
@@ -616,7 +616,7 @@ namespace Netus2_Test.Integration
         public void LogJctPersonAddress_ShouldLog_WriteUpdateDelete()
         {
             //Prerequisite
-            Address address = addressDaoImpl.Write(new Address("tst1", "tstCity", Enum_State_Province.values["mi"], Enum_Country.values["us"], Enum_True_False.values["true"], Enum_Address.values["home"]), connection);
+            Address address = addressDaoImpl.Write(new Address("tst1", "tstCity", Enum_State_Province.values["mi"], Enum_Country.values["us"]), connection);
             Person person = new Person("fname", "lname", new DateTime(), Enum_Gender.values["unset"], Enum_Ethnic.values["unset"]);
 
             //Write
