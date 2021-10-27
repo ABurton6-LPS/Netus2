@@ -4,6 +4,7 @@ using Netus2_DatabaseConnection.utilityTools;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Text;
 
 namespace Netus2_DatabaseConnection.daoImplementations
@@ -12,63 +13,86 @@ namespace Netus2_DatabaseConnection.daoImplementations
     {
         public void Delete(int enrollmentId, int academicSessionId, IConnectable connection)
         {
-            StringBuilder sql = new StringBuilder("DELETE FROM jct_enrollment_academic_session WHERE 1=1 ");
-            sql.Append("AND enrollment_id = " + enrollmentId + " ");
-            sql.Append("AND academic_session_id = " + academicSessionId);
+            if (enrollmentId <= 0 || academicSessionId <= 0)
+                throw new Exception("Cannot delete a record from jct_enrollment_academic_session " +
+                    "without a database-assigned ID for both enrollmentId and academicSessionId." +
+                    "\nenrollmentId: " + enrollmentId +
+                    "\nacademicSessionId: " + academicSessionId);
 
-            connection.ExecuteNonQuery(sql.ToString());
+            string sql = "DELETE FROM jct_enrollment_academic_session WHERE 1=1 " +
+            "AND enrollment_id = @enrollment_id " +
+            "AND academic_session_id = @academic_session_id";
+
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@enrollment_id", enrollmentId));
+            parameters.Add(new SqlParameter("@academic_session_id", academicSessionId));
+
+            connection.ExecuteNonQuery(sql, parameters);
         }
 
         public DataRow Read(int enrollmentId, int academicSessionId, IConnectable connection)
         {
-            StringBuilder sql = new StringBuilder("SELECT * FROM jct_enrollment_academic_session WHERE 1=1 ");
-            sql.Append("AND enrollment_id = " + enrollmentId + " ");
-            sql.Append("AND academic_session_id = " + academicSessionId);
+            string sql = "SELECT * FROM jct_enrollment_academic_session WHERE 1=1 " +
+            "AND enrollment_id = @enrollment_id " +
+            "AND academic_session_id = @academic_session_id";
 
-            List<DataRow> results = Read(sql.ToString(), connection);
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@enrollment_id", enrollmentId));
+            parameters.Add(new SqlParameter("@academic_session_id", academicSessionId));
+
+            List<DataRow> results = Read(sql, connection, parameters);
+
             if (results.Count == 0)
                 return null;
-            else if (results.Count == 1)
-                return results[0];
             else
-                throw new Exception("The jct_enrollment_academic_session table contains a duplicate record.\n" +
-                    "enrollment_id = " + enrollmentId + ", address_Id = " + academicSessionId);
+                return results[0];
         }
 
-        public List<DataRow> Read_WithEnrollmentId(int enrollmentId, IConnectable connection)
+        public List<DataRow> Read_AllWithEnrollmentId(int enrollmentId, IConnectable connection)
         {
-            string sql = "SELECT * FROM jct_enrollment_academic_session WHERE enrollment_id = " + enrollmentId;
+            string sql = "SELECT * FROM jct_enrollment_academic_session WHERE " +
+                "enrollment_id = @enrollment_id";
 
-            return Read(sql, connection);
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@enrollment_id", enrollmentId));
+
+            return Read(sql, connection, parameters);
         }
-        public List<DataRow> Read_WithAcademicSessionId(int academicSessionId, IConnectable connection)
+
+        public List<DataRow> Read_AllWithAcademicSessionId(int academicSessionId, IConnectable connection)
         {
-            string sql = "SELECT * FROM jct_enrollment_academic_session WHERE academic_session_id = " + academicSessionId;
+            string sql = "SELECT * FROM jct_enrollment_academic_session WHERE " +
+                "academic_session_id = @academic_session_id";
 
-            return Read(sql, connection);
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@academic_session_id", academicSessionId));
+
+            return Read(sql, connection, parameters);
         }
 
-        private List<DataRow> Read(string sql, IConnectable connection)
+        private List<DataRow> Read(string sql, IConnectable connection, List<SqlParameter> parameters)
         {
             DataTable dtJctEnrollmentAcademicSession = DataTableFactory.CreateDataTable_Netus2_JctEnrollmentAcademicSession();
-            dtJctEnrollmentAcademicSession = connection.ReadIntoDataTable(sql, dtJctEnrollmentAcademicSession);
+            dtJctEnrollmentAcademicSession = connection.ReadIntoDataTable(sql, dtJctEnrollmentAcademicSession, parameters);
 
             List<DataRow> jctEnrollmentAcademicSessionDaos = new List<DataRow>();
             foreach (DataRow row in dtJctEnrollmentAcademicSession.Rows)
-            {
                 jctEnrollmentAcademicSessionDaos.Add(row);
-            }
 
             return jctEnrollmentAcademicSessionDaos;
         }
 
         public DataRow Write(int enrollmentId, int academicSessionId, IConnectable connection)
         {
-            StringBuilder sql = new StringBuilder("INSERT INTO jct_enrollment_academic_session (enrollment_id, academic_session_id) VALUES (");
-            sql.Append(enrollmentId + ", ");
-            sql.Append(academicSessionId + ")");
+            string sql = "INSERT INTO jct_enrollment_academic_session (" +
+                "enrollment_id, academic_session_id) VALUES (" +
+                "@enrollment_id, @academic_session_id)";
 
-            connection.ExecuteNonQuery(sql.ToString());
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@enrollment_id", enrollmentId));
+            parameters.Add(new SqlParameter("@academic_session_id", academicSessionId));
+
+            connection.ExecuteNonQuery(sql, parameters);
 
             DataRow jctEnrollmentAcademicSessionDao = DataTableFactory.CreateDataTable_Netus2_JctEnrollmentAcademicSession().NewRow();
             jctEnrollmentAcademicSessionDao["enrollment_id"] = enrollmentId;

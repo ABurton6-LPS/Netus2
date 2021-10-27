@@ -42,7 +42,7 @@ namespace Netus2_Test.MockDaoImpl
                 return null;
         }
 
-        public List<DataRow> Read_AddressIsNotInTempTable(IConnectable connection)
+        public List<DataRow> Read_AllAddressIsNotInTempTable(IConnectable connection)
         {
             WasCalled_ReadAddressIsNotImTempTable = true;
 
@@ -74,7 +74,7 @@ namespace Netus2_Test.MockDaoImpl
             return list;
         }
 
-        public List<DataRow> Read_WithPersonId(int personId, IConnectable connection)
+        public List<DataRow> Read_AllWithPersonId(int personId, IConnectable connection)
         {
             WasCalled_ReadWithPersonId = true;
 
@@ -100,7 +100,7 @@ namespace Netus2_Test.MockDaoImpl
             return row;
         }
 
-        public void Write_TempTable(int personId, int addressId, IConnectable connection)
+        public void Write_ToTempTable(int personId, int addressId, IConnectable connection)
         {
             WasCalled_WriteTempTable = true;
         }

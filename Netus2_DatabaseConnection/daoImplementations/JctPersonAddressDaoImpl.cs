@@ -4,6 +4,7 @@ using Netus2_DatabaseConnection.utilityTools;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Text;
 
 namespace Netus2_DatabaseConnection.daoImplementations
@@ -12,78 +13,99 @@ namespace Netus2_DatabaseConnection.daoImplementations
     {
         public void Delete(int personId, int addressId, IConnectable connection)
         {
-            StringBuilder sql = new StringBuilder("DELETE FROM jct_person_address WHERE 1=1 ");
-            sql.Append("AND person_id = " + personId + " ");
-            sql.Append("AND address_id = " + addressId);
+            if (personId <= 0 || addressId <= 0)
+                throw new Exception("Cannot delete a record from jct_person_address " +
+                    "without a database-assigned ID for both personId and addressId." +
+                    "\npersonId: " + personId +
+                    "\naddressId: " + addressId);
 
-            connection.ExecuteNonQuery(sql.ToString());
+            string sql = "DELETE FROM jct_person_address WHERE 1=1 " +
+            "AND person_id = @person_id " +
+            "AND address_id = @address_id";
+
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@person_id", personId));
+            parameters.Add(new SqlParameter("@address_id", addressId));
+
+            connection.ExecuteNonQuery(sql, parameters);
         }
 
         public DataRow Read(int personId, int addressId, IConnectable connection)
         {
-            StringBuilder sql = new StringBuilder("SELECT * FROM jct_person_address WHERE 1=1 ");
-            sql.Append("AND person_id = " + personId + " ");
-            sql.Append("AND address_id = " + addressId);
+            string sql = "SELECT * FROM jct_person_address WHERE 1=1 " +
+            "AND person_id = @person_id " +
+            "AND address_id = @address_id";
 
-            List<DataRow> results = Read(sql.ToString(), connection);
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@person_id", personId));
+            parameters.Add(new SqlParameter("@address_id", addressId));
+
+            List<DataRow> results = Read(sql, connection, parameters);
+
             if (results.Count == 0)
                 return null;
-            else if (results.Count == 1)
-                return results[0];
             else
-                throw new Exception("The jct_person_address table contains a duplicate record.\n" +
-                    "person_id = " + personId + ", address_Id = " + addressId);
+                return results[0];
         }
 
-        public List<DataRow> Read_WithPersonId(int personId, IConnectable connection)
+        public List<DataRow> Read_AllWithPersonId(int personId, IConnectable connection)
         {
-            string sql = "SELECT * FROM jct_person_address WHERE person_id = " + personId;
+            string sql = "SELECT * FROM jct_person_address WHERE " +
+                "person_id = @person_id";
 
-            return Read(sql, connection);
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@person_id", personId));
+
+            return Read(sql, connection, parameters);
         }
 
         public List<DataRow> Read_WithAddressId(int addressId, IConnectable connection)
         {
-            string sql = "SELECT * FROM jct_person_address WHERE address_id = " + addressId;
+            string sql = "SELECT * FROM jct_person_address WHERE " +
+                "address_id = @address_id";
 
-            return Read(sql, connection);
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@address_id", addressId));
+
+            return Read(sql, connection, parameters);
         }
 
-        public List<DataRow> Read_AddressIsNotInTempTable(IConnectable connection)
+        public List<DataRow> Read_AllAddressIsNotInTempTable(IConnectable connection)
         {
             string sql =
                 "SELECT jpa.person_id, jpa.address_id " +
                 "FROM jct_person_address jpa " +
-                "WHERE 1=1 " +
-                "AND jpa.address_id NOT IN ( " +
+                "WHERE jpa.address_id NOT IN ( " +
                 "SELECT tjpa.address_id " +
                 "FROM temp_jct_person_address tjpa " +
                 "WHERE tjpa.person_id = jpa.person_id )";
 
-            return Read(sql, connection);
+            return Read(sql, connection, new List<SqlParameter>());
         }
 
-        private List<DataRow> Read(string sql, IConnectable connection)
+        private List<DataRow> Read(string sql, IConnectable connection, List<SqlParameter> parameters)
         {
             DataTable dtJctPersonAddress = DataTableFactory.CreateDataTable_Netus2_JctPersonAddress();
-            dtJctPersonAddress = connection.ReadIntoDataTable(sql, dtJctPersonAddress);
+            dtJctPersonAddress = connection.ReadIntoDataTable(sql, dtJctPersonAddress, parameters);
 
             List<DataRow> jctPersonAddressDaos = new List<DataRow>();
             foreach (DataRow row in dtJctPersonAddress.Rows)
-            {
                 jctPersonAddressDaos.Add(row);
-            }
 
             return jctPersonAddressDaos;
         }
 
         public DataRow Write(int personId, int addressId, IConnectable connection)
         {
-            StringBuilder sql = new StringBuilder("INSERT INTO jct_person_address (person_id, address_id) VALUES (");
-            sql.Append(personId + ", ");
-            sql.Append(addressId + ")");
+            string sql = "INSERT INTO jct_person_address (" +
+                "person_id, address_id) VALUES (" +
+                "@person_id, @address_id)";
 
-            connection.ExecuteNonQuery(sql.ToString());
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@person_id", personId));
+            parameters.Add(new SqlParameter("@address_id", addressId));
+
+            connection.ExecuteNonQuery(sql, parameters);
 
             DataRow jctPersonAddressDao = DataTableFactory.CreateDataTable_Netus2_JctPersonAddress().NewRow();
             jctPersonAddressDao["person_id"] = personId;
@@ -92,13 +114,17 @@ namespace Netus2_DatabaseConnection.daoImplementations
             return jctPersonAddressDao;
         }
 
-        public void Write_TempTable(int personId, int addressId, IConnectable connection)
+        public void Write_ToTempTable(int personId, int addressId, IConnectable connection)
         {
-            StringBuilder sql = new StringBuilder("INSERT INTO temp_jct_person_address (person_id, address_id) VALUES (");
-            sql.Append(personId + ", ");
-            sql.Append(addressId + ")");
+            string sql = "INSERT INTO temp_jct_person_address (" +
+                "person_id, address_id) VALUES (" +
+                "@person_id, @address_id)";
 
-            connection.ExecuteNonQuery(sql.ToString());
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@person_id", personId));
+            parameters.Add(new SqlParameter("@address_id", addressId));
+
+            connection.ExecuteNonQuery(sql, parameters);
         }
     }
 }

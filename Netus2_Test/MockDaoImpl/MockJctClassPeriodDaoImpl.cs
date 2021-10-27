@@ -12,6 +12,7 @@ namespace Netus2_Test.MockDaoImpl
         public bool WasCalled_Delete = false;
         public bool WasCalled_ReadWithClassIdAndPeriodId = false;
         public bool WasCalled_ReadWithClassId = false;
+        public bool WasCalled_ReadWithPeriodId = false;
         public bool WasCalled_Write = false;
         public bool _shouldReadReturnData = false;
 
@@ -25,7 +26,7 @@ namespace Netus2_Test.MockDaoImpl
             WasCalled_Delete = true;
         }
 
-        public List<DataRow> Read(int classId, IConnectable connection)
+        public List<DataRow> Read_AllWithClassId(int classId, IConnectable connection)
         {
             WasCalled_ReadWithClassId = true;
 
@@ -37,6 +38,24 @@ namespace Netus2_Test.MockDaoImpl
                     DataRow row = DataTableFactory.CreateDataTable_Netus2_JctClassPeriod().NewRow();
                     row["class_id"] = classId;
                     row["enum_period_id"] = tdBuilder.classEnrolled.Periods[i].Id;
+                    returnData.Add(row);
+                }
+
+            return returnData;
+        }
+
+        public List<DataRow> Read_AllWithPeriodId(int periodId, IConnectable connection)
+        {
+            WasCalled_ReadWithPeriodId = true;
+
+            List<DataRow> returnData = new List<DataRow>();
+
+            if (_shouldReadReturnData)
+                for (int i = 0; i < tdBuilder.classEnrolled.Periods.Count; i++)
+                {
+                    DataRow row = DataTableFactory.CreateDataTable_Netus2_JctClassPeriod().NewRow();
+                    row["class_id"] = tdBuilder.classEnrolled.Id;
+                    row["enum_period_id"] = periodId;
                     returnData.Add(row);
                 }
 

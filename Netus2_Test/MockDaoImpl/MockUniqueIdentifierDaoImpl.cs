@@ -9,6 +9,7 @@ namespace Netus2_Test.MockDaoImpl
     {
         TestDataBuilder tdBuilder;
         public bool WasCalled_Delete = false;
+        public bool WasCalled_ReadAllWithPersonId = false;
         public bool WasCalled_Read = false;
         public bool WasCalled_Update = false;
         public bool WasCalled_Write = false;
@@ -29,9 +30,26 @@ namespace Netus2_Test.MockDaoImpl
             this.tdBuilder = tdBuilder;
         }
 
-        public void Delete(UniqueIdentifier uniqueId, int personId, IConnectable connection)
+        public void Delete(UniqueIdentifier uniqueId, IConnectable connection)
         {
             WasCalled_Delete = true;
+        }
+
+        public List<UniqueIdentifier> Read_AllWithPersonId(int personId, IConnectable connection)
+        {
+            WasCalled_ReadAllWithPersonId = true;
+
+            List<UniqueIdentifier> returnData = new List<UniqueIdentifier>();
+
+            if (_shouldReadReturnData)
+            {
+                if (personId == tdBuilder.student.Id)
+                    returnData.Add(tdBuilder.uniqueId_Student);
+                else
+                    returnData.Add(tdBuilder.uniqueId_Teacher);
+            }
+
+            return returnData;
         }
 
         public List<UniqueIdentifier> Read(UniqueIdentifier uniqueId, int personId, IConnectable connection)

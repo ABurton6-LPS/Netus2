@@ -76,7 +76,8 @@ namespace Netus2_Test.Integration
 
             //Add Academic Session to School
             //You must create the AcademicSession with the Organization (School), so no need to update the School
-            AcademicSession schoolYear = new AcademicSession("2020 - 2021", Enum_Session.values["school year"], school, "T1");
+            AcademicSession schoolYear = new AcademicSession(Enum_Session.values["school year"], school, "T1");
+            schoolYear.Name = "2020 - 2021";
             schoolYear = academicSessionDaoImpl.Write(schoolYear, connection);
             schoolYear = academicSessionDaoImpl.Read(schoolYear, connection)[0];
             Assert.IsTrue(schoolYear.Id > 0);
@@ -84,7 +85,8 @@ namespace Netus2_Test.Integration
 
             //Add GradingPeriod AcademicSession to SchoolYear
             //You can write the AcademicSession with the parentId, so no need to update the SchoolYear
-            AcademicSession gradingPeriod = new AcademicSession("markingPeriod", Enum_Session.values["grading period"], school, "T1");
+            AcademicSession gradingPeriod = new AcademicSession(Enum_Session.values["grading period"], school, "T1");
+            gradingPeriod.Name = "markingPeriod";
             gradingPeriod = academicSessionDaoImpl.Write(gradingPeriod, schoolYear.Id, connection);
             schoolYear = academicSessionDaoImpl.Read(schoolYear, connection)[0];
             Assert.IsTrue(gradingPeriod.Id > 0);
@@ -108,16 +110,16 @@ namespace Netus2_Test.Integration
             //Add Employment Session to School
             //You must create the Employment Session with the Organization (School), so no need to update the School
             //You must write the Employment Session with the Person Id, so no need to update the Person
-            EmploymentSession employmentSession = new EmploymentSession("John Smith Employment", Enum_True_False.values["true"], school);
+            EmploymentSession employmentSession = new EmploymentSession(Enum_True_False.values["true"], school);
             employmentSession = employmentSessionDaoImpl.Write(employmentSession, teacher.Id, connection);
-            employmentSession = employmentSessionDaoImpl.Read_WithOrganizationId(employmentSession, school.Id, connection)[0];
+            employmentSession = employmentSessionDaoImpl.Read_AllWithOrganizationId(school.Id, connection)[0];
             Assert.AreEqual(school.Id, employmentSession.Organization.Id);
             Assert.AreEqual(employmentSession.Id, personDaoImpl.Read(teacher, connection)[0].EmploymentSessions[0].Id);
-            employmentSession = employmentSessionDaoImpl.Read_WithPersonId(employmentSession, teacher.Id, connection)[0];
+            employmentSession = employmentSessionDaoImpl.Read_AllWithPersonId(teacher.Id, connection)[0];
             Assert.AreEqual(school.Id, employmentSession.Organization.Id);
             Assert.AreEqual(employmentSession.Id, personDaoImpl.Read(teacher, connection)[0].EmploymentSessions[0].Id);
-            Assert.AreEqual(employmentSessionDaoImpl.Read_WithOrganizationId(employmentSession, school.Id, connection)[0].Id,
-                employmentSessionDaoImpl.Read_WithPersonId(employmentSession, teacher.Id, connection)[0].Id);
+            Assert.AreEqual(employmentSessionDaoImpl.Read_AllWithOrganizationId(school.Id, connection)[0].Id,
+                employmentSessionDaoImpl.Read_AllWithPersonId(teacher.Id, connection)[0].Id);
 
             //Create Course
             Course spanishCourse = new Course("Spanish", "spn");

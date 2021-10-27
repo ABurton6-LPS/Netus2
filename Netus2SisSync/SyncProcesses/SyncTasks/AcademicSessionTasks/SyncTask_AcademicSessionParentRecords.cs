@@ -37,24 +37,25 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AcademicSessionTasks
 
                 IOrganizationDao orgDaoImpl = DaoImplFactory.GetOrganizationDaoImpl();
                 orgDaoImpl.SetTaskId(this.Id);
-                Organization org = orgDaoImpl.Read_WithSisBuildingCode(sisBuildingCode, _netus2Connection);
+                Organization org = orgDaoImpl.Read_UsingSisBuildingCode(sisBuildingCode, _netus2Connection);
 
-                AcademicSession academicSession = new AcademicSession(sisName, sisEnumSession, org, sisTermCode);
+                AcademicSession academicSession = new AcademicSession(sisEnumSession, org, sisTermCode);
+                academicSession.Name = sisName;
                 academicSession.SchoolYear = sisSchoolYear;
                 academicSession.StartDate = sisStartDate;
                 academicSession.EndDate = sisEndDate;
 
                 IAcademicSessionDao academicSessionDaoImpl = DaoImplFactory.GetAcademicSessionDaoImpl();
                 academicSessionDaoImpl.SetTaskId(this.Id);
-                List<AcademicSession> foundAcademicSessions = academicSessionDaoImpl.Read(academicSession, _netus2Connection);
+                AcademicSession foundAcademicSession = academicSessionDaoImpl.Read_UsingSisBuildingCode_TermCode_Schoolyear(sisBuildingCode, sisTermCode, sisSchoolYear, _netus2Connection);
 
-                if (foundAcademicSessions.Count == 1)
+                if (foundAcademicSession != null)
                 {
-                    academicSession.Id = foundAcademicSessions[0].Id;
+                    academicSession.Id = foundAcademicSession.Id;
                 }
                 else
                 {
-                    throw new Exception(foundAcademicSessions.Count + " record(s) found matching Academic Session:\n" + academicSession.ToString());
+                    throw new Exception("No records found matching Academic Session:\n" + academicSession.ToString());
                 }
 
                 AcademicSession parentAcademicSession = null;

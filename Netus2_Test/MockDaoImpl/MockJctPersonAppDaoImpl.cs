@@ -40,7 +40,7 @@ namespace Netus2_Test.MockDaoImpl
                 return null;
         }
 
-        public List<DataRow> Read_WithAppId(int appId, IConnectable connection)
+        public List<DataRow> Read_AllWithAppId(int appId, IConnectable connection)
         {
             WasCalled_ReadWithAppId = true;
 
@@ -55,7 +55,7 @@ namespace Netus2_Test.MockDaoImpl
             return list;
         }
 
-        public List<DataRow> Read_WithPersonId(int personId, IConnectable connection)
+        public List<DataRow> Read_AllWithPersonId(int personId, IConnectable connection)
         {
             WasCalled_ReadWithPersonId = true;
 

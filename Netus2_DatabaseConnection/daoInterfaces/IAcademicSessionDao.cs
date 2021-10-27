@@ -7,158 +7,143 @@ namespace Netus2_DatabaseConnection.daoInterfaces
     public interface IAcademicSessionDao
     {
         /// <summary>
-        /// Sets the taskId value to be used in "write" and "update" statements to indicate which process made the
-        /// modification to the database.
+        /// Sets the taskId value to be used in "write" and "update" statements, 
+        /// to indicate which process made the modification to the database in the 
+        /// "created_by" and "changed_by" fields, respectively.
         /// </summary>
         /// <param name="taskId"></param>
         void SetTaskId(int taskId);
 
         /// <summary>
-        /// Returns the taskId value that was set with the SetTaskId method. If the value has not been set, will
-        /// retun null;
+        /// Returns the taskId value, used in "write" and "update" statements, 
+        /// to indicate which process made the modification to the database in the 
+        /// "created_by" and "changed_by" fields, respectively.
         /// </summary>
+        /// <returns>Null, if no value has been set.</returns>
         int? GetTaskId();
 
         /// <summary>
         /// <para>
-        /// Returns a list of AcademicSessions, read from the database, which match the parameters provided in the 
-        /// AcademicSession object passed in. Null values provided within the AcademicSession object will be ignored. 
-        /// This method will only return records that have no AcademicSession parentId in the database.
+        /// Deletes the provided record from the database.
         /// </para>
-        /// Also populates the returned objects with the associated Organization object, and any associated child AcademicSession objects.
+        /// Unlinks any child records and enrollment records.
+        /// Deletes any associated ClassEnrolled records.
         /// </summary>
-        /// <param name="academicSession"/>
-        /// <param name="connection"/>
-        List<AcademicSession> Read(AcademicSession academicSession, IConnectable connection);
+        /// <param name="academicSession"></param>
+        /// <param name="connection"></param>
+        public void Delete(AcademicSession academicSession, IConnectable connection);
 
         /// <summary>
-        /// <para>
-        /// Returns a list of AcademicSessions, read from the database, which match the parameters provided in the 
-        /// AcademicSession object passed in, and are linked to the AcademicSession parentId passed in. Null values 
-        /// provided within the AcademicSession object will be ignored.
-        /// </para>
-        /// Also populates the returned object with the associated Organization object, and any associated child AcademicSession objects.
+        /// Queries the database for the records associated with the passed-in data.
         /// </summary>
-        /// <param name="academicSession"/>
-        /// <param name="parentId"/>
-        /// <param name="connection"/>
-        List<AcademicSession> Read(AcademicSession academicSession, int parentId, IConnectable connection);
+        /// <param name="organizationId"></param>
+        /// <param name="connection"></param>
+        /// <returns>Empty list, if no records are found.</returns>
+        public List<AcademicSession> Read_AllWithOrganizationId(int organizationId, IConnectable connection);
 
         /// <summary>
-        /// <para>
-        /// Returns the specific AcademicSession object from the database which is indicated by the primary 
-        /// database key, academicSessionId, passed in.
-        /// </para>
-        /// Also populates the returned object with the associated Organization object, and any associated child AcademicSession objects.
+        /// Queries the databse for the record associated with the passed-in data.
         /// </summary>
-        /// <param name="academicSessionId"/>
-        /// <param name="connection"/>
-        AcademicSession Read_UsingAcademicSessionId(int academicSessionId, IConnectable connection);
+        /// <param name="classEnrolledId"></param>
+        /// <param name="connection"></param>
+        /// <returns>Null, if no record is found.</returns>
+        public AcademicSession Read_UsingClassEnrolledId(int classEnrolledId, IConnectable connection);
 
         /// <summary>
-        /// <para>
-        /// Returns the specific AcademicSession object from the database which is linked to the 
-        /// primary database key for a ClassEnrolled object, classEnrolledId, passed in.
-        /// </para>
-        /// Also populates the returned object with the associated Organization object, and any associated child AcademicSession objects.
+        /// Queries the database for a specific record, using the primary key value.
         /// </summary>
-        /// <param name="classEnrolledId"/>
-        /// <param name="connection"/>
-        AcademicSession Read_UsingClassEnrolledId(int classEnrolledId, IConnectable connection);
+        /// <param name="academicSessionId"></param>
+        /// <param name="connection"></param>
+        /// <returns>Null, if no record is found.</returns>
+        public AcademicSession Read_UsingAcademicSessionId(int academicSessionId, IConnectable connection);
 
         /// <summary>
-        /// <para>
-        /// Returns a list of AcademicSessions, read from the database, which are linked to the 
-        /// primary database key for an Organization object, organizationId, passed in.
-        /// </para>
-        /// Also populates the returned object with the associated Organization object, and any associated child AcademicSession objects.
+        /// Queries the database for the record associated with the passed-in data.
         /// </summary>
-        /// <param name="organizationId"/>
-        /// <param name="connection"/>
-        List<AcademicSession> Read_UsingOrganizationId(int organizationId, IConnectable connection);
-
-        /// <summary>
-        /// Returns the AcademicSession object which is linked to the data provided. The schoolCode is the buildingCode for the Organization table
-        /// that this record will be linked to. The termCode and the schoolYear, in conjunction with the organizationId (for the Organization object
-        /// with the buildingCode which matches the provided schoolCode value) create a unique identifier for a given AcademicSession object.
-        /// </summary>
-        /// <param name="schoolCode"></param>
+        /// <param name="sisBuildingCode"></param>
         /// <param name="termCode"></param>
         /// <param name="schoolYear"></param>
         /// <param name="connection"></param>
-        AcademicSession Read_UsingSisBuildingCode_TermCode_Schoolyear(string schoolCode, string termCode, int schoolYear, IConnectable connection);
-        
-        /// <summary>
-        /// Returns a list containing the child Academic Sessions for the parent Academic Session passed in.
-        /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="connection"></param>
-        List<AcademicSession> Read_Children(AcademicSession parent, IConnectable connection);
+        /// <returns>Null, if no record is found.</returns>
+        public AcademicSession Read_UsingSisBuildingCode_TermCode_Schoolyear(string sisBuildingCode, string termCode, int schoolYear, IConnectable connection);
 
         /// <summary>
-        /// Returns the parent AcademicSession object, if one exists in the database, to the AcademicSession object passed in.
-        /// Otherwise, returns null.
+        /// Queries the database for the parent of the record associated with the passed-in data.
         /// </summary>
         /// <param name="child"></param>
         /// <param name="connection"></param>
-        AcademicSession Read_Parent(AcademicSession child, IConnectable connection);
+        /// <returns>Null, if no parent record is found.</returns>
+        public AcademicSession Read_Parent(AcademicSession child, IConnectable connection);
+
+        /// <summary>
+        /// Quereis the database for the children of the record associated with the passed-in data.
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="connection"></param>
+        /// <returns>Empty list, if no child records are found.</returns>
+        public List<AcademicSession> Read_Children(AcademicSession parent, IConnectable connection);
+
+        /// <summary>
+        /// Queries the database for any records that match what is provided. Null datapoints are ignored.
+        /// </summary>
+        /// <param name="academicSession"></param>
+        /// <param name="connection"></param>
+        /// <returns>Empty list, if no records are found.</returns>
+        public List<AcademicSession> Read(AcademicSession academicSession, IConnectable connection);
 
         /// <summary>
         /// <para>
-        /// Writes the provided AcademicSession object to the database, then returns with that same object, 
-        /// but with the auto-generated Id field populated using the primary key from the database.
+        /// Queries the database for any records that match what is provided, with the provided
+        /// parent record. Null datapoints are ignored.
         /// </para>
-        /// Also populates the returned object with the associated Organization object. This assumes that 
-        /// the associated Organization object has already been written into the database.
         /// </summary>
-        /// <param name="academicSession"/>
-        /// <param name="connection"/>
-        AcademicSession Write(AcademicSession academicSession, IConnectable connection);
+        /// <param name="academicSession"></param>
+        /// <param name="parentId"></param>
+        /// <param name="connection"></param>
+        /// <returns>Empty list, if no records are found.</returns>
+        public List<AcademicSession> Read(AcademicSession academicSession, int parentId, IConnectable connection);
+
 
         /// <summary>
         /// <para>
-        /// Writes the provided AcademicSession object to the database, linking it to the parent AcademicSession 
-        /// with the parentId passed in, then returns with that same object, but with the auto-generated Id field 
-        /// populated using the primary key from the database.
+        /// Checks to see if the provided data is associated to any record currently in the database.
+        /// If not, then writes this record to the database, not linked to any parent record.
+        /// If so, then updates the database record to match this object, setting any parentId to null.
         /// </para>
-        /// Also populates the returned object with the associated Organization object. This assumes that the 
-        /// associated Organization object has already been written into the database.
+        /// The parentId is not used as part of the lookup phase.
         /// </summary>
-        /// <param name="academicSession"/>
-        /// <param name="parentId"/>
-        /// <param name="connection"/>
-        AcademicSession Write(AcademicSession academicSession, int parentId, IConnectable connection);
-
-        /// <summary>
-        /// Searches the database for the record matching the AcademicSession object passed in, much like the Read 
-        /// methods do, then, if found, updates the database to match the object passed in. If it cannot be found, 
-        /// the AcademicSession object will be written to the database.
-        /// </summary>
-        /// <param name="academicSession"/>
-        /// <param name="connection"/>
-        void Update(AcademicSession academicSession, IConnectable connection);
-
-        /// <summary>
-        /// Searches the database for the record matching the AcademicSession object passed in, much like the Read 
-        /// methods do, then, if found, updates the database to match the object passed in, linked to the parent 
-        /// AcademicSession with the parentId passed in. If it cannot be found, the AcademicSession object, along 
-        /// with the parentId, will be written to the database.
-        /// </summary>
-        /// <param name="academicSession"/>
-        /// <param name="parentId"/>
-        /// <param name="connection"/>
-        void Update(AcademicSession academicSession, int parentId, IConnectable connection);
+        /// <param name="academicSession"></param>
+        /// <param name="connection"></param>
+        public void Update(AcademicSession academicSession, IConnectable connection);
 
         /// <summary>
         /// <para>
-        /// Before performing the deletion, this method unlinks the passed in AcademicSession from any child 
-        /// AcademicSession objects, and calls the Delete method for the ClassEnrolled object that it is linked to.
+        /// Checks to see if the provided data is associated to any record currently in the database.
+        /// If not, then writes this record to the database, linked to the provided parentId.
+        /// If so, then updates the database record to match this object, including a link to the provided parentId.
         /// </para>
-        /// Deletes the AcademicSession object passed in. All datapoints provided in the AcademicSession object must 
-        /// match exactly what is in the database before the deletion can be successfully completed.
+        /// The parentId is not used as part of the lookup phase.
         /// </summary>
-        /// <param name="academicSession"/>
-        /// <param name="connection"/>
-        void Delete(AcademicSession academicSession, IConnectable connection);
+        /// <param name="academicSession"></param>
+        /// <param name="parentId"></param>
+        /// <param name="connection"></param>
+        public void Update(AcademicSession academicSession, int parentId, IConnectable connection);
+
+        /// <summary>
+        /// Writes the provided record to the database.
+        /// </summary>
+        /// <param name="academicSession"></param>
+        /// <param name="connection"></param>
+        /// <returns>A copy of the record that was written, including the object Id, generated by the database.</returns>
+        public AcademicSession Write(AcademicSession academicSession, IConnectable connection);
+
+        /// <summary>
+        /// Writes the provided record to the database, linked to the provided parentId.
+        /// </summary>
+        /// <param name="academicSession"></param>
+        /// <param name="parentId"></param>
+        /// <param name="connection"></param>
+        /// <returns>A copy of the record that was written, including the object Id, generated by the database.</returns>
+        public AcademicSession Write(AcademicSession academicSession, int parentId, IConnectable connection);
     }
 }

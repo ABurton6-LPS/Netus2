@@ -31,73 +31,6 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
         }
 
         [TestCase]
-        public void Delete_ShouldUseExpectedSql()
-        {
-            DaoImplFactory.MockMarkDaoImpl = new MockMarkDaoImpl(tdBuilder);
-
-            _netus2DbConnection.expectedNonQuerySql =
-                "DELETE FROM mark " +
-                "WHERE 1=1 " +
-                "AND mark_id = " + tdBuilder.mark.Id + " " +
-                "AND lineitem_id = " + tdBuilder.lineItem.Id + " " +
-                "AND enum_score_status_id = " + tdBuilder.mark.ScoreStatus.Id + " " +
-                "AND score = " + tdBuilder.mark.Score + " " +
-                "AND score_date = '" + tdBuilder.mark.ScoreDate + "' " +
-                "AND comment = '" + tdBuilder.mark.Comment + "' ";
-
-            markDaoImpl.Delete(tdBuilder.mark, _netus2DbConnection);
-        }
-
-        [TestCase]
-        public void Read_WhileMarkIsNull_ShouldUseExpectedSql()
-        {
-            _netus2DbConnection.expectedReaderSql =
-                "SELECT * FROM mark " +
-                "WHERE 1=1 " +
-                "AND person_id = " + tdBuilder.teacher.Id;
-
-            markDaoImpl.Read(null, tdBuilder.teacher.Id, _netus2DbConnection);
-        }
-
-        [TestCase]
-        public void Read_WhileUsingMarkId_ShouldUseExpectedSql()
-        {
-            _netus2DbConnection.expectedReaderSql =
-                "SELECT * FROM mark " +
-                "WHERE 1=1 " +
-                "AND mark_id = " + tdBuilder.mark.Id + " ";
-
-            markDaoImpl.Read(tdBuilder.mark, tdBuilder.teacher.Id, _netus2DbConnection);
-        }
-
-        [TestCase]
-        public void Read_WhileNotUsingMarkId_ShouldUseExpectedSql()
-        {
-            tdBuilder.mark.Id = -1;
-
-            _netus2DbConnection.expectedReaderSql =
-                "SELECT * FROM mark " +
-                "WHERE 1=1 " +
-                "AND lineitem_id = " + tdBuilder.lineItem.Id + " " +
-                "AND person_id = " + tdBuilder.student.Id + " " +
-                "AND enum_score_status_id = " + tdBuilder.mark.ScoreStatus.Id + " " +
-                "AND score = " + tdBuilder.mark.Score + " " +
-                "AND score_date = '" + tdBuilder.mark.ScoreDate + "' " +
-                "AND comment = '" + tdBuilder.mark.Comment + "' ";
-
-            markDaoImpl.Read(tdBuilder.mark, tdBuilder.student.Id, _netus2DbConnection);
-        }
-
-        [TestCase]
-        public void ReadWithLineItemId_ShouldUseExpectedSql()
-        {
-            _netus2DbConnection.expectedReaderSql =
-                "SELECT * FROM mark WHERE lineitem_id = " + tdBuilder.lineItem.Id;
-
-            markDaoImpl.Read_WithLineItemId(tdBuilder.lineItem.Id, _netus2DbConnection);
-        }
-
-        [TestCase]
         public void Read_ShouldCallExpectedMethods()
         {
             List<DataRow> tstDataSet = new List<DataRow>();
@@ -129,54 +62,6 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 Assert.IsNotEmpty(e.Message);
                 Assert.AreEqual(expectedExceptionMessage, e.Message);
             }
-        }
-
-        [TestCase]
-        public void Update_WhileRecordFound_ShouldUseExpectedSql()
-        {
-            List<DataRow> tstDataSet = new List<DataRow>();
-            tstDataSet.Add(daoObjectMapper.MapMark(tdBuilder.mark, tdBuilder.student.Id));
-            SetMockReaderWithTestData(tstDataSet);
-
-            _netus2DbConnection.expectedNonQuerySql =
-                "UPDATE mark SET " +
-                "lineitem_id = " + tdBuilder.mark.LineItem.Id + ", " +
-                "person_id = " + tdBuilder.student.Id + ", " +
-                "enum_score_status_id = " + tdBuilder.mark.ScoreStatus.Id + ", " +
-                "score = " + tdBuilder.mark.Score + ", " +
-                "score_date = '" + tdBuilder.mark.ScoreDate + "', " +
-                "comment = '" + tdBuilder.mark.Comment + "', " +
-                "changed = dbo.CURRENT_DATETIME(), " +
-                "changed_by = 'Netus2' " +
-                "WHERE mark_id = " + tdBuilder.mark.Id;
-
-            markDaoImpl.Update(tdBuilder.mark, tdBuilder.student.Id, _netus2DbConnection);
-        }
-
-        [TestCase]
-        public void Write_ShouldUseExpectedSql()
-        {
-            _netus2DbConnection.expectedNewRecordSql =
-                "INSERT INTO mark (" +
-                "lineitem_id, " +
-                "person_id, " +
-                "enum_score_status_id, " +
-                "score, " +
-                "score_date, " +
-                "comment, " +
-                "created, " +
-                "created_by" +
-                ") VALUES (" +
-                tdBuilder.lineItem.Id + ", " +
-                tdBuilder.student.Id + ", " +
-                tdBuilder.mark.ScoreStatus.Id + ", " +
-                tdBuilder.mark.Score + ", " +
-                "'" + tdBuilder.mark.ScoreDate + "', " +
-                "'" + tdBuilder.mark.Comment + "', " +
-                "dbo.CURRENT_DATETIME(), " +
-                "'Netus2')";
-
-            markDaoImpl.Write(tdBuilder.mark, tdBuilder.student.Id, _netus2DbConnection);
         }
 
         [TestCase]

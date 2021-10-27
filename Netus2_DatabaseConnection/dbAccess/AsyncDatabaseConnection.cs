@@ -50,9 +50,7 @@ namespace Netus2_DatabaseConnection.dbAccess
 
         public DataTable ReadIntoDataTable(string sql, DataTable dt)
         {
-            List<SqlParameter> parameters = new List<SqlParameter>();
-
-            return ReadIntoDataTable(sql, dt, parameters);
+            return ReadIntoDataTable(sql, dt, new List<SqlParameter>());
         }
 
         public DataTable ReadIntoDataTable(string sql, DataTable dt, List<SqlParameter> parameters)
@@ -101,9 +99,7 @@ namespace Netus2_DatabaseConnection.dbAccess
 
         public int ExecuteNonQuery(string sql)
         {
-            List<SqlParameter> parameters = new List<SqlParameter>();
-
-            return ExecuteNonQuery(sql, parameters);
+            return ExecuteNonQuery(sql, new List<SqlParameter>());
         }
 
         public int ExecuteNonQuery(string sql, List<SqlParameter> parameters)
@@ -155,13 +151,6 @@ namespace Netus2_DatabaseConnection.dbAccess
             }
 
             return returnValue;
-        }
-
-        public int InsertNewRecord(string sql)
-        {
-            List<SqlParameter> parameters = new List<SqlParameter>();
-
-            return InsertNewRecord(sql, parameters);
         }
 
         public int InsertNewRecord(string sql, List<SqlParameter> parameters)

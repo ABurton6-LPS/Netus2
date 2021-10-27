@@ -6,6 +6,7 @@ using Netus2_DatabaseConnection.utilityTools;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Text;
 
 namespace Netus2_DatabaseConnection.daoImplementations
@@ -27,18 +28,22 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         public void Delete(Course course, IConnectable connection)
         {
+            if (course.Id <= 0)
+                throw new Exception("Cannot delete a course which doesn't have a database-assigned ID.\n" + course.ToString());
+
             Delete_ClassEnrolled(course, connection);
             Delete_JctCourseSubject(course, connection);
             Delete_JctCourseGrade(course, connection);
 
             DataRow row = daoObjectMapper.MapCourse(course);
 
-            StringBuilder sql = new StringBuilder("DELETE FROM course WHERE 1=1 ");
-            sql.Append("AND course_id = " + row["course_id"] + " ");
-            sql.Append("AND name " + (row["name"] != DBNull.Value ? "= '" + row["name"] + "' " : "IS NULL "));
-            sql.Append("AND course_code " + (row["course_code"] != DBNull.Value ? "= '" + row["course_code"] + "' " : "IS NULL "));
+            string sql = "DELETE FROM course WHERE " +
+                "course_id = @course_id";
 
-            connection.ExecuteNonQuery(sql.ToString());
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@course_id", course.Id));
+
+            connection.ExecuteNonQuery(sql, parameters);
         }
 
         private void Delete_ClassEnrolled(Course course, IConnectable connection)
@@ -69,40 +74,55 @@ namespace Netus2_DatabaseConnection.daoImplementations
             }
         }
 
-        public Course Read(int courseId, IConnectable connection)
+        public Course Read_UsingCourseId(int courseId, IConnectable connection)
         {
-            string sql = "SELECT * FROM course WHERE course_id = " + courseId;
-            List<Course> results = Read(sql, connection);
-            if (results.Count > 0)
-                return results[0];
-            else
+            string sql = "SELECT * FROM course WHERE course_id = @course_id";
+
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@course_id", courseId));
+
+            List<Course> results = Read(sql, connection, parameters);
+
+            if (results.Count == 0)
                 return null;
+            else
+                return results[0];
         }
 
         public List<Course> Read(Course course, IConnectable connection)
         {
-            StringBuilder sql = new StringBuilder("");
-
             DataRow row = daoObjectMapper.MapCourse(course);
 
-            sql.Append("SELECT * FROM course WHERE 1=1 ");
+            List<SqlParameter> parameters = new List<SqlParameter>();
+
+            StringBuilder sql = new StringBuilder("SELECT * FROM course WHERE 1=1 ");
             if (row["course_id"] != DBNull.Value)
-                sql.Append("AND course_id = " + row["course_id"] + " ");
+            {
+                sql.Append("AND course_id = @course_id");
+                parameters.Add(new SqlParameter("@course_id", row["course_id"]));
+            }
             else
             {
                 if (row["name"] != DBNull.Value)
-                    sql.Append("AND name = '" + row["name"] + "' ");
+                {
+                    sql.Append("AND name = @name ");
+                    parameters.Add(new SqlParameter("@name", row["name"]));
+                }
+
                 if (row["course_code"] != DBNull.Value)
-                    sql.Append("AND course_code = '" + row["course_code"] + "' ");
+                {
+                    sql.Append("AND course_code = @course_code");
+                    parameters.Add(new SqlParameter("@course_code", row["course_code"]));
+                }
             }
 
-            return Read(sql.ToString(), connection);
+            return Read(sql.ToString(), connection, parameters);
         }
 
-        private List<Course> Read(string sql, IConnectable connection)
+        private List<Course> Read(string sql, IConnectable connection, List<SqlParameter> parameters)
         {
             DataTable dtCourse = DataTableFactory.CreateDataTable_Netus2_Course();
-            dtCourse = connection.ReadIntoDataTable(sql, dtCourse);
+            dtCourse = connection.ReadIntoDataTable(sql, dtCourse, parameters);
 
             List<Course> results = new List<Course>();
             foreach (DataRow foundCourseDao in dtCourse.Rows)
@@ -125,7 +145,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
             List<int> idsFound = new List<int>();
 
             IJctCourseSubjectDao jctCourseSubjectDaoImpl = DaoImplFactory.GetJctCourseSubjectDaoImpl();
-            List<DataRow> foundJctCourseSubjectDaos = jctCourseSubjectDaoImpl.Read(courseId, connection);
+            List<DataRow> foundJctCourseSubjectDaos = jctCourseSubjectDaoImpl.Read_AllWithCourseId(courseId, connection);
             foreach (DataRow foundJctCourseSubjectDao in foundJctCourseSubjectDaos)
             {
                 idsFound.Add((int)foundJctCourseSubjectDao["enum_subject_id"]);
@@ -145,7 +165,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
             List<int> idsFound = new List<int>();
 
             IJctCourseGradeDao jctCourseGradeDaoImpl = DaoImplFactory.GetJctCourseGradeDaoImpl();
-            List<DataRow> foundJctCourseGradeDaos = jctCourseGradeDaoImpl.Read(courseId, connection);
+            List<DataRow> foundJctCourseGradeDaos = jctCourseGradeDaoImpl.Read_AllWithCourseId(courseId, connection);
             foreach (DataRow foundJctCourseGradeDao in foundJctCourseGradeDaos)
             {
                 idsFound.Add((int)foundJctCourseGradeDao["enum_grade_id"]);
@@ -180,37 +200,70 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
             if (row["course_id"] != DBNull.Value)
             {
+                List<SqlParameter> parameters = new List<SqlParameter>();
+
                 StringBuilder sql = new StringBuilder("UPDATE course SET ");
-                sql.Append("name = " + (row["name"] != DBNull.Value ? "'" + row["name"] + "', " : "NULL, "));
-                sql.Append("course_code = " + (row["course_code"] != DBNull.Value ? "'" + row["course_code"] + "', " : "NULL, "));
+                if (row["name"] != DBNull.Value)
+                {
+                    sql.Append("name = @name, ");
+                    parameters.Add(new SqlParameter("@name", row["name"]));
+                }
+                else
+                    sql.Append("name = NULL, ");
+
+                if (row["course_code"] != DBNull.Value)
+                {
+                    sql.Append("course_code = @course_code, ");
+                    parameters.Add(new SqlParameter("@course_code", row["course_code"]));
+                }
+                else
+                    sql.Append("course_code = NULL, ");
+
                 sql.Append("changed = dbo.CURRENT_DATETIME(), ");
                 sql.Append("changed_by = " + (_taskId != null ? _taskId.ToString() : "'Netus2'") + " ");
-                sql.Append("WHERE course_id = " + row["course_id"]);
+                sql.Append("WHERE course_id = @course_id");
+                parameters.Add(new SqlParameter("@course_id", row["course_id"]));
 
-                connection.ExecuteNonQuery(sql.ToString());
+                connection.ExecuteNonQuery(sql.ToString(), parameters);
 
                 UpdateJctCourseSubject(course.Subjects, course.Id, connection);
                 UpdateJctCourseGrade(course.Grades, course.Id, connection);
             }
             else
-            {
                 throw new Exception("The following Course needs to be inserted into the database, before it can be updated.\n" + course.ToString());
-            }
         }
 
         public Course Write(Course course, IConnectable connection)
         {
             DataRow row = daoObjectMapper.MapCourse(course);
 
-            StringBuilder sql = new StringBuilder("INSERT INTO course (");
-            sql.Append("name, course_code, created, created_by");
-            sql.Append(") VALUES (");
-            sql.Append(row["name"] != DBNull.Value ? "'" + row["name"] + "', " : "NULL, ");
-            sql.Append(row["course_code"] != DBNull.Value ? "'" + row["course_code"] + "', " : "NULL, ");
-            sql.Append("dbo.CURRENT_DATETIME(), ");
-            sql.Append((_taskId != null ? _taskId.ToString() : "'Netus2'") + ")");
+            List<SqlParameter> parameters = new List<SqlParameter>();
 
-            row["course_id"] = connection.InsertNewRecord(sql.ToString());
+            StringBuilder sqlValues = new StringBuilder();
+            if (row["name"] != DBNull.Value)
+            {
+                sqlValues.Append("@name, ");
+                parameters.Add(new SqlParameter("@name", row["name"]));
+            }
+            else
+                sqlValues.Append("NULL, ");
+
+            if (row["course_code"] != DBNull.Value)
+            {
+                sqlValues.Append("@course_code, ");
+                parameters.Add(new SqlParameter("@course_code", row["course_code"]));
+            }
+            else
+                sqlValues.Append("NULL, ");
+
+            sqlValues.Append("dbo.CURRENT_DATETIME(), ");
+            sqlValues.Append(_taskId != null ? _taskId.ToString() : "'Netus2'");
+
+            string sql = "INSERT INTO course " +
+                "(name, course_code, created, created_by) " +
+                "VALUES (" + sqlValues.ToString() + ")";
+
+            row["course_id"] = connection.InsertNewRecord(sql.ToString(), parameters);
 
             Course result = daoObjectMapper.MapCourse(row);
 
@@ -225,7 +278,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
             List<Enumeration> updatedSubjects = new List<Enumeration>();
             IJctCourseSubjectDao jctCourseSubjectDaoImpl = DaoImplFactory.GetJctCourseSubjectDaoImpl();
             List<DataRow> foundJctCourseSubjectDaos =
-                jctCourseSubjectDaoImpl.Read(courseId, connection);
+                jctCourseSubjectDaoImpl.Read_AllWithCourseId(courseId, connection);
             List<int> subjectIds = new List<int>();
             List<int> foundSubjectIds = new List<int>();
 
@@ -267,7 +320,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
             List<Enumeration> updatedGrades = new List<Enumeration>();
             IJctCourseGradeDao jctCourseGradeDaoImpl = DaoImplFactory.GetJctCourseGradeDaoImpl();
             List<DataRow> foundJctCourseGradeDaos =
-                jctCourseGradeDaoImpl.Read(courseId, connection);
+                jctCourseGradeDaoImpl.Read_AllWithCourseId(courseId, connection);
             List<int> gradeIds = new List<int>();
             List<int> foundGradeIds = new List<int>();
 

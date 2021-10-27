@@ -5,6 +5,7 @@ using Netus2_DatabaseConnection.utilityTools;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Text;
 
 namespace Netus2_DatabaseConnection.daoImplementations
@@ -24,59 +25,79 @@ namespace Netus2_DatabaseConnection.daoImplementations
             return _taskId;
         }
 
-        public void Delete(UniqueIdentifier uniqueId, int personId, IConnectable connection)
+        public void Delete(UniqueIdentifier uniqueId, IConnectable connection)
         {
-            DataRow row = daoObjectMapper.MapUniqueIdentifier(uniqueId, personId);
+            if(uniqueId.Id <= 0)
+                throw new Exception("Cannot delete a unique identifier which doesn't have a database-assigned ID.\n" + uniqueId.ToString());
 
-            StringBuilder sql = new StringBuilder("DELETE FROM unique_identifier WHERE 1=1 ");
-            sql.Append("AND unique_identifier_id " + (row["unique_identifier_id"] != DBNull.Value ? "= " + row["unique_identifier_id"] + " " : "IS NULL "));
-            sql.Append("AND person_id " + (row["person_id"] != DBNull.Value ? "= " + row["person_id"] + " " : "IS NULL "));
-            sql.Append("AND unique_identifier " + (row["unique_identifier"] != DBNull.Value ? "= '" + row["unique_identifier"] + "' " : "IS NULL "));
-            sql.Append("AND enum_identifier_id " + (row["enum_identifier_id"] != DBNull.Value ? "= " + row["enum_identifier_id"] + " " : "IS NULL "));
-            sql.Append("AND is_active_id " + (row["is_active_id"] != DBNull.Value ? "= " + row["is_active_id"] + " " : "IS NULL "));
+            string sql = "DELETE FROM unique_identifier WHERE unique_identifier_id = @unique_identifier_id";
 
-            connection.ExecuteNonQuery(sql.ToString());
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@unique_identifier_id", uniqueId.Id));
+
+            connection.ExecuteNonQuery(sql, parameters);
+        }
+
+        public List<UniqueIdentifier> Read_AllWithPersonId(int personId, IConnectable connection)
+        {
+            string sql = "SELECT * FROM unique_identifier WHERE person_id = @person_id";
+
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@person_id", personId));
+
+            return Read(sql, connection, parameters);
         }
 
         public List<UniqueIdentifier> Read(UniqueIdentifier uniqueId, int personId, IConnectable connection)
         {
-            StringBuilder sql = new StringBuilder("");
+            DataRow row = daoObjectMapper.MapUniqueIdentifier(uniqueId, personId);
 
-            if (uniqueId == null)
-                sql.Append("SELECT * FROM unique_identifier WHERE person_id = " + personId);
+            List<SqlParameter> parameters = new List<SqlParameter>();
+
+            StringBuilder sql = new StringBuilder("SELECT * FROM unique_identifier WHERE 1=1 ");
+            if (row["unique_identifier_id"] != DBNull.Value)
+            {
+                sql.Append("AND unique_identifier_id = @unique_identifier_id");
+                parameters.Add(new SqlParameter("@unique_identifier_id", row["unique_identifier_id"]));
+            }
             else
             {
-                DataRow row = daoObjectMapper.MapUniqueIdentifier(uniqueId, personId);
-
-                sql.Append("SELECT * FROM unique_identifier WHERE 1=1 ");
-                if (row["unique_identifier_id"] != DBNull.Value)
-                    sql.Append("AND unique_identifier_id = " + row["unique_identifier_id"] + " ");
-                else
+                if (row["person_id"] != DBNull.Value)
                 {
-                    if (row["person_id"] != DBNull.Value)
-                        sql.Append("AND person_id = " + row["person_id"] + " ");
-                    if (row["unique_identifier"] != DBNull.Value)
-                        sql.Append("AND unique_identifier = '" + row["unique_identifier"] + "' ");
-                    if (row["enum_identifier_id"] != DBNull.Value)
-                        sql.Append("AND enum_identifier_id = " + row["enum_identifier_id"] + " ");
-                    if (row["is_active_id"] != DBNull.Value)
-                        sql.Append("AND is_active_id = " + row["is_active_id"] + " ");
+                    sql.Append("AND person_id = @person_id ");
+                    parameters.Add(new SqlParameter("@person_id", row["person_id"]));
+                }
+
+                if (row["unique_identifier"] != DBNull.Value)
+                {
+                    sql.Append("AND unique_identifier = @unique_identifier ");
+                    parameters.Add(new SqlParameter("@unique_identifier", row["unique_identifier"]));
+                }
+
+                if (row["enum_identifier_id"] != DBNull.Value)
+                {
+                    sql.Append("AND enum_identifier_id = @enum_identifier_id ");
+                    parameters.Add(new SqlParameter("@enum_identifier_id", row["enum_identifier_id"]));
+                }
+
+                if (row["is_active_id"] != DBNull.Value)
+                {
+                    sql.Append("AND is_active_id = @is_active_id ");
+                    parameters.Add(new SqlParameter("@is_active_id", row["is_active_id"]));
                 }
             }
 
-            return Read(sql.ToString(), connection);
+            return Read(sql.ToString(), connection, parameters);
         }
 
-        private List<UniqueIdentifier> Read(string sql, IConnectable connection)
+        private List<UniqueIdentifier> Read(string sql, IConnectable connection, List<SqlParameter> parameters)
         {
             DataTable dtUniqueIdentifier = DataTableFactory.CreateDataTable_Netus2_UniqueIdentifier();
-            dtUniqueIdentifier = connection.ReadIntoDataTable(sql, dtUniqueIdentifier);
+            dtUniqueIdentifier = connection.ReadIntoDataTable(sql, dtUniqueIdentifier, parameters);
 
             List<UniqueIdentifier> results = new List<UniqueIdentifier>();
             foreach (DataRow row in dtUniqueIdentifier.Rows)
-            {
                 results.Add(daoObjectMapper.MapUniqueIdentifier(row));
-            }
 
             return results;
         }
@@ -102,41 +123,104 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
             if (row["unique_identifier_id"] != DBNull.Value)
             {
+                List<SqlParameter> parameters = new List<SqlParameter>();
+
                 StringBuilder sql = new StringBuilder("UPDATE unique_identifier SET ");
-                sql.Append("person_id = " + (row["person_id"] != DBNull.Value ? row["person_id"] + ", " : "NULL, "));
-                sql.Append("unique_identifier = " + (row["unique_identifier"] != DBNull.Value ? "'" + row["unique_identifier"] + "', " : "NULL, "));
-                sql.Append("enum_identifier_id = " + (row["enum_identifier_id"] != DBNull.Value ? row["enum_identifier_id"] + ", " : "NULL, "));
-                sql.Append("is_active_id = " + (row["is_active_id"] != DBNull.Value ? row["is_active_id"] + ", " : "NULL, "));
+                if (row["person_id"] != DBNull.Value)
+                {
+                    sql.Append("person_id = @person_id, ");
+                    parameters.Add(new SqlParameter("@person_id", row["person_id"]));
+                }
+                else
+                    sql.Append("person_id = NULL, ");
+
+                if (row["unique_identifier"] != DBNull.Value)
+                {
+                    sql.Append("unique_identifier = @unique_identifier, ");
+                    parameters.Add(new SqlParameter("@unique_identifier", row["unique_identifier"]));
+                }
+                else
+                    sql.Append("unique_identifier = NULL, ");
+
+                if (row["enum_identifier_id"] != DBNull.Value)
+                {
+                    sql.Append("enum_identifier_id = @enum_identifier_id, ");
+                    parameters.Add(new SqlParameter("@enum_identifier_id", row["enum_identifier_id"]));
+                }
+                else
+                    sql.Append("enum_identifier_id = NULL, ");
+
+                if (row["is_active_id"] != DBNull.Value)
+                {
+                    sql.Append("is_active_id = @is_active_id, ");
+                    parameters.Add(new SqlParameter("@is_active_id", row["is_active_id"]));
+                }
+                else
+                    sql.Append("is_active_id = NULL, ");
+
                 sql.Append("changed = dbo.CURRENT_DATETIME(), ");
                 sql.Append("changed_by = " + (_taskId != null ? _taskId.ToString() : "'Netus2'") + " ");
-                sql.Append("WHERE unique_identifier_id = " + row["unique_identifier_id"]);
+                sql.Append("WHERE unique_identifier_id = @unique_identifier_id");
+                parameters.Add(new SqlParameter("@unique_identifier_id", row["unique_identifier_id"]));
 
-                connection.ExecuteNonQuery(sql.ToString());
+                connection.ExecuteNonQuery(sql.ToString(), parameters);
             }
             else
-            {
                 throw new Exception("The following Unique Identifier needs to be inserted into the database, before it can be updated.\n" + uniqueIdentifier.ToString());
-            }
         }
 
         public UniqueIdentifier Write(UniqueIdentifier uniqueId, int personId, IConnectable connection)
         {
             DataRow row = daoObjectMapper.MapUniqueIdentifier(uniqueId, personId);
 
-            StringBuilder sql = new StringBuilder("INSERT INTO unique_identifier (");
-            sql.Append("person_id, unique_identifier, enum_identifier_id, is_active_id, created, created_by");
-            sql.Append(") VALUES (");
-            sql.Append(row["person_id"] != DBNull.Value ? row["person_id"] + ", " : "NULL, ");
-            sql.Append(row["unique_identifier"] != DBNull.Value ? "'" + row["unique_identifier"] + "', " : "NULL, ");
-            sql.Append(row["enum_identifier_id"] != DBNull.Value ? row["enum_identifier_id"] + ", " : "NULL, ");
-            sql.Append(row["is_active_id"] != DBNull.Value ? row["is_active_id"] + ", " : "NULL, ");
-            sql.Append("dbo.CURRENT_DATETIME(), ");
-            sql.Append(_taskId != null ? _taskId.ToString() : "'Netus2'");
-            sql.Append(")");
+            List<SqlParameter> parameters = new List<SqlParameter>();
 
-            row["unique_identifier_id"] = connection.InsertNewRecord(sql.ToString());
+            StringBuilder sqlValues = new StringBuilder("");
+            if (row["person_id"] != DBNull.Value)
+            {
+                sqlValues.Append("@person_id, ");
+                parameters.Add(new SqlParameter("@person_id", row["person_id"]));
+            }
+            else
+                sqlValues.Append("NULL, ");
 
-            return daoObjectMapper.MapUniqueIdentifier(row);
+            if (row["unique_identifier"] != DBNull.Value)
+            {
+                sqlValues.Append("@unique_identifier, ");
+                parameters.Add(new SqlParameter("@unique_identifier", row["unique_identifier"]));
+            }
+            else
+                sqlValues.Append("NULL, ");
+
+            if (row["enum_identifier_id"] != DBNull.Value)
+            {
+                sqlValues.Append("@enum_identifier_id, ");
+                parameters.Add(new SqlParameter("@enum_identifier_id", row["enum_identifier_id"]));
+            }
+            else
+                sqlValues.Append("NULL, ");
+
+            if (row["is_active_id"] != DBNull.Value)
+            {
+                sqlValues.Append("@is_active_id, ");
+                parameters.Add(new SqlParameter("@is_active_id", row["is_active_id"]));
+            }
+            else
+                sqlValues.Append("NULL, ");
+
+            sqlValues.Append("dbo.CURRENT_DATETIME(), ");
+            sqlValues.Append(_taskId != null ? _taskId.ToString() : "'Netus2'");
+
+            string sql = "INSERT INTO unique_identifier " +
+                "(person_id, unique_identifier, enum_identifier_id, is_active_id, " +
+                "created, created_by) " +
+                "VALUES (" + sqlValues.ToString() + ")";
+
+            row["unique_identifier_id"] = connection.InsertNewRecord(sql, parameters);
+
+            UniqueIdentifier result = daoObjectMapper.MapUniqueIdentifier(row);
+
+            return result;
         }
     }
 }

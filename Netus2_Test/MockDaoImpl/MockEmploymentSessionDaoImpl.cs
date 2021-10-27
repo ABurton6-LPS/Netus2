@@ -8,12 +8,13 @@ namespace Netus2_Test.MockDaoImpl
     public class MockEmploymentSessionDaoImpl : IEmploymentSessionDao
     {
         public TestDataBuilder tdBuilder;
-        public bool WasCalled_DeleteWithOrganizationId = false;
-        public bool WasCalled_DeleteWithPersonId = false;
-        public bool WasCalled_ReadWithOrganizationId = false;
-        public bool WasCalled_ReadWithPersonId = false;
+        public bool WasCalled_Delete = false;
+        public bool WasCalled_ReadAllWithOrganizationId = false;
+        public bool WasCalled_ReadAllWithPersonId = false;
         public bool WasCalled_Update = false;
         public bool WasCalled_Write = false;
+        public bool WasCalled_ReadUsingPersonId = false;
+        public bool WasCalled_ReadUsingOrganizationId = false;
         public bool _shouldReadReturnData = false;
 
         public void SetTaskId(int taskId)
@@ -31,19 +32,14 @@ namespace Netus2_Test.MockDaoImpl
             this.tdBuilder = tdBuilder;
         }
 
-        public void Delete_WithOrganizationId(EmploymentSession employmentSession, int organizationId, IConnectable connection)
+        public void Delete(EmploymentSession employmentSession, IConnectable connection)
         {
-            WasCalled_DeleteWithOrganizationId = true;
+            WasCalled_Delete = true;
         }
 
-        public void Delete_WithPersonId(EmploymentSession employmentSession, int personId, IConnectable connection)
+        public List<EmploymentSession> Read_AllWithOrganizationId(int organizationId, IConnectable connection)
         {
-            WasCalled_DeleteWithPersonId = true;
-        }
-
-        public List<EmploymentSession> Read_WithOrganizationId(EmploymentSession employmentSession, int organizationId, IConnectable connection)
-        {
-            WasCalled_ReadWithOrganizationId = true;
+            WasCalled_ReadAllWithOrganizationId = true;
 
             List<EmploymentSession> returnData = new List<EmploymentSession>();
 
@@ -53,9 +49,33 @@ namespace Netus2_Test.MockDaoImpl
             return returnData;
         }
 
-        public List<EmploymentSession> Read_WithPersonId(EmploymentSession employmentSession, int personId, IConnectable connection)
+        public List<EmploymentSession> Read_AllWithPersonId(int personId, IConnectable connection)
         {
-            WasCalled_ReadWithPersonId = true;
+            WasCalled_ReadAllWithPersonId = true;
+
+            List<EmploymentSession> returnData = new List<EmploymentSession>();
+
+            if (_shouldReadReturnData)
+                returnData.Add(tdBuilder.employmentSession);
+
+            return returnData;
+        }
+
+        public List<EmploymentSession> Read_UsingPersonId(EmploymentSession employmentSession, int personId, IConnectable connection)
+        {
+            WasCalled_ReadUsingPersonId = true;
+
+            List<EmploymentSession> returnData = new List<EmploymentSession>();
+
+            if (_shouldReadReturnData)
+                returnData.Add(tdBuilder.employmentSession);
+
+            return returnData;
+        }
+
+        public List<EmploymentSession> Read_UsingOrganizationId(EmploymentSession employmentSession, int organizationId, IConnectable connection)
+        {
+            WasCalled_ReadUsingOrganizationId = true;
 
             List<EmploymentSession> returnData = new List<EmploymentSession>();
 

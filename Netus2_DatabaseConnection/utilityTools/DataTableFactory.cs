@@ -16,13 +16,13 @@ namespace Netus2_DatabaseConnection.utilityTools
             dtAcademicSession.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(string);
-            dtColumn.ColumnName = "term_code";
+            dtColumn.DataType = typeof(int);
+            dtColumn.ColumnName = "school_year";
             dtAcademicSession.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(int);
-            dtColumn.ColumnName = "school_year";
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "term_code";
             dtAcademicSession.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();

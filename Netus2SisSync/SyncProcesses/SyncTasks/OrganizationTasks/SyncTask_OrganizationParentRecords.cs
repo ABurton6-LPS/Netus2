@@ -49,7 +49,7 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.OrganizationTasks
                 Organization parentOrg = null;
                 if (sisParentBuildingcode != null && sisParentBuildingcode != "")
                 {
-                    parentOrg = orgDaoImpl.Read_WithSisBuildingCode(sisParentBuildingcode, netus2Connection);
+                    parentOrg = orgDaoImpl.Read_UsingSisBuildingCode(sisParentBuildingcode, netus2Connection);
                     if (parentOrg != null)
                     {
                         List<int> childIds = new List<int>();

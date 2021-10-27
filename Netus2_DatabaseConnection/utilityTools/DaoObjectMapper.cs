@@ -560,12 +560,12 @@ namespace Netus2_DatabaseConnection.utilityTools
             if (employmentSession.StartDate != new DateTime())
                 row["start_date"] = employmentSession.StartDate;
             else
-                row["start_date"] = new DateTime();
+                row["start_date"] = DBNull.Value;
 
             if (employmentSession.EndDate != new DateTime())
                 row["end_date"] = employmentSession.EndDate;
             else
-                row["end_date"] = new DateTime();
+                row["end_date"] = DBNull.Value;
 
             if (employmentSession.IsPrimary != null)
                 row["is_primary_id"] = employmentSession.IsPrimary.Id;
@@ -633,15 +633,16 @@ namespace Netus2_DatabaseConnection.utilityTools
 
         public EmploymentSession MapEmploymentSession(DataRow row, Organization org)
         {
-            string name = null;
-            if(row["name"] != DBNull.Value)
-                name = (string)row["name"];
-
             Enumeration isPrimary = null;
             if (row["is_primary_id"] != DBNull.Value)
                 isPrimary = Enum_True_False.GetEnumFromId((int)row["is_primary_id"]);
 
-            EmploymentSession es = new EmploymentSession(name, isPrimary, org);
+            EmploymentSession es = new EmploymentSession(isPrimary, org);
+
+            if (row["name"] != DBNull.Value)
+                es.Name = (string)row["name"];
+            else
+                es.Name = null;
 
             if (row["employment_session_id"] != DBNull.Value)
                 es.Id = (int)row["employment_session_id"];
@@ -693,12 +694,12 @@ namespace Netus2_DatabaseConnection.utilityTools
             if (enrollment.StartDate != new DateTime())
                 row["start_date"] = enrollment.StartDate;
             else
-                row["start_date"] = new DateTime();
+                row["start_date"] = DBNull.Value;
 
             if (enrollment.EndDate != new DateTime())
                 row["end_date"] = enrollment.EndDate;
             else
-                row["end_date"] = new DateTime();
+                row["end_date"] = DBNull.Value;
 
             if (enrollment.IsPrimary != null)
                 row["is_primary_id"] = enrollment.IsPrimary.Id;
@@ -875,12 +876,12 @@ namespace Netus2_DatabaseConnection.utilityTools
             if (academicSession.StartDate != new DateTime())
                 row["start_date"] = academicSession.StartDate;
             else
-                row["start_date"] = new DateTime();
+                row["start_date"] = DBNull.Value;
 
             if (academicSession.EndDate != new DateTime())
                 row["end_date"] = academicSession.EndDate;
             else
-                row["end_date"] = new DateTime();
+                row["end_date"] = DBNull.Value;
 
             if (academicSession.SessionType != null)
                 row["enum_session_id"] = academicSession.SessionType.Id;
@@ -902,10 +903,6 @@ namespace Netus2_DatabaseConnection.utilityTools
 
         public AcademicSession MapAcademicSession(DataRow row, Organization org)
         {
-            string name = null;
-            if(row["name"] != DBNull.Value)
-                name = (string)row["name"];
-
             Enumeration sessionType = null;
             if (row["enum_session_id"] != DBNull.Value)
                 sessionType = Enum_Session.GetEnumFromId((int)row["enum_session_id"]);
@@ -914,19 +911,24 @@ namespace Netus2_DatabaseConnection.utilityTools
             if (row["term_code"] != DBNull.Value)
                 termCode = (string)row["term_code"];
 
-            AcademicSession academicSession = new AcademicSession(name, sessionType, org, termCode);
+            AcademicSession academicSession = new AcademicSession(sessionType, org, termCode);
+
+            if (row["name"] != DBNull.Value)
+                academicSession.Name = (string)row["name"];
+            else
+                academicSession.Name = null;
 
             if (row["academic_session_id"] != DBNull.Value)
                 academicSession.Id = (int)row["academic_session_id"];
             else
                 academicSession.Id = -1;
 
-            if ((DateTime)row["start_date"] != new DateTime())
+            if (row["start_date"] != DBNull.Value)
                 academicSession.StartDate = (DateTime)row["start_date"];
             else
                 academicSession.StartDate = new DateTime();
 
-            if ((DateTime)row["end_date"] != new DateTime())
+            if (row["end_date"] != DBNull.Value)
                 academicSession.EndDate = (DateTime)row["end_date"];
             else
                 academicSession.EndDate = new DateTime();
@@ -1043,7 +1045,7 @@ namespace Netus2_DatabaseConnection.utilityTools
             if (mark.ScoreDate != new DateTime())
                 row["score_date"] = mark.ScoreDate;
             else
-                row["score_date"] = new DateTime();
+                row["score_date"] = DBNull.Value;
 
             if (mark.Comment != null)
                 row["comment"] = mark.Comment;
@@ -1064,7 +1066,7 @@ namespace Netus2_DatabaseConnection.utilityTools
                 score = (double)row["score"];
 
             DateTime scoreDate = new DateTime();
-            if ((DateTime)row["score_date"] != new DateTime())
+            if (row["score_date"] != DBNull.Value)
                 scoreDate = (DateTime)row["score_date"];
 
             Mark mark = new Mark(lineItem, scoreStatus, score, scoreDate);
@@ -1099,12 +1101,12 @@ namespace Netus2_DatabaseConnection.utilityTools
             if (lineItem.AssignDate != new DateTime())
                 row["assign_date"] = lineItem.AssignDate;
             else
-                row["assign_date"] = new DateTime();
+                row["assign_date"] = DBNull.Value;
 
             if (lineItem.DueDate != new DateTime())
                 row["due_date"] = lineItem.DueDate;
             else
-                row["due_date"] = new DateTime();
+                row["due_date"] = DBNull.Value;
             
             if (lineItem.ClassAssigned != null && lineItem.ClassAssigned.Id != -1)
                 row["class_id"] = lineItem.ClassAssigned.Id;
@@ -1136,11 +1138,11 @@ namespace Netus2_DatabaseConnection.utilityTools
                 name = (string)row["name"];
 
             DateTime assignDate = new DateTime();
-            if((DateTime)row["assign_date"] != new DateTime())
+            if(row["assign_date"] != DBNull.Value)
                 assignDate = (DateTime)row["assign_date"];
 
             DateTime dueDate = new DateTime();
-            if ((DateTime)row["due_date"] != new DateTime())
+            if (row["due_date"] != DBNull.Value)
                 dueDate = (DateTime)row["due_date"];
 
             Enumeration category = null;

@@ -4,6 +4,7 @@ using Netus2_DatabaseConnection.utilityTools;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Text;
 
 namespace Netus2_DatabaseConnection.daoImplementations
@@ -12,58 +13,85 @@ namespace Netus2_DatabaseConnection.daoImplementations
     {
         public void Delete(int personId, int roleId, IConnectable connection)
         {
-            StringBuilder sql = new StringBuilder("DELETE FROM jct_person_role WHERE 1=1 ");
-            sql.Append("AND person_id = " + personId + " ");
-            sql.Append("AND enum_role_id = " + roleId);
+            if (personId <= 0 || roleId < 0)
+                throw new Exception("Cannot delete a record from jct_person_role " +
+                    "without a database-assigned ID for both personId and roleId." +
+                    "\npersonId: " + personId +
+                    "\nroleId: " + roleId);
 
-            connection.ExecuteNonQuery(sql.ToString());
+            string sql = "DELETE FROM jct_person_role WHERE 1=1 " +
+            "AND person_id = @person_id " +
+            "AND enum_role_id = @enum_role_id";
+
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@person_id", personId));
+            parameters.Add(new SqlParameter("@enum_role_id", roleId));
+
+            connection.ExecuteNonQuery(sql, parameters);
         }
 
         public DataRow Read(int personId, int roleId, IConnectable connection)
         {
-            StringBuilder sql = new StringBuilder("SELECT * FROM jct_person_role WHERE 1=1 ");
-            sql.Append("AND person_id = " + personId + " ");
-            sql.Append("AND enum_role_id = " + roleId);
+            string sql = "SELECT * FROM jct_person_role WHERE 1=1 " +
+            "AND person_id = @person_id " +
+            "AND enum_role_id = @enum_role_id";
 
-            List<DataRow> results = Read(sql.ToString(), connection);
-            if (results.Count == 1)
-                return results[0];
-            else if (results.Count == 0)
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@person_id", personId));
+            parameters.Add(new SqlParameter("@enum_role_id", roleId));
+
+            List<DataRow> results = Read(sql, connection, parameters);
+
+            if (results.Count == 0)
                 return null;
             else
-                throw new Exception("The jct_person_role table contains a duplicate record.\n" +
-                    "person_id = " + personId + ", role_id = " + roleId);
+                return results[0];
         }
 
-        public List<DataRow> Read(int personId, IConnectable connection)
+        public List<DataRow> Read_AllWithPersonId(int personId, IConnectable connection)
         {
-            StringBuilder sql = new StringBuilder("SELECT * FROM jct_person_role WHERE 1=1 ");
-            sql.Append("AND person_id = " + personId);
+            string sql = "SELECT * FROM jct_person_role WHERE " +
+            "person_id = @person_id";
 
-            return Read(sql.ToString(), connection);
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@person_id", personId));
+
+            return Read(sql, connection, parameters);
         }
 
-        private List<DataRow> Read(string sql, IConnectable connection)
+        public List<DataRow> Read_AllWithRoleId(int roleId, IConnectable connection)
+        {
+            string sql = "SELECT * FROM jct_person_role WHERE " +
+                "enum_role_id = @enum_role_id";
+
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@enum_role_id", roleId));
+
+            return Read(sql, connection, parameters);
+        }
+
+        private List<DataRow> Read(string sql, IConnectable connection, List<SqlParameter> parameters)
         {
             DataTable dtJctPersonRole = DataTableFactory.CreateDataTable_Netus2_JctPersonRole();
-            dtJctPersonRole = connection.ReadIntoDataTable(sql, dtJctPersonRole);
+            dtJctPersonRole = connection.ReadIntoDataTable(sql, dtJctPersonRole, parameters);
 
             List<DataRow> jctPersonRoleDaos = new List<DataRow>();
             foreach (DataRow row in dtJctPersonRole.Rows)
-            {
                 jctPersonRoleDaos.Add(row);
-            }
 
             return jctPersonRoleDaos;
         }
 
         public DataRow Write(int personId, int roleId, IConnectable connection)
         {
-            StringBuilder sql = new StringBuilder("INSERT INTO jct_person_role (person_id, enum_role_id) VALUES (");
-            sql.Append(personId + ", ");
-            sql.Append(roleId + ")");
+            string sql = "INSERT INTO jct_person_role (person_id, enum_role_id) VALUES (" +
+                "@person_id, @enum_role_id)";
 
-            connection.ExecuteNonQuery(sql.ToString());
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@person_id", personId));
+            parameters.Add(new SqlParameter("@enum_role_id", roleId));
+
+            connection.ExecuteNonQuery(sql, parameters);
 
             DataRow jctPersonRoleDao = DataTableFactory.CreateDataTable_Netus2_JctPersonRole().NewRow();
             jctPersonRoleDao["person_id"] = personId;

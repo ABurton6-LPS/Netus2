@@ -13,6 +13,7 @@ namespace Netus2_Test.MockDaoImpl
         public bool WasCalled_Delete = false;
         public bool WasCalled_Read = false;
         public bool WasCalled_ReadWithCourseId = false;
+        public bool WasCalled_ReadWithGradeId = false;
         public bool WaasCalled_Update = false;
         public bool WasCalled_Write = false;
         public bool _shouldReadReturnData = false;
@@ -27,7 +28,7 @@ namespace Netus2_Test.MockDaoImpl
             WasCalled_Delete = true;
         }
 
-        public List<DataRow> Read(int courseId, IConnectable connection)
+        public List<DataRow> Read_AllWithCourseId(int courseId, IConnectable connection)
         {
             WasCalled_ReadWithCourseId = true;
 
@@ -41,6 +42,27 @@ namespace Netus2_Test.MockDaoImpl
                     DataRow row = dataTable.NewRow();
                     row["course_id"] = courseId;
                     row["enum_grade_id"] = tdBuilder.spanishCourse.Grades[i].Id;
+                    returnData.Add(row);
+                }
+            }
+
+            return returnData;
+        }
+
+        public List<DataRow> Read_AllWithGradeId(int gradeId, IConnectable connection)
+        {
+            WasCalled_ReadWithGradeId = true;
+
+            List<DataRow> returnData = new List<DataRow>();
+
+            if (_shouldReadReturnData)
+            {
+                DataTable dataTable = DataTableFactory.CreateDataTable_Netus2_JctCourseGrade();
+                for (int i = 0; i < tdBuilder.spanishCourse.Grades.Count; i++)
+                {
+                    DataRow row = dataTable.NewRow();
+                    row["course_id"] = tdBuilder.spanishCourse.Id;
+                    row["enum_grade_id"] = gradeId;
                     returnData.Add(row);
                 }
             }

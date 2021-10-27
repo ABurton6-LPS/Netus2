@@ -63,7 +63,7 @@ namespace Netus2_Test.Integration
             Assert.AreEqual(1, organizationDaoImpl.Read(tdBuilder.school, connection).Count);
             Assert.AreEqual(1, academicSessionDaoImpl.Read(tdBuilder.schoolYear, connection).Count);
             Assert.AreEqual(1, personDaoImpl.Read(tdBuilder.teacher, connection).Count);
-            Assert.AreEqual(1, employmentSessionDaoImpl.Read_WithPersonId(tdBuilder.employmentSession, tdBuilder.teacher.Id, connection).Count);
+            Assert.AreEqual(1, employmentSessionDaoImpl.Read_AllWithPersonId(tdBuilder.teacher.Id, connection).Count);
             Assert.AreEqual(1, courseDaoImpl.Read(tdBuilder.spanishCourse, connection).Count);
             Assert.AreEqual(1, resourceDaoImpl.Read(tdBuilder.resource, connection).Count);
             Assert.AreEqual(1, classEnrolledDaoImpl.Read(tdBuilder.classEnrolled, connection).Count);
@@ -87,7 +87,7 @@ namespace Netus2_Test.Integration
             Assert.AreEqual(0, organizationDaoImpl.Read(tdBuilder.school, connection).Count);
             Assert.AreEqual(0, academicSessionDaoImpl.Read(tdBuilder.schoolYear, connection).Count);
             Assert.AreEqual(1, personDaoImpl.Read(tdBuilder.teacher, connection).Count);
-            Assert.AreEqual(0, employmentSessionDaoImpl.Read_WithPersonId(tdBuilder.employmentSession, tdBuilder.teacher.Id, connection).Count);
+            Assert.AreEqual(0, employmentSessionDaoImpl.Read_AllWithPersonId(tdBuilder.teacher.Id, connection).Count);
             Assert.AreEqual(1, courseDaoImpl.Read(tdBuilder.spanishCourse, connection).Count);
             Assert.AreEqual(1, resourceDaoImpl.Read(tdBuilder.resource, connection).Count);
             Assert.AreEqual(0, classEnrolledDaoImpl.Read(tdBuilder.classEnrolled, connection).Count);
@@ -111,7 +111,7 @@ namespace Netus2_Test.Integration
             Assert.AreEqual(1, organizationDaoImpl.Read(tdBuilder.school, connection).Count);
             Assert.AreEqual(0, academicSessionDaoImpl.Read(tdBuilder.schoolYear, connection).Count);
             Assert.AreEqual(1, personDaoImpl.Read(tdBuilder.teacher, connection).Count);
-            Assert.AreEqual(1, employmentSessionDaoImpl.Read_WithPersonId(tdBuilder.employmentSession, tdBuilder.teacher.Id, connection).Count);
+            Assert.AreEqual(1, employmentSessionDaoImpl.Read_AllWithPersonId(tdBuilder.teacher.Id, connection).Count);
             Assert.AreEqual(1, courseDaoImpl.Read(tdBuilder.spanishCourse, connection).Count);
             Assert.AreEqual(1, resourceDaoImpl.Read(tdBuilder.resource, connection).Count);
             Assert.AreEqual(1, classEnrolledDaoImpl.Read(tdBuilder.classEnrolled, connection).Count);
@@ -135,7 +135,7 @@ namespace Netus2_Test.Integration
             Assert.AreEqual(1, organizationDaoImpl.Read(tdBuilder.school, connection).Count);
             Assert.AreEqual(0, academicSessionDaoImpl.Read(tdBuilder.semester1, connection).Count);
             Assert.AreEqual(1, personDaoImpl.Read(tdBuilder.teacher, connection).Count);
-            Assert.AreEqual(1, employmentSessionDaoImpl.Read_WithPersonId(tdBuilder.employmentSession, tdBuilder.teacher.Id, connection).Count);
+            Assert.AreEqual(1, employmentSessionDaoImpl.Read_AllWithPersonId(tdBuilder.teacher.Id, connection).Count);
             Assert.AreEqual(1, courseDaoImpl.Read(tdBuilder.spanishCourse, connection).Count);
             Assert.AreEqual(1, resourceDaoImpl.Read(tdBuilder.resource, connection).Count);
             Assert.AreEqual(0, classEnrolledDaoImpl.Read(tdBuilder.classEnrolled, connection).Count);
@@ -159,7 +159,7 @@ namespace Netus2_Test.Integration
             Assert.AreEqual(1, organizationDaoImpl.Read(tdBuilder.school, connection).Count);
             Assert.AreEqual(1, academicSessionDaoImpl.Read(tdBuilder.schoolYear, connection).Count);
             Assert.AreEqual(0, personDaoImpl.Read(tdBuilder.teacher, connection).Count);
-            Assert.AreEqual(0, employmentSessionDaoImpl.Read_WithPersonId(tdBuilder.employmentSession, tdBuilder.teacher.Id, connection).Count);
+            Assert.AreEqual(0, employmentSessionDaoImpl.Read_AllWithPersonId(tdBuilder.teacher.Id, connection).Count);
             Assert.AreEqual(1, courseDaoImpl.Read(tdBuilder.spanishCourse, connection).Count);
             Assert.AreEqual(1, resourceDaoImpl.Read(tdBuilder.resource, connection).Count);
             Assert.AreEqual(1, classEnrolledDaoImpl.Read(tdBuilder.classEnrolled, connection).Count);
@@ -183,7 +183,7 @@ namespace Netus2_Test.Integration
             Assert.AreEqual(1, organizationDaoImpl.Read(tdBuilder.school, connection).Count);
             Assert.AreEqual(1, academicSessionDaoImpl.Read(tdBuilder.schoolYear, connection).Count);
             Assert.AreEqual(1, personDaoImpl.Read(tdBuilder.teacher, connection).Count);
-            Assert.AreEqual(1, employmentSessionDaoImpl.Read_WithPersonId(tdBuilder.employmentSession, tdBuilder.teacher.Id, connection).Count);
+            Assert.AreEqual(1, employmentSessionDaoImpl.Read_AllWithPersonId(tdBuilder.teacher.Id, connection).Count);
             Assert.AreEqual(1, courseDaoImpl.Read(tdBuilder.spanishCourse, connection).Count);
             Assert.AreEqual(1, resourceDaoImpl.Read(tdBuilder.resource, connection).Count);
             Assert.AreEqual(1, classEnrolledDaoImpl.Read(tdBuilder.classEnrolled, connection).Count);
@@ -202,12 +202,12 @@ namespace Netus2_Test.Integration
         [Test]
         public void Overall_Delete_EmploymentSession()
         {
-            employmentSessionDaoImpl.Delete_WithPersonId(tdBuilder.employmentSession, tdBuilder.teacher.Id, connection);
+            employmentSessionDaoImpl.Delete(tdBuilder.employmentSession, connection);
             Assert.AreEqual(1, organizationDaoImpl.Read(tdBuilder.district, connection).Count);
             Assert.AreEqual(1, organizationDaoImpl.Read(tdBuilder.school, connection).Count);
             Assert.AreEqual(1, academicSessionDaoImpl.Read(tdBuilder.schoolYear, connection).Count);
             Assert.AreEqual(1, personDaoImpl.Read(tdBuilder.teacher, connection).Count);
-            Assert.AreEqual(0, employmentSessionDaoImpl.Read_WithPersonId(tdBuilder.employmentSession, tdBuilder.teacher.Id, connection).Count);
+            Assert.AreEqual(0, employmentSessionDaoImpl.Read_AllWithPersonId(tdBuilder.teacher.Id, connection).Count);
             Assert.AreEqual(1, courseDaoImpl.Read(tdBuilder.spanishCourse, connection).Count);
             Assert.AreEqual(1, resourceDaoImpl.Read(tdBuilder.resource, connection).Count);
             Assert.AreEqual(1, classEnrolledDaoImpl.Read(tdBuilder.classEnrolled, connection).Count);
@@ -231,7 +231,7 @@ namespace Netus2_Test.Integration
             Assert.AreEqual(1, organizationDaoImpl.Read(tdBuilder.school, connection).Count);
             Assert.AreEqual(1, academicSessionDaoImpl.Read(tdBuilder.schoolYear, connection).Count);
             Assert.AreEqual(1, personDaoImpl.Read(tdBuilder.teacher, connection).Count);
-            Assert.AreEqual(1, employmentSessionDaoImpl.Read_WithPersonId(tdBuilder.employmentSession, tdBuilder.teacher.Id, connection).Count);
+            Assert.AreEqual(1, employmentSessionDaoImpl.Read_AllWithPersonId(tdBuilder.teacher.Id, connection).Count);
             Assert.AreEqual(0, courseDaoImpl.Read(tdBuilder.spanishCourse, connection).Count);
             Assert.AreEqual(1, resourceDaoImpl.Read(tdBuilder.resource, connection).Count);
             Assert.AreEqual(0, classEnrolledDaoImpl.Read(tdBuilder.classEnrolled, connection).Count);
@@ -255,7 +255,7 @@ namespace Netus2_Test.Integration
             Assert.AreEqual(1, organizationDaoImpl.Read(tdBuilder.school, connection).Count);
             Assert.AreEqual(1, academicSessionDaoImpl.Read(tdBuilder.schoolYear, connection).Count);
             Assert.AreEqual(1, personDaoImpl.Read(tdBuilder.teacher, connection).Count);
-            Assert.AreEqual(1, employmentSessionDaoImpl.Read_WithPersonId(tdBuilder.employmentSession, tdBuilder.teacher.Id, connection).Count);
+            Assert.AreEqual(1, employmentSessionDaoImpl.Read_AllWithPersonId(tdBuilder.teacher.Id, connection).Count);
             Assert.AreEqual(1, courseDaoImpl.Read(tdBuilder.spanishCourse, connection).Count);
             Assert.AreEqual(0, resourceDaoImpl.Read(tdBuilder.resource, connection).Count);
             Assert.AreEqual(1, classEnrolledDaoImpl.Read(tdBuilder.classEnrolled, connection).Count);
@@ -279,7 +279,7 @@ namespace Netus2_Test.Integration
             Assert.AreEqual(1, organizationDaoImpl.Read(tdBuilder.school, connection).Count);
             Assert.AreEqual(1, academicSessionDaoImpl.Read(tdBuilder.schoolYear, connection).Count);
             Assert.AreEqual(1, personDaoImpl.Read(tdBuilder.teacher, connection).Count);
-            Assert.AreEqual(1, employmentSessionDaoImpl.Read_WithPersonId(tdBuilder.employmentSession, tdBuilder.teacher.Id, connection).Count);
+            Assert.AreEqual(1, employmentSessionDaoImpl.Read_AllWithPersonId(tdBuilder.teacher.Id, connection).Count);
             Assert.AreEqual(1, courseDaoImpl.Read(tdBuilder.spanishCourse, connection).Count);
             Assert.AreEqual(1, resourceDaoImpl.Read(tdBuilder.resource, connection).Count);
             Assert.AreEqual(0, classEnrolledDaoImpl.Read(tdBuilder.classEnrolled, connection).Count);
@@ -303,7 +303,7 @@ namespace Netus2_Test.Integration
             Assert.AreEqual(1, organizationDaoImpl.Read(tdBuilder.school, connection).Count);
             Assert.AreEqual(1, academicSessionDaoImpl.Read(tdBuilder.schoolYear, connection).Count);
             Assert.AreEqual(1, personDaoImpl.Read(tdBuilder.teacher, connection).Count);
-            Assert.AreEqual(1, employmentSessionDaoImpl.Read_WithPersonId(tdBuilder.employmentSession, tdBuilder.teacher.Id, connection).Count);
+            Assert.AreEqual(1, employmentSessionDaoImpl.Read_AllWithPersonId(tdBuilder.teacher.Id, connection).Count);
             Assert.AreEqual(1, courseDaoImpl.Read(tdBuilder.spanishCourse, connection).Count);
             Assert.AreEqual(1, resourceDaoImpl.Read(tdBuilder.resource, connection).Count);
             Assert.AreEqual(1, classEnrolledDaoImpl.Read(tdBuilder.classEnrolled, connection).Count);
@@ -327,7 +327,7 @@ namespace Netus2_Test.Integration
             Assert.AreEqual(1, organizationDaoImpl.Read(tdBuilder.school, connection).Count);
             Assert.AreEqual(1, academicSessionDaoImpl.Read(tdBuilder.schoolYear, connection).Count);
             Assert.AreEqual(1, personDaoImpl.Read(tdBuilder.teacher, connection).Count);
-            Assert.AreEqual(1, employmentSessionDaoImpl.Read_WithPersonId(tdBuilder.employmentSession, tdBuilder.teacher.Id, connection).Count);
+            Assert.AreEqual(1, employmentSessionDaoImpl.Read_AllWithPersonId(tdBuilder.teacher.Id, connection).Count);
             Assert.AreEqual(1, courseDaoImpl.Read(tdBuilder.spanishCourse, connection).Count);
             Assert.AreEqual(1, resourceDaoImpl.Read(tdBuilder.resource, connection).Count);
             Assert.AreEqual(1, classEnrolledDaoImpl.Read(tdBuilder.classEnrolled, connection).Count);
@@ -351,7 +351,7 @@ namespace Netus2_Test.Integration
             Assert.AreEqual(1, organizationDaoImpl.Read(tdBuilder.school, connection).Count);
             Assert.AreEqual(1, academicSessionDaoImpl.Read(tdBuilder.schoolYear, connection).Count);
             Assert.AreEqual(1, personDaoImpl.Read(tdBuilder.teacher, connection).Count);
-            Assert.AreEqual(1, employmentSessionDaoImpl.Read_WithPersonId(tdBuilder.employmentSession, tdBuilder.teacher.Id, connection).Count);
+            Assert.AreEqual(1, employmentSessionDaoImpl.Read_AllWithPersonId(tdBuilder.teacher.Id, connection).Count);
             Assert.AreEqual(1, courseDaoImpl.Read(tdBuilder.spanishCourse, connection).Count);
             Assert.AreEqual(1, resourceDaoImpl.Read(tdBuilder.resource, connection).Count);
             Assert.AreEqual(1, classEnrolledDaoImpl.Read(tdBuilder.classEnrolled, connection).Count);
@@ -375,7 +375,7 @@ namespace Netus2_Test.Integration
             Assert.AreEqual(1, organizationDaoImpl.Read(tdBuilder.school, connection).Count);
             Assert.AreEqual(1, academicSessionDaoImpl.Read(tdBuilder.schoolYear, connection).Count);
             Assert.AreEqual(1, personDaoImpl.Read(tdBuilder.teacher, connection).Count);
-            Assert.AreEqual(1, employmentSessionDaoImpl.Read_WithPersonId(tdBuilder.employmentSession, tdBuilder.teacher.Id, connection).Count);
+            Assert.AreEqual(1, employmentSessionDaoImpl.Read_AllWithPersonId(tdBuilder.teacher.Id, connection).Count);
             Assert.AreEqual(1, courseDaoImpl.Read(tdBuilder.spanishCourse, connection).Count);
             Assert.AreEqual(1, resourceDaoImpl.Read(tdBuilder.resource, connection).Count);
             Assert.AreEqual(1, classEnrolledDaoImpl.Read(tdBuilder.classEnrolled, connection).Count);
@@ -398,7 +398,7 @@ namespace Netus2_Test.Integration
             Assert.AreEqual(1, organizationDaoImpl.Read(tdBuilder.district, connection).Count);
             Assert.AreEqual(1, organizationDaoImpl.Read(tdBuilder.school, connection).Count);
             Assert.AreEqual(1, personDaoImpl.Read(tdBuilder.teacher, connection).Count);
-            Assert.AreEqual(1, employmentSessionDaoImpl.Read_WithPersonId(tdBuilder.employmentSession, tdBuilder.teacher.Id, connection).Count);
+            Assert.AreEqual(1, employmentSessionDaoImpl.Read_AllWithPersonId(tdBuilder.teacher.Id, connection).Count);
             Assert.AreEqual(1, courseDaoImpl.Read(tdBuilder.spanishCourse, connection).Count);
             Assert.AreEqual(1, resourceDaoImpl.Read(tdBuilder.resource, connection).Count);
             Assert.AreEqual(1, classEnrolledDaoImpl.Read(tdBuilder.classEnrolled, connection).Count);
@@ -417,12 +417,12 @@ namespace Netus2_Test.Integration
         [Test]
         public void Overall_Delete_UniqueIdentifier()
         {
-            uniqueIdentifierDaoImpl.Delete(tdBuilder.uniqueId_Student, tdBuilder.student.Id, connection);
+            uniqueIdentifierDaoImpl.Delete(tdBuilder.uniqueId_Student, connection);
             Assert.AreEqual(1, organizationDaoImpl.Read(tdBuilder.district, connection).Count);
             Assert.AreEqual(1, organizationDaoImpl.Read(tdBuilder.school, connection).Count);
             Assert.AreEqual(1, academicSessionDaoImpl.Read(tdBuilder.schoolYear, connection).Count);
             Assert.AreEqual(1, personDaoImpl.Read(tdBuilder.teacher, connection).Count);
-            Assert.AreEqual(1, employmentSessionDaoImpl.Read_WithPersonId(tdBuilder.employmentSession, tdBuilder.teacher.Id, connection).Count);
+            Assert.AreEqual(1, employmentSessionDaoImpl.Read_AllWithPersonId(tdBuilder.teacher.Id, connection).Count);
             Assert.AreEqual(1, courseDaoImpl.Read(tdBuilder.spanishCourse, connection).Count);
             Assert.AreEqual(1, resourceDaoImpl.Read(tdBuilder.resource, connection).Count);
             Assert.AreEqual(1, classEnrolledDaoImpl.Read(tdBuilder.classEnrolled, connection).Count);
@@ -441,12 +441,12 @@ namespace Netus2_Test.Integration
         [Test]
         public void Overall_Delete_PhoneNumber()
         {
-            phoneNumberDaoImpl.Delete(tdBuilder.phoneNumber_Student, tdBuilder.student.Id, connection);
+            phoneNumberDaoImpl.Delete(tdBuilder.phoneNumber_Student, connection);
             Assert.AreEqual(1, organizationDaoImpl.Read(tdBuilder.district, connection).Count);
             Assert.AreEqual(1, organizationDaoImpl.Read(tdBuilder.school, connection).Count);
             Assert.AreEqual(1, academicSessionDaoImpl.Read(tdBuilder.schoolYear, connection).Count);
             Assert.AreEqual(1, personDaoImpl.Read(tdBuilder.teacher, connection).Count);
-            Assert.AreEqual(1, employmentSessionDaoImpl.Read_WithPersonId(tdBuilder.employmentSession, tdBuilder.teacher.Id, connection).Count);
+            Assert.AreEqual(1, employmentSessionDaoImpl.Read_AllWithPersonId(tdBuilder.teacher.Id, connection).Count);
             Assert.AreEqual(1, courseDaoImpl.Read(tdBuilder.spanishCourse, connection).Count);
             Assert.AreEqual(1, resourceDaoImpl.Read(tdBuilder.resource, connection).Count);
             Assert.AreEqual(1, classEnrolledDaoImpl.Read(tdBuilder.classEnrolled, connection).Count);
@@ -470,7 +470,7 @@ namespace Netus2_Test.Integration
             Assert.AreEqual(1, organizationDaoImpl.Read(tdBuilder.school, connection).Count);
             Assert.AreEqual(1, academicSessionDaoImpl.Read(tdBuilder.schoolYear, connection).Count);
             Assert.AreEqual(1, personDaoImpl.Read(tdBuilder.teacher, connection).Count);
-            Assert.AreEqual(1, employmentSessionDaoImpl.Read_WithPersonId(tdBuilder.employmentSession, tdBuilder.teacher.Id, connection).Count);
+            Assert.AreEqual(1, employmentSessionDaoImpl.Read_AllWithPersonId(tdBuilder.teacher.Id, connection).Count);
             Assert.AreEqual(1, courseDaoImpl.Read(tdBuilder.spanishCourse, connection).Count);
             Assert.AreEqual(1, resourceDaoImpl.Read(tdBuilder.resource, connection).Count);
             Assert.AreEqual(1, classEnrolledDaoImpl.Read(tdBuilder.classEnrolled, connection).Count);
@@ -494,7 +494,7 @@ namespace Netus2_Test.Integration
             Assert.AreEqual(1, organizationDaoImpl.Read(tdBuilder.school, connection).Count);
             Assert.AreEqual(1, academicSessionDaoImpl.Read(tdBuilder.schoolYear, connection).Count);
             Assert.AreEqual(1, personDaoImpl.Read(tdBuilder.teacher, connection).Count);
-            Assert.AreEqual(1, employmentSessionDaoImpl.Read_WithPersonId(tdBuilder.employmentSession, tdBuilder.teacher.Id, connection).Count);
+            Assert.AreEqual(1, employmentSessionDaoImpl.Read_AllWithPersonId(tdBuilder.teacher.Id, connection).Count);
             Assert.AreEqual(1, courseDaoImpl.Read(tdBuilder.spanishCourse, connection).Count);
             Assert.AreEqual(1, resourceDaoImpl.Read(tdBuilder.resource, connection).Count);
             Assert.AreEqual(1, classEnrolledDaoImpl.Read(tdBuilder.classEnrolled, connection).Count);

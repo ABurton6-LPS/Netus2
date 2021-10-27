@@ -99,7 +99,7 @@ namespace Netus2SisSync.SyncProcesses.SyncJobs
             IConnectable netus2Connection = DbConnectionFactory.GetNetus2Connection();
             IJctPersonAddressDao jctPersonAddressDaoImpl = new JctPersonAddressDaoImpl();
 
-            List<DataRow> recordsToBeDeleted = jctPersonAddressDaoImpl.Read_AddressIsNotInTempTable(netus2Connection);
+            List<DataRow> recordsToBeDeleted = jctPersonAddressDaoImpl.Read_AllAddressIsNotInTempTable(netus2Connection);
             foreach (DataRow row in recordsToBeDeleted)
                 jctPersonAddressDaoImpl.Delete((int)row["person_id"], (int)row["address_id"], netus2Connection);
         }

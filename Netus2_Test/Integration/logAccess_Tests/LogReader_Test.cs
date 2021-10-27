@@ -251,7 +251,7 @@ namespace Netus2_Test.Integration
             Assert.IsNotNull(updateLog);
 
             //Delete
-            uniqueIdentifierDaoImpl.Delete(uniqueIdentifier, person.Id, connection);
+            uniqueIdentifierDaoImpl.Delete(uniqueIdentifier, connection);
 
             //Read logs after delete
             logs.Clear();
@@ -291,7 +291,7 @@ namespace Netus2_Test.Integration
             //Update
             provider.Name = "new";
             providerDaoImpl.Update(provider, connection);
-            provider = providerDaoImpl.Read_WithProviderId(provider.Id, connection);
+            provider = providerDaoImpl.Read_UsingProviderId(provider.Id, connection);
 
             //Read logs after update
             logs.Clear();
@@ -340,7 +340,7 @@ namespace Netus2_Test.Integration
             Person person = personDaoImpl.Write(new Person("fname", "lname", new DateTime(1985, 9, 6), Enum_Gender.values["unset"], Enum_Ethnic.values["unset"]), connection);
             Course course = courseDaoImpl.Write(new Course("testName", "testCode"), connection);
             Organization organization = organizationDaoImpl.Write(new Organization("testName", Enum_Organization.values["unset"], "testId", "tstBldg"), connection);
-            AcademicSession academicSession = academicSessionDaoImpl.Write(new AcademicSession("testName", Enum_Session.values["unset"], organization, "tst"), connection);
+            AcademicSession academicSession = academicSessionDaoImpl.Write(new AcademicSession(Enum_Session.values["unset"], organization, "tst"), connection);
             ClassEnrolled classEnrolled = new ClassEnrolled("testName", "tstClassCode", Enum_Class.values["unset"], "tstRoom", course, academicSession);
 
             //Write
@@ -663,7 +663,7 @@ namespace Netus2_Test.Integration
             Person person = personDaoImpl.Write(new Person("ftest", "ltest", new DateTime(1985, 9, 6), Enum_Gender.values["unset"], Enum_Ethnic.values["unset"]), connection);
 
             //Write
-            EmploymentSession employmentSession = employmentSessionDaoImpl.Write(new EmploymentSession("testName", Enum_True_False.values["true"], org), person.Id, connection);
+            EmploymentSession employmentSession = employmentSessionDaoImpl.Write(new EmploymentSession(Enum_True_False.values["true"], org), person.Id, connection);
 
             //Read logs after write
             List<LogEmploymentSession> logs = new List<LogEmploymentSession>();
@@ -678,7 +678,7 @@ namespace Netus2_Test.Integration
             //Update
             employmentSession.Name = "new";
             employmentSessionDaoImpl.Update(employmentSession, person.Id, connection);
-            employmentSession = employmentSessionDaoImpl.Read_WithPersonId(employmentSession, person.Id, connection)[0];
+            employmentSession = employmentSessionDaoImpl.Read_AllWithPersonId(person.Id, connection)[0];
 
             //Read logs after update
             logs.Clear();
@@ -699,7 +699,7 @@ namespace Netus2_Test.Integration
             Assert.IsNotNull(updateLog);
 
             //Delete
-            employmentSessionDaoImpl.Delete_WithPersonId(employmentSession, person.Id, connection);
+            employmentSessionDaoImpl.Delete(employmentSession, connection);
 
             //Read logs after delete
             logs.Clear();
@@ -727,7 +727,7 @@ namespace Netus2_Test.Integration
             Organization org = organizationDaoImpl.Write(new Organization("testName", Enum_Organization.values["unset"], "testIdentifier", "testSisBuildingCode"), connection);
 
             //Write
-            AcademicSession academicSession = academicSessionDaoImpl.Write(new AcademicSession("testName", Enum_Session.values["unset"], org, "tst"), connection);
+            AcademicSession academicSession = academicSessionDaoImpl.Write(new AcademicSession(Enum_Session.values["unset"], org, "tst"), connection);
 
             //Read logs after write
             List<LogAcademicSession> logs = new List<LogAcademicSession>();
@@ -803,7 +803,7 @@ namespace Netus2_Test.Integration
             //Update
             org.Name = "new";
             organizationDaoImpl.Update(org, connection);
-            org = organizationDaoImpl.Read_WithOrganizationId(org.Id, connection);
+            org = organizationDaoImpl.Read_UsingOrganizationId(org.Id, connection);
 
             //Read logs after update
             logs.Clear();
@@ -1060,7 +1060,7 @@ namespace Netus2_Test.Integration
             //Prerequisite
             Course course = courseDaoImpl.Write(new Course("testName", "testCourseCode"), connection);
             Organization org = organizationDaoImpl.Write(new Organization("testName", Enum_Organization.values["unset"], "testIdentifier", "testSisBuildingCode"), connection);
-            AcademicSession academicSession = academicSessionDaoImpl.Write(new AcademicSession("testName", Enum_Session.values["unset"], org, "tst"), connection);
+            AcademicSession academicSession = academicSessionDaoImpl.Write(new AcademicSession(Enum_Session.values["unset"], org, "tst"), connection);
 
             //Write
             ClassEnrolled classEnrolled = classEnrolledDaoImpl.Write(new ClassEnrolled("testName", "tstClassCode", Enum_Class.values["unset"], "testRoom", course, academicSession), connection);
@@ -1127,7 +1127,7 @@ namespace Netus2_Test.Integration
             //Prerequisite
             Course course = courseDaoImpl.Write(new Course("testName", "tstCourseCode"), connection);
             Organization org = organizationDaoImpl.Write(new Organization("testName", Enum_Organization.values["unset"], "test", "tstBldg"), connection);
-            AcademicSession academicSession = academicSessionDaoImpl.Write(new AcademicSession("testName", Enum_Session.values["unset"], org, "tst"), connection);
+            AcademicSession academicSession = academicSessionDaoImpl.Write(new AcademicSession(Enum_Session.values["unset"], org, "tst"), connection);
             ClassEnrolled classEnrolled = new ClassEnrolled("testName", "testClassCode", Enum_Class.values["unset"], "testRoom", course, academicSession);
             Enumeration period = Enum_Period.values["unset"];
 
@@ -1175,7 +1175,7 @@ namespace Netus2_Test.Integration
             Resource resource = resourceDaoImpl.Write(new Resource("tstName", "tstVenName"), connection);
             Course course = courseDaoImpl.Write(new Course("testName", "tstCourseCode"), connection);
             Organization org = organizationDaoImpl.Write(new Organization("testName", Enum_Organization.values["unset"], "test", "tstBldg"), connection);
-            AcademicSession academicSession = academicSessionDaoImpl.Write(new AcademicSession("testName", Enum_Session.values["unset"], org, "tst"), connection);
+            AcademicSession academicSession = academicSessionDaoImpl.Write(new AcademicSession(Enum_Session.values["unset"], org, "tst"), connection);
             ClassEnrolled classEnrolled = new ClassEnrolled("testName", "testClassCode", Enum_Class.values["unset"], "testRoom", course, academicSession);
 
             //Write
@@ -1221,7 +1221,7 @@ namespace Netus2_Test.Integration
             //Prerequisite
             Course course = courseDaoImpl.Write(new Course("testName", "tstCourseCode"), connection);
             Organization org = organizationDaoImpl.Write(new Organization("testName", Enum_Organization.values["unset"], "test", "tstBldg"), connection);
-            AcademicSession academicSession = academicSessionDaoImpl.Write(new AcademicSession("testName", Enum_Session.values["unset"], org, "tst"), connection);
+            AcademicSession academicSession = academicSessionDaoImpl.Write(new AcademicSession(Enum_Session.values["unset"], org, "tst"), connection);
             ClassEnrolled classEnrolled = classEnrolledDaoImpl.Write(new ClassEnrolled("testName", "testClassCode", Enum_Class.values["unset"], "testRoom", course, academicSession), connection);
 
             //Write
@@ -1240,7 +1240,7 @@ namespace Netus2_Test.Integration
             //Update
             lineItem.Descript = "newDescript";
             lineItemDaoImpl.Update(lineItem, connection);
-            lineItem = lineItemDaoImpl.Read(lineItem.Id, connection);
+            lineItem = lineItemDaoImpl.Read_UsingLineItemId(lineItem.Id, connection);
 
             //Read logs after update
             logs.Clear();
@@ -1289,7 +1289,7 @@ namespace Netus2_Test.Integration
             Person person = personDaoImpl.Write(new Person("fname", "lname", new DateTime(1985, 9, 6), Enum_Gender.values["unset"], Enum_Ethnic.values["unset"]), connection);
             Course course = courseDaoImpl.Write(new Course("testName", "tstCourseCode"), connection);
             Organization organization = organizationDaoImpl.Write(new Organization("testName", Enum_Organization.values["unset"], "tstId", "tstBldg"), connection);
-            AcademicSession academicSession = academicSessionDaoImpl.Write(new AcademicSession("testName", Enum_Session.values["unset"], organization, "tst"), connection);
+            AcademicSession academicSession = academicSessionDaoImpl.Write(new AcademicSession(Enum_Session.values["unset"], organization, "tst"), connection);
             ClassEnrolled classEnrolled = classEnrolledDaoImpl.Write(new ClassEnrolled("testName", "testClassCode", Enum_Class.values["unset"], "testRoom", course, academicSession), connection);
 
             //Write
@@ -1357,7 +1357,7 @@ namespace Netus2_Test.Integration
             Person person = personDaoImpl.Write(new Person("ftest", "ltest", new DateTime(1985, 9, 6), Enum_Gender.values["unset"], Enum_Ethnic.values["unset"]), connection);
             Course course = courseDaoImpl.Write(new Course("testName", "tstCourseCode"), connection);
             Organization org = organizationDaoImpl.Write(new Organization("testName", Enum_Organization.values["unset"], "test", "tstBldg"), connection);
-            AcademicSession academicSession = academicSessionDaoImpl.Write(new AcademicSession("testName", Enum_Session.values["unset"], org, "tst"), connection);
+            AcademicSession academicSession = academicSessionDaoImpl.Write(new AcademicSession(Enum_Session.values["unset"], org, "tst"), connection);
             ClassEnrolled classEnrolled = classEnrolledDaoImpl.Write(new ClassEnrolled("testName", "testClassCode", Enum_Class.values["unset"], "testRoom", course, academicSession), connection);
             LineItem lineItem = lineItemDaoImpl.Write(new LineItem("testName", new DateTime(), new DateTime(), classEnrolled, Enum_Category.values["unset"], 0, 100), connection);
 
@@ -1426,7 +1426,7 @@ namespace Netus2_Test.Integration
             Person person = personDaoImpl.Write(new Person("fname", "lname", new DateTime(1985, 9, 6), Enum_Gender.values["unset"], Enum_Ethnic.values["unset"]), connection);
             Course course = courseDaoImpl.Write(new Course("testName", "tstCourseCode"), connection);
             Organization organization = organizationDaoImpl.Write(new Organization("testName", Enum_Organization.values["unset"], "tstId", "tstBldg"), connection);
-            AcademicSession academicSession = academicSessionDaoImpl.Write(new AcademicSession("testName", Enum_Session.values["unset"], organization, "tst"), connection);
+            AcademicSession academicSession = academicSessionDaoImpl.Write(new AcademicSession(Enum_Session.values["unset"], organization, "tst"), connection);
             ClassEnrolled classEnrolled = classEnrolledDaoImpl.Write(new ClassEnrolled("testName", "testClassCode", Enum_Class.values["unset"], "testRoom", course, academicSession), connection);
 
             //Write

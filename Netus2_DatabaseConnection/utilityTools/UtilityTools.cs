@@ -4,6 +4,7 @@ using Netus2_DatabaseConnection.enumerations;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 
 namespace Netus2_DatabaseConnection.utilityTools
 {
@@ -77,12 +78,17 @@ namespace Netus2_DatabaseConnection.utilityTools
             IConnectable connection = DbConnectionFactory.GetNetus2Connection();
 
             string sql = "SELECT * FROM config WHERE 1=1 " +
-                "AND enum_config_id = " + enumConfig.Id + " " +
-                "AND is_for_student_id = " + enumIsForStudents.Id + " " +
-                "AND is_for_staff_id = " + enumIsForStaff.Id;
+                "AND enum_config_id = @enum_config_id " +
+                "AND is_for_student_id = @is_for_student_id " +
+                "AND is_for_staff_id = @is_for_staff_id";
+
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@enum_config_id", enumConfig.Id));
+            parameters.Add(new SqlParameter("@is_for_student_id", enumIsForStudents.Id));
+            parameters.Add(new SqlParameter("@is_for_staff_id", enumIsForStaff.Id));
 
             DataTable dtConfig = DataTableFactory.CreateDataTable_Netus2_Config();
-            dtConfig = connection.ReadIntoDataTable(sql, dtConfig);
+            dtConfig = connection.ReadIntoDataTable(sql, dtConfig, parameters);
 
             List<Config> configs = new List<Config>();
             foreach(DataRow row in dtConfig.Rows)

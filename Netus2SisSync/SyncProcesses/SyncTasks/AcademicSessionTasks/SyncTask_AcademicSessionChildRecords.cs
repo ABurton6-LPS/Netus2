@@ -29,48 +29,47 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AcademicSessionTasks
             try
             {
                 string sisBuildingCode = row["building_code"].ToString() == "" ? null : row["building_code"].ToString();
-                string sisTermCode = row["term_code"].ToString() == "" ? null : row["term_code"].ToString();
                 int sisSchoolYear = Int32.Parse(row["school_year"].ToString() == "" ? "-1" : row["school_year"].ToString());
-                string sisName = row["name"].ToString() == "" ? null : row["name"].ToString();
+                string sisTermCode = row["term_code"].ToString() == "" ? null : row["term_code"].ToString();
+
                 Enumeration sisEnumSession = Enum_Session.values[row["enum_session_id"].ToString().ToLower()];
+                string sisName = row["name"].ToString() == "" ? null : row["name"].ToString();                
                 DateTime sisStartDate = DateTime.Parse(row["start_date"].ToString());
                 DateTime sisEndDate = DateTime.Parse(row["end_date"].ToString());
 
                 IOrganizationDao orgDaoImpl = DaoImplFactory.GetOrganizationDaoImpl();
                 orgDaoImpl.SetTaskId(this.Id);
-                Organization org = orgDaoImpl.Read_WithSisBuildingCode(sisBuildingCode, _netus2Connection);
+                Organization org = orgDaoImpl.Read_UsingSisBuildingCode(sisBuildingCode, _netus2Connection);
 
-                AcademicSession academicSession = new AcademicSession(sisName, sisEnumSession, org, sisTermCode);
+                AcademicSession academicSession = new AcademicSession(sisEnumSession, org, sisTermCode);
                 academicSession.SchoolYear = sisSchoolYear;
-                academicSession.StartDate = sisStartDate;
-                academicSession.EndDate = sisEndDate;
 
                 IAcademicSessionDao academicSessionDaoImpl = DaoImplFactory.GetAcademicSessionDaoImpl();
                 academicSessionDaoImpl.SetTaskId(this.Id);
-                List<AcademicSession> foundAcademicSessions = academicSessionDaoImpl.Read(academicSession, _netus2Connection);
+                AcademicSession foundAcademicSession = academicSessionDaoImpl.Read_UsingSisBuildingCode_TermCode_Schoolyear(sisBuildingCode, sisTermCode, sisSchoolYear, _netus2Connection);
 
-                if (foundAcademicSessions.Count == 0)
+                academicSession.Name = sisName;
+                academicSession.StartDate = sisStartDate;
+                academicSession.EndDate = sisEndDate;
+
+                if (foundAcademicSession == null)
                 {
                     academicSession = academicSessionDaoImpl.Write(academicSession, _netus2Connection);
                 }
-                else if (foundAcademicSessions.Count == 1)
+                else if (foundAcademicSession != null)
                 {
-                    academicSession.Id = foundAcademicSessions[0].Id;
+                    academicSession.Id = foundAcademicSession.Id;
 
-                    if ((academicSession.TermCode != foundAcademicSessions[0].TermCode) ||
-                        (academicSession.SchoolYear != foundAcademicSessions[0].SchoolYear) ||
-                        (academicSession.Name != foundAcademicSessions[0].Name) ||
-                        (academicSession.SessionType != foundAcademicSessions[0].SessionType) ||
-                        (academicSession.StartDate != foundAcademicSessions[0].StartDate) ||
-                        (academicSession.EndDate != foundAcademicSessions[0].EndDate) ||
-                        (academicSession.Organization.Id != foundAcademicSessions[0].Organization.Id))
+                    if ((academicSession.TermCode != foundAcademicSession.TermCode) ||
+                        (academicSession.SchoolYear != foundAcademicSession.SchoolYear) ||
+                        (academicSession.Name != foundAcademicSession.Name) ||
+                        (academicSession.SessionType != foundAcademicSession.SessionType) ||
+                        (academicSession.StartDate != foundAcademicSession.StartDate) ||
+                        (academicSession.EndDate != foundAcademicSession.EndDate) ||
+                        (academicSession.Organization.Id != foundAcademicSession.Organization.Id))
                     {
                         academicSessionDaoImpl.Update(academicSession, _netus2Connection);
                     }
-                }
-                else
-                {
-                    throw new Exception(foundAcademicSessions.Count + " record(s) found matching Academic Session:\n" + academicSession.ToString());
                 }
 
                 SyncLogger.LogStatus(this, Enum_Sync_Status.values["end"]);

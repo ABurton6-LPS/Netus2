@@ -31,21 +31,6 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
         }
 
         [TestCase]
-        public void Delete_ShouldUseExpectedSql()
-        {
-            DaoImplFactory.MockJctPersonAppDaoImpl = new MockJctPersonAppDaoImpl(tdBuilder);
-
-            _netus2DbConnection.expectedNonQuerySql =
-                "DELETE FROM app " +
-                "WHERE 1=1 " +
-                "AND app_id = " + tdBuilder.application.Id + " " +
-                "AND name LIKE '" + tdBuilder.application.Name + "' " +
-                "AND provider_id = " + tdBuilder.application.Provider.Id + " ";
-
-            applicationDaoImpl.Delete(tdBuilder.application, _netus2DbConnection);
-        }
-
-        [TestCase]
         public void DeleteJctPersonApp_ShouldCallExpectedMethods()
         {
             MockJctPersonAppDaoImpl mockJctPersonAppDaoImpl = new MockJctPersonAppDaoImpl(tdBuilder);
@@ -56,51 +41,6 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
 
             Assert.IsTrue(mockJctPersonAppDaoImpl.WasCalled_ReadWithAppId);
             Assert.IsTrue(mockJctPersonAppDaoImpl.WasCalled_Delete);
-        }
-
-        [TestCase]
-        public void ReadUsingAppId_ShouldUseExpectedSql()
-        {
-            _netus2DbConnection.expectedReaderSql =
-                "SELECT * FROM app " +
-                "WHERE app_id = " + tdBuilder.application.Id;
-
-            applicationDaoImpl.Read_UsingAppId(tdBuilder.application.Id, _netus2DbConnection);
-        }
-
-        [TestCase]
-        public void ReadUsingProviderId_ShouldUseExpectedSql()
-        {
-            _netus2DbConnection.expectedReaderSql =
-                "SELECT * FROM app " +
-                "WHERE provider_id = " + tdBuilder.application.Provider.Id;
-
-            applicationDaoImpl.Read_UsingProviderId(tdBuilder.application.Provider.Id, _netus2DbConnection);
-        }
-
-        [TestCase]
-        public void Read_WithIdPopulatd_ShouldUseExpectedSql()
-        {
-            _netus2DbConnection.expectedReaderSql =
-                "SELECT * FROM app " +
-                "WHERE 1=1 " +
-                "AND app_id = " + tdBuilder.application.Id + " ";
-
-            applicationDaoImpl.Read(tdBuilder.application, _netus2DbConnection);
-        }
-
-        [TestCase]
-        public void Read_WithoutIdPopulated_ShouldUseExpectedSql()
-        {
-            tdBuilder.application.Id = -1;
-
-            _netus2DbConnection.expectedReaderSql =
-                "SELECT * FROM app " +
-                "WHERE 1=1 " +
-                "AND name = '" + tdBuilder.application.Name + "' " +
-                "AND provider_id = " + tdBuilder.provider.Id + " ";
-
-            applicationDaoImpl.Read(tdBuilder.application, _netus2DbConnection);
         }
 
         [TestCase]
@@ -116,60 +56,6 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
             applicationDaoImpl.Read(tdBuilder.application, _netus2DbConnection);
 
             Assert.IsTrue(mockProviderDaoImpl.WasCalled_ReadWithProviderId);
-        }
-
-        [TestCase]
-        public void Update_WhenRecordNotFound_ShouldUseExpectedSql()
-        {
-            _netus2DbConnection.expectedNewRecordSql =
-                "INSERT INTO app (" +
-                "name, " +
-                "provider_id, " +
-                "created, " +
-                "created_by" +
-                ") VALUES (" +
-                "'" + tdBuilder.application.Name + "', " +
-                tdBuilder.application.Provider.Id + ", " +
-                "dbo.CURRENT_DATETIME(), " +
-                "'Netus2')";
-
-            applicationDaoImpl.Update(tdBuilder.application, _netus2DbConnection);
-        }
-
-        [TestCase]
-        public void Update_WhenRecordFound_ShouldUseExpectedSql()
-        {
-            List<DataRow> tstDataSet = new List<DataRow>();
-            tstDataSet.Add(daoObjectMapper.MapApp(tdBuilder.application));
-            SetMockReaderWithTestData(tstDataSet);
-
-            _netus2DbConnection.expectedNonQuerySql =
-                "UPDATE app " +
-                "SET name = '" + tdBuilder.application.Name + "', " +
-                "provider_id = " + tdBuilder.application.Provider.Id + ", " +
-                "changed = dbo.CURRENT_DATETIME(), " +
-                "changed_by = 'Netus2' " +
-                "WHERE app_id = " + tdBuilder.application.Id;
-
-            applicationDaoImpl.Update(tdBuilder.application, _netus2DbConnection);
-        }
-
-        [TestCase]
-        public void Write_ShouldUseExpectedSql()
-        {
-            _netus2DbConnection.expectedNewRecordSql =
-                "INSERT INTO app (" +
-                "name, " +
-                "provider_id, " +
-                "created, " +
-                "created_by" +
-                ") VALUES (" +
-                "'" + tdBuilder.application.Name + "', " +
-                tdBuilder.application.Provider.Id + ", " +
-                "dbo.CURRENT_DATETIME(), " +
-                "'Netus2')";
-
-            applicationDaoImpl.Write(tdBuilder.application, _netus2DbConnection);
         }
 
         [TestCase]

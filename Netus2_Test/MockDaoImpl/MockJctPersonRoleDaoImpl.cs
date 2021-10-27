@@ -11,6 +11,7 @@ namespace Netus2_Test.MockDaoImpl
         public TestDataBuilder tdBuilder;
         public bool WasCalled_Delete = false;
         public bool WasCalled_ReadWithPersonId = false;
+        public bool WasCalled_ReadWithRoleId = false;
         public bool WasCalled_Read = false;
         public bool WasCalled_Write = false;
         public bool _shouldReadReturnData = false;
@@ -25,7 +26,7 @@ namespace Netus2_Test.MockDaoImpl
             WasCalled_Delete = true;
         }
 
-        public List<DataRow> Read(int personId, IConnectable connection)
+        public List<DataRow> Read_AllWithPersonId(int personId, IConnectable connection)
         {
             WasCalled_ReadWithPersonId = true;
 
@@ -40,6 +41,28 @@ namespace Netus2_Test.MockDaoImpl
                     row["enum_role_id"] = tdBuilder.teacher.Roles[0].Id;
                 else
                     row["enum_role_id"] = tdBuilder.student.Roles[0].Id;
+
+                returnData.Add(row);
+            }
+
+            return returnData;
+        }
+
+        public List<DataRow> Read_AllWithRoleId(int roleIdId, IConnectable connection)
+        {
+            WasCalled_ReadWithRoleId = true;
+
+            List<DataRow> returnData = new List<DataRow>();
+
+            if (_shouldReadReturnData)
+            {
+                DataRow row = DataTableFactory.CreateDataTable_Netus2_JctPersonRole().NewRow();
+                row["enum_role_id"] = roleIdId;
+
+                if (roleIdId == tdBuilder.teacher.Roles[0].Id)
+                    row["person_id"] = tdBuilder.teacher.Id;
+                else
+                    row["person_id"] = tdBuilder.student.Id;
 
                 returnData.Add(row);
             }

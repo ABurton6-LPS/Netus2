@@ -1,8 +1,10 @@
 ﻿using Netus2_DatabaseConnection.daoInterfaces;
 using Netus2_DatabaseConnection.dbAccess;
 using Netus2_DatabaseConnection.utilityTools;
+using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Text;
 
 namespace Netus2_DatabaseConnection.daoImplementations
@@ -11,60 +13,100 @@ namespace Netus2_DatabaseConnection.daoImplementations
     {
         public void Delete(int classId, int personId, IConnectable connection)
         {
-            string sql = "DELETE FROM jct_class_person WHERE class_id = " + classId +
-                " AND person_id = " + personId;
+            if (classId <= 0 || personId <= 0)
+                throw new Exception("Cannot delete a record from jct_class_person " +
+                    "without a database-assigned ID for classId and personId." +
+                    "\nclassId: " + classId +
+                    "\npersonId: " + personId);
 
-            connection.ExecuteNonQuery(sql);
+            string sql = "DELETE FROM jct_class_person WHERE 1=1 " +
+                "AND class_id = @class_id " +
+                "AND person_id = @person_id";
+
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@class_id", classId));
+            parameters.Add(new SqlParameter("@person_id", personId));
+
+            connection.ExecuteNonQuery(sql, parameters);
         }
 
-        public DataRow Read(int classId, int personId, IConnectable connection)
+        public DataRow Read(int classId, int personId, int roleId, IConnectable connection)
         {
-            string sql = "SELECT * FROM jct_class_person WHERE class_id = " + classId +
-                " AND person_id = " + personId;
+            string sql = "SELECT * FROM jct_class_person WHERE 1=1 " +
+                "AND class_id = @class_id " +
+                "AND person_id = @person_id " +
+                "AND enum_role_id = @enum_role_id";
 
-            List<DataRow> result = Read(sql, connection);
-            if (result.Count > 0)
-                return result[0];
-            else
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@class_id", classId));
+            parameters.Add(new SqlParameter("@person_id", personId));
+            parameters.Add(new SqlParameter("@enum_role_id", roleId));
+
+            List<DataRow> result = Read(sql, connection, parameters);
+
+            if (result.Count == 0)
                 return null;
+            else
+                return result[0];
         }
 
-        public List<DataRow> Read_WithClassId(int classId, IConnectable connection)
+        public List<DataRow> Read_AllWithClassId(int classId, IConnectable connection)
         {
-            string sql = "SELECT * FROM jct_class_person WHERE class_id = " + classId;
+            string sql = "SELECT * FROM jct_class_person WHERE " +
+                "class_id = @class_id";
 
-            return Read(sql, connection);
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@class_id", classId));
+
+            return Read(sql, connection, parameters);
         }
 
-        public List<DataRow> Read_WithPersonId(int personId, IConnectable connection)
+        public List<DataRow> Read_AllWithPersonId(int personId, IConnectable connection)
         {
-            string sql = "SELECT * FROM jct_class_person WHERE person_id = " + personId;
+            string sql = "SELECT * FROM jct_class_person WHERE " +
+                "person_id = @person_id";
 
-            return Read(sql, connection);
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@person_id", personId));
+
+            return Read(sql, connection, parameters);
         }
 
-        private List<DataRow> Read(string sql, IConnectable connection)
+        public List<DataRow> Read_AllWithRoleId(int roleId, IConnectable connection)
+        {
+            string sql = "SELECT * FROM jct_class_person WHERE " +
+                "enum_role_id = @enum_role_id";
+
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@enum_role_id", roleId));
+
+            return Read(sql, connection, parameters);
+        }
+
+        private List<DataRow> Read(string sql, IConnectable connection, List<SqlParameter> parameters)
         {
             DataTable dtJctClassPerson = DataTableFactory.CreateDataTable_Netus2_JctClassPerson();
-            dtJctClassPerson = connection.ReadIntoDataTable(sql, dtJctClassPerson);
+            dtJctClassPerson = connection.ReadIntoDataTable(sql, dtJctClassPerson, parameters);
 
             List<DataRow> jctClassPersonDaos = new List<DataRow>();
             foreach (DataRow row in dtJctClassPerson.Rows)
-            {
                 jctClassPersonDaos.Add(row);
-            }
 
             return jctClassPersonDaos;
         }
 
         public DataRow Write(int classId, int personId, int roleId, IConnectable connection)
         {
-            StringBuilder sql = new StringBuilder("INSERT INTO jct_class_person (class_id, person_id, enum_role_id) VALUES (");
-            sql.Append(classId + ", ");
-            sql.Append(personId + ", ");
-            sql.Append(roleId + ")");
+            string sql = "INSERT INTO jct_class_person (" +
+                "class_id, person_id, enum_role_id) VALUES (" +
+                "@class_id, @person_id, @enum_role_id)";
 
-            connection.ExecuteNonQuery(sql.ToString());
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@class_id", classId));
+            parameters.Add(new SqlParameter("@person_id", personId));
+            parameters.Add(new SqlParameter("@enum_role_id", roleId));
+
+            connection.ExecuteNonQuery(sql, parameters);
 
             DataRow jctClassPersonDao = DataTableFactory.CreateDataTable_Netus2_JctClassPerson().NewRow();
             jctClassPersonDao["class_id"] = classId;

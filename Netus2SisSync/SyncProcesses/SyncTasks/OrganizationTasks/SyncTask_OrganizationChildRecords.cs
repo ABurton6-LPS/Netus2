@@ -36,7 +36,7 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.OrganizationTasks
                 orgDaoImpl.SetTaskId(this.Id);
 
                 netus2Connection = DbConnectionFactory.GetNetus2Connection();
-                Organization foundOrg = orgDaoImpl.Read_WithSisBuildingCode(sisBuildingCode, netus2Connection);
+                Organization foundOrg = orgDaoImpl.Read_UsingSisBuildingCode(sisBuildingCode, netus2Connection);
 
                 if (foundOrg == null)
                 {

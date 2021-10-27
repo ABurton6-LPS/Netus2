@@ -79,26 +79,35 @@ namespace Netus2_Test
             if (connection != null)
             {
                 organizationDaoImpl.Update(school, district.Id, connection);
-                district = organizationDaoImpl.Read_WithOrganizationId(district.Id, connection);
+                district = organizationDaoImpl.Read_UsingOrganizationId(district.Id, connection);
             }
 
-            schoolYear = new AcademicSession("2021", Enum_Session.values["school year"], school, "T1");
+            schoolYear = new AcademicSession(Enum_Session.values["school year"], school, "T1");
+            schoolYear.Name = "2021";
             schoolYear.SchoolYear = 2021;
+            schoolYear.StartDate = new DateTime(2019, 9, 1);
+            schoolYear.EndDate = new DateTime(2020, 6, 1);
             if (connection != null)
                 schoolYear = academicSessionDaoImpl.Write(schoolYear, connection);
             else
                 schoolYear.Id = 1;
 
-            semester1 = new AcademicSession("Semester1", Enum_Session.values["semester"], school, "S1");
+            semester1 = new AcademicSession(Enum_Session.values["semester"], school, "S1");
+            semester1.Name = "Semester1";
             semester1.SchoolYear = 2021;
+            semester1.StartDate = new DateTime(2019, 9, 1);
+            semester1.EndDate = new DateTime(2020, 6, 1);
             schoolYear.Children.Add(semester1);
             if (connection != null)
                 semester1 = academicSessionDaoImpl.Write(semester1, schoolYear.Id, connection);
             else
                 semester1.Id = 2;
 
-            semester2 = new AcademicSession("Semester2", Enum_Session.values["semester"], school, "S2");
+            semester2 = new AcademicSession(Enum_Session.values["semester"], school, "S2");
+            semester2.Name = "Semester2";
             semester2.SchoolYear = 2021;
+            semester2.StartDate = new DateTime(2019, 9, 1);
+            semester2.EndDate = new DateTime(2020, 6, 1);
             schoolYear.Children.Add(semester2);
             if (connection != null)
                 semester2 = academicSessionDaoImpl.Write(semester2, schoolYear.Id, connection);
@@ -146,7 +155,10 @@ namespace Netus2_Test
                 uniqueId_Teacher.Id = 1;
             teacher.UniqueIdentifiers.Add(uniqueId_Teacher);
 
-            employmentSession = new EmploymentSession("John Smith Employment", Enum_True_False.values["true"], school);
+            employmentSession = new EmploymentSession(Enum_True_False.values["true"], school);
+            employmentSession.Name = "John Smith Employment";
+            employmentSession.StartDate = new DateTime(2019, 9, 1);
+            employmentSession.EndDate = new DateTime(2020, 6, 1);
             if (connection != null)
                 employmentSession = employmentSessionDaoImpl.Write(employmentSession, teacher.Id, connection);
             else

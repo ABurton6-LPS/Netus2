@@ -35,22 +35,6 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
         }
 
         [TestCase]
-        public void Delete_ShouldUseExpectedSql()
-        {
-            _netus2DbConnection.expectedNonQuerySql =
-                "DELETE FROM resource " +
-                "WHERE 1=1 " +
-                "AND resource_id = " + tdBuilder.resource.Id + " " +
-                "AND name = '" + tdBuilder.resource.Name + "' " +
-                "AND enum_importance_id = " + tdBuilder.resource.Importance.Id + " " +
-                "AND vendor_resource_identification = '" + tdBuilder.resource.VendorResourceId + "' " +
-                "AND vendor_identification = '" + tdBuilder.resource.VendorId + "' " +
-                "AND application_identification = '" + tdBuilder.resource.ApplicationId + "' ";
-
-            resourceDaoImpl.Delete(tdBuilder.resource, _netus2DbConnection);
-        }
-
-        [TestCase]
         public void DeleteJctClassResource_ShouldCallExpectedMethods()
         {
             mockJctClassResource._shouldReadReturnData = true;
@@ -59,110 +43,6 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
 
             Assert.IsTrue(mockJctClassResource.WasCalled_ReadWithResourceId);
             Assert.IsTrue(mockJctClassResource.WasCalled_Delete);
-        }
-
-        [TestCase]
-        public void ReadUsingResourceId_ShouldUseExpectedSql()
-        {
-            _netus2DbConnection.expectedReaderSql =
-                "SELECT * FROM resource WHERE resource_id = " + tdBuilder.resource.Id;
-
-            resourceDaoImpl.Read_UsingResourceId(tdBuilder.resource.Id, _netus2DbConnection);
-        }
-
-        [TestCase]
-        public void Read_WhileUsingResourceId_ShouldUseExpectedSql()
-        {
-            _netus2DbConnection.expectedReaderSql =
-                "SELECT * FROM resource WHERE 1=1 AND resource_id = " + tdBuilder.resource.Id + " ";
-
-            resourceDaoImpl.Read(tdBuilder.resource, _netus2DbConnection);
-        }
-
-        [TestCase]
-        public void Read_WhileNotUsingResourceId_ShouldUseExpectedSql()
-        {
-            tdBuilder.resource.Id = -1;
-
-            _netus2DbConnection.expectedReaderSql =
-                "SELECT * FROM resource " +
-                "WHERE 1=1 " +
-                "AND name = '" + tdBuilder.resource.Name + "' " +
-                "AND enum_importance_id = " + tdBuilder.resource.Importance.Id + " " +
-                "AND vendor_resource_identification = '" + tdBuilder.resource.VendorResourceId + "' " +
-                "AND vendor_identification = '" + tdBuilder.resource.VendorId + "' " +
-                "AND application_identification = '" + tdBuilder.resource.ApplicationId + "' ";
-
-            resourceDaoImpl.Read(tdBuilder.resource, _netus2DbConnection);
-        }
-
-        [TestCase]
-        public void Update_WhileRecordNotFound_ShouldUseExpectedSql()
-        {
-            _netus2DbConnection.expectedNewRecordSql =
-                "INSERT INTO resource (" +
-                "name, " +
-                "enum_importance_id, " +
-                "vendor_resource_identification, " +
-                "vendor_identification, " +
-                "application_identification, " +
-                "created, " +
-                "created_by" +
-                ") VALUES (" +
-                "'" + tdBuilder.resource.Name + "', " +
-                tdBuilder.resource.Importance.Id + ", " +
-                "'" + tdBuilder.resource.VendorResourceId + "', " +
-                "'" + tdBuilder.resource.VendorId + "', " +
-                "'" + tdBuilder.resource.ApplicationId + "', " +
-                "dbo.CURRENT_DATETIME(), " +
-                "'Netus2')";
-
-            resourceDaoImpl.Update(tdBuilder.resource, _netus2DbConnection);
-        }
-
-        [TestCase]
-        public void Update_WhileRecordFound_ShouldUseExpectedSql()
-        {
-            List<DataRow> tstDataSet = new List<DataRow>();
-            tstDataSet.Add(daoObjectMapper.MapResource(tdBuilder.resource));
-            SetMockReaderWithTestData(tstDataSet);
-
-            _netus2DbConnection.expectedNonQuerySql =
-                "UPDATE resource SET " +
-                "name = '" + tdBuilder.resource.Name + "', " +
-                "enum_importance_id = " + tdBuilder.resource.Importance.Id + ", " +
-                "vendor_resource_identification = '" + tdBuilder.resource.VendorResourceId + "', " +
-                "vendor_identification = '" + tdBuilder.resource.VendorId + "', " +
-                "application_identification = '" + tdBuilder.resource.ApplicationId + "', " +
-                "changed = dbo.CURRENT_DATETIME(), " +
-                "changed_by = 'Netus2' " +
-                "WHERE resource_id = " + tdBuilder.resource.Id;
-
-            resourceDaoImpl.Update(tdBuilder.resource, _netus2DbConnection);
-        }
-
-        [TestCase]
-        public void Write_ShouldUseExpectedSql()
-        {
-            _netus2DbConnection.expectedNewRecordSql =
-                "INSERT INTO resource (" +
-                "name, " +
-                "enum_importance_id, " +
-                "vendor_resource_identification, " +
-                "vendor_identification, " +
-                "application_identification, " +
-                "created, " +
-                "created_by" +
-                ") VALUES (" +
-                "'" + tdBuilder.resource.Name + "', " +
-                tdBuilder.resource.Importance.Id + ", " +
-                "'" + tdBuilder.resource.VendorResourceId + "', " +
-                "'" + tdBuilder.resource.VendorId + "', " +
-                "'" + tdBuilder.resource.ApplicationId + "', " +
-                "dbo.CURRENT_DATETIME(), " +
-                "'Netus2')";
-
-            resourceDaoImpl.Write(tdBuilder.resource, _netus2DbConnection);
         }
 
         [TearDown]

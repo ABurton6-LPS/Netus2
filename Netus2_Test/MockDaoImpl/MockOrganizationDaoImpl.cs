@@ -15,6 +15,7 @@ namespace Netus2_Test.MockDaoImpl
         public bool WasCalled_ReadWithSisBuildingCode = false;
         public bool WasCalled_ReadWithOrganizationId = false;
         public bool WasCalled_ReadParent = false;
+        public bool WasCalled_ReadAllChildrenWithParentId;
         public bool WasCalled_UpdateWithoutParentId = false;
         public bool WasCalled_UpdateWithParentId = false;
         public bool WasCalled_WriteWithoutParentId = false;
@@ -65,7 +66,7 @@ namespace Netus2_Test.MockDaoImpl
             return orgs;
         }
 
-        public Organization Read_WithAcademicSessionId(int academicSessionId, IConnectable connection)
+        public Organization Read_UsingAcademicSessionId(int academicSessionId, IConnectable connection)
         {
             WasCalled_ReadWithAcademicSessionId = true;
 
@@ -75,7 +76,7 @@ namespace Netus2_Test.MockDaoImpl
                 return null;
         }
 
-        public Organization Read_WithSisBuildingCode(string sisBuildingCode, IConnectable connection)
+        public Organization Read_UsingSisBuildingCode(string sisBuildingCode, IConnectable connection)
         {
             WasCalled_ReadWithSisBuildingCode = true;
 
@@ -88,7 +89,7 @@ namespace Netus2_Test.MockDaoImpl
                 return null;
         }
 
-        public Organization Read_WithOrganizationId(int organizationId, IConnectable connection)
+        public Organization Read_UsingOrganizationId(int organizationId, IConnectable connection)
         {
             WasCalled_ReadWithOrganizationId = true;
 
@@ -106,6 +107,18 @@ namespace Netus2_Test.MockDaoImpl
                 return tdBuilder.district;
             else
                 return null;
+        }
+
+        public List<Organization> Read_AllChildrenWithParentId(int parentId, IConnectable connection)
+        {
+            WasCalled_ReadAllChildrenWithParentId = true;
+
+            List<Organization> orgs = new List<Organization>();
+
+            if (_shouldReadReturnData)
+                orgs.Add(tdBuilder.school);
+
+            return orgs;
         }
 
         public void Update(Organization organization, IConnectable connection)

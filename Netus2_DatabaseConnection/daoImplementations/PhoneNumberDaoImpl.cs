@@ -5,6 +5,7 @@ using Netus2_DatabaseConnection.utilityTools;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Text;
 
 namespace Netus2_DatabaseConnection.daoImplementations
@@ -26,21 +27,16 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         public void Delete(PhoneNumber phoneNumber, IConnectable connection)
         {
-            Delete(phoneNumber, -1, connection);
-        }
+            if(phoneNumber.Id <= 0)
+                throw new Exception("Cannot delete a phone number which doesn't have a database-assigned ID.\n" + phoneNumber.ToString());
 
-        public void Delete(PhoneNumber phoneNumber, int personId, IConnectable connection)
-        {
-            DataRow row = daoObjectMapper.MapPhoneNumber(phoneNumber, personId);
+            string sql = "DELETE FROM phone_number WHERE " +
+                "phone_number_id = @phone_number_id";
 
-            StringBuilder sql = new StringBuilder("DELETE FROM phone_number WHERE 1=1 ");
-            sql.Append("AND phone_number_id " + (row["phone_number_id"] != DBNull.Value ? "= " + row["phone_number_id"] + " " : "IS NULL "));
-            sql.Append("AND person_id " + (row["person_id"] != DBNull.Value ? "= " + row["person_id"] + " " : "IS NULL "));
-            sql.Append("AND phone_number " + (row["phone_number"] != DBNull.Value ? "LIKE '" + row["phone_number"] + "' " : "IS NULL "));
-            sql.Append("AND is_primary_id " + (row["is_primary_id"] != DBNull.Value ? "= " + row["is_primary_id"] + " " : "IS NULL "));
-            sql.Append("AND enum_phone_id " + (row["enum_phone_id"] != DBNull.Value ? "= " + row["enum_phone_id"] + " " : "IS NULL "));
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@phone_number_id", phoneNumber.Id));
 
-            connection.ExecuteNonQuery(sql.ToString());
+            connection.ExecuteNonQuery(sql, parameters);
         }
 
         public List<PhoneNumber> Read(PhoneNumber phoneNumber, IConnectable connection)
@@ -48,45 +44,68 @@ namespace Netus2_DatabaseConnection.daoImplementations
             return Read(phoneNumber, -1, connection);
         }
 
+        public List<PhoneNumber> Read_AllWithPersonId(int personId, IConnectable connection)
+        {
+            string sql = "SELECT * FROM phone_number WHERE person_id = @person_id";
+
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@person_id", personId));
+
+            List<PhoneNumber> result = Read(sql, connection, parameters);
+
+            return result;
+        }
+
         public List<PhoneNumber> Read(PhoneNumber phoneNumber, int personId, IConnectable connection)
         {
-            StringBuilder sql = new StringBuilder("");
+            DataRow row = daoObjectMapper.MapPhoneNumber(phoneNumber, personId);
 
-            if (phoneNumber == null)
-                sql.Append("SELECT * FROM phone_number WHERE person_id = " + personId);
+            List<SqlParameter> parameters = new List<SqlParameter>();
+
+            StringBuilder sql = new StringBuilder("SELECT * FROM phone_number WHERE 1=1 ");
+            if (row["phone_number_id"] != DBNull.Value)
+            {
+                sql.Append("AND phone_number_id = @phone_number_id");
+                parameters.Add(new SqlParameter("@phone_number_id", phoneNumber.Id));
+            }
             else
             {
-                DataRow row = daoObjectMapper.MapPhoneNumber(phoneNumber, personId);
-
-                sql.Append("SELECT * FROM phone_number WHERE 1=1 ");
-                if (row["phone_number_id"] != DBNull.Value)
-                    sql.Append("AND phone_number_id = " + row["phone_number_id"] + " ");
-                else
+                if (row["person_id"] != DBNull.Value)
                 {
-                    if (row["person_id"] != DBNull.Value)
-                        sql.Append("AND person_id = " + row["person_id"] + " ");
-                    if (row["phone_number"] != DBNull.Value)
-                        sql.Append("AND phone_number = '" + row["phone_number"] + "' ");
-                    if (row["is_primary_id"] != DBNull.Value)
-                        sql.Append("AND is_primary_id = " + row["is_primary_id"] + " ");
-                    if (row["enum_phone_id"] != DBNull.Value)
-                        sql.Append("AND enum_phone_id = " + row["enum_phone_id"] + " ");
+                    sql.Append("AND person_id = @person_id ");
+                    parameters.Add(new SqlParameter("@person_id", row["person_id"]));
+                }
+
+                if (row["phone_number"] != DBNull.Value)
+                {
+                    sql.Append("AND phone_number = @phone_number ");
+                    parameters.Add(new SqlParameter("@phone_number", row["phone_number"]));
+                }
+
+                if (row["is_primary_id"] != DBNull.Value)
+                {
+                    sql.Append("AND is_primary_id = @is_primary_id ");
+                    parameters.Add(new SqlParameter("@is_primary_id", row["is_primary_id"]));
+                }
+
+                if (row["enum_phone_id"] != DBNull.Value)
+                {
+                    sql.Append("AND enum_phone_id = @enum_phone_id ");
+                    parameters.Add(new SqlParameter("@enum_phone_id", row["enum_phone_id"]));
                 }
             }
 
-            return Read(sql.ToString(), connection);
+            return Read(sql.ToString(), connection, parameters);
         }
 
-        private List<PhoneNumber> Read(string sql, IConnectable connection)
+        private List<PhoneNumber> Read(string sql, IConnectable connection, List<SqlParameter> parameters)
         {
             DataTable dtPhoneNumber = DataTableFactory.CreateDataTable_Netus2_PhoneNumber();
-            dtPhoneNumber = connection.ReadIntoDataTable(sql, dtPhoneNumber);
+            dtPhoneNumber = connection.ReadIntoDataTable(sql, dtPhoneNumber, parameters);
 
             List<PhoneNumber> results = new List<PhoneNumber>();
             foreach (DataRow row in dtPhoneNumber.Rows)
-            {
                 results.Add(daoObjectMapper.MapPhoneNumber(row));
-            }
 
             return results;
         }
@@ -117,16 +136,47 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
             if (row["phone_number_id"] != DBNull.Value)
             {
+                List<SqlParameter> parameters = new List<SqlParameter>();
+
                 StringBuilder sql = new StringBuilder("UPDATE phone_number SET ");
-                sql.Append("person_id = " + (row["person_id"] != DBNull.Value ? row["person_id"] + ", " : "NULL, "));
-                sql.Append("phone_number = " + (row["phone_number"] != DBNull.Value ? "'" + row["phone_number"] + "', " : "NULL, "));
-                sql.Append("is_primary_id = " + (row["is_primary_id"] != DBNull.Value ? row["is_primary_id"] + ", " : "NULL, "));
-                sql.Append("enum_phone_id = " + (row["enum_phone_id"] != DBNull.Value ? row["enum_phone_id"] + ", " : "NULL, "));
+                if (row["person_id"] != DBNull.Value)
+                {
+                    sql.Append("person_id = @person_id, ");
+                    parameters.Add(new SqlParameter("@person_id", row["person_id"]));
+                }
+                else
+                    sql.Append("person_id = NULL, ");
+
+                if (row["phone_number"] != DBNull.Value)
+                {
+                    sql.Append("phone_number = @phone_number, ");
+                    parameters.Add(new SqlParameter("@phone_number", row["phone_number"]));
+                }
+                else
+                    sql.Append("phone_number = NULL, ");
+
+                if (row["is_primary_id"] != DBNull.Value)
+                {
+                    sql.Append("is_primary_id = @is_primary_id, ");
+                    parameters.Add(new SqlParameter("@is_primary_id", row["is_primary_id"]));
+                }
+                else
+                    sql.Append("is_primary_id = NULL, ");
+
+                if (row["enum_phone_id"] != DBNull.Value)
+                {
+                    sql.Append("enum_phone_id = @enum_phone_id, ");
+                    parameters.Add(new SqlParameter("@enum_phone_id", row["enum_phone_id"]));
+                }
+                else
+                    sql.Append("enum_phone_id = NULL, ");
+
                 sql.Append("changed = dbo.CURRENT_DATETIME(), ");
                 sql.Append("changed_by = " + (_taskId != null ? _taskId.ToString() : "'Netus2'") + " ");
-                sql.Append("WHERE phone_number_id = " + row["phone_number_id"]);
+                sql.Append("WHERE phone_number_id = @phone_number_id");
+                parameters.Add(new SqlParameter("@phone_number_id", row["phone_number_id"]));
 
-                connection.ExecuteNonQuery(sql.ToString());
+                connection.ExecuteNonQuery(sql.ToString(), parameters);
             }
             else
             {
@@ -143,11 +193,41 @@ namespace Netus2_DatabaseConnection.daoImplementations
         {
             DataRow row = daoObjectMapper.MapPhoneNumber(phoneNumber, personId);
 
+            List<SqlParameter> parameters = new List<SqlParameter>();
+
             StringBuilder sqlValues = new StringBuilder();
-            sqlValues.Append(row["person_id"] != DBNull.Value ? row["person_id"] + ", " : "NULL, ");
-            sqlValues.Append(row["phone_number"] != DBNull.Value ? "'" + row["phone_number"] + "', " : "NULL, ");
-            sqlValues.Append(row["is_primary_id"] != DBNull.Value ? row["is_primary_id"] + ", " : "NULL, ");
-            sqlValues.Append(row["enum_phone_id"] != DBNull.Value ? row["enum_phone_id"] + ", " : "NULL, ");
+            if (row["person_id"] != DBNull.Value)
+            {
+                sqlValues.Append("@person_id, ");
+                parameters.Add(new SqlParameter("@person_id", row["person_id"]));
+            }
+            else
+                sqlValues.Append("NULL, ");
+
+            if (row["phone_number"] != DBNull.Value)
+            {
+                sqlValues.Append("@phone_number, ");
+                parameters.Add(new SqlParameter("@phone_number", row["phone_number"]));
+            }
+            else
+                sqlValues.Append("NULL, ");
+
+            if (row["is_primary_id"] != DBNull.Value)
+            {
+                sqlValues.Append("@is_primary_id, ");
+                parameters.Add(new SqlParameter("@is_primary_id", row["is_primary_id"]));
+            }
+            else
+                sqlValues.Append("NULL, ");
+
+            if (row["enum_phone_id"] != DBNull.Value)
+            {
+                sqlValues.Append("@enum_phone_id, ");
+                parameters.Add(new SqlParameter("@enum_phone_id", row["enum_phone_id"]));
+            }
+            else
+                sqlValues.Append("NULL, ");
+
             sqlValues.Append("dbo.CURRENT_DATETIME(), ");
             sqlValues.Append(_taskId != null ? _taskId.ToString() : "'Netus2'");
 
@@ -155,9 +235,11 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 "(person_id, phone_number, is_primary_id, enum_phone_id, created, created_by) " +
                 "VALUES (" + sqlValues.ToString() + ")";
 
-            row["phone_number_id"] = connection.InsertNewRecord(sql);
+            row["phone_number_id"] = connection.InsertNewRecord(sql, parameters);
 
-            return daoObjectMapper.MapPhoneNumber(row);
+            PhoneNumber result = daoObjectMapper.MapPhoneNumber(row);
+
+            return result;
         }
     }
 }

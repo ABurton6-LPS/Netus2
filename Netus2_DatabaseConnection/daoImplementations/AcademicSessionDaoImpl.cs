@@ -5,6 +5,7 @@ using Netus2_DatabaseConnection.utilityTools;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Text;
 
 namespace Netus2_DatabaseConnection.daoImplementations
@@ -26,23 +27,20 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         public void Delete(AcademicSession academicSession, IConnectable connection)
         {
+            if (academicSession.Id <= 0)
+                throw new Exception("Cannot delete an academic session which doesn't have a database-assigned ID.\n" + academicSession.ToString());
+
             UnlinkChildren(academicSession, connection);
             UnlinkEnrollment(academicSession, connection);
             Delete_ClassesEnrolled(academicSession.Id, connection);
 
-            DataRow row = daoObjectMapper.MapAcademicSession(academicSession, -1);
+            string sql = "DELETE FROM academic_session WHERE " +
+                "academic_session_id = @academic_session_id";
 
-            StringBuilder sql = new StringBuilder("DELETE FROM academic_session WHERE 1=1 ");
-            sql.Append("AND academic_session_id = " + row["academic_session_id"] + " ");
-            sql.Append("AND term_code " + (row["term_code"] != DBNull.Value ? "LIKE '" + row["term_code"] + "' " : "IS NULL "));
-            sql.Append("AND school_year " + (row["school_year"] != DBNull.Value ? "= " + row["school_year"] + " " : "IS NULL "));
-            sql.Append("AND name " + (row["name"] != DBNull.Value ? "LIKE '" + row["name"] + "' " : "IS NULL "));
-            sql.Append("AND start_date " + (row["start_date"] != DBNull.Value ? "= '" + row["start_date"] + "' " : "IS NULL "));
-            sql.Append("AND end_date " + (row["end_date"] != DBNull.Value ? "= '" + row["end_date"] + "' " : "IS NULL "));
-            sql.Append("AND enum_session_id " + (row["enum_session_id"] != DBNull.Value ? "= " + row["enum_session_id"] + " " : "IS NULL "));
-            sql.Append("AND organization_id " + (row["organization_id"] != DBNull.Value ? "= " + row["organization_id"]: "IS NULL"));
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@academic_session_id", academicSession.Id));
 
-            connection.ExecuteNonQuery(sql.ToString());
+            connection.ExecuteNonQuery(sql, parameters);
         }
 
         private void Delete_ClassesEnrolled(int academicSessionId, IConnectable connection)
@@ -72,72 +70,102 @@ namespace Netus2_DatabaseConnection.daoImplementations
         private void UnlinkEnrollment(AcademicSession academicSession, IConnectable connection)
         {
             IJctEnrollmentAcademicSessionDao jctEnrollmentAcademicSessionDaoImpl = DaoImplFactory.GetJctEnrollmentAcademicSessionDaoImpl();
-            List<DataRow> linksToBeRemoved = jctEnrollmentAcademicSessionDaoImpl.Read_WithAcademicSessionId(academicSession.Id, connection);
+            List<DataRow> linksToBeRemoved = jctEnrollmentAcademicSessionDaoImpl.Read_AllWithAcademicSessionId(academicSession.Id, connection);
             foreach(DataRow linkToBeRemoved in linksToBeRemoved)
             {
                 jctEnrollmentAcademicSessionDaoImpl.Delete((int)linkToBeRemoved["enrollment_id"], (int)linkToBeRemoved["academic_session_id"], connection);
             }
         }
 
-        public List<AcademicSession> Read_UsingOrganizationId(int organizationId, IConnectable connection)
+        public List<AcademicSession> Read_AllWithOrganizationId(int organizationId, IConnectable connection)
         {
-            string sql = "SELECT * FROM academic_session WHERE organization_id = " + organizationId;
-            return Read(sql, connection);
+            string sql = "SELECT * FROM academic_session WHERE organization_id = @organization_id";
+
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@organization_id", organizationId));
+
+            return Read(sql, connection, parameters);
         }
 
         public AcademicSession Read_UsingClassEnrolledId(int classEnrolledId, IConnectable connection)
         {
             string sql = "SELECT * FROM academic_session WHERE academic_session_id IN (" +
-                "SELECT academic_session_id FROM class WHERE class_id = " + classEnrolledId + ")";
+                "SELECT academic_session_id FROM class WHERE class_id = @class_id)";
 
-            List<AcademicSession> results = Read(sql, connection);
-            if (results.Count > 0)
-                return results[0];
-            else
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@class_id", classEnrolledId));
+
+            List<AcademicSession> results = Read(sql, connection, parameters);
+
+            if (results.Count == 0)
                 return null;
+            else
+                return results[0];
         }
 
         public AcademicSession Read_UsingAcademicSessionId(int academicSessionId, IConnectable connection)
         {
-            string sql = "SELECT * FROM academic_session WHERE academic_session_id = " + academicSessionId;
+            string sql = "SELECT * FROM academic_session WHERE academic_session_id = @academic_session_id";
 
-            List<AcademicSession> resutls = Read(sql, connection);
-            if (resutls.Count > 0)
-                return resutls[0];
-            else
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@academic_session_id", academicSessionId));
+
+            List<AcademicSession> resutls = Read(sql, connection, parameters);
+
+            if (resutls.Count == 0)
                 return null;
+            else
+                return resutls[0];
         }
 
         public AcademicSession Read_UsingSisBuildingCode_TermCode_Schoolyear(string sisBuildingCode, string termCode, int schoolYear, IConnectable connection)
         {
             string sql = "SELECT * FROM academic_session WHERE 1=1 " + 
-                "AND term_code = '" + termCode + "' " + 
-                "AND school_year = " + schoolYear + " " +
+                "AND term_code = @term_code " + 
+                "AND school_year = @school_year " +
                 "AND organization_id in (" +
-                "SELECT organization_id FROM organization WHERE sis_building_code = '" + sisBuildingCode + "')";
+                "SELECT organization_id FROM organization WHERE sis_building_code = @sis_building_code)";
 
-            List<AcademicSession> resutls = Read(sql, connection);
-            if (resutls.Count == 1)
-                return resutls[0];
-            else if (resutls.Count > 1)
-                throw new Exception("Multiple academic_session records found linked to " +
-                    "sisBuildingCode: " + sisBuildingCode + 
-                    ", termCode: " + termCode + 
-                    ", schoolYear: " + schoolYear);
-            else
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@term_code", termCode));
+            parameters.Add(new SqlParameter("@schoolYear", schoolYear));
+            parameters.Add(new SqlParameter("@sis_building_code", sisBuildingCode));
+
+            List<AcademicSession> results = Read(sql, connection, parameters);
+
+            if (results.Count == 0)
                 return null;
+            else
+                return results[0];
         }
 
         public AcademicSession Read_Parent(AcademicSession child, IConnectable connection)
         {
-            string sql = "SELECT * FROM academic_session WHERE academic_session_id in (" +
-                "SELECT parent_session_id FROM academic_session WEHRE academic_session_id = " + child.Id + ")";
+            if (child.Id <= 0)
+                throw new Exception("Cannot query the database for the parent of a record that " +
+                    "has not yet been written to the database.\n" + child.ToString());
 
-            List<AcademicSession> results = new List<AcademicSession>();
-            if (results.Count > 0)
-                return results[0];
-            else
+            string sql = "SELECT * FROM academic_session WHERE academic_session_id in (" +
+                "SELECT parent_session_id FROM academic_session WEHRE academic_session_id = @academic_session_id)";
+
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@academic_session_id", child.Id));
+
+            List<AcademicSession> results = Read(sql, connection, parameters);
+            if (results.Count == 0)
                 return null;
+            else
+                return results[0];
+        }
+
+        public List<AcademicSession> Read_Children(AcademicSession parent, IConnectable connection)
+        {
+            string sql = "SELECT * FROM academic_session WHERE parent_session_id = @parent_session_id";
+
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@parent_session_id", parent.Id));
+
+            return Read(sql, connection, parameters);
         }
 
         public List<AcademicSession> Read(AcademicSession academicSession, IConnectable connection)
@@ -151,34 +179,66 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
             DataRow row = daoObjectMapper.MapAcademicSession(academicSession, parentId);
 
+            List<SqlParameter> parameters = new List<SqlParameter>();
+
             sql.Append("SELECT * FROM academic_session WHERE 1=1 ");
             if (row["academic_session_id"] != DBNull.Value)
-                sql.Append("AND academic_session_id = " + row["academic_session_id"] + " ");
+            {
+                sql.Append("AND academic_session_id = @academic_session_id");
+                parameters.Add(new SqlParameter("@academic_session_id", row["academic_session_id"]));
+            }
             else
             {
                 if (row["name"] != DBNull.Value)
-                    sql.Append("AND name = '" + row["name"] + "' ");
+                {
+                    sql.Append("AND name = @name ");
+                    parameters.Add(new SqlParameter("@name", row["name"]));
+                }
+                    
                 if (row["term_code"] != DBNull.Value)
-                    sql.Append("AND term_code = '" + row["term_code"] + "' ");
+                {
+                    sql.Append("AND term_code = @term_code ");
+                    parameters.Add(new SqlParameter("@term_code", row["term_code"]));
+                }
+                    
                 if (row["school_year"] != DBNull.Value)
-                    sql.Append("AND school_year = " + row["school_year"] + " ");
+                {
+                    sql.Append("AND school_year = @school_year ");
+                    parameters.Add(new SqlParameter("@school_year", row["school_year"]));
+                }
+                    
                 if (row["start_date"] != DBNull.Value)
-                    sql.Append("AND start_date = '" + row["start_date"] + "' ");
+                {
+                    sql.Append("AND start_date = @start_date ");
+                    parameters.Add(new SqlParameter("@start_date", row["start_date"]));
+                }
+                    
                 if (row["end_date"] != DBNull.Value)
-                    sql.Append("AND end_date = '" + row["end_date"] + "' ");
+                {
+                    sql.Append("AND end_date = @end_date ");
+                    parameters.Add(new SqlParameter("@end_date", row["end_date"]));
+                }
+                    
                 if (row["enum_session_id"] != DBNull.Value)
-                    sql.Append("AND enum_session_id = " + row["enum_session_id"] + " ");
+                {
+                    sql.Append("AND enum_session_id = @enum_session_id ");
+                    parameters.Add(new SqlParameter("@enum_session_id", row["enum_session_id"]));
+                }
+                    
                 if (row["parent_session_id"] != DBNull.Value)
-                    sql.Append("AND parent_session_id = " + row["parent_session_id"] + " ");
+                {
+                    sql.Append("AND parent_session_id = @parent_session_id");
+                    parameters.Add(new SqlParameter("@parent_session_id", row["parent_session_id"]));
+                }
             }
 
-            return Read(sql.ToString(), connection);
+            return Read(sql.ToString(), connection, parameters);
         }
 
-        private List<AcademicSession> Read(string sql, IConnectable connection)
+        private List<AcademicSession> Read(string sql, IConnectable connection, List<SqlParameter> parameters)
         {
             DataTable dtAcademicSession = DataTableFactory.CreateDataTable_Netus2_AcademicSession();
-            dtAcademicSession = connection.ReadIntoDataTable(sql, dtAcademicSession);
+            dtAcademicSession = connection.ReadIntoDataTable(sql, dtAcademicSession, parameters);
 
             List<AcademicSession> results = new List<AcademicSession>();
             foreach (DataRow row in dtAcademicSession.Rows)
@@ -191,16 +251,10 @@ namespace Netus2_DatabaseConnection.daoImplementations
             return results;
         }
 
-        public List<AcademicSession> Read_Children(AcademicSession parent, IConnectable connection)
-        {
-            string sql = "SELECT * FROM academic_session WHERE parent_session_id = " + parent.Id;
-            return Read(sql, connection);
-        }
-
         private Organization Read_Organization(int organizationId, IConnectable connection)
         {
             IOrganizationDao organizationDaoImpl = DaoImplFactory.GetOrganizationDaoImpl();
-            return organizationDaoImpl.Read_WithOrganizationId(organizationId, connection);
+            return organizationDaoImpl.Read_UsingOrganizationId(organizationId, connection);
         }
 
         public void Update(AcademicSession academicSession, IConnectable connection)
@@ -232,20 +286,79 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
             if (row["academic_session_id"] != DBNull.Value)
             {
+                List<SqlParameter> parameters = new List<SqlParameter>();
+
                 StringBuilder sql = new StringBuilder("UPDATE academic_session SET ");
-                sql.Append("term_code = " + (row["term_code"] != DBNull.Value ? "'" + row["term_code"] + "', " : "NULL, "));
-                sql.Append("school_year = " + (row["school_year"] != DBNull.Value ? row["school_year"] + ", " : "NULL, "));
-                sql.Append("name = " + (row["name"] != DBNull.Value ? "'" + row["name"] + "', " : "NULL, "));
-                sql.Append("start_date = " + (row["start_date"] != DBNull.Value ? "'" + row["start_date"] + "', " : "NULL, "));
-                sql.Append("end_date = " + (row["end_date"] != DBNull.Value ? "'" + row["end_date"] + "', " : "NULL, "));
-                sql.Append("enum_session_id = " + (row["enum_session_id"] != DBNull.Value ? row["enum_session_id"] + ", " : "NULL, "));
-                sql.Append("parent_session_id = " + (row["parent_session_id"] != DBNull.Value ? row["parent_session_id"] + ", " : "NULL, "));
-                sql.Append("organization_id = " + (row["organization_id"] != DBNull.Value ? row["organization_id"] + ", " : "NULL, "));
+                if(row["term_code"] != DBNull.Value)
+                {
+                    sql.Append("term_code = @term_code, ");
+                    parameters.Add(new SqlParameter("@term_code", row["term_code"]));
+                }
+                else
+                    sql.Append("term_code = NULL, ");
+
+                if (row["school_year"] != DBNull.Value)
+                {
+                    sql.Append("school_year = @school_year, ");
+                    parameters.Add(new SqlParameter("@school_year", row["school_year"]));
+                }
+                else
+                    sql.Append("school_year = NULL, ");
+
+                if (row["name"] != DBNull.Value)
+                {
+                    sql.Append("name = @name, ");
+                    parameters.Add(new SqlParameter("@name", row["name"]));
+                }
+                else
+                    sql.Append("name = NULL, ");
+
+                if (row["start_date"] != DBNull.Value)
+                {
+                    sql.Append("start_date = @start_date, ");
+                    parameters.Add(new SqlParameter("@start_date", row["start_date"]));
+                }
+                else
+                    sql.Append("start_date = NULL, ");
+
+                if (row["end_date"] != DBNull.Value)
+                {
+                    sql.Append("end_date = @end_date, ");
+                    parameters.Add(new SqlParameter("@end_date", row["end_date"]));
+                }
+                else
+                    sql.Append("end_date = NULL, ");
+
+                if (row["enum_session_id"] != DBNull.Value)
+                {
+                    sql.Append("enum_session_id = @enum_session_id, ");
+                    parameters.Add(new SqlParameter("@enum_session_id", row["enum_session_id"]));
+                }
+                else
+                    sql.Append("enum_session_id = NULL, ");
+
+                if (row["parent_session_id"] != DBNull.Value)
+                {
+                    sql.Append("parent_session_id = @parent_session_id, ");
+                    parameters.Add(new SqlParameter("@parent_session_id", row["parent_session_id"]));
+                }
+                else
+                    sql.Append("parent_session_id = NULL, ");
+
+                if (row["organization_id"] != DBNull.Value)
+                {
+                    sql.Append("organization_id = @organization_id, ");
+                    parameters.Add(new SqlParameter("@organization_id", row["organization_id"]));
+                }
+                else
+                    sql.Append("organization_id = NULL, ");
+
                 sql.Append("changed = dbo.CURRENT_DATETIME(), ");
                 sql.Append("changed_by = " + (_taskId != null ? _taskId.ToString() : "'Netus2'") + " ");
-                sql.Append("WHERE academic_session_id = " + row["academic_session_id"]);
+                sql.Append("WHERE academic_session_id = @academic_session_id");
+                parameters.Add(new SqlParameter("@academic_session_id", row["academic_session_id"]));
 
-                connection.ExecuteNonQuery(sql.ToString());
+                connection.ExecuteNonQuery(sql.ToString(), parameters);
             }
             else
             {
@@ -262,24 +375,88 @@ namespace Netus2_DatabaseConnection.daoImplementations
         {
             DataRow row = daoObjectMapper.MapAcademicSession(academicSession, parentId);
 
-            StringBuilder sql = new StringBuilder("INSERT INTO academic_session (");
-            sql.Append("term_code, school_year, name, start_date, end_date, enum_session_id, parent_session_id, organization_id, created, created_by");
-            sql.Append(") VALUES (");
-            sql.Append(row["term_code"] != DBNull.Value ? "'" + row["term_code"] + "', " : "NULL, ");
-            sql.Append(row["school_year"] != DBNull.Value ? row["school_year"] + ", " : "NULL, ");
-            sql.Append(row["name"] != DBNull.Value ? "'" + row["name"] + "', " : "NULL, ");
-            sql.Append(row["start_date"] != DBNull.Value ? "'" + row["start_date"] + "', " : "NULL, ");
-            sql.Append(row["end_date"] != DBNull.Value ? "'" + row["end_date"] + "', " : "NULL, ");
-            sql.Append(row["enum_session_id"] != DBNull.Value ? row["enum_session_id"] + ", " : "NULL, ");
-            sql.Append(row["parent_session_id"] != DBNull.Value ? row["parent_session_id"] + ", " : "NULL, ");
-            sql.Append(row["organization_id"] != DBNull.Value ? row["organization_id"] + ", " : "NULL, ");
-            sql.Append("dbo.CURRENT_DATETIME(), ");
-            sql.Append((_taskId != null ? _taskId.ToString() : "'Netus2'") + ")");
+            List<SqlParameter> parameters = new List<SqlParameter>();
 
-            row["academic_session_id"] = connection.InsertNewRecord(sql.ToString());
+            StringBuilder sqlValues = new StringBuilder();
+            if (row["term_code"] != DBNull.Value)
+            {
+                sqlValues.Append("@term_code, ");
+                parameters.Add(new SqlParameter("@term_code", row["term_code"]));
+            }
+            else
+                sqlValues.Append("NULL, ");
+
+            if (row["school_year"] != DBNull.Value)
+            {
+                sqlValues.Append("@school_year, ");
+                parameters.Add(new SqlParameter("@school_year", row["school_year"]));
+            }
+            else
+                sqlValues.Append("NULL, ");
+
+            if (row["name"] != DBNull.Value)
+            {
+                sqlValues.Append("@name, ");
+                parameters.Add(new SqlParameter("@name", row["name"]));
+            }
+            else
+                sqlValues.Append("NULL, ");
+
+            if (row["start_date"] != DBNull.Value)
+            {
+                sqlValues.Append("@start_date, ");
+                parameters.Add(new SqlParameter("@start_date", row["start_date"]));
+            }
+            else
+                sqlValues.Append("NULL, ");
+
+            if (row["end_date"] != DBNull.Value)
+            {
+                sqlValues.Append("@end_date, ");
+                parameters.Add(new SqlParameter("@end_date", row["end_date"]));
+            }
+            else
+                sqlValues.Append("NULL, ");
+
+            if (row["enum_session_id"] != DBNull.Value)
+            {
+                sqlValues.Append("@enum_session_id, ");
+                parameters.Add(new SqlParameter("@enum_session_id", row["enum_session_id"]));
+            }
+            else
+                sqlValues.Append("NULL, ");
+
+            if (row["parent_session_id"] != DBNull.Value)
+            {
+                sqlValues.Append("@parent_session_id, ");
+                parameters.Add(new SqlParameter("@parent_session_id", row["parent_session_id"]));
+            }
+            else
+                sqlValues.Append("NULL, ");
+
+            if (row["organization_id"] != DBNull.Value)
+            {
+                sqlValues.Append("@organization_id, ");
+                parameters.Add(new SqlParameter("@organization_id", row["organization_id"]));
+            }
+            else
+                sqlValues.Append("NULL, ");
+
+            sqlValues.Append("dbo.CURRENT_DATETIME(), ");
+            sqlValues.Append(_taskId != null ? _taskId.ToString() : "'Netus2'");
+
+            string sql =
+                "INSERT INTO academic_session " +
+                "(term_code, school_year, name, start_date, end_date, enum_session_id, " +
+                "parent_session_id, organization_id, created, created_by) " +
+                "VALUES (" + sqlValues.ToString() + ")";
+
+            row["academic_session_id"] = connection.InsertNewRecord(sql, parameters);
 
             Organization foundOrg = Read_Organization((int)row["organization_id"], connection);
-            return daoObjectMapper.MapAcademicSession(row, foundOrg);
+            AcademicSession result =  daoObjectMapper.MapAcademicSession(row, foundOrg);
+
+            return result;
         }
     }
 }
