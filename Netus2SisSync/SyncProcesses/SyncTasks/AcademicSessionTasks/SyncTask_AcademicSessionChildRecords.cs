@@ -29,6 +29,7 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AcademicSessionTasks
             try
             {
                 string sisBuildingCode = row["building_code"].ToString() == "" ? null : row["building_code"].ToString();
+                string sisTrackCode = row["track_code"].ToString() == "" ? null : row["track_code"].ToString();
                 int sisSchoolYear = Int32.Parse(row["school_year"].ToString() == "" ? "-1" : row["school_year"].ToString());
                 string sisTermCode = row["term_code"].ToString() == "" ? null : row["term_code"].ToString();
 
@@ -41,26 +42,26 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AcademicSessionTasks
                 orgDaoImpl.SetTaskId(this.Id);
                 Organization org = orgDaoImpl.Read_UsingSisBuildingCode(sisBuildingCode, _netus2Connection);
 
-                AcademicSession academicSession = new AcademicSession(sisEnumSession, org, sisTermCode);
-                academicSession.SchoolYear = sisSchoolYear;
-
                 IAcademicSessionDao academicSessionDaoImpl = DaoImplFactory.GetAcademicSessionDaoImpl();
                 academicSessionDaoImpl.SetTaskId(this.Id);
-                AcademicSession foundAcademicSession = academicSessionDaoImpl.Read_UsingSisBuildingCode_TermCode_Schoolyear(sisBuildingCode, sisTermCode, sisSchoolYear, _netus2Connection);
+                AcademicSession foundAcademicSession = academicSessionDaoImpl.
+                    Read_UsingSisBuildingCode_TermCode_TrackCode_Schoolyear(sisBuildingCode, sisTermCode, sisTrackCode, sisSchoolYear, _netus2Connection);
 
+                AcademicSession academicSession = new AcademicSession(sisEnumSession, org, sisTermCode);
+                academicSession.TrackCode = sisTrackCode;
+                academicSession.SchoolYear = sisSchoolYear;
                 academicSession.Name = sisName;
                 academicSession.StartDate = sisStartDate;
                 academicSession.EndDate = sisEndDate;
 
                 if (foundAcademicSession == null)
-                {
                     academicSession = academicSessionDaoImpl.Write(academicSession, _netus2Connection);
-                }
                 else if (foundAcademicSession != null)
                 {
                     academicSession.Id = foundAcademicSession.Id;
 
                     if ((academicSession.TermCode != foundAcademicSession.TermCode) ||
+                        (academicSession.TrackCode != foundAcademicSession.TrackCode) ||
                         (academicSession.SchoolYear != foundAcademicSession.SchoolYear) ||
                         (academicSession.Name != foundAcademicSession.Name) ||
                         (academicSession.SessionType != foundAcademicSession.SessionType) ||

@@ -122,17 +122,19 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 throw new Exception(results.Count + " found matching academicSessionId: " + academicSessionId);
         }
 
-        public AcademicSession Read_UsingSisBuildingCode_TermCode_Schoolyear(string sisBuildingCode, string termCode, int schoolYear, IConnectable connection)
+        public AcademicSession Read_UsingSisBuildingCode_TermCode_TrackCode_Schoolyear(string sisBuildingCode, string termCode, string trackCode, int schoolYear, IConnectable connection)
         {
             string sql = "SELECT * FROM academic_session WHERE 1=1 " + 
                 "AND term_code = @term_code " + 
+                "AND track_code = @track_code " +
                 "AND school_year = @school_year " +
                 "AND organization_id in (" +
                 "SELECT organization_id FROM organization WHERE sis_building_code = @sis_building_code)";
 
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("@term_code", termCode));
-            parameters.Add(new SqlParameter("@schoolYear", schoolYear));
+            parameters.Add(new SqlParameter("@track_code", trackCode));
+            parameters.Add(new SqlParameter("@school_year", schoolYear));
             parameters.Add(new SqlParameter("@sis_building_code", sisBuildingCode));
 
             List<AcademicSession> results = Read(sql, connection, parameters);
@@ -142,7 +144,11 @@ namespace Netus2_DatabaseConnection.daoImplementations
             else if (results.Count == 1)
                 return results[0];
             else
-                throw new Exception(results.Count + " found matching sisBuildingCode: " + sisBuildingCode + " and termCode: " + termCode + " and schoolYear: " + schoolYear);
+                throw new Exception(results.Count + " found matching " +
+                    "sisBuildingCode: " + sisBuildingCode + 
+                    " and termCode: " + termCode + 
+                    " and trackCode: " + trackCode + 
+                    " and schoolYear: " + schoolYear);
         }
 
         public AcademicSession Read_Parent(AcademicSession child, IConnectable connection)
@@ -152,7 +158,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
                     "has not yet been written to the database.\n" + child.ToString());
 
             string sql = "SELECT * FROM academic_session WHERE academic_session_id in (" +
-                "SELECT parent_session_id FROM academic_session WEHRE academic_session_id = @academic_session_id)";
+                "SELECT parent_session_id FROM academic_session WHERE academic_session_id = @academic_session_id)";
 
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("@academic_session_id", child.Id));
@@ -208,7 +214,13 @@ namespace Netus2_DatabaseConnection.daoImplementations
                     sql.Append("AND term_code = @term_code ");
                     parameters.Add(new SqlParameter("@term_code", row["term_code"]));
                 }
-                    
+
+                if (row["track_code"] != DBNull.Value)
+                {
+                    sql.Append("AND track_code = @track_code ");
+                    parameters.Add(new SqlParameter("@track_code", row["track_code"]));
+                }
+
                 if (row["school_year"] != DBNull.Value)
                 {
                     sql.Append("AND school_year = @school_year ");
@@ -305,6 +317,14 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 else
                     sql.Append("term_code = NULL, ");
 
+                if (row["track_code"] != DBNull.Value)
+                {
+                    sql.Append("track_code = @track_code, ");
+                    parameters.Add(new SqlParameter("@track_code", row["track_code"]));
+                }
+                else
+                    sql.Append("track_code = NULL, ");
+
                 if (row["school_year"] != DBNull.Value)
                 {
                     sql.Append("school_year = @school_year, ");
@@ -392,6 +412,14 @@ namespace Netus2_DatabaseConnection.daoImplementations
             else
                 sqlValues.Append("NULL, ");
 
+            if (row["track_code"] != DBNull.Value)
+            {
+                sqlValues.Append("@track_code, ");
+                parameters.Add(new SqlParameter("@track_code", row["track_code"]));
+            }
+            else
+                sqlValues.Append("NULL, ");
+
             if (row["school_year"] != DBNull.Value)
             {
                 sqlValues.Append("@school_year, ");
@@ -453,7 +481,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
             string sql =
                 "INSERT INTO academic_session " +
-                "(term_code, school_year, name, start_date, end_date, enum_session_id, " +
+                "(term_code, track_code, school_year, name, start_date, end_date, enum_session_id, " +
                 "parent_session_id, organization_id, created, created_by) " +
                 "VALUES (" + sqlValues.ToString() + ")";
 

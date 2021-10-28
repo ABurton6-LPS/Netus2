@@ -865,6 +865,11 @@ namespace Netus2_DatabaseConnection.utilityTools
             else
                 row["term_code"] = DBNull.Value;
 
+            if (academicSession.TrackCode != null)
+                row["track_code"] = academicSession.TrackCode;
+            else
+                row["track_code"] = DBNull.Value;
+
             if (academicSession.SchoolYear != -1)
                 row["school_year"] = academicSession.SchoolYear;
             else
@@ -914,6 +919,11 @@ namespace Netus2_DatabaseConnection.utilityTools
                 termCode = (string)row["term_code"];
 
             AcademicSession academicSession = new AcademicSession(sessionType, org, termCode);
+
+            if (row["track_code"] != DBNull.Value)
+                academicSession.TrackCode = (string)row["track_code"];
+            else
+                academicSession.TrackCode = null;
 
             if (row["name"] != DBNull.Value)
                 academicSession.Name = (string)row["name"];

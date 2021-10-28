@@ -74,10 +74,11 @@ namespace Netus2_DatabaseConnection.daoInterfaces
         /// </summary>
         /// <param name="sisBuildingCode"></param>
         /// <param name="termCode"></param>
+        /// <param name="trackCode"></param>
         /// <param name="schoolYear"></param>
         /// <param name="connection"></param>
         /// <returns>Null, if no record is found.</returns>
-        public AcademicSession Read_UsingSisBuildingCode_TermCode_Schoolyear(string sisBuildingCode, string termCode, int schoolYear, IConnectable connection);
+        public AcademicSession Read_UsingSisBuildingCode_TermCode_TrackCode_Schoolyear(string sisBuildingCode, string termCode, string trackCode, int schoolYear, IConnectable connection);
 
         /// <summary>
         /// <para>
