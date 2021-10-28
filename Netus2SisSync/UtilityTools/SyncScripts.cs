@@ -1,5 +1,4 @@
 ﻿using Netus2_DatabaseConnection.dataObjects;
-using Netus2_DatabaseConnection.dbAccess;
 using Netus2_DatabaseConnection.enumerations;
 
 namespace Netus2SisSync.UtilityTools

@@ -450,6 +450,7 @@ namespace Netus2_Test.Unit.SyncProcess
                 DataRow row = dtAcademicSession.NewRow();
                 row["building_code"] = tstData.BuildingCode;
                 row["term_code"] = tstData.TermCode;
+                row["track_code"] = tstData.TrackCode;
                 row["school_year"] = tstData.SchoolYear;
                 row["name"] = tstData.Name;
                 row["enum_session_id"] = tstData.SessionId;
@@ -472,7 +473,7 @@ namespace Netus2_Test.Unit.SyncProcess
                 .Callback(() => count++);
 
             reader.Setup(x => x.FieldCount)
-                .Returns(() => 8);
+                .Returns(() => 9);
 
             reader.Setup(x => x.GetValues(It.IsAny<object[]>()))
                 .Callback<object[]>(
@@ -480,12 +481,13 @@ namespace Netus2_Test.Unit.SyncProcess
                     {
                         values[0] = tstDataSet[count].BuildingCode;
                         values[1] = tstDataSet[count].TermCode;
-                        values[2] = tstDataSet[count].SchoolYear;
-                        values[3] = tstDataSet[count].Name;
-                        values[4] = tstDataSet[count].SessionId;
-                        values[5] = tstDataSet[count].StartDate;
-                        values[6] = tstDataSet[count].EndDate;
-                        values[7] = tstDataSet[count].ParentSessionCode;
+                        values[2] = tstDataSet[count].TrackCode;
+                        values[3] = tstDataSet[count].SchoolYear;
+                        values[4] = tstDataSet[count].Name;
+                        values[5] = tstDataSet[count].SessionId;
+                        values[6] = tstDataSet[count].StartDate;
+                        values[7] = tstDataSet[count].EndDate;
+                        values[8] = tstDataSet[count].ParentSessionCode;
                     }
                 ).Returns(count);
 
@@ -504,45 +506,52 @@ namespace Netus2_Test.Unit.SyncProcess
                 .Returns(() => typeof(string));
 
             reader.Setup(x => x.GetName(2))
-                .Returns(() => "school_year");
-            reader.Setup(x => x.GetOrdinal("school_year"))
+                .Returns(() => "track_code");
+            reader.Setup(x => x.GetOrdinal("track_code"))
                 .Returns(() => 2);
             reader.Setup(x => x.GetFieldType(2))
-                .Returns(() => typeof(int));
-
-            reader.Setup(x => x.GetName(3))
-                .Returns(() => "name");
-            reader.Setup(x => x.GetOrdinal("name"))
-                .Returns(() => 3);
-            reader.Setup(x => x.GetFieldType(3))
                 .Returns(() => typeof(string));
 
+            reader.Setup(x => x.GetName(3))
+                .Returns(() => "school_year");
+            reader.Setup(x => x.GetOrdinal("school_year"))
+                .Returns(() => 3);
+            reader.Setup(x => x.GetFieldType(3))
+                .Returns(() => typeof(int));
+
             reader.Setup(x => x.GetName(4))
-                .Returns(() => "enum_session_id");
-            reader.Setup(x => x.GetOrdinal("enum_session_id"))
+                .Returns(() => "name");
+            reader.Setup(x => x.GetOrdinal("name"))
                 .Returns(() => 4);
             reader.Setup(x => x.GetFieldType(4))
                 .Returns(() => typeof(string));
 
             reader.Setup(x => x.GetName(5))
-                .Returns(() => "start_date");
-            reader.Setup(x => x.GetOrdinal("start_date"))
+                .Returns(() => "enum_session_id");
+            reader.Setup(x => x.GetOrdinal("enum_session_id"))
                 .Returns(() => 5);
             reader.Setup(x => x.GetFieldType(5))
-                .Returns(() => typeof(DateTime));
+                .Returns(() => typeof(string));
 
             reader.Setup(x => x.GetName(6))
-                .Returns(() => "end_date");
-            reader.Setup(x => x.GetOrdinal("end_date"))
+                .Returns(() => "start_date");
+            reader.Setup(x => x.GetOrdinal("start_date"))
                 .Returns(() => 6);
             reader.Setup(x => x.GetFieldType(6))
                 .Returns(() => typeof(DateTime));
 
             reader.Setup(x => x.GetName(7))
-                .Returns(() => "parent_session_code");
-            reader.Setup(x => x.GetOrdinal("parent_session_code"))
+                .Returns(() => "end_date");
+            reader.Setup(x => x.GetOrdinal("end_date"))
                 .Returns(() => 7);
             reader.Setup(x => x.GetFieldType(7))
+                .Returns(() => typeof(DateTime));
+
+            reader.Setup(x => x.GetName(8))
+                .Returns(() => "parent_session_code");
+            reader.Setup(x => x.GetOrdinal("parent_session_code"))
+                .Returns(() => 8);
+            reader.Setup(x => x.GetFieldType(8))
                 .Returns(() => typeof(string));
 
             _sisConnection.mockReader = reader;
@@ -553,6 +562,7 @@ namespace Netus2_Test.Unit.SyncProcess
     {
         public string BuildingCode { get; set; }
         public string TermCode { get; set; }
+        public string TrackCode { get; set; }
         public int SchoolYear { get; set; }
         public string Name { get; set; }
         public string SessionId { get; set; }

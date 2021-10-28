@@ -27,6 +27,11 @@ namespace Netus2_DatabaseConnection.utilityTools
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "track_code";
+            dtAcademicSession.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
             dtColumn.ColumnName = "name";
             dtAcademicSession.Columns.Add(dtColumn);
 
