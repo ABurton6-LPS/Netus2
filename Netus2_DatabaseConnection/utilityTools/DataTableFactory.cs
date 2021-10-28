@@ -353,6 +353,11 @@ namespace Netus2_DatabaseConnection.utilityTools
             dtAcademicSession.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "track_code";
+            dtAcademicSession.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
             dtColumn.DataType = typeof(int);
             dtColumn.ColumnName = "school_year";
             dtAcademicSession.Columns.Add(dtColumn);
@@ -874,7 +879,7 @@ namespace Netus2_DatabaseConnection.utilityTools
 
         public static DataTable CreateDataTable_Netus2_Mark()
         {
-            DataTable dtAcademicSession = new DataTable("Mark");
+            DataTable dtMark = new DataTable("Mark");
             DataColumn[] PrimaryKeycolumns = new DataColumn[1];
             DataColumn dtColumn;
 
@@ -882,60 +887,60 @@ namespace Netus2_DatabaseConnection.utilityTools
             dtColumn.DataType = typeof(int);
             dtColumn.ColumnName = "mark_id";
             PrimaryKeycolumns[0] = dtColumn;
-            dtAcademicSession.Columns.Add(dtColumn);
-            dtAcademicSession.PrimaryKey = PrimaryKeycolumns;
+            dtMark.Columns.Add(dtColumn);
+            dtMark.PrimaryKey = PrimaryKeycolumns;
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(int);
             dtColumn.ColumnName = "lineitem_id";
-            dtAcademicSession.Columns.Add(dtColumn);
+            dtMark.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(int);
             dtColumn.ColumnName = "person_id";
-            dtAcademicSession.Columns.Add(dtColumn);
+            dtMark.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(int);
             dtColumn.ColumnName = "enum_score_status_id";
-            dtAcademicSession.Columns.Add(dtColumn);
+            dtMark.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(double);
             dtColumn.ColumnName = "score";
-            dtAcademicSession.Columns.Add(dtColumn);
+            dtMark.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(DateTime);
             dtColumn.ColumnName = "score_date";
-            dtAcademicSession.Columns.Add(dtColumn);
+            dtMark.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(string);
             dtColumn.ColumnName = "comment";
-            dtAcademicSession.Columns.Add(dtColumn);
+            dtMark.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(DateTime);
             dtColumn.ColumnName = "created";
-            dtAcademicSession.Columns.Add(dtColumn);
+            dtMark.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(string);
             dtColumn.ColumnName = "created_by";
-            dtAcademicSession.Columns.Add(dtColumn);
+            dtMark.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(DateTime);
             dtColumn.ColumnName = "changed";
-            dtAcademicSession.Columns.Add(dtColumn);
+            dtMark.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(string);
             dtColumn.ColumnName = "changed_by";
-            dtAcademicSession.Columns.Add(dtColumn);
+            dtMark.Columns.Add(dtColumn);
 
-            return dtAcademicSession;
+            return dtMark;
         }
 
         public static DataTable CreateDataTable_Netus2_Organization()
@@ -1575,6 +1580,11 @@ namespace Netus2_DatabaseConnection.utilityTools
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(string);
             dtColumn.ColumnName = "term_code";
+            dtLogAcademicSession.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "track_code";
             dtLogAcademicSession.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();

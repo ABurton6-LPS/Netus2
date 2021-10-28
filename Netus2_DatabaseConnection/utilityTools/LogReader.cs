@@ -1160,6 +1160,12 @@ namespace Netus2_DatabaseConnection.utilityTools
                             else
                                 logAcademicSession.term_code = null;
                             break;
+                        case "track_code":
+                            if (row[columnName] != DBNull.Value)
+                                logAcademicSession.track_code = (string)row[columnName];
+                            else
+                                logAcademicSession.track_code = null;
+                            break;
                         case "school_year":
                             if (row[columnName] != DBNull.Value)
                                 logAcademicSession.school_year = (int)row[columnName];

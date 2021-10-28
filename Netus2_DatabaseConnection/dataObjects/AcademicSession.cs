@@ -7,6 +7,7 @@ namespace Netus2_DatabaseConnection.dataObjects
     public class AcademicSession : Session
     {
         public string TermCode { get; set; }
+        public string TrackCode { get; set; }
         public int SchoolYear { get; set; }
         public Enumeration SessionType { get; set; }
         public List<AcademicSession> Children { get; set; }
@@ -21,6 +22,7 @@ namespace Netus2_DatabaseConnection.dataObjects
         {
             StringBuilder strAcademicSession = new StringBuilder();
             strAcademicSession.Append("Term Code: " + TermCode + "\n");
+            strAcademicSession.Append("Track Code: " + TrackCode + "\n");
             strAcademicSession.Append("School Year: " + SchoolYear + "\n");
             strAcademicSession.Append("Session Type: " + SessionType + "\n");
             strAcademicSession.Append("Children: " + Children.Count + "\n");
