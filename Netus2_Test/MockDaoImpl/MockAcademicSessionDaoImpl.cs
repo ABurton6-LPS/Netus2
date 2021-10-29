@@ -90,7 +90,7 @@ namespace Netus2_Test.MockDaoImpl
             return null;
         }
 
-        public AcademicSession Read_UsingSisBuildingCode_TermCode_TrackCode_Schoolyear(string sisBuildingCode, string termCode, int schoolYear, IConnectable connection)
+        public AcademicSession Read_UsingSisBuildingCode_TermCode_TrackCode_Schoolyear(string sisBuildingCode, string termCode, string trackCode, int schoolYear, IConnectable connection)
         {
             WasCalled_ReadUsingSisBuildingCodeTermCodeSchoolyear = true;
 
@@ -102,14 +102,17 @@ namespace Netus2_Test.MockDaoImpl
 
                 if (schoolYearSession.Organization.SisBuildingCode == sisBuildingCode &&
                     schoolYearSession.TermCode == termCode &&
+                    schoolYearSession.TrackCode == trackCode &&
                     schoolYearSession.SchoolYear == schoolYear)
                     return schoolYearSession;
                 if (semester1.Organization.SisBuildingCode == sisBuildingCode &&
                     semester1.TermCode == termCode &&
+                    semester1.TrackCode == trackCode &&
                     semester1.SchoolYear == schoolYear)
                     return semester1;
                 if (semester2.Organization.SisBuildingCode == sisBuildingCode &&
                     semester2.TermCode == termCode &&
+                    semester2.TrackCode == trackCode &&
                     semester2.SchoolYear == schoolYear)
                     return semester2;
             }

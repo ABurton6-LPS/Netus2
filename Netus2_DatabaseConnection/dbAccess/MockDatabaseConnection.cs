@@ -65,6 +65,11 @@ namespace Netus2_DatabaseConnection.dbAccess
             testEnumKeys.Add("be");
             testEnumKeys.Add("14");
             testEnumKeys.Add("aide");
+            testEnumKeys.Add("sis_organization_query");
+            testEnumKeys.Add("sis_academic_session_query");
+            testEnumKeys.Add("sis_person_query");
+            testEnumKeys.Add("sis_address_query");
+            testEnumKeys.Add("sis_course_query");
 
             DataTable mockEnumDataTable = DataTableFactory.CreateDataTable_Netus2_Enumeration();
 
