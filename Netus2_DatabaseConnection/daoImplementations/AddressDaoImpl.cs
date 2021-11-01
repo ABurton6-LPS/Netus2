@@ -138,12 +138,6 @@ namespace Netus2_DatabaseConnection.daoImplementations
                     parameters.Add(new SqlParameter("@enum_country_id", row["enum_country_id"]));
                 }
 
-                if (row["is_current_id"] != DBNull.Value)
-                {
-                    sql.Append("AND is_current_id = @is_current_id ");
-                    parameters.Add(new SqlParameter("@is_current_id", row["is_current_id"]));
-                }
-
                 if (row["enum_address_id"] != DBNull.Value)
                 {
                     sql.Append("AND enum_address_id = @enum_address_id");
@@ -264,14 +258,6 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 else
                     sql.Append("enum_country_id = NULL, ");
 
-                if (row["is_current_id"] != DBNull.Value)
-                {
-                    sql.Append("is_current_id = @is_current_id, ");
-                    parameters.Add(new SqlParameter("@is_current_id", row["is_current_id"]));
-                }
-                else
-                    sql.Append("is_current_id = NULL, ");
-
                 if (row["enum_address_id"] != DBNull.Value)
                 {
                     sql.Append("enum_address_id = @enum_address_id, ");
@@ -370,14 +356,6 @@ namespace Netus2_DatabaseConnection.daoImplementations
             else
                 sqlValues.Append("NULL, ");
 
-            if (row["is_current_id"] != DBNull.Value)
-            {
-                sqlValues.Append("@is_current_id, ");
-                parameters.Add(new SqlParameter("@is_current_id", row["is_current_id"]));
-            }
-            else
-                sqlValues.Append("NULL, ");
-
             if (row["enum_address_id"] != DBNull.Value)
             {
                 sqlValues.Append("@enum_address_id, ");
@@ -391,7 +369,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
             string sql = "INSERT INTO address " +
                 "(address_line_1, address_line_2, address_line_3, address_line_4, apartment, " +
-                "city, enum_state_province_id, postal_code, enum_country_id, is_current_id, enum_address_id, " +
+                "city, enum_state_province_id, postal_code, enum_country_id, enum_address_id, " +
                 "created, created_by) VALUES (" + sqlValues.ToString() + ")";
 
             row["address_id"] = connection.InsertNewRecord(sql, parameters);

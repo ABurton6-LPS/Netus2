@@ -109,7 +109,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         private void Delete_JctPersonAddress(Person person, IConnectable connection)
         {
             IJctPersonAddressDao jctPersonAddressDaoImpl = DaoImplFactory.GetJctPersonAddressDaoImpl();
-            foreach (Address address in person.Addresses)
+            foreach (Address address in person.GetAddresses())
             {
                 jctPersonAddressDaoImpl.Delete(person.Id, address.Id, connection);
             }
@@ -274,7 +274,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 result.Applications.AddRange(Read_JctPersonApp(result.Id, connection));
                 result.Roles.AddRange(Read_JctPersonRole(result.Id, connection));
                 result.Relations.AddRange(Read_JctPersonPerson(result.Id, connection));
-                result.Addresses.AddRange(Read_JctPersonAddress(result.Id, connection));
+                result.AddRangeAddresses(Read_JctPersonAddress(result.Id, connection));
                 result.PhoneNumbers.AddRange(DaoImplFactory.GetPhoneNumberDaoImpl().Read_AllWithPersonId(result.Id, connection));
                 result.UniqueIdentifiers.AddRange(DaoImplFactory.GetUniqueIdentifierDaoImpl().Read_AllWithPersonId(result.Id, connection));
                 result.EmploymentSessions.AddRange(DaoImplFactory.GetEmploymentSessionDaoImpl().Read_AllWithPersonId(result.Id, connection));
@@ -457,18 +457,187 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
                 connection.ExecuteNonQuery(sql.ToString(), parameters);
 
-                UpdateEmploymentSessions(person.EmploymentSessions, person.Id, connection);
                 UpdateJctPersonRole(person.Roles, person.Id, connection);
                 UpdatePhoneNumbers(person.PhoneNumbers, person.Id, connection);
                 UpdateJctPersonPerson(person.Relations, person.Id, connection);
-                UpdateAddresses(person.Addresses, person.Id, connection);
-                UpdateUniqueIdentifiers(person.UniqueIdentifiers, person.Id, connection);
-                UpdateApplications(person.Applications, person.Id, connection);
-                UpdatedEnrollments(person.Enrollments, person.Id, connection);
-                UpdateMarks(person.Marks, person.Id, connection);
+                UpdateJctPersonAddress(person.GetAddresses(), person.Id, connection);
+                UpdateJctPersonApp(person.Applications, person.Id, connection);
             }
             else
                 throw new Exception("The following Person needs to be inserted into the database, before it can be updated.\n" + person.ToString());
+        }
+
+        private List<Application> UpdateJctPersonApp(List<Application> apps, int personId, IConnectable connection)
+        {
+            IJctPersonAppDao jctPersonAppDaoImpl = DaoImplFactory.GetJctPersonAppDaoImpl();
+            List<DataRow> foundJctPersonAppDaos =
+                jctPersonAppDaoImpl.Read_AllWithPersonId(personId, connection);
+            List<int> appIds = new List<int>();
+            List<int> foundAppIds = new List<int>();
+
+            foreach (Application app in apps)
+            {
+                appIds.Add(app.Id);
+            }
+
+            foreach (DataRow jctPersonAppDao in foundJctPersonAppDaos)
+            {
+                foundAppIds.Add((int)jctPersonAppDao["app_id"]);
+            }
+
+            foreach (int appId in appIds)
+            {
+                if (appId <= 0)
+                    throw new Exception("Applications must be already in the database before they can be linked with a person. PersonId: " + personId);
+
+                if (foundAppIds.Contains(appId) == false)
+                    jctPersonAppDaoImpl.Write(personId, appId, connection);
+            }
+
+            foreach (int foundAppId in foundAppIds)
+            {
+                if (appIds.Contains(foundAppId) == false)
+                    jctPersonAppDaoImpl.Delete(personId, foundAppId, connection);
+            }
+
+            return apps;
+        }
+
+        private List<Address> UpdateJctPersonAddress(List<Address> addresses, int personId, IConnectable connection)
+        {
+            IJctPersonAddressDao jctPersonAddressDaoImpl = DaoImplFactory.GetJctPersonAddressDaoImpl();
+            List<DataRow> foundJctPersonAddressDaos =
+                jctPersonAddressDaoImpl.Read_AllWithPersonId(personId, connection);
+            List<int> addressIds = new List<int>();
+            List<int> foundAddressIds = new List<int>();
+
+            foreach (Address address in addresses)
+            {
+                addressIds.Add(address.Id);
+            }
+
+            foreach (DataRow jctPersonAddressDao in foundJctPersonAddressDaos)
+            {
+                foundAddressIds.Add((int)jctPersonAddressDao["address_id"]);
+            }
+
+            foreach (int addressId in addressIds)
+            {
+                if (addressId <= 0)
+                    throw new Exception("Addresses must be already in the database before they can be linked with a person. PersonId: " + personId);
+
+                Address matchingAddress = null ;
+                foreach (Address addr in addresses)
+                    if (addr.Id == addressId)
+                        matchingAddress = addr;
+
+                if (foundAddressIds.Contains(addressId) == false)
+                    jctPersonAddressDaoImpl.Write(personId, addressId, matchingAddress.IsPrimary.Id, connection);
+            }
+
+            foreach (int foundAddressId in foundAddressIds)
+            {
+                if (addressIds.Contains(foundAddressId) == false)
+                    jctPersonAddressDaoImpl.Delete(personId, foundAddressId, connection);
+            }
+
+            return addresses;
+        }
+
+        private List<Enumeration> UpdateJctPersonRole(List<Enumeration> roles, int personId, IConnectable connection)
+        {
+            List<Enumeration> updatedRoles = new List<Enumeration>();
+            IJctPersonRoleDao jctPersonRoleDaoImpl = DaoImplFactory.GetJctPersonRoleDaoImpl();
+            List<DataRow> foundJctPersonRoleDaos =
+                jctPersonRoleDaoImpl.Read_AllWithPersonId(personId, connection);
+            List<int> roleIds = new List<int>();
+            List<int> foundRoleIds = new List<int>();
+
+            foreach (Enumeration role in roles)
+            {
+                roleIds.Add(role.Id);
+            }
+
+            foreach (DataRow jctPersonRoleDao in foundJctPersonRoleDaos)
+            {
+                foundRoleIds.Add((int)jctPersonRoleDao["enum_role_id"]);
+            }
+
+            foreach (int roleId in roleIds)
+            {
+                if (foundRoleIds.Contains(roleId) == false)
+                    jctPersonRoleDaoImpl.Write(personId, roleId, connection);
+
+                DataRow jctPersonRoleDao = jctPersonRoleDaoImpl.Read(personId, roleId, connection);
+                if (jctPersonRoleDao != null)
+                {
+                    int enumRoleId = (int)jctPersonRoleDao["enum_role_id"];
+
+                    updatedRoles.Add(Enum_Role.GetEnumFromId(enumRoleId));
+                }
+            }
+
+            foreach (int foundRoleId in foundRoleIds)
+            {
+                if (roleIds.Contains(foundRoleId) == false)
+                    jctPersonRoleDaoImpl.Delete(personId, foundRoleId, connection);
+            }
+
+            return updatedRoles;
+        }
+
+        private List<int> UpdateJctPersonPerson(List<int> relations, int personId, IConnectable connection)
+        {
+            List<int> updatedRelations = new List<int>();
+            IJctPersonPersonDao jctPersonPersonDaoImpl = DaoImplFactory.GetJctPersonPersonDaoImpl();
+            List<DataRow> foundJctPersonPersonDaos =
+                jctPersonPersonDaoImpl.Read_AllWithPersonOneId(personId, connection);
+            List<int> foundRelations = new List<int>();
+
+            foreach (DataRow jctPersonPersonDao in foundJctPersonPersonDaos)
+            {
+                foundRelations.Add((int)jctPersonPersonDao["person_two_id"]);
+            }
+
+            foreach (int relation in relations)
+            {
+                if (foundRelations.Contains(relation) == false)
+                    jctPersonPersonDaoImpl.Write(personId, relation, connection);
+
+                DataRow jctPersonPersonDao = jctPersonPersonDaoImpl.Read(personId, relation, connection);
+                if (jctPersonPersonDao != null)
+                    updatedRelations.Add((int)jctPersonPersonDao["person_two_id"]);
+            }
+
+            foreach (int foundRelation in foundRelations)
+            {
+                if (relations.Contains(foundRelation) == false)
+                    jctPersonPersonDaoImpl.Delete(personId, foundRelation, connection);
+            }
+            return relations;
+        }
+
+        private List<PhoneNumber> UpdatePhoneNumbers(List<PhoneNumber> phoneNumbers, int personId, IConnectable connection)
+        {
+            IPhoneNumberDao phoneNumberDaoImpl = DaoImplFactory.GetPhoneNumberDaoImpl();
+            List<PhoneNumber> updatedPhoneNumberes = new List<PhoneNumber>();
+
+            List<PhoneNumber> foundPhoneNumbers =
+                phoneNumberDaoImpl.Read_AllWithPersonId(personId, connection);
+
+            foreach (PhoneNumber phoneNumber in phoneNumbers)
+            {
+                phoneNumberDaoImpl.Update(phoneNumber, personId, connection);
+                updatedPhoneNumberes.AddRange(phoneNumberDaoImpl.Read(phoneNumber, personId, connection));
+            }
+
+            foreach (PhoneNumber foundPhoneNumber in foundPhoneNumbers)
+            {
+                if (phoneNumbers.Find(x => (x.Id == foundPhoneNumber.Id)) == null)
+                    phoneNumberDaoImpl.Delete(foundPhoneNumber, connection);
+            }
+
+            return updatedPhoneNumberes;
         }
 
         public Person Write(Person person, IConnectable connection)
@@ -564,296 +733,13 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
             Person result = daoObjectMapper.MapPerson(row);
 
-            result.UniqueIdentifiers = UpdateUniqueIdentifiers(person.UniqueIdentifiers, result.Id, connection);
             result.PhoneNumbers = UpdatePhoneNumbers(person.PhoneNumbers, result.Id, connection);
-            result.Addresses = UpdateAddresses(person.Addresses, result.Id, connection);
-            result.Applications = UpdateApplications(person.Applications, result.Id, connection);
+            result.SetAddresses(UpdateJctPersonAddress(person.GetAddresses(), result.Id, connection));
+            result.Applications = UpdateJctPersonApp(person.Applications, result.Id, connection);
             result.Roles = UpdateJctPersonRole(person.Roles, result.Id, connection);
             result.Relations = UpdateJctPersonPerson(person.Relations, result.Id, connection);
-            result.EmploymentSessions = UpdateEmploymentSessions(person.EmploymentSessions, result.Id, connection);
-            result.Enrollments = UpdatedEnrollments(person.Enrollments, result.Id, connection);
-            result.Marks = UpdateMarks(person.Marks, result.Id, connection);
 
             return result;
-        }
-
-        private List<Mark> UpdateMarks(List<Mark> marks, int personId, IConnectable connection)
-        {
-            List<Mark> updatedMarks = new List<Mark>();
-            IMarkDao markDaoImpl = DaoImplFactory.GetMarkDaoImpl();
-
-            List<Mark> foundMarks =
-                markDaoImpl.Read_AllWithPersonId(personId, connection);
-
-            foreach (Mark mark in marks)
-            {
-                markDaoImpl.Update(mark, personId, connection);
-                updatedMarks.AddRange(markDaoImpl.Read(mark, personId, connection));
-            }
-
-            foreach (Mark foundMark in foundMarks)
-            {
-                if (marks.Find(x => (x.Id == foundMark.Id)) == null)
-                    markDaoImpl.Delete(foundMark, connection);
-            }
-
-            return updatedMarks;
-        }
-
-        private List<Enrollment> UpdatedEnrollments(List<Enrollment> enrollments, int personId, IConnectable connection)
-        {
-            List<Enrollment> updatedEnrollments = new List<Enrollment>();
-            IEnrollmentDao enrollmentDaoImpl = DaoImplFactory.GetEnrollmentDaoImpl();
-
-            List<Enrollment> foundEnrollments =
-                enrollmentDaoImpl.Read_AllWithPersonId(personId, connection);
-
-            foreach (Enrollment enrollment in enrollments)
-            {
-                enrollmentDaoImpl.Update(enrollment, personId, connection);
-                updatedEnrollments.AddRange(enrollmentDaoImpl.Read(enrollment, personId, connection));
-            }
-
-            foreach (Enrollment foundEnrollment in foundEnrollments)
-            {
-                if (enrollments.Find(x => (x.Id == foundEnrollment.Id)) == null)
-                    enrollmentDaoImpl.Delete(foundEnrollment, connection);
-            }
-
-            return updatedEnrollments;
-        }
-
-        private List<EmploymentSession> UpdateEmploymentSessions(List<EmploymentSession> employmentSessions, int personId, IConnectable connection)
-        {
-            List<EmploymentSession> updatedEmploymentSessions = new List<EmploymentSession>();
-            IEmploymentSessionDao employmentSessionDaoImpl = DaoImplFactory.GetEmploymentSessionDaoImpl();
-
-            List<EmploymentSession> foundEmploymentSessions =
-                employmentSessionDaoImpl.Read_AllWithPersonId(personId, connection);
-
-            foreach (EmploymentSession employmentSession in employmentSessions)
-            {
-                employmentSessionDaoImpl.Update(employmentSession, personId, connection);
-                updatedEmploymentSessions.AddRange(employmentSessionDaoImpl.Read_AllWithPersonId(personId, connection));
-            }
-
-            foreach (EmploymentSession foundEmploymentSession in foundEmploymentSessions)
-            {
-                if (employmentSessions.Find(x => (x.Id == foundEmploymentSession.Id)) == null)
-                    employmentSessionDaoImpl.Delete(foundEmploymentSession, connection);
-            }
-
-            return updatedEmploymentSessions;
-        }
-
-        private List<UniqueIdentifier> UpdateUniqueIdentifiers(List<UniqueIdentifier> uniqueIdentifieres, int personId, IConnectable connection)
-        {
-            List<UniqueIdentifier> updatedUniqueIdentifieres = new List<UniqueIdentifier>();
-            IUniqueIdentifierDao uniqueIdentifierDaoImpl = DaoImplFactory.GetUniqueIdentifierDaoImpl();
-
-            List<UniqueIdentifier> foundUniqueIdentifiers =
-                uniqueIdentifierDaoImpl.Read_AllWithPersonId(personId, connection);
-
-
-            foreach (UniqueIdentifier uniqueIdentifier in uniqueIdentifieres)
-            {
-                uniqueIdentifierDaoImpl.Update(uniqueIdentifier, personId, connection);
-                updatedUniqueIdentifieres.AddRange(uniqueIdentifierDaoImpl.Read(uniqueIdentifier, personId, connection));
-            }
-
-            foreach (UniqueIdentifier foundUniqueIdentifier in foundUniqueIdentifiers)
-            {
-                if (uniqueIdentifieres.Find(x => (x.Id == foundUniqueIdentifier.Id)) == null)
-                    uniqueIdentifierDaoImpl.Delete(foundUniqueIdentifier, connection);
-            }
-            return updatedUniqueIdentifieres;
-        }
-
-        private List<PhoneNumber> UpdatePhoneNumbers(List<PhoneNumber> phoneNumbers, int personId, IConnectable connection)
-        {
-            IPhoneNumberDao phoneNumberDaoImpl = DaoImplFactory.GetPhoneNumberDaoImpl();
-            List<PhoneNumber> updatedPhoneNumberes = new List<PhoneNumber>();
-
-            List<PhoneNumber> foundPhoneNumbers =
-                phoneNumberDaoImpl.Read_AllWithPersonId(personId, connection);
-
-            foreach (PhoneNumber phoneNumber in phoneNumbers)
-            {
-                phoneNumberDaoImpl.Update(phoneNumber, personId, connection);
-                updatedPhoneNumberes.AddRange(phoneNumberDaoImpl.Read(phoneNumber, personId, connection));
-            }
-
-            foreach (PhoneNumber foundPhoneNumber in foundPhoneNumbers)
-            {
-                if (phoneNumbers.Find(x => (x.Id == foundPhoneNumber.Id)) == null)
-                    phoneNumberDaoImpl.Delete(foundPhoneNumber, connection);
-            }
-
-            return updatedPhoneNumberes;
-        }
-
-        private List<Address> UpdateAddresses(List<Address> addresses, int personId, IConnectable connection)
-        {
-            List<Address> updatedAddresses = new List<Address>();
-            IAddressDao addressDaoImpl = DaoImplFactory.GetAddressDaoImpl();
-            foreach (Address address in addresses)
-            {
-                updatedAddresses.AddRange(addressDaoImpl.Read(address, connection));
-            }
-
-            UpdateJctPersonAddress(updatedAddresses, personId, connection);
-
-            return updatedAddresses;
-        }
-
-        private void UpdateJctPersonAddress(List<Address> addresses, int personId, IConnectable connection)
-        {
-            IJctPersonAddressDao jctPersonAddressDaoImpl = DaoImplFactory.GetJctPersonAddressDaoImpl();
-            List<DataRow> foundJctPersonAddressDaos =
-                jctPersonAddressDaoImpl.Read_AllWithPersonId(personId, connection);
-            List<int> addressIds = new List<int>();
-            List<int> foundAddressIds = new List<int>();
-
-            foreach (Address address in addresses)
-            {
-                addressIds.Add(address.Id);
-            }
-
-            foreach (DataRow jctPersonAddressDao in foundJctPersonAddressDaos)
-            {
-                foundAddressIds.Add((int)jctPersonAddressDao["address_id"]);
-            }
-
-            foreach (int addressId in addressIds)
-            {
-                if (foundAddressIds.Contains(addressId) == false)
-                    jctPersonAddressDaoImpl.Write(personId, addressId, connection);
-            }
-
-            foreach (int foundAddressId in foundAddressIds)
-            {
-                if (addressIds.Contains(foundAddressId) == false)
-                    jctPersonAddressDaoImpl.Delete(personId, foundAddressId, connection);
-            }
-        }
-
-        private List<Application> UpdateApplications(List<Application> apps, int personId, IConnectable connection)
-        {
-            List<Application> updatedApps = new List<Application>();
-            IApplicationDao appDaoImpl = DaoImplFactory.GetApplicationDaoImpl();
-            foreach (Application app in apps)
-            {
-                appDaoImpl.Update(app, connection);
-                updatedApps.AddRange(appDaoImpl.Read(app, connection));
-            }
-
-            UpdateJctPersonApp(updatedApps, personId, connection);
-
-            return updatedApps;
-        }
-
-        private void UpdateJctPersonApp(List<Application> apps, int personId, IConnectable connection)
-        {
-            IJctPersonAppDao jctPersonAppDaoImpl = DaoImplFactory.GetJctPersonAppDaoImpl();
-            List<DataRow> foundJctPersonAppDaos =
-                jctPersonAppDaoImpl.Read_AllWithPersonId(personId, connection);
-            List<int> appIds = new List<int>();
-            List<int> foundAppIds = new List<int>();
-
-            foreach (Application app in apps)
-            {
-                appIds.Add(app.Id);
-            }
-
-            foreach (DataRow jctPersonAppDao in foundJctPersonAppDaos)
-            {
-                foundAppIds.Add((int)jctPersonAppDao["app_id"]);
-            }
-
-            foreach (int appId in appIds)
-            {
-                if (foundAppIds.Contains(appId) == false)
-                    jctPersonAppDaoImpl.Write(personId, appId, connection);
-            }
-
-            foreach (int foundAppId in foundAppIds)
-            {
-                if (appIds.Contains(foundAppId) == false)
-                    jctPersonAppDaoImpl.Delete(personId, foundAppId, connection);
-            }
-        }
-
-        private List<Enumeration> UpdateJctPersonRole(List<Enumeration> roles, int personId, IConnectable connection)
-        {
-            List<Enumeration> updatedRoles = new List<Enumeration>();
-            IJctPersonRoleDao jctPersonRoleDaoImpl = DaoImplFactory.GetJctPersonRoleDaoImpl();
-            List<DataRow> foundJctPersonRoleDaos =
-                jctPersonRoleDaoImpl.Read_AllWithPersonId(personId, connection);
-            List<int> roleIds = new List<int>();
-            List<int> foundRoleIds = new List<int>();
-
-            foreach (Enumeration role in roles)
-            {
-                roleIds.Add(role.Id);
-            }
-
-            foreach (DataRow jctPersonRoleDao in foundJctPersonRoleDaos)
-            {
-                foundRoleIds.Add((int)jctPersonRoleDao["enum_role_id"]);
-            }
-
-            foreach (int roleId in roleIds)
-            {
-                if (foundRoleIds.Contains(roleId) == false)
-                    jctPersonRoleDaoImpl.Write(personId, roleId, connection);
-
-                DataRow jctPersonRoleDao = jctPersonRoleDaoImpl.Read(personId, roleId, connection);
-                if(jctPersonRoleDao != null)
-                {
-                    int enumRoleId = (int)jctPersonRoleDao["enum_role_id"];
-
-                    updatedRoles.Add(Enum_Role.GetEnumFromId(enumRoleId));
-                }
-            }
-
-            foreach (int foundRoleId in foundRoleIds)
-            {
-                if (roleIds.Contains(foundRoleId) == false)
-                    jctPersonRoleDaoImpl.Delete(personId, foundRoleId, connection);
-            }
-
-            return updatedRoles;
-        }
-
-        private List<int> UpdateJctPersonPerson(List<int> relations, int personId, IConnectable connection)
-        {
-            List<int> updatedRelations = new List<int>();
-            IJctPersonPersonDao jctPersonPersonDaoImpl = DaoImplFactory.GetJctPersonPersonDaoImpl();
-            List<DataRow> foundJctPersonPersonDaos =
-                jctPersonPersonDaoImpl.Read_AllWithPersonOneId(personId, connection);
-            List<int> foundRelations = new List<int>();
-
-            foreach (DataRow jctPersonPersonDao in foundJctPersonPersonDaos)
-            {
-                foundRelations.Add((int)jctPersonPersonDao["person_two_id"]);
-            }
-
-            foreach (int relation in relations)
-            {
-                if (foundRelations.Contains(relation) == false)
-                    jctPersonPersonDaoImpl.Write(personId, relation, connection);
-
-                DataRow jctPersonPersonDao = jctPersonPersonDaoImpl.Read(personId, relation, connection);
-                if(jctPersonPersonDao != null)
-                    updatedRelations.Add((int)jctPersonPersonDao["person_two_id"]);
-            }
-
-            foreach (int foundRelation in foundRelations)
-            {
-                if (relations.Contains(foundRelation) == false)
-                    jctPersonPersonDaoImpl.Delete(personId, foundRelation, connection);
-            }
-            return relations;
         }
     }
 }

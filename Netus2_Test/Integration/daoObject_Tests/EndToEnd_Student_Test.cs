@@ -64,7 +64,7 @@ namespace Netus2_Test.Integration
             Assert_Table(person.Id, 1, "person", DataTableFactory.CreateDataTable_Netus2_Person(), connection);
             Assert_Table(person.Id, 1, "jct_person_role", DataTableFactory.CreateDataTable_Netus2_JctPersonRole(), connection);
             Assert_Table(person.PhoneNumbers[0].Id, 1, "phone_number", DataTableFactory.CreateDataTable_Netus2_PhoneNumber(), connection);
-            Assert_Table(person.Addresses[0].Id, 1, "address", DataTableFactory.CreateDataTable_Netus2_Address(), connection);
+            Assert_Table(person.GetAddresses()[0].Id, 1, "address", DataTableFactory.CreateDataTable_Netus2_Address(), connection);
             Assert_Table(person.UniqueIdentifiers[0].Id, 1, "unique_identifier", DataTableFactory.CreateDataTable_Netus2_UniqueIdentifier(), connection);
             Assert_Table(person.Marks[0].Id, 1, "mark", DataTableFactory.CreateDataTable_Netus2_Mark(), connection);
             Assert_Table(person.Marks[0].LineItem.Id, 1, "lineitem", DataTableFactory.CreateDataTable_Netus2_LineItem(), connection);
@@ -97,7 +97,7 @@ namespace Netus2_Test.Integration
             Assert_Table(person.Id, 0, "person", DataTableFactory.CreateDataTable_Netus2_Person(), connection);
             Assert_Table(person.Id, 0, "jct_person_role", DataTableFactory.CreateDataTable_Netus2_JctPersonRole(), connection);
             Assert_Table(person.PhoneNumbers[0].Id, 0, "phone_number", DataTableFactory.CreateDataTable_Netus2_PhoneNumber(), connection);
-            Assert_Table(person.Addresses[0].Id, 1, "address", DataTableFactory.CreateDataTable_Netus2_Address(), connection);
+            Assert_Table(person.GetAddresses()[0].Id, 1, "address", DataTableFactory.CreateDataTable_Netus2_Address(), connection);
             Assert_Table(person.UniqueIdentifiers[0].Id, 0, "unique_identifier", DataTableFactory.CreateDataTable_Netus2_UniqueIdentifier(), connection);
             Assert_Table(person.Marks[0].Id, 0, "mark", DataTableFactory.CreateDataTable_Netus2_Mark(), connection);
             Assert_Table(person.Marks[0].LineItem.Id, 1, "lineitem", DataTableFactory.CreateDataTable_Netus2_LineItem(), connection);
@@ -127,7 +127,7 @@ namespace Netus2_Test.Integration
             Assert_Table(person.Id, 1, "person", DataTableFactory.CreateDataTable_Netus2_Person(), connection);
             Assert_Table(person.Id, 1, "jct_person_role", DataTableFactory.CreateDataTable_Netus2_JctPersonRole(), connection);
             Assert_Table(person.PhoneNumbers[0].Id, 1, "phone_number", DataTableFactory.CreateDataTable_Netus2_PhoneNumber(), connection);
-            Assert_Table(person.Addresses[0].Id, 1, "address", DataTableFactory.CreateDataTable_Netus2_Address(), connection);
+            Assert_Table(person.GetAddresses()[0].Id, 1, "address", DataTableFactory.CreateDataTable_Netus2_Address(), connection);
             Assert_Table(person.UniqueIdentifiers[0].Id, 1, "unique_identifier", DataTableFactory.CreateDataTable_Netus2_UniqueIdentifier(), connection);
             Assert_Table(person.Marks[0].Id, 0, "mark", DataTableFactory.CreateDataTable_Netus2_Mark(), connection);
             Assert_Table(person.Marks[0].LineItem.Id, 0, "lineitem", DataTableFactory.CreateDataTable_Netus2_LineItem(), connection);
@@ -157,7 +157,7 @@ namespace Netus2_Test.Integration
             Assert_Table(person.Id, 1, "person", DataTableFactory.CreateDataTable_Netus2_Person(), connection);
             Assert_Table(person.Id, 1, "jct_person_role", DataTableFactory.CreateDataTable_Netus2_JctPersonRole(), connection);
             Assert_Table(person.PhoneNumbers[0].Id, 1, "phone_number", DataTableFactory.CreateDataTable_Netus2_PhoneNumber(), connection);
-            Assert_Table(person.Addresses[0].Id, 1, "address", DataTableFactory.CreateDataTable_Netus2_Address(), connection);
+            Assert_Table(person.GetAddresses()[0].Id, 1, "address", DataTableFactory.CreateDataTable_Netus2_Address(), connection);
             Assert_Table(person.UniqueIdentifiers[0].Id, 1, "unique_identifier", DataTableFactory.CreateDataTable_Netus2_UniqueIdentifier(), connection);
             Assert_Table(person.Marks[0].Id, 1, "mark", DataTableFactory.CreateDataTable_Netus2_Mark(), connection);
             Assert_Table(person.Marks[0].LineItem.Id, 1, "lineitem", DataTableFactory.CreateDataTable_Netus2_LineItem(), connection);
@@ -186,7 +186,7 @@ namespace Netus2_Test.Integration
             Assert_Table(person.Id, 1, "person", DataTableFactory.CreateDataTable_Netus2_Person(), connection);
             Assert_Table(person.Id, 1, "jct_person_role", DataTableFactory.CreateDataTable_Netus2_JctPersonRole(), connection);
             Assert_Table(person.PhoneNumbers[0].Id, 1, "phone_number", DataTableFactory.CreateDataTable_Netus2_PhoneNumber(), connection);
-            Assert_Table(person.Addresses[0].Id, 1, "address", DataTableFactory.CreateDataTable_Netus2_Address(), connection);
+            Assert_Table(person.GetAddresses()[0].Id, 1, "address", DataTableFactory.CreateDataTable_Netus2_Address(), connection);
             Assert_Table(person.UniqueIdentifiers[0].Id, 1, "unique_identifier", DataTableFactory.CreateDataTable_Netus2_UniqueIdentifier(), connection);
             Assert_Table(person.Marks[0].Id, 0, "mark", DataTableFactory.CreateDataTable_Netus2_Mark(), connection);
             Assert_Table(person.Marks[0].LineItem.Id, 0, "lineitem", DataTableFactory.CreateDataTable_Netus2_LineItem(), connection);
@@ -215,7 +215,7 @@ namespace Netus2_Test.Integration
             Assert_Table(person.Id, 1, "person", DataTableFactory.CreateDataTable_Netus2_Person(), connection);
             Assert_Table(person.Id, 1, "jct_person_role", DataTableFactory.CreateDataTable_Netus2_JctPersonRole(), connection);
             Assert_Table(person.PhoneNumbers[0].Id, 1, "phone_number", DataTableFactory.CreateDataTable_Netus2_PhoneNumber(), connection);
-            Assert_Table(person.Addresses[0].Id, 1, "address", DataTableFactory.CreateDataTable_Netus2_Address(), connection);
+            Assert_Table(person.GetAddresses()[0].Id, 1, "address", DataTableFactory.CreateDataTable_Netus2_Address(), connection);
             Assert_Table(person.UniqueIdentifiers[0].Id, 1, "unique_identifier", DataTableFactory.CreateDataTable_Netus2_UniqueIdentifier(), connection);
             Assert_Table(person.Marks[0].Id, 0, "mark", DataTableFactory.CreateDataTable_Netus2_Mark(), connection);
             Assert_Table(person.Marks[0].LineItem.Id, 0, "lineitem", DataTableFactory.CreateDataTable_Netus2_LineItem(), connection);
@@ -244,7 +244,7 @@ namespace Netus2_Test.Integration
             Assert_Table(person.Id, 1, "person", DataTableFactory.CreateDataTable_Netus2_Person(), connection);
             Assert_Table(person.Id, 1, "jct_person_role", DataTableFactory.CreateDataTable_Netus2_JctPersonRole(), connection);
             Assert_Table(person.PhoneNumbers[0].Id, 1, "phone_number", DataTableFactory.CreateDataTable_Netus2_PhoneNumber(), connection);
-            Assert_Table(person.Addresses[0].Id, 1, "address", DataTableFactory.CreateDataTable_Netus2_Address(), connection);
+            Assert_Table(person.GetAddresses()[0].Id, 1, "address", DataTableFactory.CreateDataTable_Netus2_Address(), connection);
             Assert_Table(person.UniqueIdentifiers[0].Id, 1, "unique_identifier", DataTableFactory.CreateDataTable_Netus2_UniqueIdentifier(), connection);
             Assert_Table(person.Marks[0].Id, 1, "mark", DataTableFactory.CreateDataTable_Netus2_Mark(), connection);
             Assert_Table(person.Marks[0].LineItem.Id, 1, "lineitem", DataTableFactory.CreateDataTable_Netus2_LineItem(), connection);
@@ -324,49 +324,6 @@ namespace Netus2_Test.Integration
 
             Assert_Table(mark.Id, 0, "mark", DataTableFactory.CreateDataTable_Netus2_Mark(), connection);
             AssertPerson(person, personDaoImpl.Read(person, connection)[0], connection);
-        }
-
-        [Test]
-        public void GivenStudentWithMarks_WhenMarkIsChanged_ShouldUpdateRelevantTables()
-        {
-            Person person = testDataBuilder.student;
-            LineItem lineItem = testDataBuilder.lineItem;
-            Mark mark = testDataBuilder.mark;
-
-            Assert_Table(mark.Id, 1, "mark", DataTableFactory.CreateDataTable_Netus2_Mark(), connection);
-
-            Mark newMark = new Mark(testDataBuilder.lineItem, Enum_Score_Status.values["exempt"], 20.00, DateTime.Now);
-            newMark.Score = 2.0;
-            newMark = markDaoImpl.Write(newMark, person.Id, connection);
-            person.Marks[0] = newMark;
-            personDaoImpl.Update(person, connection);
-
-            Person personAfterRead = personDaoImpl.Read(person, connection)[0];
-
-            Assert.AreNotEqual(mark.Id, newMark.Id);
-            Assert.AreNotEqual(mark.Id, personAfterRead.Marks[0].Id);
-            Assert.AreEqual(newMark.Id, personAfterRead.Marks[0].Id);
-            Assert_Table(mark.Id, 0, "mark", DataTableFactory.CreateDataTable_Netus2_Mark(), connection);
-            Assert_Table(personAfterRead.Marks[0].Id, 1, "mark", DataTableFactory.CreateDataTable_Netus2_Mark(), connection);
-        }
-
-        [Test]
-        public void GivenStudentWithEnrollment_WhenEnrollmentChanges_ShuldReflectInDatabase()
-        {
-            Person student = testDataBuilder.student;
-            int oldEnrollmentId = student.Enrollments[0].Id;
-
-            Enrollment newEnrollment = new Enrollment(Enum_Grade.values["7"], new DateTime(2022, 1, 1), new DateTime(2023, 1, 1), Enum_True_False.values["true"], testDataBuilder.classEnrolled, new List<AcademicSession>());
-            student.Enrollments[0] = newEnrollment;
-
-            personDaoImpl.Update(student, connection);
-            student = personDaoImpl.Read(student, connection)[0];
-            Assert.IsTrue(student.Enrollments.Count == 1);
-            int newEnrollmentId = student.Enrollments[0].Id;
-
-            Assert.AreNotEqual(oldEnrollmentId, newEnrollmentId);
-            Assert_Table(oldEnrollmentId, 0, "enrollment", DataTableFactory.CreateDataTable_Netus2_Enrollment(), connection);
-            Assert_Table(newEnrollmentId, 1, "enrollment", DataTableFactory.CreateDataTable_Netus2_Enrollment(), connection);
         }
 
         [TearDown]

@@ -333,11 +333,6 @@ namespace Netus2_DatabaseConnection.utilityTools
             else
                 row["enum_country_id"] = DBNull.Value;
 
-            if (address.IsCurrent != null)
-                row["is_current_id"] = address.IsCurrent.Id;
-            else
-                row["is_current_id"] = DBNull.Value;
-
             if (address.AddressType != null)
                 row["enum_address_id"] = address.AddressType.Id;
             else
@@ -365,11 +360,6 @@ namespace Netus2_DatabaseConnection.utilityTools
                 city = (string)row["city"];
 
             Address address = new Address(line1, city, stateProvince, country);
-
-            if (row["is_current_id"] != DBNull.Value)
-                address.IsCurrent = Enum_True_False.GetEnumFromId((int)row["is_current_id"]);
-            else
-                address.IsCurrent = null;
 
             if (row["enum_address_id"] != DBNull.Value)
                 address.AddressType = Enum_Address.GetEnumFromId((int)row["enum_address_id"]);
@@ -433,11 +423,6 @@ namespace Netus2_DatabaseConnection.utilityTools
             else
                 row["enum_identifier_id"] = DBNull.Value;
 
-            if (uniqueId.IsActive != null)
-                row["is_active_id"] = uniqueId.IsActive.Id;
-            else
-                row["is_active_id"] = DBNull.Value;
-
             return row;
         }
 
@@ -447,15 +432,11 @@ namespace Netus2_DatabaseConnection.utilityTools
             if (row["enum_identifier_id"] != DBNull.Value)
                 identifierType = Enum_Identifier.GetEnumFromId((int)row["enum_identifier_id"]);
 
-            Enumeration isActive = null;
-            if(row["is_active_id"] != DBNull.Value)
-                isActive = Enum_True_False.GetEnumFromId((int)row["is_active_id"]);
-
             string uniqueIdentifier = null;
             if (row["unique_identifier"] != DBNull.Value)
                 uniqueIdentifier = (string)row["unique_identifier"];
 
-            UniqueIdentifier uniqueId = new UniqueIdentifier(uniqueIdentifier, identifierType, isActive);
+            UniqueIdentifier uniqueId = new UniqueIdentifier(uniqueIdentifier, identifierType);
 
             if (row["unique_identifier_id"] != DBNull.Value)
                 uniqueId.Id = (int)row["unique_identifier_id"];

@@ -282,16 +282,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
         {
             personDaoImpl.Update(tdBuilder.teacher, _netus2DbConnection);
 
-            Assert.IsTrue(mockAddressDaoImpl.WasCalled_Read);
             Assert.IsTrue(mockJctPersonAddressDaoImpl.WasCalled_ReadWithPersonId);
-        }
-
-        [TestCase]
-        public void UpdateUniqueIdentifier_ShouldCallExpectedMethod()
-        {
-            personDaoImpl.Update(tdBuilder.teacher, _netus2DbConnection);
-
-            Assert.IsTrue(mockUniqueIdentifierDaoImpl.WasCalled_Read);
         }
 
         [TestCase]
@@ -299,7 +290,6 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
         {
             personDaoImpl.Update(tdBuilder.teacher, _netus2DbConnection);
 
-            Assert.IsTrue(mockApplicationDaoImpl.WasCalled_Read);
             Assert.IsTrue(mockJctPersonAppDaoImpl.WasCalled_ReadWithPersonId);
         }
 
@@ -317,14 +307,6 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
             personDaoImpl.Update(tdBuilder.teacher, _netus2DbConnection);
 
             Assert.IsTrue(mockMarkDaoImpl.WasCalled_ReadWithPersonId);
-        }
-
-        [TestCase]
-        public void Write_UpdateEmploymentSession_ShouldCallExpectedMethod()
-        {
-            personDaoImpl.Write(tdBuilder.teacher, _netus2DbConnection);
-
-            Assert.IsTrue(mockEmploymentSessionDaoImpl.WasCalled_ReadAllWithPersonId);
         }
 
         [TestCase]
@@ -356,16 +338,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
         {
             personDaoImpl.Write(tdBuilder.teacher, _netus2DbConnection);
 
-            Assert.IsTrue(mockAddressDaoImpl.WasCalled_Read);
             Assert.IsTrue(mockJctPersonAddressDaoImpl.WasCalled_ReadWithPersonId);
-        }
-
-        [TestCase]
-        public void Write_UpdateUniqueIdentifier_ShouldCallExpectedMethod()
-        {
-            personDaoImpl.Write(tdBuilder.teacher, _netus2DbConnection);
-
-            Assert.IsTrue(mockUniqueIdentifierDaoImpl.WasCalled_Read);
         }
 
         [TestCase]
@@ -373,24 +346,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
         {
             personDaoImpl.Write(tdBuilder.teacher, _netus2DbConnection);
 
-            Assert.IsTrue(mockApplicationDaoImpl.WasCalled_Read);
             Assert.IsTrue(mockJctPersonAppDaoImpl.WasCalled_ReadWithPersonId);
-        }
-
-        [TestCase]
-        public void Write_UpdateEnrollment_ShouldCallExpectedMethod()
-        {
-            personDaoImpl.Write(tdBuilder.teacher, _netus2DbConnection);
-
-            Assert.IsTrue(mockEnrollmentDaoImpl.WasCalled_ReadWithPersonId);
-        }
-
-        [TestCase]
-        public void Write_UpdateMark_ShouldCallExpectedMethod()
-        {
-            personDaoImpl.Write(tdBuilder.teacher, _netus2DbConnection);
-
-            Assert.IsTrue(mockMarkDaoImpl.WasCalled_ReadWithPersonId);
         }
 
         [TearDown]

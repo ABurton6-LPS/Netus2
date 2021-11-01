@@ -91,6 +91,12 @@ namespace Netus2_DatabaseConnection.utilityTools
                             else
                                 logPerson.login_pw = null;
                             break;
+                        case "enum_status_id":
+                            if (row[columnName] != DBNull.Value)
+                                logPerson.Status = Enum_Status.GetEnumFromId((int)row[columnName]);
+                            else
+                                logPerson.Status = null;
+                            break;
                         case "created":
                             if (row[columnName] != DBNull.Value)
                                 logPerson.created = (DateTime)row[columnName];
@@ -310,12 +316,6 @@ namespace Netus2_DatabaseConnection.utilityTools
                                 logUniqueIdentifier.IdentifierType = Enum_Identifier.GetEnumFromId((int)row[columnName]);
                             else
                                 logUniqueIdentifier.IdentifierType = null;
-                            break;
-                        case "is_active_id":
-                            if (row[columnName] != DBNull.Value)
-                                logUniqueIdentifier.IsActive = Enum_True_False.GetEnumFromId((int)row[columnName]);
-                            else
-                                logUniqueIdentifier.IsActive = null;
                             break;
                         case "created":
                             if (row[columnName] != DBNull.Value)
@@ -878,12 +878,6 @@ namespace Netus2_DatabaseConnection.utilityTools
                             else
                                 logAddress.Country = null;
                             break;
-                        case "is_current_id":
-                            if (row[columnName] != DBNull.Value)
-                                logAddress.set_IsCurrent((int)row[columnName]);
-                            else
-                                logAddress.IsCurrent = null;
-                            break;
                         case "enum_address_id":
                             if (row[columnName] != DBNull.Value)
                                 logAddress.set_AddressType((int)row[columnName]);
@@ -975,6 +969,12 @@ namespace Netus2_DatabaseConnection.utilityTools
                                 logJctPersonAddress.address_id = (int)row[columnName];
                             else
                                 logJctPersonAddress.address_id = -1;
+                            break;
+                        case "is_primary_id":
+                            if (row[columnName] != DBNull.Value)
+                                logJctPersonAddress.set_IsPrimary((int)row[columnName]);
+                            else
+                                logJctPersonAddress.IsPrimary = null;
                             break;
                         case "log_date":
                             if(row[columnName] != DBNull.Value)

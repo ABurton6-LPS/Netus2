@@ -97,21 +97,23 @@ namespace Netus2_DatabaseConnection.daoImplementations
             return jctPersonAddressDaos;
         }
 
-        public DataRow Write(int personId, int addressId, IConnectable connection)
+        public DataRow Write(int personId, int addressId, int isPrimaryId, IConnectable connection)
         {
             string sql = "INSERT INTO jct_person_address (" +
-                "person_id, address_id) VALUES (" +
-                "@person_id, @address_id)";
+                "person_id, address_id, is_primary_id) VALUES (" +
+                "@person_id, @address_id, @is_primary_id)";
 
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("@person_id", personId));
             parameters.Add(new SqlParameter("@address_id", addressId));
+            parameters.Add(new SqlParameter("@is_primary_id", isPrimaryId));
 
             connection.ExecuteNonQuery(sql, parameters);
 
             DataRow jctPersonAddressDao = DataTableFactory.CreateDataTable_Netus2_JctPersonAddress().NewRow();
             jctPersonAddressDao["person_id"] = personId;
             jctPersonAddressDao["address_id"] = addressId;
+            jctPersonAddressDao["is_primary_id"] = isPrimaryId;
 
             return jctPersonAddressDao;
         }

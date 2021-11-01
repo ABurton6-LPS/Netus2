@@ -22,7 +22,7 @@ namespace Netus2_DatabaseConnection.dataObjects
         public List<int> Relations { get; set; }
         public List<PhoneNumber> PhoneNumbers { get; set; }
         public List<Application> Applications { get; set; }
-        public List<Address> Addresses { get; set; }
+        private List<Address> Addresses { get; set; }
         public List<UniqueIdentifier> UniqueIdentifiers { get; set; }
         public List<Mark> Marks { get; set; }
         public List<Enrollment> Enrollments { get; set; }
@@ -47,6 +47,32 @@ namespace Netus2_DatabaseConnection.dataObjects
             Marks = new List<Mark>();
             Enrollments = new List<Enrollment>();
             EmploymentSessions = new List<EmploymentSession>();
+        }
+
+        public void AddAddress(Address address, Enumeration isPrimary)
+        {
+            address.IsPrimary = isPrimary;
+            Addresses.Add(address);
+        }
+
+        public List<Address> GetAddresses()
+        {
+            return Addresses;
+        }
+
+        public void ClearAddresses()
+        {
+            Addresses.Clear();
+        }
+
+        public void AddRangeAddresses(IEnumerable<Address> collection)
+        {
+            Addresses.AddRange(collection);
+        }
+
+        public void SetAddresses(List<Address> addresses)
+        {
+            Addresses = addresses;
         }
 
         public override string ToString()

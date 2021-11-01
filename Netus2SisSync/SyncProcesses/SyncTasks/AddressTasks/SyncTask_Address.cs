@@ -36,7 +36,7 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AddressTasks
                 Enumeration sisStateProvince = Enum_State_Province.values[row["enum_state_province_id"].ToString().ToLower()];
                 string sisPostalCode = row["postal_code"].ToString() == "" ? null : row["postal_code"].ToString();
                 Enumeration sisCountry = Enum_Country.values[row["enum_country_id"].ToString().ToLower()];
-                Enumeration sisIsCurrent = Enum_True_False.values[row["is_current_id"].ToString().ToLower()];
+                Enumeration sisIsPrimary = Enum_True_False.values[row["is_primary_id"].ToString().ToLower()];
                 Enumeration sisAddressType = Enum_Address.values[row["enum_address_id"].ToString().ToLower()];
                 string sisSuniq = row["suniq"].ToString();
 
@@ -58,7 +58,7 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AddressTasks
                 addressDaoImpl.SetTaskId(this.Id);
                 List<Address> foundAddresses = addressDaoImpl.Read(address, _netus2Connection);
 
-                address.IsCurrent = sisIsCurrent;
+                address.IsPrimary = sisIsPrimary;
                 address.AddressType = sisAddressType;
 
                 IJctPersonAddressDao jctPersonAddressDaoImpl = new JctPersonAddressDaoImpl();
@@ -66,7 +66,7 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AddressTasks
                 if (foundAddresses.Count == 0)
                 {
                     address = addressDaoImpl.Write(address, _netus2Connection);
-                    jctPersonAddressDaoImpl.Write(person.Id, address.Id, _netus2Connection);
+                    jctPersonAddressDaoImpl.Write(person.Id, address.Id, address.IsPrimary.Id, _netus2Connection);
                     jctPersonAddressDaoImpl.Write_ToTempTable(person.Id, address.Id, _netus2Connection);
                 }
                 else if(foundAddresses.Count == 1)
@@ -74,13 +74,13 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AddressTasks
                     address.Id = foundAddresses[0].Id;
 
                     bool personHasAddress = false;
-                    foreach(Address addressLinkedToPerson in person.Addresses)
+                    foreach(Address addressLinkedToPerson in person.GetAddresses())
                         if (addressLinkedToPerson.Id == address.Id)
                             personHasAddress = true;
 
                     if (personHasAddress == false)
                     {
-                        jctPersonAddressDaoImpl.Write(person.Id, address.Id, _netus2Connection);
+                        jctPersonAddressDaoImpl.Write(person.Id, address.Id, address.IsPrimary.Id, _netus2Connection);
                         jctPersonAddressDaoImpl.Write_ToTempTable(person.Id, address.Id, _netus2Connection);
                     }
 
@@ -93,7 +93,7 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AddressTasks
                         (address.StateProvince != foundAddresses[0].StateProvince) ||
                         (address.PostalCode != foundAddresses[0].PostalCode) ||
                         (address.Country != foundAddresses[0].Country) ||
-                        (address.IsCurrent != foundAddresses[0].IsCurrent) ||
+                        (address.IsPrimary != foundAddresses[0].IsPrimary) ||
                         (address.AddressType != foundAddresses[0].AddressType))
                     {
                         addressDaoImpl.Update(address, _netus2Connection);

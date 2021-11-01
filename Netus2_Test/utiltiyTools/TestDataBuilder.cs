@@ -141,14 +141,14 @@ namespace Netus2_Test
                 address_Teacher = addressDaoImpl.Write(address_Teacher, connection);
             else
                 address_Teacher.Id = 1;
-            teacher.Addresses.Add(address_Teacher);
+            teacher.AddAddress(address_Teacher, Enum_True_False.values["true"]);
             if (connection != null)
             {
                 personDaoImpl.Update(teacher, connection);
                 teacher = personDaoImpl.Read(teacher, connection)[0];
             }
 
-            uniqueId_Teacher = new UniqueIdentifier(DateTime.Now.ToString() + "_teacher", Enum_Identifier.values["state id"], Enum_True_False.values["true"]);
+            uniqueId_Teacher = new UniqueIdentifier(DateTime.Now.ToString() + "_teacher", Enum_Identifier.values["state id"]);
             if (connection != null)
                 uniqueId_Teacher = uniqueIdentifierDaoImpl.Write(uniqueId_Teacher, teacher.Id, connection); 
             else
@@ -228,7 +228,7 @@ namespace Netus2_Test
                 address_Student = addressDaoImpl.Write(address_Student, connection);
             else
                 address_Student.Id = 2;
-            student.Addresses.Add(address_Student);
+            student.AddAddress(address_Student, Enum_True_False.values["true"]);
             if (connection != null)
             {
                 personDaoImpl.Update(student, connection);
@@ -249,7 +249,7 @@ namespace Netus2_Test
             else
                 mark.Id = 1;
 
-            uniqueId_Student = new UniqueIdentifier(DateTime.Now.ToString() + "_student", Enum_Identifier.values["student id"], Enum_True_False.values["true"]);
+            uniqueId_Student = new UniqueIdentifier(DateTime.Now.ToString() + "_student", Enum_Identifier.values["student id"]);
             if (connection != null)
                 uniqueId_Student = uniqueIdentifierDaoImpl.Write(uniqueId_Student, student.Id, connection);
             else

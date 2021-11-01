@@ -15,7 +15,7 @@ namespace Netus2_DatabaseConnection.dataObjects
         public Enumeration StateProvince { get; set; }
         public string PostalCode { get; set; }
         public Enumeration Country { get; set; }
-        public Enumeration IsCurrent { get; set; }
+        public Enumeration IsPrimary { get; set; }
         public Enumeration AddressType { get; set; }
 
         public Address(string line1, string city, Enumeration stateProvince, Enumeration country)
@@ -25,6 +25,7 @@ namespace Netus2_DatabaseConnection.dataObjects
             City = city;
             StateProvince = stateProvince;
             Country = country;
+            IsPrimary = Enum_True_False.values["false"];
         }
 
         public override string ToString()
@@ -39,7 +40,7 @@ namespace Netus2_DatabaseConnection.dataObjects
             strAddr.Append("State/Province: " + StateProvince + "\n");
             strAddr.Append("Postal Code: " + PostalCode + "\n");
             strAddr.Append("Country: " + Country + "\n");
-            strAddr.Append("Is Current: " + IsCurrent + "\n");
+            strAddr.Append("Is Current: " + IsPrimary + "\n");
             strAddr.Append("Address Type: " + AddressType + "\n");
 
             return strAddr.ToString();

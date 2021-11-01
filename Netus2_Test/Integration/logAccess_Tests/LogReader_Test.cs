@@ -215,7 +215,7 @@ namespace Netus2_Test.Integration
             Person person = personDaoImpl.Write(new Person("ftest", "ltest", new DateTime(1985, 9, 6), Enum_Gender.values["unset"], Enum_Ethnic.values["unset"]), connection);
 
             //Write
-            UniqueIdentifier uniqueIdentifier = uniqueIdentifierDaoImpl.Write(new UniqueIdentifier("test", Enum_Identifier.values["unset"], Enum_True_False.values["true"]), person.Id, connection);
+            UniqueIdentifier uniqueIdentifier = uniqueIdentifierDaoImpl.Write(new UniqueIdentifier("test", Enum_Identifier.values["unset"]), person.Id, connection);
 
             //Read logs after write
             List<LogUniqueIdentifier> logs = new List<LogUniqueIdentifier>();
@@ -620,7 +620,7 @@ namespace Netus2_Test.Integration
             Person person = new Person("fname", "lname", new DateTime(), Enum_Gender.values["unset"], Enum_Ethnic.values["unset"]);
 
             //Write
-            person.Addresses.Add(address);
+            person.AddAddress(address, Enum_True_False.values["true"]);
             person = personDaoImpl.Write(person, connection);
 
             List<LogJctPersonAddress> logs = new List<LogJctPersonAddress>();
@@ -633,7 +633,7 @@ namespace Netus2_Test.Integration
             Assert.AreEqual(Enum_Log_Action.values["insert"], logs[0].LogAction);
 
             //Delete
-            person.Addresses.Clear();
+            person.ClearAddresses();
             personDaoImpl.Update(person, connection);
 
             //Read logs after delete

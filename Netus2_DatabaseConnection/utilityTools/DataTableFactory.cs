@@ -206,7 +206,7 @@ namespace Netus2_DatabaseConnection.utilityTools
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(string);
-            dtColumn.ColumnName = "is_current_id";
+            dtColumn.ColumnName = "is_primary_id";
             dtAddress.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
@@ -476,11 +476,6 @@ namespace Netus2_DatabaseConnection.utilityTools
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(int);
             dtColumn.ColumnName = "enum_country_id";
-            dtAddress.Columns.Add(dtColumn);
-
-            dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(int);
-            dtColumn.ColumnName = "is_current_id";
             dtAddress.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
@@ -1302,11 +1297,6 @@ namespace Netus2_DatabaseConnection.utilityTools
             dtUniqueIdentifier.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(int);
-            dtColumn.ColumnName = "is_active_id";
-            dtUniqueIdentifier.Columns.Add(dtColumn);
-
-            dtColumn = new DataColumn();
             dtColumn.DataType = typeof(DateTime);
             dtColumn.ColumnName = "created";
             dtUniqueIdentifier.Columns.Add(dtColumn);
@@ -1491,6 +1481,11 @@ namespace Netus2_DatabaseConnection.utilityTools
             PrimaryKeycolumns[1] = dtColumn;
             dtJctPersonAddress.Columns.Add(dtColumn);
             dtJctPersonAddress.PrimaryKey = PrimaryKeycolumns;
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(int);
+            dtColumn.ColumnName = "is_primary_id";
+            dtJctPersonAddress.Columns.Add(dtColumn);
 
             return dtJctPersonAddress;
         }
@@ -1726,11 +1721,6 @@ namespace Netus2_DatabaseConnection.utilityTools
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(int);
             dtColumn.ColumnName = "enum_country_id";
-            dtLogAddress.Columns.Add(dtColumn);
-
-            dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(int);
-            dtColumn.ColumnName = "is_current_id";
             dtLogAddress.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
@@ -2804,11 +2794,6 @@ namespace Netus2_DatabaseConnection.utilityTools
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(int);
             dtColumn.ColumnName = "enum_identifier_id";
-            dtLogUniqueIdentifier.Columns.Add(dtColumn);
-
-            dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(int);
-            dtColumn.ColumnName = "is_active_id";
             dtLogUniqueIdentifier.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();

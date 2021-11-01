@@ -22,7 +22,6 @@ namespace Netus2_DatabaseConnection.logObjects
         public string log_user { get; set; }
 
         public Enumeration AddressType;
-        public Enumeration IsCurrent;
         public Enumeration Country;
         public Enumeration StateProvince;
         public Enumeration LogAction;
@@ -30,11 +29,6 @@ namespace Netus2_DatabaseConnection.logObjects
         public void set_AddressType(int enumAddressType)
         {
             AddressType = Enum_Address.GetEnumFromId(enumAddressType);
-        }
-
-        public void set_IsCurrent(int enumIsCurrentId)
-        {
-            IsCurrent = Enum_True_False.GetEnumFromId(enumIsCurrentId);
         }
 
         public void set_Country(int enumCountryId)

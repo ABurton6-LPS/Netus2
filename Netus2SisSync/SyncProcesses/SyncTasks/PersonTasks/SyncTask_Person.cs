@@ -52,7 +52,7 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.PersonTasks
                 {
                     typeOfSisId = Enum_Identifier.values["student id"];
                 }
-                UniqueIdentifier uniqueId = new UniqueIdentifier(sisId, typeOfSisId, Enum_True_False.values["true"]);
+                UniqueIdentifier uniqueId = new UniqueIdentifier(sisId, typeOfSisId);
                 IUniqueIdentifierDao uniqueIdentifierDaoImpl = DaoImplFactory.GetUniqueIdentifierDaoImpl();
                 uniqueIdentifierDaoImpl.SetTaskId(this.Id);
                 List<UniqueIdentifier> foundUniqueIdentifiers = uniqueIdentifierDaoImpl.Read(uniqueId, -1, _netus2Connection);
