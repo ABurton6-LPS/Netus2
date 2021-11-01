@@ -8,14 +8,12 @@ namespace Netus2_DatabaseConnection.dataObjects
         public int Id { get; set; }
         public string Identifier { get; set; }
         public Enumeration IdentifierType { get; set; }
-        public Enumeration IsActive { get; set; }
 
-        public UniqueIdentifier(string identifier, Enumeration identifierType, Enumeration isActive)
+        public UniqueIdentifier(string identifier, Enumeration identifierType)
         {
             Id = -1;
             Identifier = identifier;
             IdentifierType = identifierType;
-            IsActive = isActive;
         }
 
         public override string ToString()
@@ -23,7 +21,6 @@ namespace Netus2_DatabaseConnection.dataObjects
             StringBuilder strUniqueId = new StringBuilder();
             strUniqueId.Append("Identifier: " + Identifier + "\n");
             strUniqueId.Append("Identifier Type: " + IdentifierType.Netus2Code + "\n");
-            strUniqueId.Append("Is Active: " + IsActive.Netus2Code + "\n");
 
             return base.ToString();
         }

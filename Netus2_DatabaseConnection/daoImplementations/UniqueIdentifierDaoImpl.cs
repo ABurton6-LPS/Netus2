@@ -79,12 +79,6 @@ namespace Netus2_DatabaseConnection.daoImplementations
                     sql.Append("AND enum_identifier_id = @enum_identifier_id ");
                     parameters.Add(new SqlParameter("@enum_identifier_id", row["enum_identifier_id"]));
                 }
-
-                if (row["is_active_id"] != DBNull.Value)
-                {
-                    sql.Append("AND is_active_id = @is_active_id ");
-                    parameters.Add(new SqlParameter("@is_active_id", row["is_active_id"]));
-                }
             }
 
             return Read(sql.ToString(), connection, parameters);
@@ -150,14 +144,6 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 else
                     sql.Append("enum_identifier_id = NULL, ");
 
-                if (row["is_active_id"] != DBNull.Value)
-                {
-                    sql.Append("is_active_id = @is_active_id, ");
-                    parameters.Add(new SqlParameter("@is_active_id", row["is_active_id"]));
-                }
-                else
-                    sql.Append("is_active_id = NULL, ");
-
                 sql.Append("changed = dbo.CURRENT_DATETIME(), ");
                 sql.Append("changed_by = " + (_taskId != null ? _taskId.ToString() : "'Netus2'") + " ");
                 sql.Append("WHERE unique_identifier_id = @unique_identifier_id");
@@ -200,19 +186,11 @@ namespace Netus2_DatabaseConnection.daoImplementations
             else
                 sqlValues.Append("NULL, ");
 
-            if (row["is_active_id"] != DBNull.Value)
-            {
-                sqlValues.Append("@is_active_id, ");
-                parameters.Add(new SqlParameter("@is_active_id", row["is_active_id"]));
-            }
-            else
-                sqlValues.Append("NULL, ");
-
             sqlValues.Append("dbo.CURRENT_DATETIME(), ");
             sqlValues.Append(_taskId != null ? _taskId.ToString() : "'Netus2'");
 
             string sql = "INSERT INTO unique_identifier " +
-                "(person_id, unique_identifier, enum_identifier_id, is_active_id, " +
+                "(person_id, unique_identifier, enum_identifier_id, " +
                 "created, created_by) " +
                 "VALUES (" + sqlValues.ToString() + ")";
 

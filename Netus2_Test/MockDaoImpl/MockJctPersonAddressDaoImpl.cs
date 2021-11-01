@@ -34,7 +34,8 @@ namespace Netus2_Test.MockDaoImpl
 
             DataRow row = DataTableFactory.CreateDataTable_Netus2_JctPersonAddress().NewRow();
             row["person_id"] = tdBuilder.student.Id;
-            row["address_id"] = tdBuilder.student.Addresses[0].Id;
+            row["address_id"] = tdBuilder.student.GetAddresses()[0].Id;
+            row["is_primary_id"] = tdBuilder.student.GetAddresses()[0].IsPrimary.Id;
 
             if (_shouldReadReturnData)
                 return row;
@@ -48,7 +49,8 @@ namespace Netus2_Test.MockDaoImpl
 
             DataRow row = DataTableFactory.CreateDataTable_Netus2_JctPersonAddress().NewRow();
             row["person_id"] = tdBuilder.student.Id;
-            row["address_id"] = tdBuilder.student.Addresses[0].Id;
+            row["address_id"] = tdBuilder.student.GetAddresses()[0].Id;
+            row["is_primary_id"] = tdBuilder.student.GetAddresses()[0].IsPrimary.Id;
 
             List<DataRow> results = new List<DataRow>();
             results.Add(row);
@@ -67,6 +69,7 @@ namespace Netus2_Test.MockDaoImpl
             DataRow row = DataTableFactory.CreateDataTable_Netus2_JctPersonAddress().NewRow();
             row["person_id"] = tdBuilder.student.Id;
             row["address_id"] = addressId;
+            row["is_primary_id"] = tdBuilder.student.GetAddresses()[0].IsPrimary.Id;
 
             if (_shouldReadReturnData)
                 list.Add(row);
@@ -81,7 +84,8 @@ namespace Netus2_Test.MockDaoImpl
             List<DataRow> list = new List<DataRow>();
             DataRow row = DataTableFactory.CreateDataTable_Netus2_JctPersonAddress().NewRow();
             row["person_id"] = personId;
-            row["address_id"] = tdBuilder.student.Addresses[0].Id;
+            row["address_id"] = tdBuilder.student.GetAddresses()[0].Id;
+            row["is_primary_id"] = tdBuilder.student.GetAddresses()[0].IsPrimary.Id;
 
             if (_shouldReadReturnData)
                 list.Add(row);
@@ -89,13 +93,14 @@ namespace Netus2_Test.MockDaoImpl
             return list;
         }
 
-        public DataRow Write(int personId, int addressId, IConnectable connection)
+        public DataRow Write(int personId, int addressId, int isPrimary, IConnectable connection)
         {
             WasCalled_Write = true;
 
             DataRow row = DataTableFactory.CreateDataTable_Netus2_JctPersonAddress().NewRow();
             row["person_id"] = personId;
             row["address_id"] = addressId;
+            row["is_primary_id"] = isPrimary;
 
             return row;
         }

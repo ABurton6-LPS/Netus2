@@ -16,10 +16,16 @@ namespace Netus2_DatabaseConnection.logObjects
         public string log_user { get; set; }
 
         public Enumeration LogAction;
+        public Enumeration IsPrimary;
 
         public void set_LogAction(int enumLogActionId)
         {
             LogAction = Enum_Log_Action.GetEnumFromId(enumLogActionId);
+        }
+
+        public void set_IsPrimary(int isPrimaryId)
+        {
+            IsPrimary = Enum_True_False.GetEnumFromId(isPrimaryId);
         }
     }
 }

@@ -23,6 +23,7 @@ namespace Netus2_DatabaseConnection.logObjects
         public Enumeration Gender;
         public Enumeration Ethnic;
         public Enumeration ResidenceStatus;
+        public Enumeration Status;
         public Enumeration LogAction;
     }
 }

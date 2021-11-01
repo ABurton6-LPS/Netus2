@@ -17,13 +17,7 @@ namespace Netus2_DatabaseConnection.logObjects
         public string log_user { get; set; }
 
         public Enumeration IdentifierType;
-        public Enumeration IsActive;
         public Enumeration LogAction;
-
-        public void set_IsActive(int enumIsActiveId)
-        {
-            IsActive = Enum_True_False.GetEnumFromId(enumIsActiveId);
-        }
 
         public void set_Identifier(int enumIdentifierId)
         {

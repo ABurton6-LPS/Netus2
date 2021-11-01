@@ -101,11 +101,11 @@ namespace Netus2_Test.Integration
             //Add the AddressTeacher to the Teacher and update the Teacher
             Address addressTeacher = new Address("123 Main", "City", Enum_State_Province.values["mi"], Enum_Country.values["us"]);
             addressTeacher = addressDaoImpl.Write(addressTeacher, connection);
-            teacher.Addresses.Add(addressTeacher);
+            teacher.AddAddress(addressTeacher, Enum_True_False.values["true"]);
             personDaoImpl.Update(teacher, connection);
             teacher = personDaoImpl.Read(teacher, connection)[0];
             Assert.IsTrue(addressTeacher.Id > 0);
-            Assert.AreEqual(addressTeacher.Id, teacher.Addresses[0].Id);
+            Assert.AreEqual(addressTeacher.Id, teacher.GetAddresses()[0].Id);
 
             //Add Employment Session to School
             //You must create the Employment Session with the Organization (School), so no need to update the School
@@ -178,11 +178,11 @@ namespace Netus2_Test.Integration
             //Add the AddressStudent to the Student and update the Student
             Address addressStudent = new Address("456 Main", "City", Enum_State_Province.values["mi"], Enum_Country.values["us"]);
             addressStudent = addressDaoImpl.Write(addressStudent, connection);
-            student.Addresses.Add(addressStudent);
+            student.AddAddress(addressStudent, Enum_True_False.values["true"]);
             personDaoImpl.Update(student, connection);
             student = personDaoImpl.Read(student, connection)[0];
             Assert.IsTrue(addressStudent.Id > 0);
-            Assert.AreEqual(addressStudent.Id, student.Addresses[0].Id);
+            Assert.AreEqual(addressStudent.Id, student.GetAddresses()[0].Id);
 
             //Create Enrollment
             //You must create the Enrollment with the ClassEnrolled, so no need to update ClassEnrolled
@@ -212,7 +212,7 @@ namespace Netus2_Test.Integration
 
             //Create Unique Identifier
             //You must write the Unique Identifier with the Student Id, so no need to update the Student
-            UniqueIdentifier uniqueId = new UniqueIdentifier("Overall_ReadWrite_Test_Student", Enum_Identifier.values["student id"], Enum_True_False.values["true"]);
+            UniqueIdentifier uniqueId = new UniqueIdentifier("Overall_ReadWrite_Test_Student", Enum_Identifier.values["student id"]);
             uniqueId = uniqueIdentifierDaoImpl.Write(uniqueId, student.Id, connection);
             student = personDaoImpl.Read(student, connection)[0];
             Assert.IsTrue(uniqueId.Id > 0);
