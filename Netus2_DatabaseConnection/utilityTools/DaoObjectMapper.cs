@@ -117,7 +117,7 @@ namespace Netus2_DatabaseConnection.utilityTools
             return person;
         }
 
-        public DataRow MapPhoneNumber(PhoneNumber phoneNumber, int personId)
+        public DataRow MapPhoneNumber(PhoneNumber phoneNumber)
         {
             DataRow row = DataTableFactory.CreateDataTable_Netus2_PhoneNumber().NewRow();
 
@@ -125,21 +125,11 @@ namespace Netus2_DatabaseConnection.utilityTools
                 row["phone_number_id"] = phoneNumber.Id;
             else
                 row["phone_number_id"] = DBNull.Value;
-            
-            if (personId != -1)
-                row["person_id"] = personId;
-            else
-                row["person_id"] = DBNull.Value;
 
             if (phoneNumber.PhoneNumberValue != null)
                 row["phone_number"] = phoneNumber.PhoneNumberValue;
             else
                 row["phone_number"] = DBNull.Value;
-
-            if (phoneNumber.IsPrimary != null)
-                row["is_primary_id"] = phoneNumber.IsPrimary.Id;
-            else
-                row["is_primary_id"] = DBNull.Value;
 
             if (phoneNumber.PhoneType != null)
                 row["enum_phone_id"] = phoneNumber.PhoneType.Id;
@@ -151,10 +141,6 @@ namespace Netus2_DatabaseConnection.utilityTools
 
         public PhoneNumber MapPhoneNumber(DataRow row)
         {
-            Enumeration isPrimary = null;
-            if(row["is_primary_id"] != DBNull.Value)
-                isPrimary = Enum_True_False.GetEnumFromId((int)row["is_primary_id"]);
-
             Enumeration phoneType = null;
             if(row["enum_phone_id"] != DBNull.Value)
                 phoneType = Enum_Phone.GetEnumFromId((int)row["enum_phone_id"]);
@@ -163,7 +149,7 @@ namespace Netus2_DatabaseConnection.utilityTools
             if (row["phone_number"] != DBNull.Value)
                 strPhoneNumber = (string)row["phone_number"];
 
-            PhoneNumber phoneNumber = new PhoneNumber(strPhoneNumber, isPrimary, phoneType);
+            PhoneNumber phoneNumber = new PhoneNumber(strPhoneNumber, phoneType);
 
             if (row["phone_number_id"] != DBNull.Value)
                 phoneNumber.Id = (int)row["phone_number_id"];

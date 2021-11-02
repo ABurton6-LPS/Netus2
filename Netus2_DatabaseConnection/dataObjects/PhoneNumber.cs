@@ -10,11 +10,11 @@ namespace Netus2_DatabaseConnection.dataObjects
         public Enumeration IsPrimary { get; set; }
         public Enumeration PhoneType { get; set; }
 
-        public PhoneNumber(string phoneNumberValue, Enumeration isPrimary, Enumeration phoneType)
+        public PhoneNumber(string phoneNumberValue, Enumeration phoneType)
         {
             Id = -1;
             PhoneNumberValue = phoneNumberValue;
-            IsPrimary = isPrimary;
+            IsPrimary = Enum_True_False.values["false"];
             PhoneType = phoneType;
         }
 

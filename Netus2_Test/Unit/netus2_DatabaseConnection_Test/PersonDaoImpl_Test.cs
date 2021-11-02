@@ -29,6 +29,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
         MockJctClassPersonDaoImpl mockJctClassPersonDaoImpl;
         MockApplicationDaoImpl mockApplicationDaoImpl;
         MockAddressDaoImpl mockAddressDaoImpl;
+        MockJctPersonPhoneNumberDaoImpl mockJctPersonPhoneNumberDaoImpl;
 
         [SetUp]
         public void SetUp()
@@ -66,6 +67,8 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
             DaoImplFactory.MockApplicationDaoImpl = mockApplicationDaoImpl;
             mockAddressDaoImpl = new MockAddressDaoImpl(tdBuilder);
             DaoImplFactory.MockAddressDaoImpl = mockAddressDaoImpl;
+            mockJctPersonPhoneNumberDaoImpl = new MockJctPersonPhoneNumberDaoImpl(tdBuilder);
+            DaoImplFactory.MockJctPersonPhoneNumberDaoImpl = mockJctPersonPhoneNumberDaoImpl;
 
             List<DataRow> tstDataSet = new List<DataRow>();
             tstDataSet.Add(daoObjectMapper.MapPerson(tdBuilder.teacher));
@@ -99,9 +102,13 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
         [TestCase]
         public void DeletePhoneNumber_ShouldCallExpectedMethod()
         {
+            mockJctPersonPhoneNumberDaoImpl._shouldReadReturnData = true;
+
             personDaoImpl.Delete(tdBuilder.teacher, _netus2DbConnection);
 
-            Assert.IsTrue(mockPhoneNumberDaoImpl.WasCalled_Delete);
+            Assert.IsTrue(mockJctPersonPhoneNumberDaoImpl.WasCalled_ReadAllWithPersonId);
+            Assert.IsTrue(mockJctPersonPhoneNumberDaoImpl.WasCalled_Delete);
+            Assert.IsFalse(mockPhoneNumberDaoImpl.WasCalled_Delete);
         }
 
         [TestCase]
@@ -208,9 +215,12 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
         [TestCase]
         public void ReadPhoneNumber_ShouldCallExpectedMethod()
         {
+            mockJctPersonPhoneNumberDaoImpl._shouldReadReturnData = true;
+
             personDaoImpl.Read(tdBuilder.teacher, _netus2DbConnection);
 
-            Assert.IsTrue(mockPhoneNumberDaoImpl.WasCalled_ReadAllWithPersonId);
+            Assert.IsTrue(mockJctPersonPhoneNumberDaoImpl.WasCalled_ReadAllWithPersonId);
+            Assert.IsTrue(mockPhoneNumberDaoImpl.WasCalled_ReadAllWithPhoneNumberId);
         }
 
         [TestCase]
@@ -266,7 +276,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
         {
             personDaoImpl.Update(tdBuilder.teacher, _netus2DbConnection);
 
-            Assert.IsTrue(mockPhoneNumberDaoImpl.WasCalled_ReadWithPersonId);
+            Assert.IsTrue(mockJctPersonPhoneNumberDaoImpl.WasCalled_ReadAllWithPersonId);
         }
 
         [TestCase]
@@ -322,7 +332,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
         {
             personDaoImpl.Write(tdBuilder.teacher, _netus2DbConnection);
 
-            Assert.IsTrue(mockPhoneNumberDaoImpl.WasCalled_ReadWithPersonId);
+            Assert.IsTrue(mockJctPersonPhoneNumberDaoImpl.WasCalled_ReadAllWithPersonId);
         }
 
         [TestCase]

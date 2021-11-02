@@ -12,6 +12,7 @@ namespace Netus2_Test.MockDaoImpl
         public bool WasCalled_ReadWithPersonId = false;
         public bool WasCalled_ReadWithoutPersonId = false;
         public bool WasCalled_ReadAllWithPersonId = false;
+        public bool WasCalled_ReadAllWithPhoneNumberId = false;
         public bool WasCalled_UpdateWithPersonId = false;
         public bool WasCalled_UpdateWithoutPersonId = false;
         public bool WasCalled_WriteWithPersonId = false;
@@ -53,6 +54,21 @@ namespace Netus2_Test.MockDaoImpl
             }
 
             return returnData;
+        }
+
+        public PhoneNumber Read_WithPhoneNumberId(int phoneNumberId, IConnectable connection)
+        {
+            WasCalled_ReadAllWithPhoneNumberId = true;
+
+            if (_shouldReadReturnData)
+            {
+                if (phoneNumberId == tdBuilder.phoneNumber_Teacher.Id)
+                    return tdBuilder.phoneNumber_Teacher;
+                else
+                    return tdBuilder.phoneNumber_Student;
+            }
+
+            return null;
         }
 
         public List<PhoneNumber> Read(PhoneNumber phoneNumber, int personId, IConnectable connection)

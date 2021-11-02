@@ -491,10 +491,55 @@ namespace Netus2_Test.Integration
         }
 
         [Test]
+        public void LogJctPersonPhoneNumber_ShouldLog_WriteUpdateDelete()
+        {
+            //Prerequisite
+            Person person = new Person("fname", "lname", new DateTime(), Enum_Gender.values["unset"], Enum_Ethnic.values["unset"]);
+            PhoneNumber phoneNumber = new PhoneNumber("1234567890", Enum_Phone.values["cell"]);
+
+            //Write
+            phoneNumber = phoneNumberDaoImpl.Write(phoneNumber, connection);
+            person.PhoneNumbers.Add(phoneNumber);
+            person = personDaoImpl.Write(person, connection);
+
+            //Read logs after write
+            List<LogJctPersonPhoneNumber> logs = new List<LogJctPersonPhoneNumber>();
+            foreach (LogJctPersonPhoneNumber log in logReader.Read_LogJctPersonPhoneNumber(connection))
+                if (log.person_id == person.Id && log.phone_number_id == phoneNumber.Id)
+                    logs.Add(log);
+
+            //Assert on log after write
+            Assert.AreEqual(1, logs.Count);
+            Assert.AreEqual(Enum_Log_Action.values["insert"], logs[0].LogAction);
+
+            //Delete
+            person.PhoneNumbers.Clear();
+            personDaoImpl.Update(person, connection);
+
+            //Read logs after delete
+            logs.Clear();
+            foreach (LogJctPersonPhoneNumber log in logReader.Read_LogJctPersonPhoneNumber(connection))
+                if (log.person_id == person.Id && log.phone_number_id == phoneNumber.Id)
+                    logs.Add(log);
+
+            //Assert on number of logs after delete
+            Assert.AreEqual(2, logs.Count);
+
+            //Get delete log from logs
+            LogJctPersonPhoneNumber deleteLog = null;
+            foreach (LogJctPersonPhoneNumber log in logs)
+                if (log.LogAction == Enum_Log_Action.values["delete"])
+                    deleteLog = log;
+
+            //Assert on delete log
+            Assert.IsNotNull(deleteLog);
+        }
+
+        [Test]
         public void LogPhoneNumber_ShouldLog_WriteUpdateDelete()
         {
             //Write
-            PhoneNumber phoneNumber = phoneNumberDaoImpl.Write(new PhoneNumber("2134567890", Enum_True_False.values["true"], Enum_Phone.values["unset"]), connection);
+            PhoneNumber phoneNumber = phoneNumberDaoImpl.Write(new PhoneNumber("2134567890", Enum_Phone.values["unset"]), connection);
 
             //Read logs after write
             List<LogPhoneNumber> logs = new List<LogPhoneNumber>();

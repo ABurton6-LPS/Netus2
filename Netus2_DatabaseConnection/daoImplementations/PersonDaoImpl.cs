@@ -34,7 +34,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
             Delete_JctPersonPerson(person, connection);
             Delete_JctPersonRole(person, connection);
             Delete_JctPersonApp(person, connection);
-            Delete_PhoneNumber(person, connection);
+            Delete_JctPersonPhoneNumber(person, connection);
             Delete_JctPersonAddress(person, connection);
             Delete_EmploymentSession(person, connection);
             Delete_UniqueIdentifier(person, connection);
@@ -115,12 +115,16 @@ namespace Netus2_DatabaseConnection.daoImplementations
             }
         }
 
-        private void Delete_PhoneNumber(Person person, IConnectable connection)
+        private void Delete_JctPersonPhoneNumber(Person person, IConnectable connection)
         {
-            IPhoneNumberDao phoneNumberDaoImpl = DaoImplFactory.GetPhoneNumberDaoImpl();
-            foreach (PhoneNumber phoneNumber in person.PhoneNumbers)
+            IJctPersonPhoneNumberDao jctPersonPhoneNumberDaoImpl = DaoImplFactory.GetJctPersonPhoneNumberDaoImpl();
+            List<DataRow> foundJctPersonPhoneNumbers = jctPersonPhoneNumberDaoImpl.Read_AllWithPersonId(person.Id, connection);
+
+            foreach (DataRow foundJctPersonPhoneNumber in foundJctPersonPhoneNumbers)
             {
-                phoneNumberDaoImpl.Delete(phoneNumber, connection);
+                jctPersonPhoneNumberDaoImpl.Delete(
+                    (int)foundJctPersonPhoneNumber["person_id"], 
+                    (int)foundJctPersonPhoneNumber["phone_number_id"], connection);
             }
         }
 
@@ -275,7 +279,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 result.Roles.AddRange(Read_JctPersonRole(result.Id, connection));
                 result.Relations.AddRange(Read_JctPersonPerson(result.Id, connection));
                 result.AddRangeAddresses(Read_JctPersonAddress(result.Id, connection));
-                result.PhoneNumbers.AddRange(DaoImplFactory.GetPhoneNumberDaoImpl().Read_AllWithPersonId(result.Id, connection));
+                result.PhoneNumbers.AddRange(Read_JctPersonPhoneNumber(result.Id, connection));
                 result.UniqueIdentifiers.AddRange(DaoImplFactory.GetUniqueIdentifierDaoImpl().Read_AllWithPersonId(result.Id, connection));
                 result.EmploymentSessions.AddRange(DaoImplFactory.GetEmploymentSessionDaoImpl().Read_AllWithPersonId(result.Id, connection));
                 result.Enrollments.AddRange(DaoImplFactory.GetEnrollmentDaoImpl().Read_AllWithPersonId(result.Id, connection));
@@ -300,6 +304,23 @@ namespace Netus2_DatabaseConnection.daoImplementations
             }
 
             return foundApplications;
+        }
+
+        private List<PhoneNumber> Read_JctPersonPhoneNumber(int personId, IConnectable connection)
+        {
+            IPhoneNumberDao phoneNumberDaoImpl = DaoImplFactory.GetPhoneNumberDaoImpl();
+            IJctPersonPhoneNumberDao jctPersonPhoneNumberDaoImpl = DaoImplFactory.GetJctPersonPhoneNumberDaoImpl();
+
+            List<PhoneNumber> foundPhoneNumbers = new List<PhoneNumber>();
+            List<DataRow> foundJctPersonPhoneNumberDaos = jctPersonPhoneNumberDaoImpl.Read_AllWithPersonId(personId, connection);
+
+            foreach (DataRow foundJctPersonPhoneNumberDao in foundJctPersonPhoneNumberDaos)
+            {
+                int phoneNumberId = (int)foundJctPersonPhoneNumberDao["phone_number_id"];
+                foundPhoneNumbers.Add(phoneNumberDaoImpl.Read_WithPhoneNumberId(phoneNumberId, connection));
+            }
+
+            return foundPhoneNumbers;
         }
 
         private List<Address> Read_JctPersonAddress(int personId, IConnectable connection)
@@ -619,25 +640,39 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         private List<PhoneNumber> UpdatePhoneNumbers(List<PhoneNumber> phoneNumbers, int personId, IConnectable connection)
         {
+            List<PhoneNumber> phoneNumbersToBeReturned = new List<PhoneNumber>();
+
             IPhoneNumberDao phoneNumberDaoImpl = DaoImplFactory.GetPhoneNumberDaoImpl();
-            List<PhoneNumber> updatedPhoneNumberes = new List<PhoneNumber>();
+            IJctPersonPhoneNumberDao jctPersonPhoneNumberDaoImpl = DaoImplFactory.GetJctPersonPhoneNumberDaoImpl();
 
-            List<PhoneNumber> foundPhoneNumbers =
-                phoneNumberDaoImpl.Read_AllWithPersonId(personId, connection);
-
-            foreach (PhoneNumber phoneNumber in phoneNumbers)
+            List<int> passedInPhoneNubmerIds = new List<int>();
+            foreach (PhoneNumber passedInPhoneNumber in phoneNumbers)
             {
-                phoneNumberDaoImpl.Update(phoneNumber, personId, connection);
-                updatedPhoneNumberes.AddRange(phoneNumberDaoImpl.Read(phoneNumber, personId, connection));
+                if(passedInPhoneNumber.Id <= 0)
+                {
+                    throw new Exception("Phone Number must be in the database before it can be linked with a person. PhoneNumber: " + passedInPhoneNumber.ToString());
+                }
+                else
+                {
+                    passedInPhoneNubmerIds.Add(passedInPhoneNumber.Id);
+
+                    DataRow foundJctPersonPhoneNumber = jctPersonPhoneNumberDaoImpl.Read(personId, passedInPhoneNumber.Id, connection);
+
+                    if (foundJctPersonPhoneNumber == null)
+                        jctPersonPhoneNumberDaoImpl.Write(personId, passedInPhoneNumber.Id, passedInPhoneNumber.IsPrimary.Id, connection);
+
+                    phoneNumbersToBeReturned.Add(phoneNumberDaoImpl.Read_WithPhoneNumberId(passedInPhoneNumber.Id, connection));
+                }
             }
 
-            foreach (PhoneNumber foundPhoneNumber in foundPhoneNumbers)
+            List<DataRow> foundJctPersonPhoneNubmers = jctPersonPhoneNumberDaoImpl.Read_AllWithPersonId(personId, connection);
+            foreach(DataRow foundJctPersonPhoneNubmer in foundJctPersonPhoneNubmers)
             {
-                if (phoneNumbers.Find(x => (x.Id == foundPhoneNumber.Id)) == null)
-                    phoneNumberDaoImpl.Delete(foundPhoneNumber, connection);
+                if (passedInPhoneNubmerIds.Contains((int)foundJctPersonPhoneNubmer["phone_number_id"]) == false)
+                    jctPersonPhoneNumberDaoImpl.Delete(personId, (int)foundJctPersonPhoneNubmer["phone_number_id"], connection);
             }
 
-            return updatedPhoneNumberes;
+            return phoneNumbersToBeReturned;
         }
 
         public Person Write(Person person, IConnectable connection)

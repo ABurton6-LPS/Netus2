@@ -25,6 +25,7 @@ namespace Netus2_Test
         IPhoneNumberDao phoneNumberDaoImpl = DaoImplFactory.GetPhoneNumberDaoImpl();
         IProviderDao providerDaoImpl = DaoImplFactory.GetProviderDaoImpl();
         IApplicationDao applicationDaoImpl = DaoImplFactory.GetApplicationDaoImpl();
+        IJctPersonPhoneNumberDao jctPersonPhoneNumberDaoImpl = DaoImplFactory.GetJctPersonPhoneNumberDaoImpl();
 
         public Organization district;
         public Organization school;
@@ -124,10 +125,12 @@ namespace Netus2_Test
             else
                 teacher.Id = 1;
 
-            phoneNumber_Teacher = new PhoneNumber("8009876549", Enum_True_False.values["true"], Enum_Phone.values["cell"]);
+            phoneNumber_Teacher = new PhoneNumber("8009876549", Enum_Phone.values["cell"]);
             if (connection != null)
             {
-                phoneNumber_Teacher = phoneNumberDaoImpl.Write(phoneNumber_Teacher, teacher.Id, connection);
+                phoneNumber_Teacher = phoneNumberDaoImpl.Write(phoneNumber_Teacher, connection);
+                phoneNumber_Teacher.IsPrimary = Enum_True_False.values["true"];
+                jctPersonPhoneNumberDaoImpl.Write(teacher.Id, phoneNumber_Teacher.Id, phoneNumber_Teacher.IsPrimary.Id, connection);
                 teacher = personDaoImpl.Read(teacher, connection)[0];
             }
             else
@@ -258,10 +261,12 @@ namespace Netus2_Test
                 student.UniqueIdentifiers.Add(uniqueId_Student);
             }
 
-            phoneNumber_Student = new PhoneNumber("8001231234", Enum_True_False.values["true"], Enum_Phone.values["cell"]);
+            phoneNumber_Student = new PhoneNumber("8001231234", Enum_Phone.values["cell"]);
             if (connection != null)
             {
-                phoneNumber_Student = phoneNumberDaoImpl.Write(phoneNumber_Student, student.Id, connection);
+                phoneNumber_Student = phoneNumberDaoImpl.Write(phoneNumber_Student, connection);
+                phoneNumber_Student.IsPrimary = Enum_True_False.values["true"];
+                jctPersonPhoneNumberDaoImpl.Write(student.Id, phoneNumber_Student.Id, phoneNumber_Student.IsPrimary.Id, connection);
                 student = personDaoImpl.Read(student, connection)[0];
             }
             else
