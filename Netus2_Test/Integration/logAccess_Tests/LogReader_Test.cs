@@ -662,10 +662,11 @@ namespace Netus2_Test.Integration
         {
             //Prerequisite
             Address address = addressDaoImpl.Write(new Address("tst1", "tstCity", Enum_State_Province.values["mi"], Enum_Country.values["us"]), connection);
+            address.IsPrimary = Enum_True_False.values["true"];
             Person person = new Person("fname", "lname", new DateTime(), Enum_Gender.values["unset"], Enum_Ethnic.values["unset"]);
 
             //Write
-            person.AddAddress(address, Enum_True_False.values["true"]);
+            person.Addresses.Add(address);
             person = personDaoImpl.Write(person, connection);
 
             List<LogJctPersonAddress> logs = new List<LogJctPersonAddress>();
@@ -678,7 +679,7 @@ namespace Netus2_Test.Integration
             Assert.AreEqual(Enum_Log_Action.values["insert"], logs[0].LogAction);
 
             //Delete
-            person.ClearAddresses();
+            person.Addresses.Clear();
             personDaoImpl.Update(person, connection);
 
             //Read logs after delete

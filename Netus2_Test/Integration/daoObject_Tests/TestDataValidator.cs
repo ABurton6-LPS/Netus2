@@ -45,11 +45,11 @@ namespace Netus2_Test.Integration
                 Assert_Table(actual.Id, expected.Applications.Count, "jct_person_app", DataTableFactory.CreateDataTable_Netus2_JctPersonApp(), connection);
                 AssertApplication(expected.Applications[i], actual.Applications[i]);
             }
-            Assert.AreEqual(expected.GetAddresses().Count, actual.GetAddresses().Count);
-            for (int i = 0; i < expected.GetAddresses().Count; i++)
+            Assert.AreEqual(expected.Addresses.Count, actual.Addresses.Count);
+            for (int i = 0; i < expected.Addresses.Count; i++)
             {
-                Assert_Table(actual.GetAddresses()[i].Id, expected.GetAddresses().Count, "address", DataTableFactory.CreateDataTable_Netus2_Address(), connection);
-                AssertAddress(expected.GetAddresses()[i], actual.GetAddresses()[i]);
+                Assert_Table(actual.Addresses[i].Id, expected.Addresses.Count, "address", DataTableFactory.CreateDataTable_Netus2_Address(), connection);
+                AssertAddress(expected.Addresses[i], actual.Addresses[i]);
             }
             Assert.AreEqual(expected.UniqueIdentifiers.Count, actual.UniqueIdentifiers.Count);
             for (int i = 0; i < expected.UniqueIdentifiers.Count; i++)

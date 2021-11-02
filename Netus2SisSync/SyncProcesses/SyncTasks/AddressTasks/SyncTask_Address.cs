@@ -74,7 +74,7 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AddressTasks
                     address.Id = foundAddresses[0].Id;
 
                     bool personHasAddress = false;
-                    foreach(Address addressLinkedToPerson in person.GetAddresses())
+                    foreach(Address addressLinkedToPerson in person.Addresses)
                         if (addressLinkedToPerson.Id == address.Id)
                             personHasAddress = true;
 

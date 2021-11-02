@@ -61,7 +61,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
             return Read(sql, connection, parameters);
         }
 
-        public List<DataRow> Read_WithAddressId(int addressId, IConnectable connection)
+        public List<DataRow> Read_WithAllAddressId(int addressId, IConnectable connection)
         {
             string sql = "SELECT * FROM jct_person_address WHERE " +
                 "address_id = @address_id";

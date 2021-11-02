@@ -1,6 +1,7 @@
 ﻿using Netus2_DatabaseConnection.daoInterfaces;
 using Netus2_DatabaseConnection.dataObjects;
 using Netus2_DatabaseConnection.dbAccess;
+using Netus2_DatabaseConnection.enumerations;
 using Netus2_DatabaseConnection.utilityTools;
 using System;
 using System.Collections.Generic;
@@ -45,7 +46,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         {
             IJctPersonAddressDao jctPersonAddressDaoImpl = DaoImplFactory.GetJctPersonAddressDaoImpl();
             List<DataRow> foundDataRows =
-                jctPersonAddressDaoImpl.Read_WithAddressId(addressId, connection);
+                jctPersonAddressDaoImpl.Read_WithAllAddressId(addressId, connection);
 
             foreach (DataRow foundDataRow in foundDataRows)
             {
@@ -155,9 +156,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
             List<Address> results = new List<Address>();
             foreach (DataRow row in dtAddress.Rows)
-            {
                 results.Add(daoObjectMapper.MapAddress(row));
-            }
 
             return results;
         }

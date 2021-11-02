@@ -37,7 +37,7 @@ namespace Netus2_DatabaseConnection.daoInterfaces
         /// <param name="addressId"></param>
         /// <param name="connection"></param>
         /// <returns>Empty list, if no records are found.</returns>
-        public List<DataRow> Read_WithAddressId(int addressId, IConnectable connection);
+        public List<DataRow> Read_WithAllAddressId(int addressId, IConnectable connection);
 
         /// <summary>
         /// Queries the database for any records that are not in the temporary table.

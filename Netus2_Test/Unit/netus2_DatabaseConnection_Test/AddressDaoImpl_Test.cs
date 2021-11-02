@@ -39,7 +39,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
 
             addressDaoImpl.Delete(tdBuilder.address_Teacher, _netus2DbConnection);
 
-            Assert.IsTrue(mockJctPersonAddressDaoImpl.WasCalled_ReadWithAddressId);
+            Assert.IsTrue(mockJctPersonAddressDaoImpl.WasCalled_ReadAllWithAddressId);
             Assert.IsTrue(mockJctPersonAddressDaoImpl.WasCalled_Delete);
         }
 

@@ -11,8 +11,8 @@ namespace Netus2_Test.MockDaoImpl
         public TestDataBuilder tdBuilder;
         public bool WasCalled_Delete = false;
         public bool WasCalled_Read = false;
-        public bool WasCalled_ReadWithAddressId = false;
-        public bool WasCalled_ReadWithPersonId = false;
+        public bool WasCalled_ReadAllWithAddressId = false;
+        public bool WasCalled_ReadAllWithPersonId = false;
         public bool WasCalled_Write = false;
         public bool WasCalled_ReadAddressIsNotImTempTable = false;
         public bool WasCalled_WriteTempTable = false;
@@ -34,8 +34,8 @@ namespace Netus2_Test.MockDaoImpl
 
             DataRow row = DataTableFactory.CreateDataTable_Netus2_JctPersonAddress().NewRow();
             row["person_id"] = tdBuilder.student.Id;
-            row["address_id"] = tdBuilder.student.GetAddresses()[0].Id;
-            row["is_primary_id"] = tdBuilder.student.GetAddresses()[0].IsPrimary.Id;
+            row["address_id"] = tdBuilder.student.Addresses[0].Id;
+            row["is_primary_id"] = tdBuilder.student.Addresses[0].IsPrimary.Id;
 
             if (_shouldReadReturnData)
                 return row;
@@ -49,8 +49,8 @@ namespace Netus2_Test.MockDaoImpl
 
             DataRow row = DataTableFactory.CreateDataTable_Netus2_JctPersonAddress().NewRow();
             row["person_id"] = tdBuilder.student.Id;
-            row["address_id"] = tdBuilder.student.GetAddresses()[0].Id;
-            row["is_primary_id"] = tdBuilder.student.GetAddresses()[0].IsPrimary.Id;
+            row["address_id"] = tdBuilder.student.Addresses[0].Id;
+            row["is_primary_id"] = tdBuilder.student.Addresses[0].IsPrimary.Id;
 
             List<DataRow> results = new List<DataRow>();
             results.Add(row);
@@ -61,15 +61,15 @@ namespace Netus2_Test.MockDaoImpl
                 return null;
         }
 
-        public List<DataRow> Read_WithAddressId(int addressId, IConnectable connection)
+        public List<DataRow> Read_WithAllAddressId(int addressId, IConnectable connection)
         {
-            WasCalled_ReadWithAddressId = true;
+            WasCalled_ReadAllWithAddressId = true;
 
             List<DataRow> list = new List<DataRow>();
             DataRow row = DataTableFactory.CreateDataTable_Netus2_JctPersonAddress().NewRow();
             row["person_id"] = tdBuilder.student.Id;
             row["address_id"] = addressId;
-            row["is_primary_id"] = tdBuilder.student.GetAddresses()[0].IsPrimary.Id;
+            row["is_primary_id"] = tdBuilder.student.Addresses[0].IsPrimary.Id;
 
             if (_shouldReadReturnData)
                 list.Add(row);
@@ -79,13 +79,13 @@ namespace Netus2_Test.MockDaoImpl
 
         public List<DataRow> Read_AllWithPersonId(int personId, IConnectable connection)
         {
-            WasCalled_ReadWithPersonId = true;
+            WasCalled_ReadAllWithPersonId = true;
 
             List<DataRow> list = new List<DataRow>();
             DataRow row = DataTableFactory.CreateDataTable_Netus2_JctPersonAddress().NewRow();
             row["person_id"] = personId;
-            row["address_id"] = tdBuilder.student.GetAddresses()[0].Id;
-            row["is_primary_id"] = tdBuilder.student.GetAddresses()[0].IsPrimary.Id;
+            row["address_id"] = tdBuilder.student.Addresses[0].Id;
+            row["is_primary_id"] = tdBuilder.student.Addresses[0].IsPrimary.Id;
 
             if (_shouldReadReturnData)
                 list.Add(row);
