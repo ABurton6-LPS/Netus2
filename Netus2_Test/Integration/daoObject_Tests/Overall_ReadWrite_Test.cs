@@ -28,6 +28,7 @@ namespace Netus2_Test.Integration
         IPhoneNumberDao phoneNumberDaoImpl;
         IProviderDao providerDaoImpl;
         IApplicationDao applicationDaoImpl;
+        IJctPersonPhoneNumberDao jctPersonPhoneNumberDaoImpl;
 
         [SetUp]
         public void Setup()
@@ -51,6 +52,7 @@ namespace Netus2_Test.Integration
             phoneNumberDaoImpl = DaoImplFactory.GetPhoneNumberDaoImpl();
             providerDaoImpl = DaoImplFactory.GetProviderDaoImpl();
             applicationDaoImpl = DaoImplFactory.GetApplicationDaoImpl();
+            jctPersonPhoneNumberDaoImpl = DaoImplFactory.GetJctPersonPhoneNumberDaoImpl();
         }
 
         [Test]
@@ -220,8 +222,10 @@ namespace Netus2_Test.Integration
 
             //Create Phone Number
             //You must write the Phone Number with the Student Id, so no need to update the Student
-            PhoneNumber phoneNumber = new PhoneNumber("8001231234", Enum_True_False.values["true"], Enum_Phone.values["cell"]);
-            phoneNumber = phoneNumberDaoImpl.Write(phoneNumber, student.Id, connection);
+            PhoneNumber phoneNumber = new PhoneNumber("8001231234", Enum_Phone.values["cell"]);
+            phoneNumber.IsPrimary = Enum_True_False.values["true"];
+            phoneNumber = phoneNumberDaoImpl.Write(phoneNumber, connection);
+            jctPersonPhoneNumberDaoImpl.Write(student.Id, phoneNumber.Id, phoneNumber.IsPrimary.Id, connection);
             student = personDaoImpl.Read(student, connection)[0];
             Assert.IsTrue(phoneNumber.Id > 0);
             Assert.AreEqual(phoneNumber.Id, student.PhoneNumbers[0].Id);

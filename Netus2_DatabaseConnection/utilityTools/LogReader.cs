@@ -627,6 +627,74 @@ namespace Netus2_DatabaseConnection.utilityTools
             return logJctPersonApps;
         }
 
+        public List<LogJctPersonPhoneNumber> Read_LogJctPersonPhoneNumber(IConnectable connection)
+        {
+            string sql = "SELECT * FROM log_jct_person_phone_number";
+
+            DataTable dtLogJctPersonPhoneNumber = DataTableFactory.CreateDataTable_Netus2_Log_JctPersonPhoneNumber();
+            dtLogJctPersonPhoneNumber = connection.ReadIntoDataTable(sql, dtLogJctPersonPhoneNumber);
+
+            List<LogJctPersonPhoneNumber> logJctPersonPhoneNumbers = new List<LogJctPersonPhoneNumber>();
+            foreach (DataRow row in dtLogJctPersonPhoneNumber.Rows)
+            {
+                LogJctPersonPhoneNumber logJctPersonPhoneNumber = new LogJctPersonPhoneNumber();
+                foreach (DataColumn column in row.Table.Columns)
+                {
+                    string columnName = column.ColumnName;
+                    switch (columnName)
+                    {
+                        case "log_jct_person_phone_number_id":
+                            if (row[columnName] != DBNull.Value)
+                                logJctPersonPhoneNumber.log_jct_person_phone_number_id = (int)row[columnName];
+                            else
+                                logJctPersonPhoneNumber.log_jct_person_phone_number_id = -1;
+                            break;
+                        case "person_id":
+                            if (row[columnName] != DBNull.Value)
+                                logJctPersonPhoneNumber.person_id = (int)row[columnName];
+                            else
+                                logJctPersonPhoneNumber.person_id = -1;
+                            break;
+                        case "phone_number_id":
+                            if (row[columnName] != DBNull.Value)
+                                logJctPersonPhoneNumber.phone_number_id = (int)row[columnName];
+                            else
+                                logJctPersonPhoneNumber.phone_number_id = -1;
+                            break;
+                        case "is_primary_id":
+                            if (row[columnName] != DBNull.Value)
+                                logJctPersonPhoneNumber.set_IsPrimary((int)row[columnName]);
+                            else
+                                logJctPersonPhoneNumber.IsPrimary = null;
+                            break;
+                        case "log_date":
+                            if (row[columnName] != DBNull.Value)
+                                logJctPersonPhoneNumber.log_date = (DateTime)row[columnName];
+                            else
+                                logJctPersonPhoneNumber.log_date = new DateTime();
+                            break;
+                        case "log_user":
+                            if (row[columnName] != DBNull.Value)
+                                logJctPersonPhoneNumber.log_user = (string)row[columnName];
+                            else
+                                logJctPersonPhoneNumber.log_user = null;
+                            break;
+                        case "enum_log_action_id":
+                            if (row[columnName] != DBNull.Value)
+                                logJctPersonPhoneNumber.set_LogAction((int)row[columnName]);
+                            else
+                                logJctPersonPhoneNumber.LogAction = null;
+                            break;
+                        default:
+                            throw new Exception("Unexpected column found in log_jct_person_phone_number table: " + columnName);
+                    }
+                }
+                logJctPersonPhoneNumbers.Add(logJctPersonPhoneNumber);
+            }
+
+            return logJctPersonPhoneNumbers;
+        }
+
         public List<LogJctClassPerson> Read_LogJctClassPerson(IConnectable connection)
         {
             string sql = "SELECT * FROM log_jct_class_person";
@@ -723,23 +791,11 @@ namespace Netus2_DatabaseConnection.utilityTools
                             else
                                 logPhoneNumber.phone_number_id = -1;
                             break;
-                        case "person_id":
-                            if (row[columnName] != DBNull.Value)
-                                logPhoneNumber.person_id = (int)row[columnName];
-                            else
-                                logPhoneNumber.person_id = -1;
-                            break;
                         case "phone_number":
                             if (row[columnName] != DBNull.Value)
                                 logPhoneNumber.phone_number = (string)row[columnName];
                             else
                                 logPhoneNumber.phone_number = null;
-                            break;
-                        case "is_primary_id":
-                            if (row[columnName] != DBNull.Value)
-                                logPhoneNumber.set_IsPrimary((int)row[columnName]);
-                            else
-                                logPhoneNumber.IsPrimary = null;
                             break;
                         case "enum_phone_id":
                             if (row[columnName] != DBNull.Value)

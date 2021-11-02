@@ -1104,18 +1104,8 @@ namespace Netus2_DatabaseConnection.utilityTools
             dtPhoneNumber.PrimaryKey = PrimaryKeycolumns;
 
             dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(int);
-            dtColumn.ColumnName = "person_id";
-            dtPhoneNumber.Columns.Add(dtColumn);
-
-            dtColumn = new DataColumn();
             dtColumn.DataType = typeof(string);
             dtColumn.ColumnName = "phone_number";
-            dtPhoneNumber.Columns.Add(dtColumn);
-
-            dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(int);
-            dtColumn.ColumnName = "is_primary_id";
             dtPhoneNumber.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
@@ -1511,6 +1501,34 @@ namespace Netus2_DatabaseConnection.utilityTools
             dtJctPersonApp.PrimaryKey = PrimaryKeycolumns;
 
             return dtJctPersonApp;
+        }
+
+        public static DataTable CreateDataTable_Netus2_JctPersonPhoneNumber()
+        {
+            DataTable dtJctPersonPhoneNumber = new DataTable("JctPersonPhoneNumber");
+            DataColumn[] PrimaryKeycolumns = new DataColumn[2];
+            DataColumn dtColumn;
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(int);
+            dtColumn.ColumnName = "person_id";
+            PrimaryKeycolumns[0] = dtColumn;
+            dtJctPersonPhoneNumber.Columns.Add(dtColumn);
+            dtJctPersonPhoneNumber.PrimaryKey = PrimaryKeycolumns;
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(int);
+            dtColumn.ColumnName = "phone_number_id";
+            PrimaryKeycolumns[1] = dtColumn;
+            dtJctPersonPhoneNumber.Columns.Add(dtColumn);
+            dtJctPersonPhoneNumber.PrimaryKey = PrimaryKeycolumns;
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(int);
+            dtColumn.ColumnName = "is_primary_id";
+            dtJctPersonPhoneNumber.Columns.Add(dtColumn);
+
+            return dtJctPersonPhoneNumber;
         }
 
         public static DataTable CreateDataTable_Netus2_JctPersonPerson()
@@ -2549,18 +2567,8 @@ namespace Netus2_DatabaseConnection.utilityTools
             dtLogPhoneNumber.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(int);
-            dtColumn.ColumnName = "person_id";
-            dtLogPhoneNumber.Columns.Add(dtColumn);
-
-            dtColumn = new DataColumn();
             dtColumn.DataType = typeof(string);
             dtColumn.ColumnName = "phone_number";
-            dtLogPhoneNumber.Columns.Add(dtColumn);
-
-            dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(int);
-            dtColumn.ColumnName = "is_primary_id";
             dtLogPhoneNumber.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
@@ -3165,6 +3173,52 @@ namespace Netus2_DatabaseConnection.utilityTools
             dtLogJctPersonApp.Columns.Add(dtColumn);
 
             return dtLogJctPersonApp;
+        }
+
+        public static DataTable CreateDataTable_Netus2_Log_JctPersonPhoneNumber()
+        {
+            DataTable dtLogJctPersonPhoneNumber = new DataTable("Log_JctPersonPhoneNumber");
+            DataColumn[] PrimaryKeycolumns = new DataColumn[1];
+            DataColumn dtColumn;
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(int);
+            dtColumn.ColumnName = "log_jct_person_phone_number_id";
+            PrimaryKeycolumns[0] = dtColumn;
+            dtLogJctPersonPhoneNumber.Columns.Add(dtColumn);
+            dtLogJctPersonPhoneNumber.PrimaryKey = PrimaryKeycolumns;
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(int);
+            dtColumn.ColumnName = "person_id";
+            dtLogJctPersonPhoneNumber.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(int);
+            dtColumn.ColumnName = "phone_number_id";
+            dtLogJctPersonPhoneNumber.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(int);
+            dtColumn.ColumnName = "is_primary_id";
+            dtLogJctPersonPhoneNumber.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(DateTime);
+            dtColumn.ColumnName = "log_date";
+            dtLogJctPersonPhoneNumber.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "log_user";
+            dtLogJctPersonPhoneNumber.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(int);
+            dtColumn.ColumnName = "enum_log_action_id";
+            dtLogJctPersonPhoneNumber.Columns.Add(dtColumn);
+
+            return dtLogJctPersonPhoneNumber;
         }
 
         public static DataTable CreateDataTable_Netus2_Log_JctPersonPerson()

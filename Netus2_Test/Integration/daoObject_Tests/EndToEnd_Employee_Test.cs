@@ -216,8 +216,9 @@ namespace Netus2_Test.Integration
             Assert_Table(student.Id, 0, "jct_person_person", DataTableFactory.CreateDataTable_Netus2_JctPersonPerson(), connection);
             Assert_Table(teacher.Id, 0, "jct_person_role", DataTableFactory.CreateDataTable_Netus2_JctPersonRole(), connection);
             Assert_Table(teacher.Id, 0, "jct_person_app", DataTableFactory.CreateDataTable_Netus2_JctPersonApp(), connection);
-            Assert_Table(teacher.PhoneNumbers[0].Id, 0, "phone_number", DataTableFactory.CreateDataTable_Netus2_PhoneNumber(), connection);
+            Assert_Table(teacher.PhoneNumbers[0].Id, 0, "jct_person_phone_number", DataTableFactory.CreateDataTable_Netus2_JctPersonPhoneNumber(), connection);
             Assert_Table(teacher.Id, 0, "jct_person_address", DataTableFactory.CreateDataTable_Netus2_JctPersonAddress(), connection);
+            Assert_Table(teacher.PhoneNumbers[0].Id, 1, "phone_number", DataTableFactory.CreateDataTable_Netus2_PhoneNumber(), connection);
             Assert_Table(teacher.EmploymentSessions[0].Id, 0, "employment_session", DataTableFactory.CreateDataTable_Netus2_EmploymentSession(), connection);
             Assert_Table(teacher.UniqueIdentifiers[0].Id, 0, "unique_identifier", DataTableFactory.CreateDataTable_Netus2_UniqueIdentifier(), connection);
             Assert_Table(student.Id, 0, "jct_class_person", DataTableFactory.CreateDataTable_Netus2_JctClassPerson(), connection);
@@ -247,8 +248,9 @@ namespace Netus2_Test.Integration
             Assert_Table(teacher.Id, 0, "jct_person_person", DataTableFactory.CreateDataTable_Netus2_JctPersonPerson(), connection);
             Assert_Table(student.Id, 0, "jct_person_role", DataTableFactory.CreateDataTable_Netus2_JctPersonRole(), connection);
             Assert_Table(student.Id, 0, "jct_person_app", DataTableFactory.CreateDataTable_Netus2_JctPersonApp(), connection);
-            Assert_Table(student.PhoneNumbers[0].Id, 0, "phone_number", DataTableFactory.CreateDataTable_Netus2_PhoneNumber(), connection);
+            Assert_Table(student.PhoneNumbers[0].Id, 0, "jct_person_phone_number", DataTableFactory.CreateDataTable_Netus2_JctPersonPhoneNumber(), connection);
             Assert_Table(student.Id, 0, "jct_person_address", DataTableFactory.CreateDataTable_Netus2_JctPersonAddress(), connection);
+            Assert_Table(student.PhoneNumbers[0].Id, 1, "phone_number", DataTableFactory.CreateDataTable_Netus2_PhoneNumber(), connection);
             Assert_Table(student.Enrollments[0].Id, 0, "enrollment", DataTableFactory.CreateDataTable_Netus2_Enrollment(), connection);
             Assert_Table(student.UniqueIdentifiers[0].Id, 0, "unique_identifier", DataTableFactory.CreateDataTable_Netus2_UniqueIdentifier(), connection);
             Assert_Table(student.Marks[0].Id, 0, "mark", DataTableFactory.CreateDataTable_Netus2_Mark(), connection);
@@ -297,7 +299,7 @@ namespace Netus2_Test.Integration
         [Test]
         public void GivenUnassignedPhoneNumber_ShouldBeAbleToReadAndWrite()
         {
-            PhoneNumber phoneNumber = new PhoneNumber("1234567890", Enum_True_False.values["true"], Enum_Phone.values["office"]);
+            PhoneNumber phoneNumber = new PhoneNumber("1234567890", Enum_Phone.values["office"]);
             PhoneNumber phoneNumberAfterWrite = phoneNumberDaoImpl.Write(phoneNumber, connection);
             PhoneNumber phoneNumberAfterRead = phoneNumberDaoImpl.Read(phoneNumber, connection)[0];
 
@@ -308,7 +310,7 @@ namespace Netus2_Test.Integration
         public void GivenUnassignedPhoneNumber_ShouldBeAbleToAssignIt()
         {
             PhoneNumber phoneNumber = phoneNumberDaoImpl.Write(
-                new PhoneNumber("1234567890", Enum_True_False.values["true"], Enum_Phone.values["office"]), connection);
+                new PhoneNumber("1234567890", Enum_Phone.values["office"]), connection);
 
             Person student = testDataBuilder.student;
             student.PhoneNumbers.Clear();
