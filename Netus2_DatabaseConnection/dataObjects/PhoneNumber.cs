@@ -14,7 +14,7 @@ namespace Netus2_DatabaseConnection.dataObjects
         {
             Id = -1;
             PhoneNumberValue = phoneNumberValue;
-            IsPrimary = Enum_True_False.values["false"];
+            IsPrimary = Enum_True_False.values["unset"];
             PhoneType = phoneType;
         }
 

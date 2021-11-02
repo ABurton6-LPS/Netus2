@@ -204,7 +204,7 @@ namespace Netus2_Test.Integration
             Assert_Table(teacher.Id, expectedNumberOfRecords, "jct_person_role", DataTableFactory.CreateDataTable_Netus2_JctPersonRole(), connection);
             Assert_Table(teacher.Id, expectedNumberOfRecords, "jct_person_app", DataTableFactory.CreateDataTable_Netus2_JctPersonApp(), connection);
             Assert_Table(teacher.PhoneNumbers[0].Id, expectedNumberOfRecords, "phone_number", DataTableFactory.CreateDataTable_Netus2_PhoneNumber(), connection);
-            Assert_Table(teacher.GetAddresses()[0].Id, expectedNumberOfRecords, "address", DataTableFactory.CreateDataTable_Netus2_Address(), connection);
+            Assert_Table(teacher.Addresses[0].Id, expectedNumberOfRecords, "address", DataTableFactory.CreateDataTable_Netus2_Address(), connection);
             Assert_Table(teacher.EmploymentSessions[0].Id, expectedNumberOfRecords, "employment_session", DataTableFactory.CreateDataTable_Netus2_EmploymentSession(), connection);
             Assert_Table(teacher.UniqueIdentifiers[0].Id, expectedNumberOfRecords, "unique_identifier", DataTableFactory.CreateDataTable_Netus2_UniqueIdentifier(), connection);
             Assert_Table(teacher.Id, expectedNumberOfRecords, "jct_class_person", DataTableFactory.CreateDataTable_Netus2_JctClassPerson(), connection);
@@ -236,7 +236,7 @@ namespace Netus2_Test.Integration
             Assert_Table(student.Id, expectedNumberOfRecords, "jct_person_role", DataTableFactory.CreateDataTable_Netus2_JctPersonRole(), connection);
             Assert_Table(student.Id, expectedNumberOfRecords, "jct_person_app", DataTableFactory.CreateDataTable_Netus2_JctPersonApp(), connection);
             Assert_Table(student.PhoneNumbers[0].Id, expectedNumberOfRecords, "phone_number", DataTableFactory.CreateDataTable_Netus2_PhoneNumber(), connection);
-            Assert_Table(student.GetAddresses()[0].Id, expectedNumberOfRecords, "address", DataTableFactory.CreateDataTable_Netus2_Address(), connection);
+            Assert_Table(student.Addresses[0].Id, expectedNumberOfRecords, "address", DataTableFactory.CreateDataTable_Netus2_Address(), connection);
             Assert_Table(student.Enrollments[0].Id, expectedNumberOfRecords, "enrollment", DataTableFactory.CreateDataTable_Netus2_Enrollment(), connection);
             Assert_Table(student.UniqueIdentifiers[0].Id, expectedNumberOfRecords, "unique_identifier", DataTableFactory.CreateDataTable_Netus2_UniqueIdentifier(), connection);
             Assert_Table(student.Marks[0].Id, expectedNumberOfRecords, "mark", DataTableFactory.CreateDataTable_Netus2_Mark(), connection);

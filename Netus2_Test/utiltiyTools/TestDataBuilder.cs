@@ -140,11 +140,12 @@ namespace Netus2_Test
             }
 
             address_Teacher = new Address("teacher addr", "somewhere", Enum_State_Province.values["mi"], Enum_Country.values["us"]);
+            address_Teacher.IsPrimary = Enum_True_False.values["true"];
             if (connection != null)
                 address_Teacher = addressDaoImpl.Write(address_Teacher, connection);
             else
                 address_Teacher.Id = 1;
-            teacher.AddAddress(address_Teacher, Enum_True_False.values["true"]);
+            teacher.Addresses.Add(address_Teacher);
             if (connection != null)
             {
                 personDaoImpl.Update(teacher, connection);
@@ -227,11 +228,12 @@ namespace Netus2_Test
                 teacher.Relations.Add(student.Id);
 
             address_Student = new Address("student addr", "somewhere", Enum_State_Province.values["mi"], Enum_Country.values["us"]);
+            address_Student.IsPrimary = Enum_True_False.values["true"];
             if (connection != null)
                 address_Student = addressDaoImpl.Write(address_Student, connection);
             else
                 address_Student.Id = 2;
-            student.AddAddress(address_Student, Enum_True_False.values["true"]);
+            student.Addresses.Add(address_Student);
             if (connection != null)
             {
                 personDaoImpl.Update(student, connection);

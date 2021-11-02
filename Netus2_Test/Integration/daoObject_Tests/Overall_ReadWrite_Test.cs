@@ -102,12 +102,13 @@ namespace Netus2_Test.Integration
             //Create AddressTeacher
             //Add the AddressTeacher to the Teacher and update the Teacher
             Address addressTeacher = new Address("123 Main", "City", Enum_State_Province.values["mi"], Enum_Country.values["us"]);
+            addressTeacher.IsPrimary = Enum_True_False.values["true"];
             addressTeacher = addressDaoImpl.Write(addressTeacher, connection);
-            teacher.AddAddress(addressTeacher, Enum_True_False.values["true"]);
+            teacher.Addresses.Add(addressTeacher);
             personDaoImpl.Update(teacher, connection);
             teacher = personDaoImpl.Read(teacher, connection)[0];
             Assert.IsTrue(addressTeacher.Id > 0);
-            Assert.AreEqual(addressTeacher.Id, teacher.GetAddresses()[0].Id);
+            Assert.AreEqual(addressTeacher.Id, teacher.Addresses[0].Id);
 
             //Add Employment Session to School
             //You must create the Employment Session with the Organization (School), so no need to update the School
@@ -179,12 +180,13 @@ namespace Netus2_Test.Integration
             //Create AddressStudent
             //Add the AddressStudent to the Student and update the Student
             Address addressStudent = new Address("456 Main", "City", Enum_State_Province.values["mi"], Enum_Country.values["us"]);
+            addressStudent.IsPrimary = Enum_True_False.values["true"];
             addressStudent = addressDaoImpl.Write(addressStudent, connection);
-            student.AddAddress(addressStudent, Enum_True_False.values["true"]);
+            student.Addresses.Add(addressStudent);
             personDaoImpl.Update(student, connection);
             student = personDaoImpl.Read(student, connection)[0];
             Assert.IsTrue(addressStudent.Id > 0);
-            Assert.AreEqual(addressStudent.Id, student.GetAddresses()[0].Id);
+            Assert.AreEqual(addressStudent.Id, student.Addresses[0].Id);
 
             //Create Enrollment
             //You must create the Enrollment with the ClassEnrolled, so no need to update ClassEnrolled

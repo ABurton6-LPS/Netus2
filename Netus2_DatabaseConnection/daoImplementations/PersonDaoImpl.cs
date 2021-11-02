@@ -109,9 +109,13 @@ namespace Netus2_DatabaseConnection.daoImplementations
         private void Delete_JctPersonAddress(Person person, IConnectable connection)
         {
             IJctPersonAddressDao jctPersonAddressDaoImpl = DaoImplFactory.GetJctPersonAddressDaoImpl();
-            foreach (Address address in person.GetAddresses())
+            List<DataRow> foundJctPersonAddresses = jctPersonAddressDaoImpl.Read_AllWithPersonId(person.Id, connection);
+
+            foreach (DataRow foundJctPersonAddress in foundJctPersonAddresses)
             {
-                jctPersonAddressDaoImpl.Delete(person.Id, address.Id, connection);
+                jctPersonAddressDaoImpl.Delete(
+                    (int)foundJctPersonAddress["person_id"], 
+                    (int)foundJctPersonAddress["address_id"], connection);
             }
         }
 
@@ -278,7 +282,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 result.Applications.AddRange(Read_JctPersonApp(result.Id, connection));
                 result.Roles.AddRange(Read_JctPersonRole(result.Id, connection));
                 result.Relations.AddRange(Read_JctPersonPerson(result.Id, connection));
-                result.AddRangeAddresses(Read_JctPersonAddress(result.Id, connection));
+                result.Addresses = Read_JctPersonAddress(result.Id, connection);
                 result.PhoneNumbers.AddRange(Read_JctPersonPhoneNumber(result.Id, connection));
                 result.UniqueIdentifiers.AddRange(DaoImplFactory.GetUniqueIdentifierDaoImpl().Read_AllWithPersonId(result.Id, connection));
                 result.EmploymentSessions.AddRange(DaoImplFactory.GetEmploymentSessionDaoImpl().Read_AllWithPersonId(result.Id, connection));
@@ -317,7 +321,13 @@ namespace Netus2_DatabaseConnection.daoImplementations
             foreach (DataRow foundJctPersonPhoneNumberDao in foundJctPersonPhoneNumberDaos)
             {
                 int phoneNumberId = (int)foundJctPersonPhoneNumberDao["phone_number_id"];
-                foundPhoneNumbers.Add(phoneNumberDaoImpl.Read_WithPhoneNumberId(phoneNumberId, connection));
+                PhoneNumber foundPhoneNumber = phoneNumberDaoImpl.Read_WithPhoneNumberId(phoneNumberId, connection);
+
+                if(foundPhoneNumber != null)
+                {
+                    foundPhoneNumber.IsPrimary = Enum_True_False.GetEnumFromId((int)foundJctPersonPhoneNumberDao["is_primary_id"]);
+                    foundPhoneNumbers.Add(foundPhoneNumber);
+                }
             }
 
             return foundPhoneNumbers;
@@ -334,7 +344,12 @@ namespace Netus2_DatabaseConnection.daoImplementations
             foreach (DataRow foundJctPersonAddressDao in foundJctPersonAddressDaos)
             {
                 int addressId = (int)foundJctPersonAddressDao["address_id"];
-                foundAddresss.Add(addressDaoImpl.Read_UsingAdddressId(addressId, connection));
+                Address foundAddress = addressDaoImpl.Read_UsingAdddressId(addressId, connection);
+                if(foundAddress != null)
+                {
+                    foundAddress.IsPrimary = Enum_True_False.GetEnumFromId((int)foundJctPersonAddressDao["is_primary_id"]);
+                    foundAddresss.Add(foundAddress);
+                }
             }
 
             return foundAddresss;
@@ -481,7 +496,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 UpdateJctPersonRole(person.Roles, person.Id, connection);
                 UpdatePhoneNumbers(person.PhoneNumbers, person.Id, connection);
                 UpdateJctPersonPerson(person.Relations, person.Id, connection);
-                UpdateJctPersonAddress(person.GetAddresses(), person.Id, connection);
+                UpdateAddresses(person.Addresses, person.Id, connection);
                 UpdateJctPersonApp(person.Applications, person.Id, connection);
             }
             else
@@ -524,45 +539,45 @@ namespace Netus2_DatabaseConnection.daoImplementations
             return apps;
         }
 
-        private List<Address> UpdateJctPersonAddress(List<Address> addresses, int personId, IConnectable connection)
+        private List<Address> UpdateAddresses(List<Address> addresses, int personId, IConnectable connection)
         {
+            List<Address> addressesToBeReturned = new List<Address>();
+
+            IAddressDao addressDaoImpl = DaoImplFactory.GetAddressDaoImpl();
             IJctPersonAddressDao jctPersonAddressDaoImpl = DaoImplFactory.GetJctPersonAddressDaoImpl();
-            List<DataRow> foundJctPersonAddressDaos =
-                jctPersonAddressDaoImpl.Read_AllWithPersonId(personId, connection);
-            List<int> addressIds = new List<int>();
-            List<int> foundAddressIds = new List<int>();
 
-            foreach (Address address in addresses)
+            List<int> passedInAddressIds = new List<int>();
+            foreach (Address passedInAddress in addresses)
             {
-                addressIds.Add(address.Id);
+                if (passedInAddress.Id <= 0)
+                    throw new Exception("Address must be in the database before it can be linked with a person. Address: " + passedInAddress.ToString());
+                else
+                {
+                    passedInAddressIds.Add(passedInAddress.Id);
+
+                    DataRow foundJctPersonAddress = jctPersonAddressDaoImpl.Read(personId, passedInAddress.Id, connection);
+
+                    if (foundJctPersonAddress == null)
+                        foundJctPersonAddress = jctPersonAddressDaoImpl.Write(personId, passedInAddress.Id, passedInAddress.IsPrimary.Id, connection);
+
+                    Address foundAddress = addressDaoImpl.Read_UsingAdddressId(passedInAddress.Id, connection);
+
+                    if(foundAddress != null)
+                    {
+                        foundAddress.IsPrimary = Enum_True_False.GetEnumFromId((int)foundJctPersonAddress["is_primary_id"]);
+                        addressesToBeReturned.Add(foundAddress);
+                    }                    
+                }
             }
 
-            foreach (DataRow jctPersonAddressDao in foundJctPersonAddressDaos)
+            List<DataRow> foundJctAddresses = jctPersonAddressDaoImpl.Read_AllWithPersonId(personId, connection);
+            foreach(DataRow foundJctPersonAddress in foundJctAddresses)
             {
-                foundAddressIds.Add((int)jctPersonAddressDao["address_id"]);
+                if (passedInAddressIds.Contains((int)foundJctPersonAddress["address_id"]) == false)
+                    jctPersonAddressDaoImpl.Delete(personId, (int)foundJctPersonAddress["address_id"], connection);
             }
 
-            foreach (int addressId in addressIds)
-            {
-                if (addressId <= 0)
-                    throw new Exception("Addresses must be already in the database before they can be linked with a person. PersonId: " + personId);
-
-                Address matchingAddress = null ;
-                foreach (Address addr in addresses)
-                    if (addr.Id == addressId)
-                        matchingAddress = addr;
-
-                if (foundAddressIds.Contains(addressId) == false)
-                    jctPersonAddressDaoImpl.Write(personId, addressId, matchingAddress.IsPrimary.Id, connection);
-            }
-
-            foreach (int foundAddressId in foundAddressIds)
-            {
-                if (addressIds.Contains(foundAddressId) == false)
-                    jctPersonAddressDaoImpl.Delete(personId, foundAddressId, connection);
-            }
-
-            return addresses;
+            return addressesToBeReturned;
         }
 
         private List<Enumeration> UpdateJctPersonRole(List<Enumeration> roles, int personId, IConnectable connection)
@@ -649,9 +664,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
             foreach (PhoneNumber passedInPhoneNumber in phoneNumbers)
             {
                 if(passedInPhoneNumber.Id <= 0)
-                {
                     throw new Exception("Phone Number must be in the database before it can be linked with a person. PhoneNumber: " + passedInPhoneNumber.ToString());
-                }
                 else
                 {
                     passedInPhoneNubmerIds.Add(passedInPhoneNumber.Id);
@@ -659,9 +672,15 @@ namespace Netus2_DatabaseConnection.daoImplementations
                     DataRow foundJctPersonPhoneNumber = jctPersonPhoneNumberDaoImpl.Read(personId, passedInPhoneNumber.Id, connection);
 
                     if (foundJctPersonPhoneNumber == null)
-                        jctPersonPhoneNumberDaoImpl.Write(personId, passedInPhoneNumber.Id, passedInPhoneNumber.IsPrimary.Id, connection);
+                        foundJctPersonPhoneNumber = jctPersonPhoneNumberDaoImpl.Write(personId, passedInPhoneNumber.Id, passedInPhoneNumber.IsPrimary.Id, connection);
 
-                    phoneNumbersToBeReturned.Add(phoneNumberDaoImpl.Read_WithPhoneNumberId(passedInPhoneNumber.Id, connection));
+                    PhoneNumber foundPhoneNumber = phoneNumberDaoImpl.Read_WithPhoneNumberId(passedInPhoneNumber.Id, connection);
+
+                    if(foundPhoneNumber != null)
+                    {
+                        foundPhoneNumber.IsPrimary = Enum_True_False.GetEnumFromId((int)foundJctPersonPhoneNumber["is_primary_id"]);
+                        phoneNumbersToBeReturned.Add(foundPhoneNumber);
+                    }
                 }
             }
 
@@ -769,7 +788,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
             Person result = daoObjectMapper.MapPerson(row);
 
             result.PhoneNumbers = UpdatePhoneNumbers(person.PhoneNumbers, result.Id, connection);
-            result.SetAddresses(UpdateJctPersonAddress(person.GetAddresses(), result.Id, connection));
+            result.Addresses = UpdateAddresses(person.Addresses, result.Id, connection);
             result.Applications = UpdateJctPersonApp(person.Applications, result.Id, connection);
             result.Roles = UpdateJctPersonRole(person.Roles, result.Id, connection);
             result.Relations = UpdateJctPersonPerson(person.Relations, result.Id, connection);

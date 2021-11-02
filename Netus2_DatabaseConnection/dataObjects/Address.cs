@@ -25,7 +25,7 @@ namespace Netus2_DatabaseConnection.dataObjects
             City = city;
             StateProvince = stateProvince;
             Country = country;
-            IsPrimary = Enum_True_False.values["false"];
+            IsPrimary = Enum_True_False.values["unset"];
         }
 
         public override string ToString()
