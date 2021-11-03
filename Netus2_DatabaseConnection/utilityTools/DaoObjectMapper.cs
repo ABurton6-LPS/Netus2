@@ -385,6 +385,48 @@ namespace Netus2_DatabaseConnection.utilityTools
             return address;
         }
 
+        public DataRow MapEmail(Email email)
+        {
+            DataRow row = DataTableFactory.CreateDataTable_Netus2_Email().NewRow();
+
+            if (email.Id != -1)
+                row["email_id"] = email.Id;
+            else
+                row["email_id"] = DBNull.Value;
+
+            if (email.EmailValue != null)
+                row["email"] = email.EmailValue;
+            else
+                row["email"] = DBNull.Value;
+
+            if (email.EmailType != null)
+                row["enum_email_id"] = email.EmailType.Id;
+            else
+                row["enum_email_id"] = DBNull.Value;
+
+            return row;
+        }
+
+        public Email MapEmail(DataRow row)
+        {
+            string emailValue = null;
+            if (row["email"] != DBNull.Value)
+                emailValue = (string)row["email"];
+
+            Enumeration emailType = null;
+            if (row["enum_email_id"] != DBNull.Value)
+                emailType = Enum_Email.GetEnumFromId((int)row["enum_email_id"]);
+
+            Email email = new Email(emailValue, emailType);
+
+            if (row["email_id"] != DBNull.Value)
+                email.Id = (int)row["email_id"];
+            else
+                email.Id = -1;
+
+            return email;
+        }
+
         public DataRow MapUniqueIdentifier(UniqueIdentifier uniqueId, int personId)
         {
             DataRow row = DataTableFactory.CreateDataTable_Netus2_UniqueIdentifier().NewRow();

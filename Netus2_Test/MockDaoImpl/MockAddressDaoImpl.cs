@@ -30,7 +30,7 @@ namespace Netus2_Test.MockDaoImpl
             WasCalled_Delete = true;
         }
 
-        public Address Read_UsingAdddressId(int addressId, IConnectable connection)
+        public Address Read_UsingAddressId(int addressId, IConnectable connection)
         {
             WasCalled_ReadUsingAddressId = true;
 

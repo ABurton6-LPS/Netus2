@@ -8,6 +8,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         public static bool MockAll = false;
         public static IAcademicSessionDao MockAcademicSessionDaoImpl = null;
         public static IAddressDao MockAddressDaoImpl = null;
+        public static IEmailDao MockEmailDaoImpl = null;
         public static IApplicationDao MockApplicationDaoImpl = null;
         public static IClassEnrolledDao MockClassEnrolledDaoImpl = null;
         public static ICourseDao MockCourseDaoImpl = null;
@@ -20,6 +21,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         public static IJctCourseSubjectDao MockJctCourseSubjectDaoImpl = null;
         public static IJctEnrollmentAcademicSessionDao MockJctEnrollmentAcademicSessionDaoImpl = null;
         public static IJctPersonAddressDao MockJctPersonAddressDaoImpl = null;
+        public static IJctPersonEmailDao MockJctPersonEmailDaoImpl = null;
         public static IJctPersonAppDao MockJctPersonAppDaoImpl = null;
         public static IJctPersonPhoneNumberDao MockJctPersonPhoneNumberDaoImpl = null;
         public static IJctPersonPersonDao MockJctPersonPersonDaoImpl = null;
@@ -35,6 +37,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         public static IAcademicSessionDao AcademicSessionDaoImpl = null;
         public static IAddressDao AddressDaoImpl = null;
+        public static IEmailDao EmailDaoImpl = null;
         public static IApplicationDao ApplicationDaoImpl = null;
         public static IClassEnrolledDao ClassEnrolledDaoImpl = null;
         public static ICourseDao CourseDaoImpl = null;
@@ -47,6 +50,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         public static IJctCourseSubjectDao JctCourseSubjectDaoImpl = null;
         public static IJctEnrollmentAcademicSessionDao JctEnrollmentAcademicSessionDaoImpl = null;
         public static IJctPersonAddressDao JctPersonAddressDaoImpl = null;
+        public static IJctPersonEmailDao JctPersonEmailDaoImpl = null;
         public static IJctPersonAppDao JctPersonAppDaoImpl = null;
         public static IJctPersonPhoneNumberDao JctPersonPhoneNumberDaoImpl = null;
         public static IJctPersonPersonDao JctPersonPersonDaoImpl = null;
@@ -74,6 +78,14 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 return new AddressDaoImpl();
             else
                 return MockAddressDaoImpl;
+        }
+
+        public static IEmailDao GetEmailDaoImpl()
+        {
+            if (MockEmailDaoImpl == null && MockAll == false)
+                return new EmailDaoImpl();
+            else
+                return MockEmailDaoImpl;
         }
 
         public static IApplicationDao GetApplicationDaoImpl()
@@ -170,6 +182,14 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 return new JctPersonAddressDaoImpl();
             else
                 return MockJctPersonAddressDaoImpl;
+        }
+
+        public static IJctPersonEmailDao GetJctPersonEmailDaoImpl()
+        {
+            if (MockJctPersonEmailDaoImpl == null && MockAll == false)
+                return new JctPersonEmailDaoImpl();
+            else
+                return MockJctPersonEmailDaoImpl;
         }
 
         public static IJctPersonAppDao GetJctPersonAppDaoImpl()

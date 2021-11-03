@@ -15,10 +15,10 @@ namespace Netus2_DatabaseConnection.dataObjects
         public override string ToString()
         {
             StringBuilder strConfig = new StringBuilder();
-            strConfig.Append("Config Type: " + ConfigType.ToString() + "\n");
+            strConfig.Append("Config Type: " + ConfigType.Netus2Code + "\n");
             strConfig.Append("Config Value: " + ConfigValue + "\n");
-            strConfig.Append("Is For Students: " + IsForStudents.ToString() + "\n");
-            strConfig.Append("Is For Staff: " + IsForStaff.ToString() + "\n");
+            strConfig.Append("Is For Students: " + IsForStudents.Netus2Code + "\n");
+            strConfig.Append("Is For Staff: " + IsForStaff.Netus2Code + "\n");
 
             return strConfig.ToString();
         }

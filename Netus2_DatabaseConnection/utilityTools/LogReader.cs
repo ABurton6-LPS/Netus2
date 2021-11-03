@@ -999,7 +999,7 @@ namespace Netus2_DatabaseConnection.utilityTools
             DataTable dtLogJctPersonAddress = DataTableFactory.CreateDataTable_Netus2_Log_JctPersonAddress();
             dtLogJctPersonAddress = connection.ReadIntoDataTable(sql, dtLogJctPersonAddress);
 
-            List<LogJctPersonAddress> logJctPersonAddresss = new List<LogJctPersonAddress>();
+            List<LogJctPersonAddress> logJctPersonAddresses = new List<LogJctPersonAddress>();
             foreach (DataRow row in dtLogJctPersonAddress.Rows)
             {
                 LogJctPersonAddress logJctPersonAddress = new LogJctPersonAddress();
@@ -1054,10 +1054,170 @@ namespace Netus2_DatabaseConnection.utilityTools
                             throw new Exception("Unexpected column found in log_jct_person_address table: " + columnName);
                     }
                 }
-                logJctPersonAddresss.Add(logJctPersonAddress);
+                logJctPersonAddresses.Add(logJctPersonAddress);
             }
 
-            return logJctPersonAddresss;
+            return logJctPersonAddresses;
+        }
+
+        public List<LogEmail> Read_LogEmail(IConnectable connection)
+        {
+            string sql = "SELECT * FROM log_email";
+
+            DataTable dtLogEmail = DataTableFactory.CreateDataTable_Netus2_Log_Email();
+            dtLogEmail = connection.ReadIntoDataTable(sql, dtLogEmail);
+
+            List<LogEmail> logEmails = new List<LogEmail>();
+            foreach (DataRow row in dtLogEmail.Rows)
+            {
+                LogEmail logEmail = new LogEmail();
+                foreach (DataColumn column in row.Table.Columns)
+                {
+                    string columnName = column.ColumnName;
+                    switch (columnName)
+                    {
+                        case "log_email_id":
+                            if (row[columnName] != DBNull.Value)
+                                logEmail.log_email_id = (int)row[columnName];
+                            else
+                                logEmail.log_email_id = -1;
+                            break;
+                        case "email_id":
+                            if (row[columnName] != DBNull.Value)
+                                logEmail.email_id = (int)row[columnName];
+                            else
+                                logEmail.email_id = -1;
+                            break;
+                        case "email":
+                            if (row[columnName] != DBNull.Value)
+                                logEmail.email = (string)row[columnName];
+                            else
+                                logEmail.email = null;
+                            break;
+                        case "enum_email_id":
+                            if (row[columnName] != DBNull.Value)
+                                logEmail.set_EmailType((int)row[columnName]);
+                            else
+                                logEmail.EmailType = null;
+                            break;
+                        case "created":
+                            if (row[columnName] != DBNull.Value)
+                                logEmail.created = (DateTime)row[columnName];
+                            else
+                                logEmail.created = new DateTime();
+                            break;
+                        case "created_by":
+                            if (row[columnName] != DBNull.Value)
+                                logEmail.created_by = (string)row[columnName];
+                            else
+                                logEmail.created_by = null;
+                            break;
+                        case "changed":
+                            if (row[columnName] != DBNull.Value)
+                                logEmail.changed = (DateTime)row[columnName];
+                            else
+                                logEmail.changed = new DateTime();
+                            break;
+                        case "changed_by":
+                            if (row[columnName] != DBNull.Value)
+                                logEmail.changed_by = (string)row[columnName];
+                            else
+                                logEmail.changed_by = null;
+                            break;
+                        case "log_date":
+                            if (row[columnName] != DBNull.Value)
+                                logEmail.log_date = (DateTime)row[columnName];
+                            else
+                                logEmail.log_date = new DateTime();
+                            break;
+                        case "log_user":
+                            if (row[columnName] != DBNull.Value)
+                                logEmail.log_user = (string)row[columnName];
+                            else
+                                logEmail.log_user = null;
+                            break;
+                        case "enum_log_action_id":
+                            if (row[columnName] != DBNull.Value)
+                                logEmail.set_LogAction((int)row[columnName]);
+                            else
+                                logEmail.LogAction = null;
+                            break;
+                        default:
+                            throw new Exception("Unexpected column found in log_email table: " + columnName);
+                    }
+                }
+                logEmails.Add(logEmail);
+            }
+
+            return logEmails;
+        }
+
+        public List<LogJctPersonEmail> Read_LogJctPersonEmail(IConnectable connection)
+        {
+            string sql = "SELECT * FROM log_jct_person_email";
+
+            DataTable dtLogJctPersonEmail = DataTableFactory.CreateDataTable_Netus2_Log_JctPersonEmail();
+            dtLogJctPersonEmail = connection.ReadIntoDataTable(sql, dtLogJctPersonEmail);
+
+            List<LogJctPersonEmail> logJctPersonEmails = new List<LogJctPersonEmail>();
+            foreach (DataRow row in dtLogJctPersonEmail.Rows)
+            {
+                LogJctPersonEmail logJctPersonEmail = new LogJctPersonEmail();
+                foreach (DataColumn column in row.Table.Columns)
+                {
+                    string columnName = column.ColumnName;
+                    switch (columnName)
+                    {
+                        case "log_jct_person_email_id":
+                            if (row[columnName] != DBNull.Value)
+                                logJctPersonEmail.log_jct_person_email_id = (int)row[columnName];
+                            else
+                                logJctPersonEmail.log_jct_person_email_id = -1;
+                            break;
+                        case "person_id":
+                            if(row[columnName] != DBNull.Value)
+                                logJctPersonEmail.person_id = (int)row[columnName];
+                            else
+                                logJctPersonEmail.person_id = -1;
+                            break;
+                        case "email_id":
+                            if(row[columnName] != DBNull.Value)
+                                logJctPersonEmail.email_id = (int)row[columnName];
+                            else
+                                logJctPersonEmail.email_id = -1;
+                            break;
+                        case "is_primary_id":
+                            if (row[columnName] != DBNull.Value)
+                                logJctPersonEmail.set_IsPrimary((int)row[columnName]);
+                            else
+                                logJctPersonEmail.IsPrimary = null;
+                            break;
+                        case "log_date":
+                            if(row[columnName] != DBNull.Value)
+                                logJctPersonEmail.log_date = (DateTime)row[columnName];
+                            else
+                                logJctPersonEmail.log_date = new DateTime();
+                            break;
+                        case "log_user":
+                            if (row[columnName] != DBNull.Value)
+                                logJctPersonEmail.log_user = (string)row[columnName];
+                            else
+                                logJctPersonEmail.log_user = null;
+                            break;
+                        case "enum_log_action_id":
+                            if(row[columnName] != DBNull.Value)
+                                logJctPersonEmail.set_LogAction((int)row[columnName]);
+                            else
+                                logJctPersonEmail.LogAction = null;
+                            break;
+                        default:
+                            throw new Exception("Unexpected column found in log_jct_person_email table: " + columnName);
+                    }
+                }
+                logJctPersonEmails.Add(logJctPersonEmail);
+            }
+
+            return logJctPersonEmails;
         }
 
         public List<LogEmploymentSession> Read_LogEmploymentSession(IConnectable connection)

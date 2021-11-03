@@ -26,9 +26,9 @@ namespace Netus2_DatabaseConnection.logObjects
         public Enumeration StateProvince;
         public Enumeration LogAction;
 
-        public void set_AddressType(int enumAddressType)
+        public void set_AddressType(int enumAddressTypeId)
         {
-            AddressType = Enum_Address.GetEnumFromId(enumAddressType);
+            AddressType = Enum_Address.GetEnumFromId(enumAddressTypeId);
         }
 
         public void set_Country(int enumCountryId)

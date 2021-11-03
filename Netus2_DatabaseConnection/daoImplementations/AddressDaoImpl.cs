@@ -55,7 +55,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
             }
         }
 
-        public Address Read_UsingAdddressId(int addressId, IConnectable connection)
+        public Address Read_UsingAddressId(int addressId, IConnectable connection)
         {
             string sql = "SELECT * FROM address WHERE address_id = @address_id";
 
