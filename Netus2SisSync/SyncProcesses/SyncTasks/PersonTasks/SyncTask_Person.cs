@@ -67,8 +67,9 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.PersonTasks
                     person.ResidenceStatus = sisResidenceStatus;
                     person.LoginName = sisLoginName;
                     person.LoginPw = sisLoginPw;
-                    person.UniqueIdentifiers.Add(uniqueId);
                     person = personDaoImpl.Write(person, _netus2Connection);
+
+                    uniqueIdentifierDaoImpl.Write(uniqueId, person.Id, _netus2Connection);
                 }
                 else if (foundUniqueIdentifiers.Count == 1)
                 {
