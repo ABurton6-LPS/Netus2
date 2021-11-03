@@ -37,11 +37,11 @@ namespace Netus2_DatabaseConnection.dataObjects
             strAddr.Append("Line 4: " + Line4 + "\n");
             strAddr.Append("Apartment: " + Apartment + "\n");
             strAddr.Append("City: " + City + "\n");
-            strAddr.Append("State/Province: " + StateProvince + "\n");
+            strAddr.Append("State/Province: " + StateProvince.Netus2Code + "\n");
             strAddr.Append("Postal Code: " + PostalCode + "\n");
-            strAddr.Append("Country: " + Country + "\n");
-            strAddr.Append("Is Current: " + IsPrimary + "\n");
-            strAddr.Append("Address Type: " + AddressType + "\n");
+            strAddr.Append("Country: " + Country.Netus2Code + "\n");
+            strAddr.Append("Is Current: " + IsPrimary.Netus2Code + "\n");
+            strAddr.Append("Address Type: " + AddressType.Netus2Code + "\n");
 
             return strAddr.ToString();
         }

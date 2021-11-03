@@ -615,7 +615,7 @@ namespace Netus2_Test.Integration
             //Update
             address.Line2 = "tst2";
             addressDaoImpl.Update(address, connection);
-            address = addressDaoImpl.Read_UsingAdddressId(address.Id, connection);
+            address = addressDaoImpl.Read_UsingAddressId(address.Id, connection);
 
             //Read logs after update
             logs.Clear();

@@ -506,6 +506,52 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtAddress;
         }
 
+        public static DataTable CreateDataTable_Netus2_Email()
+        {
+            DataTable dtEmail = new DataTable("Email");
+            DataColumn[] PrimaryKeycolumns = new DataColumn[1];
+            DataColumn dtColumn;
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(int);
+            dtColumn.ColumnName = "email_id";
+            PrimaryKeycolumns[0] = dtColumn;
+            dtEmail.Columns.Add(dtColumn);
+            dtEmail.PrimaryKey = PrimaryKeycolumns;
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "email";
+            dtEmail.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(int);
+            dtColumn.ColumnName = "enum_email_id";
+            dtEmail.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(DateTime);
+            dtColumn.ColumnName = "created";
+            dtEmail.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "created_by";
+            dtEmail.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(DateTime);
+            dtColumn.ColumnName = "changed";
+            dtEmail.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "changed_by";
+            dtEmail.Columns.Add(dtColumn);
+
+            return dtEmail;
+        }
+
         public static DataTable CreateDataTable_Netus2_Application()
         {
             DataTable dtApplication = new DataTable("Application");
@@ -1480,6 +1526,34 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtJctPersonAddress;
         }
 
+        public static DataTable CreateDataTable_Netus2_JctPersonEmail()
+        {
+            DataTable dtJctPersonAddress = new DataTable("JctPersonEmail");
+            DataColumn[] PrimaryKeycolumns = new DataColumn[2];
+            DataColumn dtColumn;
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(int);
+            dtColumn.ColumnName = "person_id";
+            PrimaryKeycolumns[0] = dtColumn;
+            dtJctPersonAddress.Columns.Add(dtColumn);
+            dtJctPersonAddress.PrimaryKey = PrimaryKeycolumns;
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(int);
+            dtColumn.ColumnName = "email_id";
+            PrimaryKeycolumns[1] = dtColumn;
+            dtJctPersonAddress.Columns.Add(dtColumn);
+            dtJctPersonAddress.PrimaryKey = PrimaryKeycolumns;
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(int);
+            dtColumn.ColumnName = "is_primary_id";
+            dtJctPersonAddress.Columns.Add(dtColumn);
+
+            return dtJctPersonAddress;
+        }
+
         public static DataTable CreateDataTable_Netus2_JctPersonApp()
         {
             DataTable dtJctPersonApp = new DataTable("JctPersonApp");
@@ -1782,6 +1856,72 @@ namespace Netus2_DatabaseConnection.utilityTools
             dtLogAddress.Columns.Add(dtColumn);
 
             return dtLogAddress;
+        }
+
+        public static DataTable CreateDataTable_Netus2_Log_Email()
+        {
+            DataTable dtLogEmail = new DataTable("Log_Email");
+            DataColumn[] PrimaryKeycolumns = new DataColumn[1];
+            DataColumn dtColumn;
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(int);
+            dtColumn.ColumnName = "log_email_id";
+            PrimaryKeycolumns[0] = dtColumn;
+            dtLogEmail.Columns.Add(dtColumn);
+            dtLogEmail.PrimaryKey = PrimaryKeycolumns;
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(int);
+            dtColumn.ColumnName = "email_id";
+            dtLogEmail.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "email";
+            dtLogEmail.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(int);
+            dtColumn.ColumnName = "enum_email_id";
+            dtLogEmail.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(DateTime);
+            dtColumn.ColumnName = "created";
+            dtLogEmail.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "created_by";
+            dtLogEmail.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(DateTime);
+            dtColumn.ColumnName = "changed";
+            dtLogEmail.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "changed_by";
+            dtLogEmail.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(DateTime);
+            dtColumn.ColumnName = "log_date";
+            dtLogEmail.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "log_user";
+            dtLogEmail.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(int);
+            dtColumn.ColumnName = "enum_log_action_id";
+            dtLogEmail.Columns.Add(dtColumn);
+
+            return dtLogEmail;
         }
 
         public static DataTable CreateDataTable_Netus2_Log_Application()
@@ -3117,6 +3257,11 @@ namespace Netus2_DatabaseConnection.utilityTools
             dtLogJctPersonAddress.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(int);
+            dtColumn.ColumnName = "is_primary_id";
+            dtLogJctPersonAddress.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
             dtColumn.DataType = typeof(DateTime);
             dtColumn.ColumnName = "log_date";
             dtLogJctPersonAddress.Columns.Add(dtColumn);
@@ -3132,6 +3277,52 @@ namespace Netus2_DatabaseConnection.utilityTools
             dtLogJctPersonAddress.Columns.Add(dtColumn);
 
             return dtLogJctPersonAddress;
+        }
+
+        public static DataTable CreateDataTable_Netus2_Log_JctPersonEmail()
+        {
+            DataTable dtLogJctPersonEmail = new DataTable("Log_JctPersonEmail");
+            DataColumn[] PrimaryKeycolumns = new DataColumn[1];
+            DataColumn dtColumn;
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(int);
+            dtColumn.ColumnName = "log_jct_person_email_id";
+            PrimaryKeycolumns[0] = dtColumn;
+            dtLogJctPersonEmail.Columns.Add(dtColumn);
+            dtLogJctPersonEmail.PrimaryKey = PrimaryKeycolumns;
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(int);
+            dtColumn.ColumnName = "person_id";
+            dtLogJctPersonEmail.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(int);
+            dtColumn.ColumnName = "email_id";
+            dtLogJctPersonEmail.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(int);
+            dtColumn.ColumnName = "is_primary_id";
+            dtLogJctPersonEmail.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(DateTime);
+            dtColumn.ColumnName = "log_date";
+            dtLogJctPersonEmail.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "log_user";
+            dtLogJctPersonEmail.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(int);
+            dtColumn.ColumnName = "enum_log_action_id";
+            dtLogJctPersonEmail.Columns.Add(dtColumn);
+
+            return dtLogJctPersonEmail;
         }
 
         public static DataTable CreateDataTable_Netus2_Log_JctPersonApp()

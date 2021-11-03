@@ -83,7 +83,7 @@ namespace Netus2_DatabaseConnection.dataObjects
             StringBuilder strClassEnrolled = new StringBuilder();
             strClassEnrolled.Append("Name: " + Name + "\n");
             strClassEnrolled.Append("Class Code: " + ClassCode + "\n");
-            strClassEnrolled.Append("Class Type: " + ClassType + "\n");
+            strClassEnrolled.Append("Class Type: " + ClassType.Netus2Code + "\n");
             strClassEnrolled.Append("Room: " + Room + "\n");
             strClassEnrolled.Append("Course: " + Course + "\n");
             strClassEnrolled.Append("Academic Session: " + AcademicSession + "\n");

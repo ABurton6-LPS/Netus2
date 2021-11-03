@@ -27,7 +27,7 @@ namespace Netus2_DatabaseConnection.dataObjects
             strProvider.Append("Standard URL: " + UrlStandardAccess + "\n");
             strProvider.Append("Admin URL: " + UrlAdminAccess + "\n");
             strProvider.Append("Populated By: " + PopulatedBy + "\n");
-            strProvider.Append("Number of Child Providers: " + Children.Count + "\n");
+            strProvider.Append("Number of Children: " + Children.Count + "\n");
 
             return strProvider.ToString();
         }

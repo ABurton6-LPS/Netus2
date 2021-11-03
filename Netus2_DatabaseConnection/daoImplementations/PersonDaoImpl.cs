@@ -36,6 +36,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
             Delete_JctPersonApp(person, connection);
             Delete_JctPersonPhoneNumber(person, connection);
             Delete_JctPersonAddress(person, connection);
+            Delete_JctPersonEmail(person, connection);
             Delete_EmploymentSession(person, connection);
             Delete_UniqueIdentifier(person, connection);
             Delete_Enrollment(person, connection);
@@ -116,6 +117,19 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 jctPersonAddressDaoImpl.Delete(
                     (int)foundJctPersonAddress["person_id"], 
                     (int)foundJctPersonAddress["address_id"], connection);
+            }
+        }
+
+        private void Delete_JctPersonEmail(Person person, IConnectable connection)
+        {
+            IJctPersonEmailDao jctPersonEmailDaoImpl = DaoImplFactory.GetJctPersonEmailDaoImpl();
+            List<DataRow> foundJctPersonEmails = jctPersonEmailDaoImpl.Read_AllWithPersonId(person.Id, connection);
+
+            foreach (DataRow foundJctPersonEmail in foundJctPersonEmails)
+            {
+                jctPersonEmailDaoImpl.Delete(
+                    (int)foundJctPersonEmail["person_id"],
+                    (int)foundJctPersonEmail["email_id"], connection);
             }
         }
 
@@ -283,6 +297,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 result.Roles.AddRange(Read_JctPersonRole(result.Id, connection));
                 result.Relations.AddRange(Read_JctPersonPerson(result.Id, connection));
                 result.Addresses = Read_JctPersonAddress(result.Id, connection);
+                result.Emails = Read_JctPersonEmail(result.Id, connection);
                 result.PhoneNumbers.AddRange(Read_JctPersonPhoneNumber(result.Id, connection));
                 result.UniqueIdentifiers.AddRange(DaoImplFactory.GetUniqueIdentifierDaoImpl().Read_AllWithPersonId(result.Id, connection));
                 result.EmploymentSessions.AddRange(DaoImplFactory.GetEmploymentSessionDaoImpl().Read_AllWithPersonId(result.Id, connection));
@@ -344,7 +359,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
             foreach (DataRow foundJctPersonAddressDao in foundJctPersonAddressDaos)
             {
                 int addressId = (int)foundJctPersonAddressDao["address_id"];
-                Address foundAddress = addressDaoImpl.Read_UsingAdddressId(addressId, connection);
+                Address foundAddress = addressDaoImpl.Read_UsingAddressId(addressId, connection);
                 if(foundAddress != null)
                 {
                     foundAddress.IsPrimary = Enum_True_False.GetEnumFromId((int)foundJctPersonAddressDao["is_primary_id"]);
@@ -353,6 +368,28 @@ namespace Netus2_DatabaseConnection.daoImplementations
             }
 
             return foundAddresss;
+        }
+
+        private List<Email> Read_JctPersonEmail(int personId, IConnectable connection)
+        {
+            IEmailDao emailDaoImpl = DaoImplFactory.GetEmailDaoImpl();
+            IJctPersonEmailDao jctPersonEmailDaoImpl = DaoImplFactory.GetJctPersonEmailDaoImpl();
+
+            List<Email> foundEmails = new List<Email>();
+            List<DataRow> foundJctPersonEmailDaos = jctPersonEmailDaoImpl.Read_AllWithPersonId(personId, connection);
+
+            foreach (DataRow foundJctPersonEmailDao in foundJctPersonEmailDaos)
+            {
+                int emailId = (int)foundJctPersonEmailDao["email_id"];
+                Email foundEmail = emailDaoImpl.Read_UsingEmailId(emailId, connection);
+                if (foundEmail != null)
+                {
+                    foundEmail.IsPrimary = Enum_True_False.GetEnumFromId((int)foundJctPersonEmailDao["is_primary_id"]);
+                    foundEmails.Add(foundEmail);
+                }
+            }
+
+            return foundEmails;
         }
 
         private List<Enumeration> Read_JctPersonRole(int personId, IConnectable connection)
@@ -497,6 +534,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 UpdatePhoneNumbers(person.PhoneNumbers, person.Id, connection);
                 UpdateJctPersonPerson(person.Relations, person.Id, connection);
                 UpdateAddresses(person.Addresses, person.Id, connection);
+                UpdateEmails(person.Emails, person.Id, connection);
                 UpdateJctPersonApp(person.Applications, person.Id, connection);
             }
             else
@@ -560,7 +598,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
                     if (foundJctPersonAddress == null)
                         foundJctPersonAddress = jctPersonAddressDaoImpl.Write(personId, passedInAddress.Id, passedInAddress.IsPrimary.Id, connection);
 
-                    Address foundAddress = addressDaoImpl.Read_UsingAdddressId(passedInAddress.Id, connection);
+                    Address foundAddress = addressDaoImpl.Read_UsingAddressId(passedInAddress.Id, connection);
 
                     if(foundAddress != null)
                     {
@@ -578,6 +616,47 @@ namespace Netus2_DatabaseConnection.daoImplementations
             }
 
             return addressesToBeReturned;
+        }
+
+        private List<Email> UpdateEmails(List<Email> emails, int personId, IConnectable connection)
+        {
+            List<Email> emailsToBeReturned = new List<Email>();
+
+            IEmailDao emailDaoImpl = DaoImplFactory.GetEmailDaoImpl();
+            IJctPersonEmailDao jctPersonEmailDaoImpl = DaoImplFactory.GetJctPersonEmailDaoImpl();
+
+            List<int> passedInEmailIds = new List<int>();
+            foreach (Email passedInEmail in emails)
+            {
+                if (passedInEmail.Id <= 0)
+                    throw new Exception("Email must be in the database before it can be linked with a person. Email: " + passedInEmail.ToString());
+                else
+                {
+                    passedInEmailIds.Add(passedInEmail.Id);
+
+                    DataRow foundJctPersonEmail = jctPersonEmailDaoImpl.Read(personId, passedInEmail.Id, connection);
+
+                    if (foundJctPersonEmail == null)
+                        foundJctPersonEmail = jctPersonEmailDaoImpl.Write(personId, passedInEmail.Id, passedInEmail.IsPrimary.Id, connection);
+
+                    Email foundEmail = emailDaoImpl.Read_UsingEmailId(passedInEmail.Id, connection);
+
+                    if (foundEmail != null)
+                    {
+                        foundEmail.IsPrimary = Enum_True_False.GetEnumFromId((int)foundJctPersonEmail["is_primary_id"]);
+                        emailsToBeReturned.Add(foundEmail);
+                    }
+                }
+            }
+
+            List<DataRow> foundJctEmails = jctPersonEmailDaoImpl.Read_AllWithPersonId(personId, connection);
+            foreach (DataRow foundJctPersonEmail in foundJctEmails)
+            {
+                if (passedInEmailIds.Contains((int)foundJctPersonEmail["email_id"]) == false)
+                    jctPersonEmailDaoImpl.Delete(personId, (int)foundJctPersonEmail["email_id"], connection);
+            }
+
+            return emailsToBeReturned;
         }
 
         private List<Enumeration> UpdateJctPersonRole(List<Enumeration> roles, int personId, IConnectable connection)
@@ -789,6 +868,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
             result.PhoneNumbers = UpdatePhoneNumbers(person.PhoneNumbers, result.Id, connection);
             result.Addresses = UpdateAddresses(person.Addresses, result.Id, connection);
+            result.Emails = UpdateEmails(person.Emails, result.Id, connection);
             result.Applications = UpdateJctPersonApp(person.Applications, result.Id, connection);
             result.Roles = UpdateJctPersonRole(person.Roles, result.Id, connection);
             result.Relations = UpdateJctPersonPerson(person.Relations, result.Id, connection);

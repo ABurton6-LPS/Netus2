@@ -27,8 +27,8 @@ namespace Netus2_DatabaseConnection.dataObjects
             StringBuilder strCourse = new StringBuilder();
             strCourse.Append("Name: " + Name + "\n");
             strCourse.Append("Course Code: " + CourseCode + "\n");
-            strCourse.Append("Grades: " + Grades + "\n");
-            strCourse.Append("Subjects: " + Subjects + "\n");
+            strCourse.Append("Number of Grades: " + Grades.Count + "\n");
+            strCourse.Append("Number of Subjects: " + Subjects.Count + "\n");
 
             return strCourse.ToString();
         }

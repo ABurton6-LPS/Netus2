@@ -23,6 +23,7 @@ namespace Netus2_DatabaseConnection.dataObjects
         public List<PhoneNumber> PhoneNumbers { get; set; }
         public List<Application> Applications { get; set; }
         public List<Address> Addresses { get; set; }
+        public List<Email> Emails { get; set; }
         public List<UniqueIdentifier> UniqueIdentifiers { get; set; }
         public List<Mark> Marks { get; set; }
         public List<Enrollment> Enrollments { get; set; }
@@ -43,6 +44,7 @@ namespace Netus2_DatabaseConnection.dataObjects
             PhoneNumbers = new List<PhoneNumber>();
             Applications = new List<Application>();
             Addresses = new List<Address>();
+            Emails = new List<Email>();
             UniqueIdentifiers = new List<UniqueIdentifier>();
             Marks = new List<Mark>();
             Enrollments = new List<Enrollment>();
@@ -59,13 +61,14 @@ namespace Netus2_DatabaseConnection.dataObjects
             strPerson.Append("Gender: " + Gender.Netus2Code + "\n");
             strPerson.Append("Ethnic: " + Ethnic.Netus2Code + "\n");
             strPerson.Append("Number of Roles: " + Roles.Count + "\n");
-            strPerson.Append("Residence Status : " + ResidenceStatus + "\n");
+            strPerson.Append("Residence Status : " + ResidenceStatus.Netus2Code + "\n");
             strPerson.Append("Login Name: " + LoginName + "\n");
             strPerson.Append("Login Password: " + LoginPw + "\n");
             strPerson.Append("Number of Relations: " + Relations.Count + "\n");
             strPerson.Append("Number of Phone Numbers: " + PhoneNumbers.Count + "\n");
             strPerson.Append("Number of Applications: " + Applications.Count + "\n");
             strPerson.Append("Number of Addresses: " + Addresses.Count + "\n");
+            strPerson.Append("Number of Emails: " + Emails.Count + "\n");
             strPerson.Append("Number of Unique Identifiers: " + UniqueIdentifiers.Count + "\n");
             strPerson.Append("Number of Marks: " + Marks.Count + "\n");
             strPerson.Append("Number of Enrollments: " + Enrollments.Count + "\n");

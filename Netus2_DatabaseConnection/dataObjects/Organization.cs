@@ -29,11 +29,11 @@ namespace Netus2_DatabaseConnection.dataObjects
         {
             StringBuilder strOrg = new StringBuilder();
             strOrg.Append("Name: " + Name + "\n");
-            strOrg.Append("Organization Type: " + OrganizationType + "\n");
+            strOrg.Append("Organization Type: " + OrganizationType.Netus2Code + "\n");
             strOrg.Append("Identifier: " + Identifier + "\n");
             strOrg.Append("Sis Building Code: " + SisBuildingCode + "\n");
             strOrg.Append("Hr Building Code: " + HrBuildingCode + "\n");
-            strOrg.Append("Number of Child Organizations: " + Children.Count + "\n");
+            strOrg.Append("Number of Children: " + Children.Count + "\n");
 
             return strOrg.ToString();
         }

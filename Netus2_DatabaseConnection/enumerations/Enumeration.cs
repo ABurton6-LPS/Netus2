@@ -11,7 +11,6 @@
         public override string ToString()
         {
             return 
-                "Id: " + Id + " " + 
                 "Netus2Code: " + Netus2Code + " " +
                 "SisCode: " + SisCode + " " +
                 "HrCode: " + HrCode + " " +
