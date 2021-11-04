@@ -61,7 +61,7 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AddressTasks
                 address.IsPrimary = sisIsPrimary;
                 address.AddressType = sisAddressType;
 
-                IJctPersonAddressDao jctPersonAddressDaoImpl = new JctPersonAddressDaoImpl();
+                IJctPersonAddressDao jctPersonAddressDaoImpl = DaoImplFactory.GetJctPersonAddressDaoImpl();
 
                 if (foundAddresses.Count == 0)
                 {

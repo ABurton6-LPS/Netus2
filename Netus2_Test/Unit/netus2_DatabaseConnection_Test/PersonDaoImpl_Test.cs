@@ -29,6 +29,8 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
         MockJctClassPersonDaoImpl mockJctClassPersonDaoImpl;
         MockApplicationDaoImpl mockApplicationDaoImpl;
         MockAddressDaoImpl mockAddressDaoImpl;
+        MockEmailDaoImpl mockEmailDaoImpl;
+        MockJctPersonEmailDaoImpl mockJctPersonEmailDaoImpl;
         MockJctPersonPhoneNumberDaoImpl mockJctPersonPhoneNumberDaoImpl;
 
         [SetUp]
@@ -67,6 +69,10 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
             DaoImplFactory.MockApplicationDaoImpl = mockApplicationDaoImpl;
             mockAddressDaoImpl = new MockAddressDaoImpl(tdBuilder);
             DaoImplFactory.MockAddressDaoImpl = mockAddressDaoImpl;
+            mockEmailDaoImpl = new MockEmailDaoImpl(tdBuilder);
+            DaoImplFactory.MockEmailDaoImpl = mockEmailDaoImpl;
+            mockJctPersonEmailDaoImpl = new MockJctPersonEmailDaoImpl(tdBuilder);
+            DaoImplFactory.MockJctPersonEmailDaoImpl = mockJctPersonEmailDaoImpl;
             mockJctPersonPhoneNumberDaoImpl = new MockJctPersonPhoneNumberDaoImpl(tdBuilder);
             DaoImplFactory.MockJctPersonPhoneNumberDaoImpl = mockJctPersonPhoneNumberDaoImpl;
 
