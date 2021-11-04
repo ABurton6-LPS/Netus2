@@ -8,7 +8,6 @@ using Netus2SisSync.UtilityTools;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Text;
 using System.Threading;
 
 namespace Netus2SisSync.SyncProcesses.SyncJobs

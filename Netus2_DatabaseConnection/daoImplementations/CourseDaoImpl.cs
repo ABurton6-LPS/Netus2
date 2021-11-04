@@ -91,6 +91,23 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 throw new Exception(results.Count + " found matching courseId: " + courseId);
         }
 
+        public Course Read_UsingCourseCode(string courseCode, IConnectable connection)
+        {
+            string sql = "SELECT * FROM course WHERE course_code = @course_code";
+
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@course_code", courseCode));
+
+            List<Course> results = Read(sql, connection, parameters);
+
+            if (results.Count == 0)
+                return null;
+            else if (results.Count == 1)
+                return results[0];
+            else
+                throw new Exception(results.Count + " found matching courseCode: " + courseCode);
+        }
+
         public List<Course> Read(Course course, IConnectable connection)
         {
             DataRow row = daoObjectMapper.MapCourse(course);

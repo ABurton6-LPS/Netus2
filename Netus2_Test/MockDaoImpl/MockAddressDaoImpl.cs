@@ -53,8 +53,12 @@ namespace Netus2_Test.MockDaoImpl
 
             if (_shouldReadReturnData)
             {
-                address.Id = 100;
-                results.Add(address);
+                if (tdBuilder.address_Teacher.Line1 == address.Line1 ||
+                    tdBuilder.address_Teacher.Apartment == address.Apartment)
+                    results.Add(tdBuilder.address_Teacher);
+                else if(tdBuilder.address_Student.Line1 == address.Line1 ||
+                    tdBuilder.address_Student.Apartment == address.Apartment)
+                    results.Add(tdBuilder.address_Student);
             }
 
             return results;

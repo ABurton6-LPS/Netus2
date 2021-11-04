@@ -70,6 +70,8 @@ namespace Netus2_DatabaseConnection.dbAccess
             testEnumKeys.Add("sis_person_query");
             testEnumKeys.Add("sis_address_query");
             testEnumKeys.Add("sis_course_query");
+            testEnumKeys.Add("me");
+            testEnumKeys.Add("am");
 
             DataTable mockEnumDataTable = DataTableFactory.CreateDataTable_Netus2_Enumeration();
 

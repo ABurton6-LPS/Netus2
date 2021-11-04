@@ -11,6 +11,7 @@ namespace Netus2_Test.MockDaoImpl
         public bool WasCalled_Delete = false;
         public bool WasCalled_Read = false;
         public bool WasCalled_ReadUsingCourseId = false;
+        public bool WasCalled_ReadUsingCourseCode = false;
         public bool WasCalled_Update = false;
         public bool WasCalled_Write = false;
         public bool _shouldReadReturnData = false;
@@ -50,6 +51,16 @@ namespace Netus2_Test.MockDaoImpl
         public Course Read_UsingCourseId(int courseId, IConnectable connection)
         {
             WasCalled_ReadUsingCourseId = true;
+
+            if (_shouldReadReturnData)
+                return tdBuilder.spanishCourse;
+            else
+                return null;
+        }
+
+        public Course Read_UsingCourseCode(string courseCode, IConnectable connection)
+        {
+            WasCalled_ReadUsingCourseCode = true;
 
             if (_shouldReadReturnData)
                 return tdBuilder.spanishCourse;

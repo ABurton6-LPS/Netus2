@@ -53,6 +53,8 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.CourseTasks
 
                 if(foundCourses.Count == 0)
                 {
+                    course.Subjects = sisSubjectList;
+                    course.Grades = sisGradeList;
                     course = courseDaoImpl.Write(course, _netus2Connection);
                 }
                 else if(foundCourses.Count == 1)
@@ -68,9 +70,7 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.CourseTasks
                         courseDaoImpl.Update(course, _netus2Connection);
                 }
                 else
-                {
                     throw new Exception(foundCourses.Count + " record(s) found matching Course:\n" + course.ToString());
-                }
 
                 SyncLogger.LogStatus(this, Enum_Sync_Status.values["end"]);
             }

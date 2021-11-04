@@ -22,10 +22,10 @@ namespace Netus2_Test
         IMarkDao markDaoImpl = DaoImplFactory.GetMarkDaoImpl();
         IUniqueIdentifierDao uniqueIdentifierDaoImpl = DaoImplFactory.GetUniqueIdentifierDaoImpl();
         IAddressDao addressDaoImpl = DaoImplFactory.GetAddressDaoImpl();
+        IEmailDao emailDaoImpl = DaoImplFactory.GetEmailDaoImpl();
         IPhoneNumberDao phoneNumberDaoImpl = DaoImplFactory.GetPhoneNumberDaoImpl();
         IProviderDao providerDaoImpl = DaoImplFactory.GetProviderDaoImpl();
         IApplicationDao applicationDaoImpl = DaoImplFactory.GetApplicationDaoImpl();
-        IJctPersonPhoneNumberDao jctPersonPhoneNumberDaoImpl = DaoImplFactory.GetJctPersonPhoneNumberDaoImpl();
 
         public Organization district;
         public Organization school;
@@ -47,6 +47,8 @@ namespace Netus2_Test
         public PhoneNumber phoneNumber_Teacher;
         public Address address_Teacher;
         public Address address_Student;
+        public Email email_Teacher;
+        public Email email_Student;
         public Provider provider;
         public Provider provider_parent;
         public Application application;
@@ -130,7 +132,8 @@ namespace Netus2_Test
             {
                 phoneNumber_Teacher = phoneNumberDaoImpl.Write(phoneNumber_Teacher, connection);
                 phoneNumber_Teacher.IsPrimary = Enum_True_False.values["true"];
-                jctPersonPhoneNumberDaoImpl.Write(teacher.Id, phoneNumber_Teacher.Id, phoneNumber_Teacher.IsPrimary.Id, connection);
+                teacher.PhoneNumbers.Add(phoneNumber_Teacher);
+                personDaoImpl.Update(teacher, connection);
                 teacher = personDaoImpl.Read(teacher, connection)[0];
             }
             else
@@ -140,7 +143,9 @@ namespace Netus2_Test
             }
 
             address_Teacher = new Address("teacher addr", "somewhere", Enum_State_Province.values["mi"], Enum_Country.values["us"]);
+            address_Teacher.PostalCode = "12345";
             address_Teacher.IsPrimary = Enum_True_False.values["true"];
+            address_Teacher.AddressType = Enum_Address.values["home"];
             if (connection != null)
                 address_Teacher = addressDaoImpl.Write(address_Teacher, connection);
             else
@@ -152,7 +157,19 @@ namespace Netus2_Test
                 teacher = personDaoImpl.Read(teacher, connection)[0];
             }
 
-            uniqueId_Teacher = new UniqueIdentifier(DateTime.Now.ToString() + "_teacher", Enum_Identifier.values["state id"]);
+            email_Teacher = new Email("teacher@123School.org", Enum_Email.values["school"]);
+            if (connection != null)
+                email_Teacher = emailDaoImpl.Write(email_Teacher, connection);
+            else
+                email_Teacher.Id = 1;
+            teacher.Emails.Add(email_Teacher);
+            if(connection != null)
+            {
+                personDaoImpl.Update(teacher, connection);
+                teacher = personDaoImpl.Read(teacher, connection)[0];
+            }
+
+            uniqueId_Teacher = new UniqueIdentifier(DateTime.Now.GetHashCode().ToString(), Enum_Identifier.values["state id"]);
             if (connection != null)
                 uniqueId_Teacher = uniqueIdentifierDaoImpl.Write(uniqueId_Teacher, teacher.Id, connection); 
             else
@@ -228,12 +245,26 @@ namespace Netus2_Test
                 teacher.Relations.Add(student.Id);
 
             address_Student = new Address("student addr", "somewhere", Enum_State_Province.values["mi"], Enum_Country.values["us"]);
+            address_Student.PostalCode = "12345";
             address_Student.IsPrimary = Enum_True_False.values["true"];
+            address_Student.AddressType = Enum_Address.values["home"];
             if (connection != null)
                 address_Student = addressDaoImpl.Write(address_Student, connection);
             else
                 address_Student.Id = 2;
             student.Addresses.Add(address_Student);
+            if (connection != null)
+            {
+                personDaoImpl.Update(student, connection);
+                student = personDaoImpl.Read(student, connection)[0];
+            }
+
+            email_Student = new Email("student@123School.org", Enum_Email.values["school"]);
+            if (connection != null)
+                email_Student = emailDaoImpl.Write(email_Student, connection);
+            else
+                email_Student.Id = 2;
+            student.Emails.Add(email_Student);
             if (connection != null)
             {
                 personDaoImpl.Update(student, connection);
@@ -254,7 +285,7 @@ namespace Netus2_Test
             else
                 mark.Id = 1;
 
-            uniqueId_Student = new UniqueIdentifier(DateTime.Now.ToString() + "_student", Enum_Identifier.values["student id"]);
+            uniqueId_Student = new UniqueIdentifier(DateTime.Now.GetHashCode().ToString(), Enum_Identifier.values["student id"]);
             if (connection != null)
                 uniqueId_Student = uniqueIdentifierDaoImpl.Write(uniqueId_Student, student.Id, connection);
             else
@@ -268,7 +299,8 @@ namespace Netus2_Test
             {
                 phoneNumber_Student = phoneNumberDaoImpl.Write(phoneNumber_Student, connection);
                 phoneNumber_Student.IsPrimary = Enum_True_False.values["true"];
-                jctPersonPhoneNumberDaoImpl.Write(student.Id, phoneNumber_Student.Id, phoneNumber_Student.IsPrimary.Id, connection);
+                student.PhoneNumbers.Add(phoneNumber_Student);
+                personDaoImpl.Update(student, connection);
                 student = personDaoImpl.Read(student, connection)[0];
             }
             else

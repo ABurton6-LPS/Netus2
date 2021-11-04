@@ -46,6 +46,17 @@ namespace Netus2_DatabaseConnection.daoInterfaces
 
         /// <summary>
         /// <para>
+        /// Queries the database for the record that match what is provided.
+        /// </para>
+        /// Populates the returned records with any associated Subject and/or Grade records.
+        /// </summary>
+        /// <param name="courseCode"></param>
+        /// <param name="connection"></param>
+        /// <returns>Null, if no record is found.</returns>
+        public Course Read_UsingCourseCode(string courseCode, IConnectable connection);
+
+        /// <summary>
+        /// <para>
         /// Queries the database for any records that match what is provided. Null datapoints are ignored.
         /// </para>
         /// Populates the returned records with any associated Subject and/or Grade records.

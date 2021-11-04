@@ -210,7 +210,12 @@ namespace Netus2_DatabaseConnection.utilityTools
             dtAddress.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(int);
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "enum_address_id";
+            dtAddress.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
             dtColumn.ColumnName = "suniq";
             dtAddress.Columns.Add(dtColumn);
 
@@ -253,8 +258,40 @@ namespace Netus2_DatabaseConnection.utilityTools
 
         public static DataTable CreateDataTable_Sis_Class()
         {
-            //Do Nothing
-            return null;
+            DataTable dtClass = new DataTable("Class");
+            DataColumn dtColumn;
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "name";
+            dtClass.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "class_code";
+            dtClass.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "enum_class_id";
+            dtClass.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "room";
+            dtClass.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "course_id";
+            dtClass.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "academic_session_id";
+            dtClass.Columns.Add(dtColumn);
+
+            return dtClass;
         }
 
         public static DataTable CreateDataTable_Sis_Enrollment()
