@@ -45,7 +45,7 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AcademicSessionTasks
                 IAcademicSessionDao academicSessionDaoImpl = DaoImplFactory.GetAcademicSessionDaoImpl();
                 academicSessionDaoImpl.SetTaskId(this.Id);
                 AcademicSession foundAcademicSession = academicSessionDaoImpl.
-                    Read_UsingSisBuildingCode_TermCode_TrackCode_Schoolyear(sisBuildingCode, sisTermCode, sisTrackCode, sisSchoolYear, _netus2Connection);
+                    Read_UsingSisBuildingCode_TrackCode_TermCode_Schoolyear(sisBuildingCode, sisTrackCode, sisTermCode, sisSchoolYear, _netus2Connection);
 
                 AcademicSession academicSession = new AcademicSession(sisEnumSession, org, sisTermCode);
                 academicSession.TrackCode = sisTrackCode;

@@ -41,11 +41,11 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.ClassTasks
 
                 string[] sisAcademicSessionCodeArray = sisAcademicSessionId.Split('-');
                 IAcademicSessionDao academicSessionDaoImpl = DaoImplFactory.GetAcademicSessionDaoImpl();
-                AcademicSession academicSession = academicSessionDaoImpl.Read_UsingSisBuildingCode_TermCode_TrackCode_Schoolyear(
-                    sisAcademicSessionCodeArray[0],
-                    sisAcademicSessionCodeArray[1],
-                    sisAcademicSessionCodeArray[2],
-                    Int32.Parse(sisAcademicSessionCodeArray[3]),
+                AcademicSession academicSession = academicSessionDaoImpl.Read_UsingSisBuildingCode_TrackCode_TermCode_Schoolyear(
+                    (sisAcademicSessionCodeArray[0] == "" ? null : sisAcademicSessionCodeArray[0]),
+                    (sisAcademicSessionCodeArray[1] == "" ? null : sisAcademicSessionCodeArray[1]),
+                    (sisAcademicSessionCodeArray[2] == "" ? null : sisAcademicSessionCodeArray[2]),
+                    Int32.Parse((sisAcademicSessionCodeArray[3] == "" ? "-1" : sisAcademicSessionCodeArray[3])),
                     _netus2Connection);
 
                 ClassEnrolled classEnrolled = new ClassEnrolled(sisClassName, sisClassCode, classType, sisRoom, course, academicSession);

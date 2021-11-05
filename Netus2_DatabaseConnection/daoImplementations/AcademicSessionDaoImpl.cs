@@ -122,7 +122,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 throw new Exception(results.Count + " found matching academicSessionId: " + academicSessionId);
         }
 
-        public AcademicSession Read_UsingSisBuildingCode_TermCode_TrackCode_Schoolyear(string sisBuildingCode, string termCode, string trackCode, int schoolYear, IConnectable connection)
+        public AcademicSession Read_UsingSisBuildingCode_TrackCode_TermCode_Schoolyear(string sisBuildingCode, string trackCode, string termCode, int schoolYear, IConnectable connection)
         {
             string sql = "SELECT * FROM academic_session WHERE 1=1 " + 
                 "AND term_code = @term_code " + 

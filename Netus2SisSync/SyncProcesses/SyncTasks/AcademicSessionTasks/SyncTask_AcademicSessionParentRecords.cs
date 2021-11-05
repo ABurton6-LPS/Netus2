@@ -44,7 +44,7 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AcademicSessionTasks
                 IAcademicSessionDao academicSessionDaoImpl = DaoImplFactory.GetAcademicSessionDaoImpl();
                 academicSessionDaoImpl.SetTaskId(this.Id);
                 AcademicSession foundAcademicSession = academicSessionDaoImpl.
-                    Read_UsingSisBuildingCode_TermCode_TrackCode_Schoolyear(sisBuildingCode, sisTermCode, sisTrackCode, sisSchoolYear, _netus2Connection);
+                    Read_UsingSisBuildingCode_TrackCode_TermCode_Schoolyear(sisBuildingCode, sisTrackCode, sisTermCode, sisSchoolYear, _netus2Connection);
 
                 AcademicSession academicSession = new AcademicSession(sisEnumSession, org, sisTermCode);
                 academicSession.TrackCode = sisTrackCode;
@@ -69,7 +69,7 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AcademicSessionTasks
                     string sisParentTermCode = sisParentSessionCodeArray[1];
                     int sisParentSchoolYear = Int32.Parse(sisParentSessionCodeArray[2]);
 
-                    parentAcademicSession = academicSessionDaoImpl.Read_UsingSisBuildingCode_TermCode_TrackCode_Schoolyear(sisParentBuildingCode, sisParentTermCode, sisTrackCode, sisParentSchoolYear, _netus2Connection);
+                    parentAcademicSession = academicSessionDaoImpl.Read_UsingSisBuildingCode_TrackCode_TermCode_Schoolyear(sisParentBuildingCode, sisTrackCode, sisParentTermCode, sisParentSchoolYear, _netus2Connection);
                     if (parentAcademicSession != null)
                     {
                         List<int> childIds = new List<int>();
