@@ -82,7 +82,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
             {
                 sql.Append("AND address_id = @address_id");
                 parameters.Add(new SqlParameter("@address_id", row["address_id"]));
-            }                
+            }
             else
             {
                 if (row["address_line_1"] != DBNull.Value)

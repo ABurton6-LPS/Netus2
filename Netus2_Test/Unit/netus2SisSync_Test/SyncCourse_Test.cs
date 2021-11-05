@@ -3,7 +3,6 @@ using Netus2_DatabaseConnection.dbAccess;
 using System.Data;
 using Moq;
 using System.Collections.Generic;
-using System;
 using Netus2SisSync.SyncProcesses.SyncJobs;
 using Netus2SisSync.SyncProcesses.SyncTasks.CourseTasks;
 using Netus2_DatabaseConnection.daoImplementations;
