@@ -47,14 +47,27 @@ namespace Netus2_DatabaseConnection.daoInterfaces
         public List<DataRow> Read_AllAddressIsNotInTempTable(IConnectable connection);
 
         /// <summary>
+        /// Checks to see if the provided data is associated to any record currently in the database.
+        /// If not, then writes this record to the database.
+        /// If so, then updates the database record to match this object.
+        /// </summary>
+        /// <param name="personId"></param>
+        /// <param name="addressId"></param>
+        /// <param name="isPrimaryId"></param>
+        /// <param name="enumAddressId"></param>
+        /// <param name="connection"></param>
+        public void Update(int personId, int addressId, int isPrimaryId, int enumAddressId, IConnectable connection);
+
+        /// <summary>
         /// Writes a link between the provided data points to the database.
         /// </summary>
         /// <param name="personId"></param>
         /// <param name="addressId"></param>
         /// <param name="isPrimaryId"></param>
+        /// <param name="enumAddressId"></param>
         /// <param name="connection"></param>
         /// <returns>A copy of the record that was written.</returns>
-        public DataRow Write(int personId, int addressId, int isPrimaryId, IConnectable connection);
+        public DataRow Write(int personId, int addressId, int isPrimaryId, int enumAddressId, IConnectable connection);
 
         /// <summary>
         /// Writes a link between the provided data points to the temporary table.

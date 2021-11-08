@@ -17,6 +17,7 @@ namespace Netus2_DatabaseConnection.logObjects
 
         public Enumeration LogAction;
         public Enumeration IsPrimary;
+        public Enumeration AddressType;
 
         public void set_LogAction(int enumLogActionId)
         {
@@ -26,6 +27,11 @@ namespace Netus2_DatabaseConnection.logObjects
         public void set_IsPrimary(int isPrimaryId)
         {
             IsPrimary = Enum_True_False.GetEnumFromId(isPrimaryId);
+        }
+
+        public void set_AddressType(int enumAddressId)
+        {
+            AddressType = Enum_Address.GetEnumFromId(enumAddressId);
         }
     }
 }

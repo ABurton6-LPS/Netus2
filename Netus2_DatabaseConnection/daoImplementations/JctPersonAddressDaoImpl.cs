@@ -97,16 +97,44 @@ namespace Netus2_DatabaseConnection.daoImplementations
             return jctPersonAddressDaos;
         }
 
-        public DataRow Write(int personId, int addressId, int isPrimaryId, IConnectable connection)
+        public void Update(int personId, int addressId, int isPrimaryId, int enumAddressId, IConnectable connection)
         {
-            string sql = "INSERT INTO jct_person_address (" +
-                "person_id, address_id, is_primary_id) VALUES (" +
-                "@person_id, @address_id, @is_primary_id)";
+            DataRow foundJctPersonAddressDao = Read(personId, addressId, connection);
+
+            if (foundJctPersonAddressDao == null)
+                Write(personId, addressId, isPrimaryId, enumAddressId, connection);
+            else
+                UpdateInternals(personId, addressId, isPrimaryId, enumAddressId, connection);
+        }
+
+        private void UpdateInternals(int personId, int addressId, int isPrimaryId, int enumAddressId, IConnectable connection)
+        {
+            string sql = "UPDATE jct_person_address SET " + 
+                "is_primary_id = @is_pimary_id, " +
+                "enum_address_id = @enum_address_id " + 
+                "WHERE person_id = @person_id " + 
+                "AND address_id = @address_id";
 
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("@person_id", personId));
             parameters.Add(new SqlParameter("@address_id", addressId));
             parameters.Add(new SqlParameter("@is_primary_id", isPrimaryId));
+            parameters.Add(new SqlParameter("@enum_address_id", enumAddressId));
+
+            connection.ExecuteNonQuery(sql, parameters);
+        }
+
+        public DataRow Write(int personId, int addressId, int isPrimaryId, int enumAddressId, IConnectable connection)
+        {
+            string sql = "INSERT INTO jct_person_address (" +
+                "person_id, address_id, is_primary_id, enum_address_id) VALUES (" +
+                "@person_id, @address_id, @is_primary_id, @enum_address_id)";
+
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@person_id", personId));
+            parameters.Add(new SqlParameter("@address_id", addressId));
+            parameters.Add(new SqlParameter("@is_primary_id", isPrimaryId));
+            parameters.Add(new SqlParameter("@enum_address_id", enumAddressId));
 
             connection.ExecuteNonQuery(sql, parameters);
 
@@ -114,6 +142,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
             jctPersonAddressDao["person_id"] = personId;
             jctPersonAddressDao["address_id"] = addressId;
             jctPersonAddressDao["is_primary_id"] = isPrimaryId;
+            jctPersonAddressDao["enum_address_id"] = enumAddressId;
 
             return jctPersonAddressDao;
         }

@@ -69,10 +69,24 @@ namespace Netus2SisSync.SyncProcesses
             syncTask.Execute(row, latch);
         }
 
+        public static void Execute_JctPersonAddress_RecordSync(SyncJob job, DataRow row, CountDownLatch latch)
+        {
+            SyncTask syncTask = new SyncTask_JctPersonAddress(
+                "SyncTask_JctPersonAddress", job);
+            syncTask.Execute(row, latch);
+        }
+
         public static void Execute_PhoneNumber_RecordSync(SyncJob job, DataRow row, CountDownLatch latch)
         {
             SyncTask syncTask = new SyncTask_PhoneNumber(
                 "SyncTask_PhoneNumber", job);
+            syncTask.Execute(row, latch);
+        }
+
+        public static void Execute_JctPersonPhoneNumber_RecordSync(SyncJob job, DataRow row, CountDownLatch latch)
+        {
+            SyncTask syncTask = new SyncTask_JctPersonPhoneNumber(
+                "SyncTask_JctPersonPhoneNumber", job);
             syncTask.Execute(row, latch);
         }
 

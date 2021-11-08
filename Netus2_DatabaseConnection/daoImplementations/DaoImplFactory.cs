@@ -35,35 +35,6 @@ namespace Netus2_DatabaseConnection.daoImplementations
         public static IResourceDao MockResourceDaoImpl = null;
         public static IUniqueIdentifierDao MockUniqueIdentifierDaoImpl = null;
 
-        private static IAcademicSessionDao AcademicSessionDaoImpl = null;
-        private static IAddressDao AddressDaoImpl = null;
-        private static IEmailDao EmailDaoImpl = null;
-        private static IApplicationDao ApplicationDaoImpl = null;
-        private static IClassEnrolledDao ClassEnrolledDaoImpl = null;
-        private static ICourseDao CourseDaoImpl = null;
-        private static IEmploymentSessionDao EmploymentSessionDaoImpl = null;
-        private static IEnrollmentDao EnrollmentDaoImpl = null;
-        private static IJctClassPeriodDao JctClassPeriodDaoImpl = null;
-        private static IJctClassPersonDao JctClassPersonDaoImpl = null;
-        private static IJctClassResourceDao JctClassResourceDaoImpl = null;
-        private static IJctCourseGradeDao JctCourseGradeDaoImpl = null;
-        private static IJctCourseSubjectDao JctCourseSubjectDaoImpl = null;
-        private static IJctEnrollmentAcademicSessionDao JctEnrollmentAcademicSessionDaoImpl = null;
-        private static IJctPersonAddressDao JctPersonAddressDaoImpl = null;
-        private static IJctPersonEmailDao JctPersonEmailDaoImpl = null;
-        private static IJctPersonAppDao JctPersonAppDaoImpl = null;
-        private static IJctPersonPhoneNumberDao JctPersonPhoneNumberDaoImpl = null;
-        private static IJctPersonPersonDao JctPersonPersonDaoImpl = null;
-        private static IJctPersonRoleDao JctPersonRoleDaoImpl = null;
-        private static ILineItemDao LineItemDaoImpl = null;
-        private static IMarkDao MarkDaoImpl = null;
-        private static IOrganizationDao OrganizationDaoImpl = null;
-        private static IPersonDao PersonDaoImpl = null;
-        private static IPhoneNumberDao PhoneNumberDaoImpl = null;
-        private static IProviderDao ProviderDaoImpl = null;
-        private static IResourceDao ResourceDaoImpl = null;
-        private static IUniqueIdentifierDao UniqueIdentifierDaoImpl = null;
-
         public static IAcademicSessionDao GetAcademicSessionDaoImpl()
         {
             if (MockAcademicSessionDaoImpl == null && MockAll == false)

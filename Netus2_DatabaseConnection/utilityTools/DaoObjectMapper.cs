@@ -319,11 +319,6 @@ namespace Netus2_DatabaseConnection.utilityTools
             else
                 row["enum_country_id"] = DBNull.Value;
 
-            if (address.AddressType != null)
-                row["enum_address_id"] = address.AddressType.Id;
-            else
-                row["enum_address_id"] = DBNull.Value;
-
             return row;
         }
 
@@ -341,26 +336,24 @@ namespace Netus2_DatabaseConnection.utilityTools
             if (row["address_line_1"] != DBNull.Value)
                 line1 = (string)row["address_line_1"];
 
+            string line2 = null;
+            if (row["address_line_2"] != DBNull.Value)
+                line2 = (string)row["address_line_2"];
+
             string city = null;
             if (row["city"] != DBNull.Value)
                 city = (string)row["city"];
 
-            Address address = new Address(line1, city, stateProvince, country);
+            string postalCode = null;
+            if (row["postal_code"] != DBNull.Value)
+                postalCode = (string)row["postal_code"];
 
-            if (row["enum_address_id"] != DBNull.Value)
-                address.AddressType = Enum_Address.GetEnumFromId((int)row["enum_address_id"]);
-            else
-                address.AddressType = null;
+            Address address = new Address(line1, line2, city, stateProvince, postalCode);
 
             if (row["address_id"] != DBNull.Value)
                 address.Id = (int)row["address_id"];
             else
                 address.Id = -1;
-
-            if (row["address_line_2"] != DBNull.Value)
-                address.Line2 = (string)row["address_line_2"];
-            else
-                address.Line2 = null;
 
             if (row["address_line_3"] != DBNull.Value)
                 address.Line3 = (string)row["address_line_3"];
@@ -377,10 +370,10 @@ namespace Netus2_DatabaseConnection.utilityTools
             else
                 address.Apartment = null;
 
-            if (row["postal_code"] != DBNull.Value)
-                address.PostalCode = (string)row["postal_code"];
+            if (row["enum_country_id"] != DBNull.Value)
+                address.Country = Enum_Country.GetEnumFromId((int)row["enum_country_id"]);
             else
-                address.PostalCode = null;
+                address.Country = null;
 
             return address;
         }
