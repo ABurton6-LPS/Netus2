@@ -596,7 +596,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
                     DataRow foundJctPersonAddress = jctPersonAddressDaoImpl.Read(personId, passedInAddress.Id, connection);
 
                     if (foundJctPersonAddress == null)
-                        foundJctPersonAddress = jctPersonAddressDaoImpl.Write(personId, passedInAddress.Id, passedInAddress.IsPrimary.Id, connection);
+                        foundJctPersonAddress = jctPersonAddressDaoImpl.Write(personId, passedInAddress.Id, passedInAddress.IsPrimary.Id, passedInAddress.AddressType.Id, connection);
 
                     Address foundAddress = addressDaoImpl.Read_UsingAddressId(passedInAddress.Id, connection);
 

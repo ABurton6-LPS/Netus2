@@ -18,13 +18,15 @@ namespace Netus2_DatabaseConnection.dataObjects
         public Enumeration IsPrimary { get; set; }
         public Enumeration AddressType { get; set; }
 
-        public Address(string line1, string city, Enumeration stateProvince, Enumeration country)
+        public Address(string line1, string line2, string city, Enumeration stateProvince, string postalCode)
         {
             Id = -1;
             Line1 = line1;
+            Line2 = line2;
             City = city;
             StateProvince = stateProvince;
-            Country = country;
+            PostalCode = postalCode;
+            Country = Enum_Country.values["us"];
             IsPrimary = Enum_True_False.values["unset"];
             AddressType = Enum_Address.values["unset"];
         }

@@ -142,10 +142,10 @@ namespace Netus2_Test
                 teacher.PhoneNumbers.Add(phoneNumber_Teacher);
             }
 
-            address_Teacher = new Address("teacher addr", "somewhere", Enum_State_Province.values["mi"], Enum_Country.values["us"]);
+            address_Teacher = new Address("teacher addr", "apt. 3", "somewhere", Enum_State_Province.values["mi"], "12345");
             address_Teacher.PostalCode = "12345";
-            address_Teacher.IsPrimary = Enum_True_False.values["true"];
-            address_Teacher.AddressType = Enum_Address.values["home"];
+            address_Teacher.IsPrimary = Enum_True_False.values["false"];
+            address_Teacher.AddressType = Enum_Address.values["office"];
             if (connection != null)
                 address_Teacher = addressDaoImpl.Write(address_Teacher, connection);
             else
@@ -244,7 +244,7 @@ namespace Netus2_Test
             else
                 teacher.Relations.Add(student.Id);
 
-            address_Student = new Address("student addr", "somewhere", Enum_State_Province.values["mi"], Enum_Country.values["us"]);
+            address_Student = new Address("student addr", "apt. 1", "somewhere", Enum_State_Province.values["mi"], "12345");
             address_Student.PostalCode = "12345";
             address_Student.IsPrimary = Enum_True_False.values["true"];
             address_Student.AddressType = Enum_Address.values["home"];

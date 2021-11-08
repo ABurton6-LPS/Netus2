@@ -72,6 +72,19 @@ namespace Netus2_DatabaseConnection.daoImplementations
             return Read(sql, connection, parameters);
         }
 
+        public List<DataRow> Read_AllPhoneNumberIsNotInTempTable(IConnectable connection)
+        {
+            string sql =
+                "SELECT jpp.person_id, jpp.phone_number_id " +
+                "FROM jct_person_phone_number jpp " +
+                "WHERE jpp.phone_number_id NOT IN ( " +
+                "SELECT tjpp.phone_number_id " +
+                "FROM temp_jct_person_phone_number tjpp " +
+                "WHERE tjpp.person_id = jpp.person_id )";
+
+            return Read(sql, connection, new List<SqlParameter>());
+        }
+
         private List<DataRow> Read(string sql, IConnectable connection, List<SqlParameter> parameters)
         {
             DataTable dtJctPersonphoneNumber = DataTableFactory.CreateDataTable_Netus2_JctPersonPhoneNumber();
@@ -103,6 +116,19 @@ namespace Netus2_DatabaseConnection.daoImplementations
             jctPersonPhoneNumberDao["is_primary_id"] = isPrimaryId;
 
             return jctPersonPhoneNumberDao;
+        }
+
+        public void Write_ToTempTable(int personId, int phoneNumberId, IConnectable connection)
+        {
+            string sql = "INSERT INTO temp_jct_person_phone_number (" +
+                "person_id, address_id) VALUES (" +
+                "@person_id, @phone_number_id)";
+
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@person_id", personId));
+            parameters.Add(new SqlParameter("@phone_number_id", phoneNumberId));
+
+            connection.ExecuteNonQuery(sql, parameters);
         }
     }
 }

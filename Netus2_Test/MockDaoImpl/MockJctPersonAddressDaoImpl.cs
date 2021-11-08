@@ -13,6 +13,7 @@ namespace Netus2_Test.MockDaoImpl
         public bool WasCalled_Read = false;
         public bool WasCalled_ReadAllWithAddressId = false;
         public bool WasCalled_ReadAllWithPersonId = false;
+        public bool WasCalled_Update = false;
         public bool WasCalled_Write = false;
         public bool WasCalled_ReadAddressIsNotImTempTable = false;
         public bool WasCalled_WriteTempTable = false;
@@ -33,9 +34,20 @@ namespace Netus2_Test.MockDaoImpl
             WasCalled_Read = true;
 
             DataRow row = DataTableFactory.CreateDataTable_Netus2_JctPersonAddress().NewRow();
-            row["person_id"] = tdBuilder.student.Id;
-            row["address_id"] = tdBuilder.student.Addresses[0].Id;
-            row["is_primary_id"] = tdBuilder.student.Addresses[0].IsPrimary.Id;
+            if(personId == tdBuilder.teacher.Id)
+            {
+                row["person_id"] = tdBuilder.teacher.Id;
+                row["address_id"] = tdBuilder.teacher.Addresses[0].Id;
+                row["is_primary_id"] = tdBuilder.teacher.Addresses[0].IsPrimary.Id;
+                row["enum_address_id"] = tdBuilder.teacher.Addresses[0].AddressType.Id;
+            }
+            else if(personId == tdBuilder.student.Id)
+            {
+                row["person_id"] = tdBuilder.student.Id;
+                row["address_id"] = tdBuilder.student.Addresses[0].Id;
+                row["is_primary_id"] = tdBuilder.student.Addresses[0].IsPrimary.Id;
+                row["enum_address_id"] = tdBuilder.student.Addresses[0].AddressType.Id;
+            }
 
             if (_shouldReadReturnData)
                 return row;
@@ -93,7 +105,12 @@ namespace Netus2_Test.MockDaoImpl
             return list;
         }
 
-        public DataRow Write(int personId, int addressId, int isPrimary, IConnectable connection)
+        public void Update(int personId, int addressId, int isPrimaryId, int enumAddressId, IConnectable connection)
+        {
+            WasCalled_Update = true;
+        }
+
+        public DataRow Write(int personId, int addressId, int isPrimary, int enumAddressId, IConnectable connection)
         {
             WasCalled_Write = true;
 
@@ -101,6 +118,7 @@ namespace Netus2_Test.MockDaoImpl
             row["person_id"] = personId;
             row["address_id"] = addressId;
             row["is_primary_id"] = isPrimary;
+            row["enum_address_id"] = enumAddressId;
 
             return row;
         }

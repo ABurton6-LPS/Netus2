@@ -1032,6 +1032,12 @@ namespace Netus2_DatabaseConnection.utilityTools
                             else
                                 logJctPersonAddress.IsPrimary = null;
                             break;
+                        case "enum_address_id":
+                            if (row[columnName] != DBNull.Value)
+                                logJctPersonAddress.set_AddressType((int)row[columnName]);
+                            else
+                                logJctPersonAddress.AddressType = null;
+                            break;
                         case "log_date":
                             if(row[columnName] != DBNull.Value)
                                 logJctPersonAddress.log_date = (DateTime)row[columnName];

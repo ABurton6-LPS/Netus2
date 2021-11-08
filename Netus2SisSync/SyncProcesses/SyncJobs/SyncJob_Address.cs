@@ -15,6 +15,7 @@ namespace Netus2SisSync.SyncProcesses.SyncJobs
     public class SyncJob_Address : SyncJob
     {
         public DataTable _dtAddress;
+        public DataTable _dtJctPersonAddress;
 
         public SyncJob_Address() : base("SyncJob_Address")
         {
@@ -48,10 +49,8 @@ namespace Netus2SisSync.SyncProcesses.SyncJobs
             try
             {
                 SyncLogger.LogStatus(this, Enum_Sync_Status.values["sisread_start"]);
-                
-                _dtAddress = DataTableFactory.CreateDataTable_Sis_Address();
-                _dtAddress = sisConnection.ReadIntoDataTable(SyncScripts.ReadSis_Address_SQL, _dtAddress);
-
+                ReadFromSisAddress(sisConnection);
+                ReadFromSisJctPersonAddress(sisConnection);
                 SyncLogger.LogStatus(this, Enum_Sync_Status.values["sisread_end"]);
             }
             catch (Exception e)
@@ -63,6 +62,20 @@ namespace Netus2SisSync.SyncProcesses.SyncJobs
             {
                 sisConnection.CloseConnection();
             }
+        }
+
+        public void ReadFromSisAddress(IConnectable sisConnection)
+        {
+            _dtAddress = sisConnection.ReadIntoDataTable(
+                    SyncScripts.ReadSis_Address_SQL,
+                    DataTableFactory.CreateDataTable_Sis_Address());
+        }
+
+        public void ReadFromSisJctPersonAddress(IConnectable sisConnection)
+        {
+            _dtJctPersonAddress = sisConnection.ReadIntoDataTable(
+                    SyncScripts.ReadSis_JctPersonAddress_SQL,
+                    DataTableFactory.CreateDataTable_Sis_JctPersonAddress());
         }
 
         private void RunJobTasks()
@@ -80,6 +93,29 @@ namespace Netus2SisSync.SyncProcesses.SyncJobs
                         DataRow row = _dtAddress.Rows[numberOfThreadsProcessed];
 
                         new Thread(syncThread => SyncTask.Execute_Address_RecordSync(
+                            this, row, latch)).Start();
+
+                        numberOfThreadsProcessed++;
+                    }
+                    else
+                    {
+                        latch.Signal();
+                    }
+                }
+                latch.Wait();
+            }
+
+            numberOfThreadsProcessed = 0;
+            while (numberOfThreadsProcessed < _dtJctPersonAddress.Rows.Count)
+            {
+                CountDownLatch latch = new CountDownLatch(_maxThreadsPerBatch);
+                for (int i = 0; i < _maxThreadsPerBatch; i++)
+                {
+                    if (numberOfThreadsProcessed < _dtJctPersonAddress.Rows.Count)
+                    {
+                        DataRow row = _dtJctPersonAddress.Rows[numberOfThreadsProcessed];
+
+                        new Thread(syncThread => SyncTask.Execute_JctPersonAddress_RecordSync(
                             this, row, latch)).Start();
 
                         numberOfThreadsProcessed++;

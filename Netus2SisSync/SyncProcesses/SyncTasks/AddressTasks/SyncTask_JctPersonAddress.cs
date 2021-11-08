@@ -12,11 +12,11 @@ using System.Diagnostics;
 
 namespace Netus2SisSync.SyncProcesses.SyncTasks.AddressTasks
 {
-    public class SyncTask_Address : SyncTask
+    public class SyncTask_JctPersonAddress : SyncTask
     {
         IConnectable _netus2Connection;
 
-        public SyncTask_Address(string name, SyncJob job)
+        public SyncTask_JctPersonAddress(string name, SyncJob job)
             : base(name, job)
         {
             _netus2Connection = DbConnectionFactory.GetNetus2Connection();
@@ -29,43 +29,47 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AddressTasks
             {
                 string sisAddressLine1 = row["address_line_1"].ToString() == "" ? null : row["address_line_1"].ToString();
                 string sisAddressLine2 = row["address_line_2"].ToString() == "" ? null : row["address_line_2"].ToString();
-                string sisAddressLine3 = row["address_line_3"].ToString() == "" ? null : row["address_line_3"].ToString();
-                string sisAddressLine4 = row["address_line_4"].ToString() == "" ? null : row["address_line_4"].ToString();
-                string sisApartment = row["apartment"].ToString() == "" ? null : row["apartment"].ToString();
                 string sisCity = row["city"].ToString() == "" ? null : row["city"].ToString();
                 Enumeration sisStateProvince = Enum_State_Province.values[row["enum_state_province_id"].ToString().ToLower()];
                 string sisPostalCode = row["postal_code"].ToString() == "" ? null : row["postal_code"].ToString();
-                Enumeration sisCountry = Enum_Country.values[row["enum_country_id"].ToString().ToLower()];
+                string sisPersonId = row["suniq"].ToString() == "" ? null : row["suniq"].ToString();
+                Enumeration sisAddressType = Enum_Address.values[row["enum_address_id"].ToString().ToLower()];
+                Enumeration sisIsPrimary = null;
+                if (sisAddressType == Enum_Address.values["home"])
+                    sisIsPrimary = Enum_True_False.values["true"];
+                else
+                    sisIsPrimary = Enum_True_False.values["false"];
+
+                IPersonDao personDaoImpl = DaoImplFactory.GetPersonDaoImpl();
+                personDaoImpl.SetTaskId(this.Id);
+                Person person = personDaoImpl.Read_UsingUniqueIdentifier(sisPersonId, _netus2Connection);
+
+                if (person.Id <= 0)
+                    throw new Exception("Person with unique id: " + sisPersonId + " doesn't exist within the Netus2 Database");
 
                 Address address = new Address(sisAddressLine1, sisAddressLine2, sisCity, sisStateProvince, sisPostalCode);
-                address.Line3 = sisAddressLine3;
-                address.Line4 = sisAddressLine4;
-                address.Apartment = sisApartment;
-                address.Country = sisCountry;
-
                 IAddressDao addressDaoImpl = DaoImplFactory.GetAddressDaoImpl();
                 addressDaoImpl.SetTaskId(this.Id);
                 List<Address> foundAddresses = addressDaoImpl.Read(address, _netus2Connection);
 
-                if (foundAddresses.Count == 0)
-                {
-                    address = addressDaoImpl.Write(address, _netus2Connection);
-                }
-                else if(foundAddresses.Count == 1)
+                IJctPersonAddressDao jctPersonAddressDaoImpl = DaoImplFactory.GetJctPersonAddressDaoImpl();
+
+                if (foundAddresses.Count == 1)
                 {
                     address.Id = foundAddresses[0].Id;
-                    
-                    if ((address.Line1 != foundAddresses[0].Line1) ||
-                        (address.Line2 != foundAddresses[0].Line2) ||
-                        (address.Line3 != foundAddresses[0].Line3) ||
-                        (address.Line4 != foundAddresses[0].Line4) ||
-                        (address.Apartment != foundAddresses[0].Apartment) ||
-                        (address.City != foundAddresses[0].City) ||
-                        (address.StateProvince != foundAddresses[0].StateProvince) ||
-                        (address.PostalCode != foundAddresses[0].PostalCode) ||
-                        (address.Country != foundAddresses[0].Country))
+
+                    DataRow foundJctPersonAddressDao = jctPersonAddressDaoImpl.Read(person.Id, address.Id, _netus2Connection);
+
+                    if (foundJctPersonAddressDao == null)
                     {
-                        addressDaoImpl.Update(address, _netus2Connection);
+                        jctPersonAddressDaoImpl.Write(person.Id, address.Id, sisIsPrimary.Id, sisAddressType.Id, _netus2Connection);
+                        jctPersonAddressDaoImpl.Write_ToTempTable(person.Id, address.Id, _netus2Connection);
+                    }
+                    else
+                    {
+                        if (((int)foundJctPersonAddressDao["is_primary_id"] != sisIsPrimary.Id) ||
+                            ((int)foundJctPersonAddressDao["enum_address_id"] != sisAddressType.Id))
+                            jctPersonAddressDaoImpl.Update(person.Id, address.Id, sisIsPrimary.Id, sisAddressType.Id, _netus2Connection);
                     }
                 }
                 else

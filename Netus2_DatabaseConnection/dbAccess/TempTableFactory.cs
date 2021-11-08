@@ -38,5 +38,38 @@ namespace Netus2_DatabaseConnection.dbAccess
 
             connection.ExecuteNonQuery(drop_sql);
         }
+
+        public static void Create_JctPersonPhoneNumber()
+        {
+            try
+            {
+                Drop_JctPersonAddress();
+            }
+            catch (Exception e)
+            {
+                if (e.Message.Contains("does not exist") == false)
+                    throw;
+            }
+
+
+            IConnectable connection = DbConnectionFactory.GetNetus2Connection();
+
+            string sql =
+                    "CREATE TABLE temp_jct_person_phone_number ("
+                    + "person_id int,"
+                    + "phone_number_id int)";
+
+            connection.ExecuteNonQuery(sql);
+        }
+
+        public static void Drop_JctPersonPhoneNumber()
+        {
+            IConnectable connection = DbConnectionFactory.GetNetus2Connection();
+
+            string drop_sql =
+                "DROP TABLE temp_jct_person_phone_number";
+
+            connection.ExecuteNonQuery(drop_sql);
+        }
     }
 }

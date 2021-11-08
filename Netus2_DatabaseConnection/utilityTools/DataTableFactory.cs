@@ -222,7 +222,56 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtAddress;
         }
 
+        public static DataTable CreateDataTable_Sis_JctPersonAddress()
+        {
+            DataTable dtJctPersonAddress = new DataTable("JctPersonAddress");
+            DataColumn dtColumn;
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "address_line_1";
+            dtJctPersonAddress.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "address_line_2";
+            dtJctPersonAddress.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "city";
+            dtJctPersonAddress.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "enum_state_province_id";
+            dtJctPersonAddress.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "postal_code";
+            dtJctPersonAddress.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "suniq";
+            dtJctPersonAddress.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "enum_address_id";
+            dtJctPersonAddress.Columns.Add(dtColumn);
+
+            return dtJctPersonAddress;
+        }
+
         public static DataTable CreateDataTable_Sis_PhoneNumber()
+        {
+            //Do Nothing
+            return null;
+        }
+
+        public static DataTable CreateDataTable_Sis_JctPersonPhoneNumber()
         {
             //Do Nothing
             return null;
@@ -513,11 +562,6 @@ namespace Netus2_DatabaseConnection.utilityTools
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(int);
             dtColumn.ColumnName = "enum_country_id";
-            dtAddress.Columns.Add(dtColumn);
-
-            dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(int);
-            dtColumn.ColumnName = "enum_address_id";
             dtAddress.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
@@ -1560,6 +1604,11 @@ namespace Netus2_DatabaseConnection.utilityTools
             dtColumn.ColumnName = "is_primary_id";
             dtJctPersonAddress.Columns.Add(dtColumn);
 
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(int);
+            dtColumn.ColumnName = "enum_address_id";
+            dtJctPersonAddress.Columns.Add(dtColumn);
+
             return dtJctPersonAddress;
         }
 
@@ -1850,11 +1899,6 @@ namespace Netus2_DatabaseConnection.utilityTools
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(int);
             dtColumn.ColumnName = "enum_country_id";
-            dtLogAddress.Columns.Add(dtColumn);
-
-            dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(int);
-            dtColumn.ColumnName = "enum_address_id";
             dtLogAddress.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
@@ -3296,6 +3340,11 @@ namespace Netus2_DatabaseConnection.utilityTools
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(int);
             dtColumn.ColumnName = "is_primary_id";
+            dtLogJctPersonAddress.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(int);
+            dtColumn.ColumnName = "enum_address_id";
             dtLogJctPersonAddress.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
