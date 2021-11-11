@@ -26,7 +26,7 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.OrganizationTasks
             try
             {
                 string sisName = row["name"].ToString() == "" ? null : row["name"].ToString();
-                Enumeration sisEnumOrganization = Enum_Organization.values[row["enum_organization_id"].ToString().ToLower()];
+                Enumeration sisEnumOrganization = row["enum_organization_id"].ToString() == "" ? null : Enum_Organization.GetEnumFromSisCode(row["enum_organization_id"].ToString().ToLower());
                 string sisIdentifier = row["identifier"].ToString() == "" ? null : row["identifier"].ToString();
                 string sisBuildingCode = row["building_code"].ToString() == "" ? null : row["building_code"].ToString();
 

@@ -32,7 +32,7 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AcademicSessionTasks
                 int sisSchoolYear = Int32.Parse(row["school_year"].ToString() == "" ? "-1" : row["school_year"].ToString());
                 string sisTermCode = row["term_code"].ToString() == "" ? null : row["term_code"].ToString();
 
-                Enumeration sisEnumSession = Enum_Session.values[row["enum_session_id"].ToString().ToLower()];
+                Enumeration sisEnumSession = row["enum_session_id"].ToString() == "" ? null : Enum_Session.GetEnumFromSisCode(row["enum_session_id"].ToString().ToLower());
                 string sisName = row["name"].ToString() == "" ? null : row["name"].ToString();
                 DateTime sisStartDate = DateTime.Parse(row["start_date"].ToString());
                 DateTime sisEndDate = DateTime.Parse(row["end_date"].ToString());

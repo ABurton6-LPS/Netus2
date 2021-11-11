@@ -30,7 +30,7 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.PhoneNumberTasks
             {
                 string sisPhoneNubmer = row["phone_number"].ToString() == "" ? null : row["phone_number"].ToString();
                 string sisPersonId = row["person_id"].ToString() == "" ? null : row["person_id"].ToString();
-                Enumeration sisIsPrimaryId = row["is_primary_id"].ToString() == "" ? null : Enum_True_False.GetEnumFromSisCode(row["is_primary_id"].ToString());
+                Enumeration sisIsPrimaryId = row["is_primary_id"].ToString() == "" ? null : Enum_True_False.GetEnumFromSisCode(row["is_primary_id"].ToString().ToLower());
 
                 IPersonDao personDaoImpl = DaoImplFactory.GetPersonDaoImpl();
                 Person person = personDaoImpl.Read_UsingUniqueIdentifier(sisPersonId, _netus2Connection);

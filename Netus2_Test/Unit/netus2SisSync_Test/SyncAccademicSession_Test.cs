@@ -77,7 +77,7 @@ namespace Netus2_Test.Unit.SyncProcess
             tstData.TermCode = tdBuilder.semester1.TermCode;
             tstData.SchoolYear = tdBuilder.semester1.SchoolYear;
             tstData.Name = tdBuilder.semester1.Name;
-            tstData.SessionId = tdBuilder.semester1.SessionType.Netus2Code;
+            tstData.SessionId = tdBuilder.semester1.SessionType.SisCode;
             tstData.StartDate = tdBuilder.semester1.StartDate;
             tstData.EndDate = tdBuilder.semester1.EndDate;
             tstData.ParentSessionCode = tdBuilder.school.SisBuildingCode + "-" + tdBuilder.schoolYear.TermCode + "-" + tdBuilder.schoolYear.SchoolYear;
@@ -87,7 +87,7 @@ namespace Netus2_Test.Unit.SyncProcess
             tstData2.TermCode = tdBuilder.semester2.TermCode;
             tstData2.SchoolYear = tdBuilder.semester2.SchoolYear;
             tstData2.Name = tdBuilder.semester2.Name;
-            tstData2.SessionId = tdBuilder.semester2.SessionType.Netus2Code;
+            tstData2.SessionId = tdBuilder.semester2.SessionType.SisCode;
             tstData2.StartDate = tdBuilder.semester2.StartDate;
             tstData2.EndDate = tdBuilder.semester2.EndDate;
             tstData2.ParentSessionCode = tdBuilder.school.SisBuildingCode + "-" + tdBuilder.schoolYear.TermCode + "-" + tdBuilder.schoolYear.SchoolYear;
@@ -133,7 +133,7 @@ namespace Netus2_Test.Unit.SyncProcess
             tstData.TermCode = tdBuilder.schoolYear.TermCode;
             tstData.SchoolYear = tdBuilder.schoolYear.SchoolYear;
             tstData.Name = tdBuilder.schoolYear.Name;
-            tstData.SessionId = tdBuilder.schoolYear.SessionType.Netus2Code;
+            tstData.SessionId = tdBuilder.schoolYear.SessionType.SisCode;
             tstData.StartDate = tdBuilder.schoolYear.StartDate;
             tstData.EndDate = tdBuilder.schoolYear.EndDate;
             tstData.ParentSessionCode = null;
@@ -161,7 +161,7 @@ namespace Netus2_Test.Unit.SyncProcess
             tstData.TermCode = tdBuilder.schoolYear.TermCode;
             tstData.SchoolYear = tdBuilder.schoolYear.SchoolYear;
             tstData.Name = tdBuilder.schoolYear.Name;
-            tstData.SessionId = tdBuilder.schoolYear.SessionType.Netus2Code;
+            tstData.SessionId = tdBuilder.schoolYear.SessionType.SisCode;
             tstData.StartDate = tdBuilder.schoolYear.StartDate;
             tstData.EndDate = tdBuilder.schoolYear.EndDate;
             tstData.ParentSessionCode = null;
@@ -190,7 +190,7 @@ namespace Netus2_Test.Unit.SyncProcess
             tstData.TermCode = "NewTermCode";
             tstData.SchoolYear = tdBuilder.schoolYear.SchoolYear;
             tstData.Name = tdBuilder.schoolYear.Name;
-            tstData.SessionId = tdBuilder.schoolYear.SessionType.Netus2Code;
+            tstData.SessionId = tdBuilder.schoolYear.SessionType.SisCode;
             tstData.StartDate = tdBuilder.schoolYear.StartDate;
             tstData.EndDate = tdBuilder.schoolYear.EndDate;
             tstData.ParentSessionCode = null;
@@ -218,7 +218,7 @@ namespace Netus2_Test.Unit.SyncProcess
             tstData.TermCode = tdBuilder.schoolYear.TermCode;
             tstData.SchoolYear = 1985;
             tstData.Name = tdBuilder.schoolYear.Name;
-            tstData.SessionId = tdBuilder.schoolYear.SessionType.Netus2Code;
+            tstData.SessionId = tdBuilder.schoolYear.SessionType.SisCode;
             tstData.StartDate = tdBuilder.schoolYear.StartDate;
             tstData.EndDate = tdBuilder.schoolYear.EndDate;
             tstData.ParentSessionCode = null;
@@ -246,7 +246,7 @@ namespace Netus2_Test.Unit.SyncProcess
             tstData.TermCode = tdBuilder.schoolYear.TermCode;
             tstData.SchoolYear = tdBuilder.schoolYear.SchoolYear;
             tstData.Name = "NewTestName";
-            tstData.SessionId = tdBuilder.schoolYear.SessionType.Netus2Code;
+            tstData.SessionId = tdBuilder.schoolYear.SessionType.SisCode;
             tstData.StartDate = tdBuilder.schoolYear.StartDate;
             tstData.EndDate = tdBuilder.schoolYear.EndDate;
             tstData.ParentSessionCode = null;
@@ -302,7 +302,7 @@ namespace Netus2_Test.Unit.SyncProcess
             tstData.TermCode = tdBuilder.schoolYear.TermCode;
             tstData.SchoolYear = tdBuilder.schoolYear.SchoolYear;
             tstData.Name = tdBuilder.schoolYear.Name;
-            tstData.SessionId = tdBuilder.schoolYear.SessionType.Netus2Code;
+            tstData.SessionId = tdBuilder.schoolYear.SessionType.SisCode;
             tstData.StartDate = DateTime.Now;
             tstData.EndDate = tdBuilder.schoolYear.EndDate;
             tstData.ParentSessionCode = null;
@@ -330,7 +330,7 @@ namespace Netus2_Test.Unit.SyncProcess
             tstData.TermCode = tdBuilder.schoolYear.TermCode;
             tstData.SchoolYear = tdBuilder.schoolYear.SchoolYear;
             tstData.Name = tdBuilder.schoolYear.Name;
-            tstData.SessionId = tdBuilder.schoolYear.SessionType.Netus2Code;
+            tstData.SessionId = tdBuilder.schoolYear.SessionType.SisCode;
             tstData.StartDate = tdBuilder.schoolYear.StartDate;
             tstData.EndDate = DateTime.Now;
             tstData.ParentSessionCode = null;
@@ -358,7 +358,7 @@ namespace Netus2_Test.Unit.SyncProcess
             tstData.TermCode = tdBuilder.schoolYear.TermCode;
             tstData.SchoolYear = tdBuilder.schoolYear.SchoolYear;
             tstData.Name = tdBuilder.schoolYear.Name;
-            tstData.SessionId = tdBuilder.schoolYear.SessionType.Netus2Code;
+            tstData.SessionId = tdBuilder.schoolYear.SessionType.SisCode;
             tstData.StartDate = tdBuilder.schoolYear.StartDate;
             tstData.EndDate = tdBuilder.schoolYear.EndDate;
             tstData.ParentSessionCode = null;
@@ -388,7 +388,7 @@ namespace Netus2_Test.Unit.SyncProcess
             tstData.TermCode = tdBuilder.semester2.TermCode;
             tstData.SchoolYear = tdBuilder.semester2.SchoolYear;
             tstData.Name = tdBuilder.semester2.Name;
-            tstData.SessionId = tdBuilder.semester2.SessionType.Netus2Code;
+            tstData.SessionId = tdBuilder.semester2.SessionType.SisCode;
             tstData.StartDate = tdBuilder.semester2.StartDate;
             tstData.EndDate = tdBuilder.semester2.EndDate;
             tstData.ParentSessionCode = tdBuilder.school.SisBuildingCode + "-" + tdBuilder.semester1.TermCode + "-" + tdBuilder.semester1.SchoolYear;
@@ -421,7 +421,7 @@ namespace Netus2_Test.Unit.SyncProcess
             tstData.TermCode = tdBuilder.semester2.TermCode;
             tstData.SchoolYear = tdBuilder.semester2.SchoolYear;
             tstData.Name = tdBuilder.semester2.Name;
-            tstData.SessionId = tdBuilder.semester2.SessionType.Netus2Code;
+            tstData.SessionId = tdBuilder.semester2.SessionType.SisCode;
             tstData.StartDate = tdBuilder.semester2.StartDate;
             tstData.EndDate = tdBuilder.semester2.EndDate;
             tstData.ParentSessionCode = null;

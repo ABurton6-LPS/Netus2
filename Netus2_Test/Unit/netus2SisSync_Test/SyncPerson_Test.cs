@@ -80,28 +80,28 @@ namespace Netus2_Test.Unit.SyncProcess
         public void SisRead_Person_TestData()
         {
             SisPersonTestData tstData = new SisPersonTestData();
-            tstData.PersonType = tdBuilder.teacher.Roles[0].Netus2Code;
+            tstData.PersonType = tdBuilder.teacher.Roles[0].SisCode;
             tstData.SisId = tdBuilder.teacher.UniqueIdentifiers[0].Identifier;
             tstData.FirstName = tdBuilder.teacher.FirstName;
             tstData.MiddleName = tdBuilder.teacher.MiddleName;
             tstData.LastName = tdBuilder.teacher.LastName;
             tstData.BirthDate = tdBuilder.teacher.BirthDate;
-            tstData.Gender = tdBuilder.teacher.Gender.Netus2Code;
-            tstData.Ethnic = tdBuilder.teacher.Ethnic.Netus2Code;
+            tstData.Gender = tdBuilder.teacher.Gender.SisCode;
+            tstData.Ethnic = tdBuilder.teacher.Ethnic.SisCode;
             tstData.ResStatus = null;
             tstData.LoginName = tdBuilder.teacher.LoginName;
             tstData.LoginPw = tdBuilder.teacher.LoginPw;
 
             SisPersonTestData tstData2 = new SisPersonTestData();
-            tstData2.PersonType = tdBuilder.student.Roles[0].Netus2Code;
+            tstData2.PersonType = tdBuilder.student.Roles[0].SisCode;
             tstData2.SisId = tdBuilder.student.UniqueIdentifiers[0].Identifier;
             tstData2.FirstName = tdBuilder.student.FirstName;
             tstData2.MiddleName = tdBuilder.student.MiddleName;
             tstData2.LastName = tdBuilder.student.LastName;
             tstData2.BirthDate = tdBuilder.student.BirthDate;
-            tstData2.Gender = tdBuilder.student.Gender.Netus2Code;
-            tstData2.Ethnic = tdBuilder.student.Ethnic.Netus2Code;
-            tstData2.ResStatus = tdBuilder.student.ResidenceStatus.Netus2Code;
+            tstData2.Gender = tdBuilder.student.Gender.SisCode;
+            tstData2.Ethnic = tdBuilder.student.Ethnic.SisCode;
+            tstData2.ResStatus = tdBuilder.student.ResidenceStatus.SisCode;
             tstData2.LoginName = tdBuilder.student.LoginName;
             tstData2.LoginPw = tdBuilder.student.LoginPw;
 
@@ -147,15 +147,15 @@ namespace Netus2_Test.Unit.SyncProcess
         public void Sync_Person_ShouldWriteNewRecord()
         {
             SisPersonTestData tstData = new SisPersonTestData();
-            tstData.PersonType = tdBuilder.student.Roles[0].Netus2Code;
+            tstData.PersonType = tdBuilder.student.Roles[0].SisCode;
             tstData.SisId = tdBuilder.student.UniqueIdentifiers[0].Identifier;
             tstData.FirstName = tdBuilder.student.FirstName;
             tstData.MiddleName = tdBuilder.student.MiddleName;
             tstData.LastName = tdBuilder.student.LastName;
             tstData.BirthDate = tdBuilder.student.BirthDate;
-            tstData.Gender = tdBuilder.student.Gender.Netus2Code;
-            tstData.Ethnic = tdBuilder.student.Ethnic.Netus2Code;
-            tstData.ResStatus = tdBuilder.student.ResidenceStatus.Netus2Code;
+            tstData.Gender = tdBuilder.student.Gender.SisCode;
+            tstData.Ethnic = tdBuilder.student.Ethnic.SisCode;
+            tstData.ResStatus = tdBuilder.student.ResidenceStatus.SisCode;
             tstData.LoginName = tdBuilder.student.LoginName;
             tstData.LoginPw = tdBuilder.student.LoginPw;
 
@@ -178,15 +178,15 @@ namespace Netus2_Test.Unit.SyncProcess
             mockPersonDaoImpl._shouldReadReturnData = true;
 
             SisPersonTestData tstData = new SisPersonTestData();
-            tstData.PersonType = Enum_Role.values["aide"].Netus2Code;
+            tstData.PersonType = Enum_Role.values["aide"].SisCode;
             tstData.SisId = tdBuilder.uniqueId_Student.Identifier;
             tstData.FirstName = tdBuilder.student.FirstName;
             tstData.MiddleName = tdBuilder.student.MiddleName;
             tstData.LastName = tdBuilder.student.LastName;
             tstData.BirthDate = tdBuilder.student.BirthDate;
-            tstData.Gender = tdBuilder.student.Gender.Netus2Code;
-            tstData.Ethnic = tdBuilder.student.Ethnic.Netus2Code;
-            tstData.ResStatus = tdBuilder.student.ResidenceStatus.Netus2Code;
+            tstData.Gender = tdBuilder.student.Gender.SisCode;
+            tstData.Ethnic = tdBuilder.student.Ethnic.SisCode;
+            tstData.ResStatus = tdBuilder.student.ResidenceStatus.SisCode;
             tstData.LoginName = tdBuilder.student.LoginName;
             tstData.LoginPw = tdBuilder.student.LoginPw;
 
@@ -210,15 +210,15 @@ namespace Netus2_Test.Unit.SyncProcess
             mockPersonDaoImpl._shouldReadReturnData = true;
 
             SisPersonTestData tstData = new SisPersonTestData();
-            tstData.PersonType = tdBuilder.student.Roles[0].Netus2Code;
+            tstData.PersonType = tdBuilder.student.Roles[0].SisCode;
             tstData.SisId = tdBuilder.uniqueId_Student.Identifier;
             tstData.FirstName = "NewFirstName";
             tstData.MiddleName = tdBuilder.student.MiddleName;
             tstData.LastName = tdBuilder.student.LastName;
             tstData.BirthDate = tdBuilder.student.BirthDate;
-            tstData.Gender = tdBuilder.student.Gender.Netus2Code;
-            tstData.Ethnic = tdBuilder.student.Ethnic.Netus2Code;
-            tstData.ResStatus = tdBuilder.student.ResidenceStatus.Netus2Code;
+            tstData.Gender = tdBuilder.student.Gender.SisCode;
+            tstData.Ethnic = tdBuilder.student.Ethnic.SisCode;
+            tstData.ResStatus = tdBuilder.student.ResidenceStatus.SisCode;
             tstData.LoginName = tdBuilder.student.LoginName;
             tstData.LoginPw = tdBuilder.student.LoginPw;
 
@@ -242,15 +242,15 @@ namespace Netus2_Test.Unit.SyncProcess
             mockPersonDaoImpl._shouldReadReturnData = true;
 
             SisPersonTestData tstData = new SisPersonTestData();
-            tstData.PersonType = tdBuilder.student.Roles[0].Netus2Code;
+            tstData.PersonType = tdBuilder.student.Roles[0].SisCode;
             tstData.SisId = tdBuilder.uniqueId_Student.Identifier;
             tstData.FirstName = tdBuilder.student.FirstName;
             tstData.MiddleName = "NewMiddleName";
             tstData.LastName = tdBuilder.student.LastName;
             tstData.BirthDate = tdBuilder.student.BirthDate;
-            tstData.Gender = tdBuilder.student.Gender.Netus2Code;
-            tstData.Ethnic = tdBuilder.student.Ethnic.Netus2Code;
-            tstData.ResStatus = tdBuilder.student.ResidenceStatus.Netus2Code;
+            tstData.Gender = tdBuilder.student.Gender.SisCode;
+            tstData.Ethnic = tdBuilder.student.Ethnic.SisCode;
+            tstData.ResStatus = tdBuilder.student.ResidenceStatus.SisCode;
             tstData.LoginName = tdBuilder.student.LoginName;
             tstData.LoginPw = tdBuilder.student.LoginPw;
 
@@ -274,15 +274,15 @@ namespace Netus2_Test.Unit.SyncProcess
             mockPersonDaoImpl._shouldReadReturnData = true;
 
             SisPersonTestData tstData = new SisPersonTestData();
-            tstData.PersonType = tdBuilder.student.Roles[0].Netus2Code;
+            tstData.PersonType = tdBuilder.student.Roles[0].SisCode;
             tstData.SisId = tdBuilder.uniqueId_Student.Identifier;
             tstData.FirstName = tdBuilder.student.FirstName;
             tstData.MiddleName = tdBuilder.student.MiddleName;
             tstData.LastName = "NewLastName";
             tstData.BirthDate = tdBuilder.student.BirthDate;
-            tstData.Gender = tdBuilder.student.Gender.Netus2Code;
-            tstData.Ethnic = tdBuilder.student.Ethnic.Netus2Code;
-            tstData.ResStatus = tdBuilder.student.ResidenceStatus.Netus2Code;
+            tstData.Gender = tdBuilder.student.Gender.SisCode;
+            tstData.Ethnic = tdBuilder.student.Ethnic.SisCode;
+            tstData.ResStatus = tdBuilder.student.ResidenceStatus.SisCode;
             tstData.LoginName = tdBuilder.student.LoginName;
             tstData.LoginPw = tdBuilder.student.LoginPw;
 
@@ -306,15 +306,15 @@ namespace Netus2_Test.Unit.SyncProcess
             mockPersonDaoImpl._shouldReadReturnData = true;
 
             SisPersonTestData tstData = new SisPersonTestData();
-            tstData.PersonType = tdBuilder.student.Roles[0].Netus2Code;
+            tstData.PersonType = tdBuilder.student.Roles[0].SisCode;
             tstData.SisId = tdBuilder.uniqueId_Student.Identifier;
             tstData.FirstName = tdBuilder.student.FirstName;
             tstData.MiddleName = tdBuilder.student.MiddleName;
             tstData.LastName = tdBuilder.student.LastName;
             tstData.BirthDate = DateTime.Now;
-            tstData.Gender = tdBuilder.student.Gender.Netus2Code;
-            tstData.Ethnic = tdBuilder.student.Ethnic.Netus2Code;
-            tstData.ResStatus = tdBuilder.student.ResidenceStatus.Netus2Code;
+            tstData.Gender = tdBuilder.student.Gender.SisCode;
+            tstData.Ethnic = tdBuilder.student.Ethnic.SisCode;
+            tstData.ResStatus = tdBuilder.student.ResidenceStatus.SisCode;
             tstData.LoginName = tdBuilder.student.LoginName;
             tstData.LoginPw = tdBuilder.student.LoginPw;
 
@@ -338,15 +338,15 @@ namespace Netus2_Test.Unit.SyncProcess
             mockPersonDaoImpl._shouldReadReturnData = true;
 
             SisPersonTestData tstData = new SisPersonTestData();
-            tstData.PersonType = tdBuilder.student.Roles[0].Netus2Code;
+            tstData.PersonType = tdBuilder.student.Roles[0].SisCode;
             tstData.SisId = tdBuilder.uniqueId_Student.Identifier;
             tstData.FirstName = tdBuilder.student.FirstName;
             tstData.MiddleName = tdBuilder.student.MiddleName;
             tstData.LastName = tdBuilder.student.LastName;
             tstData.BirthDate = tdBuilder.student.BirthDate;
-            tstData.Gender = Enum_Gender.values["unset"].Netus2Code;
-            tstData.Ethnic = tdBuilder.student.Ethnic.Netus2Code;
-            tstData.ResStatus = tdBuilder.student.ResidenceStatus.Netus2Code;
+            tstData.Gender = Enum_Gender.values["unset"].SisCode;
+            tstData.Ethnic = tdBuilder.student.Ethnic.SisCode;
+            tstData.ResStatus = tdBuilder.student.ResidenceStatus.SisCode;
             tstData.LoginName = tdBuilder.student.LoginName;
             tstData.LoginPw = tdBuilder.student.LoginPw;
 
@@ -370,15 +370,15 @@ namespace Netus2_Test.Unit.SyncProcess
             mockPersonDaoImpl._shouldReadReturnData = true;
 
             SisPersonTestData tstData = new SisPersonTestData();
-            tstData.PersonType = tdBuilder.student.Roles[0].Netus2Code;
+            tstData.PersonType = tdBuilder.student.Roles[0].SisCode;
             tstData.SisId = tdBuilder.uniqueId_Student.Identifier;
             tstData.FirstName = tdBuilder.student.FirstName;
             tstData.MiddleName = tdBuilder.student.MiddleName;
             tstData.LastName = tdBuilder.student.LastName;
             tstData.BirthDate = tdBuilder.student.BirthDate;
-            tstData.Gender = tdBuilder.student.Gender.Netus2Code;
-            tstData.Ethnic = Enum_Ethnic.values["unset"].Netus2Code;
-            tstData.ResStatus = tdBuilder.student.ResidenceStatus.Netus2Code;
+            tstData.Gender = tdBuilder.student.Gender.SisCode;
+            tstData.Ethnic = Enum_Ethnic.values["unset"].SisCode;
+            tstData.ResStatus = tdBuilder.student.ResidenceStatus.SisCode;
             tstData.LoginName = tdBuilder.student.LoginName;
             tstData.LoginPw = tdBuilder.student.LoginPw;
 
@@ -402,14 +402,14 @@ namespace Netus2_Test.Unit.SyncProcess
             mockPersonDaoImpl._shouldReadReturnData = true;
 
             SisPersonTestData tstData = new SisPersonTestData();
-            tstData.PersonType = tdBuilder.student.Roles[0].Netus2Code;
+            tstData.PersonType = tdBuilder.student.Roles[0].SisCode;
             tstData.SisId = tdBuilder.uniqueId_Student.Identifier;
             tstData.FirstName = tdBuilder.student.FirstName;
             tstData.MiddleName = tdBuilder.student.MiddleName;
             tstData.LastName = tdBuilder.student.LastName;
             tstData.BirthDate = tdBuilder.student.BirthDate;
-            tstData.Gender = tdBuilder.student.Gender.Netus2Code;
-            tstData.Ethnic = tdBuilder.student.Ethnic.Netus2Code;
+            tstData.Gender = tdBuilder.student.Gender.SisCode;
+            tstData.Ethnic = tdBuilder.student.Ethnic.SisCode;
             tstData.ResStatus = "01656";
             tstData.LoginName = tdBuilder.student.LoginName;
             tstData.LoginPw = tdBuilder.student.LoginPw;
@@ -434,15 +434,15 @@ namespace Netus2_Test.Unit.SyncProcess
             mockPersonDaoImpl._shouldReadReturnData = true;
 
             SisPersonTestData tstData = new SisPersonTestData();
-            tstData.PersonType = tdBuilder.student.Roles[0].Netus2Code;
+            tstData.PersonType = tdBuilder.student.Roles[0].SisCode;
             tstData.SisId = tdBuilder.uniqueId_Student.Identifier;
             tstData.FirstName = tdBuilder.student.FirstName;
             tstData.MiddleName = tdBuilder.student.MiddleName;
             tstData.LastName = tdBuilder.student.LastName;
             tstData.BirthDate = tdBuilder.student.BirthDate;
-            tstData.Gender = tdBuilder.student.Gender.Netus2Code;
-            tstData.Ethnic = tdBuilder.student.Ethnic.Netus2Code;
-            tstData.ResStatus = tdBuilder.student.ResidenceStatus.Netus2Code;
+            tstData.Gender = tdBuilder.student.Gender.SisCode;
+            tstData.Ethnic = tdBuilder.student.Ethnic.SisCode;
+            tstData.ResStatus = tdBuilder.student.ResidenceStatus.SisCode;
             tstData.LoginName = "NewLoginName";
             tstData.LoginPw = tdBuilder.student.LoginPw;
 
@@ -466,15 +466,15 @@ namespace Netus2_Test.Unit.SyncProcess
             mockPersonDaoImpl._shouldReadReturnData = true;
 
             SisPersonTestData tstData = new SisPersonTestData();
-            tstData.PersonType = tdBuilder.student.Roles[0].Netus2Code;
+            tstData.PersonType = tdBuilder.student.Roles[0].SisCode;
             tstData.SisId = tdBuilder.uniqueId_Student.Identifier;
             tstData.FirstName = tdBuilder.student.FirstName;
             tstData.MiddleName = tdBuilder.student.MiddleName;
             tstData.LastName = tdBuilder.student.LastName;
             tstData.BirthDate = tdBuilder.student.BirthDate;
-            tstData.Gender = tdBuilder.student.Gender.Netus2Code;
-            tstData.Ethnic = tdBuilder.student.Ethnic.Netus2Code;
-            tstData.ResStatus = tdBuilder.student.ResidenceStatus.Netus2Code;
+            tstData.Gender = tdBuilder.student.Gender.SisCode;
+            tstData.Ethnic = tdBuilder.student.Ethnic.SisCode;
+            tstData.ResStatus = tdBuilder.student.ResidenceStatus.SisCode;
             tstData.LoginName = tdBuilder.student.LoginName;
             tstData.LoginPw = "NewLoginPw";
 

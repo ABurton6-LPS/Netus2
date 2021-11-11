@@ -93,11 +93,11 @@ namespace Netus2_Test.Unit.SyncProcess
             tstData.Line4 = addressTeacher.Line4;
             tstData.Apartment = addressTeacher.Apartment;
             tstData.City = addressTeacher.City;
-            tstData.State = addressTeacher.StateProvince.Netus2Code;
+            tstData.State = addressTeacher.StateProvince.SisCode;
             tstData.Zip = addressTeacher.PostalCode;
-            tstData.Country = addressTeacher.Country.Netus2Code;
-            tstData.IsPrimary = addressTeacher.IsPrimary.Netus2Code;
-            tstData.AddressType = addressTeacher.AddressType.Netus2Code;
+            tstData.Country = addressTeacher.Country.SisCode;
+            tstData.IsPrimary = addressTeacher.IsPrimary.SisCode;
+            tstData.AddressType = addressTeacher.AddressType.SisCode;
             tstData.PersonId = tdBuilder.teacher.UniqueIdentifiers[0].Identifier;
 
             SisAddressTestData tstData2 = new SisAddressTestData();
@@ -107,11 +107,11 @@ namespace Netus2_Test.Unit.SyncProcess
             tstData2.Line4 = addressStudent.Line4;
             tstData2.Apartment = addressStudent.Apartment;
             tstData2.City = addressStudent.City;
-            tstData2.State = addressStudent.StateProvince.Netus2Code;
+            tstData2.State = addressStudent.StateProvince.SisCode;
             tstData2.Zip = addressStudent.PostalCode;
-            tstData2.Country = addressStudent.Country.Netus2Code;
-            tstData2.IsPrimary = addressStudent.IsPrimary.Netus2Code;
-            tstData2.AddressType = addressStudent.AddressType.Netus2Code;
+            tstData2.Country = addressStudent.Country.SisCode;
+            tstData2.IsPrimary = addressStudent.IsPrimary.SisCode;
+            tstData2.AddressType = addressStudent.AddressType.SisCode;
             tstData2.PersonId = tdBuilder.student.UniqueIdentifiers[0].Identifier;
 
             List<SisAddressTestData> tstDataSet = new List<SisAddressTestData>();
@@ -196,10 +196,10 @@ namespace Netus2_Test.Unit.SyncProcess
             tstData.Line1 = tdBuilder.address_Teacher.Line1;
             tstData.Line2 = tdBuilder.address_Teacher.Line2;
             tstData.City = tdBuilder.address_Teacher.City;
-            tstData.State = tdBuilder.address_Teacher.StateProvince.Netus2Code;
+            tstData.State = tdBuilder.address_Teacher.StateProvince.SisCode;
             tstData.Zip = tdBuilder.address_Teacher.PostalCode;
             tstData.PersonId = tdBuilder.teacher.UniqueIdentifiers[0].Identifier;
-            tstData.AddressTypeId = tdBuilder.address_Teacher.AddressType.Netus2Code;
+            tstData.AddressTypeId = tdBuilder.address_Teacher.AddressType.SisCode;
 
             List<SisJctPersonAddressTestData> tstDataSet = new List<SisJctPersonAddressTestData>();
             tstDataSet.Add(tstData);
@@ -233,11 +233,11 @@ namespace Netus2_Test.Unit.SyncProcess
             tstData.Line4 = addressTeacher.Line4;
             tstData.Apartment = addressTeacher.Apartment;
             tstData.City = addressTeacher.City;
-            tstData.State = addressTeacher.StateProvince.Netus2Code;
+            tstData.State = addressTeacher.StateProvince.SisCode;
             tstData.Zip = addressTeacher.PostalCode;
-            tstData.Country = addressTeacher.Country.Netus2Code;
-            tstData.IsPrimary = addressTeacher.IsPrimary.Netus2Code;
-            tstData.AddressType = addressTeacher.AddressType.Netus2Code;
+            tstData.Country = addressTeacher.Country.SisCode;
+            tstData.IsPrimary = addressTeacher.IsPrimary.SisCode;
+            tstData.AddressType = addressTeacher.AddressType.SisCode;
             tstData.PersonId = tdBuilder.teacher.UniqueIdentifiers[0].Identifier;
 
             List<SisAddressTestData> tstDataSet = new List<SisAddressTestData>();
@@ -268,11 +268,11 @@ namespace Netus2_Test.Unit.SyncProcess
             tstData.Line4 = addressTeacher.Line4;
             tstData.Apartment = addressTeacher.Apartment;
             tstData.City = addressTeacher.City;
-            tstData.State = addressTeacher.StateProvince.Netus2Code;
+            tstData.State = addressTeacher.StateProvince.SisCode;
             tstData.Zip = addressTeacher.PostalCode;
-            tstData.Country = addressTeacher.Country.Netus2Code;
-            tstData.IsPrimary = addressTeacher.IsPrimary.Netus2Code;
-            tstData.AddressType = addressTeacher.AddressType.Netus2Code;
+            tstData.Country = addressTeacher.Country.SisCode;
+            tstData.IsPrimary = addressTeacher.IsPrimary.SisCode;
+            tstData.AddressType = addressTeacher.AddressType.SisCode;
             tstData.PersonId = tdBuilder.teacher.UniqueIdentifiers[0].Identifier;
 
             List<SisAddressTestData> tstDataSet = new List<SisAddressTestData>();
@@ -303,11 +303,11 @@ namespace Netus2_Test.Unit.SyncProcess
             tstData.Line4 = addressTeacher.Line4;
             tstData.Apartment = addressTeacher.Apartment;
             tstData.City = addressTeacher.City;
-            tstData.State = addressTeacher.StateProvince.Netus2Code;
+            tstData.State = addressTeacher.StateProvince.SisCode;
             tstData.Zip = addressTeacher.PostalCode;
-            tstData.Country = addressTeacher.Country.Netus2Code;
-            tstData.IsPrimary = addressTeacher.IsPrimary.Netus2Code;
-            tstData.AddressType = addressTeacher.AddressType.Netus2Code;
+            tstData.Country = addressTeacher.Country.SisCode;
+            tstData.IsPrimary = addressTeacher.IsPrimary.SisCode;
+            tstData.AddressType = addressTeacher.AddressType.SisCode;
             tstData.PersonId = tdBuilder.teacher.UniqueIdentifiers[0].Identifier;
 
             List<SisAddressTestData> tstDataSet = new List<SisAddressTestData>();
@@ -338,11 +338,11 @@ namespace Netus2_Test.Unit.SyncProcess
             tstData.Line4 = addressTeacher.Line4;
             tstData.Apartment = addressTeacher.Apartment;
             tstData.City = addressTeacher.City;
-            tstData.State = addressTeacher.StateProvince.Netus2Code;
+            tstData.State = addressTeacher.StateProvince.SisCode;
             tstData.Zip = addressTeacher.PostalCode;
-            tstData.Country = addressTeacher.Country.Netus2Code;
-            tstData.IsPrimary = addressTeacher.IsPrimary.Netus2Code;
-            tstData.AddressType = addressTeacher.AddressType.Netus2Code;
+            tstData.Country = addressTeacher.Country.SisCode;
+            tstData.IsPrimary = addressTeacher.IsPrimary.SisCode;
+            tstData.AddressType = addressTeacher.AddressType.SisCode;
             tstData.PersonId = tdBuilder.teacher.UniqueIdentifiers[0].Identifier;
 
             List<SisAddressTestData> tstDataSet = new List<SisAddressTestData>();
@@ -373,11 +373,11 @@ namespace Netus2_Test.Unit.SyncProcess
             tstData.Line4 = addressTeacher.Line4;
             tstData.Apartment = addressTeacher.Apartment;
             tstData.City = addressTeacher.City;
-            tstData.State = addressTeacher.StateProvince.Netus2Code;
+            tstData.State = addressTeacher.StateProvince.SisCode;
             tstData.Zip = addressTeacher.PostalCode;
-            tstData.Country = addressTeacher.Country.Netus2Code;
-            tstData.IsPrimary = addressTeacher.IsPrimary.Netus2Code;
-            tstData.AddressType = addressTeacher.AddressType.Netus2Code;
+            tstData.Country = addressTeacher.Country.SisCode;
+            tstData.IsPrimary = addressTeacher.IsPrimary.SisCode;
+            tstData.AddressType = addressTeacher.AddressType.SisCode;
             tstData.PersonId = tdBuilder.teacher.UniqueIdentifiers[0].Identifier;
 
             List<SisAddressTestData> tstDataSet = new List<SisAddressTestData>();
@@ -408,11 +408,11 @@ namespace Netus2_Test.Unit.SyncProcess
             tstData.Line4 = "something strange";
             tstData.Apartment = addressTeacher.Apartment;
             tstData.City = addressTeacher.City;
-            tstData.State = addressTeacher.StateProvince.Netus2Code;
+            tstData.State = addressTeacher.StateProvince.SisCode;
             tstData.Zip = addressTeacher.PostalCode;
-            tstData.Country = addressTeacher.Country.Netus2Code;
-            tstData.IsPrimary = addressTeacher.IsPrimary.Netus2Code;
-            tstData.AddressType = addressTeacher.AddressType.Netus2Code;
+            tstData.Country = addressTeacher.Country.SisCode;
+            tstData.IsPrimary = addressTeacher.IsPrimary.SisCode;
+            tstData.AddressType = addressTeacher.AddressType.SisCode;
             tstData.PersonId = tdBuilder.teacher.UniqueIdentifiers[0].Identifier;
 
             List<SisAddressTestData> tstDataSet = new List<SisAddressTestData>();
@@ -443,11 +443,11 @@ namespace Netus2_Test.Unit.SyncProcess
             tstData.Line4 = addressTeacher.Line4;
             tstData.Apartment = "togetherment?";
             tstData.City = addressTeacher.City;
-            tstData.State = addressTeacher.StateProvince.Netus2Code;
+            tstData.State = addressTeacher.StateProvince.SisCode;
             tstData.Zip = addressTeacher.PostalCode;
-            tstData.Country = addressTeacher.Country.Netus2Code;
-            tstData.IsPrimary = addressTeacher.IsPrimary.Netus2Code;
-            tstData.AddressType = addressTeacher.AddressType.Netus2Code;
+            tstData.Country = addressTeacher.Country.SisCode;
+            tstData.IsPrimary = addressTeacher.IsPrimary.SisCode;
+            tstData.AddressType = addressTeacher.AddressType.SisCode;
             tstData.PersonId = tdBuilder.teacher.UniqueIdentifiers[0].Identifier;
 
             List<SisAddressTestData> tstDataSet = new List<SisAddressTestData>();
@@ -478,11 +478,11 @@ namespace Netus2_Test.Unit.SyncProcess
             tstData.Line4 = addressTeacher.Line4;
             tstData.Apartment = addressTeacher.Apartment;
             tstData.City = "This one isn't too windy";
-            tstData.State = addressTeacher.StateProvince.Netus2Code;
+            tstData.State = addressTeacher.StateProvince.SisCode;
             tstData.Zip = addressTeacher.PostalCode;
-            tstData.Country = addressTeacher.Country.Netus2Code;
-            tstData.IsPrimary = addressTeacher.IsPrimary.Netus2Code;
-            tstData.AddressType = addressTeacher.AddressType.Netus2Code;
+            tstData.Country = addressTeacher.Country.SisCode;
+            tstData.IsPrimary = addressTeacher.IsPrimary.SisCode;
+            tstData.AddressType = addressTeacher.AddressType.SisCode;
             tstData.PersonId = tdBuilder.teacher.UniqueIdentifiers[0].Identifier;
 
             List<SisAddressTestData> tstDataSet = new List<SisAddressTestData>();
@@ -515,9 +515,9 @@ namespace Netus2_Test.Unit.SyncProcess
             tstData.City = addressTeacher.City;
             tstData.State = "unset";
             tstData.Zip = addressTeacher.PostalCode;
-            tstData.Country = addressTeacher.Country.Netus2Code;
-            tstData.IsPrimary = addressTeacher.IsPrimary.Netus2Code;
-            tstData.AddressType = addressTeacher.AddressType.Netus2Code;
+            tstData.Country = addressTeacher.Country.SisCode;
+            tstData.IsPrimary = addressTeacher.IsPrimary.SisCode;
+            tstData.AddressType = addressTeacher.AddressType.SisCode;
             tstData.PersonId = tdBuilder.teacher.UniqueIdentifiers[0].Identifier;
 
             List<SisAddressTestData> tstDataSet = new List<SisAddressTestData>();
@@ -548,11 +548,11 @@ namespace Netus2_Test.Unit.SyncProcess
             tstData.Line4 = addressTeacher.Line4;
             tstData.Apartment = addressTeacher.Apartment;
             tstData.City = addressTeacher.City;
-            tstData.State = addressTeacher.StateProvince.Netus2Code;
+            tstData.State = addressTeacher.StateProvince.SisCode;
             tstData.Zip = addressTeacher.PostalCode;
             tstData.Country = "unset";
-            tstData.IsPrimary = addressTeacher.IsPrimary.Netus2Code;
-            tstData.AddressType = addressTeacher.AddressType.Netus2Code;
+            tstData.IsPrimary = addressTeacher.IsPrimary.SisCode;
+            tstData.AddressType = addressTeacher.AddressType.SisCode;
             tstData.PersonId = tdBuilder.teacher.UniqueIdentifiers[0].Identifier;
 
             List<SisAddressTestData> tstDataSet = new List<SisAddressTestData>();
@@ -578,10 +578,10 @@ namespace Netus2_Test.Unit.SyncProcess
             tstData.Line1 = tdBuilder.address_Teacher.Line1;
             tstData.Line2 = tdBuilder.address_Teacher.Line2;
             tstData.City = tdBuilder.address_Teacher.City;
-            tstData.State = tdBuilder.address_Teacher.StateProvince.Netus2Code;
+            tstData.State = tdBuilder.address_Teacher.StateProvince.SisCode;
             tstData.Zip = tdBuilder.address_Teacher.PostalCode;
             tstData.PersonId = tdBuilder.teacher.UniqueIdentifiers[0].Identifier;
-            tstData.AddressTypeId = tdBuilder.address_Teacher.AddressType.Netus2Code;
+            tstData.AddressTypeId = tdBuilder.address_Teacher.AddressType.SisCode;
 
             List<SisJctPersonAddressTestData> tstDataSet = new List<SisJctPersonAddressTestData>();
             tstDataSet.Add(tstData);
@@ -609,10 +609,10 @@ namespace Netus2_Test.Unit.SyncProcess
             tstData.Line1 = tdBuilder.address_Teacher.Line1;
             tstData.Line2 = tdBuilder.address_Teacher.Line2;
             tstData.City = tdBuilder.address_Teacher.City;
-            tstData.State = tdBuilder.address_Teacher.StateProvince.Netus2Code;
+            tstData.State = tdBuilder.address_Teacher.StateProvince.SisCode;
             tstData.Zip = tdBuilder.address_Teacher.PostalCode;
             tstData.PersonId = tdBuilder.teacher.UniqueIdentifiers[0].Identifier;
-            tstData.AddressTypeId = tdBuilder.address_Teacher.AddressType.Netus2Code;
+            tstData.AddressTypeId = tdBuilder.address_Teacher.AddressType.SisCode;
 
             List<SisJctPersonAddressTestData> tstDataSet = new List<SisJctPersonAddressTestData>();
             tstDataSet.Add(tstData);
@@ -640,7 +640,7 @@ namespace Netus2_Test.Unit.SyncProcess
             tstData.Line1 = tdBuilder.address_Teacher.Line1;
             tstData.Line2 = tdBuilder.address_Teacher.Line2;
             tstData.City = tdBuilder.address_Teacher.City;
-            tstData.State = tdBuilder.address_Teacher.StateProvince.Netus2Code;
+            tstData.State = tdBuilder.address_Teacher.StateProvince.SisCode;
             tstData.Zip = tdBuilder.address_Teacher.PostalCode;
             tstData.PersonId = tdBuilder.teacher.UniqueIdentifiers[0].Identifier;
             tstData.AddressTypeId = "home";

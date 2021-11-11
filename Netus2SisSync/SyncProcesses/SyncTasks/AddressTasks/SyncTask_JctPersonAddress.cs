@@ -30,10 +30,10 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AddressTasks
                 string sisAddressLine1 = row["address_line_1"].ToString() == "" ? null : row["address_line_1"].ToString();
                 string sisAddressLine2 = row["address_line_2"].ToString() == "" ? null : row["address_line_2"].ToString();
                 string sisCity = row["city"].ToString() == "" ? null : row["city"].ToString();
-                Enumeration sisStateProvince = Enum_State_Province.values[row["enum_state_province_id"].ToString().ToLower()];
+                Enumeration sisStateProvince = row["enum_state_province_id"].ToString() == "" ? null : Enum_State_Province.GetEnumFromSisCode(row["enum_state_province_id"].ToString().ToLower());
                 string sisPostalCode = row["postal_code"].ToString() == "" ? null : row["postal_code"].ToString();
                 string sisPersonId = row["suniq"].ToString() == "" ? null : row["suniq"].ToString();
-                Enumeration sisAddressType = Enum_Address.values[row["enum_address_id"].ToString().ToLower()];
+                Enumeration sisAddressType = row["enum_address_id"].ToString() == "" ? null : Enum_Address.GetEnumFromSisCode(row["enum_address_id"].ToString().ToLower());
                 Enumeration sisIsPrimary = null;
                 if (sisAddressType == Enum_Address.values["home"])
                     sisIsPrimary = Enum_True_False.values["true"];

@@ -62,8 +62,8 @@ namespace Netus2_Test.Unit.SyncProcess
             SisCourseTestData tstData = new SisCourseTestData();
             tstData.Name = tdBuilder.spanishCourse.Name;
             tstData.CourseCode = tdBuilder.spanishCourse.CourseCode;
-            tstData.Subject = tdBuilder.spanishCourse.Subjects[0].Netus2Code;
-            tstData.Grade = tdBuilder.spanishCourse.Grades[0].Netus2Code;
+            tstData.Subject = tdBuilder.spanishCourse.Subjects[0].SisCode;
+            tstData.Grade = tdBuilder.spanishCourse.Grades[0].SisCode;
 
             List<SisCourseTestData> tstDataSet = new List<SisCourseTestData>();
             tstDataSet.Add(tstData);
@@ -109,13 +109,13 @@ namespace Netus2_Test.Unit.SyncProcess
             tstData.CourseCode = tdBuilder.spanishCourse.CourseCode;
             foreach(Enumeration enumSubject in tdBuilder.spanishCourse.Subjects)
             {
-                tstData.Subject += enumSubject.Netus2Code + ',';
+                tstData.Subject += enumSubject.SisCode + ',';
             }
             tstData.Subject = tstData.Subject.Remove(tstData.Subject.Length - 1, 1);
 
             foreach(Enumeration enumGrade in tdBuilder.spanishCourse.Grades)
             {
-                tstData.Grade += enumGrade.Netus2Code + ',';
+                tstData.Grade += enumGrade.SisCode + ',';
             }
             tstData.Grade = tstData.Grade.Remove(tstData.Grade.Length - 1, 1);
 
@@ -142,13 +142,13 @@ namespace Netus2_Test.Unit.SyncProcess
             tstData.CourseCode = "NewCourseCode";
             foreach (Enumeration enumSubject in tdBuilder.spanishCourse.Subjects)
             {
-                tstData.Subject += enumSubject.Netus2Code + ',';
+                tstData.Subject += enumSubject.SisCode + ',';
             }
             tstData.Subject = tstData.Subject.Remove(tstData.Subject.Length - 1, 1);
 
             foreach (Enumeration enumGrade in tdBuilder.spanishCourse.Grades)
             {
-                tstData.Grade += enumGrade.Netus2Code + ',';
+                tstData.Grade += enumGrade.SisCode + ',';
             }
             tstData.Grade = tstData.Grade.Remove(tstData.Grade.Length - 1, 1);
 
@@ -174,13 +174,13 @@ namespace Netus2_Test.Unit.SyncProcess
             tstData.CourseCode = tdBuilder.spanishCourse.CourseCode;
             foreach (Enumeration enumSubject in tdBuilder.spanishCourse.Subjects)
             {
-                tstData.Subject += enumSubject.Netus2Code + ',';
+                tstData.Subject += enumSubject.SisCode + ',';
             }
             tstData.Subject = tstData.Subject.Remove(tstData.Subject.Length - 1, 1);
 
             foreach (Enumeration enumGrade in tdBuilder.spanishCourse.Grades)
             {
-                tstData.Grade += enumGrade.Netus2Code + ',';
+                tstData.Grade += enumGrade.SisCode + ',';
             }
             tstData.Grade = tstData.Grade.Remove(tstData.Grade.Length - 1, 1);
 
@@ -208,7 +208,7 @@ namespace Netus2_Test.Unit.SyncProcess
 
             foreach (Enumeration enumGrade in tdBuilder.spanishCourse.Grades)
             {
-                tstData.Grade += enumGrade.Netus2Code + ',';
+                tstData.Grade += enumGrade.SisCode + ',';
             }
             tstData.Grade = tstData.Grade.Remove(tstData.Grade.Length - 1, 1);
 
@@ -235,14 +235,14 @@ namespace Netus2_Test.Unit.SyncProcess
 
             foreach (Enumeration enumSubject in tdBuilder.spanishCourse.Subjects)
             {
-                tstData.Subject += enumSubject.Netus2Code + ',';
+                tstData.Subject += enumSubject.SisCode + ',';
             }
             tstData.Subject = tstData.Subject.Remove(tstData.Subject.Length - 1, 1);
             tstData.Subject += ("," + Enum_Subject.values["be"].SisCode);
 
             foreach (Enumeration enumGrade in tdBuilder.spanishCourse.Grades)
             {
-                tstData.Grade += enumGrade.Netus2Code + ',';
+                tstData.Grade += enumGrade.SisCode + ',';
             }
             tstData.Grade = tstData.Grade.Remove(tstData.Grade.Length - 1, 1);
 
@@ -268,13 +268,13 @@ namespace Netus2_Test.Unit.SyncProcess
             tstData.CourseCode = tdBuilder.spanishCourse.CourseCode;
             foreach (Enumeration enumSubject in tdBuilder.spanishCourse.Subjects)
             {
-                tstData.Subject += enumSubject.Netus2Code + ',';
+                tstData.Subject += enumSubject.SisCode + ',';
             }
             tstData.Subject = tstData.Subject.Remove(tstData.Subject.Length - 1, 1);
 
             foreach (Enumeration enumGrade in tdBuilder.spanishCourse.Grades)
             {
-                tstData.Grade += enumGrade.Netus2Code + ',';
+                tstData.Grade += enumGrade.SisCode + ',';
             }
             tstData.Grade = tstData.Grade.Remove(tstData.Grade.Length - 1, 1);
             tstData.Grade += "," + Enum_Grade.values["14"].SisCode;
@@ -301,7 +301,7 @@ namespace Netus2_Test.Unit.SyncProcess
             tstData.CourseCode = tdBuilder.spanishCourse.CourseCode;
             foreach (Enumeration enumSubject in tdBuilder.spanishCourse.Subjects)
             {
-                tstData.Subject += enumSubject.Netus2Code + ',';
+                tstData.Subject += enumSubject.SisCode + ',';
             }
             tstData.Subject = tstData.Subject.Remove(tstData.Subject.Length - 1, 1);
 
