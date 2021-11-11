@@ -50,6 +50,14 @@ namespace Netus2_DatabaseConnection.daoInterfaces
         public PhoneNumber Read_WithPhoneNumberId(int phoneNumberId, IConnectable connection);
 
         /// <summary>
+        /// Queries the database for the record associated with the passed-in data.
+        /// </summary>
+        /// <param name="phoneNumberValeu"></param>
+        /// <param name="connection"></param>
+        /// <returns>Null, if no records are found.</returns>
+        public PhoneNumber Read_WithPhoneNumberValue(string phoneNumberValeu, IConnectable connection);
+
+        /// <summary>
         /// <para>
         /// Checks to see if the provided data is associated to any record currently in the database.
         /// If not, then writes this record to the database.

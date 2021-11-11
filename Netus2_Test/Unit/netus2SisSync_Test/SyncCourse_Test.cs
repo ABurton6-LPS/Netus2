@@ -319,6 +319,12 @@ namespace Netus2_Test.Unit.SyncProcess
             Assert.IsTrue(mockCourseDaoImpl.WasCalled_Update);
         }
 
+        [TearDown]
+        public void TearDown()
+        {
+            DaoImplFactory.MockCourseDaoImpl = null;
+        }
+
         private DataTable BuildTestDataTable(List<SisCourseTestData> tstDataSet)
         {
             DataTable dtCourse = DataTableFactory.CreateDataTable_Sis_Course();

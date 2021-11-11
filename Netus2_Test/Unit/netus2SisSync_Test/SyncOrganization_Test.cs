@@ -310,6 +310,12 @@ namespace Netus2_Test.Unit.SyncProcess
             Assert.IsTrue(mockOrganizationDaoImpl.WasCalled_UpdateWithoutParentId);
         }
 
+        [TearDown]
+        public void TearDown()
+        {
+            DaoImplFactory.MockOrganizationDaoImpl = null;
+        }
+
         private DataTable BuildTestDataTable(List<SisOrganizationTestData> tstDataSet)
         {
             DataTable dtOrganization = DataTableFactory.CreateDataTable_Sis_Organization();

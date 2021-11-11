@@ -47,6 +47,17 @@ namespace Netus2_DatabaseConnection.daoInterfaces
         public List<DataRow> Read_AllPhoneNumberIsNotInTempTable(IConnectable connection);
 
         /// <summary>
+        /// Checks to see if the provided data is associated to any record currently in the database.
+        /// If not, then writes this record to the database.
+        /// If so, then updates the database record to match this object.
+        /// </summary>
+        /// <param name="personId"></param>
+        /// <param name="phoneNumberId"></param>
+        /// <param name="isPrimaryId"></param>
+        /// <param name="connection"></param>
+        public void Update(int personId, int phoneNumberId, int isPrimaryId, IConnectable connection);
+
+        /// <summary>
         /// Writes a link between the provided data points to the database.
         /// </summary>
         /// <param name="personId"></param>

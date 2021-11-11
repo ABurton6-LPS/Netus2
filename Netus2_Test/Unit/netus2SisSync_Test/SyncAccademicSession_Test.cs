@@ -442,6 +442,13 @@ namespace Netus2_Test.Unit.SyncProcess
             Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_Update);
         }
 
+        [TearDown]
+        public void TearDown()
+        {
+            DaoImplFactory.MockAcademicSessionDaoImpl = null;
+            DaoImplFactory.MockOrganizationDaoImpl = null;
+        }
+
         private DataTable BuildTestDataTable(List<SisAcademicSessionTestData> tstDataSet)
         {
             DataTable dtAcademicSession = DataTableFactory.CreateDataTable_Sis_AcademicSession();

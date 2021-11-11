@@ -56,6 +56,23 @@ namespace Netus2_DatabaseConnection.daoImplementations
             }
         }
 
+        public PhoneNumber Read_WithPhoneNumberValue(string phoneNumberValue, IConnectable connection)
+        {
+            string sql = "SELECT * FROM phone_number WHERE phone_number = @phone_number";
+
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@phone_number", phoneNumberValue));
+
+            List<PhoneNumber> results = Read(sql, connection, parameters);
+
+            if (results.Count == 0)
+                return null;
+            else if (results.Count == 1)
+                return results[0];
+            else
+                throw new Exception(results.Count + " found matching phone number value: " + phoneNumberValue);
+        }
+
         public PhoneNumber Read_WithPhoneNumberId(int phoneNumberId, IConnectable connection)
         {
             string sql = "SELECT * FROM phone_number WHERE phone_number_id = @phone_number_id";

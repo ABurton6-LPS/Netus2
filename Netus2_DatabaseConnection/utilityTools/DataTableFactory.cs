@@ -267,14 +267,43 @@ namespace Netus2_DatabaseConnection.utilityTools
 
         public static DataTable CreateDataTable_Sis_PhoneNumber()
         {
-            //Do Nothing
-            return null;
+            DataTable dtPhoneNumber = new DataTable("PhoneNumber");
+            DataColumn dtColumn;
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "phone_number";
+            dtPhoneNumber.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "phone_type_code";
+            dtPhoneNumber.Columns.Add(dtColumn);
+
+            return dtPhoneNumber;
         }
 
         public static DataTable CreateDataTable_Sis_JctPersonPhoneNumber()
         {
-            //Do Nothing
-            return null;
+            DataTable dtJctPersonPhoneNumber = new DataTable("JctPersonPhoneNumber");
+            DataColumn dtColumn;
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "phone_number";
+            dtJctPersonPhoneNumber.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "person_id";
+            dtJctPersonPhoneNumber.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "is_primary_id";
+            dtJctPersonPhoneNumber.Columns.Add(dtColumn);
+
+            return dtJctPersonPhoneNumber;
         }
 
         public static DataTable CreateDataTable_Sis_Course()

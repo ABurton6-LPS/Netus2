@@ -9,14 +9,11 @@ namespace Netus2_Test.MockDaoImpl
     {
         public TestDataBuilder tdBuilder;
         public bool WasCalled_Delete = false;
-        public bool WasCalled_ReadWithPersonId = false;
-        public bool WasCalled_ReadWithoutPersonId = false;
-        public bool WasCalled_ReadAllWithPersonId = false;
-        public bool WasCalled_ReadAllWithPhoneNumberId = false;
-        public bool WasCalled_UpdateWithPersonId = false;
-        public bool WasCalled_UpdateWithoutPersonId = false;
-        public bool WasCalled_WriteWithPersonId = false;
-        public bool WasCalled_WriteWithoutPersonId = false;
+        public bool WasCalled_Read = false;
+        public bool WasCalled_ReadWithPhoneNumberId = false;
+        public bool WasCalled_ReadWithPhoneNumberValue = false;
+        public bool WasCalled_Update = false;
+        public bool WasCalled_Write = false;
         public bool _shouldReadReturnData = false;
 
         public void SetTaskId(int taskId)
@@ -29,103 +26,74 @@ namespace Netus2_Test.MockDaoImpl
             return null;
         }
 
-        public MockPhoneNumberDaoImpl(TestDataBuilder tdBuilder)
-        {
-            this.tdBuilder = tdBuilder;
-        }
-
         public void Delete(PhoneNumber phoneNumber, IConnectable connection)
         {
             WasCalled_Delete = true;
         }
 
-        public List<PhoneNumber> Read_AllWithPersonId(int personId, IConnectable connection)
+        public List<PhoneNumber> Read(PhoneNumber phoneNumber, IConnectable connection)
         {
-            WasCalled_ReadAllWithPersonId = true;
+            WasCalled_Read = true;
 
-            List<PhoneNumber> returnData = new List<PhoneNumber>();
+            List<PhoneNumber> result = new List<PhoneNumber>();
 
-            if (_shouldReadReturnData)
+            if(_shouldReadReturnData)
             {
-                if (personId == tdBuilder.teacher.Id)
-                    returnData.Add(tdBuilder.phoneNumber_Teacher);
-                else
-                    returnData.Add(tdBuilder.phoneNumber_Student);
+                if (phoneNumber.PhoneNumberValue == tdBuilder.teacher.PhoneNumbers[0].PhoneNumberValue)
+                    result.Add(tdBuilder.teacher.PhoneNumbers[0]);
+                if (phoneNumber.PhoneNumberValue == tdBuilder.student.PhoneNumbers[0].PhoneNumberValue)
+                    result.Add(tdBuilder.student.PhoneNumbers[0]);
             }
 
-            return returnData;
+            return result;
         }
 
         public PhoneNumber Read_WithPhoneNumberId(int phoneNumberId, IConnectable connection)
         {
-            WasCalled_ReadAllWithPhoneNumberId = true;
+            WasCalled_ReadWithPhoneNumberId = true;
 
             if (_shouldReadReturnData)
             {
-                if (phoneNumberId == tdBuilder.phoneNumber_Teacher.Id)
-                    return tdBuilder.phoneNumber_Teacher;
-                else
-                    return tdBuilder.phoneNumber_Student;
+                if (phoneNumberId == tdBuilder.teacher.PhoneNumbers[0].Id)
+                    return tdBuilder.teacher.PhoneNumbers[0];
+                else if (phoneNumberId == tdBuilder.student.PhoneNumbers[0].Id)
+                    return tdBuilder.student.PhoneNumbers[0];
+            }
+            
+            return null;
+        }
+
+        public void Update(PhoneNumber phoneNumber, IConnectable connection)
+        {
+            WasCalled_Update = true;
+        }
+
+        public PhoneNumber Write(PhoneNumber phoneNumber, IConnectable connection)
+        {
+            WasCalled_Write = true;
+
+            phoneNumber.Id = 45;
+            return phoneNumber;
+        }
+
+        public PhoneNumber Read_WithPhoneNumberValue(string phoneNumberValue, IConnectable connection)
+        {
+            WasCalled_ReadWithPhoneNumberValue = true;
+
+            if(_shouldReadReturnData)
+            {
+                if (phoneNumberValue == tdBuilder.teacher.PhoneNumbers[0].PhoneNumberValue)
+                    return tdBuilder.teacher.PhoneNumbers[0];
+                else if (phoneNumberValue == tdBuilder.student.PhoneNumbers[0].PhoneNumberValue)
+                    return tdBuilder.student.PhoneNumbers[0];
             }
 
             return null;
         }
 
-        public List<PhoneNumber> Read(PhoneNumber phoneNumber, int personId, IConnectable connection)
+        public MockPhoneNumberDaoImpl(TestDataBuilder tdBuilder)
         {
-            WasCalled_ReadWithPersonId = true;
-
-            List<PhoneNumber> returnData = new List<PhoneNumber>();
-
-            if (_shouldReadReturnData)
-            {
-                if (personId == tdBuilder.teacher.Id)
-                    returnData.Add(tdBuilder.phoneNumber_Teacher);
-                else
-                    returnData.Add(tdBuilder.phoneNumber_Student);
-            }
-            
-            return returnData;
-        }
-
-        public List<PhoneNumber> Read(PhoneNumber phoneNumber, IConnectable connection)
-        {
-            WasCalled_ReadWithoutPersonId = true;
-
-            List<PhoneNumber> returnData = new List<PhoneNumber>();
-
-            if(_shouldReadReturnData)
-            {
-                returnData.Add(tdBuilder.phoneNumber_Student);
-                returnData.Add(tdBuilder.phoneNumber_Teacher);
-            }
-
-            return returnData;
-        }
-
-        public void Update(PhoneNumber phoneNumber, int personId, IConnectable connection)
-        {
-            WasCalled_UpdateWithPersonId = true;
-        }
-
-        public void Update(PhoneNumber phoneNumber, IConnectable connection)
-        {
-            WasCalled_UpdateWithoutPersonId = true;
-        }
-
-        public PhoneNumber Write(PhoneNumber phoneNumber, int personId, IConnectable connection)
-        {
-            WasCalled_WriteWithPersonId = true;
-
-            if (personId == tdBuilder.teacher.Id)
-                return tdBuilder.phoneNumber_Teacher;
-            else
-                return tdBuilder.phoneNumber_Student;
-        }
-
-        public PhoneNumber Write(PhoneNumber phoneNumber, IConnectable connection)
-        {
-            throw new System.NotImplementedException();
+            this.tdBuilder = tdBuilder;
         }
     }
 }

@@ -49,14 +49,10 @@ namespace Netus2SisSync.SyncProcesses.SyncJobs
             try
             {
                 SyncLogger.LogStatus(this, Enum_Sync_Status.values["sisread_start"]);
-                
-                _dtPhoneNumber = sisConnection.ReadIntoDataTable(
-                    SyncScripts.ReadSis_PhoneNumber_SQL, 
-                    DataTableFactory.CreateDataTable_Sis_PhoneNumber());
 
-                _dtJctPersonPhoneNumber = sisConnection.ReadIntoDataTable(
-                    SyncScripts.ReadSis_JctPersonPhoneNumber_SQL,
-                    DataTableFactory.CreateDataTable_Sis_JctPersonPhoneNumber());
+                ReadFromSisPhoneNumber(sisConnection);
+
+                ReadFromSisJctPersonPhoneNumber(sisConnection);
 
                 SyncLogger.LogStatus(this, Enum_Sync_Status.values["sisread_end"]);
             }
@@ -69,6 +65,20 @@ namespace Netus2SisSync.SyncProcesses.SyncJobs
             {
                 sisConnection.CloseConnection();
             }
+        }
+
+        public void ReadFromSisPhoneNumber(IConnectable sisConnection)
+        {
+            _dtPhoneNumber = sisConnection.ReadIntoDataTable(
+                    SyncScripts.ReadSis_PhoneNumber_SQL,
+                    DataTableFactory.CreateDataTable_Sis_PhoneNumber());
+        }
+
+        public void ReadFromSisJctPersonPhoneNumber(IConnectable sisConnection)
+        {
+            _dtJctPersonPhoneNumber = sisConnection.ReadIntoDataTable(
+                    SyncScripts.ReadSis_JctPersonPhoneNumber_SQL,
+                    DataTableFactory.CreateDataTable_Sis_JctPersonPhoneNumber());
         }
 
         private void RunJobTasks()
