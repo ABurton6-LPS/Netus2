@@ -127,11 +127,11 @@ namespace Netus2_Test
             else
                 teacher.Id = 1;
 
-            phoneNumber_Teacher = new PhoneNumber("8009876549", Enum_Phone.values["cell"]);
+            phoneNumber_Teacher = new PhoneNumber("8009876549", Enum_Phone.values["work"]);
+            phoneNumber_Teacher.IsPrimary = Enum_True_False.values["false"];
             if (connection != null)
             {
                 phoneNumber_Teacher = phoneNumberDaoImpl.Write(phoneNumber_Teacher, connection);
-                phoneNumber_Teacher.IsPrimary = Enum_True_False.values["true"];
                 teacher.PhoneNumbers.Add(phoneNumber_Teacher);
                 personDaoImpl.Update(teacher, connection);
                 teacher = personDaoImpl.Read(teacher, connection)[0];
@@ -295,10 +295,10 @@ namespace Netus2_Test
             }
 
             phoneNumber_Student = new PhoneNumber("8001231234", Enum_Phone.values["cell"]);
+            phoneNumber_Student.IsPrimary = Enum_True_False.values["true"];
             if (connection != null)
             {
                 phoneNumber_Student = phoneNumberDaoImpl.Write(phoneNumber_Student, connection);
-                phoneNumber_Student.IsPrimary = Enum_True_False.values["true"];
                 student.PhoneNumbers.Add(phoneNumber_Student);
                 personDaoImpl.Update(student, connection);
                 student = personDaoImpl.Read(student, connection)[0];

@@ -229,7 +229,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
             personDaoImpl.Read(tdBuilder.teacher, _netus2DbConnection);
 
             Assert.IsTrue(mockJctPersonPhoneNumberDaoImpl.WasCalled_ReadAllWithPersonId);
-            Assert.IsTrue(mockPhoneNumberDaoImpl.WasCalled_ReadAllWithPhoneNumberId);
+            Assert.IsTrue(mockPhoneNumberDaoImpl.WasCalled_ReadWithPhoneNumberId);
         }
 
         [TestCase]

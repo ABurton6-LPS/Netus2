@@ -8,7 +8,6 @@ using Netus2_Test.MockDaoImpl;
 using Netus2SisSync.SyncProcesses.SyncJobs;
 using Netus2SisSync.SyncProcesses.SyncTasks.AddressTasks;
 using NUnit.Framework;
-using System;
 using System.Collections.Generic;
 using System.Data;
 
@@ -514,7 +513,7 @@ namespace Netus2_Test.Unit.SyncProcess
             tstData.Line4 = addressTeacher.Line4;
             tstData.Apartment = addressTeacher.Apartment;
             tstData.City = addressTeacher.City;
-            tstData.State = "me";
+            tstData.State = "unset";
             tstData.Zip = addressTeacher.PostalCode;
             tstData.Country = addressTeacher.Country.Netus2Code;
             tstData.IsPrimary = addressTeacher.IsPrimary.Netus2Code;
@@ -551,7 +550,7 @@ namespace Netus2_Test.Unit.SyncProcess
             tstData.City = addressTeacher.City;
             tstData.State = addressTeacher.StateProvince.Netus2Code;
             tstData.Zip = addressTeacher.PostalCode;
-            tstData.Country = "am";
+            tstData.Country = "unset";
             tstData.IsPrimary = addressTeacher.IsPrimary.Netus2Code;
             tstData.AddressType = addressTeacher.AddressType.Netus2Code;
             tstData.PersonId = tdBuilder.teacher.UniqueIdentifiers[0].Identifier;
@@ -659,6 +658,14 @@ namespace Netus2_Test.Unit.SyncProcess
             Assert.IsTrue(mockJctPersonAddressDaoImpl.WasCalled_Read);
             Assert.IsFalse(mockJctPersonAddressDaoImpl.WasCalled_Write);
             Assert.IsTrue(mockJctPersonAddressDaoImpl.WasCalled_Update);
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            DaoImplFactory.MockPersonDaoImpl = null;
+            DaoImplFactory.MockAddressDaoImpl = null;
+            DaoImplFactory.MockJctPersonAddressDaoImpl = null;
         }
 
         private DataTable BuildTestDataTable(List<SisAddressTestData> tstDataSet)

@@ -27,7 +27,26 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.PhoneNumberTasks
         {
             try
             {
+                string sisPhoneNumber = row["phone_number"].ToString() == "" ? null : row["phone_number"].ToString();
+                string sisPhoneTypeCode = row["phone_type_code"].ToString() == "" ? null : row["phone_type_code"].ToString();
 
+                PhoneNumber phoneNumber = new PhoneNumber(sisPhoneNumber, Enum_Phone.GetEnumFromSisCode(sisPhoneTypeCode));
+
+                IPhoneNumberDao phoneNumberDaoImpl = DaoImplFactory.GetPhoneNumberDaoImpl();
+                List<PhoneNumber> foundPhoneNumbers = phoneNumberDaoImpl.Read(phoneNumber, _netus2Connection);
+
+                if (foundPhoneNumbers.Count == 0)
+                    phoneNumberDaoImpl.Write(phoneNumber, _netus2Connection);
+                else if (foundPhoneNumbers.Count == 1)
+                {
+                    phoneNumber.Id = foundPhoneNumbers[0].Id;
+
+                    if ((phoneNumber.PhoneNumberValue != foundPhoneNumbers[0].PhoneNumberValue) ||
+                        (phoneNumber.PhoneType != foundPhoneNumbers[0].PhoneType))
+                        phoneNumberDaoImpl.Update(phoneNumber, _netus2Connection);
+                }
+                else
+                    throw new Exception(foundPhoneNumbers.Count + " Phone Numbers found matching: " + phoneNumber.ToString());
 
                 SyncLogger.LogStatus(this, Enum_Sync_Status.values["end"]);
             }

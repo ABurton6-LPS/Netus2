@@ -60,12 +60,18 @@ namespace Netus2SisSync.UtilityTools
 
         private static string BuildScript_Sis_PhoneNumber()
         {
-            return "";
+            Config config = Netus2_DatabaseConnection.utilityTools.UtilityTools.ReadConfig(
+                Enum_Config.values["sis_phone_number_query"], Enum_True_False.values["true"], Enum_True_False.values["true"]);
+
+            return config.ConfigValue;
         }
 
         private static string BuildScript_Sis_JctPersonPhoneNumber()
         {
-            return "";
+            Config config = Netus2_DatabaseConnection.utilityTools.UtilityTools.ReadConfig(
+                Enum_Config.values["sis_jct_person_phone_number_query"], Enum_True_False.values["true"], Enum_True_False.values["true"]);
+
+            return config.ConfigValue;
         }
 
         private static string BuildScript_Sis_Course()

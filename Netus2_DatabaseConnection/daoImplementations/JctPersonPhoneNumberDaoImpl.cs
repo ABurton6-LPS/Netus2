@@ -97,6 +97,31 @@ namespace Netus2_DatabaseConnection.daoImplementations
             return jctPersonphoneNumberDaos;
         }
 
+        public void Update(int personId, int phoneNumberId, int isPrimaryId, IConnectable connection)
+        {
+            DataRow foundJctPersonPhoneNumberDao = Read(personId, phoneNumberId, connection);
+
+            if (foundJctPersonPhoneNumberDao == null)
+                Write(personId, phoneNumberId, isPrimaryId, connection);
+            else
+                UpdateInternals(personId, phoneNumberId, isPrimaryId, connection);
+        }
+
+        private void UpdateInternals(int personId, int phoneNumberId, int isPrimaryId, IConnectable connection)
+        {
+            string sql = "UPDATE jct_person_phone_number SET " +
+                "is_primary_id = @is_primary_id " +
+                "WHERE person_id = @person_id " +
+                "AND phone_number_id = @phone_number_id";
+
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@is_primary_id", isPrimaryId));
+            parameters.Add(new SqlParameter("@person_id", personId));
+            parameters.Add(new SqlParameter("@phone_number_id", phoneNumberId));
+
+            connection.ExecuteNonQuery(sql, parameters);
+        }
+
         public DataRow Write(int personId, int phoneNumberId, int isPrimaryId, IConnectable connection)
         {
             string sql = "INSERT INTO jct_person_phone_number (" +

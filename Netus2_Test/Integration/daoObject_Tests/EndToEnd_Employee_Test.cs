@@ -299,7 +299,7 @@ namespace Netus2_Test.Integration
         [Test]
         public void GivenUnassignedPhoneNumber_ShouldBeAbleToReadAndWrite()
         {
-            PhoneNumber phoneNumber = new PhoneNumber("1234567890", Enum_Phone.values["office"]);
+            PhoneNumber phoneNumber = new PhoneNumber("1234567890", Enum_Phone.values["work"]);
             PhoneNumber phoneNumberAfterWrite = phoneNumberDaoImpl.Write(phoneNumber, connection);
             PhoneNumber phoneNumberAfterRead = phoneNumberDaoImpl.Read(phoneNumber, connection)[0];
 
@@ -310,7 +310,7 @@ namespace Netus2_Test.Integration
         public void GivenUnassignedPhoneNumber_ShouldBeAbleToAssignIt()
         {
             PhoneNumber phoneNumber = phoneNumberDaoImpl.Write(
-                new PhoneNumber("1234567890", Enum_Phone.values["office"]), connection);
+                new PhoneNumber("1234567890", Enum_Phone.values["work"]), connection);
 
             Person student = testDataBuilder.student;
             student.PhoneNumbers.Clear();
