@@ -69,14 +69,14 @@ namespace Netus2_Test.Unit.SyncProcess
         {
             SisOrganizationTestData tstData = new SisOrganizationTestData();
             tstData.Name = tdBuilder.district.Name;
-            tstData.OrgId = tdBuilder.district.OrganizationType.Netus2Code;
+            tstData.OrgId = tdBuilder.district.OrganizationType.SisCode;
             tstData.Ident = tdBuilder.district.Identifier;
             tstData.BldgCode = tdBuilder.district.SisBuildingCode;
             tstData.ParentOrgId = null;
 
             SisOrganizationTestData tstData2 = new SisOrganizationTestData();
             tstData2.Name = tdBuilder.school.Name;
-            tstData2.OrgId = tdBuilder.school.OrganizationType.Netus2Code;
+            tstData2.OrgId = tdBuilder.school.OrganizationType.SisCode;
             tstData2.Ident = tdBuilder.school.Identifier;
             tstData2.BldgCode = tdBuilder.school.SisBuildingCode;
             tstData2.ParentOrgId = tdBuilder.district.SisBuildingCode;
@@ -112,7 +112,7 @@ namespace Netus2_Test.Unit.SyncProcess
         {
             SisOrganizationTestData tstData = new SisOrganizationTestData();
             tstData.Name = tdBuilder.school.Name;
-            tstData.OrgId = tdBuilder.school.OrganizationType.Netus2Code;
+            tstData.OrgId = tdBuilder.school.OrganizationType.SisCode;
             tstData.Ident = tdBuilder.school.Identifier;
             tstData.BldgCode = tdBuilder.school.SisBuildingCode;
             tstData.ParentOrgId = tdBuilder.district.SisBuildingCode;
@@ -136,7 +136,7 @@ namespace Netus2_Test.Unit.SyncProcess
 
             SisOrganizationTestData tstData = new SisOrganizationTestData();
             tstData.Name = tdBuilder.school.Name;
-            tstData.OrgId = tdBuilder.school.OrganizationType.Netus2Code;
+            tstData.OrgId = tdBuilder.school.OrganizationType.SisCode;
             tstData.Ident = tdBuilder.school.Identifier;
             tstData.BldgCode = tdBuilder.school.SisBuildingCode;
             tstData.ParentOrgId = tdBuilder.district.SisBuildingCode;
@@ -161,7 +161,7 @@ namespace Netus2_Test.Unit.SyncProcess
 
             SisOrganizationTestData tstData = new SisOrganizationTestData();
             tstData.Name = "NewTestName";
-            tstData.OrgId = tdBuilder.school.OrganizationType.Netus2Code;
+            tstData.OrgId = tdBuilder.school.OrganizationType.SisCode;
             tstData.Ident = tdBuilder.school.Identifier;
             tstData.BldgCode = tdBuilder.school.SisBuildingCode;
             tstData.ParentOrgId = tdBuilder.district.SisBuildingCode;
@@ -185,7 +185,7 @@ namespace Netus2_Test.Unit.SyncProcess
 
             SisOrganizationTestData tstData = new SisOrganizationTestData();
             tstData.Name = tdBuilder.school.Name;
-            tstData.OrgId = Enum_Organization.values["unset"].Netus2Code;
+            tstData.OrgId = Enum_Organization.values["unset"].SisCode;
             tstData.Ident = tdBuilder.school.Identifier;
             tstData.BldgCode = tdBuilder.school.SisBuildingCode;
             tstData.ParentOrgId = tdBuilder.district.SisBuildingCode;
@@ -209,7 +209,7 @@ namespace Netus2_Test.Unit.SyncProcess
 
             SisOrganizationTestData tstData = new SisOrganizationTestData();
             tstData.Name = tdBuilder.school.Name;
-            tstData.OrgId = tdBuilder.school.OrganizationType.Netus2Code;
+            tstData.OrgId = tdBuilder.school.OrganizationType.SisCode;
             tstData.Ident = "NewIdentifier";
             tstData.BldgCode = tdBuilder.school.SisBuildingCode;
             tstData.ParentOrgId = tdBuilder.district.SisBuildingCode;
@@ -233,7 +233,7 @@ namespace Netus2_Test.Unit.SyncProcess
 
             SisOrganizationTestData tstData = new SisOrganizationTestData();
             tstData.Name = tdBuilder.school.Name;
-            tstData.OrgId = tdBuilder.school.OrganizationType.Netus2Code;
+            tstData.OrgId = tdBuilder.school.OrganizationType.SisCode;
             tstData.Ident = tdBuilder.school.Identifier;
             tstData.BldgCode = "NewBuildingCode";
             tstData.ParentOrgId = tdBuilder.district.SisBuildingCode;
@@ -257,7 +257,7 @@ namespace Netus2_Test.Unit.SyncProcess
 
             SisOrganizationTestData tstData = new SisOrganizationTestData();
             tstData.Name = tdBuilder.school.Name;
-            tstData.OrgId = tdBuilder.school.OrganizationType.Netus2Code;
+            tstData.OrgId = tdBuilder.school.OrganizationType.SisCode;
             tstData.Ident = tdBuilder.school.Identifier;
             tstData.BldgCode = tdBuilder.school.SisBuildingCode;
             tstData.ParentOrgId = "NewParentOrg";
@@ -287,7 +287,7 @@ namespace Netus2_Test.Unit.SyncProcess
 
             SisOrganizationTestData tstData = new SisOrganizationTestData();
             tstData.Name = tdBuilder.school.Name;
-            tstData.OrgId = tdBuilder.school.OrganizationType.Netus2Code;
+            tstData.OrgId = tdBuilder.school.OrganizationType.SisCode;
             tstData.Ident = tdBuilder.school.Identifier;
             tstData.BldgCode = tdBuilder.school.SisBuildingCode;
             tstData.ParentOrgId = null;

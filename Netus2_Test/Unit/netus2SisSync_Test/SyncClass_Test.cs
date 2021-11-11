@@ -75,7 +75,7 @@ namespace Netus2_Test.Unit.SyncProcess
             SisClassTestData tstData = new SisClassTestData();
             tstData.Name = tdBuilder.classEnrolled.Name;
             tstData.ClassCode = tdBuilder.classEnrolled.ClassCode;
-            tstData.ClassType = tdBuilder.classEnrolled.ClassType.Netus2Code;
+            tstData.ClassType = tdBuilder.classEnrolled.ClassType.SisCode;
             tstData.Room = tdBuilder.classEnrolled.Room;
             tstData.CourseId = tdBuilder.spanishCourse.CourseCode;
             tstData.AcademicSessionId =
@@ -112,7 +112,7 @@ namespace Netus2_Test.Unit.SyncProcess
             SisClassTestData tstData = new SisClassTestData();
             tstData.Name = tdBuilder.classEnrolled.Name;
             tstData.ClassCode = tdBuilder.classEnrolled.ClassCode;
-            tstData.ClassType = tdBuilder.classEnrolled.ClassType.Netus2Code;
+            tstData.ClassType = tdBuilder.classEnrolled.ClassType.SisCode;
             tstData.Room = tdBuilder.classEnrolled.Room;
             tstData.CourseId = tdBuilder.spanishCourse.CourseCode;
             tstData.AcademicSessionId =
@@ -146,7 +146,7 @@ namespace Netus2_Test.Unit.SyncProcess
             SisClassTestData tstData = new SisClassTestData();
             tstData.Name = tdBuilder.classEnrolled.Name;
             tstData.ClassCode = tdBuilder.classEnrolled.ClassCode;
-            tstData.ClassType = tdBuilder.classEnrolled.ClassType.Netus2Code;
+            tstData.ClassType = tdBuilder.classEnrolled.ClassType.SisCode;
             tstData.Room = tdBuilder.classEnrolled.Room;
             tstData.CourseId = tdBuilder.spanishCourse.CourseCode;
             tstData.AcademicSessionId =
@@ -180,7 +180,7 @@ namespace Netus2_Test.Unit.SyncProcess
             SisClassTestData tstData = new SisClassTestData();
             tstData.Name = "NewName";
             tstData.ClassCode = tdBuilder.classEnrolled.ClassCode;
-            tstData.ClassType = tdBuilder.classEnrolled.ClassType.Netus2Code;
+            tstData.ClassType = tdBuilder.classEnrolled.ClassType.SisCode;
             tstData.Room = tdBuilder.classEnrolled.Room;
             tstData.CourseId = tdBuilder.spanishCourse.CourseCode;
             tstData.AcademicSessionId =

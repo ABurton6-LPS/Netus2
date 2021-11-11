@@ -29,12 +29,10 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.ClassTasks
             {
                 string sisClassName = row["name"].ToString() == "" ? null : row["name"].ToString();
                 string sisClassCode = row["class_code"].ToString() == "" ? null : row["class_code"].ToString();
-                string sisClassType = row["enum_class_id"].ToString() == "" ? null : row["enum_class_id"].ToString();
+                Enumeration sisClassType = row["enum_class_id"].ToString() == "" ? null : Enum_Class.GetEnumFromSisCode(row["enum_class_id"].ToString().ToLower());
                 string sisRoom = row["room"].ToString() == "" ? null : row["room"].ToString();
                 string sisCourseId = row["course_id"].ToString() == "" ? null : row["course_id"].ToString();
                 string sisAcademicSessionId = row["academic_session_id"].ToString() == "" ? null : row["academic_session_id"].ToString();
-
-                Enumeration classType = Enum_Class.values[sisClassType];
 
                 ICourseDao courseDaoImpl = DaoImplFactory.GetCourseDaoImpl();
                 Course course = courseDaoImpl.Read_UsingCourseCode(sisCourseId, _netus2Connection);
@@ -48,7 +46,7 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.ClassTasks
                     Int32.Parse((sisAcademicSessionCodeArray[3] == "" ? "-1" : sisAcademicSessionCodeArray[3])),
                     _netus2Connection);
 
-                ClassEnrolled classEnrolled = new ClassEnrolled(sisClassName, sisClassCode, classType, sisRoom, course, academicSession);
+                ClassEnrolled classEnrolled = new ClassEnrolled(sisClassName, sisClassCode, sisClassType, sisRoom, course, academicSession);
 
                 IClassEnrolledDao classEnrolledDaoImpl = DaoImplFactory.GetClassEnrolledDaoImpl();
                 classEnrolledDaoImpl.SetTaskId(this.Id);

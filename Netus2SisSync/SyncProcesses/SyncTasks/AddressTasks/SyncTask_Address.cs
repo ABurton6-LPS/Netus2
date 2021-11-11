@@ -33,9 +33,9 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AddressTasks
                 string sisAddressLine4 = row["address_line_4"].ToString() == "" ? null : row["address_line_4"].ToString();
                 string sisApartment = row["apartment"].ToString() == "" ? null : row["apartment"].ToString();
                 string sisCity = row["city"].ToString() == "" ? null : row["city"].ToString();
-                Enumeration sisStateProvince = Enum_State_Province.values[row["enum_state_province_id"].ToString().ToLower()];
+                Enumeration sisStateProvince = row["enum_state_province_id"].ToString() == "" ? null : Enum_State_Province.GetEnumFromSisCode(row["enum_state_province_id"].ToString().ToLower());
                 string sisPostalCode = row["postal_code"].ToString() == "" ? null : row["postal_code"].ToString();
-                Enumeration sisCountry = Enum_Country.values[row["enum_country_id"].ToString().ToLower()];
+                Enumeration sisCountry = row["enum_country_id"].ToString() == "" ? null : Enum_Country.GetEnumFromSisCode(row["enum_country_id"].ToString().ToLower());
 
                 Address address = new Address(sisAddressLine1, sisAddressLine2, sisCity, sisStateProvince, sisPostalCode);
                 address.Line3 = sisAddressLine3;
