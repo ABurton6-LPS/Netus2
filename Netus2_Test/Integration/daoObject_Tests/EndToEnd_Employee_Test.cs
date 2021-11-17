@@ -153,7 +153,7 @@ namespace Netus2_Test.Integration
         {
             Person person = testDataBuilder.teacher;
 
-            Assert_Table(person.Id, 1, "jct_person_app", DataTableFactory.CreateDataTable_Netus2_JctPersonApp(), connection);
+            Assert_Table(person.Id, 1, "jct_person_application", DataTableFactory.CreateDataTable_Netus2_JctPersonApplication(), connection);
             AssertApplication(person.Applications[0], appDaoImpl.Read(person.Applications[0], connection)[0]);
         }
 
@@ -163,14 +163,14 @@ namespace Netus2_Test.Integration
             Person person = testDataBuilder.teacher;
             Application app = person.Applications[0];
 
-            Assert_Table(person.Id, 1, "jct_person_app", DataTableFactory.CreateDataTable_Netus2_JctPersonApp(), connection);
+            Assert_Table(person.Id, 1, "jct_person_application", DataTableFactory.CreateDataTable_Netus2_JctPersonApplication(), connection);
             AssertApplication(person.Applications[0], app);
 
             person.Applications[0] = DaoImplFactory.GetApplicationDaoImpl().Write(new Application("NewTestApp", person.Applications[0].Provider), connection);
             personDaoImpl.Update(person, connection);
             person = personDaoImpl.Read(person, connection)[0];
 
-            Assert_Table(person.Id, 1, "jct_person_app", DataTableFactory.CreateDataTable_Netus2_JctPersonApp(), connection);
+            Assert_Table(person.Id, 1, "jct_person_application", DataTableFactory.CreateDataTable_Netus2_JctPersonApplication(), connection);
             AssertApplication(person.Applications[0], appDaoImpl.Read(person.Applications[0], connection)[0]);
             AssertApplication(app, appDaoImpl.Read(app, connection)[0]);
         }
@@ -181,14 +181,14 @@ namespace Netus2_Test.Integration
             Person person = testDataBuilder.teacher;
             Application app = person.Applications[0];
 
-            Assert_Table(person.Id, 1, "jct_person_app", DataTableFactory.CreateDataTable_Netus2_JctPersonApp(), connection);
+            Assert_Table(person.Id, 1, "jct_person_application", DataTableFactory.CreateDataTable_Netus2_JctPersonApplication(), connection);
             AssertApplication(person.Applications[0], app);
 
             person.Applications.Clear();
             personDaoImpl.Update(person, connection);
             person = personDaoImpl.Read(person, connection)[0];
 
-            Assert_Table(person.Id, 0, "jct_person_app", DataTableFactory.CreateDataTable_Netus2_JctPersonApp(), connection);
+            Assert_Table(person.Id, 0, "jct_person_application", DataTableFactory.CreateDataTable_Netus2_JctPersonApplication(), connection);
             AssertApplication(app, appDaoImpl.Read(app, connection)[0]);
         }
 
@@ -202,12 +202,11 @@ namespace Netus2_Test.Integration
             Assert_Table(teacher.Id, expectedNumberOfRecords, "jct_person_person", DataTableFactory.CreateDataTable_Netus2_JctPersonPerson(), connection);
             Assert_Table(student.Id, expectedNumberOfRecords, "jct_person_person", DataTableFactory.CreateDataTable_Netus2_JctPersonPerson(), connection);
             Assert_Table(teacher.Id, expectedNumberOfRecords, "jct_person_role", DataTableFactory.CreateDataTable_Netus2_JctPersonRole(), connection);
-            Assert_Table(teacher.Id, expectedNumberOfRecords, "jct_person_app", DataTableFactory.CreateDataTable_Netus2_JctPersonApp(), connection);
+            Assert_Table(teacher.Id, expectedNumberOfRecords, "jct_person_application", DataTableFactory.CreateDataTable_Netus2_JctPersonApplication(), connection);
             Assert_Table(teacher.PhoneNumbers[0].Id, expectedNumberOfRecords, "phone_number", DataTableFactory.CreateDataTable_Netus2_PhoneNumber(), connection);
             Assert_Table(teacher.Addresses[0].Id, expectedNumberOfRecords, "address", DataTableFactory.CreateDataTable_Netus2_Address(), connection);
             Assert_Table(teacher.EmploymentSessions[0].Id, expectedNumberOfRecords, "employment_session", DataTableFactory.CreateDataTable_Netus2_EmploymentSession(), connection);
             Assert_Table(teacher.UniqueIdentifiers[0].Id, expectedNumberOfRecords, "unique_identifier", DataTableFactory.CreateDataTable_Netus2_UniqueIdentifier(), connection);
-            Assert_Table(teacher.Id, expectedNumberOfRecords, "jct_class_person", DataTableFactory.CreateDataTable_Netus2_JctClassPerson(), connection);
 
 
             personDaoImpl.Delete(teacher, connection);
@@ -215,13 +214,12 @@ namespace Netus2_Test.Integration
             Assert_Table(teacher.Id, 0, "jct_person_person", DataTableFactory.CreateDataTable_Netus2_JctPersonPerson(), connection);
             Assert_Table(student.Id, 0, "jct_person_person", DataTableFactory.CreateDataTable_Netus2_JctPersonPerson(), connection);
             Assert_Table(teacher.Id, 0, "jct_person_role", DataTableFactory.CreateDataTable_Netus2_JctPersonRole(), connection);
-            Assert_Table(teacher.Id, 0, "jct_person_app", DataTableFactory.CreateDataTable_Netus2_JctPersonApp(), connection);
+            Assert_Table(teacher.Id, 0, "jct_person_application", DataTableFactory.CreateDataTable_Netus2_JctPersonApplication(), connection);
             Assert_Table(teacher.PhoneNumbers[0].Id, 0, "jct_person_phone_number", DataTableFactory.CreateDataTable_Netus2_JctPersonPhoneNumber(), connection);
             Assert_Table(teacher.Id, 0, "jct_person_address", DataTableFactory.CreateDataTable_Netus2_JctPersonAddress(), connection);
             Assert_Table(teacher.PhoneNumbers[0].Id, 1, "phone_number", DataTableFactory.CreateDataTable_Netus2_PhoneNumber(), connection);
             Assert_Table(teacher.EmploymentSessions[0].Id, 0, "employment_session", DataTableFactory.CreateDataTable_Netus2_EmploymentSession(), connection);
             Assert_Table(teacher.UniqueIdentifiers[0].Id, 0, "unique_identifier", DataTableFactory.CreateDataTable_Netus2_UniqueIdentifier(), connection);
-            Assert_Table(student.Id, 0, "jct_class_person", DataTableFactory.CreateDataTable_Netus2_JctClassPerson(), connection);
         }
 
         [Test]
@@ -234,7 +232,7 @@ namespace Netus2_Test.Integration
             Assert_Table(student.Id, expectedNumberOfRecords, "jct_person_person", DataTableFactory.CreateDataTable_Netus2_JctPersonPerson(), connection);
             Assert_Table(teacher.Id, expectedNumberOfRecords, "jct_person_person", DataTableFactory.CreateDataTable_Netus2_JctPersonPerson(), connection);
             Assert_Table(student.Id, expectedNumberOfRecords, "jct_person_role", DataTableFactory.CreateDataTable_Netus2_JctPersonRole(), connection);
-            Assert_Table(student.Id, expectedNumberOfRecords, "jct_person_app", DataTableFactory.CreateDataTable_Netus2_JctPersonApp(), connection);
+            Assert_Table(student.Id, expectedNumberOfRecords, "jct_person_application", DataTableFactory.CreateDataTable_Netus2_JctPersonApplication(), connection);
             Assert_Table(student.PhoneNumbers[0].Id, expectedNumberOfRecords, "phone_number", DataTableFactory.CreateDataTable_Netus2_PhoneNumber(), connection);
             Assert_Table(student.Addresses[0].Id, expectedNumberOfRecords, "address", DataTableFactory.CreateDataTable_Netus2_Address(), connection);
             Assert_Table(student.Enrollments[0].Id, expectedNumberOfRecords, "enrollment", DataTableFactory.CreateDataTable_Netus2_Enrollment(), connection);
@@ -247,7 +245,7 @@ namespace Netus2_Test.Integration
             Assert_Table(student.Id, 0, "jct_person_person", DataTableFactory.CreateDataTable_Netus2_JctPersonPerson(), connection);
             Assert_Table(teacher.Id, 0, "jct_person_person", DataTableFactory.CreateDataTable_Netus2_JctPersonPerson(), connection);
             Assert_Table(student.Id, 0, "jct_person_role", DataTableFactory.CreateDataTable_Netus2_JctPersonRole(), connection);
-            Assert_Table(student.Id, 0, "jct_person_app", DataTableFactory.CreateDataTable_Netus2_JctPersonApp(), connection);
+            Assert_Table(student.Id, 0, "jct_person_application", DataTableFactory.CreateDataTable_Netus2_JctPersonApplication(), connection);
             Assert_Table(student.PhoneNumbers[0].Id, 0, "jct_person_phone_number", DataTableFactory.CreateDataTable_Netus2_JctPersonPhoneNumber(), connection);
             Assert_Table(student.Id, 0, "jct_person_address", DataTableFactory.CreateDataTable_Netus2_JctPersonAddress(), connection);
             Assert_Table(student.PhoneNumbers[0].Id, 1, "phone_number", DataTableFactory.CreateDataTable_Netus2_PhoneNumber(), connection);
@@ -275,7 +273,7 @@ namespace Netus2_Test.Integration
         {
             Application app = testDataBuilder.application;
 
-            Assert_Table(app.Id, 1, "app", DataTableFactory.CreateDataTable_Netus2_Application(), connection);
+            Assert_Table(app.Id, 1, "application", DataTableFactory.CreateDataTable_Netus2_Application(), connection);
             Assert_Table(app.Provider.Id, 1, "provider", DataTableFactory.CreateDataTable_Netus2_Provider(), connection);
             AssertApplication(app, appDaoImpl.Read(app, connection)[0]);
         }
@@ -285,14 +283,14 @@ namespace Netus2_Test.Integration
         {
             Person person = testDataBuilder.teacher;
 
-            Assert_Table(person.Id, 1, "jct_person_app", DataTableFactory.CreateDataTable_Netus2_JctPersonApp(), connection);
-            Assert_Table(person.Applications[0].Id, 1, "app", DataTableFactory.CreateDataTable_Netus2_Application(), connection);
+            Assert_Table(person.Id, 1, "jct_person_application", DataTableFactory.CreateDataTable_Netus2_JctPersonApplication(), connection);
+            Assert_Table(person.Applications[0].Id, 1, "application", DataTableFactory.CreateDataTable_Netus2_Application(), connection);
             Assert_Table(person.Applications[0].Provider.Id, 1, "provider", DataTableFactory.CreateDataTable_Netus2_Provider(), connection);
 
             providerDaoImpl.Delete(person.Applications[0].Provider, connection);
 
-            Assert_Table(person.Applications[0].Id, 0, "jct_person_app", DataTableFactory.CreateDataTable_Netus2_JctPersonApp(), connection);
-            Assert_Table(person.Applications[0].Id, 0, "app", DataTableFactory.CreateDataTable_Netus2_Application(), connection);
+            Assert_Table(person.Applications[0].Id, 0, "jct_person_application", DataTableFactory.CreateDataTable_Netus2_JctPersonApplication(), connection);
+            Assert_Table(person.Applications[0].Id, 0, "application", DataTableFactory.CreateDataTable_Netus2_Application(), connection);
             Assert_Table(person.Applications[0].Provider.Id, 0, "provider", DataTableFactory.CreateDataTable_Netus2_Provider(), connection);
         }
 

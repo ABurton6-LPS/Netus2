@@ -94,7 +94,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 .Callback<object[]>(
                     (values) =>
                     {
-                        values[0] = tstDataSet[count]["app_id"];
+                        values[0] = tstDataSet[count]["application_id"];
                         values[1] = tstDataSet[count]["name"];
                         values[2] = tstDataSet[count]["provider_id"];
                         values[3] = tstDataSet[count]["created"];
@@ -105,8 +105,8 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 ).Returns(count);
 
             reader.Setup(x => x.GetName(0))
-                .Returns(() => "app_id");
-            reader.Setup(x => x.GetOrdinal("app_id"))
+                .Returns(() => "application_id");
+            reader.Setup(x => x.GetOrdinal("application_id"))
                 .Returns(() => 0);
             reader.Setup(x => x.GetFieldType(0))
                 .Returns(() => typeof(int));

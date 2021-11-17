@@ -58,10 +58,10 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         public PhoneNumber Read_WithPhoneNumberValue(string phoneNumberValue, IConnectable connection)
         {
-            string sql = "SELECT * FROM phone_number WHERE phone_number = @phone_number";
+            string sql = "SELECT * FROM phone_number WHERE phone_number_value = @phone_number_value";
 
             List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("@phone_number", phoneNumberValue));
+            parameters.Add(new SqlParameter("@phone_number_value", phoneNumberValue));
 
             List<PhoneNumber> results = Read(sql, connection, parameters);
 
@@ -104,10 +104,10 @@ namespace Netus2_DatabaseConnection.daoImplementations
             }
             else
             {
-                if (row["phone_number"] != DBNull.Value)
+                if (row["phone_number_value"] != DBNull.Value)
                 {
-                    sql.Append("AND phone_number = @phone_number ");
-                    parameters.Add(new SqlParameter("@phone_number", row["phone_number"]));
+                    sql.Append("AND phone_number_value = @phone_number_value ");
+                    parameters.Add(new SqlParameter("@phone_number_value", row["phone_number_value"]));
                 }
 
                 if (row["enum_phone_id"] != DBNull.Value)
@@ -156,13 +156,13 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 List<SqlParameter> parameters = new List<SqlParameter>();
 
                 StringBuilder sql = new StringBuilder("UPDATE phone_number SET ");
-                if (row["phone_number"] != DBNull.Value)
+                if (row["phone_number_value"] != DBNull.Value)
                 {
-                    sql.Append("phone_number = @phone_number, ");
-                    parameters.Add(new SqlParameter("@phone_number", row["phone_number"]));
+                    sql.Append("phone_number_value = @phone_number_value, ");
+                    parameters.Add(new SqlParameter("@phone_number_value", row["phone_number_value"]));
                 }
                 else
-                    sql.Append("phone_number = NULL, ");
+                    sql.Append("phone_number_value = NULL, ");
 
                 if (row["enum_phone_id"] != DBNull.Value)
                 {
@@ -190,10 +190,10 @@ namespace Netus2_DatabaseConnection.daoImplementations
             List<SqlParameter> parameters = new List<SqlParameter>();
 
             StringBuilder sqlValues = new StringBuilder();
-            if (row["phone_number"] != DBNull.Value)
+            if (row["phone_number_value"] != DBNull.Value)
             {
-                sqlValues.Append("@phone_number, ");
-                parameters.Add(new SqlParameter("@phone_number", row["phone_number"]));
+                sqlValues.Append("@phone_number_value, ");
+                parameters.Add(new SqlParameter("@phone_number_value", row["phone_number_value"]));
             }
             else
                 sqlValues.Append("NULL, ");
@@ -210,7 +210,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
             sqlValues.Append(_taskId != null ? _taskId.ToString() : "'Netus2'");
 
             string sql = "INSERT INTO phone_number " +
-                "(phone_number, enum_phone_id, created, created_by) " +
+                "(phone_number_value, enum_phone_id, created, created_by) " +
                 "VALUES (" + sqlValues.ToString() + ")";
 
             row["phone_number_id"] = connection.InsertNewRecord(sql, parameters);

@@ -31,7 +31,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 throw new Exception("Cannot delete an academic session which doesn't have a database-assigned ID.\n" + academicSession.ToString());
 
             UnlinkChildren(academicSession, connection);
-            UnlinkEnrollment(academicSession, connection);
+            Delete_Enrollment(academicSession, connection);
             Delete_ClassesEnrolled(academicSession.Id, connection);
 
             string sql = "DELETE FROM academic_session WHERE " +
@@ -67,13 +67,13 @@ namespace Netus2_DatabaseConnection.daoImplementations
             }
         }
 
-        private void UnlinkEnrollment(AcademicSession academicSession, IConnectable connection)
+        private void Delete_Enrollment(AcademicSession academicSession, IConnectable connection)
         {
-            IJctEnrollmentAcademicSessionDao jctEnrollmentAcademicSessionDaoImpl = DaoImplFactory.GetJctEnrollmentAcademicSessionDaoImpl();
-            List<DataRow> linksToBeRemoved = jctEnrollmentAcademicSessionDaoImpl.Read_AllWithAcademicSessionId(academicSession.Id, connection);
-            foreach(DataRow linkToBeRemoved in linksToBeRemoved)
+            IEnrollmentDao enrollmentDaoImpl = DaoImplFactory.GetEnrollmentDaoImpl();
+            List<Enrollment> foundEnrollments = enrollmentDaoImpl.Read_AllWithAcademicSessionId(academicSession.Id, connection);
+            foreach(Enrollment foundEnrollment in foundEnrollments)
             {
-                jctEnrollmentAcademicSessionDaoImpl.Delete((int)linkToBeRemoved["enrollment_id"], (int)linkToBeRemoved["academic_session_id"], connection);
+                enrollmentDaoImpl.Delete(foundEnrollment, connection);
             }
         }
 

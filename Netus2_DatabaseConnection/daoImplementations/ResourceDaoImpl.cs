@@ -51,7 +51,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
             foreach (DataRow foundJctClassResourceDao in foundJctClassResourceDaos)
             {
-                jctClassResourceDaoImpl.Delete((int)foundJctClassResourceDao["class_id"],
+                jctClassResourceDaoImpl.Delete((int)foundJctClassResourceDao["class_enrolled_id"],
                     (int)foundJctClassResourceDao["resource_id"], connection);
             }
         }

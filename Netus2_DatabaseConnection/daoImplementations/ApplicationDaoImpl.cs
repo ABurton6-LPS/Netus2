@@ -34,11 +34,11 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
             DataRow row = daoObjectMapper.MapApp(appliction);
 
-            string sql = "DELETE FROM app WHERE " +
-                "app_id = @app_id";
+            string sql = "DELETE FROM application WHERE " +
+                "application_id = @application_id";
 
             List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("@app_id", appliction.Id));
+            parameters.Add(new SqlParameter("@application_id", appliction.Id));
 
             connection.ExecuteNonQuery(sql, parameters);
         }
@@ -50,16 +50,16 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
             foreach (DataRow foundDataRow in foundDataRows)
             {
-                jctPersonAppDaoImpl.Delete((int)foundDataRow["person_id"], (int)foundDataRow["app_id"], connection);
+                jctPersonAppDaoImpl.Delete((int)foundDataRow["person_id"], (int)foundDataRow["application_id"], connection);
             }
         }
 
         public Application Read_UsingAppId(int appId, IConnectable connection)
         {
-            string sql = "SELECT * FROM app WHERE app_id = @app_id";
+            string sql = "SELECT * FROM application WHERE application_id = @application_id";
 
             List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("@app_id", appId));
+            parameters.Add(new SqlParameter("@application_id", appId));
 
             List<Application> results = Read(sql, connection, parameters);
 
@@ -73,7 +73,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         public List<Application> Read_UsingProviderId(int providerId, IConnectable connection)
         {
-            StringBuilder sql = new StringBuilder("SELECT * FROM app WHERE provider_id = @provider_id");
+            StringBuilder sql = new StringBuilder("SELECT * FROM application WHERE provider_id = @provider_id");
 
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("@provider_id", providerId));
@@ -87,11 +87,11 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
             List<SqlParameter> parameters = new List<SqlParameter>();
 
-            StringBuilder sql = new StringBuilder("SELECT * FROM app WHERE 1=1 ");
-            if (row["app_id"] != DBNull.Value)
+            StringBuilder sql = new StringBuilder("SELECT * FROM application WHERE 1=1 ");
+            if (row["application_id"] != DBNull.Value)
             {
-                sql.Append("AND app_id = @app_id");
-                parameters.Add(new SqlParameter("@app_id", row["app_id"]));
+                sql.Append("AND application_id = @application_id");
+                parameters.Add(new SqlParameter("@application_id", row["application_id"]));
             }                
             else
             {
@@ -151,11 +151,11 @@ namespace Netus2_DatabaseConnection.daoImplementations
         {
             DataRow row = daoObjectMapper.MapApp(application);
             
-            if(row["app_id"] != DBNull.Value)
+            if(row["application_id"] != DBNull.Value)
             {
                 List<SqlParameter> parameters = new List<SqlParameter>();
 
-                StringBuilder sql = new StringBuilder("UPDATE app SET ");
+                StringBuilder sql = new StringBuilder("UPDATE application SET ");
                 if (row["name"] != DBNull.Value)
                 {
                     sql.Append("name = @name, ");
@@ -174,8 +174,8 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
                 sql.Append("changed = dbo.CURRENT_DATETIME(), ");
                 sql.Append("changed_by = " + (_taskId != null ? _taskId.ToString() : "'Netus2'") + " ");
-                sql.Append("WHERE app_id = @app_id");
-                parameters.Add(new SqlParameter("@app_id", row["app_id"]));
+                sql.Append("WHERE application_id = @application_id");
+                parameters.Add(new SqlParameter("@application_id", row["application_id"]));
 
                 connection.ExecuteNonQuery(sql.ToString(), parameters);
             }
@@ -209,11 +209,11 @@ namespace Netus2_DatabaseConnection.daoImplementations
             sqlValues.Append("dbo.CURRENT_DATETIME(), ");
             sqlValues.Append(_taskId != null ? _taskId.ToString() : "'Netus2'");
 
-            string sql = "INSERT INTO app " +
+            string sql = "INSERT INTO application " +
                 "(name, provider_id, created, created_by) " +
                 "VALUES (" + sqlValues.ToString() + ")";
 
-            row["app_id"] = connection.InsertNewRecord(sql, parameters);
+            row["application_id"] = connection.InsertNewRecord(sql, parameters);
 
             Provider foundProvider = Read_Provider((int)row["provider_id"], connection);
             Application result = daoObjectMapper.MapApp(row, foundProvider);

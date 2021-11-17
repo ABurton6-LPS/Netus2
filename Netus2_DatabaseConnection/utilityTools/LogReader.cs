@@ -305,7 +305,7 @@ namespace Netus2_DatabaseConnection.utilityTools
                             else
                                 logUniqueIdentifier.person_id = -1;
                             break;
-                        case "unique_identifier":
+                        case "unique_identifier_value":
                             if (row[columnName] != DBNull.Value)
                                 logUniqueIdentifier.unique_identifier = (string)row[columnName];
                             else
@@ -415,6 +415,12 @@ namespace Netus2_DatabaseConnection.utilityTools
                             else
                                 logProvider.url_admin_access = null;
                             break;
+                        case "populated_by":
+                            if (row[columnName] != DBNull.Value)
+                                logProvider.populated_by = (string)row[columnName];
+                            else
+                                logProvider.populated_by = null;
+                            break;
                         case "parent_provider_id":
                             if (row[columnName] != DBNull.Value)
                                 logProvider.parent_provider_id = (int)row[columnName];
@@ -473,33 +479,33 @@ namespace Netus2_DatabaseConnection.utilityTools
             return logProviders;
         }
 
-        public List<LogApp> Read_LogApp(IConnectable connection)
+        public List<LogApplication> Read_LogApplication(IConnectable connection)
         {
-            string sql = "SELECT * FROM log_app";
+            string sql = "SELECT * FROM log_application";
 
             DataTable dtLogApp = DataTableFactory.CreateDataTable_Netus2_Log_Application();
             dtLogApp = connection.ReadIntoDataTable(sql, dtLogApp);
 
-            List<LogApp> logApps = new List<LogApp>();
+            List<LogApplication> logApps = new List<LogApplication>();
             foreach (DataRow row in dtLogApp.Rows)
             {
-                LogApp logApp = new LogApp();
+                LogApplication logApp = new LogApplication();
                 foreach (DataColumn column in row.Table.Columns)
                 {
                     string columnName = column.ColumnName;
                     switch (columnName)
                     {
-                        case "log_app_id":
+                        case "log_application_id":
                             if (row[columnName] != DBNull.Value)
-                                logApp.log_app_id = (int)row[columnName];
+                                logApp.log_application_id = (int)row[columnName];
                             else
-                                logApp.log_app_id = -1;
+                                logApp.log_application_id = -1;
                             break;
-                        case "app_id":
+                        case "application_id":
                             if (row[columnName] != DBNull.Value)
-                                logApp.app_id = (int)row[columnName];
+                                logApp.application_id = (int)row[columnName];
                             else
-                                logApp.app_id = -1;
+                                logApp.application_id = -1;
                             break;
                         case "name":
                             if (row[columnName] != DBNull.Value)
@@ -556,7 +562,7 @@ namespace Netus2_DatabaseConnection.utilityTools
                                 logApp.LogAction = null;
                             break;
                         default:
-                            throw new Exception("Unexpected column found in log_app table: " + columnName);
+                            throw new Exception("Unexpected column found in log_application table: " + columnName);
                     }
                 }
                 logApps.Add(logApp);
@@ -565,66 +571,66 @@ namespace Netus2_DatabaseConnection.utilityTools
             return logApps;
         }
 
-        public List<LogJctPersonApp> Read_LogJctPersonApp(IConnectable connection)
+        public List<LogJctPersonApplication> Read_LogJctPersonApplication(IConnectable connection)
         {
-            string sql = "SELECT * FROM log_jct_person_app";
+            string sql = "SELECT * FROM log_jct_person_application";
 
-            DataTable dtLogJctPersonApp = DataTableFactory.CreateDataTable_Netus2_Log_JctPersonApp();
-            dtLogJctPersonApp = connection.ReadIntoDataTable(sql, dtLogJctPersonApp);
+            DataTable dtLogJctPersonApplication = DataTableFactory.CreateDataTable_Netus2_Log_JctPersonApplication();
+            dtLogJctPersonApplication = connection.ReadIntoDataTable(sql, dtLogJctPersonApplication);
 
-            List<LogJctPersonApp> logJctPersonApps = new List<LogJctPersonApp>();
-            foreach (DataRow row in dtLogJctPersonApp.Rows)
+            List<LogJctPersonApplication> logJctPersonApplications = new List<LogJctPersonApplication>();
+            foreach (DataRow row in dtLogJctPersonApplication.Rows)
             {
-                LogJctPersonApp logJctPersonApp = new LogJctPersonApp();
+                LogJctPersonApplication logJctPersonApplication = new LogJctPersonApplication();
                 foreach (DataColumn column in row.Table.Columns)
                 {
                     string columnName = column.ColumnName;
                     switch (columnName)
                     {
-                        case "log_jct_person_app_id":
+                        case "log_jct_person_application_id":
                             if (row[columnName] != DBNull.Value)
-                                logJctPersonApp.log_jct_person_app_id = (int)row[columnName];
+                                logJctPersonApplication.log_jct_person_application_id = (int)row[columnName];
                             else
-                                logJctPersonApp.log_jct_person_app_id = -1;
+                                logJctPersonApplication.log_jct_person_application_id = -1;
                             break;
                         case "person_id":
                             if (row[columnName] != DBNull.Value)
-                                logJctPersonApp.person_id = (int)row[columnName];
+                                logJctPersonApplication.person_id = (int)row[columnName];
                             else
-                                logJctPersonApp.person_id = -1;
+                                logJctPersonApplication.person_id = -1;
                             break;
-                        case "app_id":
+                        case "application_id":
                             if (row[columnName] != DBNull.Value)
-                                logJctPersonApp.app_id = (int)row[columnName];
+                                logJctPersonApplication.application_id = (int)row[columnName];
                             else
-                                logJctPersonApp.app_id = -1;
+                                logJctPersonApplication.application_id = -1;
                             break;
                         case "log_date":
                             if (row[columnName] != DBNull.Value)
-                                logJctPersonApp.log_date = (DateTime)row[columnName];
+                                logJctPersonApplication.log_date = (DateTime)row[columnName];
                             else
-                                logJctPersonApp.log_date = new DateTime();
+                                logJctPersonApplication.log_date = new DateTime();
                             break;
                         case "log_user":
                             if (row[columnName] != DBNull.Value)
-                                logJctPersonApp.log_user = (string)row[columnName];
+                                logJctPersonApplication.log_user = (string)row[columnName];
                             else
-                                logJctPersonApp.log_user = null;
+                                logJctPersonApplication.log_user = null;
                             break;
                         case "enum_log_action_id":
                             if (row[columnName] != DBNull.Value)
-                                logJctPersonApp.set_LogAction((int)row[columnName]);
+                                logJctPersonApplication.set_LogAction((int)row[columnName]);
                             else
-                                logJctPersonApp.LogAction = null;
+                                logJctPersonApplication.LogAction = null;
                             break;
                         default:
-                            throw new Exception("Unexpected column found in log_jct_person_app table: " + columnName);
+                            throw new Exception("Unexpected column found in log_jct_person_application table: " + columnName);
                     }
                 }
-                logJctPersonApps.Add(logJctPersonApp);
+                logJctPersonApplications.Add(logJctPersonApplication);
             }
 
-            return logJctPersonApps;
+            return logJctPersonApplications;
         }
 
         public List<LogJctPersonPhoneNumber> Read_LogJctPersonPhoneNumber(IConnectable connection)
@@ -695,74 +701,6 @@ namespace Netus2_DatabaseConnection.utilityTools
             return logJctPersonPhoneNumbers;
         }
 
-        public List<LogJctClassPerson> Read_LogJctClassPerson(IConnectable connection)
-        {
-            string sql = "SELECT * FROM log_jct_class_person";
-
-            DataTable dtLogJctClassPerson = DataTableFactory.CreateDataTable_Netus2_Log_JctClassPerson();
-            dtLogJctClassPerson = connection.ReadIntoDataTable(sql, dtLogJctClassPerson);
-
-            List<LogJctClassPerson> logJctClassPersonDaos = new List<LogJctClassPerson>();
-            foreach (DataRow row in dtLogJctClassPerson.Rows)
-            {
-                LogJctClassPerson logJctClassPerson = new LogJctClassPerson();
-                foreach (DataColumn column in row.Table.Columns)
-                {
-                    string columnName = column.ColumnName;
-                    switch (columnName)
-                    {
-                        case "log_jct_class_person_id":
-                            if (row[columnName] != DBNull.Value)
-                                logJctClassPerson.log_jct_class_person_id = (int)row[columnName];
-                            else
-                                logJctClassPerson.log_jct_class_person_id = -1;
-                            break;
-                        case "class_id":
-                            if (row[columnName] != DBNull.Value)
-                                logJctClassPerson.class_id = (int)row[columnName];
-                            else
-                                logJctClassPerson.class_id = -1;
-                            break;
-                        case "person_id":
-                            if (row[columnName] != DBNull.Value)
-                                logJctClassPerson.person_id = (int)row[columnName];
-                            else
-                                logJctClassPerson.person_id = -1;
-                            break;
-                        case "enum_role_id":
-                            if (row[columnName] != DBNull.Value)
-                                logJctClassPerson.set_Role((int)row[columnName]);
-                            else
-                                logJctClassPerson.Role = null;
-                            break;
-                        case "log_date":
-                            if (row[columnName] != DBNull.Value)
-                                logJctClassPerson.log_date = (DateTime)row[columnName];
-                            else
-                                logJctClassPerson = null;
-                            break;
-                        case "log_user":
-                            if (row[columnName] != DBNull.Value)
-                                logJctClassPerson.log_user = (string)row[columnName];
-                            else
-                                logJctClassPerson.log_user = null;
-                            break;
-                        case "enum_log_action_id":
-                            if (row[columnName] != DBNull.Value)
-                                logJctClassPerson.set_LogAction((int)row[columnName]);
-                            else
-                                logJctClassPerson.LogAction = null;
-                            break;
-                        default:
-                            throw new Exception("Unexpected column found in log_jct_class_person table: " + columnName);
-                    }
-                }
-                logJctClassPersonDaos.Add(logJctClassPerson);
-            }
-
-            return logJctClassPersonDaos;
-        }
-
         public List<LogPhoneNumber> Read_LogPhoneNumber(IConnectable connection)
         {
             string sql = "SELECT * FROM log_phone_number";
@@ -791,7 +729,7 @@ namespace Netus2_DatabaseConnection.utilityTools
                             else
                                 logPhoneNumber.phone_number_id = -1;
                             break;
-                        case "phone_number":
+                        case "phone_number_value":
                             if (row[columnName] != DBNull.Value)
                                 logPhoneNumber.phone_number = (string)row[columnName];
                             else
@@ -1924,33 +1862,33 @@ namespace Netus2_DatabaseConnection.utilityTools
             return logJctCourseGrades;
         }
 
-        public List<LogClass> Read_LogClassEnrolled(IConnectable connection)
+        public List<LogClassEnrolled> Read_LogClassEnrolled(IConnectable connection)
         {
-            string sql = "SELECT * FROM log_class";
+            string sql = "SELECT * FROM log_class_enrolled";
 
             DataTable dtLogClassEnrolled = DataTableFactory.CreateDataTable_Netus2_Log_ClassEnrolled();
             dtLogClassEnrolled = connection.ReadIntoDataTable(sql, dtLogClassEnrolled);
 
-            List<LogClass> logClasssEnrolled = new List<LogClass>();
+            List<LogClassEnrolled> logClasssEnrolled = new List<LogClassEnrolled>();
             foreach(DataRow row in dtLogClassEnrolled.Rows)
             {
-                LogClass logClassEnrolled = new LogClass();
+                LogClassEnrolled logClassEnrolled = new LogClassEnrolled();
                 foreach (DataColumn column in row.Table.Columns)
                 {
                     string columnName = column.ColumnName;
                     switch (columnName)
                     {
-                        case "log_class_id":
+                        case "log_class_enrolled_id":
                             if (row[columnName] != DBNull.Value)
-                                logClassEnrolled.log_class_id = (int)row[columnName];
+                                logClassEnrolled.log_class_enrolled_id = (int)row[columnName];
                             else
-                                logClassEnrolled.log_class_id = -1;
+                                logClassEnrolled.log_class_enrolled_id = -1;
                             break;
-                        case "class_id":
+                        case "class_enrolled_id":
                             if (row[columnName] != DBNull.Value)
-                                logClassEnrolled.class_id = (int)row[columnName];
+                                logClassEnrolled.class_enrolled_id = (int)row[columnName];
                             else
-                                logClassEnrolled.class_id = -1;
+                                logClassEnrolled.class_enrolled_id = -1;
                             break;
                         case "name":
                             if (row[columnName] != DBNull.Value)
@@ -1958,13 +1896,13 @@ namespace Netus2_DatabaseConnection.utilityTools
                             else
                                 logClassEnrolled.name = null;
                             break;
-                        case "class_code":
+                        case "class_enrolled_code":
                             if (row[columnName] != DBNull.Value)
-                                logClassEnrolled.class_code = (string)row[columnName];
+                                logClassEnrolled.class_enrolled_code = (string)row[columnName];
                             else
-                                logClassEnrolled.class_code = null;
+                                logClassEnrolled.class_enrolled_code = null;
                             break;
-                        case "enum_class_id":
+                        case "enum_class_enrolled_id":
                             if (row[columnName] != DBNull.Value)
                                 logClassEnrolled.set_ClassType((int)row[columnName]);
                             else
@@ -2039,9 +1977,9 @@ namespace Netus2_DatabaseConnection.utilityTools
 
         public List<LogJctClassPeriod> Read_LogJctClassPeriod(IConnectable connection)
         {
-            string sql = "SELECT * FROM log_jct_class_period";
+            string sql = "SELECT * FROM log_jct_class_enrolled_period";
 
-            DataTable dtLogJctClassPeriod = DataTableFactory.CreateDataTable_Netus2_Log_JctClassPeriod();
+            DataTable dtLogJctClassPeriod = DataTableFactory.CreateDataTable_Netus2_Log_JctClassEnrolledPeriod();
             dtLogJctClassPeriod = connection.ReadIntoDataTable(sql, dtLogJctClassPeriod);
 
             List<LogJctClassPeriod> logJctClassPeriods = new List<LogJctClassPeriod>();
@@ -2053,13 +1991,13 @@ namespace Netus2_DatabaseConnection.utilityTools
                     string columnName = column.ColumnName;
                     switch (columnName)
                     {
-                        case "log_jct_class_period_id":
+                        case "log_jct_class_enrolled_period_id":
                             if (row[columnName] != DBNull.Value)
                                 logJctClassPeriod.log_jct_class_period_id = (int)row[columnName];
                             else
                                 logJctClassPeriod.log_jct_class_period_id = -1;
                             break;
-                        case "class_id":
+                        case "class_enrolled_id":
                             if (row[columnName] != DBNull.Value)
                                 logJctClassPeriod.class_id = (int)row[columnName];
                             else
@@ -2090,7 +2028,7 @@ namespace Netus2_DatabaseConnection.utilityTools
                                 logJctClassPeriod.LogAction = null;
                             break;
                         default:
-                            throw new Exception("Unexpected column found in log_jct_class_period table: " + columnName);
+                            throw new Exception("Unexpected column found in log_jct_class_enrolled_period table: " + columnName);
                     }
                 }
                 logJctClassPeriods.Add(logJctClassPeriod);
@@ -2101,9 +2039,9 @@ namespace Netus2_DatabaseConnection.utilityTools
 
         public List<LogJctClassResource> Read_LogJctClassResource(IConnectable connection)
         {
-            string sql = "SELECT * FROM log_jct_class_resource";
+            string sql = "SELECT * FROM log_jct_class_enrolled_resource";
 
-            DataTable dtLogJctClassResource = DataTableFactory.CreateDataTable_Netus2_Log_JctClassResource();
+            DataTable dtLogJctClassResource = DataTableFactory.CreateDataTable_Netus2_Log_JctClassEnrolledResource();
             dtLogJctClassResource = connection.ReadIntoDataTable(sql, dtLogJctClassResource);
 
             List<LogJctClassResource> logJctClassResources = new List<LogJctClassResource>();
@@ -2115,13 +2053,13 @@ namespace Netus2_DatabaseConnection.utilityTools
                     string columnName = column.ColumnName;
                     switch (columnName)
                     {
-                        case "log_jct_class_resource_id":
+                        case "log_jct_class_enrolled_resource_id":
                             if (row[columnName] != DBNull.Value)
                                 logJctClassResource.log_jct_class_resource_id = (int)row[columnName];
                             else
                                 logJctClassResource.log_jct_class_resource_id = -1;
                             break;
-                        case "class_id":
+                        case "class_enrolled_id":
                             if (row[columnName] != DBNull.Value)
                                 logJctClassResource.class_id = (int)row[columnName];
                             else
@@ -2210,7 +2148,7 @@ namespace Netus2_DatabaseConnection.utilityTools
                             else
                                 logLineItem.due_date = new DateTime();
                             break;
-                        case "class_id":
+                        case "class_enrolled_id":
                             if (row[columnName] != DBNull.Value)
                                 logLineItem.class_id = (int)row[columnName];
                             else
@@ -2222,13 +2160,13 @@ namespace Netus2_DatabaseConnection.utilityTools
                             else
                                 logLineItem.Category = null;
                             break;
-                        case "markValueMin":
+                        case "mark_min":
                             if (row[columnName] != DBNull.Value)
                                 logLineItem.markValueMin = (double)row[columnName];
                             else
                                 logLineItem.markValueMin = null;
                             break;
-                        case "markValueMax":
+                        case "mark_max":
                             if (row[columnName] != DBNull.Value)
                                 logLineItem.markValueMax = (double)row[columnName];
                             else
@@ -2314,11 +2252,11 @@ namespace Netus2_DatabaseConnection.utilityTools
                             else
                                 logEnrollment.person_id = -1;
                             break;
-                        case "class_id":
+                        case "academic_session_id":
                             if (row[columnName] != DBNull.Value)
-                                logEnrollment.class_id = (int)row[columnName];
+                                logEnrollment.academic_session_id = (int)row[columnName];
                             else
-                                logEnrollment.class_id = -1;
+                                logEnrollment.academic_session_id = -1;
                             break;
                         case "enum_grade_id":
                             if (row[columnName] != DBNull.Value)
@@ -2455,7 +2393,10 @@ namespace Netus2_DatabaseConnection.utilityTools
                                 logMark.score_date = new DateTime();
                             break;
                         case "comment":
-                            logMark.comment = row[columnName] != DBNull.Value ? (string)row[columnName] : null;
+                            if (row[columnName] != DBNull.Value)
+                                logMark.comment = (string)row[columnName];
+                            else
+                                logMark.comment = null;
                             break;
                         case "created":
                             if (row[columnName] != DBNull.Value)
@@ -2500,66 +2441,78 @@ namespace Netus2_DatabaseConnection.utilityTools
             return logMarks;
         }
 
-        public List<LogJctEnrollmentAcademicSession> Read_JctEnrollmentAcademicSession(IConnectable connection)
+        public List<LogJctEnrollmentClassEnrolled> Read_JctEnrollmentClassEnrolled(IConnectable connection)
         {
-            string sql = "SELECT * FROM log_jct_enrollment_academic_session";
+            string sql = "SELECT * FROM log_jct_enrollment_class_enrolled";
 
-            DataTable dtLogJctEnrollmentAcademicSession = DataTableFactory.CreateDataTable_Netus2_Log_JctEnrollmentAcademicSession();
-            dtLogJctEnrollmentAcademicSession = connection.ReadIntoDataTable(sql, dtLogJctEnrollmentAcademicSession);
+            DataTable dtLogJctEnrollmentClassEnrolled = DataTableFactory.CreateDataTable_Netus2_Log_JctEnrollmentClassEnrolled();
+            dtLogJctEnrollmentClassEnrolled = connection.ReadIntoDataTable(sql, dtLogJctEnrollmentClassEnrolled);
 
-            List<LogJctEnrollmentAcademicSession> logJctEnrollmentAcademicSessions = new List<LogJctEnrollmentAcademicSession>();
-            foreach(DataRow row in dtLogJctEnrollmentAcademicSession.Rows)
+            List<LogJctEnrollmentClassEnrolled> logJctEnrollmentClassEnrolleds = new List<LogJctEnrollmentClassEnrolled>();
+            foreach(DataRow row in dtLogJctEnrollmentClassEnrolled.Rows)
             {
-                LogJctEnrollmentAcademicSession logJctEnrollmentAcademicSession = new LogJctEnrollmentAcademicSession();
+                LogJctEnrollmentClassEnrolled logJctEnrollmentClassEnrolled = new LogJctEnrollmentClassEnrolled();
                 foreach (DataColumn colum in row.Table.Columns)
                 {
                     string columnName = colum.ColumnName;
                     switch (columnName)
                     {
-                        case "log_jct_enrollment_academic_session_id":
+                        case "log_jct_enrollment_class_enrolled_id":
                             if (row[columnName] != DBNull.Value)
-                                logJctEnrollmentAcademicSession.log_jct_enrollment_academic_session_id = (int)row[columnName];
+                                logJctEnrollmentClassEnrolled.log_jct_enrollment_class_enrolled_id = (int)row[columnName];
                             else
-                                logJctEnrollmentAcademicSession.log_jct_enrollment_academic_session_id = -1;
+                                logJctEnrollmentClassEnrolled.log_jct_enrollment_class_enrolled_id = -1;
                             break;
                         case "enrollment_id":
                             if (row[columnName] != DBNull.Value)
-                                logJctEnrollmentAcademicSession.enrollment_id = (int)row[columnName];
+                                logJctEnrollmentClassEnrolled.enrollment_id = (int)row[columnName];
                             else
-                                logJctEnrollmentAcademicSession.enrollment_id = -1;
+                                logJctEnrollmentClassEnrolled.enrollment_id = -1;
                             break;
-                        case "academic_session_id":
+                        case "class_enrolled_id":
                             if (row[columnName] != DBNull.Value)
-                                logJctEnrollmentAcademicSession.academic_session_id = (int)row[columnName];
+                                logJctEnrollmentClassEnrolled.class_enrolled_id = (int)row[columnName];
                             else
-                                logJctEnrollmentAcademicSession.academic_session_id = -1;
+                                logJctEnrollmentClassEnrolled.class_enrolled_id = -1;
+                            break;
+                        case "enrollment_start_date":
+                            if (row[columnName] != DBNull.Value)
+                                logJctEnrollmentClassEnrolled.enrollment_start_date = (DateTime)row[columnName];
+                            else
+                                logJctEnrollmentClassEnrolled.enrollment_start_date = null;
+                            break;
+                        case "enrollment_end_date":
+                            if (row[columnName] != DBNull.Value)
+                                logJctEnrollmentClassEnrolled.enrollment_end_date = (DateTime)row[columnName];
+                            else
+                                logJctEnrollmentClassEnrolled.enrollment_end_date = null;
                             break;
                         case "log_date":
                             if (row[columnName] != DBNull.Value)
-                                logJctEnrollmentAcademicSession.log_date = (DateTime)row[columnName];
+                                logJctEnrollmentClassEnrolled.log_date = (DateTime)row[columnName];
                             else
-                                logJctEnrollmentAcademicSession.log_date = new DateTime();
+                                logJctEnrollmentClassEnrolled.log_date = new DateTime();
                             break;
                         case "log_user":
                             if (row[columnName] != DBNull.Value)
-                                logJctEnrollmentAcademicSession.log_user = (string)row[columnName];
+                                logJctEnrollmentClassEnrolled.log_user = (string)row[columnName];
                             else
-                                logJctEnrollmentAcademicSession.log_user = null;
+                                logJctEnrollmentClassEnrolled.log_user = null;
                             break;
                         case "enum_log_action_id":
                             if (row[columnName] != DBNull.Value)
-                                logJctEnrollmentAcademicSession.set_LogAction((int)row[columnName]);
+                                logJctEnrollmentClassEnrolled.set_LogAction((int)row[columnName]);
                             else
-                                logJctEnrollmentAcademicSession.LogAction = null;
+                                logJctEnrollmentClassEnrolled.LogAction = null;
                             break;
                         default:
-                            throw new Exception("Unexpected column found in log_jct_enrollment_academic_session table: " + columnName);
+                            throw new Exception("Unexpected column found in log_jct_enrollment_class_enrolled table: " + columnName);
                     }
                 }
-                logJctEnrollmentAcademicSessions.Add(logJctEnrollmentAcademicSession);
+                logJctEnrollmentClassEnrolleds.Add(logJctEnrollmentClassEnrolled);
             }
 
-            return logJctEnrollmentAcademicSessions;
+            return logJctEnrollmentClassEnrolleds;
         }
     }
 }

@@ -66,10 +66,11 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AcademicSessionTasks
                     string[] sisParentSessionCodeArray = sisParentSessionCode.Split('-');
 
                     string sisParentBuildingCode = sisParentSessionCodeArray[0];
-                    string sisParentTermCode = sisParentSessionCodeArray[1];
-                    int sisParentSchoolYear = Int32.Parse(sisParentSessionCodeArray[2]);
+                    string sisParentTrackCode = sisParentSessionCodeArray[1];
+                    string sisParentTermCode = sisParentSessionCodeArray[2];
+                    int sisParentSchoolYear = Int32.Parse(sisParentSessionCodeArray[3]);
 
-                    parentAcademicSession = academicSessionDaoImpl.Read_UsingSisBuildingCode_TrackCode_TermCode_Schoolyear(sisParentBuildingCode, sisTrackCode, sisParentTermCode, sisParentSchoolYear, _netus2Connection);
+                    parentAcademicSession = academicSessionDaoImpl.Read_UsingSisBuildingCode_TrackCode_TermCode_Schoolyear(sisParentBuildingCode, sisParentTrackCode, sisParentTermCode, sisParentSchoolYear, _netus2Connection);
                     if (parentAcademicSession != null)
                     {
                         List<int> childIds = new List<int>();
@@ -81,9 +82,9 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AcademicSessionTasks
                     }
                     else
                         throw new Exception("No records were found matching parent Academic Session: " +
-                            "BuildingCode: " + sisParentBuildingCode + 
+                            "BuildingCode: " + sisParentBuildingCode +
+                            " TrackCode: " + sisParentTrackCode +
                             " TermCode: " + sisParentTermCode + 
-                            " TrackCode: " + sisTrackCode + 
                             " SchoolYear: " + sisParentSchoolYear);
                 }
                 else

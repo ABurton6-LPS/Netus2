@@ -99,10 +99,10 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                         values[2] = tstDataSet[count]["descript"];
                         values[3] = tstDataSet[count]["assign_date"];
                         values[4] = tstDataSet[count]["due_date"];
-                        values[5] = tstDataSet[count]["class_id"];
+                        values[5] = tstDataSet[count]["class_enrolled_id"];
                         values[6] = tstDataSet[count]["enum_category_id"];
-                        values[7] = tstDataSet[count]["markValueMin"];
-                        values[8] = tstDataSet[count]["markValueMax"];
+                        values[7] = tstDataSet[count]["mark_min"];
+                        values[8] = tstDataSet[count]["mark_max"];
                         values[9] = tstDataSet[count]["created"];
                         values[10] = tstDataSet[count]["created_by"];
                         values[11] = tstDataSet[count]["changed"];
@@ -146,8 +146,8 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 .Returns(() => typeof(DateTime));
 
             reader.Setup(x => x.GetName(5))
-                .Returns(() => "class_id");
-            reader.Setup(x => x.GetOrdinal("class_id"))
+                .Returns(() => "class_enrolled_id");
+            reader.Setup(x => x.GetOrdinal("class_enrolled_id"))
                 .Returns(() => 5);
             reader.Setup(x => x.GetFieldType(5))
                 .Returns(() => typeof(int));
@@ -160,15 +160,15 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 .Returns(() => typeof(int));
 
             reader.Setup(x => x.GetName(7))
-                .Returns(() => "markValueMin");
-            reader.Setup(x => x.GetOrdinal("markValueMin"))
+                .Returns(() => "mark_min");
+            reader.Setup(x => x.GetOrdinal("mark_min"))
                 .Returns(() => 7);
             reader.Setup(x => x.GetFieldType(7))
                 .Returns(() => typeof(double));
 
             reader.Setup(x => x.GetName(8))
-                .Returns(() => "markValueMax");
-            reader.Setup(x => x.GetOrdinal("markValueMax"))
+                .Returns(() => "mark_max");
+            reader.Setup(x => x.GetOrdinal("mark_max"))
                 .Returns(() => 8);
             reader.Setup(x => x.GetFieldType(8))
                 .Returns(() => typeof(double));

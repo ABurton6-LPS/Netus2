@@ -97,24 +97,6 @@ namespace Netus2_DatabaseConnection.daoImplementations
                     parameters.Add(new SqlParameter("@address_line_2", row["address_line_2"]));
                 }
 
-                if (row["address_line_3"] != DBNull.Value)
-                {
-                    sql.Append("AND address_line_3 = @address_line_3 ");
-                    parameters.Add(new SqlParameter("@address_line_3", row["address_line_3"]));
-                }
-
-                if (row["address_line_4"] != DBNull.Value)
-                {
-                    sql.Append("AND address_line_4 = @address_line_4 ");
-                    parameters.Add(new SqlParameter("@address_line_4", row["address_line_4"]));
-                }
-
-                if (row["apartment"] != DBNull.Value)
-                {
-                    sql.Append("AND apartment = @apartment ");
-                    parameters.Add(new SqlParameter("@apartment", row["apartment"]));
-                }
-
                 if (row["city"] != DBNull.Value)
                 {
                     sql.Append("AND city = @city ");
@@ -195,30 +177,6 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 else
                     sql.Append("address_line_2 = NULL, ");
 
-                if (row["address_line_1"] != DBNull.Value)
-                {
-                    sql.Append("address_line_3 = @address_line_3, ");
-                    parameters.Add(new SqlParameter("@address_line_3", row["address_line_3"]));
-                }
-                else
-                    sql.Append("address_line_3 = NULL, ");
-
-                if (row["address_line_4"] != DBNull.Value)
-                {
-                    sql.Append("address_line_4 = @address_line_4, ");
-                    parameters.Add(new SqlParameter("@address_line_4", row["address_line_4"]));
-                }
-                else
-                    sql.Append("address_line_4 = NULL, ");
-
-                if (row["apartment"] != DBNull.Value)
-                {
-                    sql.Append("apartment = @apartment, ");
-                    parameters.Add(new SqlParameter("@apartment", row["apartment"]));
-                }
-                else
-                    sql.Append("apartment = NULL, ");
-
                 if (row["city"] != DBNull.Value)
                 {
                     sql.Append("city = @city, ");
@@ -285,30 +243,6 @@ namespace Netus2_DatabaseConnection.daoImplementations
             else
                 sqlValues.Append("NULL, ");
 
-            if (row["address_line_3"] != DBNull.Value)
-            {
-                sqlValues.Append("@address_line_3, ");
-                parameters.Add(new SqlParameter("@address_line_3", row["address_line_3"]));
-            }
-            else
-                sqlValues.Append("NULL, ");
-
-            if (row["address_line_4"] != DBNull.Value)
-            {
-                sqlValues.Append("@address_line_4, ");
-                parameters.Add(new SqlParameter("@address_line_4", row["address_line_4"]));
-            }
-            else
-                sqlValues.Append("NULL, ");
-
-            if (row["apartment"] != DBNull.Value)
-            {
-                sqlValues.Append("@apartment, ");
-                parameters.Add(new SqlParameter("@apartment", row["apartment"]));
-            }
-            else
-                sqlValues.Append("NULL, ");
-
             if (row["city"] != DBNull.Value)
             {
                 sqlValues.Append("@city, ");
@@ -345,7 +279,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
             sqlValues.Append(_taskId != null ? _taskId.ToString() : "'Netus2'");
 
             string sql = "INSERT INTO address " +
-                "(address_line_1, address_line_2, address_line_3, address_line_4, apartment, " +
+                "(address_line_1, address_line_2, " +
                 "city, enum_state_province_id, postal_code, enum_country_id, " +
                 "created, created_by) VALUES (" + sqlValues.ToString() + ")";
 

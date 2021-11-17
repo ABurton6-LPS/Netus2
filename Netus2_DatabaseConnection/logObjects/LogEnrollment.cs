@@ -8,7 +8,7 @@ namespace Netus2_DatabaseConnection.logObjects
         public int log_enrollment_id { get; set; }
         public int enrollment_id { get; set; }
         public int person_id { get; set; }
-        public int class_id { get; set; }
+        public int academic_session_id { get; set; }
         public DateTime start_date { get; set; }
         public DateTime end_date { get; set; }
         public DateTime created { get; set; }

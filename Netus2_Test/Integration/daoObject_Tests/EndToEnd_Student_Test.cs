@@ -59,8 +59,8 @@ namespace Netus2_Test.Integration
             Person person = testDataBuilder.student;
 
             Assert_Table(person.Applications[0].Provider.Id, 1, "provider", DataTableFactory.CreateDataTable_Netus2_Provider(), connection);
-            Assert_Table(person.Applications[0].Id, 1, "app", DataTableFactory.CreateDataTable_Netus2_Application(), connection);
-            Assert_Table(person.Id, 1, "jct_person_app", DataTableFactory.CreateDataTable_Netus2_JctPersonApp(), connection);
+            Assert_Table(person.Applications[0].Id, 1, "application", DataTableFactory.CreateDataTable_Netus2_Application(), connection);
+            Assert_Table(person.Id, 1, "jct_person_application", DataTableFactory.CreateDataTable_Netus2_JctPersonApplication(), connection);
             Assert_Table(person.Id, 1, "person", DataTableFactory.CreateDataTable_Netus2_Person(), connection);
             Assert_Table(person.Id, 1, "jct_person_role", DataTableFactory.CreateDataTable_Netus2_JctPersonRole(), connection);
             Assert_Table(person.PhoneNumbers[0].Id, 1, "phone_number", DataTableFactory.CreateDataTable_Netus2_PhoneNumber(), connection);
@@ -69,15 +69,15 @@ namespace Netus2_Test.Integration
             Assert_Table(person.Marks[0].Id, 1, "mark", DataTableFactory.CreateDataTable_Netus2_Mark(), connection);
             Assert_Table(person.Marks[0].LineItem.Id, 1, "lineitem", DataTableFactory.CreateDataTable_Netus2_LineItem(), connection);
             Assert_Table(person.Enrollments[0].Id, 1, "enrollment", DataTableFactory.CreateDataTable_Netus2_Enrollment(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.Id, 1, "class", DataTableFactory.CreateDataTable_Netus2_ClassEnrolled(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.Id, 1, "jct_class_period", DataTableFactory.CreateDataTable_Netus2_JctClassPeriod(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.Id, 1, "jct_class_resource", DataTableFactory.CreateDataTable_Netus2_JctClassResource(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.Resources[0].Id, 1, "resource", DataTableFactory.CreateDataTable_Netus2_Resource(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.Course.Id, 1, "course", DataTableFactory.CreateDataTable_Netus2_Course(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.Course.Id, 1, "jct_course_subject", DataTableFactory.CreateDataTable_Netus2_JctCourseSubject(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.Course.Id, 1, "jct_course_grade", DataTableFactory.CreateDataTable_Netus2_JctCourseGrade(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.AcademicSession.Id, 1, "academic_session", DataTableFactory.CreateDataTable_Netus2_AcademicSession(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.AcademicSession.Organization.Id, 1, "organization", DataTableFactory.CreateDataTable_Netus2_Organization(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].Id, 1, "class_enrolled", DataTableFactory.CreateDataTable_Netus2_ClassEnrolled(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].Id, 1, "jct_class_enrolled_period", DataTableFactory.CreateDataTable_Netus2_JctClassPeriod(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].Id, 1, "jct_class_enrolled_resource", DataTableFactory.CreateDataTable_Netus2_JctClassResource(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].Resources[0].Id, 1, "resource", DataTableFactory.CreateDataTable_Netus2_Resource(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].Course.Id, 1, "course", DataTableFactory.CreateDataTable_Netus2_Course(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].Course.Id, 1, "jct_course_subject", DataTableFactory.CreateDataTable_Netus2_JctCourseSubject(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].Course.Id, 1, "jct_course_grade", DataTableFactory.CreateDataTable_Netus2_JctCourseGrade(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].AcademicSession.Id, 1, "academic_session", DataTableFactory.CreateDataTable_Netus2_AcademicSession(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].AcademicSession.Organization.Id, 1, "organization", DataTableFactory.CreateDataTable_Netus2_Organization(), connection);
 
             List<Person> results = personDaoImpl.Read(person, connection);
 
@@ -92,8 +92,8 @@ namespace Netus2_Test.Integration
             personDaoImpl.Delete(person, connection);
 
             Assert_Table(person.Applications[0].Provider.Id, 1, "provider", DataTableFactory.CreateDataTable_Netus2_Provider(), connection);
-            Assert_Table(person.Applications[0].Id, 1, "app", DataTableFactory.CreateDataTable_Netus2_Application(), connection);
-            Assert_Table(person.Id, 0, "jct_person_app", DataTableFactory.CreateDataTable_Netus2_JctPersonApp(), connection);
+            Assert_Table(person.Applications[0].Id, 1, "application", DataTableFactory.CreateDataTable_Netus2_Application(), connection);
+            Assert_Table(person.Id, 0, "jct_person_application", DataTableFactory.CreateDataTable_Netus2_JctPersonApplication(), connection);
             Assert_Table(person.Id, 0, "person", DataTableFactory.CreateDataTable_Netus2_Person(), connection);
             Assert_Table(person.Id, 0, "jct_person_role", DataTableFactory.CreateDataTable_Netus2_JctPersonRole(), connection);
             Assert_Table(person.Id, 0, "jct_person_phone_number", DataTableFactory.CreateDataTable_Netus2_JctPersonPhoneNumber(), connection);
@@ -103,16 +103,15 @@ namespace Netus2_Test.Integration
             Assert_Table(person.Marks[0].Id, 0, "mark", DataTableFactory.CreateDataTable_Netus2_Mark(), connection);
             Assert_Table(person.Marks[0].LineItem.Id, 1, "lineitem", DataTableFactory.CreateDataTable_Netus2_LineItem(), connection);
             Assert_Table(person.Enrollments[0].Id, 0, "enrollment", DataTableFactory.CreateDataTable_Netus2_Enrollment(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.Id, 1, "class", DataTableFactory.CreateDataTable_Netus2_ClassEnrolled(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.Id, 1, "jct_class_person", DataTableFactory.CreateDataTable_Netus2_JctClassPerson(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.Id, 1, "jct_class_period", DataTableFactory.CreateDataTable_Netus2_JctClassPeriod(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.Id, 1, "jct_class_resource", DataTableFactory.CreateDataTable_Netus2_JctClassResource(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.Resources[0].Id, 1, "resource", DataTableFactory.CreateDataTable_Netus2_Resource(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.Course.Id, 1, "course", DataTableFactory.CreateDataTable_Netus2_Course(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.Course.Id, 1, "jct_course_subject", DataTableFactory.CreateDataTable_Netus2_JctCourseSubject(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.Course.Id, 1, "jct_course_grade", DataTableFactory.CreateDataTable_Netus2_JctCourseGrade(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.AcademicSession.Id, 1, "academic_session", DataTableFactory.CreateDataTable_Netus2_AcademicSession(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.AcademicSession.Organization.Id, 1, "organization", DataTableFactory.CreateDataTable_Netus2_Organization(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].Id, 1, "class_enrolled", DataTableFactory.CreateDataTable_Netus2_ClassEnrolled(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].Id, 1, "jct_class_enrolled_period", DataTableFactory.CreateDataTable_Netus2_JctClassPeriod(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].Id, 1, "jct_class_enrolled_resource", DataTableFactory.CreateDataTable_Netus2_JctClassResource(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].Resources[0].Id, 1, "resource", DataTableFactory.CreateDataTable_Netus2_Resource(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].Course.Id, 1, "course", DataTableFactory.CreateDataTable_Netus2_Course(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].Course.Id, 1, "jct_course_subject", DataTableFactory.CreateDataTable_Netus2_JctCourseSubject(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].Course.Id, 1, "jct_course_grade", DataTableFactory.CreateDataTable_Netus2_JctCourseGrade(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].AcademicSession.Id, 1, "academic_session", DataTableFactory.CreateDataTable_Netus2_AcademicSession(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].AcademicSession.Organization.Id, 1, "organization", DataTableFactory.CreateDataTable_Netus2_Organization(), connection);
         }
 
         [Test]
@@ -120,11 +119,11 @@ namespace Netus2_Test.Integration
         {
             Person person = testDataBuilder.student;
 
-            classEnrolledDaoImpl.Delete(person.Enrollments[0].ClassEnrolled, connection);
+            classEnrolledDaoImpl.Delete(person.Enrollments[0].ClassesEnrolled[0], connection);
 
             Assert_Table(person.Applications[0].Provider.Id, 1, "provider", DataTableFactory.CreateDataTable_Netus2_Provider(), connection);
-            Assert_Table(person.Applications[0].Id, 1, "app", DataTableFactory.CreateDataTable_Netus2_Application(), connection);
-            Assert_Table(person.Id, 1, "jct_person_app", DataTableFactory.CreateDataTable_Netus2_JctPersonApp(), connection);
+            Assert_Table(person.Applications[0].Id, 1, "application", DataTableFactory.CreateDataTable_Netus2_Application(), connection);
+            Assert_Table(person.Id, 1, "jct_person_application", DataTableFactory.CreateDataTable_Netus2_JctPersonApplication(), connection);
             Assert_Table(person.Id, 1, "person", DataTableFactory.CreateDataTable_Netus2_Person(), connection);
             Assert_Table(person.Id, 1, "jct_person_role", DataTableFactory.CreateDataTable_Netus2_JctPersonRole(), connection);
             Assert_Table(person.PhoneNumbers[0].Id, 1, "phone_number", DataTableFactory.CreateDataTable_Netus2_PhoneNumber(), connection);
@@ -132,17 +131,17 @@ namespace Netus2_Test.Integration
             Assert_Table(person.UniqueIdentifiers[0].Id, 1, "unique_identifier", DataTableFactory.CreateDataTable_Netus2_UniqueIdentifier(), connection);
             Assert_Table(person.Marks[0].Id, 0, "mark", DataTableFactory.CreateDataTable_Netus2_Mark(), connection);
             Assert_Table(person.Marks[0].LineItem.Id, 0, "lineitem", DataTableFactory.CreateDataTable_Netus2_LineItem(), connection);
-            Assert_Table(person.Enrollments[0].Id, 0, "enrollment", DataTableFactory.CreateDataTable_Netus2_Enrollment(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.Id, 0, "class", DataTableFactory.CreateDataTable_Netus2_ClassEnrolled(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.Id, 0, "jct_class_person", DataTableFactory.CreateDataTable_Netus2_JctClassPerson(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.Id, 0, "jct_class_period", DataTableFactory.CreateDataTable_Netus2_JctClassPeriod(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.Id, 0, "jct_class_resource", DataTableFactory.CreateDataTable_Netus2_JctClassResource(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.Resources[0].Id, 1, "resource", DataTableFactory.CreateDataTable_Netus2_Resource(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.Course.Id, 1, "course", DataTableFactory.CreateDataTable_Netus2_Course(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.Course.Id, 1, "jct_course_subject", DataTableFactory.CreateDataTable_Netus2_JctCourseSubject(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.Course.Id, 1, "jct_course_grade", DataTableFactory.CreateDataTable_Netus2_JctCourseGrade(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.AcademicSession.Id, 1, "academic_session", DataTableFactory.CreateDataTable_Netus2_AcademicSession(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.AcademicSession.Organization.Id, 1, "organization", DataTableFactory.CreateDataTable_Netus2_Organization(), connection);
+            Assert_Table(person.Enrollments[0].Id, 0, "jct_enrollment_class_enrolled", DataTableFactory.CreateDataTable_Netus2_JctEnrollmentClassEnrolled(), connection);
+            Assert_Table(person.Enrollments[0].Id, 1, "enrollment", DataTableFactory.CreateDataTable_Netus2_Enrollment(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].Id, 0, "class_enrolled", DataTableFactory.CreateDataTable_Netus2_ClassEnrolled(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].Id, 0, "jct_class_enrolled_period", DataTableFactory.CreateDataTable_Netus2_JctClassPeriod(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].Id, 0, "jct_class_enrolled_resource", DataTableFactory.CreateDataTable_Netus2_JctClassResource(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].Resources[0].Id, 1, "resource", DataTableFactory.CreateDataTable_Netus2_Resource(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].Course.Id, 1, "course", DataTableFactory.CreateDataTable_Netus2_Course(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].Course.Id, 1, "jct_course_subject", DataTableFactory.CreateDataTable_Netus2_JctCourseSubject(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].Course.Id, 1, "jct_course_grade", DataTableFactory.CreateDataTable_Netus2_JctCourseGrade(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].AcademicSession.Id, 1, "academic_session", DataTableFactory.CreateDataTable_Netus2_AcademicSession(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].AcademicSession.Organization.Id, 1, "organization", DataTableFactory.CreateDataTable_Netus2_Organization(), connection);
         }
 
         [Test]
@@ -150,11 +149,11 @@ namespace Netus2_Test.Integration
         {
             Person person = testDataBuilder.student;
 
-            resourceDaoImpl.Delete(person.Enrollments[0].ClassEnrolled.Resources[0], connection);
+            resourceDaoImpl.Delete(person.Enrollments[0].ClassesEnrolled[0].Resources[0], connection);
 
             Assert_Table(person.Applications[0].Provider.Id, 1, "provider", DataTableFactory.CreateDataTable_Netus2_Provider(), connection);
-            Assert_Table(person.Applications[0].Id, 1, "app", DataTableFactory.CreateDataTable_Netus2_Application(), connection);
-            Assert_Table(person.Id, 1, "jct_person_app", DataTableFactory.CreateDataTable_Netus2_JctPersonApp(), connection);
+            Assert_Table(person.Applications[0].Id, 1, "application", DataTableFactory.CreateDataTable_Netus2_Application(), connection);
+            Assert_Table(person.Id, 1, "jct_person_application", DataTableFactory.CreateDataTable_Netus2_JctPersonApplication(), connection);
             Assert_Table(person.Id, 1, "person", DataTableFactory.CreateDataTable_Netus2_Person(), connection);
             Assert_Table(person.Id, 1, "jct_person_role", DataTableFactory.CreateDataTable_Netus2_JctPersonRole(), connection);
             Assert_Table(person.PhoneNumbers[0].Id, 1, "phone_number", DataTableFactory.CreateDataTable_Netus2_PhoneNumber(), connection);
@@ -163,15 +162,15 @@ namespace Netus2_Test.Integration
             Assert_Table(person.Marks[0].Id, 1, "mark", DataTableFactory.CreateDataTable_Netus2_Mark(), connection);
             Assert_Table(person.Marks[0].LineItem.Id, 1, "lineitem", DataTableFactory.CreateDataTable_Netus2_LineItem(), connection);
             Assert_Table(person.Enrollments[0].Id, 1, "enrollment", DataTableFactory.CreateDataTable_Netus2_Enrollment(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.Id, 1, "class", DataTableFactory.CreateDataTable_Netus2_ClassEnrolled(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.Id, 1, "jct_class_period", DataTableFactory.CreateDataTable_Netus2_JctClassPeriod(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.Id, 0, "jct_class_resource", DataTableFactory.CreateDataTable_Netus2_JctClassResource(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.Resources[0].Id, 0, "resource", DataTableFactory.CreateDataTable_Netus2_Resource(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.Course.Id, 1, "course", DataTableFactory.CreateDataTable_Netus2_Course(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.Course.Id, 1, "jct_course_subject", DataTableFactory.CreateDataTable_Netus2_JctCourseSubject(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.Course.Id, 1, "jct_course_grade", DataTableFactory.CreateDataTable_Netus2_JctCourseGrade(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.AcademicSession.Id, 1, "academic_session", DataTableFactory.CreateDataTable_Netus2_AcademicSession(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.AcademicSession.Organization.Id, 1, "organization", DataTableFactory.CreateDataTable_Netus2_Organization(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].Id, 1, "class_enrolled", DataTableFactory.CreateDataTable_Netus2_ClassEnrolled(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].Id, 1, "jct_class_enrolled_period", DataTableFactory.CreateDataTable_Netus2_JctClassPeriod(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].Id, 0, "jct_class_enrolled_resource", DataTableFactory.CreateDataTable_Netus2_JctClassResource(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].Resources[0].Id, 0, "resource", DataTableFactory.CreateDataTable_Netus2_Resource(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].Course.Id, 1, "course", DataTableFactory.CreateDataTable_Netus2_Course(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].Course.Id, 1, "jct_course_subject", DataTableFactory.CreateDataTable_Netus2_JctCourseSubject(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].Course.Id, 1, "jct_course_grade", DataTableFactory.CreateDataTable_Netus2_JctCourseGrade(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].AcademicSession.Id, 1, "academic_session", DataTableFactory.CreateDataTable_Netus2_AcademicSession(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].AcademicSession.Organization.Id, 1, "organization", DataTableFactory.CreateDataTable_Netus2_Organization(), connection);
         }
 
         [Test]
@@ -179,11 +178,11 @@ namespace Netus2_Test.Integration
         {
             Person person = testDataBuilder.student;
 
-            organizationDaoImpl.Delete(person.Enrollments[0].ClassEnrolled.AcademicSession.Organization, connection);
+            organizationDaoImpl.Delete(person.Enrollments[0].ClassesEnrolled[0].AcademicSession.Organization, connection);
 
             Assert_Table(person.Applications[0].Provider.Id, 1, "provider", DataTableFactory.CreateDataTable_Netus2_Provider(), connection);
-            Assert_Table(person.Applications[0].Id, 1, "app", DataTableFactory.CreateDataTable_Netus2_Application(), connection);
-            Assert_Table(person.Id, 1, "jct_person_app", DataTableFactory.CreateDataTable_Netus2_JctPersonApp(), connection);
+            Assert_Table(person.Applications[0].Id, 1, "application", DataTableFactory.CreateDataTable_Netus2_Application(), connection);
+            Assert_Table(person.Id, 1, "jct_person_application", DataTableFactory.CreateDataTable_Netus2_JctPersonApplication(), connection);
             Assert_Table(person.Id, 1, "person", DataTableFactory.CreateDataTable_Netus2_Person(), connection);
             Assert_Table(person.Id, 1, "jct_person_role", DataTableFactory.CreateDataTable_Netus2_JctPersonRole(), connection);
             Assert_Table(person.PhoneNumbers[0].Id, 1, "phone_number", DataTableFactory.CreateDataTable_Netus2_PhoneNumber(), connection);
@@ -192,15 +191,15 @@ namespace Netus2_Test.Integration
             Assert_Table(person.Marks[0].Id, 0, "mark", DataTableFactory.CreateDataTable_Netus2_Mark(), connection);
             Assert_Table(person.Marks[0].LineItem.Id, 0, "lineitem", DataTableFactory.CreateDataTable_Netus2_LineItem(), connection);
             Assert_Table(person.Enrollments[0].Id, 0, "enrollment", DataTableFactory.CreateDataTable_Netus2_Enrollment(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.Id, 0, "class", DataTableFactory.CreateDataTable_Netus2_ClassEnrolled(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.Id, 0, "jct_class_period", DataTableFactory.CreateDataTable_Netus2_JctClassPeriod(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.Id, 0, "jct_class_resource", DataTableFactory.CreateDataTable_Netus2_JctClassResource(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.Resources[0].Id, 1, "resource", DataTableFactory.CreateDataTable_Netus2_Resource(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.Course.Id, 1, "course", DataTableFactory.CreateDataTable_Netus2_Course(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.Course.Id, 1, "jct_course_subject", DataTableFactory.CreateDataTable_Netus2_JctCourseSubject(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.Course.Id, 1, "jct_course_grade", DataTableFactory.CreateDataTable_Netus2_JctCourseGrade(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.AcademicSession.Id, 0, "academic_session", DataTableFactory.CreateDataTable_Netus2_AcademicSession(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.AcademicSession.Organization.Id, 0, "organization", DataTableFactory.CreateDataTable_Netus2_Organization(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].Id, 0, "class_enrolled", DataTableFactory.CreateDataTable_Netus2_ClassEnrolled(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].Id, 0, "jct_class_enrolled_period", DataTableFactory.CreateDataTable_Netus2_JctClassPeriod(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].Id, 0, "jct_class_enrolled_resource", DataTableFactory.CreateDataTable_Netus2_JctClassResource(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].Resources[0].Id, 1, "resource", DataTableFactory.CreateDataTable_Netus2_Resource(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].Course.Id, 1, "course", DataTableFactory.CreateDataTable_Netus2_Course(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].Course.Id, 1, "jct_course_subject", DataTableFactory.CreateDataTable_Netus2_JctCourseSubject(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].Course.Id, 1, "jct_course_grade", DataTableFactory.CreateDataTable_Netus2_JctCourseGrade(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].AcademicSession.Id, 0, "academic_session", DataTableFactory.CreateDataTable_Netus2_AcademicSession(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].AcademicSession.Organization.Id, 0, "organization", DataTableFactory.CreateDataTable_Netus2_Organization(), connection);
         }
 
         [Test]
@@ -208,11 +207,11 @@ namespace Netus2_Test.Integration
         {
             Person person = testDataBuilder.student;
 
-            courseDaoImpl.Delete(person.Enrollments[0].ClassEnrolled.Course, connection);
+            courseDaoImpl.Delete(person.Enrollments[0].ClassesEnrolled[0].Course, connection);
 
             Assert_Table(person.Applications[0].Provider.Id, 1, "provider", DataTableFactory.CreateDataTable_Netus2_Provider(), connection);
-            Assert_Table(person.Applications[0].Id, 1, "app", DataTableFactory.CreateDataTable_Netus2_Application(), connection);
-            Assert_Table(person.Id, 1, "jct_person_app", DataTableFactory.CreateDataTable_Netus2_JctPersonApp(), connection);
+            Assert_Table(person.Applications[0].Id, 1, "application", DataTableFactory.CreateDataTable_Netus2_Application(), connection);
+            Assert_Table(person.Id, 1, "jct_person_application", DataTableFactory.CreateDataTable_Netus2_JctPersonApplication(), connection);
             Assert_Table(person.Id, 1, "person", DataTableFactory.CreateDataTable_Netus2_Person(), connection);
             Assert_Table(person.Id, 1, "jct_person_role", DataTableFactory.CreateDataTable_Netus2_JctPersonRole(), connection);
             Assert_Table(person.PhoneNumbers[0].Id, 1, "phone_number", DataTableFactory.CreateDataTable_Netus2_PhoneNumber(), connection);
@@ -220,16 +219,17 @@ namespace Netus2_Test.Integration
             Assert_Table(person.UniqueIdentifiers[0].Id, 1, "unique_identifier", DataTableFactory.CreateDataTable_Netus2_UniqueIdentifier(), connection);
             Assert_Table(person.Marks[0].Id, 0, "mark", DataTableFactory.CreateDataTable_Netus2_Mark(), connection);
             Assert_Table(person.Marks[0].LineItem.Id, 0, "lineitem", DataTableFactory.CreateDataTable_Netus2_LineItem(), connection);
-            Assert_Table(person.Enrollments[0].Id, 0, "enrollment", DataTableFactory.CreateDataTable_Netus2_Enrollment(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.Id, 0, "class", DataTableFactory.CreateDataTable_Netus2_ClassEnrolled(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.Id, 0, "jct_class_period", DataTableFactory.CreateDataTable_Netus2_JctClassPeriod(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.Id, 0, "jct_class_resource", DataTableFactory.CreateDataTable_Netus2_JctClassResource(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.Resources[0].Id, 1, "resource", DataTableFactory.CreateDataTable_Netus2_Resource(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.Course.Id, 0, "course", DataTableFactory.CreateDataTable_Netus2_Course(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.Course.Id, 0, "jct_course_subject", DataTableFactory.CreateDataTable_Netus2_JctCourseSubject(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.Course.Id, 0, "jct_course_grade", DataTableFactory.CreateDataTable_Netus2_JctCourseGrade(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.AcademicSession.Id, 1, "academic_session", DataTableFactory.CreateDataTable_Netus2_AcademicSession(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.AcademicSession.Organization.Id, 1, "organization", DataTableFactory.CreateDataTable_Netus2_Organization(), connection);
+            Assert_Table(person.Enrollments[0].Id, 0, "jct_enrollment_class_enrolled", DataTableFactory.CreateDataTable_Netus2_JctEnrollmentClassEnrolled(), connection);
+            Assert_Table(person.Enrollments[0].Id, 1, "enrollment", DataTableFactory.CreateDataTable_Netus2_Enrollment(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].Id, 0, "class_enrolled", DataTableFactory.CreateDataTable_Netus2_ClassEnrolled(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].Id, 0, "jct_class_enrolled_period", DataTableFactory.CreateDataTable_Netus2_JctClassPeriod(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].Id, 0, "jct_class_enrolled_resource", DataTableFactory.CreateDataTable_Netus2_JctClassResource(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].Resources[0].Id, 1, "resource", DataTableFactory.CreateDataTable_Netus2_Resource(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].Course.Id, 0, "course", DataTableFactory.CreateDataTable_Netus2_Course(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].Course.Id, 0, "jct_course_subject", DataTableFactory.CreateDataTable_Netus2_JctCourseSubject(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].Course.Id, 0, "jct_course_grade", DataTableFactory.CreateDataTable_Netus2_JctCourseGrade(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].AcademicSession.Id, 1, "academic_session", DataTableFactory.CreateDataTable_Netus2_AcademicSession(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].AcademicSession.Organization.Id, 1, "organization", DataTableFactory.CreateDataTable_Netus2_Organization(), connection);
         }
 
         [Test]
@@ -240,8 +240,8 @@ namespace Netus2_Test.Integration
             providerDaoImpl.Delete(person.Applications[0].Provider, connection);
 
             Assert_Table(person.Applications[0].Provider.Id, 0, "provider", DataTableFactory.CreateDataTable_Netus2_Provider(), connection);
-            Assert_Table(person.Applications[0].Id, 0, "app", DataTableFactory.CreateDataTable_Netus2_Application(), connection);
-            Assert_Table(person.Id, 0, "jct_person_app", DataTableFactory.CreateDataTable_Netus2_JctPersonApp(), connection);
+            Assert_Table(person.Applications[0].Id, 0, "application", DataTableFactory.CreateDataTable_Netus2_Application(), connection);
+            Assert_Table(person.Id, 0, "jct_person_application", DataTableFactory.CreateDataTable_Netus2_JctPersonApplication(), connection);
             Assert_Table(person.Id, 1, "person", DataTableFactory.CreateDataTable_Netus2_Person(), connection);
             Assert_Table(person.Id, 1, "jct_person_role", DataTableFactory.CreateDataTable_Netus2_JctPersonRole(), connection);
             Assert_Table(person.PhoneNumbers[0].Id, 1, "phone_number", DataTableFactory.CreateDataTable_Netus2_PhoneNumber(), connection);
@@ -250,15 +250,15 @@ namespace Netus2_Test.Integration
             Assert_Table(person.Marks[0].Id, 1, "mark", DataTableFactory.CreateDataTable_Netus2_Mark(), connection);
             Assert_Table(person.Marks[0].LineItem.Id, 1, "lineitem", DataTableFactory.CreateDataTable_Netus2_LineItem(), connection);
             Assert_Table(person.Enrollments[0].Id, 1, "enrollment", DataTableFactory.CreateDataTable_Netus2_Enrollment(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.Id, 1, "class", DataTableFactory.CreateDataTable_Netus2_ClassEnrolled(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.Id, 1, "jct_class_period", DataTableFactory.CreateDataTable_Netus2_JctClassPeriod(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.Id, 1, "jct_class_resource", DataTableFactory.CreateDataTable_Netus2_JctClassResource(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.Resources[0].Id, 1, "resource", DataTableFactory.CreateDataTable_Netus2_Resource(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.Course.Id, 1, "course", DataTableFactory.CreateDataTable_Netus2_Course(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.Course.Id, 1, "jct_course_subject", DataTableFactory.CreateDataTable_Netus2_JctCourseSubject(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.Course.Id, 1, "jct_course_grade", DataTableFactory.CreateDataTable_Netus2_JctCourseGrade(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.AcademicSession.Id, 1, "academic_session", DataTableFactory.CreateDataTable_Netus2_AcademicSession(), connection);
-            Assert_Table(person.Enrollments[0].ClassEnrolled.AcademicSession.Organization.Id, 1, "organization", DataTableFactory.CreateDataTable_Netus2_Organization(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].Id, 1, "class_enrolled", DataTableFactory.CreateDataTable_Netus2_ClassEnrolled(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].Id, 1, "jct_class_enrolled_period", DataTableFactory.CreateDataTable_Netus2_JctClassPeriod(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].Id, 1, "jct_class_enrolled_resource", DataTableFactory.CreateDataTable_Netus2_JctClassResource(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].Resources[0].Id, 1, "resource", DataTableFactory.CreateDataTable_Netus2_Resource(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].Course.Id, 1, "course", DataTableFactory.CreateDataTable_Netus2_Course(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].Course.Id, 1, "jct_course_subject", DataTableFactory.CreateDataTable_Netus2_JctCourseSubject(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].Course.Id, 1, "jct_course_grade", DataTableFactory.CreateDataTable_Netus2_JctCourseGrade(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].AcademicSession.Id, 1, "academic_session", DataTableFactory.CreateDataTable_Netus2_AcademicSession(), connection);
+            Assert_Table(person.Enrollments[0].ClassesEnrolled[0].AcademicSession.Organization.Id, 1, "organization", DataTableFactory.CreateDataTable_Netus2_Organization(), connection);
         }
 
         [Test]
@@ -305,7 +305,7 @@ namespace Netus2_Test.Integration
 
             ClassEnrolled result = classEnrolledDaoImpl.Read(classEnrolled, connection)[0];
             AssertClassEnrolled(classEnrolled, result);
-            Assert_Table(result.Id, 1, "class", DataTableFactory.CreateDataTable_Netus2_ClassEnrolled(), connection);
+            Assert_Table(result.Id, 1, "class_enrolled", DataTableFactory.CreateDataTable_Netus2_ClassEnrolled(), connection);
             Assert.AreNotEqual(oldAcademicSession.Id, result.AcademicSession.Id);
             Assert_Table(oldAcademicSession.Id, 0, "academic_session", DataTableFactory.CreateDataTable_Netus2_AcademicSession(), connection);
             Assert_Table(result.AcademicSession.Id, 1, "academic_session", DataTableFactory.CreateDataTable_Netus2_AcademicSession(), connection);

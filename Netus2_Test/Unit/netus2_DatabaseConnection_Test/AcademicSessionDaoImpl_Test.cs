@@ -37,7 +37,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
             mockClassEnrolledDaoImpl._shouldReadReturnData = true;
             DaoImplFactory.MockClassEnrolledDaoImpl = mockClassEnrolledDaoImpl;
             DaoImplFactory.MockOrganizationDaoImpl = new MockOrganizationDaoImpl(tdBuilder);
-            DaoImplFactory.MockJctEnrollmentAcademicSessionDaoImpl = new MockJctEnrollmentAcademicSessionDaoImpl(tdBuilder);
+            DaoImplFactory.MockJctEnrollmentClassEnrolledDaoImpl = new MockJctEnrollmentClassEnrolledDaoImpl(tdBuilder);
 
             academicSessionDaoImpl.Delete(tdBuilder.schoolYear, _netus2DbConnection);
 
@@ -45,16 +45,17 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
         }
 
         [TestCase]
-        public void UnlinkEnrollment_ShouldCallExpectedMethod()
+        public void DeleteEnrollment_ShouldCallExpectedMethod()
         {
-            DaoImplFactory.MockClassEnrolledDaoImpl = new MockClassEnrolledDaoImpl(tdBuilder); ;
-            DaoImplFactory.MockOrganizationDaoImpl = new MockOrganizationDaoImpl(tdBuilder);
-            MockJctEnrollmentAcademicSessionDaoImpl mockJctEnrollmentAcademicSessionDaoImpl = new MockJctEnrollmentAcademicSessionDaoImpl(tdBuilder);
-            DaoImplFactory.MockJctEnrollmentAcademicSessionDaoImpl = mockJctEnrollmentAcademicSessionDaoImpl;
+            DaoImplFactory.MockClassEnrolledDaoImpl = new MockClassEnrolledDaoImpl(tdBuilder);
+            MockEnrollmentDaoImpl mockEnrollmentDaoImpl = new MockEnrollmentDaoImpl(tdBuilder);
+            mockEnrollmentDaoImpl._shouldReadReturnData = true;
+            DaoImplFactory.MockEnrollmentDaoImpl = mockEnrollmentDaoImpl;
 
             academicSessionDaoImpl.Delete(tdBuilder.schoolYear, _netus2DbConnection);
 
-            Assert.IsTrue(mockJctEnrollmentAcademicSessionDaoImpl.WasCalled_Delete);
+            Assert.IsTrue(mockEnrollmentDaoImpl.WasCalled_ReadAllWithAcademicSessionId);
+            Assert.IsTrue(mockEnrollmentDaoImpl.WasCalled_Delete);
         }
 
         [TestCase]

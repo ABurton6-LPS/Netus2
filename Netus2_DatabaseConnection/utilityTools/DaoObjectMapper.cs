@@ -62,6 +62,11 @@ namespace Netus2_DatabaseConnection.utilityTools
             else
                 row["login_pw"] = DBNull.Value;
 
+            if (person.StatusType != null)
+                row["enum_status_id"] = person.StatusType.Id;
+            else
+                row["enum_status_id"] = DBNull.Value;
+
             return row;
         }
 
@@ -114,6 +119,11 @@ namespace Netus2_DatabaseConnection.utilityTools
             else
                 person.LoginPw = null;
 
+            if (row["enum_status_id"] != DBNull.Value)
+                person.StatusType = Enum_Status.GetEnumFromId((int)row["enum_status_id"]);
+            else
+                person.StatusType = null;
+
             return person;
         }
 
@@ -127,9 +137,9 @@ namespace Netus2_DatabaseConnection.utilityTools
                 row["phone_number_id"] = DBNull.Value;
 
             if (phoneNumber.PhoneNumberValue != null)
-                row["phone_number"] = phoneNumber.PhoneNumberValue;
+                row["phone_number_value"] = phoneNumber.PhoneNumberValue;
             else
-                row["phone_number"] = DBNull.Value;
+                row["phone_number_value"] = DBNull.Value;
 
             if (phoneNumber.PhoneType != null)
                 row["enum_phone_id"] = phoneNumber.PhoneType.Id;
@@ -146,8 +156,8 @@ namespace Netus2_DatabaseConnection.utilityTools
                 phoneType = Enum_Phone.GetEnumFromId((int)row["enum_phone_id"]);
 
             string strPhoneNumber = null;
-            if (row["phone_number"] != DBNull.Value)
-                strPhoneNumber = (string)row["phone_number"];
+            if (row["phone_number_value"] != DBNull.Value)
+                strPhoneNumber = (string)row["phone_number_value"];
 
             PhoneNumber phoneNumber = new PhoneNumber(strPhoneNumber, phoneType);
 
@@ -232,9 +242,9 @@ namespace Netus2_DatabaseConnection.utilityTools
             DataRow row = DataTableFactory.CreateDataTable_Netus2_Application().NewRow();
 
             if (application.Id != -1)
-                row["app_id"] = application.Id;
+                row["application_id"] = application.Id;
             else
-                row["app_id"] = DBNull.Value;
+                row["application_id"] = DBNull.Value;
 
             if (application.Name != null)
                 row["name"] = application.Name;
@@ -257,8 +267,8 @@ namespace Netus2_DatabaseConnection.utilityTools
 
             Application application = new Application(name, provider);
 
-            if (row["app_id"] != DBNull.Value)
-                application.Id = (int)row["app_id"];
+            if (row["application_id"] != DBNull.Value)
+                application.Id = (int)row["application_id"];
             else
                 application.Id = -1;
 
@@ -388,9 +398,9 @@ namespace Netus2_DatabaseConnection.utilityTools
                 row["email_id"] = DBNull.Value;
 
             if (email.EmailValue != null)
-                row["email"] = email.EmailValue;
+                row["email_value"] = email.EmailValue;
             else
-                row["email"] = DBNull.Value;
+                row["email_value"] = DBNull.Value;
 
             if (email.EmailType != null)
                 row["enum_email_id"] = email.EmailType.Id;
@@ -403,8 +413,8 @@ namespace Netus2_DatabaseConnection.utilityTools
         public Email MapEmail(DataRow row)
         {
             string emailValue = null;
-            if (row["email"] != DBNull.Value)
-                emailValue = (string)row["email"];
+            if (row["email_value"] != DBNull.Value)
+                emailValue = (string)row["email_value"];
 
             Enumeration emailType = null;
             if (row["enum_email_id"] != DBNull.Value)
@@ -435,9 +445,9 @@ namespace Netus2_DatabaseConnection.utilityTools
                 row["person_id"] = DBNull.Value;
 
             if (uniqueId.Identifier != null)
-                row["unique_identifier"] = uniqueId.Identifier;
+                row["unique_identifier_value"] = uniqueId.Identifier;
             else
-                row["unique_identifier"] = DBNull.Value;
+                row["unique_identifier_value"] = DBNull.Value;
 
             if (uniqueId.IdentifierType != null)
                 row["enum_identifier_id"] = uniqueId.IdentifierType.Id;
@@ -454,8 +464,8 @@ namespace Netus2_DatabaseConnection.utilityTools
                 identifierType = Enum_Identifier.GetEnumFromId((int)row["enum_identifier_id"]);
 
             string uniqueIdentifier = null;
-            if (row["unique_identifier"] != DBNull.Value)
-                uniqueIdentifier = (string)row["unique_identifier"];
+            if (row["unique_identifier_value"] != DBNull.Value)
+                uniqueIdentifier = (string)row["unique_identifier_value"];
 
             UniqueIdentifier uniqueId = new UniqueIdentifier(uniqueIdentifier, identifierType);
 
@@ -685,10 +695,10 @@ namespace Netus2_DatabaseConnection.utilityTools
             else
                 row["person_id"] = DBNull.Value;
 
-            if (enrollment.ClassEnrolled != null && enrollment.ClassEnrolled.Id != -1)
-                row["class_id"] = enrollment.ClassEnrolled.Id;
+            if (enrollment.AcademicSession != null && enrollment.AcademicSession.Id != -1)
+                row["academic_session_id"] = enrollment.AcademicSession.Id;
             else
-                row["class_id"] = DBNull.Value;
+                row["academic_session_id"] = DBNull.Value;
 
             if (enrollment.GradeLevel != null)
                 row["enum_grade_id"] = enrollment.GradeLevel.Id;
@@ -713,7 +723,7 @@ namespace Netus2_DatabaseConnection.utilityTools
             return row;
         }
 
-        public Enrollment MapEnrollment(DataRow row, ClassEnrolled classEnrolled, List<AcademicSession> academicSessions)
+        public Enrollment MapEnrollment(DataRow row, List<ClassEnrolled> classesEnrolled, AcademicSession academicSession)
         {
             Enumeration gradeLevel = null;
             if(row["is_primary_id"] != DBNull.Value)
@@ -731,7 +741,9 @@ namespace Netus2_DatabaseConnection.utilityTools
             if(row["is_primary_id"] != DBNull.Value)
                 isPrimary = Enum_True_False.GetEnumFromId((int)row["is_primary_id"]);
 
-            Enrollment enrollment = new Enrollment(gradeLevel, startDate, endDate, isPrimary, classEnrolled, academicSessions);
+            Enrollment enrollment = new Enrollment(gradeLevel, startDate, endDate, isPrimary);
+            enrollment.ClassesEnrolled = classesEnrolled;
+            enrollment.AcademicSession = academicSession;
 
             if (row["enrollment_id"] != DBNull.Value)
                 enrollment.Id = (int)row["enrollment_id"];
@@ -746,9 +758,9 @@ namespace Netus2_DatabaseConnection.utilityTools
             DataRow row = DataTableFactory.CreateDataTable_Netus2_ClassEnrolled().NewRow();
 
             if (classEnrolled.Id != -1)
-                row["class_id"] = classEnrolled.Id;
+                row["class_enrolled_id"] = classEnrolled.Id;
             else
-                row["class_id"] = DBNull.Value;
+                row["class_enrolled_id"] = DBNull.Value;
 
             if (classEnrolled.Name != null)
                 row["name"] = classEnrolled.Name;
@@ -756,14 +768,14 @@ namespace Netus2_DatabaseConnection.utilityTools
                 row["name"] = DBNull.Value;
 
             if (classEnrolled.ClassCode != null)
-                row["class_code"] = classEnrolled.ClassCode;
+                row["class_enrolled_code"] = classEnrolled.ClassCode;
             else
-                row["class_code"] = DBNull.Value;
+                row["class_enrolled_code"] = DBNull.Value;
 
             if (classEnrolled.ClassType != null)
-                row["enum_class_id"] = classEnrolled.ClassType.Id;
+                row["enum_class_enrolled_id"] = classEnrolled.ClassType.Id;
             else
-                row["enum_class_id"] = DBNull.Value;
+                row["enum_class_enrolled_id"] = DBNull.Value;
 
             if (classEnrolled.Room != null)
                 row["room"] = classEnrolled.Room;
@@ -790,12 +802,12 @@ namespace Netus2_DatabaseConnection.utilityTools
                 name = (string)row["name"];
 
             string classCode = null;
-            if(row["class_code"] != DBNull.Value)
-                classCode = (string)row["class_code"];
+            if(row["class_enrolled_code"] != DBNull.Value)
+                classCode = (string)row["class_enrolled_code"];
 
             Enumeration classType = null;
-            if(row["enum_class_id"] != DBNull.Value)
-                classType = Enum_Class.GetEnumFromId((int)row["enum_class_id"]);
+            if(row["enum_class_enrolled_id"] != DBNull.Value)
+                classType = Enum_Class_Enrolled.GetEnumFromId((int)row["enum_class_enrolled_id"]);
 
             string room = null;
             if (row["room"] != DBNull.Value)
@@ -803,8 +815,8 @@ namespace Netus2_DatabaseConnection.utilityTools
 
             ClassEnrolled classEnrolled = new ClassEnrolled(name, classCode, classType, room, course, academicSession);
 
-            if (row["class_id"] != DBNull.Value)
-                classEnrolled.Id = (int)row["class_id"];
+            if (row["class_enrolled_id"] != DBNull.Value)
+                classEnrolled.Id = (int)row["class_enrolled_id"];
             else
                 classEnrolled.Id = -1;
 
@@ -1123,9 +1135,9 @@ namespace Netus2_DatabaseConnection.utilityTools
                 row["due_date"] = DBNull.Value;
             
             if (lineItem.ClassAssigned != null && lineItem.ClassAssigned.Id != -1)
-                row["class_id"] = lineItem.ClassAssigned.Id;
+                row["class_enrolled_id"] = lineItem.ClassAssigned.Id;
             else
-                row["class_id"] = DBNull.Value;
+                row["class_enrolled_id"] = DBNull.Value;
 
             if (lineItem.Category != null)
                 row["enum_category_id"] = lineItem.Category.Id;
@@ -1133,14 +1145,14 @@ namespace Netus2_DatabaseConnection.utilityTools
                 row["enum_category_id"] = DBNull.Value;
 
             if (lineItem.MarkValueMin != -1)
-                row["markValueMin"] = lineItem.MarkValueMin;
+                row["mark_min"] = lineItem.MarkValueMin;
             else
-                row["markValeMin"] = DBNull.Value;
+                row["mark_min"] = DBNull.Value;
 
             if (lineItem.MarkValueMax != -1)
-                row["markValueMax"] = lineItem.MarkValueMax;
+                row["mark_max"] = lineItem.MarkValueMax;
             else
-                row["markValueMax"] = DBNull.Value;
+                row["mark_max"] = DBNull.Value;
 
             return row;
         }
@@ -1164,12 +1176,12 @@ namespace Netus2_DatabaseConnection.utilityTools
                 category = Enum_Category.GetEnumFromId((int)row["enum_category_id"]);
 
             double markMin = -1;
-            if(row["markValueMin"] != DBNull.Value)
-                markMin = (double)row["markValueMin"];
+            if(row["mark_min"] != DBNull.Value)
+                markMin = (double)row["mark_min"];
 
             double markMax = -1;
-            if(row["markValueMax"] != DBNull.Value)
-                markMax = (double)row["markValueMax"];
+            if(row["mark_max"] != DBNull.Value)
+                markMax = (double)row["mark_max"];
 
             LineItem lineItem = new LineItem(name, assignDate, dueDate, classEnrolled, category, markMin, markMax);
 

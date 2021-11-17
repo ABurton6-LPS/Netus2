@@ -631,7 +631,7 @@ namespace Netus2_DatabaseConnection.utilityTools
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(string);
-            dtColumn.ColumnName = "email";
+            dtColumn.ColumnName = "email_value";
             dtEmail.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
@@ -670,7 +670,7 @@ namespace Netus2_DatabaseConnection.utilityTools
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(int);
-            dtColumn.ColumnName = "app_id";
+            dtColumn.ColumnName = "application_id";
             PrimaryKeycolumns[0] = dtColumn;
             dtApplication.Columns.Add(dtColumn);
             dtApplication.PrimaryKey = PrimaryKeycolumns;
@@ -716,7 +716,7 @@ namespace Netus2_DatabaseConnection.utilityTools
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(int);
-            dtColumn.ColumnName = "class_id";
+            dtColumn.ColumnName = "class_enrolled_id";
             PrimaryKeycolumns[0] = dtColumn;
             dtClassEnrolled.Columns.Add(dtColumn);
             dtClassEnrolled.PrimaryKey = PrimaryKeycolumns;
@@ -728,12 +728,12 @@ namespace Netus2_DatabaseConnection.utilityTools
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(string);
-            dtColumn.ColumnName = "class_code";
+            dtColumn.ColumnName = "class_enrolled_code";
             dtClassEnrolled.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(int);
-            dtColumn.ColumnName = "enum_class_id";
+            dtColumn.ColumnName = "enum_class_enrolled_id";
             dtClassEnrolled.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
@@ -911,7 +911,7 @@ namespace Netus2_DatabaseConnection.utilityTools
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(int);
-            dtColumn.ColumnName = "class_id";
+            dtColumn.ColumnName = "academic_session_id";
             dtEnrollment.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
@@ -992,7 +992,7 @@ namespace Netus2_DatabaseConnection.utilityTools
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(int);
-            dtColumn.ColumnName = "class_id";
+            dtColumn.ColumnName = "class_enrolled_id";
             dtLineItem.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
@@ -1002,12 +1002,12 @@ namespace Netus2_DatabaseConnection.utilityTools
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(double);
-            dtColumn.ColumnName = "markValueMin";
+            dtColumn.ColumnName = "mark_min";
             dtLineItem.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(double);
-            dtColumn.ColumnName = "markValueMax";
+            dtColumn.ColumnName = "mark_max";
             dtLineItem.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
@@ -1224,6 +1224,11 @@ namespace Netus2_DatabaseConnection.utilityTools
             dtPerson.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(int);
+            dtColumn.ColumnName = "enum_status_id";
+            dtPerson.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
             dtColumn.DataType = typeof(DateTime);
             dtColumn.ColumnName = "created";
             dtPerson.Columns.Add(dtColumn);
@@ -1261,7 +1266,7 @@ namespace Netus2_DatabaseConnection.utilityTools
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(string);
-            dtColumn.ColumnName = "phone_number";
+            dtColumn.ColumnName = "phone_number_value";
             dtPhoneNumber.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
@@ -1434,7 +1439,7 @@ namespace Netus2_DatabaseConnection.utilityTools
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(string);
-            dtColumn.ColumnName = "unique_identifier";
+            dtColumn.ColumnName = "unique_identifier_value";
             dtUniqueIdentifier.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
@@ -1473,7 +1478,7 @@ namespace Netus2_DatabaseConnection.utilityTools
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(int);
-            dtColumn.ColumnName = "class_id";
+            dtColumn.ColumnName = "class_enrolled_id";
             PrimaryKeycolumns[0] = dtColumn;
             dtJctClassPeriod.Columns.Add(dtColumn);
             dtJctClassPeriod.PrimaryKey = PrimaryKeycolumns;
@@ -1488,34 +1493,6 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtJctClassPeriod;
         }
 
-        public static DataTable CreateDataTable_Netus2_JctClassPerson()
-        {
-            DataTable dtJctClassPerson = new DataTable("JctClassPerson");
-            DataColumn[] PrimaryKeycolumns = new DataColumn[2];
-            DataColumn dtColumn;
-
-            dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(int);
-            dtColumn.ColumnName = "class_id";
-            PrimaryKeycolumns[0] = dtColumn;
-            dtJctClassPerson.Columns.Add(dtColumn);
-            dtJctClassPerson.PrimaryKey = PrimaryKeycolumns;
-
-            dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(int);
-            dtColumn.ColumnName = "person_id";
-            PrimaryKeycolumns[1] = dtColumn;
-            dtJctClassPerson.Columns.Add(dtColumn);
-            dtJctClassPerson.PrimaryKey = PrimaryKeycolumns;
-
-            dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(int);
-            dtColumn.ColumnName = "enum_role_id";
-            dtJctClassPerson.Columns.Add(dtColumn);
-
-            return dtJctClassPerson;
-        }
-
         public static DataTable CreateDataTable_Netus2_JctClassResource()
         {
             DataTable dtJctClassResource = new DataTable("JctClassResource");
@@ -1524,7 +1501,7 @@ namespace Netus2_DatabaseConnection.utilityTools
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(int);
-            dtColumn.ColumnName = "class_id";
+            dtColumn.ColumnName = "class_enrolled_id";
             PrimaryKeycolumns[0] = dtColumn;
             dtJctClassResource.Columns.Add(dtColumn);
             dtJctClassResource.PrimaryKey = PrimaryKeycolumns;
@@ -1585,27 +1562,38 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtJctCourseSubject;
         }
 
-        public static DataTable CreateDataTable_Netus2_JctEnrollmentAcademicSession()
+        public static DataTable CreateDataTable_Netus2_JctEnrollmentClassEnrolled()
         {
-            DataTable dtJctEnrollmentAcademicSession = new DataTable("JctEnrollmentAcademicSession");
-            DataColumn[] PrimaryKeycolumns = new DataColumn[2];
+            DataTable dtJctEnrollmentClassEnrolled = new DataTable("JctEnrollmentClassEnrolled");
+            DataColumn[] PrimaryKeyColumns = new DataColumn[2];
             DataColumn dtColumn;
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(int);
             dtColumn.ColumnName = "enrollment_id";
-            PrimaryKeycolumns[0] = dtColumn;
-            dtJctEnrollmentAcademicSession.Columns.Add(dtColumn);
-            dtJctEnrollmentAcademicSession.PrimaryKey = PrimaryKeycolumns;
+            PrimaryKeyColumns[0] = dtColumn;
+            dtJctEnrollmentClassEnrolled.Columns.Add(dtColumn);
+            dtJctEnrollmentClassEnrolled.PrimaryKey = PrimaryKeyColumns;
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(int);
-            dtColumn.ColumnName = "academic_session_id";
-            PrimaryKeycolumns[1] = dtColumn;
-            dtJctEnrollmentAcademicSession.Columns.Add(dtColumn);
-            dtJctEnrollmentAcademicSession.PrimaryKey = PrimaryKeycolumns;
+            dtColumn.ColumnName = "class_enrolled_id";
+            PrimaryKeyColumns[1] = dtColumn;
+            dtJctEnrollmentClassEnrolled.Columns.Add(dtColumn);
+            dtJctEnrollmentClassEnrolled.PrimaryKey = PrimaryKeyColumns;
 
-            return dtJctEnrollmentAcademicSession;
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(DateTime);
+            dtColumn.ColumnName = "enrollment_start_date";
+            dtJctEnrollmentClassEnrolled.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(DateTime);
+            dtColumn.ColumnName = "enrollment_end_date";
+            dtJctEnrollmentClassEnrolled.Columns.Add(dtColumn);
+
+            return dtJctEnrollmentClassEnrolled;
+
         }
 
         public static DataTable CreateDataTable_Netus2_JctPersonAddress()
@@ -1669,9 +1657,9 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtJctPersonAddress;
         }
 
-        public static DataTable CreateDataTable_Netus2_JctPersonApp()
+        public static DataTable CreateDataTable_Netus2_JctPersonApplication()
         {
-            DataTable dtJctPersonApp = new DataTable("JctPersonApp");
+            DataTable dtJctPersonApp = new DataTable("JctPersonApplication");
             DataColumn[] PrimaryKeycolumns = new DataColumn[2];
             DataColumn dtColumn;
 
@@ -1684,7 +1672,7 @@ namespace Netus2_DatabaseConnection.utilityTools
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(int);
-            dtColumn.ColumnName = "app_id";
+            dtColumn.ColumnName = "application_id";
             PrimaryKeycolumns[1] = dtColumn;
             dtJctPersonApp.Columns.Add(dtColumn);
             dtJctPersonApp.PrimaryKey = PrimaryKeycolumns;
@@ -2042,14 +2030,14 @@ namespace Netus2_DatabaseConnection.utilityTools
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(int);
-            dtColumn.ColumnName = "log_app_id";
+            dtColumn.ColumnName = "log_application_id";
             PrimaryKeycolumns[0] = dtColumn;
             dtLogApplication.Columns.Add(dtColumn);
             dtLogApplication.PrimaryKey = PrimaryKeycolumns;
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(int);
-            dtColumn.ColumnName = "app_id";
+            dtColumn.ColumnName = "application_id";
             dtLogApplication.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
@@ -2108,14 +2096,14 @@ namespace Netus2_DatabaseConnection.utilityTools
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(int);
-            dtColumn.ColumnName = "log_class_id";
+            dtColumn.ColumnName = "log_class_enrolled_id";
             PrimaryKeycolumns[0] = dtColumn;
             dtLogClassEnrolled.Columns.Add(dtColumn);
             dtLogClassEnrolled.PrimaryKey = PrimaryKeycolumns;
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(int);
-            dtColumn.ColumnName = "class_id";
+            dtColumn.ColumnName = "class_enrolled_id";
             dtLogClassEnrolled.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
@@ -2125,12 +2113,12 @@ namespace Netus2_DatabaseConnection.utilityTools
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(string);
-            dtColumn.ColumnName = "class_code";
+            dtColumn.ColumnName = "class_enrolled_code";
             dtLogClassEnrolled.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(int);
-            dtColumn.ColumnName = "enum_class_id";
+            dtColumn.ColumnName = "enum_class_enrolled_id";
             dtLogClassEnrolled.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
@@ -2368,7 +2356,7 @@ namespace Netus2_DatabaseConnection.utilityTools
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(int);
-            dtColumn.ColumnName = "class_id";
+            dtColumn.ColumnName = "academic_session_id";
             dtLogEnrollment.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
@@ -2469,7 +2457,7 @@ namespace Netus2_DatabaseConnection.utilityTools
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(int);
-            dtColumn.ColumnName = "class_id";
+            dtColumn.ColumnName = "class_enrolled_id";
             dtLogLineItem.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
@@ -2479,12 +2467,12 @@ namespace Netus2_DatabaseConnection.utilityTools
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(double);
-            dtColumn.ColumnName = "markValueMin";
+            dtColumn.ColumnName = "mark_min";
             dtLogLineItem.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(double);
-            dtColumn.ColumnName = "markValueMax";
+            dtColumn.ColumnName = "mark_max";
             dtLogLineItem.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
@@ -2761,6 +2749,11 @@ namespace Netus2_DatabaseConnection.utilityTools
             dtLogPerson.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(int);
+            dtColumn.ColumnName = "enum_status_id";
+            dtLogPerson.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
             dtColumn.DataType = typeof(DateTime);
             dtColumn.ColumnName = "created";
             dtLogPerson.Columns.Add(dtColumn);
@@ -2818,7 +2811,7 @@ namespace Netus2_DatabaseConnection.utilityTools
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(string);
-            dtColumn.ColumnName = "phone_number";
+            dtColumn.ColumnName = "phone_number_value";
             dtLogPhoneNumber.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
@@ -3046,7 +3039,7 @@ namespace Netus2_DatabaseConnection.utilityTools
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(string);
-            dtColumn.ColumnName = "unique_identifier";
+            dtColumn.ColumnName = "unique_identifier_value";
             dtLogUniqueIdentifier.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
@@ -3092,22 +3085,22 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtLogUniqueIdentifier;
         }
 
-        public static DataTable CreateDataTable_Netus2_Log_JctClassPeriod()
+        public static DataTable CreateDataTable_Netus2_Log_JctClassEnrolledPeriod()
         {
-            DataTable dtLogJctClassPeriod = new DataTable("Log_JctClassPeriod");
+            DataTable dtLogJctClassPeriod = new DataTable("Log_JctClassEnrolledPeriod");
             DataColumn[] PrimaryKeycolumns = new DataColumn[1];
             DataColumn dtColumn;
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(int);
-            dtColumn.ColumnName = "log_jct_class_period_id";
+            dtColumn.ColumnName = "log_jct_class_enrolled_period_id";
             PrimaryKeycolumns[0] = dtColumn;
             dtLogJctClassPeriod.Columns.Add(dtColumn);
             dtLogJctClassPeriod.PrimaryKey = PrimaryKeycolumns;
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(int);
-            dtColumn.ColumnName = "class_id";
+            dtColumn.ColumnName = "class_enrolled_id";
             dtLogJctClassPeriod.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
@@ -3133,68 +3126,22 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtLogJctClassPeriod;
         }
 
-        public static DataTable CreateDataTable_Netus2_Log_JctClassPerson()
+        public static DataTable CreateDataTable_Netus2_Log_JctClassEnrolledResource()
         {
-            DataTable dtLogJctClassPerson = new DataTable("Log_JctClassPerson");
+            DataTable dtLogJctClassResource = new DataTable("Log_JctClassEnrolledResource");
             DataColumn[] PrimaryKeycolumns = new DataColumn[1];
             DataColumn dtColumn;
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(int);
-            dtColumn.ColumnName = "log_jct_class_person_id";
-            PrimaryKeycolumns[0] = dtColumn;
-            dtLogJctClassPerson.Columns.Add(dtColumn);
-            dtLogJctClassPerson.PrimaryKey = PrimaryKeycolumns;
-
-            dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(int);
-            dtColumn.ColumnName = "class_id";
-            dtLogJctClassPerson.Columns.Add(dtColumn);
-
-            dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(int);
-            dtColumn.ColumnName = "person_id";
-            dtLogJctClassPerson.Columns.Add(dtColumn);
-
-            dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(int);
-            dtColumn.ColumnName = "enum_role_id";
-            dtLogJctClassPerson.Columns.Add(dtColumn);
-
-            dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(DateTime);
-            dtColumn.ColumnName = "log_date";
-            dtLogJctClassPerson.Columns.Add(dtColumn);
-
-            dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(string);
-            dtColumn.ColumnName = "log_user";
-            dtLogJctClassPerson.Columns.Add(dtColumn);
-
-            dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(int);
-            dtColumn.ColumnName = "enum_log_action_id";
-            dtLogJctClassPerson.Columns.Add(dtColumn);
-
-            return dtLogJctClassPerson;
-        }
-
-        public static DataTable CreateDataTable_Netus2_Log_JctClassResource()
-        {
-            DataTable dtLogJctClassResource = new DataTable("Log_JctClassResource");
-            DataColumn[] PrimaryKeycolumns = new DataColumn[1];
-            DataColumn dtColumn;
-
-            dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(int);
-            dtColumn.ColumnName = "log_jct_class_resource_id";
+            dtColumn.ColumnName = "log_jct_class_enrolled_resource_id";
             PrimaryKeycolumns[0] = dtColumn;
             dtLogJctClassResource.Columns.Add(dtColumn);
             dtLogJctClassResource.PrimaryKey = PrimaryKeycolumns;
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(int);
-            dtColumn.ColumnName = "class_id";
+            dtColumn.ColumnName = "class_enrolled_id";
             dtLogJctClassResource.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
@@ -3302,45 +3249,41 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtLogJctCourseSubject;
         }
 
-        public static DataTable CreateDataTable_Netus2_Log_JctEnrollmentAcademicSession()
+        public static DataTable CreateDataTable_Netus2_Log_JctEnrollmentClassEnrolled()
         {
-            DataTable dtLogJctEnrollmentAcademicSession = new DataTable("Log_JctEnrollmentAcademicSession");
-            DataColumn[] PrimaryKeycolumns = new DataColumn[1];
+            DataTable dtLogJctEnrollmentClassEnrolled = new DataTable("Log_JctEnrollmentClassEnrolled");
+            DataColumn[] PrimaryKeyColumns = new DataColumn[1];
             DataColumn dtColumn;
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(int);
-            dtColumn.ColumnName = "log_jct_enrollment_academic_session_id";
-            PrimaryKeycolumns[0] = dtColumn;
-            dtLogJctEnrollmentAcademicSession.Columns.Add(dtColumn);
-            dtLogJctEnrollmentAcademicSession.PrimaryKey = PrimaryKeycolumns;
+            dtColumn.ColumnName = "log_jct_enrollment_class_enrolled_id";
+            PrimaryKeyColumns[0] = dtColumn;
+            dtLogJctEnrollmentClassEnrolled.Columns.Add(dtColumn);
+            dtLogJctEnrollmentClassEnrolled.PrimaryKey = PrimaryKeyColumns;
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(int);
             dtColumn.ColumnName = "enrollment_id";
-            dtLogJctEnrollmentAcademicSession.Columns.Add(dtColumn);
+            dtLogJctEnrollmentClassEnrolled.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(int);
-            dtColumn.ColumnName = "academic_session_id";
-            dtLogJctEnrollmentAcademicSession.Columns.Add(dtColumn);
+            dtColumn.ColumnName = "class_enrolled_id";
+            dtLogJctEnrollmentClassEnrolled.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(DateTime);
-            dtColumn.ColumnName = "log_date";
-            dtLogJctEnrollmentAcademicSession.Columns.Add(dtColumn);
+            dtColumn.ColumnName = "enrollment_start_date";
+            dtLogJctEnrollmentClassEnrolled.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(string);
-            dtColumn.ColumnName = "log_user";
-            dtLogJctEnrollmentAcademicSession.Columns.Add(dtColumn);
+            dtColumn.DataType = typeof(DateTime);
+            dtColumn.ColumnName = "enrollment_end_date";
+            dtLogJctEnrollmentClassEnrolled.Columns.Add(dtColumn);
 
-            dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(int);
-            dtColumn.ColumnName = "enum_log_action_id";
-            dtLogJctEnrollmentAcademicSession.Columns.Add(dtColumn);
+            return dtLogJctEnrollmentClassEnrolled;
 
-            return dtLogJctEnrollmentAcademicSession;
         }
 
         public static DataTable CreateDataTable_Netus2_Log_JctPersonAddress()
@@ -3440,15 +3383,15 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtLogJctPersonEmail;
         }
 
-        public static DataTable CreateDataTable_Netus2_Log_JctPersonApp()
+        public static DataTable CreateDataTable_Netus2_Log_JctPersonApplication()
         {
-            DataTable dtLogJctPersonApp = new DataTable("Log_JctPersonApp");
+            DataTable dtLogJctPersonApp = new DataTable("Log_JctPersonApplication");
             DataColumn[] PrimaryKeycolumns = new DataColumn[1];
             DataColumn dtColumn;
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(int);
-            dtColumn.ColumnName = "log_jct_person_app_id";
+            dtColumn.ColumnName = "log_jct_person_application_id";
             PrimaryKeycolumns[0] = dtColumn;
             dtLogJctPersonApp.Columns.Add(dtColumn);
             dtLogJctPersonApp.PrimaryKey = PrimaryKeycolumns;
@@ -3460,7 +3403,7 @@ namespace Netus2_DatabaseConnection.utilityTools
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(int);
-            dtColumn.ColumnName = "app_id";
+            dtColumn.ColumnName = "application_id";
             dtLogJctPersonApp.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();

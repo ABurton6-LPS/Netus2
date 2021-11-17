@@ -334,55 +334,7 @@ namespace Netus2_Test.Integration
         }
 
         [Test]
-        public void LogJctClassPerson_ShouldLog_WriteUpdateDelete()
-        {
-            //Prerequisite
-            Person person = personDaoImpl.Write(new Person("fname", "lname", new DateTime(1985, 9, 6), Enum_Gender.values["unset"], Enum_Ethnic.values["unset"]), connection);
-            Course course = courseDaoImpl.Write(new Course("testName", "testCode"), connection);
-            Organization organization = organizationDaoImpl.Write(new Organization("testName", Enum_Organization.values["unset"], "testId", "tstBldg"), connection);
-            AcademicSession academicSession = academicSessionDaoImpl.Write(new AcademicSession(Enum_Session.values["unset"], organization, "tst"), connection);
-            ClassEnrolled classEnrolled = new ClassEnrolled("testName", "tstClassCode", Enum_Class.values["unset"], "tstRoom", course, academicSession);
-
-            //Write
-            Enumeration role = Enum_Role.values["unset"];
-            classEnrolled.AddStaff(person, role);
-            classEnrolled = classEnrolledDaoImpl.Write(classEnrolled, connection);
-
-            //Read logs after write
-            List<LogJctClassPerson> logs = new List<LogJctClassPerson>();
-            foreach (LogJctClassPerson log in logReader.Read_LogJctClassPerson(connection))
-                if (log.class_id == classEnrolled.Id && log.person_id == person.Id && log.Role == role)
-                    logs.Add(log);
-
-            //Assert on log after write
-            Assert.AreEqual(1, logs.Count);
-            Assert.AreEqual(Enum_Log_Action.values["insert"], logs[0].LogAction);
-
-            //Delete
-            classEnrolled.RemoveStaff(person, role);
-            classEnrolledDaoImpl.Update(classEnrolled, connection);
-
-            //Read logs after delete
-            logs.Clear();
-            foreach (LogJctClassPerson log in logReader.Read_LogJctClassPerson(connection))
-                if (log.class_id == classEnrolled.Id && log.person_id == person.Id && log.Role == role)
-                    logs.Add(log);
-
-            //Assert on number of logs after delete
-            Assert.AreEqual(2, logs.Count);
-
-            //Get delete log from logs
-            LogJctClassPerson deleteLog = null;
-            foreach (LogJctClassPerson log in logs)
-                if (log.LogAction == Enum_Log_Action.values["delete"])
-                    deleteLog = log;
-
-            //Assert on delete log
-            Assert.IsNotNull(deleteLog);
-        }
-
-        [Test]
-        public void LogApp_ShouldLog_WriteUpdateDelete()
+        public void LogApplicationlication_ShouldLog_WriteUpdateDelete()
         {
             //Prerequisite
             Provider provider = providerDaoImpl.Write(new Provider("testName"), connection);
@@ -391,9 +343,9 @@ namespace Netus2_Test.Integration
             Application application = applicationDaoImpl.Write(new Application("testName", provider), connection);
 
             //Read logs after write
-            List<LogApp> logs = new List<LogApp>();
-            foreach (LogApp log in logReader.Read_LogApp(connection))
-                if (log.app_id == application.Id)
+            List<LogApplication> logs = new List<LogApplication>();
+            foreach (LogApplication log in logReader.Read_LogApplication(connection))
+                if (log.application_id == application.Id)
                     logs.Add(log);
 
             //Assert on log after write
@@ -407,16 +359,16 @@ namespace Netus2_Test.Integration
 
             //Read logs after update
             logs.Clear();
-            foreach (LogApp log in logReader.Read_LogApp(connection))
-                if (log.app_id == application.Id)
+            foreach (LogApplication log in logReader.Read_LogApplication(connection))
+                if (log.application_id == application.Id)
                     logs.Add(log);
 
             //Assert on number of logs after update
             Assert.AreEqual(2, logs.Count);
 
             //Get update log from logs
-            LogApp updateLog = null;
-            foreach (LogApp log in logs)
+            LogApplication updateLog = null;
+            foreach (LogApplication log in logs)
                 if (log.LogAction == Enum_Log_Action.values["update"])
                     updateLog = log;
 
@@ -428,16 +380,16 @@ namespace Netus2_Test.Integration
 
             //Read logs after delete
             logs.Clear();
-            foreach (LogApp log in logReader.Read_LogApp(connection))
-                if (log.app_id == application.Id)
+            foreach (LogApplication log in logReader.Read_LogApplication(connection))
+                if (log.application_id == application.Id)
                     logs.Add(log);
 
             //Assert on number of logs after delete
             Assert.AreEqual(3, logs.Count);
 
             //Get delete log from logs
-            LogApp deleteLog = null;
-            foreach (LogApp log in logs)
+            LogApplication deleteLog = null;
+            foreach (LogApplication log in logs)
                 if (log.LogAction == Enum_Log_Action.values["delete"])
                     deleteLog = log;
 
@@ -446,7 +398,7 @@ namespace Netus2_Test.Integration
         }
 
         [Test]
-        public void LogJctPersonApp_ShouldLog_WriteUpdateDelete()
+        public void LogJctPersonApplication_ShouldLog_WriteUpdateDelete()
         {
             //Prerequisite
             Provider provider = providerDaoImpl.Write(new Provider("testName"), connection);
@@ -458,9 +410,9 @@ namespace Netus2_Test.Integration
             person = personDaoImpl.Write(person, connection);
 
             //Read logs after write
-            List<LogJctPersonApp> logs = new List<LogJctPersonApp>();
-            foreach (LogJctPersonApp log in logReader.Read_LogJctPersonApp(connection))
-                if (log.person_id == person.Id && log.app_id == application.Id)
+            List<LogJctPersonApplication> logs = new List<LogJctPersonApplication>();
+            foreach (LogJctPersonApplication log in logReader.Read_LogJctPersonApplication(connection))
+                if (log.person_id == person.Id && log.application_id == application.Id)
                     logs.Add(log);
 
             //Assert on log after write
@@ -473,16 +425,16 @@ namespace Netus2_Test.Integration
 
             //Read logs after delete
             logs.Clear();
-            foreach (LogJctPersonApp log in logReader.Read_LogJctPersonApp(connection))
-                if (log.person_id == person.Id && log.app_id == application.Id)
+            foreach (LogJctPersonApplication log in logReader.Read_LogJctPersonApplication(connection))
+                if (log.person_id == person.Id && log.application_id == application.Id)
                     logs.Add(log);
 
             //Assert on number of logs after delete
             Assert.AreEqual(2, logs.Count);
 
             //Get delete log from logs
-            LogJctPersonApp deleteLog = null;
-            foreach (LogJctPersonApp log in logs)
+            LogJctPersonApplication deleteLog = null;
+            foreach (LogJctPersonApplication log in logs)
                 if (log.LogAction == Enum_Log_Action.values["delete"])
                     deleteLog = log;
 
@@ -1109,12 +1061,12 @@ namespace Netus2_Test.Integration
             AcademicSession academicSession = academicSessionDaoImpl.Write(new AcademicSession(Enum_Session.values["unset"], org, "tst"), connection);
 
             //Write
-            ClassEnrolled classEnrolled = classEnrolledDaoImpl.Write(new ClassEnrolled("testName", "tstClassCode", Enum_Class.values["unset"], "testRoom", course, academicSession), connection);
+            ClassEnrolled classEnrolled = classEnrolledDaoImpl.Write(new ClassEnrolled("testName", "tstClassCode", Enum_Class_Enrolled.values["unset"], "testRoom", course, academicSession), connection);
 
             //Read logs after write
-            List<LogClass> logs = new List<LogClass>();
-            foreach (LogClass log in logReader.Read_LogClassEnrolled(connection))
-                if (log.class_id == classEnrolled.Id)
+            List<LogClassEnrolled> logs = new List<LogClassEnrolled>();
+            foreach (LogClassEnrolled log in logReader.Read_LogClassEnrolled(connection))
+                if (log.class_enrolled_id == classEnrolled.Id)
                     logs.Add(log);
 
             //Assert on log after write
@@ -1128,16 +1080,16 @@ namespace Netus2_Test.Integration
 
             //Read logs after update
             logs.Clear();
-            foreach (LogClass log in logReader.Read_LogClassEnrolled(connection))
-                if (log.class_id == classEnrolled.Id)
+            foreach (LogClassEnrolled log in logReader.Read_LogClassEnrolled(connection))
+                if (log.class_enrolled_id == classEnrolled.Id)
                     logs.Add(log);
 
             //Assert on number of logs after update
             Assert.AreEqual(2, logs.Count);
 
             //Get update log from logs
-            LogClass updateLog = null;
-            foreach (LogClass log in logs)
+            LogClassEnrolled updateLog = null;
+            foreach (LogClassEnrolled log in logs)
                 if (log.LogAction == Enum_Log_Action.values["update"])
                     updateLog = log;
 
@@ -1149,8 +1101,8 @@ namespace Netus2_Test.Integration
 
             //Read logs after delete
             logs.Clear();
-            foreach (LogClass log in logReader.Read_LogClassEnrolled(connection))
-                if (log.class_id == classEnrolled.Id)
+            foreach (LogClassEnrolled log in logReader.Read_LogClassEnrolled(connection))
+                if (log.class_enrolled_id == classEnrolled.Id)
                     logs.Add(log);
 
 
@@ -1158,8 +1110,8 @@ namespace Netus2_Test.Integration
             Assert.AreEqual(3, logs.Count);
 
             //Get delete log from logs
-            LogClass deleteLog = null;
-            foreach (LogClass log in logs)
+            LogClassEnrolled deleteLog = null;
+            foreach (LogClassEnrolled log in logs)
                 if (log.LogAction == Enum_Log_Action.values["delete"])
                     deleteLog = log;
 
@@ -1174,7 +1126,7 @@ namespace Netus2_Test.Integration
             Course course = courseDaoImpl.Write(new Course("testName", "tstCourseCode"), connection);
             Organization org = organizationDaoImpl.Write(new Organization("testName", Enum_Organization.values["unset"], "test", "tstBldg"), connection);
             AcademicSession academicSession = academicSessionDaoImpl.Write(new AcademicSession(Enum_Session.values["unset"], org, "tst"), connection);
-            ClassEnrolled classEnrolled = new ClassEnrolled("testName", "testClassCode", Enum_Class.values["unset"], "testRoom", course, academicSession);
+            ClassEnrolled classEnrolled = new ClassEnrolled("testName", "testClassCode", Enum_Class_Enrolled.values["unset"], "testRoom", course, academicSession);
             Enumeration period = Enum_Period.values["unset"];
 
             //Write
@@ -1222,7 +1174,7 @@ namespace Netus2_Test.Integration
             Course course = courseDaoImpl.Write(new Course("testName", "tstCourseCode"), connection);
             Organization org = organizationDaoImpl.Write(new Organization("testName", Enum_Organization.values["unset"], "test", "tstBldg"), connection);
             AcademicSession academicSession = academicSessionDaoImpl.Write(new AcademicSession(Enum_Session.values["unset"], org, "tst"), connection);
-            ClassEnrolled classEnrolled = new ClassEnrolled("testName", "testClassCode", Enum_Class.values["unset"], "testRoom", course, academicSession);
+            ClassEnrolled classEnrolled = new ClassEnrolled("testName", "testClassCode", Enum_Class_Enrolled.values["unset"], "testRoom", course, academicSession);
 
             //Write
             classEnrolled.Resources.Add(resource);
@@ -1268,7 +1220,7 @@ namespace Netus2_Test.Integration
             Course course = courseDaoImpl.Write(new Course("testName", "tstCourseCode"), connection);
             Organization org = organizationDaoImpl.Write(new Organization("testName", Enum_Organization.values["unset"], "test", "tstBldg"), connection);
             AcademicSession academicSession = academicSessionDaoImpl.Write(new AcademicSession(Enum_Session.values["unset"], org, "tst"), connection);
-            ClassEnrolled classEnrolled = classEnrolledDaoImpl.Write(new ClassEnrolled("testName", "testClassCode", Enum_Class.values["unset"], "testRoom", course, academicSession), connection);
+            ClassEnrolled classEnrolled = classEnrolledDaoImpl.Write(new ClassEnrolled("testName", "testClassCode", Enum_Class_Enrolled.values["unset"], "testRoom", course, academicSession), connection);
 
             //Write
             LineItem lineItem = lineItemDaoImpl.Write(new LineItem("testName", new DateTime(), new DateTime(), classEnrolled, Enum_Category.values["unset"], 0, 100), connection);
@@ -1333,13 +1285,9 @@ namespace Netus2_Test.Integration
         {
             //Prerequisite
             Person person = personDaoImpl.Write(new Person("fname", "lname", new DateTime(1985, 9, 6), Enum_Gender.values["unset"], Enum_Ethnic.values["unset"]), connection);
-            Course course = courseDaoImpl.Write(new Course("testName", "tstCourseCode"), connection);
-            Organization organization = organizationDaoImpl.Write(new Organization("testName", Enum_Organization.values["unset"], "tstId", "tstBldg"), connection);
-            AcademicSession academicSession = academicSessionDaoImpl.Write(new AcademicSession(Enum_Session.values["unset"], organization, "tst"), connection);
-            ClassEnrolled classEnrolled = classEnrolledDaoImpl.Write(new ClassEnrolled("testName", "testClassCode", Enum_Class.values["unset"], "testRoom", course, academicSession), connection);
-
+                                    
             //Write
-            Enrollment enrollment = enrollmentDaoImpl.Write(new Enrollment(Enum_Grade.values["unset"], new DateTime(), new DateTime(), Enum_True_False.values["true"], classEnrolled, academicSession), person.Id, connection);
+            Enrollment enrollment = enrollmentDaoImpl.Write(new Enrollment(Enum_Grade.values["unset"], new DateTime(), new DateTime(), Enum_True_False.values["true"]), person.Id, connection);
 
             //Read logs after write
             List<LogEnrollment> logs = new List<LogEnrollment>();
@@ -1404,7 +1352,7 @@ namespace Netus2_Test.Integration
             Course course = courseDaoImpl.Write(new Course("testName", "tstCourseCode"), connection);
             Organization org = organizationDaoImpl.Write(new Organization("testName", Enum_Organization.values["unset"], "test", "tstBldg"), connection);
             AcademicSession academicSession = academicSessionDaoImpl.Write(new AcademicSession(Enum_Session.values["unset"], org, "tst"), connection);
-            ClassEnrolled classEnrolled = classEnrolledDaoImpl.Write(new ClassEnrolled("testName", "testClassCode", Enum_Class.values["unset"], "testRoom", course, academicSession), connection);
+            ClassEnrolled classEnrolled = classEnrolledDaoImpl.Write(new ClassEnrolled("testName", "testClassCode", Enum_Class_Enrolled.values["unset"], "testRoom", course, academicSession), connection);
             LineItem lineItem = lineItemDaoImpl.Write(new LineItem("testName", new DateTime(), new DateTime(), classEnrolled, Enum_Category.values["unset"], 0, 100), connection);
 
             //Write
@@ -1466,22 +1414,24 @@ namespace Netus2_Test.Integration
         }
 
         [Test]
-        public void LogJctEnrollmentAcademicSession_ShouldLog_WriteUpdateDelete()
+        public void LogJctEnrollmentClassEnrolled_ShouldLog_WriteUpdateDelete()
         {
             //Prerequisite
             Person person = personDaoImpl.Write(new Person("fname", "lname", new DateTime(1985, 9, 6), Enum_Gender.values["unset"], Enum_Ethnic.values["unset"]), connection);
             Course course = courseDaoImpl.Write(new Course("testName", "tstCourseCode"), connection);
             Organization organization = organizationDaoImpl.Write(new Organization("testName", Enum_Organization.values["unset"], "tstId", "tstBldg"), connection);
             AcademicSession academicSession = academicSessionDaoImpl.Write(new AcademicSession(Enum_Session.values["unset"], organization, "tst"), connection);
-            ClassEnrolled classEnrolled = classEnrolledDaoImpl.Write(new ClassEnrolled("testName", "testClassCode", Enum_Class.values["unset"], "testRoom", course, academicSession), connection);
+            ClassEnrolled classEnrolled = classEnrolledDaoImpl.Write(new ClassEnrolled("testName", "testClassCode", Enum_Class_Enrolled.values["unset"], "testRoom", course, academicSession), connection);
 
             //Write
-            Enrollment enrollment = enrollmentDaoImpl.Write(new Enrollment(Enum_Grade.values["unset"], new DateTime(), new DateTime(), Enum_True_False.values["true"], classEnrolled, academicSession), person.Id, connection);
+            Enrollment enrollment = new Enrollment(Enum_Grade.values["unset"], new DateTime(), new DateTime(), Enum_True_False.values["true"]);
+            enrollment.ClassesEnrolled.Add(classEnrolled);
+            enrollment = enrollmentDaoImpl.Write(enrollment, person.Id, connection);
 
             //Read logs after write
-            List<LogJctEnrollmentAcademicSession> logs = new List<LogJctEnrollmentAcademicSession>();
-            foreach (LogJctEnrollmentAcademicSession log in logReader.Read_JctEnrollmentAcademicSession(connection))
-                if (log.enrollment_id == enrollment.Id && log.academic_session_id == academicSession.Id)
+            List <LogJctEnrollmentClassEnrolled> logs = new List<LogJctEnrollmentClassEnrolled>();
+            foreach (LogJctEnrollmentClassEnrolled log in logReader.Read_JctEnrollmentClassEnrolled(connection))
+                if (log.enrollment_id == enrollment.Id && log.class_enrolled_id == classEnrolled.Id)
                     logs.Add(log);
 
             //Assert on log after write
@@ -1489,21 +1439,21 @@ namespace Netus2_Test.Integration
             Assert.AreEqual(Enum_Log_Action.values["insert"], logs[0].LogAction);
 
             //Delete
-            enrollment.AcademicSessions.Clear();
+            enrollment.ClassesEnrolled.Clear();
             enrollmentDaoImpl.Update(enrollment, person.Id, connection);
 
             //Read logs after delete
             logs.Clear();
-            foreach (LogJctEnrollmentAcademicSession log in logReader.Read_JctEnrollmentAcademicSession(connection))
-                if (log.enrollment_id == enrollment.Id && log.academic_session_id == academicSession.Id)
+            foreach (LogJctEnrollmentClassEnrolled log in logReader.Read_JctEnrollmentClassEnrolled(connection))
+                if (log.enrollment_id == enrollment.Id && log.class_enrolled_id == classEnrolled.Id)
                     logs.Add(log);
 
             //Assert on number of logs after delete
             Assert.AreEqual(2, logs.Count);
 
             //Get delete log from logs
-            LogJctEnrollmentAcademicSession deleteLog = null;
-            foreach (LogJctEnrollmentAcademicSession log in logs)
+            LogJctEnrollmentClassEnrolled deleteLog = null;
+            foreach (LogJctEnrollmentClassEnrolled log in logs)
                 if (log.LogAction == Enum_Log_Action.values["delete"])
                     deleteLog = log;
 

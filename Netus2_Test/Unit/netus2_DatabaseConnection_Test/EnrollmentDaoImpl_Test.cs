@@ -31,34 +31,24 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
         }
 
         [TestCase]
-        public void Delete_ShouldCallExpectedMethod()
-        {
-            MockJctEnrollmentAcademicSessionDaoImpl mockJctEnrollmentAcademicSessionDaoImpl = new MockJctEnrollmentAcademicSessionDaoImpl(tdBuilder);
-            DaoImplFactory.MockJctEnrollmentAcademicSessionDaoImpl = mockJctEnrollmentAcademicSessionDaoImpl;
-
-            enrollmentDaoImpl.Delete(tdBuilder.enrollment, _netus2DbConnection);
-
-            Assert.IsTrue(mockJctEnrollmentAcademicSessionDaoImpl.WasCalled_Delete);
-        }
-
-        [TestCase]
         public void Read_ShouldCallExpectedMethods()
         {
             List<DataRow> tstDataSet = new List<DataRow>();
             tstDataSet.Add(daoObjectMapper.MapEnrollment(tdBuilder.enrollment, tdBuilder.student.Id));
             SetMockReaderWithTestData(tstDataSet);
 
+            MockJctEnrollmentClassEnrolledDaoImpl mockJctEnrollmentClassEnrolledDaoImpl = new MockJctEnrollmentClassEnrolledDaoImpl(tdBuilder);
+            mockJctEnrollmentClassEnrolledDaoImpl._shouldReadReturnData = true;
+            DaoImplFactory.MockJctEnrollmentClassEnrolledDaoImpl = mockJctEnrollmentClassEnrolledDaoImpl;
             MockClassEnrolledDaoImpl mockClassEnrolledDaoImpl = new MockClassEnrolledDaoImpl(tdBuilder);
             DaoImplFactory.MockClassEnrolledDaoImpl = mockClassEnrolledDaoImpl;
-            MockJctEnrollmentAcademicSessionDaoImpl mockJctEnrollmentAcademicSessionId = new MockJctEnrollmentAcademicSessionDaoImpl(tdBuilder);
-            DaoImplFactory.MockJctEnrollmentAcademicSessionDaoImpl = mockJctEnrollmentAcademicSessionId;
             MockAcademicSessionDaoImpl mockAcademicSessionDaoImpl = new MockAcademicSessionDaoImpl(tdBuilder);
             DaoImplFactory.MockAcademicSessionDaoImpl = mockAcademicSessionDaoImpl;
 
             enrollmentDaoImpl.Read(tdBuilder.enrollment, tdBuilder.student.Id, _netus2DbConnection);
 
+            Assert.IsTrue(mockJctEnrollmentClassEnrolledDaoImpl.WasCalled_ReadAllWithEnrollmentId);
             Assert.IsTrue(mockClassEnrolledDaoImpl.WasCalled_ReadUsingClassId);
-            Assert.IsTrue(mockJctEnrollmentAcademicSessionId.WasCalled_ReadWithEnrollmentId);
             Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_ReadUsingAcademicSessionId);
         }
 
@@ -69,15 +59,16 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
             tstDataSet.Add(daoObjectMapper.MapEnrollment(tdBuilder.enrollment, tdBuilder.student.Id));
             SetMockReaderWithTestData(tstDataSet);
 
-            MockJctEnrollmentAcademicSessionDaoImpl mockJctEnrollmentAcademicSessionId = new MockJctEnrollmentAcademicSessionDaoImpl(tdBuilder);
-            DaoImplFactory.MockJctEnrollmentAcademicSessionDaoImpl = mockJctEnrollmentAcademicSessionId;
-            MockAcademicSessionDaoImpl mockAcademicSessionDaoImpl = new MockAcademicSessionDaoImpl(tdBuilder);
-            DaoImplFactory.MockAcademicSessionDaoImpl = mockAcademicSessionDaoImpl;
+            MockJctEnrollmentClassEnrolledDaoImpl mockJctEnrollmentClassEnrolledDaoImpl = new MockJctEnrollmentClassEnrolledDaoImpl(tdBuilder);
+            mockJctEnrollmentClassEnrolledDaoImpl._shouldReadReturnData = true;
+            DaoImplFactory.MockJctEnrollmentClassEnrolledDaoImpl = mockJctEnrollmentClassEnrolledDaoImpl;
+            MockClassEnrolledDaoImpl mockClassEnrolledDaoImpl = new MockClassEnrolledDaoImpl(tdBuilder);
+            DaoImplFactory.MockClassEnrolledDaoImpl = mockClassEnrolledDaoImpl;
 
             enrollmentDaoImpl.Update(tdBuilder.enrollment, tdBuilder.student.Id, _netus2DbConnection);
 
-            Assert.IsTrue(mockJctEnrollmentAcademicSessionId.WasCalled_ReadWithEnrollmentId);
-            Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_ReadUsingAcademicSessionId);
+            Assert.IsTrue(mockClassEnrolledDaoImpl.WasCalled_ReadUsingClassId);
+            Assert.IsTrue(mockJctEnrollmentClassEnrolledDaoImpl.WasCalled_Read);
         }
 
         [TestCase]
@@ -87,18 +78,19 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
             tstDataSet.Add(daoObjectMapper.MapEnrollment(tdBuilder.enrollment, tdBuilder.student.Id));
             SetMockReaderWithTestData(tstDataSet);
 
+            MockJctEnrollmentClassEnrolledDaoImpl mockJctEnrollmentClassEnrolledDaoImpl = new MockJctEnrollmentClassEnrolledDaoImpl(tdBuilder);
+            DaoImplFactory.MockJctEnrollmentClassEnrolledDaoImpl = mockJctEnrollmentClassEnrolledDaoImpl;
             MockClassEnrolledDaoImpl mockClassEnrolledDaoImpl = new MockClassEnrolledDaoImpl(tdBuilder);
             DaoImplFactory.MockClassEnrolledDaoImpl = mockClassEnrolledDaoImpl;
-            MockJctEnrollmentAcademicSessionDaoImpl mockJctEnrollmentAcademicSessionId = new MockJctEnrollmentAcademicSessionDaoImpl(tdBuilder);
-            DaoImplFactory.MockJctEnrollmentAcademicSessionDaoImpl = mockJctEnrollmentAcademicSessionId;
             MockAcademicSessionDaoImpl mockAcademicSessionDaoImpl = new MockAcademicSessionDaoImpl(tdBuilder);
             DaoImplFactory.MockAcademicSessionDaoImpl = mockAcademicSessionDaoImpl;
 
             enrollmentDaoImpl.Write(tdBuilder.enrollment, tdBuilder.student.Id, _netus2DbConnection);
 
             Assert.IsTrue(mockClassEnrolledDaoImpl.WasCalled_ReadUsingClassId);
-            Assert.IsTrue(mockJctEnrollmentAcademicSessionId.WasCalled_ReadWithEnrollmentId);
+            Assert.IsTrue(mockJctEnrollmentClassEnrolledDaoImpl.WasCalled_Read);
             Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_ReadUsingAcademicSessionId);
+            
         }
 
         [TearDown]
@@ -128,7 +120,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                     {
                         values[0] = tstDataSet[count]["enrollment_id"];
                         values[1] = tstDataSet[count]["person_id"];
-                        values[2] = tstDataSet[count]["class_id"];
+                        values[2] = tstDataSet[count]["academic_session_id"];
                         values[3] = tstDataSet[count]["enum_grade_id"];
                         values[4] = tstDataSet[count]["start_date"];
                         values[5] = tstDataSet[count]["end_date"];
@@ -155,8 +147,8 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 .Returns(() => typeof(int));
 
             reader.Setup(x => x.GetName(2))
-                .Returns(() => "class_id");
-            reader.Setup(x => x.GetOrdinal("class_id"))
+                .Returns(() => "academic_session_id");
+            reader.Setup(x => x.GetOrdinal("academic_session_id"))
                 .Returns(() => 2);
             reader.Setup(x => x.GetFieldType(2))
                 .Returns(() => typeof(int));

@@ -31,7 +31,7 @@ namespace Netus2_Test.MockDaoImpl
             WasCalled_ReadWithClassIdAndResourceId = true;
 
             DataRow row = DataTableFactory.CreateDataTable_Netus2_JctClassResource().NewRow();
-            row["class_id"] = classId;
+            row["class_enrolled_id"] = classId;
             row["resource_id"] = resourceId;
             return row;
         }
@@ -45,7 +45,7 @@ namespace Netus2_Test.MockDaoImpl
                 for(int i = 0; i < tdBuilder.classEnrolled.Resources.Count; i++)
                 {
                     DataRow row = DataTableFactory.CreateDataTable_Netus2_JctClassResource().NewRow();
-                    row["class_id"] = classId ;
+                    row["class_enrolled_id"] = classId ;
                     row["resource_id"] = tdBuilder.classEnrolled.Resources[i].Id;
                     returnData.Add(row);
                 }
@@ -61,7 +61,7 @@ namespace Netus2_Test.MockDaoImpl
             if (_shouldReadReturnData)
             {
                 DataRow row = DataTableFactory.CreateDataTable_Netus2_JctClassResource().NewRow();
-                row["class_id"] = tdBuilder.classEnrolled.Id;
+                row["class_enrolled_id"] = tdBuilder.classEnrolled.Id;
                 row["resource_id"] = resourceId;
                 returnData.Add(row);
             }
@@ -74,7 +74,7 @@ namespace Netus2_Test.MockDaoImpl
             WasCalled_Write = true;
 
             DataRow row = DataTableFactory.CreateDataTable_Netus2_JctClassResource().NewRow();
-            row["class_id"] = classId;
+            row["class_enrolled_id"] = classId;
             row["resource_id"] = resourceId;
 
             return row;

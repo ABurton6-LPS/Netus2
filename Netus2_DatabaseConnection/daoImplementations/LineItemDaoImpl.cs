@@ -70,10 +70,10 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         public List<LineItem> Read_AllWithClassEnrolledId(int classEnrolledId, IConnectable connection)
         {
-            string sql = "SELECT * FROM lineitem WHERE class_id = @class_id";
+            string sql = "SELECT * FROM lineitem WHERE class_enrolled_id = @class_enrolled_id";
 
             List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("@class_id", classEnrolledId));
+            parameters.Add(new SqlParameter("@class_enrolled_id", classEnrolledId));
 
             return Read(sql, connection, parameters);
         }
@@ -116,10 +116,10 @@ namespace Netus2_DatabaseConnection.daoImplementations
                     parameters.Add(new SqlParameter("@due_date", row["due_date"]));
                 }
 
-                if (row["class_id"] != DBNull.Value)
+                if (row["class_enrolled_id"] != DBNull.Value)
                 {
-                    sql.Append("AND class_id = @class_id ");
-                    parameters.Add(new SqlParameter("@class_id", row["class_id"]));
+                    sql.Append("AND class_enrolled_id = @class_enrolled_id ");
+                    parameters.Add(new SqlParameter("@class_enrolled_id", row["class_enrolled_id"]));
                 }
 
                 if (row["enum_category_id"] != DBNull.Value)
@@ -128,16 +128,16 @@ namespace Netus2_DatabaseConnection.daoImplementations
                     parameters.Add(new SqlParameter("@enum_category_id", row["enum_category_id"]));
                 }
 
-                if (row["markValueMin"] != DBNull.Value)
+                if (row["mark_min"] != DBNull.Value)
                 {
-                    sql.Append("AND markValueMin = @markValueMin ");
-                    parameters.Add(new SqlParameter("@markValueMin", row["markValueMin"]));
+                    sql.Append("AND mark_min = @mark_min ");
+                    parameters.Add(new SqlParameter("@mark_min", row["mark_min"]));
                 }
 
-                if (row["markValueMax"] != DBNull.Value)
+                if (row["mark_max"] != DBNull.Value)
                 {
-                    sql.Append("AND markValueMax = @markValueMax ");
-                    parameters.Add(new SqlParameter("@markValueMax", row["markValueMax"]));
+                    sql.Append("AND mark_max = @mark_max ");
+                    parameters.Add(new SqlParameter("@mark_max", row["mark_max"]));
                 }
             }
 
@@ -152,7 +152,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
             List<LineItem> results = new List<LineItem>();
             foreach (DataRow row in dtLineItem.Rows)
             {
-                ClassEnrolled classEnrolled = Read_ClassEnrolled((int)row["class_id"], connection);
+                ClassEnrolled classEnrolled = Read_ClassEnrolled((int)row["class_enrolled_id"], connection);
                 results.Add(daoObjectMapper.MapLineItem(row, classEnrolled));
             }
 
@@ -221,13 +221,13 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 else
                     sql.Append("due_date = NULL, ");
 
-                if (row["class_id"] != DBNull.Value)
+                if (row["class_enrolled_id"] != DBNull.Value)
                 {
-                    sql.Append("class_id = @class_id, ");
-                    parameters.Add(new SqlParameter("@class_id", row["class_id"]));
+                    sql.Append("class_enrolled_id = @class_enrolled_id, ");
+                    parameters.Add(new SqlParameter("@class_enrolled_id", row["class_enrolled_id"]));
                 }
                 else
-                    sql.Append("class_id = NULL, ");
+                    sql.Append("class_enrolled_id = NULL, ");
 
                 if (row["enum_category_id"] != DBNull.Value)
                 {
@@ -237,21 +237,21 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 else
                     sql.Append("enum_category_id = NULL, ");
 
-                if (row["markValueMin"] != DBNull.Value)
+                if (row["mark_min"] != DBNull.Value)
                 {
-                    sql.Append("markValueMin = @markValueMin, ");
-                    parameters.Add(new SqlParameter("@markValueMin", row["markValueMin"]));
+                    sql.Append("mark_min = @mark_min, ");
+                    parameters.Add(new SqlParameter("@mark_min", row["mark_min"]));
                 }
                 else
-                    sql.Append("markValueMin = NULL, ");
+                    sql.Append("mark_min = NULL, ");
 
-                if (row["markValueMax"] != DBNull.Value)
+                if (row["mark_max"] != DBNull.Value)
                 {
-                    sql.Append("markValueMax = @markValueMax, ");
-                    parameters.Add(new SqlParameter("@markValueMax", row["markValueMax"]));
+                    sql.Append("mark_max = @mark_max, ");
+                    parameters.Add(new SqlParameter("@mark_max", row["mark_max"]));
                 }
                 else
-                    sql.Append("markValueMax = NULL, ");
+                    sql.Append("mark_max = NULL, ");
 
                 sql.Append("changed = dbo.CURRENT_DATETIME(), ");
                 sql.Append("changed_by = " + (_taskId != null ? _taskId.ToString() : "'Netus2'") + " ");
@@ -303,10 +303,10 @@ namespace Netus2_DatabaseConnection.daoImplementations
             else
                 sqlValues.Append("NULL, ");
 
-            if (row["class_id"] != DBNull.Value)
+            if (row["class_enrolled_id"] != DBNull.Value)
             {
-                sqlValues.Append("@class_id, ");
-                parameters.Add(new SqlParameter("@class_id", row["class_id"]));
+                sqlValues.Append("@class_enrolled_id, ");
+                parameters.Add(new SqlParameter("@class_enrolled_id", row["class_enrolled_id"]));
             }
             else
                 sqlValues.Append("NULL, ");
@@ -319,18 +319,18 @@ namespace Netus2_DatabaseConnection.daoImplementations
             else
                 sqlValues.Append("NULL, ");
 
-            if (row["markValueMin"] != DBNull.Value)
+            if (row["mark_min"] != DBNull.Value)
             {
-                sqlValues.Append("@markValueMin, ");
-                parameters.Add(new SqlParameter("@markValueMin", row["markValueMin"]));
+                sqlValues.Append("@mark_min, ");
+                parameters.Add(new SqlParameter("@mark_min", row["mark_min"]));
             }
             else
                 sqlValues.Append("NULL, ");
 
-            if (row["markValueMax"] != DBNull.Value)
+            if (row["mark_max"] != DBNull.Value)
             {
-                sqlValues.Append("@markValueMax, ");
-                parameters.Add(new SqlParameter("@markValueMax", row["markValueMax"]));
+                sqlValues.Append("@mark_max, ");
+                parameters.Add(new SqlParameter("@mark_max", row["mark_max"]));
             }
             else
                 sqlValues.Append("NULL, ");
@@ -340,13 +340,13 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
             string sql =
                 "INSERT INTO lineItem " +
-                "(name, descript, assign_date, due_date, class_id, enum_category_id, " +
-                "markValueMin, markValueMax, created, created_by) " +
+                "(name, descript, assign_date, due_date, class_enrolled_id, enum_category_id, " +
+                "mark_min, mark_max, created, created_by) " +
                 "VALUES (" + sqlValues.ToString() + ")";
 
             row["lineitem_id"] = connection.InsertNewRecord(sql, parameters);
 
-            ClassEnrolled classEnrolled = Read_ClassEnrolled((int)row["class_id"], connection);
+            ClassEnrolled classEnrolled = Read_ClassEnrolled((int)row["class_enrolled_id"], connection);
             LineItem result = daoObjectMapper.MapLineItem(row, classEnrolled);
 
             return result;

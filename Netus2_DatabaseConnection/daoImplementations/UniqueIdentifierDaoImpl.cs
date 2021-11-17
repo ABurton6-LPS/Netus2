@@ -68,10 +68,10 @@ namespace Netus2_DatabaseConnection.daoImplementations
                     parameters.Add(new SqlParameter("@person_id", row["person_id"]));
                 }
 
-                if (row["unique_identifier"] != DBNull.Value)
+                if (row["unique_identifier_value"] != DBNull.Value)
                 {
-                    sql.Append("AND unique_identifier = @unique_identifier ");
-                    parameters.Add(new SqlParameter("@unique_identifier", row["unique_identifier"]));
+                    sql.Append("AND unique_identifier_value = @unique_identifier_value ");
+                    parameters.Add(new SqlParameter("@unique_identifier_value", row["unique_identifier_value"]));
                 }
 
                 if (row["enum_identifier_id"] != DBNull.Value)
@@ -128,13 +128,13 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 else
                     sql.Append("person_id = NULL, ");
 
-                if (row["unique_identifier"] != DBNull.Value)
+                if (row["unique_identifier_value"] != DBNull.Value)
                 {
-                    sql.Append("unique_identifier = @unique_identifier, ");
-                    parameters.Add(new SqlParameter("@unique_identifier", row["unique_identifier"]));
+                    sql.Append("unique_identifier_value = @unique_identifier_value, ");
+                    parameters.Add(new SqlParameter("@unique_identifier_value", row["unique_identifier_value"]));
                 }
                 else
-                    sql.Append("unique_identifier = NULL, ");
+                    sql.Append("unique_identifier_value = NULL, ");
 
                 if (row["enum_identifier_id"] != DBNull.Value)
                 {
@@ -170,10 +170,10 @@ namespace Netus2_DatabaseConnection.daoImplementations
             else
                 sqlValues.Append("NULL, ");
 
-            if (row["unique_identifier"] != DBNull.Value)
+            if (row["unique_identifier_value"] != DBNull.Value)
             {
-                sqlValues.Append("@unique_identifier, ");
-                parameters.Add(new SqlParameter("@unique_identifier", row["unique_identifier"]));
+                sqlValues.Append("@unique_identifier_value, ");
+                parameters.Add(new SqlParameter("@unique_identifier_value", row["unique_identifier_value"]));
             }
             else
                 sqlValues.Append("NULL, ");
@@ -190,7 +190,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
             sqlValues.Append(_taskId != null ? _taskId.ToString() : "'Netus2'");
 
             string sql = "INSERT INTO unique_identifier " +
-                "(person_id, unique_identifier, enum_identifier_id, " +
+                "(person_id, unique_identifier_value, enum_identifier_id, " +
                 "created, created_by) " +
                 "VALUES (" + sqlValues.ToString() + ")";
 
