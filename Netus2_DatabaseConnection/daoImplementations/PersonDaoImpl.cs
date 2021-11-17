@@ -41,7 +41,6 @@ namespace Netus2_DatabaseConnection.daoImplementations
             Delete_UniqueIdentifier(person, connection);
             Delete_Enrollment(person, connection);
             Delete_Mark(person, connection);
-            Delete_JctClassPerson(person, connection);
             
             string sql = "DELETE FROM person WHERE " +
                 "person_id = @person_id";
@@ -50,21 +49,6 @@ namespace Netus2_DatabaseConnection.daoImplementations
             parameters.Add(new SqlParameter("@person_id", person.Id));
 
             connection.ExecuteNonQuery(sql, parameters);
-        }
-
-        private void Delete_JctClassPerson(Person person, IConnectable connection)
-        {
-            IJctClassPersonDao jctClassPersonDaoImpl = DaoImplFactory.GetJctClassPersonDaoImpl();
-            List<DataRow> foundJctClassPersonDaos =
-                jctClassPersonDaoImpl.Read_AllWithPersonId(person.Id, connection);
-
-            foreach (DataRow foundClassPersonDao in foundJctClassPersonDaos)
-            {
-                jctClassPersonDaoImpl.Delete(
-                    (int)foundClassPersonDao["class_id"],
-                    (int)foundClassPersonDao["person_id"], 
-                    connection);
-            }
         }
 
         private void Delete_UniqueIdentifier(Person person, IConnectable connection)
@@ -264,6 +248,12 @@ namespace Netus2_DatabaseConnection.daoImplementations
                     parameters.Add(new SqlParameter("@enum_residence_status_id", row["enum_residence_status_id"]));
                 }
 
+                if(row["enum_status_id"] != DBNull.Value)
+                {
+                    sql.Append("AND enum_status_id = @enum_status_id ");
+                    parameters.Add(new SqlParameter("@enum_status_id", row["enum_status_id"]));
+                }
+
                 if (row["login_name"] != DBNull.Value)
                 {
                     sql.Append("AND login_name = @login_name ");
@@ -318,7 +308,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
             foreach (DataRow foundJctPersonAppDao in foundJctPersonAppDaos)
             {
-                int appId = (int)foundJctPersonAppDao["app_id"];
+                int appId = (int)foundJctPersonAppDao["application_id"];
                 foundApplications.Add(appDaoImpl.Read_UsingAppId(appId, connection));
             }
 
@@ -523,6 +513,12 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 else
                     sql.Append("login_pw = NULL, ");
 
+                if(row["enum_status_id"] != DBNull.Value)
+                {
+                    sql.Append("enum_status_id = @enum_status_id");
+                    parameters.Add(new SqlParameter("@enum_status_id", row["enum_status_id"]));
+                }
+
                 sql.Append("changed = dbo.CURRENT_DATETIME(), ");
                 sql.Append("changed_by = " + (_taskId != null ? _taskId.ToString() : "'Netus2'") + " ");
                 sql.Append("WHERE person_id = @person_id");
@@ -556,7 +552,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
             foreach (DataRow jctPersonAppDao in foundJctPersonAppDaos)
             {
-                foundAppIds.Add((int)jctPersonAppDao["app_id"]);
+                foundAppIds.Add((int)jctPersonAppDao["application_id"]);
             }
 
             foreach (int appId in appIds)
@@ -649,8 +645,8 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 }
             }
 
-            List<DataRow> foundJctEmails = jctPersonEmailDaoImpl.Read_AllWithPersonId(personId, connection);
-            foreach (DataRow foundJctPersonEmail in foundJctEmails)
+            List<DataRow> foundJctPersonEmails = jctPersonEmailDaoImpl.Read_AllWithPersonId(personId, connection);
+            foreach (DataRow foundJctPersonEmail in foundJctPersonEmails)
             {
                 if (passedInEmailIds.Contains((int)foundJctPersonEmail["email_id"]) == false)
                     jctPersonEmailDaoImpl.Delete(personId, (int)foundJctPersonEmail["email_id"], connection);
@@ -853,13 +849,21 @@ namespace Netus2_DatabaseConnection.daoImplementations
             else
                 sqlValues.Append("NULL, ");
 
+            if (row["enum_status_id"] != DBNull.Value)
+            {
+                sqlValues.Append("@enum_status_id, ");
+                parameters.Add(new SqlParameter("@enum_status_id", row["enum_status_id"]));
+            }
+            else
+                sqlValues.Append("NULL, ");
+
             sqlValues.Append("dbo.CURRENT_DATETIME(), ");
             sqlValues.Append(_taskId != null ? _taskId.ToString() : "'Netus2'");
 
             string sql =
                 "INSERT INTO person " +
                 "(first_name, middle_name, last_name, birth_date, enum_gender_id, enum_ethnic_id, " +
-                "enum_residence_status_id, login_name, login_pw, created, created_by) " +
+                "enum_residence_status_id, login_name, login_pw, enum_status_id, created, created_by) " +
                 "VALUES (" + sqlValues.ToString() + ")";
 
             row["person_id"] = connection.InsertNewRecord(sql, parameters);

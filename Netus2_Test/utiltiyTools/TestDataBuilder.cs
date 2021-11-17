@@ -207,9 +207,8 @@ namespace Netus2_Test
             else
                 resource.Id = 1;
 
-            classEnrolled = new ClassEnrolled("Mrs. Beckner 1st hour Spanish Class", "B_1_SPN", Enum_Class.values["scheduled"], "237", spanishCourse, schoolYear);
+            classEnrolled = new ClassEnrolled("Mrs. Beckner 1st hour Spanish Class", "B_1_SPN", Enum_Class_Enrolled.values["scheduled"], "237", spanishCourse, schoolYear);
             classEnrolled.Resources.Add(resource);
-            classEnrolled.AddStaff(teacher, Enum_Role.values["primary teacher"]);
             classEnrolled.Periods.Add(Enum_Period.values["1"]);
             classEnrolled.AcademicSession = semester1;
             if (connection != null)
@@ -271,8 +270,9 @@ namespace Netus2_Test
                 student = personDaoImpl.Read(student, connection)[0];
             }
 
-            enrollment = new Enrollment(Enum_Grade.values["6"], new DateTime(2020, 9, 6), new DateTime(2021, 6, 1), Enum_True_False.values["true"], classEnrolled, new List<AcademicSession>());
-            enrollment.AcademicSessions.Add(schoolYear);
+            enrollment = new Enrollment(Enum_Grade.values["6"], new DateTime(2020, 9, 6), new DateTime(2021, 6, 1), Enum_True_False.values["true"]);
+            enrollment.ClassesEnrolled.Add(classEnrolled);
+            enrollment.AcademicSession = schoolYear;
             if (connection != null)
                 enrollment = enrollmentDaoImpl.Write(enrollment, student.Id, connection);
             else

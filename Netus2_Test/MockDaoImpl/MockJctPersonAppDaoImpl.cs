@@ -30,9 +30,9 @@ namespace Netus2_Test.MockDaoImpl
         {
             WasCalled_Read = true;
 
-            DataRow row = DataTableFactory.CreateDataTable_Netus2_JctPersonApp().NewRow();
+            DataRow row = DataTableFactory.CreateDataTable_Netus2_JctPersonApplication().NewRow();
             row["person_id"] = tdBuilder.student.Id;
-            row["app_id"] = tdBuilder.application.Id;
+            row["application_id"] = tdBuilder.application.Id;
 
             if (_shouldReadReturnData)
                 return row;
@@ -45,9 +45,9 @@ namespace Netus2_Test.MockDaoImpl
             WasCalled_ReadWithAppId = true;
 
             List<DataRow> list = new List<DataRow>();
-            DataRow row = DataTableFactory.CreateDataTable_Netus2_JctPersonApp().NewRow();
+            DataRow row = DataTableFactory.CreateDataTable_Netus2_JctPersonApplication().NewRow();
             row["person_id"] = tdBuilder.student.Id;
-            row["app_id"] = appId;
+            row["application_id"] = appId;
 
             if (_shouldReadReturnData)
                 list.Add(row);
@@ -60,9 +60,9 @@ namespace Netus2_Test.MockDaoImpl
             WasCalled_ReadWithPersonId = true;
 
             List<DataRow> list = new List<DataRow>();
-            DataRow row = DataTableFactory.CreateDataTable_Netus2_JctPersonApp().NewRow();
+            DataRow row = DataTableFactory.CreateDataTable_Netus2_JctPersonApplication().NewRow();
             row["person_id"] = personId;
-            row["app_id"] = tdBuilder.application.Id;
+            row["application_id"] = tdBuilder.application.Id;
 
             if (_shouldReadReturnData)
                 list.Add(row);
@@ -74,9 +74,9 @@ namespace Netus2_Test.MockDaoImpl
         {
             WasCalled_Write = true;
 
-            DataRow row = DataTableFactory.CreateDataTable_Netus2_JctPersonApp().NewRow();
+            DataRow row = DataTableFactory.CreateDataTable_Netus2_JctPersonApplication().NewRow();
             row["person_id"] = personId;
-            row["app_id"] = appId;
+            row["application_id"] = appId;
 
             return row;
         }

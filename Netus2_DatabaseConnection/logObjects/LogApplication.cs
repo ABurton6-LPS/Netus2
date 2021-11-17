@@ -3,10 +3,10 @@ using System;
 
 namespace Netus2_DatabaseConnection.logObjects
 {
-    public class LogApp
+    public class LogApplication
     {
-        public int log_app_id { get; set; }
-        public int app_id { get; set; }
+        public int log_application_id { get; set; }
+        public int application_id { get; set; }
         public string name { get; set; }
         public int provider_id { get; set; }
         public DateTime created { get; set; }

@@ -14,17 +14,17 @@ namespace Netus2_DatabaseConnection.daoImplementations
         public void Delete(int classId, int periodId, IConnectable connection)
         {
             if (classId <= 0 || periodId < 0)
-                throw new Exception("Cannot delete a record from jct_class_period " +
+                throw new Exception("Cannot delete a record from jct_class_enrolled_period " +
                     "without a database-assigned ID for both classId and periodId." +
                     "\nclassId: " + classId +
                     "\nperiodId: " + periodId);
 
-            string sql = "DELETE FROM jct_class_period WHERE 1=1 " +
-                "AND class_id = @class_id " +
+            string sql = "DELETE FROM jct_class_enrolled_period WHERE 1=1 " +
+                "AND class_enrolled_id = @class_enrolled_id " +
                 "AND enum_period_id = @enum_period_id";
 
             List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("@class_id", classId));
+            parameters.Add(new SqlParameter("@class_enrolled_id", classId));
             parameters.Add(new SqlParameter("@enum_period_id", periodId));
 
             connection.ExecuteNonQuery(sql, parameters);
@@ -32,12 +32,12 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         public DataRow Read(int classId, int periodId, IConnectable connection)
         {
-            string sql = "SELECT * FROM jct_class_period WHERE 1=1 " +
-            "AND class_id = @class_id " +
+            string sql = "SELECT * FROM jct_class_enrolled_period WHERE 1=1 " +
+            "AND class_enrolled_id = @class_enrolled_id " +
             "AND enum_period_id = @enum_period_id";
 
             List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("@class_id", classId));
+            parameters.Add(new SqlParameter("@class_enrolled_id", classId));
             parameters.Add(new SqlParameter("@enum_period_id", periodId));
 
             List<DataRow> results = Read(sql, connection, parameters);
@@ -52,18 +52,18 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         public List<DataRow> Read_AllWithClassId(int classId, IConnectable connection)
         {
-            string sql = "SELECT * FROM jct_class_period WHERE " +
-                "class_id = @class_id";
+            string sql = "SELECT * FROM jct_class_enrolled_period WHERE " +
+                "class_enrolled_id = @class_enrolled_id";
 
             List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("@class_id", classId));
+            parameters.Add(new SqlParameter("@class_enrolled_id", classId));
 
             return Read(sql, connection, parameters);
         }
 
         public List<DataRow> Read_AllWithPeriodId(int periodId, IConnectable connection)
         {
-            string sql = "SELECT * FROM jct_class_period WHERE " +
+            string sql = "SELECT * FROM jct_class_enrolled_period WHERE " +
                 "period_id = @period_id";
 
             List<SqlParameter> parameters = new List<SqlParameter>();
@@ -86,18 +86,18 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         public DataRow Write(int classId, int periodId, IConnectable connection)
         {
-            string sql = "INSERT INTO jct_class_period (" +
-                "class_id, enum_period_id) VALUES (" +
-                "@class_id, @period_id)";
+            string sql = "INSERT INTO jct_class_enrolled_period (" +
+                "class_enrolled_id, enum_period_id) VALUES (" +
+                "@class_enrolled_id, @period_id)";
 
             List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("@class_id", classId));
+            parameters.Add(new SqlParameter("@class_enrolled_id", classId));
             parameters.Add(new SqlParameter("@period_id", periodId));
 
             connection.ExecuteNonQuery(sql, parameters);
 
             DataRow jctClassPeriodDao = DataTableFactory.CreateDataTable_Netus2_JctClassPeriod().NewRow();
-            jctClassPeriodDao["class_id"] = classId;
+            jctClassPeriodDao["class_enrolled_id"] = classId;
             jctClassPeriodDao["enum_period_id"] = periodId;
 
             return jctClassPeriodDao;

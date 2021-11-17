@@ -85,10 +85,10 @@ namespace Netus2_DatabaseConnection.daoImplementations
             }                
             else
             {
-                if (row["email"] != DBNull.Value)
+                if (row["email_value"] != DBNull.Value)
                 {
-                    sql.Append("AND email = @email ");
-                    parameters.Add(new SqlParameter("@email", row["email"]));
+                    sql.Append("AND emaemail_valueil = @email_value ");
+                    parameters.Add(new SqlParameter("@email_value", row["email_value"]));
                 }
 
                 if (row["enum_email_id"] != DBNull.Value)
@@ -137,13 +137,13 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 List<SqlParameter> parameters = new List<SqlParameter>();
 
                 StringBuilder sql = new StringBuilder("UPDATE email SET ");
-                if (row["email"] != DBNull.Value)
+                if (row["email_value"] != DBNull.Value)
                 {
-                    sql.Append("email = @email, ");
-                    parameters.Add(new SqlParameter("@email", row["email"]));
+                    sql.Append("email_value = @email_value, ");
+                    parameters.Add(new SqlParameter("@email_value", row["email_value"]));
                 }
                 else
-                    sql.Append("email = NULL, ");
+                    sql.Append("email_value = NULL, ");
 
                 if (row["enum_email_id"] != DBNull.Value)
                 {
@@ -171,10 +171,10 @@ namespace Netus2_DatabaseConnection.daoImplementations
             List<SqlParameter> parameters = new List<SqlParameter>();
 
             StringBuilder sqlValues = new StringBuilder();
-            if (row["email"] != DBNull.Value)
+            if (row["email_value"] != DBNull.Value)
             {
-                sqlValues.Append("@email, ");
-                parameters.Add(new SqlParameter("@email", row["email"]));
+                sqlValues.Append("@email_value, ");
+                parameters.Add(new SqlParameter("@email_value", row["email_value"]));
             }
             else
                 sqlValues.Append("NULL, ");
@@ -191,7 +191,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
             sqlValues.Append(_taskId != null ? _taskId.ToString() : "'Netus2'");
 
             string sql = "INSERT INTO email " +
-                "(email, enum_email_id, created, created_by) VALUES (" + sqlValues.ToString() + ")";
+                "(email_value, enum_email_id, created, created_by) VALUES (" + sqlValues.ToString() + ")";
 
             row["email_id"] = connection.InsertNewRecord(sql, parameters);
 

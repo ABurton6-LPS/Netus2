@@ -3,11 +3,13 @@ using System;
 
 namespace Netus2_DatabaseConnection.logObjects
 {
-    public class LogJctEnrollmentAcademicSession
+    public class LogJctEnrollmentClassEnrolled
     {
-        public int log_jct_enrollment_academic_session_id { get; set; }
+        public int log_jct_enrollment_class_enrolled_id { get; set; }
         public int enrollment_id { get; set; }
-        public int academic_session_id { get; set; }
+        public int class_enrolled_id { get; set; }
+        public DateTime? enrollment_start_date { get; set; }
+        public DateTime? enrollment_end_date { get; set; }
         public DateTime created { get; set; }
         public string created_by { get; set; }
         public DateTime changed { get; set; }

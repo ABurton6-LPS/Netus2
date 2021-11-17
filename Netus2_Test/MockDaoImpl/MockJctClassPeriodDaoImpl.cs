@@ -36,7 +36,7 @@ namespace Netus2_Test.MockDaoImpl
                 for(int i = 0; i < tdBuilder.classEnrolled.Periods.Count; i++)
                 {
                     DataRow row = DataTableFactory.CreateDataTable_Netus2_JctClassPeriod().NewRow();
-                    row["class_id"] = classId;
+                    row["class_enrolled_id"] = classId;
                     row["enum_period_id"] = tdBuilder.classEnrolled.Periods[i].Id;
                     returnData.Add(row);
                 }
@@ -54,7 +54,7 @@ namespace Netus2_Test.MockDaoImpl
                 for (int i = 0; i < tdBuilder.classEnrolled.Periods.Count; i++)
                 {
                     DataRow row = DataTableFactory.CreateDataTable_Netus2_JctClassPeriod().NewRow();
-                    row["class_id"] = tdBuilder.classEnrolled.Id;
+                    row["class_enrolled_id"] = tdBuilder.classEnrolled.Id;
                     row["enum_period_id"] = periodId;
                     returnData.Add(row);
                 }
@@ -69,7 +69,7 @@ namespace Netus2_Test.MockDaoImpl
             if (_shouldReadReturnData)
             {
                 DataRow row = DataTableFactory.CreateDataTable_Netus2_JctClassPeriod().NewRow();
-                row["class_id"] = classId;
+                row["class_enrolled_id"] = classId;
                 row["enum_period_id"] = tdBuilder.classEnrolled.Periods[0].Id;
                 return row;
             }
@@ -82,7 +82,7 @@ namespace Netus2_Test.MockDaoImpl
             WasCalled_Write = true;
 
             DataRow row = DataTableFactory.CreateDataTable_Netus2_JctClassPeriod().NewRow();
-            row["class_id"] = classId;
+            row["class_enrolled_id"] = classId;
             row["enum_period_id"] = tdBuilder.classEnrolled.Periods[0].Id;
             return row;
         }

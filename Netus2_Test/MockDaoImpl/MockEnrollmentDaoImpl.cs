@@ -11,8 +11,8 @@ namespace Netus2_Test.MockDaoImpl
         public bool WasCalled_Delete = false;
         public bool WasCalled_DelteWithPersonId = false;
         public bool WasCalled_Read = false;
-        public bool WasCalled_ReadWithClassId = false;
-        public bool WasCalled_ReadWithPersonId = false;
+        public bool WasCalled_ReadAllWithAcademicSessionId = false;
+        public bool WasCalled_ReadAllWithPersonId = false;
         public bool WasCalled_Update = false;
         public bool WasCalled_Write = false;
         public bool _shouldReadReturnData = false;
@@ -49,9 +49,9 @@ namespace Netus2_Test.MockDaoImpl
             return returnData;
         }
 
-        public List<Enrollment> Read_AllWithClassId(int classId, IConnectable connection)
+        public List<Enrollment> Read_AllWithAcademicSessionId(int academicSessionId, IConnectable connection)
         {
-            WasCalled_ReadWithClassId = true;
+            WasCalled_ReadAllWithAcademicSessionId = true;
 
             List<Enrollment> returnData = new List<Enrollment>();
 
@@ -63,7 +63,7 @@ namespace Netus2_Test.MockDaoImpl
 
         public List<Enrollment> Read_AllWithPersonId(int personId, IConnectable connection)
         {
-            WasCalled_ReadWithPersonId = true;
+            WasCalled_ReadAllWithPersonId = true;
 
             List<Enrollment> returnData = new List<Enrollment>();
 

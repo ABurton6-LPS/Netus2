@@ -26,7 +26,6 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
         MockUniqueIdentifierDaoImpl mockUniqueIdentifierDaoImpl;
         MockEnrollmentDaoImpl mockEnrollmentDaoImpl;
         MockMarkDaoImpl mockMarkDaoImpl;
-        MockJctClassPersonDaoImpl mockJctClassPersonDaoImpl;
         MockApplicationDaoImpl mockApplicationDaoImpl;
         MockAddressDaoImpl mockAddressDaoImpl;
         MockEmailDaoImpl mockEmailDaoImpl;
@@ -63,8 +62,6 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
             DaoImplFactory.MockEnrollmentDaoImpl = mockEnrollmentDaoImpl;
             mockMarkDaoImpl = new MockMarkDaoImpl(tdBuilder);
             DaoImplFactory.MockMarkDaoImpl = mockMarkDaoImpl;
-            mockJctClassPersonDaoImpl = new MockJctClassPersonDaoImpl(tdBuilder);
-            DaoImplFactory.MockJctClassPersonDaoImpl = mockJctClassPersonDaoImpl;
             mockApplicationDaoImpl = new MockApplicationDaoImpl(tdBuilder);
             DaoImplFactory.MockApplicationDaoImpl = mockApplicationDaoImpl;
             mockAddressDaoImpl = new MockAddressDaoImpl(tdBuilder);
@@ -157,7 +154,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
 
             personDaoImpl.Delete(tdBuilder.teacher, _netus2DbConnection);
 
-            Assert.IsTrue(mockEnrollmentDaoImpl.WasCalled_ReadWithPersonId);
+            Assert.IsTrue(mockEnrollmentDaoImpl.WasCalled_ReadAllWithPersonId);
             Assert.IsTrue(mockEnrollmentDaoImpl.WasCalled_Delete);
         }
 
@@ -170,17 +167,6 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
 
             Assert.IsTrue(mockMarkDaoImpl.WasCalled_ReadWithPersonId);
             Assert.IsTrue(mockMarkDaoImpl.WasCalled_Delete);
-        }
-
-        [TestCase]
-        public void DeleteJctClassPerson_ShouldCallExpectedMethods()
-        {
-            mockJctClassPersonDaoImpl._shouldReadReturnData = true;
-
-            personDaoImpl.Delete(tdBuilder.teacher, _netus2DbConnection);
-
-            Assert.IsTrue(mockJctClassPersonDaoImpl.WasCalled_ReadWithPersonId);
-            Assert.IsTrue(mockJctClassPersonDaoImpl.WasCalled_Delete);
         }
 
         [TestCase]
@@ -253,7 +239,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
         {
             personDaoImpl.Read(tdBuilder.teacher, _netus2DbConnection);
 
-            Assert.IsTrue(mockEnrollmentDaoImpl.WasCalled_ReadWithPersonId);
+            Assert.IsTrue(mockEnrollmentDaoImpl.WasCalled_ReadAllWithPersonId);
         }
 
         [TestCase]
@@ -317,7 +303,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
         {
             personDaoImpl.Update(tdBuilder.teacher, _netus2DbConnection);
 
-            Assert.IsTrue(mockEnrollmentDaoImpl.WasCalled_ReadWithPersonId);
+            Assert.IsTrue(mockEnrollmentDaoImpl.WasCalled_ReadAllWithPersonId);
         }
 
         [TestCase]

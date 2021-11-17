@@ -15,11 +15,10 @@ namespace Netus2_DatabaseConnection.daoImplementations
         public static IEmploymentSessionDao MockEmploymentSessionDaoImpl = null;
         public static IEnrollmentDao MockEnrollmentDaoImpl = null;
         public static IJctClassPeriodDao MockJctClassPeriodDaoImpl = null;
-        public static IJctClassPersonDao MockJctClassPersonDaoImpl = null;
         public static IJctClassResourceDao MockJctClassResourceDaoImpl = null;
         public static IJctCourseGradeDao MockJctCourseGradeDaoImpl = null;
         public static IJctCourseSubjectDao MockJctCourseSubjectDaoImpl = null;
-        public static IJctEnrollmentAcademicSessionDao MockJctEnrollmentAcademicSessionDaoImpl = null;
+        public static IJctEnrollmentClassEnrolledDao MockJctEnrollmentClassEnrolledDaoImpl = null;
         public static IJctPersonAddressDao MockJctPersonAddressDaoImpl = null;
         public static IJctPersonEmailDao MockJctPersonEmailDaoImpl = null;
         public static IJctPersonAppDao MockJctPersonAppDaoImpl = null;
@@ -107,14 +106,6 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 return MockJctClassPeriodDaoImpl;
         }
 
-        public static IJctClassPersonDao GetJctClassPersonDaoImpl()
-        {
-            if (MockJctClassPersonDaoImpl == null && MockAll == false)
-                return new JctClassPersonDaoImpl();
-            else
-                return MockJctClassPersonDaoImpl;
-        }
-
         public static IJctClassResourceDao GetJctClassResourceDaoImpl()
         {
             if (MockJctClassResourceDaoImpl == null && MockAll == false)
@@ -139,12 +130,12 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 return MockJctCourseSubjectDaoImpl;
         }
 
-        public static IJctEnrollmentAcademicSessionDao GetJctEnrollmentAcademicSessionDaoImpl()
+        public static IJctEnrollmentClassEnrolledDao GetJctEnrollmentClassEnrolledDaoImpl()
         {
-            if (MockJctEnrollmentAcademicSessionDaoImpl == null && MockAll == false)
-                return new JctEnrollmentAcademicSessionDaoImpl();
+            if (MockJctEnrollmentClassEnrolledDaoImpl == null && MockAll == false)
+                return new JctEnrollmentClassEnrolledDaoImpl();
             else
-                return MockJctEnrollmentAcademicSessionDaoImpl;
+                return MockJctEnrollmentClassEnrolledDaoImpl;
         }
 
         public static IJctPersonAddressDao GetJctPersonAddressDaoImpl()

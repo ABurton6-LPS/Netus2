@@ -41,8 +41,8 @@ namespace Netus2_Test.Integration
             Assert.AreEqual(expected.Applications.Count, actual.Applications.Count);
             for (int i = 0; i < expected.Applications.Count; i++)
             {
-                Assert_Table(actual.Applications[i].Id, expected.Applications.Count, "app", DataTableFactory.CreateDataTable_Netus2_Application(), connection);
-                Assert_Table(actual.Id, expected.Applications.Count, "jct_person_app", DataTableFactory.CreateDataTable_Netus2_JctPersonApp(), connection);
+                Assert_Table(actual.Applications[i].Id, expected.Applications.Count, "application", DataTableFactory.CreateDataTable_Netus2_Application(), connection);
+                Assert_Table(actual.Id, expected.Applications.Count, "jct_person_application", DataTableFactory.CreateDataTable_Netus2_JctPersonApplication(), connection);
                 AssertApplication(expected.Applications[i], actual.Applications[i]);
             }
             Assert.AreEqual(expected.Addresses.Count, actual.Addresses.Count);
@@ -206,12 +206,12 @@ namespace Netus2_Test.Integration
         public static void AssertEnrollment(Enrollment expected, Enrollment actual)
         {
             Assert.AreEqual(expected.Id, actual.Id);
-            if (expected.ClassEnrolled == null)
-                Assert.IsNull(actual.ClassEnrolled);
-            if (expected.ClassEnrolled != null)
+            if (expected.AcademicSession == null)
+                Assert.IsNull(actual.AcademicSession);
+            if (expected.AcademicSession != null)
             {
-                Assert.IsNotNull(actual.ClassEnrolled);
-                AssertClassEnrolled(expected.ClassEnrolled, actual.ClassEnrolled);
+                Assert.IsNotNull(actual.AcademicSession);
+                AssertAcademicSession(expected.AcademicSession, actual.AcademicSession);
             }
             Assert.AreEqual(expected.GradeLevel, actual.GradeLevel);
             Assert.AreEqual(expected.StartDate, actual.StartDate);
@@ -310,9 +310,9 @@ namespace Netus2_Test.Integration
             }
             else if (tableName.Length > 9 && tableName.Substring(0, 9) == "jct_class")
             {
-                if(tableName == "jct_class_person")
+                if(tableName == "jct_class_enrolled_person")
                 {
-                    sql = "SELECT * FROM " + tableName + " WHERE class_id = " + id;
+                    sql = "SELECT * FROM " + tableName + " WHERE class_enrolled_id = " + id;
                     int foundNumberOfRecords = RunSql(sql, dt, connection);
                     if (foundNumberOfRecords == 0)
                     {
@@ -326,13 +326,18 @@ namespace Netus2_Test.Integration
                 }
                 else
                 {
-                    sql = "SELECT * FROM " + tableName + " WHERE class_id = " + id;
+                    sql = "SELECT * FROM " + tableName + " WHERE class_enrolled_id = " + id;
                     Assert.AreEqual(expectedNumberOfRecords, RunSql(sql, dt, connection));
                 }
             }
             else if (tableName.Length > 10 && tableName.Substring(0, 10) == "jct_course")
             {
                 sql = "SELECT * FROM " + tableName + " WHERE course_id = " + id;
+                Assert.AreEqual(expectedNumberOfRecords, RunSql(sql, dt, connection));
+            }
+            else if(tableName.Length > 14 && tableName.Substring(0, 14) == "jct_enrollment")
+            {
+                sql = "SELECT * FROM " + tableName + " WHERE enrollment_id = " + id;
                 Assert.AreEqual(expectedNumberOfRecords, RunSql(sql, dt, connection));
             }
             else if (tableName.Substring(0, 3) == "jct")

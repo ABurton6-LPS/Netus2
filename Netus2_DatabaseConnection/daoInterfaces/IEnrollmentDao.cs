@@ -38,10 +38,10 @@ namespace Netus2_DatabaseConnection.daoInterfaces
         /// </para>
         /// Populates the returned records with any associated ClassEnrolled and/or AcademicSession records.
         /// </summary>
-        /// <param name="classId"></param>
+        /// <param name="personId"></param>
         /// <param name="connection"></param>
         /// <returns>Empty list, if no records are found.</returns>
-        public List<Enrollment> Read_AllWithClassId(int classId, IConnectable connection);
+        public List<Enrollment> Read_AllWithPersonId(int personId, IConnectable connection);
 
         /// <summary>
         /// <para>
@@ -49,10 +49,10 @@ namespace Netus2_DatabaseConnection.daoInterfaces
         /// </para>
         /// Populates the returned records with any associated ClassEnrolled and/or AcademicSession records.
         /// </summary>
-        /// <param name="personId"></param>
+        /// <param name="academicSessionId"></param>
         /// <param name="connection"></param>
-        /// <returns>Empty list, if no records are found.</returns>
-        public List<Enrollment> Read_AllWithPersonId(int personId, IConnectable connection);
+        /// <returns></returns>
+        public List<Enrollment> Read_AllWithAcademicSessionId(int academicSessionId, IConnectable connection);
 
         /// <summary>
         /// <para>

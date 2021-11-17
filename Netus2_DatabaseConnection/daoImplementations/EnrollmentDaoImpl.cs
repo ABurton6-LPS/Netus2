@@ -30,7 +30,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
             if(enrollment.Id <= 0)
                 throw new Exception("Cannot delete an enrollment which doesn't have a database-assigned ID.\n" + enrollment.ToString());
 
-            Delete_JctEnrollmentAcademicSession(enrollment.AcademicSessions, enrollment.Id, connection);
+            Delete_JctEnrollmentClassEnrolled(enrollment, connection);
 
             string sql = "DELETE FROM enrollment WHERE " +
                 "enrollment_id = @enrollment_id";
@@ -41,23 +41,19 @@ namespace Netus2_DatabaseConnection.daoImplementations
             connection.ExecuteNonQuery(sql, parameters);
         }
 
-        private void Delete_JctEnrollmentAcademicSession(List<AcademicSession> academicSessions, int enrollmentId, IConnectable connection)
+        private void Delete_JctEnrollmentClassEnrolled(Enrollment enrollment, IConnectable connection)
         {
-            IJctEnrollmentAcademicSessionDao jctEnrollmentAcademicSessionDaoImpl = DaoImplFactory.GetJctEnrollmentAcademicSessionDaoImpl();
-            foreach (AcademicSession academicSession in academicSessions)
+            IJctEnrollmentClassEnrolledDao jctEnrollmentClassEnrolledDaoImpl = DaoImplFactory.GetJctEnrollmentClassEnrolledDaoImpl();
+            List<DataRow> jctEnrollmentClassEnrolledDaos =
+                jctEnrollmentClassEnrolledDaoImpl.Read_AllWithEnrollmentId(enrollment.Id, connection);
+
+            foreach (DataRow jctEnrollmentClassEnrolledDao in jctEnrollmentClassEnrolledDaos)
             {
-                jctEnrollmentAcademicSessionDaoImpl.Delete(enrollmentId, academicSession.Id, connection);
+                jctEnrollmentClassEnrolledDaoImpl.Delete(
+                    (int)jctEnrollmentClassEnrolledDao["enrollment_id"],
+                    (int)jctEnrollmentClassEnrolledDao["class_enrolled_id"],
+                    connection);
             }
-        }
-
-        public List<Enrollment> Read_AllWithClassId(int classId, IConnectable connection)
-        {
-            string sql = "SELECT * FROM enrollment WHERE class_id = @class_id";
-
-            List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("@class_id", classId));
-
-            return Read(sql, connection, parameters);
         }
 
         public List<Enrollment> Read_AllWithPersonId(int personId, IConnectable connection)
@@ -66,6 +62,16 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("@person_id", personId));
+
+            return Read(sql, connection, parameters);
+        }
+
+        public List<Enrollment> Read_AllWithAcademicSessionId(int academicSessionId, IConnectable connection)
+        {
+            string sql = "SELECT * FROM enrollment WHERE academic_session_id = @academic_session_id";
+
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@academic_session_id", academicSessionId));
 
             return Read(sql, connection, parameters);
         }
@@ -90,10 +96,10 @@ namespace Netus2_DatabaseConnection.daoImplementations
                     parameters.Add(new SqlParameter("@person_id", row["person_id"]));
                 }
 
-                if (row["class_id"] != DBNull.Value)
+                if (row["academic_session_id"] != DBNull.Value)
                 {
-                    sql.Append("AND class_id = @class_id ");
-                    parameters.Add(new SqlParameter("@class_id", row["class_id"]));
+                    sql.Append("AND academic_session_id = @academic_session_id ");
+                    parameters.Add(new SqlParameter("@academic_session_id", row["academic_session_id"]));
                 }
 
                 if (row["enum_grade_id"] != DBNull.Value)
@@ -120,40 +126,40 @@ namespace Netus2_DatabaseConnection.daoImplementations
             List<Enrollment> results = new List<Enrollment>();
             foreach (DataRow foundEnrollmentDao in dtEnrollment.Rows)
             {
-                ClassEnrolled foundClassEnrolled = null;
-                if (foundEnrollmentDao["class_id"] != DBNull.Value)
-                    foundClassEnrolled = Read_ClassEnrolled((int)foundEnrollmentDao["class_id"], connection);
+                List<ClassEnrolled> foundClassesEnrolled = Read_ClassesEnrolled((int)foundEnrollmentDao["enrollment_id"], connection);
 
-                List<AcademicSession> academicSessions = Read_AcademicSessions((int)foundEnrollmentDao["enrollment_id"], connection);
-                results.Add(daoObjectMapper.MapEnrollment(foundEnrollmentDao, foundClassEnrolled, academicSessions));
+                AcademicSession foundAcademicSession = null;
+                if(foundEnrollmentDao["academic_session_id"] != DBNull.Value)
+                    foundAcademicSession = Read_AcademicSession((int)foundEnrollmentDao["academic_session_id"], connection);
+                results.Add(daoObjectMapper.MapEnrollment(foundEnrollmentDao, foundClassesEnrolled, foundAcademicSession));
             }
 
             return results;
         }
 
-        private ClassEnrolled Read_ClassEnrolled(int classEnrolledId, IConnectable connection)
+        private List<ClassEnrolled> Read_ClassesEnrolled(int enrollmentId, IConnectable connection)
         {
+            List<ClassEnrolled> classesEnrolled = new List<ClassEnrolled>();
+
+            IJctEnrollmentClassEnrolledDao jctEnrollmentClassEnrolledDaoImpl = DaoImplFactory.GetJctEnrollmentClassEnrolledDaoImpl();
+            List<DataRow> foundJctEnrolledClassEnrolledDaos =
+                jctEnrollmentClassEnrolledDaoImpl.Read_AllWithEnrollmentId(enrollmentId, connection);
+
             IClassEnrolledDao classEnrolledDaoImpl = DaoImplFactory.GetClassEnrolledDaoImpl();
-            return classEnrolledDaoImpl.Read_UsingClassId(classEnrolledId, connection);
-        }
 
-        private List<AcademicSession> Read_AcademicSessions(int enrollmentId, IConnectable connection)
-        {
-            List<AcademicSession> foundAcademicSessions = new List<AcademicSession>();
-
-            IJctEnrollmentAcademicSessionDao jctEnrollmentAcademicSessionDaoImpl = DaoImplFactory.GetJctEnrollmentAcademicSessionDaoImpl();
-            List<DataRow> foundJctEnrollmentAcademicSessionDaos =
-                jctEnrollmentAcademicSessionDaoImpl.Read_AllWithEnrollmentId(enrollmentId, connection);
-
-            IAcademicSessionDao academicSessionDaoImpl = DaoImplFactory.GetAcademicSessionDaoImpl();
-
-            foreach (DataRow foundJctEnrollmentAcademicSessionDao in foundJctEnrollmentAcademicSessionDaos)
+            foreach(DataRow foundJctEnrollmentClassEnrolledDao in foundJctEnrolledClassEnrolledDaos)
             {
-                foundAcademicSessions.Add(
-                    academicSessionDaoImpl.Read_UsingAcademicSessionId((int)foundJctEnrollmentAcademicSessionDao["academic_session_id"], connection));
+                classesEnrolled.Add(
+                    classEnrolledDaoImpl.Read_UsingClassId((int)foundJctEnrollmentClassEnrolledDao["class_enrolled_id"], connection));
             }
 
-            return foundAcademicSessions;
+            return classesEnrolled;
+        }
+
+        private AcademicSession Read_AcademicSession(int academicSessionId, IConnectable connection)
+        {
+            IAcademicSessionDao academicSessionDaoImpl = DaoImplFactory.GetAcademicSessionDaoImpl();
+            return academicSessionDaoImpl.Read_UsingAcademicSessionId(academicSessionId, connection);
         }
 
         public void Update(Enrollment enrollment, int personId, IConnectable connection)
@@ -188,13 +194,13 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 else
                     sql.Append("person_id = NULL, ");
 
-                if (row["class_id"] != DBNull.Value)
+                if (row["academic_session_id"] != DBNull.Value)
                 {
-                    sql.Append("class_id = @class_id, ");
-                    parameters.Add(new SqlParameter("@class_id", row["class_id"]));
+                    sql.Append("academic_session_id = @academic_session_id, ");
+                    parameters.Add(new SqlParameter("@academic_session_id", row["academic_session_id"]));
                 }
                 else
-                    sql.Append("class_id = NULL, ");
+                    sql.Append("academic_session_id = NULL, ");
 
                 if (row["enum_grade_id"] != DBNull.Value)
                 {
@@ -235,7 +241,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
                 connection.ExecuteNonQuery(sql.ToString(), parameters);
 
-                Update_JctEnrollmentAcademicSession(enrollment.AcademicSessions, (int)row["enrollment_id"], connection);
+                Update_JctEnrollmentClassEnrolled(enrollment.ClassesEnrolled, (int)row["enrollment_id"], connection);
             }
             else
                 throw new Exception("The following Enrollment needs to be inserted into the database, before it can be updated.\n" + enrollment.ToString());
@@ -256,10 +262,10 @@ namespace Netus2_DatabaseConnection.daoImplementations
             else
                 sqlValues.Append("NULL, ");
 
-            if (row["class_id"] != DBNull.Value)
+            if (row["academic_session_id"] != DBNull.Value)
             {
-                sqlValues.Append("@class_id, ");
-                parameters.Add(new SqlParameter("@class_id", row["class_id"]));
+                sqlValues.Append("@academic_session_id, ");
+                parameters.Add(new SqlParameter("@academic_session_id", row["academic_session_id"]));
             }
             else
                 sqlValues.Append("NULL, ");
@@ -300,49 +306,65 @@ namespace Netus2_DatabaseConnection.daoImplementations
             sqlValues.Append(_taskId != null ? _taskId.ToString() : "'Netus2'");
 
             string sql = "INSERT INTO enrollment " +
-                "(person_id, class_id, enum_grade_id, start_date, end_date, is_primary_id, created, created_by) " +
+                "(person_id, academic_session_id, enum_grade_id, start_date, end_date, is_primary_id, created, created_by) " +
                 "VALUES (" + sqlValues.ToString() + ")";
 
             row["enrollment_id"] = connection.InsertNewRecord(sql, parameters);
 
-            List<AcademicSession> foundAcademicSessions = Update_JctEnrollmentAcademicSession(enrollment.AcademicSessions, (int)row["enrollment_id"], connection);
-            ClassEnrolled foundClassEnrolled = Read_ClassEnrolled((int)row["class_id"], connection);
-            Enrollment result = daoObjectMapper.MapEnrollment(row, foundClassEnrolled, foundAcademicSessions);
+            List<ClassEnrolled> foundClassesEnrolled = Update_JctEnrollmentClassEnrolled(enrollment.ClassesEnrolled, (int)row["enrollment_id"], connection);
+            AcademicSession foundAcademicSession = row["academic_session_id"] != DBNull.Value ? Read_AcademicSession((int)row["academic_session_id"], connection) : null;
+            Enrollment result = daoObjectMapper.MapEnrollment(row, foundClassesEnrolled, foundAcademicSession);
 
             return result;
         }
 
-        private List<AcademicSession> Update_JctEnrollmentAcademicSession(List<AcademicSession> academicSessions, int enrollmentId, IConnectable connection)
+        private List<ClassEnrolled> Update_JctEnrollmentClassEnrolled(List<ClassEnrolled> classesEnrolled, int enrollmentId, IConnectable connection)
         {
-            IJctEnrollmentAcademicSessionDao jctEnrollmentAcademicSessionDaoImpl = DaoImplFactory.GetJctEnrollmentAcademicSessionDaoImpl();
-            List<DataRow> foundJctEnrollmentAcademicSessionDaos =
-                jctEnrollmentAcademicSessionDaoImpl.Read_AllWithEnrollmentId(enrollmentId, connection);
-            List<int> academicSessionIds = new List<int>();
-            List<int> foundAcademicSessionsIds = new List<int>();
+            List<ClassEnrolled> classesEnrolledToBeReturned = new List<ClassEnrolled>();
 
-            foreach (AcademicSession academicSession in academicSessions)
+            IClassEnrolledDao classEnrolledDaoImpl = DaoImplFactory.GetClassEnrolledDaoImpl();
+            IJctEnrollmentClassEnrolledDao jctEnrollmentClassEnrolledDaoImpl = DaoImplFactory.GetJctEnrollmentClassEnrolledDaoImpl();
+
+            List<int> passedInClassEnrolledIds = new List<int>();
+            foreach(ClassEnrolled passedInClassEnrolled in classesEnrolled)
+                if(passedInClassEnrolled.Id <= 0)
+                    throw new Exception("Class Enrolled must be in the database before it can be linked with a person. Class Enrolled: " + passedInClassEnrolled.ToString());
+                else
+                {
+                    passedInClassEnrolledIds.Add(passedInClassEnrolled.Id);
+
+                    DataRow foundJctEnrollmentClassEnrolled = jctEnrollmentClassEnrolledDaoImpl.Read(enrollmentId, passedInClassEnrolled.Id, connection);
+
+                    if (foundJctEnrollmentClassEnrolled == null)
+                        foundJctEnrollmentClassEnrolled = jctEnrollmentClassEnrolledDaoImpl.Write(enrollmentId, passedInClassEnrolled.Id, 
+                            passedInClassEnrolled.EnrollmentStartDate, passedInClassEnrolled.EnrollmentEndDate, connection);
+
+                    ClassEnrolled foundClassEnrolled = classEnrolledDaoImpl.Read_UsingClassId(passedInClassEnrolled.Id, connection);
+
+                    if(foundClassEnrolled != null)
+                    {
+                        if (foundJctEnrollmentClassEnrolled["enrollment_start_date"] != DBNull.Value)
+                            foundClassEnrolled.EnrollmentStartDate = (DateTime)foundJctEnrollmentClassEnrolled["enrollment_start_date"];
+                        else
+                            foundClassEnrolled.EnrollmentStartDate = null;
+                        
+                        if (foundJctEnrollmentClassEnrolled["enrollment_end_date"] != DBNull.Value)
+                            foundClassEnrolled.EnrollmentEndDate = (DateTime)foundJctEnrollmentClassEnrolled["enrollment_end_date"];
+                        else
+                            foundClassEnrolled.EnrollmentEndDate = null;
+
+                        classesEnrolledToBeReturned.Add(foundClassEnrolled);
+                    }
+                }
+
+            List<DataRow> foundJctEnrollmentClassesEnrolled = jctEnrollmentClassEnrolledDaoImpl.Read_AllWithEnrollmentId(enrollmentId, connection);
+            foreach(DataRow foundJctEnrollmentClassEnrolled in foundJctEnrollmentClassesEnrolled)
             {
-                academicSessionIds.Add(academicSession.Id);
+                if (passedInClassEnrolledIds.Contains((int)foundJctEnrollmentClassEnrolled["class_enrolled_id"]) == false)
+                    jctEnrollmentClassEnrolledDaoImpl.Delete(enrollmentId, (int)foundJctEnrollmentClassEnrolled["class_enrolled_id"], connection);
             }
 
-            foreach (DataRow foundJctEnrollmentAcademicSessionDao in foundJctEnrollmentAcademicSessionDaos)
-            {
-                foundAcademicSessionsIds.Add((int)foundJctEnrollmentAcademicSessionDao["academic_session_id"]);
-            }
-
-            foreach (int academicSessionId in academicSessionIds)
-            {
-                if (foundAcademicSessionsIds.Contains(academicSessionId) == false)
-                    jctEnrollmentAcademicSessionDaoImpl.Write(enrollmentId, academicSessionId, connection);
-            }
-
-            foreach (int foundAcademicSessionid in foundAcademicSessionsIds)
-            {
-                if (academicSessionIds.Contains(foundAcademicSessionid) == false)
-                    jctEnrollmentAcademicSessionDaoImpl.Delete(enrollmentId, foundAcademicSessionid, connection);
-            }
-
-            return Read_AcademicSessions(enrollmentId, connection);
+            return classesEnrolledToBeReturned;
         }
     }
 }

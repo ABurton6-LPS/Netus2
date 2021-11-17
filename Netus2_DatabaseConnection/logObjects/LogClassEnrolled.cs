@@ -3,12 +3,12 @@ using System;
 
 namespace Netus2_DatabaseConnection.logObjects
 {
-    public class LogClass
+    public class LogClassEnrolled
     {
-        public int log_class_id { get; set; }
-        public int class_id { get; set; }
+        public int log_class_enrolled_id { get; set; }
+        public int class_enrolled_id { get; set; }
         public string name { get; set; }
-        public string class_code { get; set; }
+        public string class_enrolled_code { get; set; }
         public string room { get; set; }
         public int course_id { get; set; }
         public int academic_session_id { get; set; }
@@ -24,7 +24,7 @@ namespace Netus2_DatabaseConnection.logObjects
 
         public void set_ClassType(int enumClassTypeId)
         {
-            ClassType = Enum_Class.GetEnumFromId(enumClassTypeId);
+            ClassType = Enum_Class_Enrolled.GetEnumFromId(enumClassTypeId);
         }
 
         public void set_LogAction(int enumLogActionId)

@@ -142,10 +142,9 @@ namespace Netus2_Test.Integration
 
             //Add Class to School Year
             //You must create the Class with the Course and Academic Session (School Year), so no need to update them
-            ClassEnrolled classEnrolled = new ClassEnrolled("Mrs. Beckner 1st hour Spanish Class", "B_1_SPN", Enum_Class.values["scheduled"], "237", spanishCourse, schoolYear);
+            ClassEnrolled classEnrolled = new ClassEnrolled("Mrs. Beckner 1st hour Spanish Class", "B_1_SPN", Enum_Class_Enrolled.values["scheduled"], "237", spanishCourse, schoolYear);
             classEnrolled = classEnrolledDaoImpl.Write(classEnrolled, connection);
             classEnrolled.Resources.Add(resource);
-            classEnrolled.AddStaff(teacher, Enum_Role.values["primary teacher"]);
             classEnrolled.Periods.Add(Enum_Period.values["1"]);
             classEnrolledDaoImpl.Update(classEnrolled, connection);
             classEnrolled = classEnrolledDaoImpl.Read(classEnrolled, connection)[0];
@@ -153,7 +152,6 @@ namespace Netus2_Test.Integration
             Assert.AreEqual(classEnrolled.AcademicSession.Id, schoolYear.Id);
             Assert.AreEqual(classEnrolled.Course.Id, spanishCourse.Id);
             Assert.AreEqual(resource.Id, classEnrolled.Resources[0].Id);
-            Assert.AreEqual(teacher.Id, classEnrolled.GetStaff()[0].Id);
             Assert.IsNotEmpty(classEnrolled.Periods);
 
             //Add LineItem to Class
@@ -189,20 +187,24 @@ namespace Netus2_Test.Integration
             Assert.AreEqual(addressStudent.Id, student.Addresses[0].Id);
 
             //Create Enrollment
-            //You must create the Enrollment with the ClassEnrolled, so no need to update ClassEnrolled
             //You must write the Enrollment with the Student Id, so no need to update Student
-            Enrollment enrollment = new Enrollment(Enum_Grade.values["6"], new DateTime(2020, 9, 6), new DateTime(2021, 6, 1), Enum_True_False.values["true"], classEnrolled, new List<AcademicSession>());
+            Enrollment enrollment = new Enrollment(Enum_Grade.values["6"], new DateTime(2020, 9, 6), new DateTime(2021, 6, 1), Enum_True_False.values["true"]);
             enrollment = enrollmentDaoImpl.Write(enrollment, student.Id, connection);
             Assert.IsTrue(enrollment.Id > 0);
-            Assert.AreEqual(classEnrolled.Id, enrollment.ClassEnrolled.Id);
             student = personDaoImpl.Read(student, connection)[0];
             Assert.AreEqual(enrollment.Id, student.Enrollments[0].Id);
 
-            //Link the SchoolYear to the Enrollment, update the Enrollment
-            enrollment.AcademicSessions.Add(schoolYear);
+            //Link the ClassEnrolled to the Enrollment, update the Enrollment
+            enrollment.ClassesEnrolled.Add(classEnrolled);
             enrollmentDaoImpl.Update(enrollment, student.Id, connection);
             enrollment = enrollmentDaoImpl.Read(enrollment, student.Id, connection)[0];
-            Assert.AreEqual(schoolYear.Id, enrollment.AcademicSessions[0].Id);
+            Assert.AreEqual(classEnrolled.Id, enrollment.ClassesEnrolled[0].Id);
+
+            //Link the SchoolYear to the Enrollment, update the Enrollment
+            enrollment.AcademicSession = schoolYear;
+            enrollmentDaoImpl.Update(enrollment, student.Id, connection);
+            enrollment = enrollmentDaoImpl.Read(enrollment, student.Id, connection)[0];
+            Assert.AreEqual(schoolYear.Id, enrollment.AcademicSession.Id);
 
             //Create Mark
             //You must create the Mark with the LineItem, so no need to update LineItem

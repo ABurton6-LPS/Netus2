@@ -14,17 +14,17 @@ namespace Netus2_DatabaseConnection.daoImplementations
         public void Delete(int classId, int resourceId, IConnectable connection)
         {
             if (classId <= 0 || resourceId <= 0)
-                throw new Exception("Cannot delete a record from jct_class_period " +
+                throw new Exception("Cannot delete a record from jct_class_enrolled_resource " +
                     "without a database-assigned ID for both classId and resourceId." +
                     "\nclassId: " + classId +
                     "\resourceId: " + resourceId);
 
-            string sql = "DELETE FROM jct_class_resource WHERE 1=1 " +
-                "AND class_id = @class_id " +
+            string sql = "DELETE FROM jct_class_enrolled_resource WHERE 1=1 " +
+                "AND class_enrolled_id = @class_enrolled_id " +
                 "AND resource_id = @resource_id";
 
             List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("@class_id", classId));
+            parameters.Add(new SqlParameter("@class_enrolled_id", classId));
             parameters.Add(new SqlParameter("@resource_id", resourceId));
 
             connection.ExecuteNonQuery(sql, parameters);
@@ -32,12 +32,12 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         public DataRow Read(int classId, int resourceId, IConnectable connection)
         {
-            string sql = "SELECT * FROM jct_class_resource WHERE 1=1 " +
-                "AND class_id = @class_id " +
+            string sql = "SELECT * FROM jct_class_enrolled_resource WHERE 1=1 " +
+                "AND class_enrolled_id = @class_enrolled_id " +
                 "AND resource_id = @resource_id";
 
             List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("@class_id", classId));
+            parameters.Add(new SqlParameter("@class_enrolled_id", classId));
             parameters.Add(new SqlParameter("@resource_id", resourceId));
 
             List<DataRow> results = Read(sql, connection, parameters);
@@ -52,18 +52,18 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         public List<DataRow> Read_AllWithClassId(int classId, IConnectable connection)
         {
-            string sql = "SELECT * FROM jct_class_resource WHERE " +
-                "class_id = @class_id";
+            string sql = "SELECT * FROM jct_class_enrolled_resource WHERE " +
+                "class_enrolled_id = @class_enrolled_id";
 
             List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("@class_id", classId));
+            parameters.Add(new SqlParameter("@class_enrolled_id", classId));
 
             return Read(sql, connection, parameters);
         }
 
         public List<DataRow> Read_AllWithResourceId(int resourceId, IConnectable connection)
         {
-            string sql = "SELECT * FROM jct_class_resource WHERE " +
+            string sql = "SELECT * FROM jct_class_enrolled_resource WHERE " +
                 "resource_id = @resource_id";
 
             List<SqlParameter> parameters = new List<SqlParameter>();
@@ -86,18 +86,18 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         public DataRow Write(int classId, int resourceId, IConnectable connection)
         {
-            string sql = "INSERT INTO jct_class_resource (" +
-                "class_id, resource_id) VALUES (" +
-                "@class_id, @resource_id)";
+            string sql = "INSERT INTO jct_class_enrolled_resource (" +
+                "class_enrolled_id, resource_id) VALUES (" +
+                "@class_enrolled_id, @resource_id)";
 
             List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("@class_id", classId));
+            parameters.Add(new SqlParameter("@class_enrolled_id", classId));
             parameters.Add(new SqlParameter("@resource_id", resourceId));
 
             connection.ExecuteNonQuery(sql, parameters);
 
             DataRow jctClassResourceDao = DataTableFactory.CreateDataTable_Netus2_JctClassResource().NewRow();
-            jctClassResourceDao["class_id"] = classId;
+            jctClassResourceDao["class_enrolled_id"] = classId;
             jctClassResourceDao["resource_id"] = resourceId;
 
             return jctClassResourceDao;

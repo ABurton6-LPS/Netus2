@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace Netus2_DatabaseConnection.enumerations
 {
-    public class Enum_Class
+    public class Enum_Class_Enrolled
     {
-        public static Dictionary<string, Enumeration> values = UtilityTools.PopulateEnumValues("enum_class");
+        public static Dictionary<string, Enumeration> values = UtilityTools.PopulateEnumValues("enum_class_enrolled");
 
         public static Enumeration GetEnumFromId(int id)
         {

@@ -29,7 +29,7 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.ClassTasks
             {
                 string sisClassName = row["name"].ToString() == "" ? null : row["name"].ToString();
                 string sisClassCode = row["class_code"].ToString() == "" ? null : row["class_code"].ToString();
-                Enumeration sisClassType = row["enum_class_id"].ToString() == "" ? null : Enum_Class.GetEnumFromSisCode(row["enum_class_id"].ToString().ToLower());
+                Enumeration sisClassType = row["enum_class_id"].ToString() == "" ? null : Enum_Class_Enrolled.GetEnumFromSisCode(row["enum_class_id"].ToString().ToLower());
                 string sisRoom = row["room"].ToString() == "" ? null : row["room"].ToString();
                 string sisCourseId = row["course_id"].ToString() == "" ? null : row["course_id"].ToString();
                 string sisAcademicSessionId = row["academic_session_id"].ToString() == "" ? null : row["academic_session_id"].ToString();
