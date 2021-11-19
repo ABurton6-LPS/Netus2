@@ -84,7 +84,10 @@ namespace Netus2SisSync.UtilityTools
 
         private static string BuildScript_Sis_Class()
         {
-            return "";
+            Config config = Netus2_DatabaseConnection.utilityTools.UtilityTools.ReadConfig(
+                Enum_Config.values["sis_class_enrolled_query"], Enum_True_False.values["true"], Enum_True_False.values["true"]);
+
+            return config.ConfigValue;
         }
 
         private static string BuildScript_Sis_Enrollment()

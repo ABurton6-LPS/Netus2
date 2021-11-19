@@ -37,7 +37,7 @@ namespace Netus2_DatabaseConnection.daoInterfaces
         /// <para>
         /// Queries the database for the records associated with the passed-in data.
         /// </para>
-        /// Populates the returned records with any associated AcademicSession, Course, Resource, Period, and/or Person (staff) records.
+        /// Populates the returned records with any associated AcademicSession, Course, Resource, and/or Period records.
         /// </summary>
         /// <param name="academicSessionId"></param>
         /// <param name="connection"></param>
@@ -48,7 +48,7 @@ namespace Netus2_DatabaseConnection.daoInterfaces
         /// <para>
         /// Queries the database for the records associated with the passed-in data.
         /// </para>
-        /// Populates the returned records with any associated AcademicSession, Course, Resource, Period, and/or Person (staff) records.
+        /// Populates the returned records with any associated AcademicSession, Course, Resource, and/or Period records.
         /// </summary>
         /// <param name="courseId"></param>
         /// <param name="connection"></param>
@@ -59,7 +59,7 @@ namespace Netus2_DatabaseConnection.daoInterfaces
         /// <para>
         /// Queries the database for a specific record, using the primary key value.
         /// </para>
-        /// Populates the returned records with any associated AcademicSession, Course, Resource, Period, and/or Person (staff) records.
+        /// Populates the returned records with any associated AcademicSession, Course, Resource, and/or Period records.
         /// </summary>
         /// <param name="classId"></param>
         /// <param name="connection"></param>
@@ -68,9 +68,20 @@ namespace Netus2_DatabaseConnection.daoInterfaces
 
         /// <summary>
         /// <para>
+        /// Queries the database for the records associated with the passed-in data.
+        /// </para>
+        /// Populates the returned records with any associated AcademicSession, Course, Resource, and/or Period records.
+        /// </summary>
+        /// <param name="classEnrolledCode"></param>
+        /// <param name="connection"></param>
+        /// <returns>Empty list, if no records are found.</returns>
+        public List<ClassEnrolled> Read_UsingClassEnrolledCode(string classEnrolledCode, IConnectable connection);
+
+        /// <summary>
+        /// <para>
         /// Queries the database for any records that match what is provided. Null datapoints are ignored.
         /// </para>
-        /// Populates the returned records with any associated AcademicSession, Course, Resource, Period, and/or Person (staff) records.
+        /// Populates the returned records with any associated AcademicSession, Course, Resource, and/or Period records.
         /// </summary>
         /// <param name="classEnrolled"></param>
         /// <param name="connection"></param>
@@ -93,7 +104,7 @@ namespace Netus2_DatabaseConnection.daoInterfaces
         /// <para>
         /// Writes the provided record to the database.
         /// </para>
-        /// Populates the returned record with any associated AcademicSession, Course, Resource, Period, and/or Person (staff) records.
+        /// Populates the returned record with any associated AcademicSession, Course, Resource, and/or Period records.
         /// </summary>
         /// <param name="classEnrolled"></param>
         /// <param name="connection"></param>

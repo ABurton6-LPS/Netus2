@@ -29,18 +29,12 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AddressTasks
             {
                 string sisAddressLine1 = row["address_line_1"].ToString() == "" ? null : row["address_line_1"].ToString();
                 string sisAddressLine2 = row["address_line_2"].ToString() == "" ? null : row["address_line_2"].ToString();
-                string sisAddressLine3 = row["address_line_3"].ToString() == "" ? null : row["address_line_3"].ToString();
-                string sisAddressLine4 = row["address_line_4"].ToString() == "" ? null : row["address_line_4"].ToString();
-                string sisApartment = row["apartment"].ToString() == "" ? null : row["apartment"].ToString();
                 string sisCity = row["city"].ToString() == "" ? null : row["city"].ToString();
                 Enumeration sisStateProvince = row["enum_state_province_id"].ToString() == "" ? null : Enum_State_Province.GetEnumFromSisCode(row["enum_state_province_id"].ToString().ToLower());
                 string sisPostalCode = row["postal_code"].ToString() == "" ? null : row["postal_code"].ToString();
                 Enumeration sisCountry = row["enum_country_id"].ToString() == "" ? null : Enum_Country.GetEnumFromSisCode(row["enum_country_id"].ToString().ToLower());
 
                 Address address = new Address(sisAddressLine1, sisAddressLine2, sisCity, sisStateProvince, sisPostalCode);
-                address.Line3 = sisAddressLine3;
-                address.Line4 = sisAddressLine4;
-                address.Apartment = sisApartment;
                 address.Country = sisCountry;
 
                 IAddressDao addressDaoImpl = DaoImplFactory.GetAddressDaoImpl();
@@ -57,9 +51,6 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AddressTasks
                     
                     if ((address.Line1 != foundAddresses[0].Line1) ||
                         (address.Line2 != foundAddresses[0].Line2) ||
-                        (address.Line3 != foundAddresses[0].Line3) ||
-                        (address.Line4 != foundAddresses[0].Line4) ||
-                        (address.Apartment != foundAddresses[0].Apartment) ||
                         (address.City != foundAddresses[0].City) ||
                         (address.StateProvince != foundAddresses[0].StateProvince) ||
                         (address.PostalCode != foundAddresses[0].PostalCode) ||

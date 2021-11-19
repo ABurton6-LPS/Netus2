@@ -54,7 +54,7 @@ namespace Netus2_Test.Unit.SyncProcess
 
             SetMockReaderWithTestData(tstDataSet);
 
-            SyncJob_Class syncJob_Class = new SyncJob_Class();
+            SyncJob_ClassEnrolled syncJob_Class = new SyncJob_ClassEnrolled();
             syncJob_Class.ReadFromSis();
             DataTable results = syncJob_Class._dtClass;
 
@@ -89,7 +89,7 @@ namespace Netus2_Test.Unit.SyncProcess
 
             SetMockReaderWithTestData(tstDataSet);
 
-            SyncJob_Class syncJob_Class = new SyncJob_Class();
+            SyncJob_ClassEnrolled syncJob_Class = new SyncJob_ClassEnrolled();
             syncJob_Class.ReadFromSis();
             DataTable results = syncJob_Class._dtClass;
 
@@ -125,8 +125,8 @@ namespace Netus2_Test.Unit.SyncProcess
             tstDataSet.Add(tstData);
             DataRow row = BuildTestDataTable(tstDataSet).Rows[0];
 
-            new SyncTask_Class("TestTask",
-                new SyncJob_Class())
+            new SyncTask_ClassEnrolled("TestTask",
+                new SyncJob_ClassEnrolled())
                 .Execute(row, new CountDownLatch(0));
 
             Assert.IsTrue(mockCourseDaoImpl.WasCalled_ReadUsingCourseCode);
@@ -159,8 +159,8 @@ namespace Netus2_Test.Unit.SyncProcess
             tstDataSet.Add(tstData);
             DataRow row = BuildTestDataTable(tstDataSet).Rows[0];
 
-            new SyncTask_Class("TestTask",
-                new SyncJob_Class())
+            new SyncTask_ClassEnrolled("TestTask",
+                new SyncJob_ClassEnrolled())
                 .Execute(row, new CountDownLatch(0));
 
             Assert.IsTrue(mockCourseDaoImpl.WasCalled_ReadUsingCourseCode);
@@ -193,8 +193,8 @@ namespace Netus2_Test.Unit.SyncProcess
             tstDataSet.Add(tstData);
             DataRow row = BuildTestDataTable(tstDataSet).Rows[0];
 
-            new SyncTask_Class("TestTask",
-                new SyncJob_Class())
+            new SyncTask_ClassEnrolled("TestTask",
+                new SyncJob_ClassEnrolled())
                 .Execute(row, new CountDownLatch(0));
 
             Assert.IsTrue(mockCourseDaoImpl.WasCalled_ReadUsingCourseCode);
@@ -214,7 +214,7 @@ namespace Netus2_Test.Unit.SyncProcess
 
         private DataTable BuildTestDataTable(List<SisClassTestData> tstDataSet)
         {
-            DataTable dtClass = DataTableFactory.CreateDataTable_Sis_Class();
+            DataTable dtClass = DataTableFactory.CreateDataTable_Sis_ClassEnrolled();
             foreach (SisClassTestData tstData in tstDataSet)
             {
                 DataRow row = dtClass.NewRow();

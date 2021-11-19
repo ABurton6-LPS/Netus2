@@ -43,7 +43,7 @@ namespace Netus2_DatabaseConnection.dbAccess
         {
             try
             {
-                Drop_JctPersonAddress();
+                Drop_JctPersonPhoneNumber();
             }
             catch (Exception e)
             {

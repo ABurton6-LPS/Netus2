@@ -30,9 +30,8 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AddressTasks
                 string sisAddressLine1 = row["address_line_1"].ToString() == "" ? null : row["address_line_1"].ToString();
                 string sisAddressLine2 = row["address_line_2"].ToString() == "" ? null : row["address_line_2"].ToString();
                 string sisCity = row["city"].ToString() == "" ? null : row["city"].ToString();
-                Enumeration sisStateProvince = row["enum_state_province_id"].ToString() == "" ? null : Enum_State_Province.GetEnumFromSisCode(row["enum_state_province_id"].ToString().ToLower());
                 string sisPostalCode = row["postal_code"].ToString() == "" ? null : row["postal_code"].ToString();
-                string sisPersonId = row["suniq"].ToString() == "" ? null : row["suniq"].ToString();
+                string sisPersonId = row["sis_person_id"].ToString() == "" ? null : row["sis_person_id"].ToString();
                 Enumeration sisAddressType = row["enum_address_id"].ToString() == "" ? null : Enum_Address.GetEnumFromSisCode(row["enum_address_id"].ToString().ToLower());
                 Enumeration sisIsPrimary = null;
                 if (sisAddressType == Enum_Address.values["home"])
@@ -44,10 +43,11 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AddressTasks
                 personDaoImpl.SetTaskId(this.Id);
                 Person person = personDaoImpl.Read_UsingUniqueIdentifier(sisPersonId, _netus2Connection);
 
-                if (person.Id <= 0)
+                if (person == null || person.Id <= 0)
                     throw new Exception("Person with unique id: " + sisPersonId + " doesn't exist within the Netus2 Database");
 
-                Address address = new Address(sisAddressLine1, sisAddressLine2, sisCity, sisStateProvince, sisPostalCode);
+                Address address = new Address(sisAddressLine1, sisAddressLine2, sisCity, 
+                    Enum_State_Province.values["mi"], sisPostalCode);
                 IAddressDao addressDaoImpl = DaoImplFactory.GetAddressDaoImpl();
                 addressDaoImpl.SetTaskId(this.Id);
                 List<Address> foundAddresses = addressDaoImpl.Read(address, _netus2Connection);
@@ -61,16 +61,13 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AddressTasks
                     DataRow foundJctPersonAddressDao = jctPersonAddressDaoImpl.Read(person.Id, address.Id, _netus2Connection);
 
                     if (foundJctPersonAddressDao == null)
-                    {
                         jctPersonAddressDaoImpl.Write(person.Id, address.Id, sisIsPrimary.Id, sisAddressType.Id, _netus2Connection);
-                        jctPersonAddressDaoImpl.Write_ToTempTable(person.Id, address.Id, _netus2Connection);
-                    }
                     else
-                    {
                         if (((int)foundJctPersonAddressDao["is_primary_id"] != sisIsPrimary.Id) ||
                             ((int)foundJctPersonAddressDao["enum_address_id"] != sisAddressType.Id))
                             jctPersonAddressDaoImpl.Update(person.Id, address.Id, sisIsPrimary.Id, sisAddressType.Id, _netus2Connection);
-                    }
+
+                    jctPersonAddressDaoImpl.Write_ToTempTable(person.Id, address.Id, _netus2Connection);
                 }
                 else
                     throw new Exception(foundAddresses.Count + " record(s) found matching Address:\n" + address.ToString());

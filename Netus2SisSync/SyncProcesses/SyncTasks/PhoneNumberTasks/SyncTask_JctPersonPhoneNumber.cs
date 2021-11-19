@@ -33,12 +33,14 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.PhoneNumberTasks
                 Enumeration sisIsPrimaryId = row["is_primary_id"].ToString() == "" ? null : Enum_True_False.GetEnumFromSisCode(row["is_primary_id"].ToString().ToLower());
 
                 IPersonDao personDaoImpl = DaoImplFactory.GetPersonDaoImpl();
+                personDaoImpl.SetTaskId(this.Id);
                 Person person = personDaoImpl.Read_UsingUniqueIdentifier(sisPersonId, _netus2Connection);
 
                 if (person == null)
                     throw new Exception("Person not found with UniqueId: " + sisPersonId);
 
                 IPhoneNumberDao phoneNumberDaoImpl = DaoImplFactory.GetPhoneNumberDaoImpl();
+                phoneNumberDaoImpl.SetTaskId(this.Id);
                 PhoneNumber phoneNumber = phoneNumberDaoImpl.Read_WithPhoneNumberValue(sisPhoneNubmer, _netus2Connection);
 
                 if (phoneNumber == null)
@@ -48,15 +50,12 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.PhoneNumberTasks
                 DataRow foundJctPersonPhoneNumberDao = jctPersonPhoneNumberDaoImpl.Read(person.Id, phoneNumber.Id, _netus2Connection);
 
                 if (foundJctPersonPhoneNumberDao == null)
-                {
                     jctPersonPhoneNumberDaoImpl.Write(person.Id, phoneNumber.Id, sisIsPrimaryId.Id, _netus2Connection);
-                    jctPersonPhoneNumberDaoImpl.Write_ToTempTable(person.Id, phoneNumber.Id, _netus2Connection);
-                }
                 else
-                {
                     if (Enum_True_False.GetEnumFromId((int)foundJctPersonPhoneNumberDao["is_primary_id"]) != sisIsPrimaryId)
                         jctPersonPhoneNumberDaoImpl.Update(person.Id, phoneNumber.Id, sisIsPrimaryId.Id, _netus2Connection);
-                }
+
+                jctPersonPhoneNumberDaoImpl.Write_ToTempTable(person.Id, phoneNumber.Id, _netus2Connection);
 
                 SyncLogger.LogStatus(this, Enum_Sync_Status.values["end"]);
             }

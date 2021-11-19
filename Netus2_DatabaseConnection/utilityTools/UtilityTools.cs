@@ -41,13 +41,13 @@ namespace Netus2_DatabaseConnection.utilityTools
                             break;
                         case "sis_code":
                             if (row[columnName] != DBNull.Value)
-                                enumeration.SisCode = (string)row[columnName];
+                                enumeration.SisCode = ((string)row[columnName]).ToLower();
                             else
                                 enumeration.SisCode = null;
                             break;
                         case "hr_code":
                             if (row[columnName] != DBNull.Value)
-                                enumeration.HrCode = (string)row[columnName];
+                                enumeration.HrCode = ((string)row[columnName]).ToLower();
                             else
                                 enumeration.HrCode = null;
                             break;

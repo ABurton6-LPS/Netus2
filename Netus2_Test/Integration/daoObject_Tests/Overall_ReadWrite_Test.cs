@@ -142,7 +142,7 @@ namespace Netus2_Test.Integration
 
             //Add Class to School Year
             //You must create the Class with the Course and Academic Session (School Year), so no need to update them
-            ClassEnrolled classEnrolled = new ClassEnrolled("Mrs. Beckner 1st hour Spanish Class", "B_1_SPN", Enum_Class_Enrolled.values["scheduled"], "237", spanishCourse, schoolYear);
+            ClassEnrolled classEnrolled = new ClassEnrolled("Mrs. Beckner 1st hour Spanish Class", "B_1_SPN", "237", spanishCourse, schoolYear);
             classEnrolled = classEnrolledDaoImpl.Write(classEnrolled, connection);
             classEnrolled.Resources.Add(resource);
             classEnrolled.Periods.Add(Enum_Period.values["1"]);
