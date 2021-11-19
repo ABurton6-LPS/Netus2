@@ -1,9 +1,12 @@
 ﻿using Netus2_DatabaseConnection;
+using Netus2_DatabaseConnection.daoImplementations;
+using Netus2_DatabaseConnection.daoInterfaces;
 using Netus2_DatabaseConnection.dbAccess;
 using Netus2_DatabaseConnection.enumerations;
 using Netus2_DatabaseConnection.utilityTools;
 using Netus2SisSync.UtilityTools;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Threading;
 
@@ -12,6 +15,7 @@ namespace Netus2SisSync.SyncProcesses.SyncJobs
     public class SyncJob_Enrollment : SyncJob
     {
         public DataTable _dtEnrollment;
+        public DataTable _dtJctEnrollmentClassEnrolled;
 
         public SyncJob_Enrollment() : base("SyncJob_Enrollment")
         {
@@ -23,7 +27,9 @@ namespace Netus2SisSync.SyncProcesses.SyncJobs
             try
             {
                 ReadFromSis();
+                TempTableFactory.Create_JctEnrollmentClassEnrolled();
                 RunJobTasks();
+                UnlinkDiscardedJctEnrollmentClassEnrolledRecords();
                 SyncLogger.LogStatus(this, Enum_Sync_Status.values["end"]);
             }
             catch (Exception e)
@@ -39,9 +45,10 @@ namespace Netus2SisSync.SyncProcesses.SyncJobs
             try
             {
                 SyncLogger.LogStatus(this, Enum_Sync_Status.values["sisread_start"]);
-                
-                _dtEnrollment = DataTableFactory.CreateDataTable_Sis_Enrollment();
-                _dtEnrollment = sisConnection.ReadIntoDataTable(SyncScripts.ReadSis_Enrollment_SQL, _dtEnrollment);
+
+                ReadFromSisEnrollment(sisConnection);
+
+                ReadFromSisJctEnrollmentClassEnrolled(sisConnection);
 
                 SyncLogger.LogStatus(this, Enum_Sync_Status.values["sisread_end"]);
             }
@@ -54,6 +61,20 @@ namespace Netus2SisSync.SyncProcesses.SyncJobs
             {
                 sisConnection.CloseConnection();
             }
+        }
+
+        public void ReadFromSisEnrollment(IConnectable sisConnection)
+        {
+            _dtEnrollment = sisConnection.ReadIntoDataTable(
+                    SyncScripts.ReadSis_Enrollment_SQL,
+                    DataTableFactory.CreateDataTable_Sis_Enrollment());
+        }
+
+        public void ReadFromSisJctEnrollmentClassEnrolled(IConnectable sisConnection)
+        {
+            _dtJctEnrollmentClassEnrolled = sisConnection.ReadIntoDataTable(
+                SyncScripts.ReadSis_JctEnrollmentClassEnrolled_SQL,
+                DataTableFactory.CreateDataTable_Sis_JctEnrollmentClassEnrolled());
         }
 
         private void RunJobTasks()
@@ -82,6 +103,16 @@ namespace Netus2SisSync.SyncProcesses.SyncJobs
                 }
                 latch.Wait();
             }
+        }
+
+        private void UnlinkDiscardedJctEnrollmentClassEnrolledRecords()
+        {
+            IConnectable netus2Connection = DbConnectionFactory.GetNetus2Connection();
+            IJctEnrollmentClassEnrolledDao jctEnrollmentClassEnrolledDaoImpl = DaoImplFactory.GetJctEnrollmentClassEnrolledDaoImpl();
+
+            List<DataRow> recordsToBeDeleted = jctEnrollmentClassEnrolledDaoImpl.Read_AllClassEnrolledNotInTempTable(netus2Connection);
+            foreach (DataRow row in recordsToBeDeleted)
+                jctEnrollmentClassEnrolledDaoImpl.Delete((int)row["enrollment_id"], (int)row["class_enrolled_id"], netus2Connection);
         }
     }
 }

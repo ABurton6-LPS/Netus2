@@ -42,6 +42,13 @@ namespace Netus2_DatabaseConnection.daoInterfaces
         public List<DataRow> Read_AllWithClassEnrolledId(int classEnrolledId, IConnectable connection);
 
         /// <summary>
+        /// Queries the database for any records that are not in the temporary table.
+        /// </summary>
+        /// <param name="connection"></param>
+        /// <returns>Empty list, if no records are found.</returns>
+        public List<DataRow> Read_AllClassEnrolledNotInTempTable(IConnectable connection);
+
+        /// <summary>
         /// Checks to see if the provided data is associated to any record currently in the databse.
         /// If not, then writes this record to the database.
         /// If so, then updates the database record to match this object.

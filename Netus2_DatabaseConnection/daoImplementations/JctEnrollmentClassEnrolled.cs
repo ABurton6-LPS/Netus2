@@ -71,7 +71,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
             return Read(sql, connection, parameters);
         }
 
-        public List<DataRow> Read_AllClassEnrolledIsNotInTempTable(IConnectable connection)
+        public List<DataRow> Read_AllClassEnrolledNotInTempTable(IConnectable connection)
         {
             string sql =
                 "SELECT jece.enrollment_id, jece.class_enrolled_id " +

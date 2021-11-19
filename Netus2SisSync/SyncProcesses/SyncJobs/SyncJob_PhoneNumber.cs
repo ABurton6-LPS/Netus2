@@ -135,7 +135,7 @@ namespace Netus2SisSync.SyncProcesses.SyncJobs
         private void UnlinkDiscardedJctPersonPhoneNumberRecords()
         {
             IConnectable netus2Connection = DbConnectionFactory.GetNetus2Connection();
-            IJctPersonPhoneNumberDao jctPersonPhoneNumberDaoImpl = new JctPersonPhoneNumberDaoImpl();
+            IJctPersonPhoneNumberDao jctPersonPhoneNumberDaoImpl = DaoImplFactory.GetJctPersonPhoneNumberDaoImpl();
 
             List<DataRow> recordsToBeDeleted = jctPersonPhoneNumberDaoImpl.Read_AllPhoneNumberIsNotInTempTable(netus2Connection);
             foreach (DataRow row in recordsToBeDeleted)
