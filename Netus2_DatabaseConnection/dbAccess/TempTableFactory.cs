@@ -71,5 +71,37 @@ namespace Netus2_DatabaseConnection.dbAccess
 
             connection.ExecuteNonQuery(drop_sql);
         }
+
+        public static void Create_JctEnrollmentClassEnrolled()
+        {
+            try
+            {
+                Drop_JctEnrollmentClassEnrolled();
+            }
+            catch (Exception e)
+            {
+                if (e.Message.Contains("does not exist") == false)
+                    throw;
+            }
+
+            IConnectable connection = DbConnectionFactory.GetNetus2Connection();
+
+            string sql =
+                "CREATE TABLE temp_jct_enrollment_class_enrolled ("
+                + "enrollment_id int,"
+                + "class_enrolled_id int)";
+
+            connection.ExecuteNonQuery(sql);
+        }
+
+        public static void Drop_JctEnrollmentClassEnrolled()
+        {
+            IConnectable connection = DbConnectionFactory.GetNetus2Connection();
+
+            string drop_sql =
+                "DROP TABLE temp_jct_enrollment_class_enrolled";
+
+            connection.ExecuteNonQuery(drop_sql);
+        }
     }
 }

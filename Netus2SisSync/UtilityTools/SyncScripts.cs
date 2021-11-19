@@ -15,6 +15,7 @@ namespace Netus2SisSync.UtilityTools
         public static string ReadSis_Course_SQL = BuildScript_Sis_Course();
         public static string ReadSis_Class_SQL = BuildScript_Sis_Class();
         public static string ReadSis_Enrollment_SQL = BuildScript_Sis_Enrollment();
+        public static string ReadSis_JctEnrollmentClassEnrolled_SQL = BuildScript_Sis_JctEnrollmentClassEnrolled();
         public static string ReadSis_LineItem_SQL = BuildScript_Sis_LineItem();
         public static string ReadSis_Mark_SQL = BuildScript_Sis_Mark();
 
@@ -92,7 +93,18 @@ namespace Netus2SisSync.UtilityTools
 
         private static string BuildScript_Sis_Enrollment()
         {
-            return "";
+            Config config = Netus2_DatabaseConnection.utilityTools.UtilityTools.ReadConfig(
+                Enum_Config.values["sis_enrollment_query"], Enum_True_False.values["true"], Enum_True_False.values["true"]);
+
+            return config.ConfigValue;
+        }
+
+        private static string BuildScript_Sis_JctEnrollmentClassEnrolled()
+        {
+            Config config = Netus2_DatabaseConnection.utilityTools.UtilityTools.ReadConfig(
+                Enum_Config.values["sis_jct_enrollment_class_enrolled_query"], Enum_True_False.values["true"], Enum_True_False.values["true"]);
+
+            return config.ConfigValue;
         }
 
         private static string BuildScript_Sis_LineItem()
