@@ -20,18 +20,19 @@ namespace Netus2_DatabaseConnection.dataObjects
         public DateTime? EnrollmentEndDate { get; set; }
 
 
-        public ClassEnrolled(string name, string classCode, Enumeration classType, string room, Course course, AcademicSession academicSession)
+        public ClassEnrolled(string name, string classCode, string room, Course course, AcademicSession academicSession)
         {
             Id = -1;
             Name = name;
             ClassCode = classCode;
-            ClassType = classType;
             Room = room;
             Course = course;
             AcademicSession = academicSession;
 
             Periods = new List<Enumeration>();
             Resources = new List<Resource>();
+
+            ClassType = Enum_Class_Enrolled.values["unset"];
         }
 
         public override string ToString()

@@ -33,6 +33,7 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.PhoneNumberTasks
                 PhoneNumber phoneNumber = new PhoneNumber(sisPhoneNumber, sisPhoneType);
 
                 IPhoneNumberDao phoneNumberDaoImpl = DaoImplFactory.GetPhoneNumberDaoImpl();
+                phoneNumberDaoImpl.SetTaskId(this.Id);
                 List<PhoneNumber> foundPhoneNumbers = phoneNumberDaoImpl.Read(phoneNumber, _netus2Connection);
 
                 if (foundPhoneNumbers.Count == 0)

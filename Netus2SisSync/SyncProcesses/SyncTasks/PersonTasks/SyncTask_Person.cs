@@ -27,8 +27,8 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.PersonTasks
         {
             try
             {
-                Enumeration sisPersonType = row["person_type"].ToString() == "" ? null : Enum_Role.GetEnumFromSisCode(row["person_type"].ToString().ToLower());
-                string sisId = row["SIS_ID"].ToString() == "" ? null : row["SIS_ID"].ToString();
+                Enumeration sisPersonType = row["enum_role_id"].ToString() == "" ? null : Enum_Role.GetEnumFromSisCode(row["enum_role_id"].ToString().ToLower());
+                string sisId = row["sis_person_id"].ToString() == "" ? null : row["sis_person_id"].ToString();
                 string sisFirstName = row["first_name"].ToString() == "" ? null : row["first_name"].ToString();
                 string sisMiddleName = row["middle_name"].ToString() == "" ? null : row["middle_name"].ToString();
                 string sisLastName = row["last_name"].ToString() == "" ? null : row["last_name"].ToString();

@@ -805,15 +805,16 @@ namespace Netus2_DatabaseConnection.utilityTools
             if(row["class_enrolled_code"] != DBNull.Value)
                 classCode = (string)row["class_enrolled_code"];
 
-            Enumeration classType = null;
-            if(row["enum_class_enrolled_id"] != DBNull.Value)
-                classType = Enum_Class_Enrolled.GetEnumFromId((int)row["enum_class_enrolled_id"]);
-
             string room = null;
             if (row["room"] != DBNull.Value)
                 room = (string)row["room"];
 
-            ClassEnrolled classEnrolled = new ClassEnrolled(name, classCode, classType, room, course, academicSession);
+            ClassEnrolled classEnrolled = new ClassEnrolled(name, classCode, room, course, academicSession);
+
+            if (row["enum_class_enrolled_id"] != DBNull.Value)
+                classEnrolled.ClassType = Enum_Class_Enrolled.GetEnumFromId((int)row["enum_class_enrolled_id"]);
+            else
+                classEnrolled.ClassType = null;
 
             if (row["class_enrolled_id"] != DBNull.Value)
                 classEnrolled.Id = (int)row["class_enrolled_id"];

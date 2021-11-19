@@ -207,7 +207,8 @@ namespace Netus2_Test
             else
                 resource.Id = 1;
 
-            classEnrolled = new ClassEnrolled("Mrs. Beckner 1st hour Spanish Class", "B_1_SPN", Enum_Class_Enrolled.values["scheduled"], "237", spanishCourse, schoolYear);
+            classEnrolled = new ClassEnrolled("Mrs. Beckner 1st hour Spanish Class", "B_1_SPN", "237", spanishCourse, schoolYear);
+            classEnrolled.ClassType = Enum_Class_Enrolled.values["scheduled"];
             classEnrolled.Resources.Add(resource);
             classEnrolled.Periods.Add(Enum_Period.values["1"]);
             classEnrolled.AcademicSession = semester1;

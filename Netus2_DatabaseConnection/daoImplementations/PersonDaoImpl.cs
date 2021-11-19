@@ -177,10 +177,10 @@ namespace Netus2_DatabaseConnection.daoImplementations
         public Person Read_UsingUniqueIdentifier(string identifier, IConnectable connection)
         {
             string sql = "SELECT * FROM person WHERE person_id in (" +
-                "SELECT person_id FROM unique_identifier WHERE unique_identifier = @unique_identifier)";
+                "SELECT person_id FROM unique_identifier WHERE unique_identifier_value = @unique_identifier_value)";
 
             List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("@unique_identifier", identifier));
+            parameters.Add(new SqlParameter("@unique_identifier_value", identifier));
 
             List<Person> results = Read(sql, connection, parameters);
 
@@ -189,7 +189,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
             else if (results.Count == 1)
                 return results[0];
             else
-                throw new Exception(results.Count + " found matching identifier: " + identifier);
+                throw new Exception(results.Count + " Person record(s) found matching Unique Identifier Value: " + identifier);
         }
 
         public List<Person> Read(Person person, IConnectable connection)

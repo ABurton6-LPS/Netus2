@@ -13,6 +13,7 @@ namespace Netus2_Test.MockDaoImpl
         public bool WasCalled_ReadUsingClassId = false;
         public bool WasCalled_UsingAcademicSessionId = false;
         public bool WasCalled_UsingCourseId = false;
+        public bool WasCalled_UsingClassEnrolledCode = false;
         public bool WasCalled_Update = false;
         public bool WasCalled_Write = false;
         public bool _shouldReadReturnData = false;
@@ -78,6 +79,18 @@ namespace Netus2_Test.MockDaoImpl
             List<ClassEnrolled> list = new List<ClassEnrolled>();
 
             if(_shouldReadReturnData)
+                list.Add(tdBuilder.classEnrolled);
+
+            return list;
+        }
+
+        public List<ClassEnrolled> Read_UsingClassEnrolledCode(string classCode, IConnectable connection)
+        {
+            WasCalled_UsingClassEnrolledCode = true;
+
+            List<ClassEnrolled> list = new List<ClassEnrolled>();
+
+            if (_shouldReadReturnData)
                 list.Add(tdBuilder.classEnrolled);
 
             return list;

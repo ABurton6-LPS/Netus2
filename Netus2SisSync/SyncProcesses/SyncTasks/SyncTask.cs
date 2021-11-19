@@ -99,7 +99,7 @@ namespace Netus2SisSync.SyncProcesses
 
         public static void Execute_Class_RecordSync(SyncJob job, DataRow row, CountDownLatch latch)
         {
-            SyncTask syncTask = new SyncTask_Class(
+            SyncTask syncTask = new SyncTask_ClassEnrolled(
                 "SyncTask_Class", job);
             syncTask.Execute(row, latch);
         }

@@ -9,11 +9,11 @@ using System.Threading;
 
 namespace Netus2SisSync.SyncProcesses.SyncJobs
 {
-    public class SyncJob_Class : SyncJob
+    public class SyncJob_ClassEnrolled : SyncJob
     {
         public DataTable _dtClass;
 
-        public SyncJob_Class() : base("SyncJob_Class")
+        public SyncJob_ClassEnrolled() : base("SyncJob_ClassEnrolled")
         {
             SyncLogger.LogNewJob(this);
         }
@@ -40,7 +40,7 @@ namespace Netus2SisSync.SyncProcesses.SyncJobs
             {
                 SyncLogger.LogStatus(this, Enum_Sync_Status.values["sisread_start"]);
                 
-                _dtClass = DataTableFactory.CreateDataTable_Sis_Class();
+                _dtClass = DataTableFactory.CreateDataTable_Sis_ClassEnrolled();
                 _dtClass = sisConnection.ReadIntoDataTable(SyncScripts.ReadSis_Class_SQL, _dtClass);
 
                 SyncLogger.LogStatus(this, Enum_Sync_Status.values["sisread_end"]);

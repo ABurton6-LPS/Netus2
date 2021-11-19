@@ -146,7 +146,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
         public void Write_ToTempTable(int personId, int phoneNumberId, IConnectable connection)
         {
             string sql = "INSERT INTO temp_jct_person_phone_number (" +
-                "person_id, address_id) VALUES (" +
+                "person_id, phone_number_id) VALUES (" +
                 "@person_id, @phone_number_id)";
 
             List<SqlParameter> parameters = new List<SqlParameter>();

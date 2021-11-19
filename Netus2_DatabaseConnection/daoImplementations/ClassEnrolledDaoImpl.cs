@@ -129,6 +129,18 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 throw new Exception(results.Count + " found matching classId: " + classId);
         }
 
+        public List<ClassEnrolled> Read_UsingClassEnrolledCode(string classEnrolledCode, IConnectable connection)
+        {
+            string sql = "SELECT * FROM class_enrolled WHERE class_enrolled_code = @class_enrolled_code";
+
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@class_enrolled_code", classEnrolledCode));
+
+            List<ClassEnrolled> results = Read(sql, connection, parameters);
+
+            return results;
+        }
+
         public List<ClassEnrolled> Read(ClassEnrolled classEnrolled, IConnectable connection)
         {
             DataRow row = daoObjectMapper.MapClassEnrolled(classEnrolled);

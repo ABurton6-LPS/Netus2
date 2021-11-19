@@ -98,12 +98,12 @@ namespace Netus2_DatabaseConnection.utilityTools
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(string);
-            dtColumn.ColumnName = "person_type";
+            dtColumn.ColumnName = "enum_role_id";
             dtPerson.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(string);
-            dtColumn.ColumnName = "sis_id";
+            dtColumn.ColumnName = "sis_person_id";
             dtPerson.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
@@ -171,21 +171,6 @@ namespace Netus2_DatabaseConnection.utilityTools
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(string);
-            dtColumn.ColumnName = "address_line_3";
-            dtAddress.Columns.Add(dtColumn);
-
-            dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(string);
-            dtColumn.ColumnName = "address_line_4";
-            dtAddress.Columns.Add(dtColumn);
-
-            dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(string);
-            dtColumn.ColumnName = "apartment";
-            dtAddress.Columns.Add(dtColumn);
-
-            dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(string);
             dtColumn.ColumnName = "city";
             dtAddress.Columns.Add(dtColumn);
 
@@ -202,21 +187,6 @@ namespace Netus2_DatabaseConnection.utilityTools
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(string);
             dtColumn.ColumnName = "enum_country_id";
-            dtAddress.Columns.Add(dtColumn);
-
-            dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(string);
-            dtColumn.ColumnName = "is_primary_id";
-            dtAddress.Columns.Add(dtColumn);
-
-            dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(string);
-            dtColumn.ColumnName = "enum_address_id";
-            dtAddress.Columns.Add(dtColumn);
-
-            dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(string);
-            dtColumn.ColumnName = "suniq";
             dtAddress.Columns.Add(dtColumn);
 
             return dtAddress;
@@ -244,17 +214,12 @@ namespace Netus2_DatabaseConnection.utilityTools
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(string);
-            dtColumn.ColumnName = "enum_state_province_id";
-            dtJctPersonAddress.Columns.Add(dtColumn);
-
-            dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(string);
             dtColumn.ColumnName = "postal_code";
             dtJctPersonAddress.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(string);
-            dtColumn.ColumnName = "suniq";
+            dtColumn.ColumnName = "sis_person_id";
             dtJctPersonAddress.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
@@ -277,7 +242,7 @@ namespace Netus2_DatabaseConnection.utilityTools
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(string);
-            dtColumn.ColumnName = "phone_type_code";
+            dtColumn.ColumnName = "Phone_type_code";
             dtPhoneNumber.Columns.Add(dtColumn);
 
             return dtPhoneNumber;
@@ -334,24 +299,19 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtCourse;
         }
 
-        public static DataTable CreateDataTable_Sis_Class()
+        public static DataTable CreateDataTable_Sis_ClassEnrolled()
         {
             DataTable dtClass = new DataTable("Class");
             DataColumn dtColumn;
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "class_enrolled_code";
+            dtClass.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
             dtColumn.ColumnName = "name";
-            dtClass.Columns.Add(dtColumn);
-
-            dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(string);
-            dtColumn.ColumnName = "class_code";
-            dtClass.Columns.Add(dtColumn);
-
-            dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(string);
-            dtColumn.ColumnName = "enum_class_id";
             dtClass.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
