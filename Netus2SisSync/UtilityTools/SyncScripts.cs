@@ -10,6 +10,8 @@ namespace Netus2SisSync.UtilityTools
         public static string ReadSis_Person_SQL = BuildScript_Sis_Person();
         public static string ReadSis_Address_SQL = BuildScript_Sis_Address();
         public static string ReadSis_JctPersonAddress_SQL = BuildScript_Sis_JctPersonAddress();
+        public static string ReadSis_Email_SQL = BuildScript_Sis_Email();
+        public static string ReadSis_JctPersonEmail_SQL = BuildScript_Sis_JctPersonEmail();
         public static string ReadSis_PhoneNumber_SQL = BuildScript_Sis_PhoneNumber();
         public static string ReadSis_JctPersonPhoneNumber_SQL = BuildScript_Sis_JctPersonPhoneNumber();
         public static string ReadSis_Course_SQL = BuildScript_Sis_Course();
@@ -57,6 +59,16 @@ namespace Netus2SisSync.UtilityTools
                 Enum_Config.values["sis_jct_person_address_query"], Enum_True_False.values["true"], Enum_True_False.values["true"]);
 
             return config.ConfigValue;
+        }
+
+        private static string BuildScript_Sis_Email()
+        {
+            return "";
+        }
+
+        private static string BuildScript_Sis_JctPersonEmail()
+        {
+            return "";
         }
 
         private static string BuildScript_Sis_PhoneNumber()

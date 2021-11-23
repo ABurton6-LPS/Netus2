@@ -230,6 +230,18 @@ namespace Netus2_DatabaseConnection.utilityTools
             return dtJctPersonAddress;
         }
 
+        public static DataTable CreateDataTable_Sis_Email()
+        {
+            //Do Nothing
+            return null;
+        }
+
+        public static DataTable CreateDataTable_Sis_JctPersonEmail()
+        {
+            //Do Nothing
+            return null;
+        }
+
         public static DataTable CreateDataTable_Sis_PhoneNumber()
         {
             DataTable dtPhoneNumber = new DataTable("PhoneNumber");

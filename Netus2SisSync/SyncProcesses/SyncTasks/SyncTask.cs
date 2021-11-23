@@ -76,6 +76,20 @@ namespace Netus2SisSync.SyncProcesses
             syncTask.Execute(row, latch);
         }
 
+        public static void Execute_Email_RecordSync(SyncJob job, DataRow row, CountDownLatch latch)
+        {
+            SyncTask syncTask = new SyncTask_Email(
+                "SyncTask_Email", job);
+            syncTask.Execute(row, latch);
+        }
+
+        public static void Execute_JctPersonEmail_RecordSync(SyncJob job, DataRow row, CountDownLatch latch)
+        {
+            SyncTask syncTask = new SyncTask_JctPersonEmail(
+                "SyncTask_JctPersonEmail", job);
+            syncTask.Execute(row, latch);
+        }
+
         public static void Execute_PhoneNumber_RecordSync(SyncJob job, DataRow row, CountDownLatch latch)
         {
             SyncTask syncTask = new SyncTask_PhoneNumber(
@@ -108,6 +122,13 @@ namespace Netus2SisSync.SyncProcesses
         {
             SyncTask syncTask = new SyncTask_Enrollment(
                 "SyncTask_Enrollment", job);
+            syncTask.Execute(row, latch);
+        }
+
+        public static void Execute_JctEnrollmentClassEnrolled_RecordSync(SyncJob job, DataRow row, CountDownLatch latch)
+        {
+            SyncTask syncTask = new SyncTask_JctEnrollmentClassEnrolled(
+                "SyncTask_JctEnrollmentClassEnrolled", job);
             syncTask.Execute(row, latch);
         }
 
