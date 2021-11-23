@@ -12,12 +12,12 @@ using System.Threading;
 
 namespace Netus2SisSync.SyncProcesses.SyncJobs
 {
-    public class SyncJob_Enrollment : SyncJob
+    public class SyncJob_Email : SyncJob
     {
-        public DataTable _dtEnrollment;
-        public DataTable _dtJctEnrollmentClassEnrolled;
+        public DataTable _dtEmail;
+        public DataTable _dtJctPersonEmail;
 
-        public SyncJob_Enrollment() : base("SyncJob_Enrollment")
+        public SyncJob_Email() : base("SyncJob_Email")
         {
             SyncLogger.LogNewJob(this);
         }
@@ -27,9 +27,9 @@ namespace Netus2SisSync.SyncProcesses.SyncJobs
             try
             {
                 ReadFromSis();
-                TempTableFactory.Create_JctEnrollmentClassEnrolled();
+                TempTableFactory.Create_JctPersonEmail();
                 RunJobTasks();
-                UnlinkDiscardedJctEnrollmentClassEnrolledRecords();
+                UnlinkDiscardedJctPersonEmailRecords();
                 SyncLogger.LogStatus(this, Enum_Sync_Status.values["end"]);
             }
             catch (Exception e)
@@ -39,7 +39,7 @@ namespace Netus2SisSync.SyncProcesses.SyncJobs
             }
             finally
             {
-                TempTableFactory.Drop_JctEnrollmentClassEnrolled();
+                TempTableFactory.Drop_JctPersonEmail();
             }
         }
 
@@ -50,9 +50,9 @@ namespace Netus2SisSync.SyncProcesses.SyncJobs
             {
                 SyncLogger.LogStatus(this, Enum_Sync_Status.values["sisread_start"]);
 
-                ReadFromSisEnrollment(sisConnection);
+                ReadFromSisEmail(sisConnection);
 
-                ReadFromSisJctEnrollmentClassEnrolled(sisConnection);
+                ReadFromSisJctPersonEmail(sisConnection);
 
                 SyncLogger.LogStatus(this, Enum_Sync_Status.values["sisread_end"]);
             }
@@ -67,18 +67,18 @@ namespace Netus2SisSync.SyncProcesses.SyncJobs
             }
         }
 
-        public void ReadFromSisEnrollment(IConnectable sisConnection)
+        public void ReadFromSisEmail(IConnectable sisConnection)
         {
-            _dtEnrollment = sisConnection.ReadIntoDataTable(
-                    SyncScripts.ReadSis_Enrollment_SQL,
-                    DataTableFactory.CreateDataTable_Sis_Enrollment());
+            _dtEmail = sisConnection.ReadIntoDataTable(
+                    SyncScripts.ReadSis_Email_SQL,
+                    DataTableFactory.CreateDataTable_Sis_Email());
         }
 
-        public void ReadFromSisJctEnrollmentClassEnrolled(IConnectable sisConnection)
+        public void ReadFromSisJctPersonEmail(IConnectable sisConnection)
         {
-            _dtJctEnrollmentClassEnrolled = sisConnection.ReadIntoDataTable(
-                SyncScripts.ReadSis_JctEnrollmentClassEnrolled_SQL,
-                DataTableFactory.CreateDataTable_Sis_JctEnrollmentClassEnrolled());
+            _dtJctPersonEmail = sisConnection.ReadIntoDataTable(
+                    SyncScripts.ReadSis_JctPersonEmail_SQL,
+                    DataTableFactory.CreateDataTable_Sis_JctPersonEmail());
         }
 
         private void RunJobTasks()
@@ -86,16 +86,16 @@ namespace Netus2SisSync.SyncProcesses.SyncJobs
             SyncLogger.LogStatus(this, Enum_Sync_Status.values["tasks_started"]);
 
             int numberOfThreadsProcessed = 0;
-            while (numberOfThreadsProcessed < _dtEnrollment.Rows.Count)
+            while (numberOfThreadsProcessed < _dtEmail.Rows.Count)
             {
                 CountDownLatch latch = new CountDownLatch(_maxThreadsPerBatch);
                 for (int i = 0; i < _maxThreadsPerBatch; i++)
                 {
-                    if (numberOfThreadsProcessed < _dtEnrollment.Rows.Count)
+                    if (numberOfThreadsProcessed < _dtEmail.Rows.Count)
                     {
-                        DataRow row = _dtEnrollment.Rows[numberOfThreadsProcessed];
+                        DataRow row = _dtEmail.Rows[numberOfThreadsProcessed];
 
-                        new Thread(syncThread => SyncTask.Execute_Enrollment_RecordSync(
+                        new Thread(syncThread => SyncTask.Execute_Email_RecordSync(
                             this, row, latch)).Start();
 
                         numberOfThreadsProcessed++;
@@ -109,16 +109,16 @@ namespace Netus2SisSync.SyncProcesses.SyncJobs
             }
 
             numberOfThreadsProcessed = 0;
-            while (numberOfThreadsProcessed < _dtJctEnrollmentClassEnrolled.Rows.Count)
+            while (numberOfThreadsProcessed < _dtJctPersonEmail.Rows.Count)
             {
                 CountDownLatch latch = new CountDownLatch(_maxThreadsPerBatch);
                 for (int i = 0; i < _maxThreadsPerBatch; i++)
                 {
-                    if (numberOfThreadsProcessed < _dtJctEnrollmentClassEnrolled.Rows.Count)
+                    if (numberOfThreadsProcessed < _dtJctPersonEmail.Rows.Count)
                     {
-                        DataRow row = _dtJctEnrollmentClassEnrolled.Rows[numberOfThreadsProcessed];
+                        DataRow row = _dtJctPersonEmail.Rows[numberOfThreadsProcessed];
 
-                        new Thread(syncThread => SyncTask.Execute_JctEnrollmentClassEnrolled_RecordSync(
+                        new Thread(syncThread => SyncTask.Execute_JctPersonEmail_RecordSync(
                             this, row, latch)).Start();
 
                         numberOfThreadsProcessed++;
@@ -132,14 +132,14 @@ namespace Netus2SisSync.SyncProcesses.SyncJobs
             }
         }
 
-        private void UnlinkDiscardedJctEnrollmentClassEnrolledRecords()
+        private void UnlinkDiscardedJctPersonEmailRecords()
         {
             IConnectable netus2Connection = DbConnectionFactory.GetNetus2Connection();
-            IJctEnrollmentClassEnrolledDao jctEnrollmentClassEnrolledDaoImpl = DaoImplFactory.GetJctEnrollmentClassEnrolledDaoImpl();
+            IJctPersonEmailDao jctPersonEmailDaoImpl = DaoImplFactory.GetJctPersonEmailDaoImpl();
 
-            List<DataRow> recordsToBeDeleted = jctEnrollmentClassEnrolledDaoImpl.Read_AllClassEnrolledNotInTempTable(netus2Connection);
+            List<DataRow> recordsToBeDeleted = jctPersonEmailDaoImpl.Read_AllEmailIsNotInTempTable(netus2Connection);
             foreach (DataRow row in recordsToBeDeleted)
-                jctEnrollmentClassEnrolledDaoImpl.Delete((int)row["enrollment_id"], (int)row["class_enrolled_id"], netus2Connection);
+                jctPersonEmailDaoImpl.Delete((int)row["person_id"], (int)row["email_id"], netus2Connection);
         }
     }
 }
