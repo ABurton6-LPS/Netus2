@@ -56,12 +56,14 @@ namespace Netus2SisSync.SyncProcesses.SyncJobs
             finally
             {
                 sisConnection.CloseConnection();
+                _totalRecordsToProcess = _dtPerson.Rows.Count;
             }
         }
 
         private void RunJobTasks()
         {
             SyncLogger.LogStatus(this, Enum_Sync_Status.values["tasks_started"]);
+            SyncLogger.LogTotalRecordsToProcess(this, _totalRecordsToProcess);
 
             int numberOfThreadsProcessed = 0;
             while (numberOfThreadsProcessed < _dtPerson.Rows.Count)
