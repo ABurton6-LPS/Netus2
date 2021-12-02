@@ -50,7 +50,7 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AddressTasks
                     Enum_State_Province.values["mi"], sisPostalCode);
                 IAddressDao addressDaoImpl = DaoImplFactory.GetAddressDaoImpl();
                 addressDaoImpl.SetTaskId(this.Id);
-                List<Address> foundAddresses = addressDaoImpl.Read(address, _netus2Connection);
+                List<Address> foundAddresses = addressDaoImpl.Read_Exact(address, _netus2Connection);
 
                 IJctPersonAddressDao jctPersonAddressDaoImpl = DaoImplFactory.GetJctPersonAddressDaoImpl();
 

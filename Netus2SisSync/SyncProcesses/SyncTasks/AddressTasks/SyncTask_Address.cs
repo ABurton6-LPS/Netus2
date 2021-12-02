@@ -39,7 +39,7 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AddressTasks
 
                 IAddressDao addressDaoImpl = DaoImplFactory.GetAddressDaoImpl();
                 addressDaoImpl.SetTaskId(this.Id);
-                List<Address> foundAddresses = addressDaoImpl.Read(address, _netus2Connection);
+                List<Address> foundAddresses = addressDaoImpl.Read_Exact(address, _netus2Connection);
 
                 if (foundAddresses.Count == 0)
                 {

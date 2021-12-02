@@ -125,6 +125,86 @@ namespace Netus2_DatabaseConnection.daoImplementations
             return Read(sql.ToString(), connection, parameters);
         }
 
+
+
+        public List<Address> Read_Exact(Address address, IConnectable connection)
+        {
+            DataRow row = daoObjectMapper.MapAddress(address);
+
+            List<SqlParameter> parameters = new List<SqlParameter>();
+
+            StringBuilder sql = new StringBuilder("SELECT * FROM address WHERE 1=1 ");
+            if (row["address_id"] != DBNull.Value)
+            {
+                sql.Append("AND address_id = @address_id");
+                parameters.Add(new SqlParameter("@address_id", row["address_id"]));
+            }
+            else
+            {
+                if (row["address_line_1"] != DBNull.Value)
+                {
+                    sql.Append("AND address_line_1 = @address_line_1 ");
+                    parameters.Add(new SqlParameter("@address_line_1", row["address_line_1"]));
+                }
+                else
+                {
+                    sql.Append("AND address_line_1 IS NULL ");
+                }
+
+                if (row["address_line_2"] != DBNull.Value)
+                {
+                    sql.Append("AND address_line_2 = @address_line_2 ");
+                    parameters.Add(new SqlParameter("@address_line_2", row["address_line_2"]));
+                }
+                else
+                {
+                    sql.Append("AND address_line_2 IS NULL ");
+                }
+
+                if (row["city"] != DBNull.Value)
+                {
+                    sql.Append("AND city = @city ");
+                    parameters.Add(new SqlParameter("@city", row["city"]));
+                }
+                else
+                {
+                    sql.Append("AND city IS NULL ");
+                }
+
+                if (row["enum_state_province_id"] != DBNull.Value)
+                {
+                    sql.Append("AND enum_state_province_id = @enum_state_province_id ");
+                    parameters.Add(new SqlParameter("@enum_state_province_id", row["enum_state_province_id"]));
+                }
+                else
+                {
+                    sql.Append("AND enum_state_province_id IS NULL ");
+                }
+
+                if (row["postal_code"] != DBNull.Value)
+                {
+                    sql.Append("AND postal_code = @postal_code ");
+                    parameters.Add(new SqlParameter("@postal_code", row["postal_code"]));
+                }
+                else
+                {
+                    sql.Append("AND postal_code IS NULL ");
+                }
+
+                if (row["enum_country_id"] != DBNull.Value)
+                {
+                    sql.Append("AND enum_country_id = @enum_country_id ");
+                    parameters.Add(new SqlParameter("@enum_country_id", row["enum_country_id"]));
+                }
+                else
+                {
+                    sql.Append("AND enum_country_id IS NULL ");
+                }
+            }
+
+            return Read(sql.ToString(), connection, parameters);
+        }
+
         private List<Address> Read(string sql, IConnectable connection, List<SqlParameter> parameters)
         {
             DataTable dtAddress = DataTableFactory.CreateDataTable_Netus2_Address();

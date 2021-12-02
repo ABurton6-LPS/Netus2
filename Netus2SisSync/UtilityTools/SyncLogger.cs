@@ -36,6 +36,32 @@ namespace Netus2SisSync.UtilityTools
             }            
         }
 
+        public static void LogTotalRecordsToProcess(SyncJob job, int totalRecordsToProcess)
+        {
+            IConnectable connection = DbConnectionFactory.GetNetus2Connection();
+            try
+            {
+                string sql =
+                    "UPDATE sync_job SET " +
+                    "total_records_to_process = @total_records_to_process " +
+                    "WHERE sync_job_id = @sync_job_id";
+
+                List<SqlParameter> parameters = new List<SqlParameter>();
+                parameters.Add(new SqlParameter("@total_records_to_process", totalRecordsToProcess));
+                parameters.Add(new SqlParameter("@sync_job_id", job.Id));
+
+                connection.ExecuteNonQuery(sql, parameters);
+            }
+            catch(Exception e)
+            {
+                LogError(e, job);
+            }
+            finally
+            {
+                connection.CloseConnection();
+            }
+        }
+
         public static void LogNewTask(SyncTask task)
         {
             IConnectable connection = DbConnectionFactory.GetNetus2Connection();
@@ -124,11 +150,21 @@ namespace Netus2SisSync.UtilityTools
             IConnectable connection = DbConnectionFactory.GetNetus2Connection();
             try
             {
-                string errorMessage = e.Message;
-                errorMessage = e.Message.Replace("'", "''");
+                string message = e.Message;
+                string stackTrace = e.StackTrace;
+                while(e.InnerException != null)
+                {
+                    e = e.InnerException;
 
-                string errorStackTrace = e.StackTrace;
-                errorStackTrace = e.StackTrace.Replace("'", "''");
+                    message += " \n **INNER_EXCEPTION_MESSAGE** \n " + e.Message;
+                    stackTrace += " \n **INNER_EXCEPTION_STACK_TRACE** \n " + e.StackTrace;
+                }
+
+                string errorMessage = message;
+                errorMessage = message.Replace("'", "''");
+
+                string errorStackTrace = stackTrace;
+                errorStackTrace = stackTrace.Replace("'", "''");
 
                 string sql = "INSERT INTO sync_error(" +
                 "sync_job_id, [message], stack_trace, [timestamp]" +

@@ -49,6 +49,14 @@ namespace Netus2_DatabaseConnection.daoInterfaces
         public List<Address> Read(Address address, IConnectable connection);
 
         /// <summary>
+        /// Queries the database for any records that match exactly what is provided. Null datapoints are NOT ignored.
+        /// </summary>
+        /// <param name="address"></param>
+        /// <param name="connection"></param>
+        /// <returns>Empty list, if no records are found.</returns>
+        public List<Address> Read_Exact(Address address, IConnectable connection);
+
+        /// <summary>
         /// Checks to see if the provided data is associated to any record currently in the database.
         /// If not, then writes this record to the database.
         /// If so, then updates the database record to match this object.
