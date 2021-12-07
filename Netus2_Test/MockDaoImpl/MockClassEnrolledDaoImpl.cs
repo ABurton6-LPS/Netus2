@@ -84,16 +84,14 @@ namespace Netus2_Test.MockDaoImpl
             return list;
         }
 
-        public List<ClassEnrolled> Read_UsingClassEnrolledCode(string classCode, IConnectable connection)
+        public ClassEnrolled Read_UsingClassEnrolledCode(string classCode, IConnectable connection)
         {
             WasCalled_UsingClassEnrolledCode = true;
 
-            List<ClassEnrolled> list = new List<ClassEnrolled>();
-
             if (_shouldReadReturnData)
-                list.Add(tdBuilder.classEnrolled);
+                return tdBuilder.classEnrolled;
 
-            return list;
+            return null;
         }
 
         public void Update(ClassEnrolled classEnrolled, IConnectable connection)

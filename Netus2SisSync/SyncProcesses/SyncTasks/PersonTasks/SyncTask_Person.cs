@@ -27,8 +27,8 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.PersonTasks
         {
             try
             {
-                Enumeration sisPersonType = row["enum_role_id"].ToString() == "" ? null : Enum_Role.GetEnumFromSisCode(row["enum_role_id"].ToString().ToLower());
-                string sisId = row["sis_person_id"].ToString() == "" ? null : row["sis_person_id"].ToString();
+                Enumeration sisPersonType = row["person_type"].ToString() == "" ? null : Enum_Role.GetEnumFromSisCode(row["person_type"].ToString().ToLower());
+                string sisId = row["unique_id"].ToString() == "" ? null : row["unique_id"].ToString();
                 string sisFirstName = row["first_name"].ToString() == "" ? null : row["first_name"].ToString();
                 string sisMiddleName = row["middle_name"].ToString() == "" ? null : row["middle_name"].ToString();
                 string sisLastName = row["last_name"].ToString() == "" ? null : row["last_name"].ToString();
@@ -62,8 +62,9 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.PersonTasks
                     person.Roles.Add(sisPersonType);
                     person.MiddleName = sisMiddleName;
                     person.ResidenceStatus = sisResidenceStatus;
-                    person.LoginName = sisLoginName;
-                    person.LoginPw = sisLoginPw;
+                    //TODO: generate new LoginName and LoginPw
+                    //person.LoginName = sisLoginName;
+                    //person.LoginPw = sisLoginPw;
                     person = personDaoImpl.Write(person, _netus2Connection);
 
                     uniqueIdentifierDaoImpl.Write(uniqueId, person.Id, _netus2Connection);
@@ -78,15 +79,19 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.PersonTasks
                         person.Roles.Add(sisPersonType);
                         needsToBeUpdated = true;
                     }
+
+                    //if ((person.LoginName != sisLoginName) ||
+                    //    (person.LoginPw != sisLoginPw))
+                    //    throw new Exception("Login name found in Netus2: " + person.LoginName + " SIS: " + sisLoginName + '\n' +
+                    //        "LoginPw found in Netus2: " + person.LoginPw + " SIS: " + sisLoginPw);
+
                     if ((person.FirstName != sisFirstName) ||
                         (person.MiddleName != sisMiddleName) ||
                         (person.LastName != sisLastName) ||
                         (person.BirthDate != sisBirthDate) ||
                         (person.Gender != sisGender) ||
                         (person.Ethnic != sisEthnic) ||
-                        (person.ResidenceStatus != sisResidenceStatus) ||
-                        (person.LoginName != sisLoginName) ||
-                        (person.LoginPw != sisLoginPw))
+                        (person.ResidenceStatus != sisResidenceStatus))
                     {
                         person.FirstName = sisFirstName;
                         person.MiddleName = sisMiddleName;
@@ -95,8 +100,6 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.PersonTasks
                         person.Gender = sisGender;
                         person.Ethnic = sisEthnic;
                         person.ResidenceStatus = sisResidenceStatus;
-                        person.LoginName = sisLoginName;
-                        person.LoginPw = sisLoginPw;
                         needsToBeUpdated = true;
                     }
                     if (needsToBeUpdated)

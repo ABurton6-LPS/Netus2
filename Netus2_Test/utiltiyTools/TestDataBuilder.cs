@@ -271,7 +271,11 @@ namespace Netus2_Test
                 student = personDaoImpl.Read(student, connection)[0];
             }
 
-            enrollment = new Enrollment(Enum_Grade.values["6"], new DateTime(2020, 9, 6), new DateTime(2021, 6, 1), Enum_True_False.values["true"]);
+            enrollment = new Enrollment(semester1);
+            enrollment.GradeLevel = Enum_Grade.values["6"];
+            enrollment.StartDate = new DateTime(2020, 9, 6);
+            enrollment.EndDate = new DateTime(2021, 6, 1);
+            enrollment.IsPrimary = Enum_True_False.values["true"];
             enrollment.ClassesEnrolled.Add(classEnrolled);
             enrollment.AcademicSession = schoolYear;
             if (connection != null)

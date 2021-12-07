@@ -55,27 +55,25 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.ClassTasks
 
                 IClassEnrolledDao classEnrolledDaoImpl = DaoImplFactory.GetClassEnrolledDaoImpl();
                 classEnrolledDaoImpl.SetTaskId(this.Id);
-                List<ClassEnrolled> foundClasses = classEnrolledDaoImpl.Read_UsingClassEnrolledCode(sisClassEnrolledCode, _netus2Connection);
+                ClassEnrolled foundClassEnrolled = classEnrolledDaoImpl.Read_UsingClassEnrolledCode(sisClassEnrolledCode, _netus2Connection);
 
                 ClassEnrolled classEnrolled = new ClassEnrolled(sisClassEnrolledName, sisClassEnrolledCode, sisRoom, course, academicSession);
-                if (foundClasses.Count == 0)
+                if (foundClassEnrolled == null)
                 {
                     classEnrolledDaoImpl.Write(classEnrolled, _netus2Connection);
                 }
-                else if(foundClasses.Count == 1)
+                else
                 {
-                    if ((classEnrolled.Name != foundClasses[0].Name) ||
-                        (classEnrolled.ClassCode != foundClasses[0].ClassCode) ||
-                        (classEnrolled.Room != foundClasses[0].Room) ||
-                        (classEnrolled.Course.Id != foundClasses[0].Course.Id) ||
-                        (classEnrolled.AcademicSession.Id != foundClasses[0].AcademicSession.Id))
+                    if ((classEnrolled.Name != foundClassEnrolled.Name) ||
+                        (classEnrolled.ClassCode != foundClassEnrolled.ClassCode) ||
+                        (classEnrolled.Room != foundClassEnrolled.Room) ||
+                        (classEnrolled.Course.Id != foundClassEnrolled.Course.Id) ||
+                        (classEnrolled.AcademicSession.Id != foundClassEnrolled.AcademicSession.Id))
                     {
-                        classEnrolled.Id = foundClasses[0].Id;
+                        classEnrolled.Id = foundClassEnrolled.Id;
                         classEnrolledDaoImpl.Update(classEnrolled, _netus2Connection);
                     }
                 }
-                else
-                    throw new Exception(foundClasses.Count + " record(s) found matching ClassEnrolled Code:\n" + classEnrolled.ClassCode);
 
                 SyncLogger.LogStatus(this, Enum_Sync_Status.values["end"]);
             }

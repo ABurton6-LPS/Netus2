@@ -44,11 +44,7 @@ namespace Netus2_DatabaseConnection.dbAccess
 
         private static string GetSisConnectionString()
         {
-            return UtilityTools.ReadConfig(
-                            Enum_Config.values["sis_db_string"],
-                            Enum_True_False.values["true"],
-                            Enum_True_False.values["true"])
-                        .ConfigValue;
+            return UtilityTools.ReadConfig("sis_db_string",true,true).Value;
         }
 
         private static string GetDatabaseConnectionString_Netus2_Tst()

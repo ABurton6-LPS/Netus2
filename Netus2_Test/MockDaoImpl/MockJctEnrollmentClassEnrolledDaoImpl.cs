@@ -15,8 +15,10 @@ namespace Netus2_Test.MockDaoImpl
         public bool WasCalled_Read = false;
         public bool WasCalled_ReadAllWithClassEnrolledId = false;
         public bool WasCalled_ReadAllWithEnrollmentId = false;
+        public bool WasCalled_ReadAllClassEnrolledNotInTempTable = false;
         public bool WasCalled_Update = false;
         public bool WasCalled_Write = false;
+        public bool WasCalled_WriteToTempTable = false;
         public bool _shouldReadReturnData = false;
 
         public MockJctEnrollmentClassEnrolledDaoImpl(TestDataBuilder tdBuilder)
@@ -51,6 +53,32 @@ namespace Netus2_Test.MockDaoImpl
             }
 
             return null;
+        }
+
+        public List<DataRow> Read_AllClassEnrolledNotInTempTable(IConnectable connection)
+        {
+            WasCalled_ReadAllClassEnrolledNotInTempTable = true;
+
+            List<DataRow> result = new List<DataRow>();
+
+            if (_shouldReadReturnData == true)
+            {
+                DataRow row = DataTableFactory.CreateDataTable_Netus2_JctEnrollmentClassEnrolled().NewRow();
+                row["enrollment_id"] = tdBuilder.enrollment.Id;
+                row["class_enrolled_id"] = tdBuilder.enrollment.ClassesEnrolled[0].Id;
+                if (tdBuilder.enrollment.ClassesEnrolled[0].EnrollmentStartDate != null)
+                    row["enrollment_start_date"] = tdBuilder.enrollment.ClassesEnrolled[0].EnrollmentStartDate;
+                else
+                    row["enrollment_start_date"] = DBNull.Value;
+
+                if (tdBuilder.enrollment.ClassesEnrolled[0].EnrollmentEndDate != null)
+                    row["enrollment_end_date"] = tdBuilder.enrollment.ClassesEnrolled[0].EnrollmentEndDate;
+                else
+                    row["enrollment_start_date"] = DBNull.Value;
+                result.Add(row);
+            }
+
+            return result;
         }
 
         public List<DataRow> Read_AllWithClassEnrolledId(int classEnrolledId, IConnectable connection)
@@ -138,6 +166,11 @@ namespace Netus2_Test.MockDaoImpl
                 row["enrollment_start_date"] = DBNull.Value;
 
             return row;
+        }
+
+        public void Write_ToTempTable(int enrollmentId, int class_enrolled_id, IConnectable connection)
+        {
+            WasCalled_WriteToTempTable = true;
         }
     }
 }

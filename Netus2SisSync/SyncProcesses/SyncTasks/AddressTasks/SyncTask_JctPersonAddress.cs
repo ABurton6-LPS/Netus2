@@ -31,7 +31,7 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AddressTasks
                 string sisAddressLine2 = row["address_line_2"].ToString() == "" ? null : row["address_line_2"].ToString();
                 string sisCity = row["city"].ToString() == "" ? null : row["city"].ToString();
                 string sisPostalCode = row["postal_code"].ToString() == "" ? null : row["postal_code"].ToString();
-                string sisPersonId = row["sis_person_id"].ToString() == "" ? null : row["sis_person_id"].ToString();
+                string sisPersonId = row["unique_id"].ToString() == "" ? null : row["unique_id"].ToString();
                 Enumeration sisAddressType = row["enum_address_id"].ToString() == "" ? null : Enum_Address.GetEnumFromSisCode(row["enum_address_id"].ToString().ToLower());
                 Enumeration sisIsPrimary = null;
                 if (sisAddressType == Enum_Address.values["home"])

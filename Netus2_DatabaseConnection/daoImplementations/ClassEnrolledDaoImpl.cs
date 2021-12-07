@@ -129,7 +129,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 throw new Exception(results.Count + " found matching classId: " + classId);
         }
 
-        public List<ClassEnrolled> Read_UsingClassEnrolledCode(string classEnrolledCode, IConnectable connection)
+        public ClassEnrolled Read_UsingClassEnrolledCode(string classEnrolledCode, IConnectable connection)
         {
             string sql = "SELECT * FROM class_enrolled WHERE class_enrolled_code = @class_enrolled_code";
 
@@ -138,7 +138,12 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
             List<ClassEnrolled> results = Read(sql, connection, parameters);
 
-            return results;
+            if (results.Count > 0)
+                return results[0];
+            else if (results.Count == 1)
+                return results[0];
+            else
+                return null;
         }
 
         public List<ClassEnrolled> Read(ClassEnrolled classEnrolled, IConnectable connection)
