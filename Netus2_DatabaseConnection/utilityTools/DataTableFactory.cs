@@ -98,12 +98,12 @@ namespace Netus2_DatabaseConnection.utilityTools
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(string);
-            dtColumn.ColumnName = "enum_role_id";
+            dtColumn.ColumnName = "person_type";
             dtPerson.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(string);
-            dtColumn.ColumnName = "sis_person_id";
+            dtColumn.ColumnName = "unique_id";
             dtPerson.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
@@ -219,7 +219,7 @@ namespace Netus2_DatabaseConnection.utilityTools
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(string);
-            dtColumn.ColumnName = "sis_person_id";
+            dtColumn.ColumnName = "unique_id";
             dtJctPersonAddress.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
@@ -346,14 +346,73 @@ namespace Netus2_DatabaseConnection.utilityTools
 
         public static DataTable CreateDataTable_Sis_Enrollment()
         {
-            //Do Nothing
-            return null;
+            DataTable tdEnrollment = new DataTable("Enrollment");
+            DataColumn dtColumn;
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "person_id";
+            tdEnrollment.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "academic_session_id";
+            tdEnrollment.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "enum_grade_id";
+            tdEnrollment.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(DateTime);
+            dtColumn.ColumnName = "start_date";
+            tdEnrollment.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(DateTime);
+            dtColumn.ColumnName = "end_date";
+            tdEnrollment.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "is_primary_id";
+            tdEnrollment.Columns.Add(dtColumn);
+
+            return tdEnrollment;
         }
 
         public static DataTable CreateDataTable_Sis_JctEnrollmentClassEnrolled()
         {
-            //Do Nothing;
-            return null;
+            DataTable dtJctEnrollmentClassEnrolled = new DataTable("JctEnrollmentclassEnrolled");
+            DataColumn dtColumn;
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "person_id";
+            dtJctEnrollmentClassEnrolled.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "class_enrolled_id";
+            dtJctEnrollmentClassEnrolled.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "academic_session_id";
+            dtJctEnrollmentClassEnrolled.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(DateTime);
+            dtColumn.ColumnName = "start_date";
+            dtJctEnrollmentClassEnrolled.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(DateTime);
+            dtColumn.ColumnName = "end_date";
+            dtJctEnrollmentClassEnrolled.Columns.Add(dtColumn);
+
+            return dtJctEnrollmentClassEnrolled;
         }
 
         public static DataTable CreateDataTable_Sis_LineItem()

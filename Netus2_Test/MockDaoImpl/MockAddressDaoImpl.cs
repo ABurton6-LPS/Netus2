@@ -10,6 +10,7 @@ namespace Netus2_Test.MockDaoImpl
         public TestDataBuilder tdBuilder;
         public bool WasCalled_Delete = false;
         public bool WasCalled_ReadUsingAddressId = false;
+        public bool WasCalled_ReadExact = false;
         public bool WasCalled_Read = false;
         public bool WasCalled_Update = false;
         public bool WasCalled_Write = false;
@@ -43,6 +44,21 @@ namespace Netus2_Test.MockDaoImpl
             }
 
             return null;
+        }
+
+        public List<Address> Read_Exact(Address address, IConnectable connection)
+        {
+            WasCalled_ReadExact = true;
+
+            List<Address> result = new List<Address>();
+
+            if (_shouldReadReturnData)
+            {
+                address.Id = 1;
+                result.Add(address);
+            }
+
+            return result;
         }
 
         public List<Address> Read(Address address, IConnectable connection)

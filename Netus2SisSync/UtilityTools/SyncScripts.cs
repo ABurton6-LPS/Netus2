@@ -23,104 +23,80 @@ namespace Netus2SisSync.UtilityTools
 
         private static string BuildScript_Sis_Organization()
         {
-            Config config = Netus2_DatabaseConnection.utilityTools.UtilityTools.ReadConfig(
-                Enum_Config.values["sis_organization_query"], Enum_True_False.values["true"], Enum_True_False.values["true"]);
-
-            return config.ConfigValue;
+            return Netus2_DatabaseConnection.utilityTools.UtilityTools
+                .ReadConfig("sis_organization_query", true, true).Value;
         }
 
         private static string BuildScript_Sis_AcademicSession()
         {
-            Config config = Netus2_DatabaseConnection.utilityTools.UtilityTools.ReadConfig(
-                Enum_Config.values["sis_academic_session_query"], Enum_True_False.values["true"], Enum_True_False.values["true"]);
-
-            return config.ConfigValue;
+            return Netus2_DatabaseConnection.utilityTools.UtilityTools
+                .ReadConfig("sis_academic_session_query", true, true).Value;
         }
 
         private static string BuildScript_Sis_Person()
         {
-            Config config = Netus2_DatabaseConnection.utilityTools.UtilityTools.ReadConfig(
-                Enum_Config.values["sis_person_query"], Enum_True_False.values["true"], Enum_True_False.values["true"]);
-
-            return config.ConfigValue;
+            return Netus2_DatabaseConnection.utilityTools.UtilityTools
+                .ReadConfig("person_query", true, true).Value;
         }
 
         private static string BuildScript_Sis_Address()
         {
-            Config config = Netus2_DatabaseConnection.utilityTools.UtilityTools.ReadConfig(
-                Enum_Config.values["sis_address_query"], Enum_True_False.values["true"], Enum_True_False.values["true"]);
-
-            return config.ConfigValue;
+            return Netus2_DatabaseConnection.utilityTools.UtilityTools
+                .ReadConfig("address_query", true, true).Value;
         }
 
         private static string BuildScript_Sis_JctPersonAddress()
         {
-            Config config = Netus2_DatabaseConnection.utilityTools.UtilityTools.ReadConfig(
-                Enum_Config.values["sis_jct_person_address_query"], Enum_True_False.values["true"], Enum_True_False.values["true"]);
-
-            return config.ConfigValue;
+            return Netus2_DatabaseConnection.utilityTools.UtilityTools
+                .ReadConfig("jct_person_address_query", true, true).Value;
         }
 
         private static string BuildScript_Sis_Email()
         {
-            return "";
+            return Netus2_DatabaseConnection.utilityTools.UtilityTools
+                .ReadConfig("email_query", true, true).Value;
         }
 
         private static string BuildScript_Sis_JctPersonEmail()
         {
-            return "";
+            return Netus2_DatabaseConnection.utilityTools.UtilityTools
+                .ReadConfig("jct_person_email_query", true, true).Value;
         }
 
         private static string BuildScript_Sis_PhoneNumber()
         {
-            Config config = Netus2_DatabaseConnection.utilityTools.UtilityTools.ReadConfig(
-                Enum_Config.values["sis_phone_number_query"], Enum_True_False.values["true"], Enum_True_False.values["true"]);
-
-            return config.ConfigValue;
+            return Netus2_DatabaseConnection.utilityTools.UtilityTools
+                .ReadConfig("phone_number_query", true, true).Value;
         }
 
         private static string BuildScript_Sis_JctPersonPhoneNumber()
         {
-            Config config = Netus2_DatabaseConnection.utilityTools.UtilityTools.ReadConfig(
-                Enum_Config.values["sis_jct_person_phone_number_query"], Enum_True_False.values["true"], Enum_True_False.values["true"]);
-
-            return config.ConfigValue;
+            return Netus2_DatabaseConnection.utilityTools.UtilityTools
+                .ReadConfig("jct_person_phone_number_query", true, true).Value;
         }
 
         private static string BuildScript_Sis_Course()
         {
-            Config config = Netus2_DatabaseConnection.utilityTools.UtilityTools.ReadConfig(
-                Enum_Config.values["sis_course_query"], Enum_True_False.values["true"], Enum_True_False.values["true"]);
-
-            return config.ConfigValue;
+            return Netus2_DatabaseConnection.utilityTools.UtilityTools
+                .ReadConfig("sis_course_query", true, true).Value;
         }
 
         private static string BuildScript_Sis_Class()
         {
-            Config config = Netus2_DatabaseConnection.utilityTools.UtilityTools.ReadConfig(
-                Enum_Config.values["sis_class_enrolled_query"], Enum_True_False.values["true"], Enum_True_False.values["true"]);
-
-            return config.ConfigValue;
+            return Netus2_DatabaseConnection.utilityTools.UtilityTools
+                .ReadConfig("sis_class_enrolled_query", true, true).Value;
         }
 
         private static string BuildScript_Sis_Enrollment()
         {
-            //Config config = Netus2_DatabaseConnection.utilityTools.UtilityTools.ReadConfig(
-            //    Enum_Config.values["sis_enrollment_query"], Enum_True_False.values["true"], Enum_True_False.values["true"]);
-
-            //return config.ConfigValue;
-
-            return "";
+            return Netus2_DatabaseConnection.utilityTools.UtilityTools
+                .ReadConfig("sis_enrollment_query", true, true).Value;
         }
 
         private static string BuildScript_Sis_JctEnrollmentClassEnrolled()
         {
-            //Config config = Netus2_DatabaseConnection.utilityTools.UtilityTools.ReadConfig(
-            //    Enum_Config.values["sis_jct_enrollment_class_enrolled_query"], Enum_True_False.values["true"], Enum_True_False.values["true"]);
-
-            //return config.ConfigValue;
-
-            return "";
+            return Netus2_DatabaseConnection.utilityTools.UtilityTools
+                .ReadConfig("sis_jct_enrollment_class_enrolled_query", true, true).Value;
         }
 
         private static string BuildScript_Sis_LineItem()

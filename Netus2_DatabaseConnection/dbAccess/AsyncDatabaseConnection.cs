@@ -57,9 +57,10 @@ namespace Netus2_DatabaseConnection.dbAccess
         {
             DataTable emptyDataTable = dt.Clone();
 
-            if ((sql == null) || (sql == "") || !(sql.ToUpper().Substring(0, 6).Contains("SELECT")))
+            if ((sql == null) || (sql == "") || (sql.StartsWith("SELECT") == false))
             {
-                throw new Exception("SQL must begin with 'SELECT'.");
+                if(sql.StartsWith("DROP TABLE IF EXISTS #phCount;") == false)
+                    throw new Exception("SQL must begin with 'SELECT'.");
             }
 
             try

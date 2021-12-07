@@ -53,7 +53,7 @@ namespace Netus2SisSync.SyncProcesses.SyncJobs
             finally
             {
                 sisConnection.CloseConnection();
-                _totalRecordsToProcess = _dtOrganization.Rows.Count;
+                _totalRecordsToProcess = _dtOrganization.Rows.Count * 2;
             }
         }
 

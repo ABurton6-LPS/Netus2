@@ -76,6 +76,24 @@ namespace Netus2_DatabaseConnection.daoImplementations
             return Read(sql, connection, parameters);
         }
 
+        public Enrollment Read_UsingAcademicSessionIdAndPersonId(int academicSessionId, int personId, IConnectable connection)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            string sql = "SELECT * FROM enrollment WHERE academic_session_id = @academic_session_id AND person_id = @person_id";
+
+            parameters.Add(new SqlParameter("@academic_session_id", academicSessionId));
+            parameters.Add(new SqlParameter("@person_id", personId));
+
+            List<Enrollment> results = Read(sql, connection, parameters);
+
+            if (results.Count > 0)
+                return results[0];
+            else if (results.Count == 1)
+                return results[0];
+            else
+                throw new Exception(results.Count + " found with academicSessionId: " + academicSessionId + " and personId: " + personId);
+        }
+
         public List<Enrollment> Read(Enrollment enrollment, int personId, IConnectable connection)
         {
             DataRow row = daoObjectMapper.MapEnrollment(enrollment, personId);
@@ -106,6 +124,18 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 {
                     sql.Append("AND enum_grade_id = @enum_grade_id ");
                     parameters.Add(new SqlParameter("@enum_grade_id", row["enum_grade_id"]));
+                }
+
+                if(row["start_date"] != DBNull.Value)
+                {
+                    sql.Append("AND start_date = @start_date ");
+                    parameters.Add(new SqlParameter("@start_date", row["start_date"]));
+                }
+
+                if(row["end_date"] != DBNull.Value)
+                {
+                    sql.Append("AND end_date = @end_date");
+                    parameters.Add(new SqlParameter("@end_date", row["end_date"]));
                 }
 
                 if (row["is_primary_id"] != DBNull.Value)

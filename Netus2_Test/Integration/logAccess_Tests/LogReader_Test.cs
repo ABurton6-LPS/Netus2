@@ -1285,9 +1285,11 @@ namespace Netus2_Test.Integration
         {
             //Prerequisite
             Person person = personDaoImpl.Write(new Person("fname", "lname", new DateTime(1985, 9, 6), Enum_Gender.values["unset"], Enum_Ethnic.values["unset"]), connection);
-                                    
+            Organization organization = organizationDaoImpl.Write(new Organization("School", Enum_Organization.values["school"], "S", "12345"), connection);
+            AcademicSession academicSession = academicSessionDaoImpl.Write(new AcademicSession(Enum_Session.values["school year"], organization, "HY"), connection);
+
             //Write
-            Enrollment enrollment = enrollmentDaoImpl.Write(new Enrollment(Enum_Grade.values["unset"], new DateTime(), new DateTime(), Enum_True_False.values["true"]), person.Id, connection);
+            Enrollment enrollment = enrollmentDaoImpl.Write(new Enrollment(academicSession), person.Id, connection);
 
             //Read logs after write
             List<LogEnrollment> logs = new List<LogEnrollment>();
@@ -1424,7 +1426,7 @@ namespace Netus2_Test.Integration
             ClassEnrolled classEnrolled = classEnrolledDaoImpl.Write(new ClassEnrolled("testName", "testClassCode", "testRoom", course, academicSession), connection);
 
             //Write
-            Enrollment enrollment = new Enrollment(Enum_Grade.values["unset"], new DateTime(), new DateTime(), Enum_True_False.values["true"]);
+            Enrollment enrollment = new Enrollment(academicSession);
             enrollment.ClassesEnrolled.Add(classEnrolled);
             enrollment = enrollmentDaoImpl.Write(enrollment, person.Id, connection);
 

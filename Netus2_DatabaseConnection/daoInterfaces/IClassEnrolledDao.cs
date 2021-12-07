@@ -68,14 +68,14 @@ namespace Netus2_DatabaseConnection.daoInterfaces
 
         /// <summary>
         /// <para>
-        /// Queries the database for the records associated with the passed-in data.
+        /// Queries the database for the record associated with the passed-in data.
         /// </para>
-        /// Populates the returned records with any associated AcademicSession, Course, Resource, and/or Period records.
+        /// Populates the returned record with any associated AcademicSession, Course, Resource, and/or Period records.
         /// </summary>
         /// <param name="classEnrolledCode"></param>
         /// <param name="connection"></param>
-        /// <returns>Empty list, if no records are found.</returns>
-        public List<ClassEnrolled> Read_UsingClassEnrolledCode(string classEnrolledCode, IConnectable connection);
+        /// <returns>Null, if no record is found.</returns>
+        public ClassEnrolled Read_UsingClassEnrolledCode(string classEnrolledCode, IConnectable connection);
 
         /// <summary>
         /// <para>

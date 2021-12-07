@@ -18,12 +18,9 @@ namespace Netus2SisSync.SyncProcesses
             Tasks = new List<SyncTask>();
 
             Config config = 
-                Netus2_DatabaseConnection.utilityTools.UtilityTools.ReadConfig(
-                Enum_Config.values["max_threads"], 
-                Enum_True_False.values["true"], 
-                Enum_True_False.values["true"]);
+                Netus2_DatabaseConnection.utilityTools.UtilityTools.ReadConfig("max_threads", true, true);
 
-            _maxThreadsPerBatch = int.Parse(config.ConfigValue);
+            _maxThreadsPerBatch = int.Parse(config.Value);
         }
     }
 }

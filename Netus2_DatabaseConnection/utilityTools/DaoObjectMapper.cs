@@ -741,9 +741,12 @@ namespace Netus2_DatabaseConnection.utilityTools
             if(row["is_primary_id"] != DBNull.Value)
                 isPrimary = Enum_True_False.GetEnumFromId((int)row["is_primary_id"]);
 
-            Enrollment enrollment = new Enrollment(gradeLevel, startDate, endDate, isPrimary);
+            Enrollment enrollment = new Enrollment(academicSession);
+            enrollment.GradeLevel = gradeLevel;
+            enrollment.StartDate = startDate;
+            enrollment.EndDate = endDate;
+            enrollment.IsPrimary = isPrimary;
             enrollment.ClassesEnrolled = classesEnrolled;
-            enrollment.AcademicSession = academicSession;
 
             if (row["enrollment_id"] != DBNull.Value)
                 enrollment.Id = (int)row["enrollment_id"];

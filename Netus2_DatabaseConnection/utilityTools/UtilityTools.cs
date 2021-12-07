@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Text;
 
 namespace Netus2_DatabaseConnection.utilityTools
 {
@@ -73,22 +74,31 @@ namespace Netus2_DatabaseConnection.utilityTools
             return enumerations;
         }
 
-        public static Config ReadConfig(Enumeration enumConfig, Enumeration enumIsForStudents, Enumeration enumIsForStaff)
+        public static Config ReadConfig(string configName, bool? isForStudents, bool? isForStaff)
         {
             IConnectable connection = DbConnectionFactory.GetNetus2Connection();
 
-            string sql = "SELECT * FROM config WHERE 1=1 " +
-                "AND enum_config_id = @enum_config_id " +
-                "AND is_for_student_id = @is_for_student_id " +
-                "AND is_for_staff_id = @is_for_staff_id";
+            StringBuilder sql = new StringBuilder("SELECT * FROM config WHERE 1=1 ");
 
             List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("@enum_config_id", enumConfig.Id));
-            parameters.Add(new SqlParameter("@is_for_student_id", enumIsForStudents.Id));
-            parameters.Add(new SqlParameter("@is_for_staff_id", enumIsForStaff.Id));
+            
+            sql.Append("AND name = @name ");
+            parameters.Add(new SqlParameter("@name", configName));
+            
+            if(isForStudents != null)
+            {
+                sql.Append("AND is_for_student = @is_for_student ");
+                parameters.Add(new SqlParameter("@is_for_student", isForStudents));
+            }
+
+            if(isForStaff != null)
+            {
+                sql.Append("AND is_for_staff = @is_for_staff");
+                parameters.Add(new SqlParameter("@is_for_staff", isForStaff));
+            }
 
             DataTable dtConfig = DataTableFactory.CreateDataTable_Netus2_Config();
-            dtConfig = connection.ReadIntoDataTable(sql, dtConfig, parameters);
+            dtConfig = connection.ReadIntoDataTable(sql.ToString(), dtConfig, parameters);
 
             List<Config> configs = new List<Config>();
             foreach(DataRow row in dtConfig.Rows)
@@ -105,29 +115,41 @@ namespace Netus2_DatabaseConnection.utilityTools
                             else
                                 config.Id = -1;
                             break;
-                        case "enum_config_id":
+                        case "type":
                             if (row[columnName] != DBNull.Value)
-                                config.ConfigType = Enum_Config.GetEnumFromId((int)row[columnName]);
+                                config.Type = (string)row[columnName];
                             else
-                                config.ConfigType = null;
+                                config.Type = null;
                             break;
-                        case "config_value":
+                        case "name":
                             if (row[columnName] != DBNull.Value)
-                                config.ConfigValue = (string)row[columnName];
+                                config.Name = (string)row[columnName];
                             else
-                                config.ConfigValue = null;
+                                config.Name = null;
                             break;
-                        case "is_for_student_id":
+                        case "value":
                             if (row[columnName] != DBNull.Value)
-                                config.IsForStudents = Enum_True_False.GetEnumFromId((int)row[columnName]);
+                                config.Value = (string)row[columnName];
+                            else
+                                config.Value = null;
+                            break;
+                        case "is_for_student":
+                            if (row[columnName] != DBNull.Value)
+                                config.IsForStudents = (bool)row[columnName];
                             else
                                 config.IsForStudents = null;
                             break;
-                        case "is_for_staff_id":
+                        case "is_for_staff":
                             if (row[columnName] != DBNull.Value)
-                                config.IsForStaff = Enum_True_False.GetEnumFromId((int)row[columnName]);
+                                config.IsForStaff = (bool)row[columnName];
                             else
                                 config.IsForStaff = null;
+                            break;
+                        case "descript":
+                            if (row[columnName] != DBNull.Value)
+                                config.Descript = (string)row[columnName];
+                            else
+                                config.Descript = null;
                             break;
                     }
                 }
@@ -140,9 +162,9 @@ namespace Netus2_DatabaseConnection.utilityTools
                 return configs[0];
             else
                 throw new Exception(configs.Count + " Config records matching:\n" +
-                    "EnumConfig: " + enumConfig.ToString() + "\n" +
-                    "EnumIsForStudents: " + enumIsForStudents.ToString() + "\n" +
-                    "EnumIsForStaff: " + enumIsForStaff.ToString());
+                    "Name: " + configName + "\n" +
+                    "IsForStudents: " + isForStudents + "\n" +
+                    "IsForStaff: " + isForStaff);
         }
     }
 }

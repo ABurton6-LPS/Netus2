@@ -188,7 +188,11 @@ namespace Netus2_Test.Integration
 
             //Create Enrollment
             //You must write the Enrollment with the Student Id, so no need to update Student
-            Enrollment enrollment = new Enrollment(Enum_Grade.values["6"], new DateTime(2020, 9, 6), new DateTime(2021, 6, 1), Enum_True_False.values["true"]);
+            Enrollment enrollment = new Enrollment(schoolYear);
+            enrollment.GradeLevel = Enum_Grade.values["6"];
+            enrollment.StartDate = new DateTime(2020, 9, 6);
+            enrollment.EndDate = new DateTime(2021, 6, 1);
+            enrollment.IsPrimary = Enum_True_False.values["true"];
             enrollment = enrollmentDaoImpl.Write(enrollment, student.Id, connection);
             Assert.IsTrue(enrollment.Id > 0);
             student = personDaoImpl.Read(student, connection)[0];

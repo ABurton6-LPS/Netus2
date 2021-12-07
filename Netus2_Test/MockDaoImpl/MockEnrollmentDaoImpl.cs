@@ -13,6 +13,7 @@ namespace Netus2_Test.MockDaoImpl
         public bool WasCalled_Read = false;
         public bool WasCalled_ReadAllWithAcademicSessionId = false;
         public bool WasCalled_ReadAllWithPersonId = false;
+        public bool WasCalled_ReadUsingAcademicSessionIdAndPersonId = false;
         public bool WasCalled_Update = false;
         public bool WasCalled_Write = false;
         public bool _shouldReadReturnData = false;
@@ -71,6 +72,16 @@ namespace Netus2_Test.MockDaoImpl
                 returnData.Add(tdBuilder.enrollment);
 
             return returnData;
+        }
+
+        public Enrollment Read_UsingAcademicSessionIdAndPersonId(int academicSessionId, int personId, IConnectable connection)
+        {
+            WasCalled_ReadUsingAcademicSessionIdAndPersonId = true;
+
+            if (_shouldReadReturnData)
+                return tdBuilder.enrollment;
+
+            return null;
         }
 
         public void Update(Enrollment enrollment, int personId, IConnectable connection)

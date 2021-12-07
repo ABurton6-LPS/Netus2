@@ -68,5 +68,14 @@ namespace Netus2_DatabaseConnection.daoInterfaces
         /// <param name="connection"></param>
         /// <returns>A copy of the record that was written.</returns>
         public DataRow Write(int enrollmentId, int classEnrolledId, DateTime? startDate, DateTime? endDate, IConnectable connection);
+
+
+        /// <summary>
+        /// Writes a link between the provided data points to the temporary table.
+        /// </summary>
+        /// <param name="enrollmentId"></param>
+        /// <param name="class_enrolled_id"></param>
+        /// <param name="connection"></param>
+        public void Write_ToTempTable(int enrollmentId, int class_enrolled_id, IConnectable connection);
     }
 }
