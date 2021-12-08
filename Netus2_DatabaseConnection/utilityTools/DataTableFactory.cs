@@ -232,14 +232,48 @@ namespace Netus2_DatabaseConnection.utilityTools
 
         public static DataTable CreateDataTable_Sis_Email()
         {
-            //Do Nothing
-            return null;
+            DataTable dtEmail = new DataTable("SisEmail");
+            DataColumn dtColumn;
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "unique_identifier";
+            dtEmail.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "email_value";
+            dtEmail.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "enum_email_id";
+            dtEmail.Columns.Add(dtColumn);
+
+            return dtEmail;
         }
 
         public static DataTable CreateDataTable_Sis_JctPersonEmail()
         {
-            //Do Nothing
-            return null;
+            DataTable dtJctPersonEmail = new DataTable("SisJctPersonEmail");
+            DataColumn dtColumn;
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "unique_identifier";
+            dtJctPersonEmail.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "email_value";
+            dtJctPersonEmail.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "enum_email_id";
+            dtJctPersonEmail.Columns.Add(dtColumn);
+
+            return dtJctPersonEmail;
         }
 
         public static DataTable CreateDataTable_Sis_PhoneNumber()
@@ -254,7 +288,7 @@ namespace Netus2_DatabaseConnection.utilityTools
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(string);
-            dtColumn.ColumnName = "Phone_type_code";
+            dtColumn.ColumnName = "phone_type_code";
             dtPhoneNumber.Columns.Add(dtColumn);
 
             return dtPhoneNumber;
@@ -272,12 +306,12 @@ namespace Netus2_DatabaseConnection.utilityTools
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(string);
-            dtColumn.ColumnName = "person_id";
+            dtColumn.ColumnName = "unique_id";
             dtJctPersonPhoneNumber.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(string);
-            dtColumn.ColumnName = "is_primary_id";
+            dtColumn.DataType = typeof(bool);
+            dtColumn.ColumnName = "is_primary";
             dtJctPersonPhoneNumber.Columns.Add(dtColumn);
 
             return dtJctPersonPhoneNumber;
@@ -375,8 +409,8 @@ namespace Netus2_DatabaseConnection.utilityTools
             tdEnrollment.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(string);
-            dtColumn.ColumnName = "is_primary_id";
+            dtColumn.DataType = typeof(bool);
+            dtColumn.ColumnName = "is_primary";
             tdEnrollment.Columns.Add(dtColumn);
 
             return tdEnrollment;
@@ -441,23 +475,33 @@ namespace Netus2_DatabaseConnection.utilityTools
             dtConfig.PrimaryKey = PrimaryKeycolumns;
 
             dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(int);
-            dtColumn.ColumnName = "enum_config_id";
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "type";
             dtConfig.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(string);
-            dtColumn.ColumnName = "config_value";
+            dtColumn.ColumnName = "name";
             dtConfig.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(int);
-            dtColumn.ColumnName = "is_for_student_id";
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "value";
             dtConfig.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(int);
-            dtColumn.ColumnName = "is_for_staff_id";
+            dtColumn.DataType = typeof(bool);
+            dtColumn.ColumnName = "is_for_student";
+            dtConfig.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(bool);
+            dtColumn.ColumnName = "is_for_staff";
+            dtConfig.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "descript";
             dtConfig.Columns.Add(dtColumn);
 
             return dtConfig;
@@ -593,21 +637,6 @@ namespace Netus2_DatabaseConnection.utilityTools
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(string);
             dtColumn.ColumnName = "address_line_2";
-            dtAddress.Columns.Add(dtColumn);
-
-            dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(string);
-            dtColumn.ColumnName = "address_line_3";
-            dtAddress.Columns.Add(dtColumn);
-
-            dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(string);
-            dtColumn.ColumnName = "address_line_4";
-            dtAddress.Columns.Add(dtColumn);
-
-            dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(string);
-            dtColumn.ColumnName = "apartment";
             dtAddress.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
@@ -891,8 +920,8 @@ namespace Netus2_DatabaseConnection.utilityTools
             dtEmploymentSession.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(int);
-            dtColumn.ColumnName = "is_primary_id";
+            dtColumn.DataType = typeof(bool);
+            dtColumn.ColumnName = "is_primary";
             dtEmploymentSession.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
@@ -967,8 +996,8 @@ namespace Netus2_DatabaseConnection.utilityTools
             dtEnrollment.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(int);
-            dtColumn.ColumnName = "is_primary_id";
+            dtColumn.DataType = typeof(bool);
+            dtColumn.ColumnName = "is_primary";
             dtEnrollment.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
@@ -1654,8 +1683,8 @@ namespace Netus2_DatabaseConnection.utilityTools
             dtJctPersonAddress.PrimaryKey = PrimaryKeycolumns;
 
             dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(int);
-            dtColumn.ColumnName = "is_primary_id";
+            dtColumn.DataType = typeof(bool);
+            dtColumn.ColumnName = "is_primary";
             dtJctPersonAddress.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
@@ -1687,8 +1716,8 @@ namespace Netus2_DatabaseConnection.utilityTools
             dtJctPersonAddress.PrimaryKey = PrimaryKeycolumns;
 
             dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(int);
-            dtColumn.ColumnName = "is_primary_id";
+            dtColumn.DataType = typeof(bool);
+            dtColumn.ColumnName = "is_primary";
             dtJctPersonAddress.Columns.Add(dtColumn);
 
             return dtJctPersonAddress;
@@ -1738,8 +1767,8 @@ namespace Netus2_DatabaseConnection.utilityTools
             dtJctPersonPhoneNumber.PrimaryKey = PrimaryKeycolumns;
 
             dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(int);
-            dtColumn.ColumnName = "is_primary_id";
+            dtColumn.DataType = typeof(bool);
+            dtColumn.ColumnName = "is_primary";
             dtJctPersonPhoneNumber.Columns.Add(dtColumn);
 
             return dtJctPersonPhoneNumber;
@@ -2316,8 +2345,8 @@ namespace Netus2_DatabaseConnection.utilityTools
             dtLogEmploymentSession.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(int);
-            dtColumn.ColumnName = "is_primary_id";
+            dtColumn.DataType = typeof(bool);
+            dtColumn.ColumnName = "is_primary";
             dtLogEmploymentSession.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
@@ -2412,8 +2441,8 @@ namespace Netus2_DatabaseConnection.utilityTools
             dtLogEnrollment.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(int);
-            dtColumn.ColumnName = "is_primary_id";
+            dtColumn.DataType = typeof(bool);
+            dtColumn.ColumnName = "is_primary";
             dtLogEnrollment.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
@@ -3347,8 +3376,8 @@ namespace Netus2_DatabaseConnection.utilityTools
             dtLogJctPersonAddress.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(int);
-            dtColumn.ColumnName = "is_primary_id";
+            dtColumn.DataType = typeof(bool);
+            dtColumn.ColumnName = "is_primary";
             dtLogJctPersonAddress.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
@@ -3398,8 +3427,8 @@ namespace Netus2_DatabaseConnection.utilityTools
             dtLogJctPersonEmail.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(int);
-            dtColumn.ColumnName = "is_primary_id";
+            dtColumn.DataType = typeof(bool);
+            dtColumn.ColumnName = "is_primary";
             dtLogJctPersonEmail.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
@@ -3485,8 +3514,8 @@ namespace Netus2_DatabaseConnection.utilityTools
             dtLogJctPersonPhoneNumber.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(int);
-            dtColumn.ColumnName = "is_primary_id";
+            dtColumn.DataType = typeof(bool);
+            dtColumn.ColumnName = "is_primary";
             dtLogJctPersonPhoneNumber.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();

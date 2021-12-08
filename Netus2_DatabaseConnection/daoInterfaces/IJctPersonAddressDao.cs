@@ -53,21 +53,21 @@ namespace Netus2_DatabaseConnection.daoInterfaces
         /// </summary>
         /// <param name="personId"></param>
         /// <param name="addressId"></param>
-        /// <param name="isPrimaryId"></param>
+        /// <param name="isPrimary"></param>
         /// <param name="enumAddressId"></param>
         /// <param name="connection"></param>
-        public void Update(int personId, int addressId, int isPrimaryId, int enumAddressId, IConnectable connection);
+        public void Update(int personId, int addressId, bool isPrimary, int enumAddressId, IConnectable connection);
 
         /// <summary>
         /// Writes a link between the provided data points to the database.
         /// </summary>
         /// <param name="personId"></param>
         /// <param name="addressId"></param>
-        /// <param name="isPrimaryId"></param>
+        /// <param name="isPrimary"></param>
         /// <param name="enumAddressId"></param>
         /// <param name="connection"></param>
         /// <returns>A copy of the record that was written.</returns>
-        public DataRow Write(int personId, int addressId, int isPrimaryId, int enumAddressId, IConnectable connection);
+        public DataRow Write(int personId, int addressId, bool isPrimary, int enumAddressId, IConnectable connection);
 
         /// <summary>
         /// Writes a link between the provided data points to the temporary table.

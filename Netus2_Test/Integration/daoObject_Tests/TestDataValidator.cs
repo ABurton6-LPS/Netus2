@@ -146,9 +146,6 @@ namespace Netus2_Test.Integration
             Assert.AreEqual(expected.Id, actual.Id);
             Assert.AreEqual(expected.Line1, actual.Line1);
             Assert.AreEqual(expected.Line2, actual.Line2);
-            Assert.AreEqual(expected.Line3, actual.Line3);
-            Assert.AreEqual(expected.Line4, actual.Line4);
-            Assert.AreEqual(expected.Apartment, actual.Apartment);
             Assert.AreEqual(expected.City, actual.City);
             Assert.AreEqual(expected.StateProvince, actual.StateProvince);
             Assert.AreEqual(expected.PostalCode, actual.PostalCode);

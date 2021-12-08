@@ -97,48 +97,48 @@ namespace Netus2_DatabaseConnection.daoImplementations
             return jctPersonphoneNumberDaos;
         }
 
-        public void Update(int personId, int phoneNumberId, int isPrimaryId, IConnectable connection)
+        public void Update(int personId, int phoneNumberId, bool isPrimary, IConnectable connection)
         {
             DataRow foundJctPersonPhoneNumberDao = Read(personId, phoneNumberId, connection);
 
             if (foundJctPersonPhoneNumberDao == null)
-                Write(personId, phoneNumberId, isPrimaryId, connection);
+                Write(personId, phoneNumberId, isPrimary, connection);
             else
-                UpdateInternals(personId, phoneNumberId, isPrimaryId, connection);
+                UpdateInternals(personId, phoneNumberId, isPrimary, connection);
         }
 
-        private void UpdateInternals(int personId, int phoneNumberId, int isPrimaryId, IConnectable connection)
+        private void UpdateInternals(int personId, int phoneNumberId, bool isPrimary, IConnectable connection)
         {
             string sql = "UPDATE jct_person_phone_number SET " +
-                "is_primary_id = @is_primary_id " +
+                "is_primary = @is_primary " +
                 "WHERE person_id = @person_id " +
                 "AND phone_number_id = @phone_number_id";
 
             List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("@is_primary_id", isPrimaryId));
+            parameters.Add(new SqlParameter("@is_primary", isPrimary));
             parameters.Add(new SqlParameter("@person_id", personId));
             parameters.Add(new SqlParameter("@phone_number_id", phoneNumberId));
 
             connection.ExecuteNonQuery(sql, parameters);
         }
 
-        public DataRow Write(int personId, int phoneNumberId, int isPrimaryId, IConnectable connection)
+        public DataRow Write(int personId, int phoneNumberId, bool isPrimary, IConnectable connection)
         {
             string sql = "INSERT INTO jct_person_phone_number (" +
-                "person_id, phone_number_id, is_primary_id) VALUES (" +
-                "@person_id, @phone_number_id, @is_primary_id)";
+                "person_id, phone_number_id, is_primary) VALUES (" +
+                "@person_id, @phone_number_id, @is_primary)";
 
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("@person_id", personId));
             parameters.Add(new SqlParameter("@phone_number_id", phoneNumberId));
-            parameters.Add(new SqlParameter("@is_primary_id", isPrimaryId));
+            parameters.Add(new SqlParameter("@is_primary", isPrimary));
 
             connection.ExecuteNonQuery(sql, parameters);
 
             DataRow jctPersonPhoneNumberDao = DataTableFactory.CreateDataTable_Netus2_JctPersonPhoneNumber().NewRow();
             jctPersonPhoneNumberDao["person_id"] = personId;
             jctPersonPhoneNumberDao["phone_number_id"] = phoneNumberId;
-            jctPersonPhoneNumberDao["is_primary_id"] = isPrimaryId;
+            jctPersonPhoneNumberDao["is_primary"] = isPrimary;
 
             return jctPersonPhoneNumberDao;
         }

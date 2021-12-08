@@ -44,7 +44,6 @@ namespace Netus2_Test.Unit.SyncProcess
             SisClassTestData tstData = new SisClassTestData();
             tstData.Name = null;
             tstData.ClassCode = null;
-            tstData.ClassType = null;
             tstData.Room = null;
             tstData.CourseId = null;
             tstData.AcademicSessionId = null;
@@ -63,7 +62,6 @@ namespace Netus2_Test.Unit.SyncProcess
             Assert.AreEqual(tstDataSet.Count, results.Rows.Count);
             Assert.AreEqual(emptyString, results.Rows[0]["name"].ToString());
             Assert.AreEqual(emptyString, results.Rows[0]["class_code"].ToString());
-            Assert.AreEqual(emptyString, results.Rows[0]["enum_class_id"].ToString());
             Assert.AreEqual(emptyString, results.Rows[0]["room"].ToString());
             Assert.AreEqual(emptyString, results.Rows[0]["course_id"].ToString());
             Assert.AreEqual(emptyString, results.Rows[0]["academic_session_id"].ToString());
@@ -75,7 +73,6 @@ namespace Netus2_Test.Unit.SyncProcess
             SisClassTestData tstData = new SisClassTestData();
             tstData.Name = tdBuilder.classEnrolled.Name;
             tstData.ClassCode = tdBuilder.classEnrolled.ClassCode;
-            tstData.ClassType = tdBuilder.classEnrolled.ClassType.SisCode;
             tstData.Room = tdBuilder.classEnrolled.Room;
             tstData.CourseId = tdBuilder.spanishCourse.CourseCode;
             tstData.AcademicSessionId =
@@ -97,7 +94,6 @@ namespace Netus2_Test.Unit.SyncProcess
             Assert.AreEqual(tstDataSet.Count, results.Rows.Count);
             Assert.AreEqual(tstDataSet[0].Name, results.Rows[0]["name"].ToString());
             Assert.AreEqual(tstDataSet[0].ClassCode, results.Rows[0]["class_code"].ToString());
-            Assert.AreEqual(tstDataSet[0].ClassType, results.Rows[0]["enum_class_id"].ToString());
             Assert.AreEqual(tstDataSet[0].Room, results.Rows[0]["room"].ToString());
             Assert.AreEqual(tstDataSet[0].CourseId, results.Rows[0]["course_id"].ToString());
             Assert.AreEqual(tstDataSet[0].AcademicSessionId, results.Rows[0]["academic_session_id"].ToString());
@@ -112,7 +108,6 @@ namespace Netus2_Test.Unit.SyncProcess
             SisClassTestData tstData = new SisClassTestData();
             tstData.Name = tdBuilder.classEnrolled.Name;
             tstData.ClassCode = tdBuilder.classEnrolled.ClassCode;
-            tstData.ClassType = tdBuilder.classEnrolled.ClassType.SisCode;
             tstData.Room = tdBuilder.classEnrolled.Room;
             tstData.CourseId = tdBuilder.spanishCourse.CourseCode;
             tstData.AcademicSessionId =
@@ -131,7 +126,7 @@ namespace Netus2_Test.Unit.SyncProcess
 
             Assert.IsTrue(mockCourseDaoImpl.WasCalled_ReadUsingCourseCode);
             Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_ReadUsingSisBuildingCodeTermCodeSchoolyear);
-            Assert.IsTrue(mockClassEnrolledDaoImpl.WasCalled_Read);
+            Assert.IsTrue(mockClassEnrolledDaoImpl.WasCalled_UsingClassEnrolledCode);
             Assert.IsTrue(mockClassEnrolledDaoImpl.WasCalled_Write);
             Assert.IsFalse(mockClassEnrolledDaoImpl.WasCalled_Update);
         }
@@ -146,7 +141,6 @@ namespace Netus2_Test.Unit.SyncProcess
             SisClassTestData tstData = new SisClassTestData();
             tstData.Name = tdBuilder.classEnrolled.Name;
             tstData.ClassCode = tdBuilder.classEnrolled.ClassCode;
-            tstData.ClassType = tdBuilder.classEnrolled.ClassType.SisCode;
             tstData.Room = tdBuilder.classEnrolled.Room;
             tstData.CourseId = tdBuilder.spanishCourse.CourseCode;
             tstData.AcademicSessionId =
@@ -165,7 +159,7 @@ namespace Netus2_Test.Unit.SyncProcess
 
             Assert.IsTrue(mockCourseDaoImpl.WasCalled_ReadUsingCourseCode);
             Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_ReadUsingSisBuildingCodeTermCodeSchoolyear);
-            Assert.IsTrue(mockClassEnrolledDaoImpl.WasCalled_Read);
+            Assert.IsTrue(mockClassEnrolledDaoImpl.WasCalled_UsingClassEnrolledCode);
             Assert.IsFalse(mockClassEnrolledDaoImpl.WasCalled_Write);
             Assert.IsFalse(mockClassEnrolledDaoImpl.WasCalled_Update);
         }
@@ -180,7 +174,6 @@ namespace Netus2_Test.Unit.SyncProcess
             SisClassTestData tstData = new SisClassTestData();
             tstData.Name = "NewName";
             tstData.ClassCode = tdBuilder.classEnrolled.ClassCode;
-            tstData.ClassType = tdBuilder.classEnrolled.ClassType.SisCode;
             tstData.Room = tdBuilder.classEnrolled.Room;
             tstData.CourseId = tdBuilder.spanishCourse.CourseCode;
             tstData.AcademicSessionId =
@@ -199,7 +192,7 @@ namespace Netus2_Test.Unit.SyncProcess
 
             Assert.IsTrue(mockCourseDaoImpl.WasCalled_ReadUsingCourseCode);
             Assert.IsTrue(mockAcademicSessionDaoImpl.WasCalled_ReadUsingSisBuildingCodeTermCodeSchoolyear);
-            Assert.IsTrue(mockClassEnrolledDaoImpl.WasCalled_Read);
+            Assert.IsTrue(mockClassEnrolledDaoImpl.WasCalled_UsingClassEnrolledCode);
             Assert.IsFalse(mockClassEnrolledDaoImpl.WasCalled_Write);
             Assert.IsTrue(mockClassEnrolledDaoImpl.WasCalled_Update);
         }
@@ -219,8 +212,7 @@ namespace Netus2_Test.Unit.SyncProcess
             {
                 DataRow row = dtClass.NewRow();
                 row["name"] = tstData.Name;
-                row["class_code"] = tstData.ClassCode;
-                row["enum_class_id"] = tstData.ClassType;
+                row["class_enrolled_code"] = tstData.ClassCode;
                 row["room"] = tstData.Room;
                 row["course_id"] = tstData.CourseId;
                 row["academic_session_id"] = tstData.AcademicSessionId;
@@ -240,7 +232,7 @@ namespace Netus2_Test.Unit.SyncProcess
                 .Callback(() => count++);
 
             reader.Setup(x => x.FieldCount)
-                .Returns(() => 6);
+                .Returns(() => 5);
 
             reader.Setup(x => x.GetValues(It.IsAny<object[]>()))
                 .Callback<object[]>(
@@ -248,10 +240,9 @@ namespace Netus2_Test.Unit.SyncProcess
                     {
                         values[0] = tstDataSet[count].Name;
                         values[1] = tstDataSet[count].ClassCode;
-                        values[2] = tstDataSet[count].ClassType;
-                        values[3] = tstDataSet[count].Room;
-                        values[4] = tstDataSet[count].CourseId;
-                        values[5] = tstDataSet[count].AcademicSessionId;
+                        values[2] = tstDataSet[count].Room;
+                        values[3] = tstDataSet[count].CourseId;
+                        values[4] = tstDataSet[count].AcademicSessionId;
                     }
                 ).Returns(count);
 
@@ -270,31 +261,24 @@ namespace Netus2_Test.Unit.SyncProcess
                 .Returns(() => typeof(string));
 
             reader.Setup(x => x.GetName(2))
-                .Returns(() => "enum_class_id");
-            reader.Setup(x => x.GetOrdinal("enum_class_id"))
+                .Returns(() => "room");
+            reader.Setup(x => x.GetOrdinal("room"))
                 .Returns(() => 2);
             reader.Setup(x => x.GetFieldType(2))
                 .Returns(() => typeof(string));
 
             reader.Setup(x => x.GetName(3))
-                .Returns(() => "room");
-            reader.Setup(x => x.GetOrdinal("room"))
+                .Returns(() => "course_id");
+            reader.Setup(x => x.GetOrdinal("course_id"))
                 .Returns(() => 3);
             reader.Setup(x => x.GetFieldType(3))
                 .Returns(() => typeof(string));
 
             reader.Setup(x => x.GetName(4))
-                .Returns(() => "course_id");
-            reader.Setup(x => x.GetOrdinal("course_id"))
-                .Returns(() => 4);
-            reader.Setup(x => x.GetFieldType(4))
-                .Returns(() => typeof(string));
-
-            reader.Setup(x => x.GetName(5))
                 .Returns(() => "academic_session_id");
             reader.Setup(x => x.GetOrdinal("academic_session_id"))
-                .Returns(() => 5);
-            reader.Setup(x => x.GetFieldType(5))
+                .Returns(() => 4);
+            reader.Setup(x => x.GetFieldType(4))
                 .Returns(() => typeof(string));
 
             _sisConnection.mockReader = reader;
@@ -304,7 +288,6 @@ namespace Netus2_Test.Unit.SyncProcess
         {
             public string Name { get; set; }
             public string ClassCode { get; set; }
-            public string ClassType { get; set; }
             public string Room { get; set; }
             public string CourseId { get; set; }
             public string AcademicSessionId { get; set; }

@@ -8,14 +8,13 @@ namespace Netus2_DatabaseConnection.dataObjects
         public int Id { get; set; }
         public string EmailValue { get; set; }
         public Enumeration EmailType { get; set; }
-        public Enumeration IsPrimary { get; set; }
+        public bool IsPrimary { get; set; }
 
         public Email(string emailValue, Enumeration emailType)
         {
             Id = -1;
             EmailValue = emailValue;
             EmailType = emailType;
-            IsPrimary = Enum_True_False.values["unset"];
         }
 
         public override string ToString()
@@ -23,7 +22,7 @@ namespace Netus2_DatabaseConnection.dataObjects
             StringBuilder strAddr = new StringBuilder();
             strAddr.Append("Email: " + EmailValue + "\n");
             strAddr.Append("Email Type: " + EmailType.Netus2Code + "\n");
-            strAddr.Append("Is Primary: " + IsPrimary.Netus2Code + "\n");
+            strAddr.Append("Is Primary: " + IsPrimary + "\n");
 
             return strAddr.ToString();
         }

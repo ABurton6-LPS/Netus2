@@ -50,15 +50,19 @@ namespace Netus2_Test.MockDaoImpl
         {
             WasCalled_ReadExact = true;
 
-            List<Address> result = new List<Address>();
+            List<Address> results = new List<Address>();
 
             if (_shouldReadReturnData)
             {
-                address.Id = 1;
-                result.Add(address);
+                if (tdBuilder.address_Teacher.Line1 == address.Line1 ||
+                    tdBuilder.address_Teacher.Line2 == address.Line2)
+                    results.Add(tdBuilder.address_Teacher);
+                else if (tdBuilder.address_Student.Line1 == address.Line1 ||
+                    tdBuilder.address_Student.Line2 == address.Line2)
+                    results.Add(tdBuilder.address_Student);
             }
 
-            return result;
+            return results;
         }
 
         public List<Address> Read(Address address, IConnectable connection)
@@ -70,10 +74,10 @@ namespace Netus2_Test.MockDaoImpl
             if (_shouldReadReturnData)
             {
                 if (tdBuilder.address_Teacher.Line1 == address.Line1 ||
-                    tdBuilder.address_Teacher.Apartment == address.Apartment)
+                    tdBuilder.address_Teacher.Line2 == address.Line2)
                     results.Add(tdBuilder.address_Teacher);
                 else if(tdBuilder.address_Student.Line1 == address.Line1 ||
-                    tdBuilder.address_Student.Apartment == address.Apartment)
+                    tdBuilder.address_Student.Line2 == address.Line2)
                     results.Add(tdBuilder.address_Student);
             }
 

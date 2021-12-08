@@ -10,8 +10,8 @@ namespace Netus2_DatabaseConnection.dataObjects
         public string Type { get; set; }
         public string Name { get; set; }
         public string Value { get; set; }
-        public bool? IsForStudents { get; set; }
-        public bool? IsForStaff { get; set; }
+        public bool IsForStudents { get; set; }
+        public bool IsForStaff { get; set; }
         public string Descript { get; set; }
 
         public override string ToString()

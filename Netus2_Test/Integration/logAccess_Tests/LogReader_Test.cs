@@ -614,7 +614,7 @@ namespace Netus2_Test.Integration
         {
             //Prerequisite
             Address address = addressDaoImpl.Write(new Address("tst1", "apt. 1", "tstCity", Enum_State_Province.values["mi"], "12345"), connection);
-            address.IsPrimary = Enum_True_False.values["true"];
+            address.IsPrimary = true;
             Person person = new Person("fname", "lname", new DateTime(), Enum_Gender.values["unset"], Enum_Ethnic.values["unset"]);
 
             //Write
@@ -661,7 +661,7 @@ namespace Netus2_Test.Integration
             Person person = personDaoImpl.Write(new Person("ftest", "ltest", new DateTime(1985, 9, 6), Enum_Gender.values["unset"], Enum_Ethnic.values["unset"]), connection);
 
             //Write
-            EmploymentSession employmentSession = employmentSessionDaoImpl.Write(new EmploymentSession(Enum_True_False.values["true"], org), person.Id, connection);
+            EmploymentSession employmentSession = employmentSessionDaoImpl.Write(new EmploymentSession(true, org), person.Id, connection);
 
             //Read logs after write
             List<LogEmploymentSession> logs = new List<LogEmploymentSession>();
@@ -1289,7 +1289,9 @@ namespace Netus2_Test.Integration
             AcademicSession academicSession = academicSessionDaoImpl.Write(new AcademicSession(Enum_Session.values["school year"], organization, "HY"), connection);
 
             //Write
-            Enrollment enrollment = enrollmentDaoImpl.Write(new Enrollment(academicSession), person.Id, connection);
+            Enrollment enrollment = new Enrollment(academicSession);
+            enrollment.GradeLevel = Enum_Grade.values["1"];
+            enrollment = enrollmentDaoImpl.Write(enrollment, person.Id, connection);
 
             //Read logs after write
             List<LogEnrollment> logs = new List<LogEnrollment>();
@@ -1428,6 +1430,7 @@ namespace Netus2_Test.Integration
             //Write
             Enrollment enrollment = new Enrollment(academicSession);
             enrollment.ClassesEnrolled.Add(classEnrolled);
+            enrollment.GradeLevel = Enum_Grade.values["1"];
             enrollment = enrollmentDaoImpl.Write(enrollment, person.Id, connection);
 
             //Read logs after write

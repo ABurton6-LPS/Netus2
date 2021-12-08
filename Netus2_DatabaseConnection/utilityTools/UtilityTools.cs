@@ -74,7 +74,7 @@ namespace Netus2_DatabaseConnection.utilityTools
             return enumerations;
         }
 
-        public static Config ReadConfig(string configName, bool? isForStudents, bool? isForStaff)
+        public static Config ReadConfig(string configName, bool isForStudents, bool isForStaff)
         {
             IConnectable connection = DbConnectionFactory.GetNetus2Connection();
 
@@ -84,18 +84,12 @@ namespace Netus2_DatabaseConnection.utilityTools
             
             sql.Append("AND name = @name ");
             parameters.Add(new SqlParameter("@name", configName));
-            
-            if(isForStudents != null)
-            {
-                sql.Append("AND is_for_student = @is_for_student ");
-                parameters.Add(new SqlParameter("@is_for_student", isForStudents));
-            }
 
-            if(isForStaff != null)
-            {
-                sql.Append("AND is_for_staff = @is_for_staff");
-                parameters.Add(new SqlParameter("@is_for_staff", isForStaff));
-            }
+            sql.Append("AND is_for_student = @is_for_student ");
+            parameters.Add(new SqlParameter("@is_for_student", isForStudents));
+
+            sql.Append("AND is_for_staff = @is_for_staff");
+            parameters.Add(new SqlParameter("@is_for_staff", isForStaff));
 
             DataTable dtConfig = DataTableFactory.CreateDataTable_Netus2_Config();
             dtConfig = connection.ReadIntoDataTable(sql.ToString(), dtConfig, parameters);
@@ -137,13 +131,13 @@ namespace Netus2_DatabaseConnection.utilityTools
                             if (row[columnName] != DBNull.Value)
                                 config.IsForStudents = (bool)row[columnName];
                             else
-                                config.IsForStudents = null;
+                                config.IsForStudents = false;
                             break;
                         case "is_for_staff":
                             if (row[columnName] != DBNull.Value)
                                 config.IsForStaff = (bool)row[columnName];
                             else
-                                config.IsForStaff = null;
+                                config.IsForStaff = false;
                             break;
                         case "descript":
                             if (row[columnName] != DBNull.Value)

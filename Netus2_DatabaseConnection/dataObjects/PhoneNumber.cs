@@ -7,14 +7,13 @@ namespace Netus2_DatabaseConnection.dataObjects
     {
         public int Id { get; set; }
         public string PhoneNumberValue { get; set; }
-        public Enumeration IsPrimary { get; set; }
+        public bool IsPrimary { get; set; }
         public Enumeration PhoneType { get; set; }
 
         public PhoneNumber(string phoneNumberValue, Enumeration phoneType)
         {
             Id = -1;
             PhoneNumberValue = phoneNumberValue;
-            IsPrimary = Enum_True_False.values["unset"];
             PhoneType = phoneType;
         }
 
@@ -22,7 +21,7 @@ namespace Netus2_DatabaseConnection.dataObjects
         {
             StringBuilder strPhoneNumber = new StringBuilder();
             strPhoneNumber.Append("Phone Number: " + PhoneNumberValue + "\n");
-            strPhoneNumber.Append("Is Primary: " + IsPrimary.Netus2Code + "\n");
+            strPhoneNumber.Append("Is Primary: " + IsPrimary + "\n");
             strPhoneNumber.Append("Phone Type: " + PhoneType.Netus2Code);
 
             return strPhoneNumber.ToString();

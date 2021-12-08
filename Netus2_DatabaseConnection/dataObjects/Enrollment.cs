@@ -13,11 +13,12 @@ namespace Netus2_DatabaseConnection.dataObjects
         public Enumeration GradeLevel { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public Enumeration IsPrimary { get; set; }
+        public bool IsPrimary { get; set; }
 
         public Enrollment(AcademicSession academicSession)
         {
             Id = -1;
+            AcademicSession = academicSession;
             ClassesEnrolled = new List<ClassEnrolled>();
         }
 
@@ -32,7 +33,7 @@ namespace Netus2_DatabaseConnection.dataObjects
             strEnrollment.Append("Start Date: " + StartDate + "\n");
             strEnrollment.Append("End Date: " + EndDate + "\n");
             if(IsPrimary != null)
-                strEnrollment.Append("Is Primary: " + IsPrimary.Netus2Code + "\n");
+                strEnrollment.Append("Is Primary: " + IsPrimary + "\n");
 
             return strEnrollment.ToString();
         }

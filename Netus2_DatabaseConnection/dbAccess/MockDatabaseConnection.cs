@@ -123,10 +123,12 @@ namespace Netus2_DatabaseConnection.dbAccess
                 {
                     DataRow row = dtConfig.NewRow();
                     row["config_id"] = -1;
-                    row["enum_config_id"] = -1;
-                    row["config_value"] = "-1";
-                    row["is_for_student_id"] = -1;
-                    row["is_for_staff_id"] = -1;
+                    row["type"] = "SQL";
+                    row["name"] = "Test";
+                    row["value"] = "1";
+                    row["is_for_student"] = false;
+                    row["is_for_staff"] = false;
+                    row["descript"] = "Only used for unit tests";
                     dtConfig.Rows.Add(row);
                 }
 
@@ -1059,7 +1061,7 @@ namespace Netus2_DatabaseConnection.dbAccess
 
             testEnum = new Enumeration();
             testEnum.Netus2Code = "student id";
-            testEnum.SisCode = "suniq";
+            testEnum.SisCode = "unique_id";
             testEnum.Descript = "Enum_Identifier";
             testEnums.Add(testEnum);
 

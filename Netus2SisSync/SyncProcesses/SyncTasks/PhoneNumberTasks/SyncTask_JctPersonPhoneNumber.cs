@@ -29,8 +29,8 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.PhoneNumberTasks
             try
             {
                 string sisPhoneNubmer = row["phone_number"].ToString() == "" ? null : row["phone_number"].ToString();
-                string sisPersonId = row["person_id"].ToString() == "" ? null : row["person_id"].ToString();
-                Enumeration sisIsPrimaryId = row["is_primary_id"].ToString() == "" ? null : Enum_True_False.GetEnumFromSisCode(row["is_primary_id"].ToString().ToLower());
+                string sisPersonId = row["unique_id"].ToString() == "" ? null : row["unique_id"].ToString();
+                bool sisIsPrimary = row["is_primary"].ToString() == "" ? false : (bool)row["is_primary"];
 
                 IPersonDao personDaoImpl = DaoImplFactory.GetPersonDaoImpl();
                 personDaoImpl.SetTaskId(this.Id);
@@ -50,10 +50,10 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.PhoneNumberTasks
                 DataRow foundJctPersonPhoneNumberDao = jctPersonPhoneNumberDaoImpl.Read(person.Id, phoneNumber.Id, _netus2Connection);
 
                 if (foundJctPersonPhoneNumberDao == null)
-                    jctPersonPhoneNumberDaoImpl.Write(person.Id, phoneNumber.Id, sisIsPrimaryId.Id, _netus2Connection);
+                    jctPersonPhoneNumberDaoImpl.Write(person.Id, phoneNumber.Id, sisIsPrimary, _netus2Connection);
                 else
-                    if (Enum_True_False.GetEnumFromId((int)foundJctPersonPhoneNumberDao["is_primary_id"]) != sisIsPrimaryId)
-                        jctPersonPhoneNumberDaoImpl.Update(person.Id, phoneNumber.Id, sisIsPrimaryId.Id, _netus2Connection);
+                    if ((bool)foundJctPersonPhoneNumberDao["is_primary"] != sisIsPrimary)
+                        jctPersonPhoneNumberDaoImpl.Update(person.Id, phoneNumber.Id, sisIsPrimary, _netus2Connection);
 
                 jctPersonPhoneNumberDaoImpl.Write_ToTempTable(person.Id, phoneNumber.Id, _netus2Connection);
 
