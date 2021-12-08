@@ -330,7 +330,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
                 if(foundPhoneNumber != null)
                 {
-                    foundPhoneNumber.IsPrimary = Enum_True_False.GetEnumFromId((int)foundJctPersonPhoneNumberDao["is_primary_id"]);
+                    foundPhoneNumber.IsPrimary = (bool)foundJctPersonPhoneNumberDao["is_primary"];
                     foundPhoneNumbers.Add(foundPhoneNumber);
                 }
             }
@@ -352,7 +352,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 Address foundAddress = addressDaoImpl.Read_UsingAddressId(addressId, connection);
                 if(foundAddress != null)
                 {
-                    foundAddress.IsPrimary = Enum_True_False.GetEnumFromId((int)foundJctPersonAddressDao["is_primary_id"]);
+                    foundAddress.IsPrimary = (bool)foundJctPersonAddressDao["is_primary"];
                     foundAddresss.Add(foundAddress);
                 }
             }
@@ -374,7 +374,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 Email foundEmail = emailDaoImpl.Read_UsingEmailId(emailId, connection);
                 if (foundEmail != null)
                 {
-                    foundEmail.IsPrimary = Enum_True_False.GetEnumFromId((int)foundJctPersonEmailDao["is_primary_id"]);
+                    foundEmail.IsPrimary = (bool)foundJctPersonEmailDao["is_primary"];
                     foundEmails.Add(foundEmail);
                 }
             }
@@ -592,13 +592,13 @@ namespace Netus2_DatabaseConnection.daoImplementations
                     DataRow foundJctPersonAddress = jctPersonAddressDaoImpl.Read(personId, passedInAddress.Id, connection);
 
                     if (foundJctPersonAddress == null)
-                        foundJctPersonAddress = jctPersonAddressDaoImpl.Write(personId, passedInAddress.Id, passedInAddress.IsPrimary.Id, passedInAddress.AddressType.Id, connection);
+                        foundJctPersonAddress = jctPersonAddressDaoImpl.Write(personId, passedInAddress.Id, passedInAddress.IsPrimary, passedInAddress.AddressType.Id, connection);
 
                     Address foundAddress = addressDaoImpl.Read_UsingAddressId(passedInAddress.Id, connection);
 
                     if(foundAddress != null)
                     {
-                        foundAddress.IsPrimary = Enum_True_False.GetEnumFromId((int)foundJctPersonAddress["is_primary_id"]);
+                        foundAddress.IsPrimary = (bool)foundJctPersonAddress["is_primary"];
                         addressesToBeReturned.Add(foundAddress);
                     }                    
                 }
@@ -633,13 +633,13 @@ namespace Netus2_DatabaseConnection.daoImplementations
                     DataRow foundJctPersonEmail = jctPersonEmailDaoImpl.Read(personId, passedInEmail.Id, connection);
 
                     if (foundJctPersonEmail == null)
-                        foundJctPersonEmail = jctPersonEmailDaoImpl.Write(personId, passedInEmail.Id, passedInEmail.IsPrimary.Id, connection);
+                        foundJctPersonEmail = jctPersonEmailDaoImpl.Write(personId, passedInEmail.Id, passedInEmail.IsPrimary, connection);
 
                     Email foundEmail = emailDaoImpl.Read_UsingEmailId(passedInEmail.Id, connection);
 
                     if (foundEmail != null)
                     {
-                        foundEmail.IsPrimary = Enum_True_False.GetEnumFromId((int)foundJctPersonEmail["is_primary_id"]);
+                        foundEmail.IsPrimary = (bool)foundJctPersonEmail["is_primary"];
                         emailsToBeReturned.Add(foundEmail);
                     }
                 }
@@ -747,13 +747,13 @@ namespace Netus2_DatabaseConnection.daoImplementations
                     DataRow foundJctPersonPhoneNumber = jctPersonPhoneNumberDaoImpl.Read(personId, passedInPhoneNumber.Id, connection);
 
                     if (foundJctPersonPhoneNumber == null)
-                        foundJctPersonPhoneNumber = jctPersonPhoneNumberDaoImpl.Write(personId, passedInPhoneNumber.Id, passedInPhoneNumber.IsPrimary.Id, connection);
+                        foundJctPersonPhoneNumber = jctPersonPhoneNumberDaoImpl.Write(personId, passedInPhoneNumber.Id, passedInPhoneNumber.IsPrimary, connection);
 
                     PhoneNumber foundPhoneNumber = phoneNumberDaoImpl.Read_WithPhoneNumberId(passedInPhoneNumber.Id, connection);
 
                     if(foundPhoneNumber != null)
                     {
-                        foundPhoneNumber.IsPrimary = Enum_True_False.GetEnumFromId((int)foundJctPersonPhoneNumber["is_primary_id"]);
+                        foundPhoneNumber.IsPrimary = (bool)foundJctPersonPhoneNumber["is_primary"];
                         phoneNumbersToBeReturned.Add(foundPhoneNumber);
                     }
                 }

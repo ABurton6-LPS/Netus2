@@ -102,7 +102,7 @@ namespace Netus2_Test.Integration
             //Create AddressTeacher
             //Add the AddressTeacher to the Teacher and update the Teacher
             Address addressTeacher = new Address("123 Main", null, "City", Enum_State_Province.values["mi"], "12345");
-            addressTeacher.IsPrimary = Enum_True_False.values["true"];
+            addressTeacher.IsPrimary = true;
             addressTeacher = addressDaoImpl.Write(addressTeacher, connection);
             teacher.Addresses.Add(addressTeacher);
             personDaoImpl.Update(teacher, connection);
@@ -113,7 +113,7 @@ namespace Netus2_Test.Integration
             //Add Employment Session to School
             //You must create the Employment Session with the Organization (School), so no need to update the School
             //You must write the Employment Session with the Person Id, so no need to update the Person
-            EmploymentSession employmentSession = new EmploymentSession(Enum_True_False.values["true"], school);
+            EmploymentSession employmentSession = new EmploymentSession(true, school);
             employmentSession = employmentSessionDaoImpl.Write(employmentSession, teacher.Id, connection);
             employmentSession = employmentSessionDaoImpl.Read_AllWithOrganizationId(school.Id, connection)[0];
             Assert.AreEqual(school.Id, employmentSession.Organization.Id);
@@ -178,7 +178,7 @@ namespace Netus2_Test.Integration
             //Create AddressStudent
             //Add the AddressStudent to the Student and update the Student
             Address addressStudent = new Address("456 Main", null, "City", Enum_State_Province.values["mi"], "12345");
-            addressStudent.IsPrimary = Enum_True_False.values["true"];
+            addressStudent.IsPrimary = true;
             addressStudent = addressDaoImpl.Write(addressStudent, connection);
             student.Addresses.Add(addressStudent);
             personDaoImpl.Update(student, connection);
@@ -192,7 +192,7 @@ namespace Netus2_Test.Integration
             enrollment.GradeLevel = Enum_Grade.values["6"];
             enrollment.StartDate = new DateTime(2020, 9, 6);
             enrollment.EndDate = new DateTime(2021, 6, 1);
-            enrollment.IsPrimary = Enum_True_False.values["true"];
+            enrollment.IsPrimary = true;
             enrollment = enrollmentDaoImpl.Write(enrollment, student.Id, connection);
             Assert.IsTrue(enrollment.Id > 0);
             student = personDaoImpl.Read(student, connection)[0];
@@ -231,9 +231,9 @@ namespace Netus2_Test.Integration
             //Create Phone Number
             //You must write the Phone Number with the Student Id, so no need to update the Student
             PhoneNumber phoneNumber = new PhoneNumber("8001231234", Enum_Phone.values["cell"]);
-            phoneNumber.IsPrimary = Enum_True_False.values["true"];
+            phoneNumber.IsPrimary = true;
             phoneNumber = phoneNumberDaoImpl.Write(phoneNumber, connection);
-            jctPersonPhoneNumberDaoImpl.Write(student.Id, phoneNumber.Id, phoneNumber.IsPrimary.Id, connection);
+            jctPersonPhoneNumberDaoImpl.Write(student.Id, phoneNumber.Id, phoneNumber.IsPrimary, connection);
             student = personDaoImpl.Read(student, connection)[0];
             Assert.IsTrue(phoneNumber.Id > 0);
             Assert.AreEqual(phoneNumber.Id, student.PhoneNumbers[0].Id);

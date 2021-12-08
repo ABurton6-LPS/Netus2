@@ -30,7 +30,7 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.EnrollmentTasks
                 string sisPersonId = row["person_id"].ToString() == "" ? null : row["person_id"].ToString();
                 string sisAcademicSessionId = row["academic_session_id"].ToString() == "" ? null : row["academic_session_id"].ToString();
                 Enumeration sisGrade = row["enum_grade_id"].ToString() == "" ? null : Enum_Grade.GetEnumFromSisCode(row["enum_grade_id"].ToString());
-                Enumeration sisIsPrimary = row["is_primary_id"].ToString() == "" ? null : Enum_True_False.GetEnumFromSisCode(row["is_primary_id"].ToString());
+                bool sisIsPrimary = row["is_primary"].ToString() == "" ? false : (bool)row["is_primary"];
 
                 DateTime sisStartDate = new DateTime();
                 if (row["start_date"] != DBNull.Value)

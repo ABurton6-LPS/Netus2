@@ -33,11 +33,11 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AddressTasks
                 string sisPostalCode = row["postal_code"].ToString() == "" ? null : row["postal_code"].ToString();
                 string sisPersonId = row["unique_id"].ToString() == "" ? null : row["unique_id"].ToString();
                 Enumeration sisAddressType = row["enum_address_id"].ToString() == "" ? null : Enum_Address.GetEnumFromSisCode(row["enum_address_id"].ToString().ToLower());
-                Enumeration sisIsPrimary = null;
+                bool sisIsPrimary = false;
                 if (sisAddressType == Enum_Address.values["home"])
-                    sisIsPrimary = Enum_True_False.values["true"];
+                    sisIsPrimary = true;
                 else
-                    sisIsPrimary = Enum_True_False.values["false"];
+                    sisIsPrimary = false;
 
                 IPersonDao personDaoImpl = DaoImplFactory.GetPersonDaoImpl();
                 personDaoImpl.SetTaskId(this.Id);
@@ -61,11 +61,11 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AddressTasks
                     DataRow foundJctPersonAddressDao = jctPersonAddressDaoImpl.Read(person.Id, address.Id, _netus2Connection);
 
                     if (foundJctPersonAddressDao == null)
-                        jctPersonAddressDaoImpl.Write(person.Id, address.Id, sisIsPrimary.Id, sisAddressType.Id, _netus2Connection);
+                        jctPersonAddressDaoImpl.Write(person.Id, address.Id, sisIsPrimary, sisAddressType.Id, _netus2Connection);
                     else
-                        if (((int)foundJctPersonAddressDao["is_primary_id"] != sisIsPrimary.Id) ||
+                        if (((bool)foundJctPersonAddressDao["is_primary"] != sisIsPrimary) ||
                             ((int)foundJctPersonAddressDao["enum_address_id"] != sisAddressType.Id))
-                            jctPersonAddressDaoImpl.Update(person.Id, address.Id, sisIsPrimary.Id, sisAddressType.Id, _netus2Connection);
+                            jctPersonAddressDaoImpl.Update(person.Id, address.Id, sisIsPrimary, sisAddressType.Id, _netus2Connection);
 
                     jctPersonAddressDaoImpl.Write_ToTempTable(person.Id, address.Id, _netus2Connection);
                 }

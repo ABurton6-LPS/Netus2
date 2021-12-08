@@ -5,11 +5,11 @@ namespace Netus2_DatabaseConnection.dataObjects
 {
     public class EmploymentSession : Session
     {
-        public Enumeration IsPrimary { get; set; }
+        public bool IsPrimary { get; set; }
 
         public Enumeration SessionType;
 
-        public EmploymentSession(Enumeration isPrimary, Organization organization) : base(organization)
+        public EmploymentSession(bool isPrimary, Organization organization) : base(organization)
         {
             IsPrimary = isPrimary;
             SessionType = Enum_Session.values["employment"];
@@ -18,7 +18,7 @@ namespace Netus2_DatabaseConnection.dataObjects
         public override string ToString()
         {
             StringBuilder strEmpSes = new StringBuilder();
-            strEmpSes.Append("Is Primary: " + IsPrimary.Netus2Code + "\n");
+            strEmpSes.Append("Is Primary: " + IsPrimary + "\n");
             strEmpSes.Append("Session Type: " + SessionType.Netus2Code + "\n");
             strEmpSes.Append(base.ToString());
 

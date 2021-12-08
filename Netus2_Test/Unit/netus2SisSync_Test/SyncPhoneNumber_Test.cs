@@ -97,7 +97,7 @@ namespace Netus2_Test.Unit.SyncProcess
             SisJctPersonPhoneNumberTestData tstData = new SisJctPersonPhoneNumberTestData();
             tstData.PhoneNumber = null;
             tstData.PersonId = null;
-            tstData.IsPrimaryId = null;
+            tstData.IsPrimary = false;
 
             List<SisJctPersonPhoneNumberTestData> tstDataSet = new List<SisJctPersonPhoneNumberTestData>();
             tstDataSet.Add(tstData);
@@ -112,8 +112,8 @@ namespace Netus2_Test.Unit.SyncProcess
             Assert.NotNull(results);
             Assert.AreEqual(tstDataSet.Count, results.Rows.Count);
             Assert.AreEqual(emptyString, results.Rows[0]["phone_number"].ToString());
-            Assert.AreEqual(emptyString, results.Rows[0]["person_id"].ToString());            
-            Assert.AreEqual(emptyString, results.Rows[0]["is_primary_id"].ToString());
+            Assert.AreEqual(emptyString, results.Rows[0]["unique_id"].ToString());            
+            Assert.AreEqual(tstData.IsPrimary.ToString(), results.Rows[0]["is_primary"].ToString());
         }
 
         [TestCase]
@@ -122,7 +122,7 @@ namespace Netus2_Test.Unit.SyncProcess
             SisJctPersonPhoneNumberTestData tstData = new SisJctPersonPhoneNumberTestData();
             tstData.PhoneNumber = tdBuilder.teacher.PhoneNumbers[0].PhoneNumberValue;
             tstData.PersonId = tdBuilder.teacher.UniqueIdentifiers[0].Identifier;
-            tstData.IsPrimaryId = tdBuilder.teacher.PhoneNumbers[0].IsPrimary.SisCode;
+            tstData.IsPrimary = tdBuilder.teacher.PhoneNumbers[0].IsPrimary;
 
             List<SisJctPersonPhoneNumberTestData> tstDataSet = new List<SisJctPersonPhoneNumberTestData>();
             tstDataSet.Add(tstData);
@@ -136,8 +136,8 @@ namespace Netus2_Test.Unit.SyncProcess
             Assert.NotNull(results);
             Assert.AreEqual(tstDataSet.Count, results.Rows.Count);
             Assert.AreEqual(tstData.PhoneNumber, results.Rows[0]["phone_number"].ToString());
-            Assert.AreEqual(tstData.PersonId, results.Rows[0]["person_id"].ToString());
-            Assert.AreEqual(tstData.IsPrimaryId, results.Rows[0]["is_primary_id"].ToString());
+            Assert.AreEqual(tstData.PersonId, results.Rows[0]["unique_id"].ToString());
+            Assert.AreEqual(tstData.IsPrimary.ToString(), results.Rows[0]["is_primary"].ToString());
         }
 
         [TestCase]
@@ -213,7 +213,7 @@ namespace Netus2_Test.Unit.SyncProcess
             SisJctPersonPhoneNumberTestData tstData = new SisJctPersonPhoneNumberTestData();
             tstData.PhoneNumber = tdBuilder.teacher.PhoneNumbers[0].PhoneNumberValue;
             tstData.PersonId = tdBuilder.teacher.UniqueIdentifiers[0].Identifier;
-            tstData.IsPrimaryId = tdBuilder.teacher.PhoneNumbers[0].IsPrimary.SisCode;
+            tstData.IsPrimary = tdBuilder.teacher.PhoneNumbers[0].IsPrimary;
 
             List<SisJctPersonPhoneNumberTestData> tstDataSet = new List<SisJctPersonPhoneNumberTestData>();
             tstDataSet.Add(tstData);
@@ -238,7 +238,7 @@ namespace Netus2_Test.Unit.SyncProcess
             SisJctPersonPhoneNumberTestData tstData = new SisJctPersonPhoneNumberTestData();
             tstData.PhoneNumber = tdBuilder.teacher.PhoneNumbers[0].PhoneNumberValue;
             tstData.PersonId = tdBuilder.teacher.UniqueIdentifiers[0].Identifier;
-            tstData.IsPrimaryId = tdBuilder.teacher.PhoneNumbers[0].IsPrimary.SisCode;
+            tstData.IsPrimary = tdBuilder.teacher.PhoneNumbers[0].IsPrimary;
 
             List<SisJctPersonPhoneNumberTestData> tstDataSet = new List<SisJctPersonPhoneNumberTestData>();
             tstDataSet.Add(tstData);
@@ -263,7 +263,7 @@ namespace Netus2_Test.Unit.SyncProcess
             SisJctPersonPhoneNumberTestData tstData = new SisJctPersonPhoneNumberTestData();
             tstData.PhoneNumber = tdBuilder.teacher.PhoneNumbers[0].PhoneNumberValue;
             tstData.PersonId = tdBuilder.teacher.UniqueIdentifiers[0].Identifier;
-            tstData.IsPrimaryId = Enum_True_False.values["true"].SisCode;
+            tstData.IsPrimary = true;
 
             List<SisJctPersonPhoneNumberTestData> tstDataSet = new List<SisJctPersonPhoneNumberTestData>();
             tstDataSet.Add(tstData);
@@ -299,8 +299,8 @@ namespace Netus2_Test.Unit.SyncProcess
             {
                 DataRow row = tdPhoneNumer.NewRow();
                 row["phone_number"] = tstData.PhoneNumber;
-                row["person_id"] = tstData.PersonId;
-                row["is_primary_id"] = tstData.IsPrimaryId;
+                row["unique_id"] = tstData.PersonId;
+                row["is_primary"] = tstData.IsPrimary;
                 tdPhoneNumer.Rows.Add(row);
             }
 
@@ -363,7 +363,7 @@ namespace Netus2_Test.Unit.SyncProcess
                     {
                         values[0] = tstDataSet[count].PhoneNumber;
                         values[1] = tstDataSet[count].PersonId;
-                        values[2] = tstDataSet[count].IsPrimaryId;
+                        values[2] = tstDataSet[count].IsPrimary;
                     }
                 ).Returns(count);
 
@@ -375,15 +375,15 @@ namespace Netus2_Test.Unit.SyncProcess
                 .Returns(() => typeof(string));
 
             reader.Setup(x => x.GetName(1))
-                .Returns(() => "person_id");
-            reader.Setup(x => x.GetOrdinal("person_id"))
+                .Returns(() => "unique_id");
+            reader.Setup(x => x.GetOrdinal("unique_id"))
                 .Returns(() => 1);
             reader.Setup(x => x.GetFieldType(1))
                 .Returns(() => typeof(string));
 
             reader.Setup(x => x.GetName(2))
-                .Returns(() => "is_primary_id");
-            reader.Setup(x => x.GetOrdinal("is_primary_id"))
+                .Returns(() => "is_primary");
+            reader.Setup(x => x.GetOrdinal("is_primary"))
                 .Returns(() => 2);
             reader.Setup(x => x.GetFieldType(2))
                 .Returns(() => typeof(string));
@@ -402,6 +402,6 @@ namespace Netus2_Test.Unit.SyncProcess
     {
         public string PhoneNumber { get; set; }
         public string PersonId { get; set; }
-        public string IsPrimaryId { get; set; }
+        public bool IsPrimary { get; set; }
     }
 }

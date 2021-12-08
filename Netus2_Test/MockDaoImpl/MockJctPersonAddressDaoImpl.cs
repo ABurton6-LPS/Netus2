@@ -38,14 +38,14 @@ namespace Netus2_Test.MockDaoImpl
             {
                 row["person_id"] = tdBuilder.teacher.Id;
                 row["address_id"] = tdBuilder.teacher.Addresses[0].Id;
-                row["is_primary_id"] = tdBuilder.teacher.Addresses[0].IsPrimary.Id;
+                row["is_primary"] = tdBuilder.teacher.Addresses[0].IsPrimary;
                 row["enum_address_id"] = tdBuilder.teacher.Addresses[0].AddressType.Id;
             }
             else if(personId == tdBuilder.student.Id)
             {
                 row["person_id"] = tdBuilder.student.Id;
                 row["address_id"] = tdBuilder.student.Addresses[0].Id;
-                row["is_primary_id"] = tdBuilder.student.Addresses[0].IsPrimary.Id;
+                row["is_primary"] = tdBuilder.student.Addresses[0].IsPrimary;
                 row["enum_address_id"] = tdBuilder.student.Addresses[0].AddressType.Id;
             }
 
@@ -62,7 +62,7 @@ namespace Netus2_Test.MockDaoImpl
             DataRow row = DataTableFactory.CreateDataTable_Netus2_JctPersonAddress().NewRow();
             row["person_id"] = tdBuilder.student.Id;
             row["address_id"] = tdBuilder.student.Addresses[0].Id;
-            row["is_primary_id"] = tdBuilder.student.Addresses[0].IsPrimary.Id;
+            row["is_primary"] = tdBuilder.student.Addresses[0].IsPrimary;
 
             List<DataRow> results = new List<DataRow>();
             results.Add(row);
@@ -81,7 +81,7 @@ namespace Netus2_Test.MockDaoImpl
             DataRow row = DataTableFactory.CreateDataTable_Netus2_JctPersonAddress().NewRow();
             row["person_id"] = tdBuilder.student.Id;
             row["address_id"] = addressId;
-            row["is_primary_id"] = tdBuilder.student.Addresses[0].IsPrimary.Id;
+            row["is_primary"] = tdBuilder.student.Addresses[0].IsPrimary;
 
             if (_shouldReadReturnData)
                 list.Add(row);
@@ -97,7 +97,7 @@ namespace Netus2_Test.MockDaoImpl
             DataRow row = DataTableFactory.CreateDataTable_Netus2_JctPersonAddress().NewRow();
             row["person_id"] = personId;
             row["address_id"] = tdBuilder.student.Addresses[0].Id;
-            row["is_primary_id"] = tdBuilder.student.Addresses[0].IsPrimary.Id;
+            row["is_primary"] = tdBuilder.student.Addresses[0].IsPrimary;
 
             if (_shouldReadReturnData)
                 list.Add(row);
@@ -105,19 +105,19 @@ namespace Netus2_Test.MockDaoImpl
             return list;
         }
 
-        public void Update(int personId, int addressId, int isPrimaryId, int enumAddressId, IConnectable connection)
+        public void Update(int personId, int addressId, bool isPrimary, int enumAddressId, IConnectable connection)
         {
             WasCalled_Update = true;
         }
 
-        public DataRow Write(int personId, int addressId, int isPrimary, int enumAddressId, IConnectable connection)
+        public DataRow Write(int personId, int addressId, bool isPrimary, int enumAddressId, IConnectable connection)
         {
             WasCalled_Write = true;
 
             DataRow row = DataTableFactory.CreateDataTable_Netus2_JctPersonAddress().NewRow();
             row["person_id"] = personId;
             row["address_id"] = addressId;
-            row["is_primary_id"] = isPrimary;
+            row["is_primary"] = isPrimary;
             row["enum_address_id"] = enumAddressId;
 
             return row;

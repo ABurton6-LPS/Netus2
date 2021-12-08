@@ -64,7 +64,7 @@ namespace Netus2_Test.Unit.SyncProcess
             Assert.NotNull(results);
             Assert.AreEqual(tstDataSet.Count, results.Rows.Count);
             Assert.AreEqual(emptyString, results.Rows[0]["person_type"].ToString());
-            Assert.AreEqual(emptyString, results.Rows[0]["SIS_ID"].ToString());
+            Assert.AreEqual(emptyString, results.Rows[0]["unique_id"].ToString());
             Assert.AreEqual(emptyString, results.Rows[0]["first_name"].ToString());
             Assert.AreEqual(emptyString, results.Rows[0]["middle_name"].ToString());
             Assert.AreEqual(emptyString, results.Rows[0]["last_name"].ToString());
@@ -119,7 +119,7 @@ namespace Netus2_Test.Unit.SyncProcess
             Assert.NotNull(results);
             Assert.AreEqual(tstDataSet.Count, results.Rows.Count);
             Assert.AreEqual(tstDataSet[0].PersonType, results.Rows[0]["person_type"]);
-            Assert.AreEqual(tstDataSet[0].SisId, results.Rows[0]["SIS_ID"]);
+            Assert.AreEqual(tstDataSet[0].SisId, results.Rows[0]["unique_id"]);
             Assert.AreEqual(tstDataSet[0].FirstName, results.Rows[0]["first_name"]);
             Assert.AreEqual(tstDataSet[0].MiddleName, results.Rows[0]["middle_name"]);
             Assert.AreEqual(tstDataSet[0].LastName, results.Rows[0]["last_name"]);
@@ -131,7 +131,7 @@ namespace Netus2_Test.Unit.SyncProcess
             Assert.AreEqual(tstDataSet[0].LoginPw, results.Rows[0]["login_pw"]);
 
             Assert.AreEqual(tstDataSet[1].PersonType, results.Rows[1]["person_type"]);
-            Assert.AreEqual(tstDataSet[1].SisId, results.Rows[1]["SIS_ID"]);
+            Assert.AreEqual(tstDataSet[1].SisId, results.Rows[1]["unique_id"]);
             Assert.AreEqual(tstDataSet[1].FirstName, results.Rows[1]["first_name"]);
             Assert.AreEqual(tstDataSet[1].MiddleName, results.Rows[1]["middle_name"]);
             Assert.AreEqual(tstDataSet[1].LastName, results.Rows[1]["last_name"]);
@@ -505,7 +505,7 @@ namespace Netus2_Test.Unit.SyncProcess
             {
                 DataRow row = dtPerson.NewRow();
                 row["person_type"] = tstData.PersonType;
-                row["SIS_ID"] = tstData.SisId;
+                row["unique_id"] = tstData.SisId;
                 row["first_name"] = tstData.FirstName;
                 row["middle_name"] = tstData.MiddleName;
                 row["last_name"] = tstData.LastName;
@@ -559,8 +559,8 @@ namespace Netus2_Test.Unit.SyncProcess
                 .Returns(() => typeof(string));
 
             reader.Setup(x => x.GetName(1))
-                .Returns(() => "sis_id");
-            reader.Setup(x => x.GetOrdinal("sis_id"))
+                .Returns(() => "unique_id");
+            reader.Setup(x => x.GetOrdinal("unique_id"))
                 .Returns(() => 1);
             reader.Setup(x => x.GetFieldType(1))
                 .Returns(() => typeof(string));

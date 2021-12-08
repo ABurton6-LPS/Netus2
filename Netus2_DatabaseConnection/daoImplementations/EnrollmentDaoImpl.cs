@@ -138,10 +138,10 @@ namespace Netus2_DatabaseConnection.daoImplementations
                     parameters.Add(new SqlParameter("@end_date", row["end_date"]));
                 }
 
-                if (row["is_primary_id"] != DBNull.Value)
+                if (row["is_primary"] != DBNull.Value)
                 {
-                    sql.Append("AND is_primary_id = @is_primary_id");
-                    parameters.Add(new SqlParameter("@is_primary_id", row["is_primary_id"]));
+                    sql.Append("AND is_primary = @is_primary");
+                    parameters.Add(new SqlParameter("@is_primary", row["is_primary"]));
                 }
             }
 
@@ -256,13 +256,13 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 else
                     sql.Append("end_date = NULL, ");
 
-                if (row["is_primary_id"] != DBNull.Value)
+                if (row["is_primary"] != DBNull.Value)
                 {
-                    sql.Append("is_primary_id = @is_primary_id, ");
-                    parameters.Add(new SqlParameter("@is_primary_id", row["is_primary_id"]));
+                    sql.Append("is_primary = @is_primary, ");
+                    parameters.Add(new SqlParameter("@is_primary", row["is_primary"]));
                 }
                 else
-                    sql.Append("is_primary_id = NULL, ");
+                    sql.Append("is_primary = NULL, ");
 
                 sql.Append("changed = dbo.CURRENT_DATETIME(), ");
                 sql.Append("changed_by = " + (_taskId != null ? _taskId.ToString() : "'Netus2'") + " ");
@@ -324,10 +324,10 @@ namespace Netus2_DatabaseConnection.daoImplementations
             else
                 sqlValues.Append("NULL, ");
 
-            if (row["is_primary_id"] != DBNull.Value)
+            if (row["is_primary"] != DBNull.Value)
             {
-                sqlValues.Append("@is_primary_id, ");
-                parameters.Add(new SqlParameter("@is_primary_id", row["is_primary_id"]));
+                sqlValues.Append("@is_primary, ");
+                parameters.Add(new SqlParameter("@is_primary", row["is_primary"]));
             }
             else
                 sqlValues.Append("NULL, ");
@@ -336,7 +336,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
             sqlValues.Append(_taskId != null ? _taskId.ToString() : "'Netus2'");
 
             string sql = "INSERT INTO enrollment " +
-                "(person_id, academic_session_id, enum_grade_id, start_date, end_date, is_primary_id, created, created_by) " +
+                "(person_id, academic_session_id, enum_grade_id, start_date, end_date, is_primary, created, created_by) " +
                 "VALUES (" + sqlValues.ToString() + ")";
 
             row["enrollment_id"] = connection.InsertNewRecord(sql, parameters);

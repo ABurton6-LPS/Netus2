@@ -667,11 +667,11 @@ namespace Netus2_DatabaseConnection.utilityTools
                             else
                                 logJctPersonPhoneNumber.phone_number_id = -1;
                             break;
-                        case "is_primary_id":
+                        case "is_primary":
                             if (row[columnName] != DBNull.Value)
-                                logJctPersonPhoneNumber.set_IsPrimary((int)row[columnName]);
+                                logJctPersonPhoneNumber.IsPrimary = (bool)row[columnName];
                             else
-                                logJctPersonPhoneNumber.IsPrimary = null;
+                                logJctPersonPhoneNumber.IsPrimary = false;
                             break;
                         case "log_date":
                             if (row[columnName] != DBNull.Value)
@@ -964,11 +964,11 @@ namespace Netus2_DatabaseConnection.utilityTools
                             else
                                 logJctPersonAddress.address_id = -1;
                             break;
-                        case "is_primary_id":
+                        case "is_primary":
                             if (row[columnName] != DBNull.Value)
-                                logJctPersonAddress.set_IsPrimary((int)row[columnName]);
+                                logJctPersonAddress.IsPrimary = (bool)row[columnName];
                             else
-                                logJctPersonAddress.IsPrimary = null;
+                                logJctPersonAddress.IsPrimary = false;
                             break;
                         case "enum_address_id":
                             if (row[columnName] != DBNull.Value)
@@ -1130,11 +1130,11 @@ namespace Netus2_DatabaseConnection.utilityTools
                             else
                                 logJctPersonEmail.email_id = -1;
                             break;
-                        case "is_primary_id":
+                        case "is_primary":
                             if (row[columnName] != DBNull.Value)
-                                logJctPersonEmail.set_IsPrimary((int)row[columnName]);
+                                logJctPersonEmail.IsPrimary = (bool)row[columnName];
                             else
-                                logJctPersonEmail.IsPrimary = null;
+                                logJctPersonEmail.IsPrimary = false;
                             break;
                         case "log_date":
                             if(row[columnName] != DBNull.Value)
@@ -1216,11 +1216,11 @@ namespace Netus2_DatabaseConnection.utilityTools
                             else
                                 logEmploymentSession.end_date = new DateTime();
                             break;
-                        case "is_primary_id":
+                        case "is_primary":
                             if (row[columnName] != DBNull.Value)
-                                logEmploymentSession.set_IsPrimary((int)row[columnName]);
+                                logEmploymentSession.IsPrimary = (bool)row[columnName];
                             else
-                                logEmploymentSession.IsPrimary = null;
+                                logEmploymentSession.IsPrimary = false;
                             break;
                         case "enum_session_id":
                             if (row[columnName] != DBNull.Value)
@@ -2276,11 +2276,11 @@ namespace Netus2_DatabaseConnection.utilityTools
                             else
                                 logEnrollment.end_date = new DateTime();
                             break;
-                        case "is_primary_id":
+                        case "is_primary":
                             if (row[columnName] != DBNull.Value)
-                                logEnrollment.set_IsPrimary((int)row[columnName]);
+                                logEnrollment.IsPrimary = (bool)row[columnName];
                             else
-                                logEnrollment.IsPrimary = null;
+                                logEnrollment.IsPrimary = false;
                             break;
                         case "created":
                             if (row[columnName] != DBNull.Value)

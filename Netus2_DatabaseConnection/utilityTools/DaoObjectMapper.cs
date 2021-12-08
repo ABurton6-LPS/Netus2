@@ -294,21 +294,6 @@ namespace Netus2_DatabaseConnection.utilityTools
             else
                 row["address_line_2"] = DBNull.Value;
 
-            if (address.Line3 != null)
-                row["address_line_3"] = address.Line3;
-            else
-                row["address_line_3"] = DBNull.Value;
-
-            if (address.Line4 != null)
-                row["address_line_4"] = address.Line4;
-            else
-                row["address_line_4"] = DBNull.Value;
-
-            if (address.Apartment != null)
-                row["apartment"] = address.Apartment;
-            else
-                row["apartment"] = DBNull.Value;
-
             if (address.City != null)
                 row["city"] = address.City;
             else
@@ -364,21 +349,6 @@ namespace Netus2_DatabaseConnection.utilityTools
                 address.Id = (int)row["address_id"];
             else
                 address.Id = -1;
-
-            if (row["address_line_3"] != DBNull.Value)
-                address.Line3 = (string)row["address_line_3"];
-            else
-                address.Line3 = null;
-
-            if (row["address_line_4"] != DBNull.Value)
-                address.Line4 = (string)row["address_line_4"];
-            else
-                address.Line4 = null;
-
-            if (row["apartment"] != DBNull.Value)
-                address.Apartment = (string)row["apartment"];
-            else
-                address.Apartment = null;
 
             if (row["enum_country_id"] != DBNull.Value)
                 address.Country = Enum_Country.GetEnumFromId((int)row["enum_country_id"]);
@@ -582,9 +552,9 @@ namespace Netus2_DatabaseConnection.utilityTools
                 row["end_date"] = DBNull.Value;
 
             if (employmentSession.IsPrimary != null)
-                row["is_primary_id"] = employmentSession.IsPrimary.Id;
+                row["is_primary"] = employmentSession.IsPrimary;
             else
-                row["is_primary_id"] = DBNull.Value;
+                row["is_primary"] = DBNull.Value;
 
             if (employmentSession.SessionType != null)
                 row["enum_session_id"] = employmentSession.SessionType.Id;
@@ -628,9 +598,9 @@ namespace Netus2_DatabaseConnection.utilityTools
                 row["end_date"] = new DateTime();
 
             if (employmentSession.IsPrimary != null)
-                row["is_primary_id"] = employmentSession.IsPrimary.Id;
+                row["is_primary"] = employmentSession.IsPrimary;
             else
-                row["is_primary_id"] = DBNull.Value;
+                row["is_primary"] = DBNull.Value;
 
             if (employmentSession.SessionType != null)
                 row["enum_session_id"] = employmentSession.SessionType.Id;
@@ -647,9 +617,9 @@ namespace Netus2_DatabaseConnection.utilityTools
 
         public EmploymentSession MapEmploymentSession(DataRow row, Organization org)
         {
-            Enumeration isPrimary = null;
-            if (row["is_primary_id"] != DBNull.Value)
-                isPrimary = Enum_True_False.GetEnumFromId((int)row["is_primary_id"]);
+            bool isPrimary = false;
+            if (row["is_primary"] != DBNull.Value)
+                isPrimary = (bool)row["is_primary"];
 
             EmploymentSession es = new EmploymentSession(isPrimary, org);
 
@@ -672,11 +642,6 @@ namespace Netus2_DatabaseConnection.utilityTools
                 es.EndDate = (DateTime)row["end_date"];
             else
                 es.EndDate = new DateTime();
-
-            if (row["is_primary_id"] != DBNull.Value)
-                es.IsPrimary = Enum_True_False.GetEnumFromId((int)row["is_primary_id"]);
-            else
-                es.IsPrimary = null;
 
             return es;
         }
@@ -716,9 +681,9 @@ namespace Netus2_DatabaseConnection.utilityTools
                 row["end_date"] = DBNull.Value;
 
             if (enrollment.IsPrimary != null)
-                row["is_primary_id"] = enrollment.IsPrimary.Id;
+                row["is_primary"] = enrollment.IsPrimary;
             else
-                row["is_primary_id"] = DBNull.Value;
+                row["is_primary"] = DBNull.Value;
 
             return row;
         }
@@ -726,7 +691,7 @@ namespace Netus2_DatabaseConnection.utilityTools
         public Enrollment MapEnrollment(DataRow row, List<ClassEnrolled> classesEnrolled, AcademicSession academicSession)
         {
             Enumeration gradeLevel = null;
-            if(row["is_primary_id"] != DBNull.Value)
+            if(row["is_primary"] != DBNull.Value)
                 gradeLevel = Enum_Grade.GetEnumFromId((int)row["enum_grade_id"]);
 
             DateTime startDate = new DateTime();
@@ -737,9 +702,9 @@ namespace Netus2_DatabaseConnection.utilityTools
             if(row["end_date"] != DBNull.Value)
                 endDate = (DateTime)row["end_date"];
 
-            Enumeration isPrimary = null;
-            if(row["is_primary_id"] != DBNull.Value)
-                isPrimary = Enum_True_False.GetEnumFromId((int)row["is_primary_id"]);
+            bool isPrimary = false;
+            if(row["is_primary"] != DBNull.Value)
+                isPrimary = (bool)row["is_primary"];
 
             Enrollment enrollment = new Enrollment(academicSession);
             enrollment.GradeLevel = gradeLevel;

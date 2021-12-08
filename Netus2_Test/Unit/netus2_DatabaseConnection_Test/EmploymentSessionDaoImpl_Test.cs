@@ -85,7 +85,7 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                         values[1] = tstDataSet[count]["name"];
                         values[2] = tstDataSet[count]["person_id"];
                         values[3] = tstDataSet[count]["start_date"];
-                        values[4] = tstDataSet[count]["is_primary_id"];
+                        values[4] = tstDataSet[count]["is_primary"];
                         values[5] = tstDataSet[count]["enum_session_id"];
                         values[6] = tstDataSet[count]["organization_id"];
                         values[7] = tstDataSet[count]["created"];
@@ -124,8 +124,8 @@ namespace Netus2_Test.Unit.Netus2_DBConnection
                 .Returns(() => typeof(DateTime));
 
             reader.Setup(x => x.GetName(4))
-                .Returns(() => "is_primary_id");
-            reader.Setup(x => x.GetOrdinal("is_primary_id"))
+                .Returns(() => "is_primary");
+            reader.Setup(x => x.GetOrdinal("is_primary"))
                 .Returns(() => 4);
             reader.Setup(x => x.GetFieldType(4))
                 .Returns(() => typeof(int));

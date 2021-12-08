@@ -90,6 +90,7 @@ namespace Netus2_Test
             schoolYear.SchoolYear = 2021;
             schoolYear.StartDate = new DateTime(2019, 9, 1);
             schoolYear.EndDate = new DateTime(2020, 6, 1);
+            schoolYear.TrackCode = "SY";
             if (connection != null)
                 schoolYear = academicSessionDaoImpl.Write(schoolYear, connection);
             else
@@ -100,6 +101,7 @@ namespace Netus2_Test
             semester1.SchoolYear = 2021;
             semester1.StartDate = new DateTime(2019, 9, 1);
             semester1.EndDate = new DateTime(2020, 6, 1);
+            semester1.TrackCode = "S1";
             schoolYear.Children.Add(semester1);
             if (connection != null)
                 semester1 = academicSessionDaoImpl.Write(semester1, schoolYear.Id, connection);
@@ -111,6 +113,7 @@ namespace Netus2_Test
             semester2.SchoolYear = 2021;
             semester2.StartDate = new DateTime(2019, 9, 1);
             semester2.EndDate = new DateTime(2020, 6, 1);
+            semester2.TrackCode = "S2";
             schoolYear.Children.Add(semester2);
             if (connection != null)
                 semester2 = academicSessionDaoImpl.Write(semester2, schoolYear.Id, connection);
@@ -128,7 +131,7 @@ namespace Netus2_Test
                 teacher.Id = 1;
 
             phoneNumber_Teacher = new PhoneNumber("8009876549", Enum_Phone.values["work"]);
-            phoneNumber_Teacher.IsPrimary = Enum_True_False.values["false"];
+            phoneNumber_Teacher.IsPrimary = false;
             if (connection != null)
             {
                 phoneNumber_Teacher = phoneNumberDaoImpl.Write(phoneNumber_Teacher, connection);
@@ -144,7 +147,7 @@ namespace Netus2_Test
 
             address_Teacher = new Address("teacher addr", "apt. 3", "somewhere", Enum_State_Province.values["mi"], "12345");
             address_Teacher.PostalCode = "12345";
-            address_Teacher.IsPrimary = Enum_True_False.values["false"];
+            address_Teacher.IsPrimary = false;
             address_Teacher.AddressType = Enum_Address.values["office"];
             if (connection != null)
                 address_Teacher = addressDaoImpl.Write(address_Teacher, connection);
@@ -176,7 +179,7 @@ namespace Netus2_Test
                 uniqueId_Teacher.Id = 1;
             teacher.UniqueIdentifiers.Add(uniqueId_Teacher);
 
-            employmentSession = new EmploymentSession(Enum_True_False.values["true"], school);
+            employmentSession = new EmploymentSession(true, school);
             employmentSession.Name = "John Smith Employment";
             employmentSession.StartDate = new DateTime(2019, 9, 1);
             employmentSession.EndDate = new DateTime(2020, 6, 1);
@@ -246,7 +249,7 @@ namespace Netus2_Test
 
             address_Student = new Address("student addr", "apt. 1", "somewhere", Enum_State_Province.values["mi"], "12345");
             address_Student.PostalCode = "12345";
-            address_Student.IsPrimary = Enum_True_False.values["true"];
+            address_Student.IsPrimary = true;
             address_Student.AddressType = Enum_Address.values["home"];
             if (connection != null)
                 address_Student = addressDaoImpl.Write(address_Student, connection);
@@ -275,7 +278,7 @@ namespace Netus2_Test
             enrollment.GradeLevel = Enum_Grade.values["6"];
             enrollment.StartDate = new DateTime(2020, 9, 6);
             enrollment.EndDate = new DateTime(2021, 6, 1);
-            enrollment.IsPrimary = Enum_True_False.values["true"];
+            enrollment.IsPrimary = true;
             enrollment.ClassesEnrolled.Add(classEnrolled);
             enrollment.AcademicSession = schoolYear;
             if (connection != null)
@@ -300,7 +303,7 @@ namespace Netus2_Test
             }
 
             phoneNumber_Student = new PhoneNumber("8001231234", Enum_Phone.values["cell"]);
-            phoneNumber_Student.IsPrimary = Enum_True_False.values["true"];
+            phoneNumber_Student.IsPrimary = true;
             if (connection != null)
             {
                 phoneNumber_Student = phoneNumberDaoImpl.Write(phoneNumber_Student, connection);

@@ -39,9 +39,9 @@ namespace Netus2_Test.MockDaoImpl
             row["phone_number_id"] = phoneNumberId;
 
             if (personId == tdBuilder.teacher.Id)
-                row["is_primary_id"] = tdBuilder.teacher.PhoneNumbers[0].IsPrimary.Id;
+                row["is_primary"] = tdBuilder.teacher.PhoneNumbers[0].IsPrimary;
             else if (personId == tdBuilder.student.Id)
-                row["is_primary_id"] = tdBuilder.student.PhoneNumbers[0].IsPrimary.Id;
+                row["is_primary"] = tdBuilder.student.PhoneNumbers[0].IsPrimary;
 
             if (_shouldReadReturnData)
                 return row;
@@ -90,7 +90,7 @@ namespace Netus2_Test.MockDaoImpl
                 DataRow row = DataTableFactory.CreateDataTable_Netus2_JctPersonPhoneNumber().NewRow();
                 row["person_id"] = tdBuilder.student.Id;
                 row["phone_number_id"] = tdBuilder.phoneNumber_Student.Id;
-                row["is_primary_id"] = tdBuilder.phoneNumber_Student.IsPrimary.Id;
+                row["is_primary"] = tdBuilder.phoneNumber_Student.IsPrimary;
 
                 results.Add(row);
             }
@@ -98,14 +98,14 @@ namespace Netus2_Test.MockDaoImpl
             return results;
         }
 
-        public DataRow Write(int personId, int phoneNumberId, int isPrimaryId, IConnectable connection)
+        public DataRow Write(int personId, int phoneNumberId, bool isPrimary, IConnectable connection)
         {
             WasCalled_Write = true;
 
             DataRow row = DataTableFactory.CreateDataTable_Netus2_JctPersonPhoneNumber().NewRow();
             row["person_id"] = personId;
             row["phone_number_id"] = phoneNumberId;
-            row["is_primary_id"] = isPrimaryId;
+            row["is_primary"] = isPrimary;
 
             return row;
         }
@@ -115,7 +115,7 @@ namespace Netus2_Test.MockDaoImpl
             WasCalled_WriteToTempTable = true;
         }
 
-        public void Update(int personId, int phoneNumberId, int isPrimaryId, IConnectable connection)
+        public void Update(int personId, int phoneNumberId, bool isPrimary, IConnectable connection)
         {
             WasCalled_Update = true;
         }
