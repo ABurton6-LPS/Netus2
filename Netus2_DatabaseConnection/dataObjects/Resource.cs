@@ -23,7 +23,7 @@ namespace Netus2_DatabaseConnection.dataObjects
         {
             StringBuilder strResource = new StringBuilder();
             strResource.Append("Name: " + Name + "\n");
-            strResource.Append("Importance: " + Importance.Netus2Code + "\n");
+            strResource.Append("Importance: " + Importance + "\n");
             strResource.Append("Vendor Resource Id: " + VendorResourceId + "\n");
             strResource.Append("Vendor Id: " + VendorId + "\n");
             strResource.Append("Application Id: " + ApplicationId + "\n");

@@ -29,7 +29,7 @@ namespace Netus2_DatabaseConnection.dataObjects
             if(AcademicSession != null)
                 strEnrollment.Append("Academic Session: " + AcademicSession.Name + "\n");
             if (GradeLevel != null)
-                strEnrollment.Append("Grade Level: " + GradeLevel.Netus2Code + "\n");
+                strEnrollment.Append("Grade Level: " + GradeLevel + "\n");
             strEnrollment.Append("Start Date: " + StartDate + "\n");
             strEnrollment.Append("End Date: " + EndDate + "\n");
             if(IsPrimary != null)

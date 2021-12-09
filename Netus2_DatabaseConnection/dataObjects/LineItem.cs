@@ -36,7 +36,7 @@ namespace Netus2_DatabaseConnection.dataObjects
             strLineItem.Append("Date Assigned: " + AssignDate + "\n");
             strLineItem.Append("Date Due: " + DueDate + "\n");
             strLineItem.Append("Class Assigned: " + ClassAssigned + "\n");
-            strLineItem.Append("Category: " + Category.Netus2Code + "\n");
+            strLineItem.Append("Category: " + Category + "\n");
             strLineItem.Append("Mark Value Min: " + MarkValueMin + "\n");
             strLineItem.Append("Mark Value Max: " + MarkValueMax + "\n");
 

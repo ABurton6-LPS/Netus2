@@ -101,7 +101,7 @@ namespace Netus2_Test.Integration
 
             //Create AddressTeacher
             //Add the AddressTeacher to the Teacher and update the Teacher
-            Address addressTeacher = new Address("123 Main", null, "City", Enum_State_Province.values["mi"], "12345");
+            Address addressTeacher = new Address("123 Main", null, "City", "12345");
             addressTeacher.IsPrimary = true;
             addressTeacher = addressDaoImpl.Write(addressTeacher, connection);
             teacher.Addresses.Add(addressTeacher);
@@ -177,7 +177,7 @@ namespace Netus2_Test.Integration
 
             //Create AddressStudent
             //Add the AddressStudent to the Student and update the Student
-            Address addressStudent = new Address("456 Main", null, "City", Enum_State_Province.values["mi"], "12345");
+            Address addressStudent = new Address("456 Main", null, "City", "12345");
             addressStudent.IsPrimary = true;
             addressStudent = addressDaoImpl.Write(addressStudent, connection);
             student.Addresses.Add(addressStudent);

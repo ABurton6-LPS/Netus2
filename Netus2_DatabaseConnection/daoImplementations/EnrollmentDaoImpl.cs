@@ -134,7 +134,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
                 if(row["end_date"] != DBNull.Value)
                 {
-                    sql.Append("AND end_date = @end_date");
+                    sql.Append("AND end_date = @end_date ");
                     parameters.Add(new SqlParameter("@end_date", row["end_date"]));
                 }
 

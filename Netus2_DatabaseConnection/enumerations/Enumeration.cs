@@ -11,10 +11,7 @@
         public override string ToString()
         {
             return 
-                "Netus2Code: " + Netus2Code + " " +
-                "SisCode: " + SisCode + " " +
-                "HrCode: " + HrCode + " " +
-                "Descript: " + Descript;
+                Netus2Code;
         }
     }
 }

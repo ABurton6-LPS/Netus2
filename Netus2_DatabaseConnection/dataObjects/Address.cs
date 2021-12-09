@@ -15,15 +15,13 @@ namespace Netus2_DatabaseConnection.dataObjects
         public bool IsPrimary { get; set; }
         public Enumeration AddressType { get; set; }
 
-        public Address(string line1, string line2, string city, Enumeration stateProvince, string postalCode)
+        public Address(string line1, string line2, string city, string postalCode)
         {
             Id = -1;
             Line1 = line1;
             Line2 = line2;
             City = city;
-            StateProvince = stateProvince;
             PostalCode = postalCode;
-            Country = Enum_Country.values["us"];
             AddressType = Enum_Address.values["unset"];
         }
 
@@ -33,11 +31,11 @@ namespace Netus2_DatabaseConnection.dataObjects
             strAddr.Append("Line 1: " + Line1 + "\n");
             strAddr.Append("Line 2: " + Line2 + "\n");
             strAddr.Append("City: " + City + "\n");
-            strAddr.Append("State/Province: " + StateProvince.Netus2Code + "\n");
+            strAddr.Append("State/Province: " + StateProvince + "\n");
             strAddr.Append("Postal Code: " + PostalCode + "\n");
-            strAddr.Append("Country: " + Country.Netus2Code + "\n");
+            strAddr.Append("Country: " + Country + "\n");
             strAddr.Append("Is Primary: " + IsPrimary + "\n");
-            strAddr.Append("Address Type: " + AddressType.Netus2Code + "\n");
+            strAddr.Append("Address Type: " + AddressType + "\n");
 
             return strAddr.ToString();
         }

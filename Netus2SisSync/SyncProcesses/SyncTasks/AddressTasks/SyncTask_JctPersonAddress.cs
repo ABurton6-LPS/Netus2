@@ -46,8 +46,7 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AddressTasks
                 if (person == null || person.Id <= 0)
                     throw new Exception("Person with unique id: " + sisPersonId + " doesn't exist within the Netus2 Database");
 
-                Address address = new Address(sisAddressLine1, sisAddressLine2, sisCity, 
-                    Enum_State_Province.values["mi"], sisPostalCode);
+                Address address = new Address(sisAddressLine1, sisAddressLine2, sisCity, sisPostalCode);
                 IAddressDao addressDaoImpl = DaoImplFactory.GetAddressDaoImpl();
                 addressDaoImpl.SetTaskId(this.Id);
                 List<Address> foundAddresses = addressDaoImpl.Read_Exact(address, _netus2Connection);
