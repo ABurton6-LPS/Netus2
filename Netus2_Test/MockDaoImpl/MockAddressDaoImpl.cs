@@ -67,6 +67,11 @@ namespace Netus2_Test.MockDaoImpl
 
         public List<Address> Read(Address address, IConnectable connection)
         {
+            return Read(address, true, connection);
+        }
+
+        public List<Address> Read(Address address, bool line2FuzzySearch, IConnectable connection)
+        {
             WasCalled_Read = true;
 
             List<Address> results = new List<Address>();

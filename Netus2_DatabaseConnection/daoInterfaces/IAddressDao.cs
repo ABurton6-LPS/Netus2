@@ -41,6 +41,20 @@ namespace Netus2_DatabaseConnection.daoInterfaces
         public Address Read_UsingAddressId(int addressId, IConnectable connection);
 
         /// <summary>
+        /// <para>
+        /// Queries the database for any records that match what is provided. Null datapoints are ignored.
+        /// </para>
+        /// If false is provided for line2FuzzySearch, then if line2 is null, then only records that have a null
+        /// value in address_line_2 will be returned. Otherwise, if true is provided, then a null value in address_line_2 will
+        /// be treated like any ther data point, and be ignored.
+        /// </summary>
+        /// <param name="address"></param>
+        /// <param name="line2FuzzySearch"></param>
+        /// <param name="connection"></param>
+        /// <returns>Empty list, if no records are found.</returns>
+        public List<Address> Read(Address address, bool line2FuzzySearch, IConnectable connection);
+
+        /// <summary>
         /// Queries the database for any records that match what is provided. Null datapoints are ignored.
         /// </summary>
         /// <param name="address"></param>
