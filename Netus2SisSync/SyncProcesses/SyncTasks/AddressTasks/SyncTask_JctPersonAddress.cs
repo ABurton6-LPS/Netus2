@@ -49,7 +49,7 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AddressTasks
                 Address address = new Address(sisAddressLine1, sisAddressLine2, sisCity, sisPostalCode);
                 IAddressDao addressDaoImpl = DaoImplFactory.GetAddressDaoImpl();
                 addressDaoImpl.SetTaskId(this.Id);
-                List<Address> foundAddresses = addressDaoImpl.Read_Exact(address, _netus2Connection);
+                List<Address> foundAddresses = addressDaoImpl.Read(address, false, _netus2Connection);
 
                 IJctPersonAddressDao jctPersonAddressDaoImpl = DaoImplFactory.GetJctPersonAddressDaoImpl();
 

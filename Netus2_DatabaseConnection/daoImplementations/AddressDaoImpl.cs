@@ -73,6 +73,11 @@ namespace Netus2_DatabaseConnection.daoImplementations
 
         public List<Address> Read(Address address, IConnectable connection)
         {
+            return Read(address, true, connection);
+        }
+
+        public List<Address> Read(Address address, bool line2FuzzySearch, IConnectable connection)
+        {
             DataRow row = daoObjectMapper.MapAddress(address);
 
             List<SqlParameter> parameters = new List<SqlParameter>();
@@ -95,6 +100,10 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 {
                     sql.Append("AND address_line_2 = @address_line_2 ");
                     parameters.Add(new SqlParameter("@address_line_2", row["address_line_2"]));
+                }
+                else if (line2FuzzySearch == false)
+                {
+                    sql.Append("AND address_line_2 IS NULL ");
                 }
 
                 if (row["city"] != DBNull.Value)
