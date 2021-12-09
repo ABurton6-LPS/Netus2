@@ -343,7 +343,8 @@ namespace Netus2_DatabaseConnection.utilityTools
             if (row["postal_code"] != DBNull.Value)
                 postalCode = (string)row["postal_code"];
 
-            Address address = new Address(line1, line2, city, stateProvince, postalCode);
+            Address address = new Address(line1, line2, city, postalCode);
+            address.StateProvince = stateProvince;
 
             if (row["address_id"] != DBNull.Value)
                 address.Id = (int)row["address_id"];

@@ -19,7 +19,7 @@ namespace Netus2_DatabaseConnection.dataObjects
         {
             StringBuilder strEmpSes = new StringBuilder();
             strEmpSes.Append("Is Primary: " + IsPrimary + "\n");
-            strEmpSes.Append("Session Type: " + SessionType.Netus2Code + "\n");
+            strEmpSes.Append("Session Type: " + SessionType + "\n");
             strEmpSes.Append(base.ToString());
 
             return strEmpSes.ToString();

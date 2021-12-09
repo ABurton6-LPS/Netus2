@@ -26,7 +26,7 @@ namespace Netus2_DatabaseConnection.dataObjects
         {
             StringBuilder strMark = new StringBuilder();
             strMark.Append("LineItem: " + LineItem + "\n");
-            strMark.Append("Score Status: " + ScoreStatus.Netus2Code + "\n");
+            strMark.Append("Score Status: " + ScoreStatus + "\n");
             strMark.Append("Score: " + Score + "\n");
             strMark.Append("Score Date: " + ScoreDate + "\n");
             strMark.Append("Comment: " + Comment + "\n");

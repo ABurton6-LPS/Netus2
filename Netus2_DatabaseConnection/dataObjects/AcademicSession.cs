@@ -24,7 +24,7 @@ namespace Netus2_DatabaseConnection.dataObjects
             strAcademicSession.Append("Term Code: " + TermCode + "\n");
             strAcademicSession.Append("Track Code: " + TrackCode + "\n");
             strAcademicSession.Append("School Year: " + SchoolYear + "\n");
-            strAcademicSession.Append("Session Type: " + SessionType.Netus2Code + "\n");
+            strAcademicSession.Append("Session Type: " + SessionType + "\n");
             strAcademicSession.Append("Number of Children: " + Children.Count + "\n");
             strAcademicSession.Append(base.ToString());
 

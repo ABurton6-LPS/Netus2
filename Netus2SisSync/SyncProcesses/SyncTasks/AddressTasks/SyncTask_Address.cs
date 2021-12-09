@@ -34,7 +34,8 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.AddressTasks
                 string sisPostalCode = row["postal_code"].ToString() == "" ? null : row["postal_code"].ToString();
                 Enumeration sisCountry = row["enum_country_id"].ToString() == "" ? null : Enum_Country.GetEnumFromSisCode(row["enum_country_id"].ToString().ToLower());
 
-                Address address = new Address(sisAddressLine1, sisAddressLine2, sisCity, sisStateProvince, sisPostalCode);
+                Address address = new Address(sisAddressLine1, sisAddressLine2, sisCity, sisPostalCode);
+                address.StateProvince = sisStateProvince;
                 address.Country = sisCountry;
 
                 IAddressDao addressDaoImpl = DaoImplFactory.GetAddressDaoImpl();

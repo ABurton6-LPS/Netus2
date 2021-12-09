@@ -20,7 +20,7 @@ namespace Netus2_DatabaseConnection.dataObjects
         {
             StringBuilder strUniqueId = new StringBuilder();
             strUniqueId.Append("Identifier: " + Identifier + "\n");
-            strUniqueId.Append("Identifier Type: " + IdentifierType.Netus2Code + "\n");
+            strUniqueId.Append("Identifier Type: " + IdentifierType + "\n");
 
             return base.ToString();
         }

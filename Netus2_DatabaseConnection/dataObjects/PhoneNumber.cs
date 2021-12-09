@@ -22,7 +22,7 @@ namespace Netus2_DatabaseConnection.dataObjects
             StringBuilder strPhoneNumber = new StringBuilder();
             strPhoneNumber.Append("Phone Number: " + PhoneNumberValue + "\n");
             strPhoneNumber.Append("Is Primary: " + IsPrimary + "\n");
-            strPhoneNumber.Append("Phone Type: " + PhoneType.Netus2Code);
+            strPhoneNumber.Append("Phone Type: " + PhoneType);
 
             return strPhoneNumber.ToString();
         }

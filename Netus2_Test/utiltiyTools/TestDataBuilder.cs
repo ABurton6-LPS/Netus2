@@ -145,7 +145,8 @@ namespace Netus2_Test
                 teacher.PhoneNumbers.Add(phoneNumber_Teacher);
             }
 
-            address_Teacher = new Address("teacher addr", "apt. 3", "somewhere", Enum_State_Province.values["mi"], "12345");
+            address_Teacher = new Address("teacher addr", "apt. 3", "somewhere", "12345");
+            address_Teacher.StateProvince = Enum_State_Province.values["mi"];
             address_Teacher.PostalCode = "12345";
             address_Teacher.IsPrimary = false;
             address_Teacher.AddressType = Enum_Address.values["office"];
@@ -247,7 +248,8 @@ namespace Netus2_Test
             else
                 teacher.Relations.Add(student.Id);
 
-            address_Student = new Address("student addr", "apt. 1", "somewhere", Enum_State_Province.values["mi"], "12345");
+            address_Student = new Address("student addr", "apt. 1", "somewhere", "12345");
+            address_Student.StateProvince = Enum_State_Province.values["mi"];
             address_Student.PostalCode = "12345";
             address_Student.IsPrimary = true;
             address_Student.AddressType = Enum_Address.values["home"];

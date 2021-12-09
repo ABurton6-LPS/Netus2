@@ -59,13 +59,13 @@ namespace Netus2_DatabaseConnection.dataObjects
             strPerson.Append("Middle Name: " + MiddleName + "\n");
             strPerson.Append("Last Name: " + LastName + "\n");
             strPerson.Append("Birth Date: " + BirthDate + "\n");
-            strPerson.Append("Gender: " + Gender.Netus2Code + "\n");
-            strPerson.Append("Ethnic: " + Ethnic.Netus2Code + "\n");
+            strPerson.Append("Gender: " + Gender + "\n");
+            strPerson.Append("Ethnic: " + Ethnic + "\n");
             strPerson.Append("Number of Roles: " + Roles.Count + "\n");
-            strPerson.Append("Residence Status : " + ResidenceStatus.Netus2Code + "\n");
+            strPerson.Append("Residence Status : " + ResidenceStatus + "\n");
             strPerson.Append("Login Name: " + LoginName + "\n");
             strPerson.Append("Login Password: " + LoginPw + "\n");
-            strPerson.Append("Status Type: " + StatusType.Netus2Code + "\n");
+            strPerson.Append("Status Type: " + StatusType + "\n");
             strPerson.Append("Number of Relations: " + Relations.Count + "\n");
             strPerson.Append("Number of Phone Numbers: " + PhoneNumbers.Count + "\n");
             strPerson.Append("Number of Applications: " + Applications.Count + "\n");

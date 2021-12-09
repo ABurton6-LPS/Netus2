@@ -21,7 +21,7 @@ namespace Netus2_DatabaseConnection.dataObjects
         {
             StringBuilder strAddr = new StringBuilder();
             strAddr.Append("Email: " + EmailValue + "\n");
-            strAddr.Append("Email Type: " + EmailType.Netus2Code + "\n");
+            strAddr.Append("Email Type: " + EmailType + "\n");
             strAddr.Append("Is Primary: " + IsPrimary + "\n");
 
             return strAddr.ToString();

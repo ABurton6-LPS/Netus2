@@ -552,7 +552,7 @@ namespace Netus2_Test.Integration
         public void LogAddress_ShouldLog_WriteUpdateDelete()
         {
             //Write
-            Address address = addressDaoImpl.Write(new Address("tst1", "apt. 1", "tstCity", Enum_State_Province.values["mi"], "12345"), connection);
+            Address address = addressDaoImpl.Write(new Address("tst1", "apt. 1", "tstCity", "12345"), connection);
 
             //Read logs after write
             List<LogAddress> logs = new List<LogAddress>();
@@ -613,7 +613,7 @@ namespace Netus2_Test.Integration
         public void LogJctPersonAddress_ShouldLog_WriteUpdateDelete()
         {
             //Prerequisite
-            Address address = addressDaoImpl.Write(new Address("tst1", "apt. 1", "tstCity", Enum_State_Province.values["mi"], "12345"), connection);
+            Address address = addressDaoImpl.Write(new Address("tst1", "apt. 1", "tstCity", "12345"), connection);
             address.IsPrimary = true;
             Person person = new Person("fname", "lname", new DateTime(), Enum_Gender.values["unset"], Enum_Ethnic.values["unset"]);
 

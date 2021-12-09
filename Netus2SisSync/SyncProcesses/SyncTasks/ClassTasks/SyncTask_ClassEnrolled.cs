@@ -51,7 +51,7 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.ClassTasks
                     _netus2Connection);
 
                 if (academicSession == null)
-                    throw new Exception("AcademicSession not ofund with Building Code, Track Code, Term Code, and School Year: " + sisAcademicSessionId);
+                    throw new Exception("AcademicSession not found with Building Code, Track Code, Term Code, and School Year: " + sisAcademicSessionId);
 
                 IClassEnrolledDao classEnrolledDaoImpl = DaoImplFactory.GetClassEnrolledDaoImpl();
                 classEnrolledDaoImpl.SetTaskId(this.Id);
