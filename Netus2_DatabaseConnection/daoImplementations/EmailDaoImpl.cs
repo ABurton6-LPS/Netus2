@@ -87,7 +87,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
             {
                 if (row["email_value"] != DBNull.Value)
                 {
-                    sql.Append("AND emaemail_valueil = @email_value ");
+                    sql.Append("AND email_value = @email_value ");
                     parameters.Add(new SqlParameter("@email_value", row["email_value"]));
                 }
 

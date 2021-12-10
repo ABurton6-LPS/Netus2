@@ -31,8 +31,8 @@ namespace Netus2SisSync.SyncProcesses
                 if (ShouldRunSync("PhoneNumber"))
                     new SyncJob_PhoneNumber().Start();
 
-                //if (ShouldRunSync("Email"))
-                //    new SyncJob_Email().Start();
+                if (ShouldRunSync("Email"))
+                    new SyncJob_Email().Start();
 
                 if (ShouldRunSync("Course"))
                     new SyncJob_Course().Start();

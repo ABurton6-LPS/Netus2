@@ -391,7 +391,8 @@ namespace Netus2_DatabaseConnection.utilityTools
             if (row["enum_email_id"] != DBNull.Value)
                 emailType = Enum_Email.GetEnumFromId((int)row["enum_email_id"]);
 
-            Email email = new Email(emailValue, emailType);
+            Email email = new Email(emailValue);
+            email.EmailType = emailType;
 
             if (row["email_id"] != DBNull.Value)
                 email.Id = (int)row["email_id"];
@@ -531,11 +532,6 @@ namespace Netus2_DatabaseConnection.utilityTools
                 row["employment_session_id"] = employmentSession.Id;
             else
                 row["employment_session_id"] = DBNull.Value;
-
-            if (employmentSession.Name != null)
-                row["name"] = employmentSession.Name;
-            else
-                row["name"] = DBNull.Value;
             
             if (personId != -1)
                 row["person_id"] = personId;
@@ -579,13 +575,6 @@ namespace Netus2_DatabaseConnection.utilityTools
             else
                 row["employment_session_id"] = DBNull.Value;
 
-            if (employmentSession.Name != null)
-
-                if (employmentSession.Name != null)
-                    row["name"] = employmentSession.Name;
-                else
-                    row["name"] = DBNull.Value;
-
             row["person_id"] = DBNull.Value;
 
             if (employmentSession.StartDate != new DateTime())
@@ -623,11 +612,6 @@ namespace Netus2_DatabaseConnection.utilityTools
                 isPrimary = (bool)row["is_primary"];
 
             EmploymentSession es = new EmploymentSession(isPrimary, org);
-
-            if (row["name"] != DBNull.Value)
-                es.Name = (string)row["name"];
-            else
-                es.Name = null;
 
             if (row["employment_session_id"] != DBNull.Value)
                 es.Id = (int)row["employment_session_id"];

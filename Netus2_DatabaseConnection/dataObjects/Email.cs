@@ -10,11 +10,10 @@ namespace Netus2_DatabaseConnection.dataObjects
         public Enumeration EmailType { get; set; }
         public bool IsPrimary { get; set; }
 
-        public Email(string emailValue, Enumeration emailType)
+        public Email(string emailValue)
         {
             Id = -1;
             EmailValue = emailValue;
-            EmailType = emailType;
         }
 
         public override string ToString()

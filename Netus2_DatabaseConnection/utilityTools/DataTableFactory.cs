@@ -273,6 +273,11 @@ namespace Netus2_DatabaseConnection.utilityTools
             dtColumn.ColumnName = "enum_email_id";
             dtJctPersonEmail.Columns.Add(dtColumn);
 
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(bool);
+            dtColumn.ColumnName = "is_primary";
+            dtJctPersonEmail.Columns.Add(dtColumn);
+
             return dtJctPersonEmail;
         }
 
@@ -898,11 +903,6 @@ namespace Netus2_DatabaseConnection.utilityTools
             PrimaryKeycolumns[0] = dtColumn;
             dtEmploymentSession.Columns.Add(dtColumn);
             dtEmploymentSession.PrimaryKey = PrimaryKeycolumns;
-
-            dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(string);
-            dtColumn.ColumnName = "name";
-            dtEmploymentSession.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(int);
@@ -2322,11 +2322,6 @@ namespace Netus2_DatabaseConnection.utilityTools
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(int);
             dtColumn.ColumnName = "employment_session_id";
-            dtLogEmploymentSession.Columns.Add(dtColumn);
-
-            dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(string);
-            dtColumn.ColumnName = "name";
             dtLogEmploymentSession.Columns.Add(dtColumn);
 
             dtColumn = new DataColumn();

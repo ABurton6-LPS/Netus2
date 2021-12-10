@@ -186,7 +186,6 @@ namespace Netus2_Test.Integration
         public static void AssertEmploymentSession(EmploymentSession expected, EmploymentSession actual)
         {
             Assert.AreEqual(expected.Id, actual.Id);
-            Assert.AreEqual(expected.Name, actual.Name);
             Assert.AreEqual(expected.StartDate, actual.StartDate);
             Assert.AreEqual(expected.EndDate, actual.EndDate);
             if (expected.Organization == null)
