@@ -85,12 +85,6 @@ namespace Netus2_DatabaseConnection.daoImplementations
             }
             else
             {
-                if (row["name"] != DBNull.Value)
-                {
-                    sql.Append("AND name = @name ");
-                    parameters.Add(new SqlParameter("@name", row["name"]));
-                }
-
                 if (row["person_id"] != DBNull.Value)
                 {
                     sql.Append("AND person_id = @person_id ");
@@ -188,14 +182,6 @@ namespace Netus2_DatabaseConnection.daoImplementations
                 List<SqlParameter> parameters = new List<SqlParameter>();
 
                 StringBuilder sql = new StringBuilder("UPDATE employment_session SET ");
-                if (row["name"] != DBNull.Value)
-                {
-                    sql.Append("name = @name, ");
-                    parameters.Add(new SqlParameter("@name", row["name"]));
-                }
-                else
-                    sql.Append("name = NULL, ");
-
                 if (row["person_id"] != DBNull.Value)
                 {
                     sql.Append("person_id = @person_id, ");
@@ -262,14 +248,6 @@ namespace Netus2_DatabaseConnection.daoImplementations
             List<SqlParameter> parameters = new List<SqlParameter>();
 
             StringBuilder sqlValues = new StringBuilder();
-            if (row["name"] != DBNull.Value)
-            {
-                sqlValues.Append("@name, ");
-                parameters.Add(new SqlParameter("@name", row["name"]));
-            }
-            else
-                sqlValues.Append("NULL, ");
-
             if (row["person_id"] != DBNull.Value)
             {
                 sqlValues.Append("@person_id, ");
@@ -322,7 +300,7 @@ namespace Netus2_DatabaseConnection.daoImplementations
             sqlValues.Append(_taskId != null ? _taskId.ToString() : "'Netus2'");
 
             string sql = "INSERT INTO employment_session " +
-                "(name, person_id, start_date, end_date, is_primary, enum_session_id, organization_id, " +
+                "(person_id, start_date, end_date, is_primary, enum_session_id, organization_id, " +
                 "created, created_by) " +
                 "VALUES (" + sqlValues.ToString() + ")";
 

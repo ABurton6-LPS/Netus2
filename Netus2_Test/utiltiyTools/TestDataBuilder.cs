@@ -147,6 +147,7 @@ namespace Netus2_Test
 
             address_Teacher = new Address("teacher addr", "apt. 3", "somewhere", "12345");
             address_Teacher.StateProvince = Enum_State_Province.values["mi"];
+            address_Teacher.Country = Enum_Country.values["us"];
             address_Teacher.PostalCode = "12345";
             address_Teacher.IsPrimary = false;
             address_Teacher.AddressType = Enum_Address.values["office"];
@@ -161,7 +162,8 @@ namespace Netus2_Test
                 teacher = personDaoImpl.Read(teacher, connection)[0];
             }
 
-            email_Teacher = new Email("teacher@123School.org", Enum_Email.values["school"]);
+            email_Teacher = new Email("teacher@123School.org");
+            email_Teacher.EmailType = Enum_Email.values["school"];
             if (connection != null)
                 email_Teacher = emailDaoImpl.Write(email_Teacher, connection);
             else
@@ -181,7 +183,6 @@ namespace Netus2_Test
             teacher.UniqueIdentifiers.Add(uniqueId_Teacher);
 
             employmentSession = new EmploymentSession(true, school);
-            employmentSession.Name = "John Smith Employment";
             employmentSession.StartDate = new DateTime(2019, 9, 1);
             employmentSession.EndDate = new DateTime(2020, 6, 1);
             if (connection != null)
@@ -250,6 +251,7 @@ namespace Netus2_Test
 
             address_Student = new Address("student addr", "apt. 1", "somewhere", "12345");
             address_Student.StateProvince = Enum_State_Province.values["mi"];
+            address_Student.Country = Enum_Country.values["us"];
             address_Student.PostalCode = "12345";
             address_Student.IsPrimary = true;
             address_Student.AddressType = Enum_Address.values["home"];
@@ -264,7 +266,8 @@ namespace Netus2_Test
                 student = personDaoImpl.Read(student, connection)[0];
             }
 
-            email_Student = new Email("student@123School.org", Enum_Email.values["school"]);
+            email_Student = new Email("student@123School.org");
+            email_Student.EmailType = Enum_Email.values["school"];
             if (connection != null)
                 email_Student = emailDaoImpl.Write(email_Student, connection);
             else

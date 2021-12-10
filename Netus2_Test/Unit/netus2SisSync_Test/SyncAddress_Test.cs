@@ -404,7 +404,7 @@ namespace Netus2_Test.Unit.SyncProcess
                 .Execute(row, new CountDownLatch(0));
 
             Assert.IsTrue(mockPersonDaoImpl.WasCalled_ReadUsingUniqueIdentifier);
-            Assert.IsTrue(mockAddressDaoImpl.WasCalled_ReadExact);
+            Assert.IsTrue(mockAddressDaoImpl.WasCalled_Read);
             Assert.IsTrue(mockJctPersonAddressDaoImpl.WasCalled_Read);
             Assert.IsTrue(mockJctPersonAddressDaoImpl.WasCalled_Write);
             Assert.IsFalse(mockJctPersonAddressDaoImpl.WasCalled_Update);
@@ -434,7 +434,7 @@ namespace Netus2_Test.Unit.SyncProcess
                 .Execute(row, new CountDownLatch(0));
 
             Assert.IsTrue(mockPersonDaoImpl.WasCalled_ReadUsingUniqueIdentifier);
-            Assert.IsTrue(mockAddressDaoImpl.WasCalled_ReadExact);
+            Assert.IsTrue(mockAddressDaoImpl.WasCalled_Read);
             Assert.IsTrue(mockJctPersonAddressDaoImpl.WasCalled_Read);
             Assert.IsFalse(mockJctPersonAddressDaoImpl.WasCalled_Write);
             Assert.IsFalse(mockJctPersonAddressDaoImpl.WasCalled_Update);
@@ -464,7 +464,7 @@ namespace Netus2_Test.Unit.SyncProcess
                 .Execute(row, new CountDownLatch(0));
 
             Assert.IsTrue(mockPersonDaoImpl.WasCalled_ReadUsingUniqueIdentifier);
-            Assert.IsTrue(mockAddressDaoImpl.WasCalled_ReadExact);
+            Assert.IsTrue(mockAddressDaoImpl.WasCalled_Read);
             Assert.IsTrue(mockJctPersonAddressDaoImpl.WasCalled_Read);
             Assert.IsFalse(mockJctPersonAddressDaoImpl.WasCalled_Write);
             Assert.IsTrue(mockJctPersonAddressDaoImpl.WasCalled_Update);

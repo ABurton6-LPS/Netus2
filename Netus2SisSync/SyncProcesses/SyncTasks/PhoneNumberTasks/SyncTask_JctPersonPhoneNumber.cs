@@ -50,10 +50,16 @@ namespace Netus2SisSync.SyncProcesses.SyncTasks.PhoneNumberTasks
                 DataRow foundJctPersonPhoneNumberDao = jctPersonPhoneNumberDaoImpl.Read(person.Id, phoneNumber.Id, _netus2Connection);
 
                 if (foundJctPersonPhoneNumberDao == null)
+                {
                     jctPersonPhoneNumberDaoImpl.Write(person.Id, phoneNumber.Id, sisIsPrimary, _netus2Connection);
+                }
                 else
+                {
                     if ((bool)foundJctPersonPhoneNumberDao["is_primary"] != sisIsPrimary)
+                    {
                         jctPersonPhoneNumberDaoImpl.Update(person.Id, phoneNumber.Id, sisIsPrimary, _netus2Connection);
+                    }
+                }
 
                 jctPersonPhoneNumberDaoImpl.Write_ToTempTable(person.Id, phoneNumber.Id, _netus2Connection);
 

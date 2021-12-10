@@ -13,6 +13,7 @@ namespace Netus2_Test.MockDaoImpl
         public bool WasCalled_Read = false;
         public bool WasCalled_ReadAllWithEmailId = false;
         public bool WasCalled_ReadAllWithPersonId = false;
+        public bool WasCalled_Update = false;
         public bool WasCalled_Write = false;
         public bool WasCalled_ReadEmailIsNotImTempTable = false;
         public bool WasCalled_WriteTempTable = false;
@@ -91,6 +92,11 @@ namespace Netus2_Test.MockDaoImpl
                 list.Add(row);
 
             return list;
+        }
+
+        public void Update(int personId, int emailId, bool isPrimary, IConnectable connection)
+        {
+            WasCalled_Update = true;
         }
 
         public DataRow Write(int personId, int emailId, bool isPrimary, IConnectable connection)

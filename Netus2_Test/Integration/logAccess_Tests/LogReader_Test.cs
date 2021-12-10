@@ -674,7 +674,6 @@ namespace Netus2_Test.Integration
             Assert.AreEqual(Enum_Log_Action.values["insert"], logs[0].LogAction);
 
             //Update
-            employmentSession.Name = "new";
             employmentSessionDaoImpl.Update(employmentSession, person.Id, connection);
             employmentSession = employmentSessionDaoImpl.Read_AllWithPersonId(person.Id, connection)[0];
 

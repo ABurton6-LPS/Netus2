@@ -97,6 +97,31 @@ namespace Netus2_DatabaseConnection.daoImplementations
             return jctPersonEmailDaos;
         }
 
+        public void Update(int personId, int emailId, bool isPrimary, IConnectable connection)
+        {
+            DataRow foundJctPersonEmailDao = Read(personId, emailId, connection);
+
+            if (foundJctPersonEmailDao == null)
+                Write(personId, emailId, isPrimary, connection);
+            else
+                UpdateInternals(personId, emailId, isPrimary, connection);
+        }
+
+        private void UpdateInternals(int personId, int emailId, bool isPrimary, IConnectable connection)
+        {
+            string sql = "UPDATE jct_person_email SET " +
+                "is_primary = @is_primary " +
+                "WHERE person_id = @person_id " +
+                "AND email_id = @email_id";
+
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@person_id", personId));
+            parameters.Add(new SqlParameter("@email_id", emailId));
+            parameters.Add(new SqlParameter("@is_primary", isPrimary));
+
+            connection.ExecuteNonQuery(sql, parameters);
+        }
+
         public DataRow Write(int personId, int emailId, bool isPrimary, IConnectable connection)
         {
             string sql = "INSERT INTO jct_person_email (" +
